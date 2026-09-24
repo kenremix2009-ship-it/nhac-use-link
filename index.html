@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Nhắc Chữ - Karaoke Soroban (Tùy chỉnh tốc độ)</title>
+    <title>Web Nhắc Chữ - Karaoke Soroban (Tùy chỉnh tốc độ chuẩn)</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -74,7 +74,7 @@
         .word {
             display: inline-block;
             color: var(--text-main);
-            transition: color 0.2s ease, transform 0.2s ease;
+            transition: color 0.15s ease, transform 0.15s ease;
         }
 
         /* Từ đang được đọc (Sáng rực, phóng to nhẹ giống Karaoke) */
@@ -131,7 +131,7 @@
         #speedValue {
             font-weight: bold;
             color: #38bdf8;
-            min-width: 45px;
+            min-width: 50px;
         }
 
         /* Nút điều khiển */
@@ -181,11 +181,11 @@
             Nhấn "Bắt đầu" để chuẩn bị...
         </div>
 
-        <!-- Thanh tùy chỉnh tốc độ -->
+        <!-- Thanh tùy chỉnh tốc độ: Chỉnh min xuống 80ms để có thể chạy rất nhanh -->
         <div class="settings-bar">
-            <label for="speedRange">Tốc độ chạy chữ:</label>
-            <input type="range" id="speedRange" min="200" max="800" step="50" value="400" oninput="changeSpeed(this.value)">
-            <span id="speedValue">400ms</span>
+            <label for="speedRange">Tốc độ mỗi từ:</label>
+            <input type="range" id="speedRange" min="80" max="600" step="20" value="300" oninput="changeSpeed(this.value)">
+            <span id="speedValue">300ms</span>
         </div>
 
         <div class="controls">
@@ -210,25 +210,19 @@
         const speedValue = document.getElementById('speedValue');
 
         let currentIndex = 0;
-        let timer = null;
+        let timeoutId = null; // Dùng setTimeout thay vì setInterval để cập nhật tốc độ linh hoạt
         let isRunning = false;
         let isPaused = false;
-        let wordDelay = 400; // Mốc thời gian mặc định mỗi từ (ms)
-        const CHUNK_SIZE = 10; // Giới hạn đúng 10 chữ hiển thị mỗi khung
+        let wordDelay = 300; // Tốc độ mặc định 300ms/từ
+        const CHUNK_SIZE = 10; // Giới hạn đúng 10 chữ mỗi khung
 
-        // Hàm thay đổi tốc độ khi kéo thanh trượt
+        // Hàm cập nhật tốc độ ngay lập tức khi kéo thanh trượt
         function changeSpeed(val) {
             wordDelay = parseInt(val);
             speedValue.innerText = wordDelay + 'ms';
-            
-            // Nếu đang chạy thì cập nhật lại tốc độ ngay lập tức mà không cần làm lại từ đầu
-            if (isRunning) {
-                clearInterval(timer);
-                runTeleprompterLoop();
-            }
         }
 
-        // Chuẩn bị sẵn các thẻ từ trong DOM
+        // Chuẩn bị khung chữ
         function initScreen() {
             screen.innerHTML = '';
             words.forEach((word, index) => {
@@ -241,7 +235,7 @@
             updateDisplayChunk();
         }
 
-        // Cập nhật cửa sổ hiển thị 10 chữ và bật hiệu ứng karaoke sáng theo từng từ
+        // Cập nhật hiển thị 10 chữ và hiệu ứng karaoke
         function updateDisplayChunk() {
             const spans = screen.getElementsByClassName('word');
             for (let i = 0; i < spans.length; i++) {
@@ -263,7 +257,7 @@
             }
         }
 
-        // Đếm ngược 3, 2, 1 trước khi chạy
+        // Đếm ngược 3, 2, 1
         function startCountdown() {
             startBtn.disabled = true;
             pauseBtn.disabled = true;
@@ -291,28 +285,29 @@
             pauseBtn.disabled = false;
             resetBtn.disabled = false;
             statusText.innerText = "Trạng thái: Đang chạy karaoke...";
-            runTeleprompterLoop();
+            stepTeleprompter();
         }
 
-        // Vòng lặp chạy chữ với tốc độ động theo biến wordDelay
-        function runTeleprompterLoop() {
-            timer = setInterval(() => {
-                if (currentIndex < words.length) {
-                    updateDisplayChunk();
-                    currentIndex++;
-                } else {
-                    stopTeleprompter();
-                    statusText.innerText = "Trạng thái: Đã hoàn thành!";
-                    startBtn.disabled = false;
-                    startBtn.innerText = "Bắt đầu";
-                    pauseBtn.disabled = true;
-                }
-            }, wordDelay);
+        // Dùng đệ quy kết hợp setTimeout để giá trị wordDelay thay đổi có tác dụng ngay tức thì
+        function stepTeleprompter() {
+            if (!isRunning) return;
+
+            if (currentIndex < words.length) {
+                updateDisplayChunk();
+                currentIndex++;
+                timeoutId = setTimeout(stepTeleprompter, wordDelay);
+            } else {
+                stopTeleprompter();
+                statusText.innerText = "Trạng thái: Đã hoàn thành!";
+                startBtn.disabled = false;
+                startBtn.innerText = "Bắt đầu";
+                pauseBtn.disabled = true;
+            }
         }
 
         function pauseTeleprompter() {
             if (isRunning) {
-                clearInterval(timer);
+                clearTimeout(timeoutId);
                 isRunning = false;
                 isPaused = true;
                 startBtn.disabled = false;
@@ -323,7 +318,7 @@
         }
 
         function stopTeleprompter() {
-            clearInterval(timer);
+            clearTimeout(timeoutId);
             isRunning = false;
         }
 
