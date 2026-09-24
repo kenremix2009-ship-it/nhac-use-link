@@ -53,7 +53,7 @@
 
         /* Màn hình hiển thị chữ karaoke */
         .teleprompter-screen {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 700;
             line-height: 1.5;
             min-height: 220px;
@@ -67,24 +67,25 @@
             border: 2px solid #334155;
             word-break: break-word;
             overflow: hidden;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .word {
             display: inline-block;
-            margin: 0 6px;
             transition: color 0.3s ease, transform 0.3s ease;
             color: var(--text-main);
         }
 
         .word.active {
             color: var(--text-highlight);
-            transform: scale(1.12);
+            transform: scale(1.1);
             text-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
         }
 
         .word.read {
             color: var(--text-read);
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         /* Nút bắt đầu / điều khiển */
@@ -151,7 +152,6 @@
     <script>
         const rawText = `Xin chào quý thầy cô và các anh chị em học viên Mình xin tự giới thiệu mình là Chu Thị The sinh ngày 28 tháng 01 năm 1980 là học viên k179 số thứ tự 16. Mình tình cờ biết được khóa học toán tư duy thông qua một bài viết trên Facebook sau khi xem và cảm nhận được lợi ích tuyệt vời của khóa học mình đã quyết định đăng kí khóa học này. Không phụ niềm tin của mình vào khóa học trong quá trình học mình càng thấy quyết định đăng kí khóa học toán tư duy của mình là hoàn toàn chính xác. Mình cảm thấy Khóa học Toán tư duy Finger Math và Soroban là một hành trình khai phóng tư duy toàn diện kết hợp hoàn hảo giữa phản xạ trực quan trên đôi bàn tay và sự bứt phá tốc độ qua bàn tính ảo. Finger Math là Bước đệm trực quan sinh động với Phương pháp dùng 10 ngón tay biến những con số trừu tượng thành những công cụ hiện hữu ngay trước mắt. Việc phối hợp nhịp nhàng giữa tay và não giúp loại bỏ hoàn toàn tâm lý sợ Toán tạo phản xạ cộng trừ nhanh chóng trong phạm vi từ 0 đến 99 một cách tự nhiên. Soroban là sự Đột phá về tư duy không gian và Anzan là bước nhảy vọt về tốc độ và khả năng ghi nhớ. Việc tưởng tượng hình ảnh các hạt tính chuyển động trong đầu giúp kích hoạt đồng thời cả hai bán cầu não: Não trái xử lý logic quy tắc; Não phải tưởng tượng hình ảnh không gian. Với Sự gắn kết logic tuyệt vời giữa 2 phương pháp: Finger Math đóng vai trò là nền móng xây dựng sự tự tin ban đầu còn Soroban là đòn bẩy đưa tốc độ xử lý thông tin lên mức tối đa. Trong quá trình học em cảm nhận được sự Tâm huyết Tận tụy và Truyền cảm hứng của đội ngũ giảng viên như Cô Ánh Lan cô Nguyễn Hạnh thầy Quân. Vì Cả Finger Math lẫn Soroban đều đòi hỏi độ chính xác trong từng thao tác tay và sự tập trung cao độ nhưng các thầy cô luôn tỉ mỉ uốn nắn từng ngón tay chỉnh sửa từng động tác gảy hạt và kiên nhẫn chờ đợi từng bước tưởng tượng của học viên mà không hề gây áp lực. Thầy cô biến mỗi buổi học thành một sân chơi phản xạ hào hứng thông qua các trò chơi toán học thi đấu tốc độ. Cách giảng dạy linh hoạt tinh tế nhận biết điểm mạnh yếu của từng học viên giúp lớp học luôn tràn ngập tiếng cười và động lực. Sự tận tâm của giảng viên không chỉ nằm ở giờ lên lớp mà còn thể hiện qua việc theo dõi sát tiến độ luyện tập hằng ngày luôn sẵn sàng giải đáp và định hướng cho phụ huynh và học viên. Sau khóa học em thấy: Toán học không còn là những con số hay công thức khô khan hay sự ép buộc mà trở thành môn học của sự sáng tạo phản xạ và niềm vui. Đồng thời có sự cải thiện rõ rệt không chỉ ở khả năng tính nhẩm siêu tốc mà quan trọng hơn là sự tập trung cao độ tính kiên trì tỉ mỉ và khả năng ghi nhớ không gian. Ngoài ra Việc chinh phục được những dãy số dài phức tạp bằng chính bộ não của mình mang lại niềm tin lớn vào khả năng tự học và giải quyết các vấn đề khó khăn trong cuộc sống. Hành trình của khóa học ngày hôm nay khép lại nhưng chiếc bàn tính Soroban ảo trong tâm trí và những bài học vô giá từ thầy cô sẽ còn theo em mãi về sau. Em xin được gửi lời cảm ơn tri ân nhất đến các thầy cô những người kiến tạo tư duy đầy tâm huyết và cảm ơn chính chúng ta vì đã nỗ lực hết mình. Chúc cho tất cả các bạn học viên luôn giữ vững sự tự tin trí tuệ sắc bén và niềm ham học hỏi trên những chặng đường phía trước.`;
 
-        // Tách văn bản thành mảng các từ, đảm bảo khoảng trắng không bị mất
         const words = rawText.split(/\s+/);
         const screen = document.getElementById('screen');
         const startBtn = document.getElementById('startBtn');
@@ -164,7 +164,7 @@
         let isRunning = false;
         let isPaused = false;
 
-        // Khởi tạo hiển thị khung chứa các từ dạng span ẩn/hiện
+        // Khởi tạo các thẻ từ sẵn vào màn hình
         function initScreen() {
             screen.innerHTML = '';
             words.forEach((word, index) => {
@@ -177,15 +177,14 @@
             updateVisibleWords();
         }
 
-        // Cập nhật hiển thị cụm chữ tập trung (mỗi lần hiển thị 1 cụm khoảng 5-7 từ cho dễ đọc kiểu karaoke)
+        // Cập nhật hiển thị nhóm từ đang đọc
         function updateVisibleWords() {
             const spans = screen.getElementsByClassName('word');
             for (let i = 0; i < spans.length; i++) {
                 spans[i].style.display = 'none';
             }
 
-            // Hiển thị một cửa sổ trượt gồm các từ xung quanh từ hiện tại
-            const windowSize = 7; // Số từ hiển thị cùng lúc trên màn hình
+            const windowSize = 7; // Hiển thị 7 từ cùng lúc
             const start = Math.max(0, currentIndex - Math.floor(windowSize / 2));
             const end = Math.min(words.length, start + windowSize);
 
@@ -219,9 +218,14 @@
                         currentIndex++;
                     } else {
                         stopTeleprompter();
+                        isRunning = false;
+                        startBtn.disabled = false;
+                        startBtn.innerText = "Bắt đầu";
+                        pauseBtn.disabled = true;
                         statusText.innerText = "Trạng thái: Đã hoàn thành!";
+                        clearInterval(timer);
                     }
-                }, 350); // Tốc độ nhịp chạy chữ vừa phải (350ms/từ)
+                }, 350); // Tốc độ chạy chữ (350ms mỗi từ)
             }
         }
 
@@ -248,13 +252,11 @@
             resetBtn.disabled = true;
             statusText.innerText = "Trạng thái: Sẵn sàng";
             initScreen();
-            screen.innerHTML = 'Nhấn "Bắt đầu" để hiển thị chữ...';
         }
 
-        // Khởi tạo ban đầu
+        // Gọi khởi tạo ngay khi tải trang để nạp sẵn dữ liệu từ
         window.onload = () => {
-            // Chuẩn bị sẵn dữ liệu mảng từ
-            const spans = screen.getElementsByClassName('word');
+            initScreen();
         };
     </script>
 </body>
