@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Nhắc Chữ - Karaoke Soroban (Tùy chỉnh tốc độ chuẩn)</title>
+    <title>Web Nhắc Chữ - Karaoke Soroban (Đầy đủ nội dung & Tự do dòng chữ)</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -30,14 +30,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            padding: 20px;
         }
 
         .container {
-            width: 90%;
-            max-width: 900px;
+            width: 95%;
+            max-width: 1000px;
             background: var(--card-bg);
-            padding: 35px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
             text-align: center;
@@ -51,37 +51,43 @@
             color: #f1f5f9;
         }
 
-        /* Màn hình hiển thị chữ karaoke - Hiển thị 10 chữ gọn gàng */
+        /* Màn hình hiển thị chữ dạng cuộn tự nhiên, không giới hạn cứng 10 chữ */
         .teleprompter-screen {
-            font-size: 2.6rem;
-            font-weight: 700;
-            line-height: 1.6;
-            min-height: 220px;
-            max-height: 260px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            font-size: 2.2rem;
+            font-weight: 600;
+            line-height: 1.8;
+            height: 280px;
+            overflow-y: auto;
+            padding: 25px;
             background: #090d16;
             border-radius: 12px;
             border: 2px solid #334155;
-            flex-wrap: wrap;
-            gap: 14px;
-            word-break: break-word;
+            text-align: left;
+            scroll-behavior: smooth;
+        }
+
+        /* Tùy chỉnh thanh cuộn cho đẹp */
+        .teleprompter-screen::-webkit-scrollbar {
+            width: 8px;
+        }
+        .teleprompter-screen::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
         }
 
         /* Hiệu ứng từng từ */
         .word {
             display: inline-block;
+            margin-right: 10px;
             color: var(--text-main);
             transition: color 0.15s ease, transform 0.15s ease;
         }
 
-        /* Từ đang được đọc (Sáng rực, phóng to nhẹ giống Karaoke) */
+        /* Từ đang được đọc */
         .word.active {
             color: var(--text-highlight);
-            transform: scale(1.15);
-            text-shadow: 0 0 20px rgba(56, 189, 248, 0.7);
+            transform: scale(1.1);
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.7);
         }
 
         /* Từ đã đọc qua */
@@ -92,6 +98,10 @@
 
         /* Màn hình đếm ngược 3 2 1 */
         .countdown-overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
             font-size: 6rem;
             font-weight: bold;
             color: #f59e0b;
@@ -181,7 +191,7 @@
             Nhấn "Bắt đầu" để chuẩn bị...
         </div>
 
-        <!-- Thanh tùy chỉnh tốc độ: Chỉnh min xuống 80ms để có thể chạy rất nhanh -->
+        <!-- Thanh tùy chỉnh tốc độ -->
         <div class="settings-bar">
             <label for="speedRange">Tốc độ mỗi từ:</label>
             <input type="range" id="speedRange" min="80" max="600" step="20" value="300" oninput="changeSpeed(this.value)">
@@ -198,6 +208,7 @@
     </div>
 
     <script>
+        // Nội dung đầy đủ toàn bộ bài phát biểu
         const rawText = `Xin chào quý thầy cô và các anh chị em học viên Mình xin tự giới thiệu mình là Chu Thị The sinh ngày 28 tháng 01 năm 1980 là học viên k179 số thứ tự 16. Mình tình cờ biết được khóa học toán tư duy thông qua một bài viết trên Facebook sau khi xem và cảm nhận được lợi ích tuyệt vời của khóa học mình đã quyết định đăng kí khóa học này. Không phụ niềm tin của mình vào khóa học trong quá trình học mình càng thấy quyết định đăng kí khóa học toán tư duy của mình là hoàn toàn chính xác. Mình cảm thấy Khóa học Toán tư duy Finger Math và Soroban là một hành trình khai phóng tư duy toàn diện kết hợp hoàn hảo giữa phản xạ trực quan trên đôi bàn tay và sự bứt phá tốc độ qua bàn tính ảo. Finger Math là Bước đệm trực quan sinh động với Phương pháp dùng 10 ngón tay biến những con số trừu tượng thành những công cụ hiện hữu ngay trước mắt. Việc phối hợp nhịp nhàng giữa tay và não giúp loại bỏ hoàn toàn tâm lý sợ Toán tạo phản xạ cộng trừ nhanh chóng trong phạm vi từ 0 đến 99 một cách tự nhiên. Soroban là sự Đột phá về tư duy không gian và Anzan là bước nhảy vọt về tốc độ và khả năng ghi nhớ. Việc tưởng tượng hình ảnh các hạt tính chuyển động trong đầu giúp kích hoạt đồng thời cả hai bán cầu não: Não trái xử lý logic quy tắc; Não phải tưởng tượng hình ảnh không gian. Với Sự gắn kết logic tuyệt vời giữa 2 phương pháp: Finger Math đóng vai trò là nền móng xây dựng sự tự tin ban đầu còn Soroban là đòn bẩy đưa tốc độ xử lý thông tin lên mức tối đa. Trong quá trình học em cảm nhận được sự Tâm huyết Tận tụy và Truyền cảm hứng của đội ngũ giảng viên như Cô Ánh Lan cô Nguyễn Hạnh thầy Quân. Vì Cả Finger Math lẫn Soroban đều đòi hỏi độ chính xác trong từng thao tác tay và sự tập trung cao độ nhưng các thầy cô luôn tỉ mỉ uốn nắn từng ngón tay chỉnh sửa từng động tác gảy hạt và kiên nhẫn chờ đợi từng bước tưởng tượng của học viên mà không hề gây áp lực. Thầy cô biến mỗi buổi học thành một sân chơi phản xạ hào hứng thông qua các trò chơi toán học thi đấu tốc độ. Cách giảng dạy linh hoạt tinh tế nhận biết điểm mạnh yếu của từng học viên giúp lớp học luôn tràn ngập tiếng cười và động lực. Sự tận tâm của giảng viên không chỉ nằm ở giờ lên lớp mà còn thể hiện qua việc theo dõi sát tiến độ luyện tập hằng ngày luôn sẵn sàng giải đáp và định hướng cho phụ huynh và học viên. Sau khóa học em thấy: Toán học không còn là những con số hay công thức khô khan hay sự ép buộc mà trở thành môn học của sự sáng tạo phản xạ và niềm vui. Đồng thời có sự cải thiện rõ rệt không chỉ ở khả năng tính nhẩm siêu tốc mà quan trọng hơn là sự tập trung cao độ tính kiên trì tỉ mỉ và khả năng ghi nhớ không gian. Ngoài ra Việc chinh phục được những dãy số dài phức tạp bằng chính bộ não của mình mang lại niềm tin lớn vào khả năng tự học và giải quyết các vấn đề khó khăn trong cuộc sống. Hành trình của khóa học ngày hôm nay khép lại nhưng chiếc bàn tính Soroban ảo trong tâm trí và những bài học vô giá từ thầy cô sẽ còn theo em mãi về sau. Em xin được gửi lời cảm ơn tri ân nhất đến các thầy cô những người kiến tạo tư duy đầy tâm huyết và cảm ơn chính chúng ta vì đã nỗ lực hết mình. Chúc cho tất cả các bạn học viên luôn giữ vững sự tự tin trí tuệ sắc bén và niềm ham học hỏi trên những chặng đường phía trước.`;
 
         const words = rawText.split(/\s+/);
@@ -210,19 +221,17 @@
         const speedValue = document.getElementById('speedValue');
 
         let currentIndex = 0;
-        let timeoutId = null; // Dùng setTimeout thay vì setInterval để cập nhật tốc độ linh hoạt
+        let timeoutId = null;
         let isRunning = false;
         let isPaused = false;
-        let wordDelay = 300; // Tốc độ mặc định 300ms/từ
-        const CHUNK_SIZE = 10; // Giới hạn đúng 10 chữ mỗi khung
+        let wordDelay = 300; // Tốc độ mặc định 300ms mỗi từ
 
-        // Hàm cập nhật tốc độ ngay lập tức khi kéo thanh trượt
         function changeSpeed(val) {
             wordDelay = parseInt(val);
             speedValue.innerText = wordDelay + 'ms';
         }
 
-        // Chuẩn bị khung chữ
+        // Khởi tạo hiển thị toàn bộ chữ ra màn hình dạng cuộn
         function initScreen() {
             screen.innerHTML = '';
             words.forEach((word, index) => {
@@ -232,32 +241,26 @@
                 span.id = `word-${index}`;
                 screen.appendChild(span);
             });
-            updateDisplayChunk();
+            currentIndex = 0;
+            updateHighlight();
         }
 
-        // Cập nhật hiển thị 10 chữ và hiệu ứng karaoke
-        function updateDisplayChunk() {
+        // Cập nhật trạng thái sáng cho từ hiện tại và tự động cuộn màn hình theo nhịp đọc
+        function updateHighlight() {
             const spans = screen.getElementsByClassName('word');
             for (let i = 0; i < spans.length; i++) {
-                spans[i].style.display = 'none';
-            }
-
-            const chunkStart = Math.floor(currentIndex / CHUNK_SIZE) * CHUNK_SIZE;
-            const chunkEnd = Math.min(chunkStart + CHUNK_SIZE, words.length);
-
-            for (let i = chunkStart; i < chunkEnd; i++) {
-                spans[i].style.display = 'inline-block';
                 if (i < currentIndex) {
                     spans[i].className = 'word read';
                 } else if (i === currentIndex) {
                     spans[i].className = 'word active';
+                    // Tự động cuộn khung nhìn theo từ đang đọc
+                    spans[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } else {
                     spans[i].className = 'word';
                 }
             }
         }
 
-        // Đếm ngược 3, 2, 1
         function startCountdown() {
             startBtn.disabled = true;
             pauseBtn.disabled = true;
@@ -288,12 +291,12 @@
             stepTeleprompter();
         }
 
-        // Dùng đệ quy kết hợp setTimeout để giá trị wordDelay thay đổi có tác dụng ngay tức thì
+        // Hàm chạy đệ quy kết hợp setTimeout giúp áp dụng ngay tốc độ mới khi kéo thanh trượt
         function stepTeleprompter() {
             if (!isRunning) return;
 
             if (currentIndex < words.length) {
-                updateDisplayChunk();
+                updateHighlight();
                 currentIndex++;
                 timeoutId = setTimeout(stepTeleprompter, wordDelay);
             } else {
@@ -331,12 +334,12 @@
             pauseBtn.disabled = true;
             resetBtn.disabled = true;
             statusText.innerText = "Trạng thái: Sẵn sàng";
-            screen.innerHTML = 'Nhấn "Bắt đầu" để chuẩn bị...';
+            initScreen();
         }
 
         window.onload = () => {
             initScreen();
-            screen.innerHTML = 'Nhấn "Bắt đầu" để chuẩn bị...';
+            screen.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #64748b;">Nhấn "Bắt đầu" để chuẩn bị...</div>';
         };
     </script>
 </body>
