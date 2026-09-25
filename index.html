@@ -294,7 +294,7 @@ img{-webkit-user-drag:none}
 #profileModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:99999999;padding:15px;backdrop-filter:blur(8px);overflow-y:auto}
 #profileModal.show{display:flex}
 .profile-box{background:#fff;border-radius:24px;padding:0;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,.6);position:relative}
-.profile-header-bg{background:linear-gradient(135deg,#1877f2,#198754);height:130px;border-radius:24px 24px 0 0;position:relative;transition:all .5s;overflow:visible}
+.profile-header-bg{background:linear-gradient(135deg,#1877f2,#198754);height:130px;border-radius:24px 24px 0 0;position:relative;transition:all .5s;overflow:visible;background-size:cover;background-position:center;background-repeat:no-repeat}
 .profile-avatar-outer{position:absolute;bottom:-55px;left:50%;transform:translateX(-50%);width:120px;height:120px;z-index:10}
 #avatarFxCanvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:200px;height:200px;pointer-events:none;z-index:0;border-radius:50%}
 .profile-avatar-wrap{position:absolute;inset:0;border-radius:50%;border:5px solid #fff;background:#e7f3ff;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#1877f2;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.2);overflow:hidden;z-index:2;background-clip:padding-box}
@@ -462,7 +462,7 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="editIdModal" class="modal-overlay"><div class="modal-box" style="max-width:520px"><div class="modal-header"><h3 id="editIdTitle">✏️ Chỉnh Sửa ID & Hiển Thị</h3><button class="close-btn" onclick="closeEditId()">✖</button></div><div id="editIdBody"></div></div></div>
 
-<div id="userAvatarBgModal" class="modal-overlay"><div class="modal-box" style="max-width:500px"><div class="modal-header"><h3 id="userAvatarBgTitle">🖼️ Ảnh nền Avatar</h3><button class="close-btn" onclick="closeUserAvatarBg()">✖</button></div><div id="userAvatarBgBody"></div></div></div>
+<div id="userAvatarBgModal" class="modal-overlay"><div class="modal-box" style="max-width:500px"><div class="modal-header"><h3 id="userAvatarBgTitle">🖼️ Ảnh nền Header</h3><button class="close-btn" onclick="closeUserAvatarBg()">✖</button></div><div id="userAvatarBgBody"></div></div></div>
 
 <div id="avatarCropModal">
   <div class="avatar-crop-box">
@@ -532,7 +532,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div id="profileModal"><div class="profile-box">
 <div id="profileFxLayer"><canvas id="profileFxCanvas"></canvas></div>
 <div class="profile-header-bg" id="profileHeaderBg">
-<button class="profile-bg-btn" id="profileBgUploadBtn" onclick="event.stopPropagation();document.getElementById('profileAvatarBgInput').click()" title="Đổi ảnh nền avatar">🖼️</button>
+<button class="profile-bg-btn" id="profileBgUploadBtn" onclick="event.stopPropagation();document.getElementById('profileAvatarBgInput').click()" title="Đổi ảnh nền header">🖼️</button>
 <button class="profile-bg-btn" id="profileBgRemoveBtn" onclick="event.stopPropagation();removeProfileAvatarBg()" title="Xóa ảnh nền">🗑️</button>
 <input type="file" id="profileAvatarBgInput" accept="image/*" style="display:none" onchange="handleAvatarBgUpload(this)">
 <div class="profile-avatar-outer">
@@ -902,9 +902,8 @@ async function openProfile(_,targetUser){
   const header=document.getElementById('profileHeaderBg');
   const effRole=getCurrentEffectRole(u);
   const effColors=getAvatarEffectColors(getAvatarEffect(effRole));
-  if(effRole&&effRole.bgColor){header.style.background=`linear-gradient(135deg,${effRole.bgColor},${adjustColor(effRole.bgColor,-30)})`;}else header.style.background='linear-gradient(135deg,#1877f2,#198754)';
   header.style.borderBottom=`4px solid ${effColors[0]}`;
-  // Apply avatar bg + display (đã bao gồm set innerHTML)
+  // Apply ảnh nền header (nếu có) hoặc gradient vai trò + set avatar display
   applyAvatarBgToProfile(u.avatarBg||'');
   // Small BG buttons - only for self
   document.getElementById('profileBgUploadBtn').style.display=isSelf?'flex':'none';
@@ -1001,7 +1000,7 @@ function applyAvatarCrop(){
   document.getElementById('profileAvatarInput').dataset.newAvatar=dataUrl;
   // Re-render avatar display dùng dataUrl
   const u=currentViewingUser||currentUserFullData;
-  if(u){u.avatar=dataUrl;const hasBg=!!u.avatarBg;applyAvatarBgToProfile(u.avatarBg||'');}
+  if(u){u.avatar=dataUrl;applyAvatarBgToProfile(u.avatarBg||'');}
   closeAvatarCrop();showToast('✅ Đã cắt avatar! Bấm "Lưu Profile" để hoàn tất.','success');
 }
 function closeAvatarCrop(){document.getElementById('avatarCropModal').classList.remove('show');avatarCropState.img=null;avatarCropState.dragging=false;}
@@ -1030,26 +1029,39 @@ async function saveProfile(){
 }
 async function loadUserStats(username){let count=0,sum=0;try{const [lb,qp]=await Promise.all([window.dbGet(window.dbChild(window.dbRef,'leaderboard')),window.dbGet(window.dbChild(window.dbRef,'qp_leaderboard'))]);const all=[...(lb.val()?Object.values(lb.val()):[]),...(qp.val()?Object.values(qp.val()):[])];all.forEach(exam=>{if(exam&&typeof exam==='object')Object.values(exam).forEach(r=>{if(r.username===username){count++;sum+=r.score||0;}});});}catch(e){}document.getElementById('profileTestCount').innerText=count;document.getElementById('profileAvgScore').innerText=count>0?(sum/count).toFixed(1):'0';}
 
-/* ẢNH NỀN AVATAR - FIXED */
+/* ẢNH NỀN HEADER - thay thế dải màu gradient (phần màu vàng) */
 function applyAvatarBgToProfile(bgUrl){
+  const header=document.getElementById('profileHeaderBg');
   const layer=document.getElementById('profileAvatarBgLayer');
   const avEl=document.getElementById('profileAvatarDisplay');
-  if(!layer)return;
-  if(bgUrl){
-    layer.style.display='block';
-    layer.style.backgroundImage=`url('${bgUrl}')`;
-  }else{
-    layer.style.display='none';
-    layer.style.backgroundImage='';
+  // Ẩn layer cũ bao quanh avatar (không còn dùng)
+  if(layer){layer.style.display='none';layer.style.backgroundImage='';}
+  // Áp ảnh nền vào HEADER (thay thế phần màu vàng/gradient)
+  if(header){
+    if(bgUrl){
+      header.style.backgroundImage=`url('${bgUrl}')`;
+      header.style.backgroundSize='cover';
+      header.style.backgroundPosition='center';
+      header.style.backgroundRepeat='no-repeat';
+    }else{
+      // Không có ảnh → khôi phục gradient theo vai trò hiệu ứng
+      const u=currentViewingUser||currentUserFullData;
+      const effRole=u?getCurrentEffectRole(u):null;
+      if(effRole&&effRole.bgColor){
+        header.style.backgroundImage=`linear-gradient(135deg,${effRole.bgColor},${adjustColor(effRole.bgColor,-30)})`;
+      }else{
+        header.style.backgroundImage='linear-gradient(135deg,#1877f2,#198754)';
+      }
+      header.style.backgroundSize='';
+      header.style.backgroundPosition='';
+      header.style.backgroundRepeat='';
+    }
   }
-  // Update avatar display size để lộ ảnh nền
+  // Avatar hiển thị bình thường full size (không thu nhỏ)
   if(avEl){
     const u=currentViewingUser||currentUserFullData;
     if(u){
-      const hasBg=!!bgUrl;
-      const sz=hasBg?'74%':'100%';
-      const fs=hasBg?'36px':'48px';
-      avEl.innerHTML=u.avatar?`<img src="${u.avatar}" style="width:${sz};height:${sz};object-fit:cover;border-radius:50%;position:relative;z-index:3">`:`<span style="position:relative;z-index:3;font-size:${fs}">${(u.nickname||u.username).charAt(0).toUpperCase()}</span>`;
+      avEl.innerHTML=u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:relative;z-index:3">`:`<span style="position:relative;z-index:3;font-size:48px">${(u.nickname||u.username).charAt(0).toUpperCase()}</span>`;
     }
   }
 }
@@ -1069,14 +1081,14 @@ async function handleAvatarBgUpload(input){
     if(currentViewingUser&&currentViewingUser.username===currentUser.username){currentViewingUser.avatarBg=d;}
     applyAvatarBgToProfile(d);
     await applyUserSession(currentUserFullData);
-    showToast('✅ Đã cập nhật ảnh nền avatar!','success');
+    showToast('✅ Đã cập nhật ảnh nền header!','success');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
   input.value='';
 }
 
 async function removeProfileAvatarBg(){
   if(!currentUser){showToast('🔐 Chưa đăng nhập!','error');return;}
-  if(!await customConfirm('Xóa ảnh nền avatar?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;
+  if(!await customConfirm('Xóa ảnh nền header?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;
   try{
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{avatarBg:'',updatedAt:Date.now()});
     currentUserFullData.avatarBg='';currentUser.avatarBg='';
@@ -1089,18 +1101,21 @@ async function removeProfileAvatarBg(){
 
 function openUserAvatarBg(username){
   const u=cachedUsers[username];if(!u)return;
-  document.getElementById('userAvatarBgTitle').innerText='🖼️ Ảnh nền Avatar — '+username;
+  document.getElementById('userAvatarBgTitle').innerText='🖼️ Ảnh nền Header — '+username;
   const cur=u.avatarBg||'';
-  const bgStyle=cur?`background-image:url('${cur}')`:'';
+  const bgStyle=cur?`background-image:url('${cur}');background-size:cover;background-position:center;`:'';
+  const defaultBg=cur?'':'background:linear-gradient(135deg,#1877f2,#198754);';
   const initial=(u.nickname||u.username).charAt(0).toUpperCase();
-  const avatarInner=u.avatar?`<img src="${u.avatar}" style="position:relative;z-index:2;width:74%;height:74%;object-fit:cover;border-radius:50%">`:`<span class="overlay-text">${initial}</span>`;
+  const avatarInner=u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover">`:initial;
   const html=`
-    <p style="font-size:13px;color:#666;margin-bottom:8px">Chỉnh ảnh nền hiển thị phía sau avatar. <b style="color:#6f42c1">Hỗ trợ cả GIF động!</b></p>
-    <div class="avatar-preview-container">
-      <div class="bg" style="${bgStyle}"></div>
-      ${avatarInner}
+    <p style="font-size:13px;color:#666;margin-bottom:8px">Ảnh này sẽ <b style="color:#6f42c1">thay thế dải màu phía trên</b> của profile (vị trí header, phía sau avatar). <b style="color:#6f42c1">Hỗ trợ cả GIF động!</b></p>
+    <div style="width:100%;height:130px;border-radius:12px;position:relative;border:2px solid #e0e0e0;overflow:visible;${bgStyle}${defaultBg}">
+      <div style="position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:90px;height:90px;border-radius:50%;border:4px solid #fff;background:#e7f3ff;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:#1877f2;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.25)">
+        ${avatarInner}
+      </div>
     </div>
-    <label style="font-weight:bold;color:#6f42c1;margin-top:8px">📤 Chọn ảnh/GIF:</label>
+    <div style="height:50px"></div>
+    <label style="font-weight:bold;color:#6f42c1;margin-top:8px;display:block">📤 Chọn ảnh/GIF:</label>
     <input type="file" id="adminAvatarBgInput" accept="image/*" onchange="handleAdminAvatarBgUpload(this,'${username}')" style="padding:6px">
     <small style="color:#888;font-size:11px;display:block;margin-top:-4px">💡 Hỗ trợ PNG/JPG/WEBP/GIF. Tối đa 3MB.</small>
     <div style="display:flex;gap:8px;margin-top:14px">
@@ -1125,13 +1140,13 @@ async function handleAdminAvatarBgUpload(input,username){
       applyAvatarBgToProfile(d);await applyUserSession(currentUserFullData);
     }
     closeUserAvatarBg();
-    showCenterSquareToast('✅','Đã lưu!',`Ảnh nền cho ${username}`,'success',2600);
+    showCenterSquareToast('✅','Đã lưu!',`Ảnh nền header cho ${username}`,'success',2600);
     filterAccList();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
   input.value='';
 }
 async function removeUserAvatarBg(username){
-  if(!await customConfirm('Xóa ảnh nền avatar?',{icon:'🗑️',okClass:'danger'}))return;
+  if(!await customConfirm('Xóa ảnh nền header?',{icon:'🗑️',okClass:'danger'}))return;
   try{
     await window.dbUpdate(window.ref(window.db,`users/${username}`),{avatarBg:'',updatedAt:Date.now()});
     if(cachedUsers[username])cachedUsers[username].avatarBg='';
@@ -1229,7 +1244,7 @@ async function confirmDeleteAll(){
 /* PIN ROLE */
 function togglePinRoleSelector(){const list=document.getElementById('profilePinnedRoleList');const icon=document.getElementById('pinRoleToggleIcon');const isOpen=list.classList.contains('open');if(isOpen){list.classList.remove('open');icon.innerText='▶';}else{list.classList.add('open');icon.innerText='▼';}}
 function renderPinnedRoleSelector(u,allRoles,isSelf){const box=document.getElementById('profilePinnedRoleBox');const list=document.getElementById('profilePinnedRoleList');const rolesFiltered=allRoles.filter(r=>r.emoji);if(rolesFiltered.length<2){box.style.display='none';return;}box.style.display='block';list.classList.remove('open');document.getElementById('pinRoleToggleIcon').innerText='▶';const pinnedId=u.pinnedRoleId||'';list.innerHTML=rolesFiltered.map(r=>{const realId=r.id||'';const isPinned=pinnedId===realId;const aura=r.auraEnabled?`box-shadow:0 0 8px ${r.auraColor||'#ffc107'},0 0 16px ${r.auraColor||'#ffc107'};`:'';return `<span class="pin-role-item ${isPinned?'pinned':''}" style="background:${r.bgColor};color:${r.textColor};${aura}" onclick="${isSelf?`pinRole('${realId}')`:'void(0)'}" title="${isSelf?'Bấm để ghim':'Chỉ chủ tài khoản đổi được'}">${r.emoji} ${escapeHtml(r.name)}</span>`;}).join('');}
-async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);if(perfMode!=='optimized'){playProfileEffect(effRole);startAvatarEffect(effRole);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);if(perfMode!=='optimized'){playProfileEffect(effRole);startAvatarEffect(effRole);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;applyAvatarBgToProfile(u.avatarBg||'');renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
 /* PROFILE FX */
 let profileFxRAF=null,profileFxAutoStop=null;
@@ -1306,7 +1321,6 @@ function openMedalPicker(){
     grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;padding:20px 0">Bạn chưa được trao huy chương/cup nào.</p>';
   }else{
     let html='';
-    // Tất cả cup đang sở hữu
     ownedCups.forEach(cid=>{
       const c=cachedMedals[cid];if(!c)return;
       const isSel=profileSelectedCup===cid;
@@ -1376,7 +1390,6 @@ let grantTargetUser=null;
 function openGrantItemForUser(username){
   const u=cachedUsers[username];if(!u)return;grantTargetUser=username;
   const ownedMedals=u.ownedMedals||[],ownedCups=getUserOwnedCups(u);
-  // Huy chương: bỏ những cái đã có, giới hạn số lượng
   const availableMedals=Object.keys(cachedMedals).filter(mid=>{
     const m=cachedMedals[mid];
     if(m.type==='cup')return false;
@@ -1384,7 +1397,6 @@ function openGrantItemForUser(username){
     if(m.maxOwners>0){const g=getMedalGrantedCount(mid);if(g>=m.maxOwners)return false;}
     return true;
   });
-  // Cup: KHÔNG giới hạn số người sở hữu, nhưng không trao trùng cup đã có
   const availableCups=Object.keys(cachedMedals).filter(mid=>{
     const m=cachedMedals[mid];
     if(m.type!=='cup')return false;
@@ -1426,7 +1438,6 @@ async function confirmGrantItem(){
     itemGrants[itemId]={grantedAt,grantedBy:currentUser.username,note};
     updates.itemGrants=itemGrants;
     if(item.type==='cup'){
-      // KHÔNG giới hạn: user có thể sở hữu nhiều cup
       const ownedCups=getUserOwnedCups(u);
       if(ownedCups.includes(itemId)){showToast('❌ Đã có cup này!','error');return;}
       const newCups=[...ownedCups,itemId];
@@ -1508,7 +1519,6 @@ function dismissCheatAlert(){document.getElementById('cheatAlertModal').style.di
 function playGalaxyEffect(){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const o=document.createElement('div');o.className='galaxy-overlay';c.appendChild(o);setTimeout(()=>o.remove(),2100);const core=document.createElement('div');core.className='galaxy-core play';c.appendChild(core);setTimeout(()=>core.remove(),2000);for(let i=0;i<30;i++){const s=document.createElement('div');s.className='galaxy-star play';const a=(Math.PI*2*i)/30;const d=200+Math.random()*320;s.style.left='50%';s.style.top='50%';s.style.setProperty('--tx',Math.cos(a)*d+'px');s.style.setProperty('--ty',Math.sin(a)*d+'px');c.appendChild(s);setTimeout(()=>s.remove(),2100);}}
 function playLightningEffect(cardEl){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const r=cardEl?cardEl.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0,height:0};const cx=r.left+r.width/2,cy=r.top+r.height/2;const f=document.createElement('div');f.className='lightning-flash play';c.appendChild(f);setTimeout(()=>f.remove(),1500);const b=document.createElement('div');b.className='lightning-bolt play';b.innerText='⚡';b.style.left=(cx-55)+'px';b.style.top=(cy-55)+'px';c.appendChild(b);setTimeout(()=>b.remove(),1300);for(let i=0;i<10;i++){const m=document.createElement('div');m.className='mini-bolt play';m.innerText='⚡';m.style.left=(cx+(Math.random()-.5)*90)+'px';m.style.top=(cy+(Math.random()-.5)*90)+'px';m.style.setProperty('--tx',((Math.random()-.5)*520)+'px');m.style.setProperty('--ty',((Math.random()-.5)*520)+'px');c.appendChild(m);setTimeout(()=>m.remove(),1900);}}
 function playShieldEffect(){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const s=document.createElement('div');s.className='shield-burst play';s.innerText='🛡️';c.appendChild(s);setTimeout(()=>s.remove(),1700);for(let i=0;i<4;i++){const r=document.createElement('div');r.className='shield-ring play';r.style.animationDelay=(i*0.12)+'s';c.appendChild(r);setTimeout(()=>r.remove(),2100);}for(let i=0;i<24;i++){const p=document.createElement('div');p.className='shield-particle play';const a=(Math.PI*2*i)/24;const d=150+Math.random()*260;p.style.setProperty('--tx',Math.cos(a)*d+'px');p.style.setProperty('--ty',Math.sin(a)*d+'px');c.appendChild(p);setTimeout(()=>p.remove(),1900);}}
-// GIẢM THỜI GIAN HIỆU ỨNG BÓNG ĐÈN
 function playSmartEffect(){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const flash=document.createElement('div');flash.className='smart-flash play';c.appendChild(flash);setTimeout(()=>flash.remove(),2800);const bulb=document.createElement('div');bulb.className='smart-bulb play';bulb.innerText='💡';c.appendChild(bulb);setTimeout(()=>bulb.remove(),2800);for(let i=0;i<5;i++){const ring=document.createElement('div');ring.className='smart-ring play';ring.style.animationDelay=(i*0.35)+'s';if(i%2===1){ring.style.borderColor='#fff8b0';ring.style.boxShadow='0 0 60px #fff8b0, inset 0 0 45px #fff8b0, 0 0 120px #ffeb3b';}c.appendChild(ring);setTimeout(()=>ring.remove(),2900);}for(let i=0;i<32;i++){const p=document.createElement('div');p.className='smart-particle play';const ang=(Math.PI*2*i)/32+Math.random()*0.2;const dist=280+Math.random()*420;p.style.setProperty('--tx',Math.cos(ang)*dist+'px');p.style.setProperty('--ty',Math.sin(ang)*dist+'px');p.style.animationDelay=(i*0.03)+'s';c.appendChild(p);setTimeout(()=>p.remove(),2900);}}
 function fxAllowed(){return perfMode!=='optimized';}
 
