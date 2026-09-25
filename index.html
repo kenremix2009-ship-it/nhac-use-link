@@ -250,7 +250,7 @@ img{-webkit-user-drag:none}
 #profileModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:99999999;padding:15px;backdrop-filter:blur(8px);overflow-y:auto}
 #profileModal.show{display:flex}
 .profile-box{background:#fff;border-radius:24px;padding:0;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,.6);position:relative}
-.profile-header-bg{background:linear-gradient(135deg,#1877f2,#198754);height:130px;border-radius:24px 24px 0 0;position:relative;transition:all .5s;overflow:visible}
+.profile-header-bg{background:linear-gradient(135deg,#1877f2,#198754);height:130px;border-radius:24px 24px 0 0;position:relative;transition:background .5s;overflow:visible;z-index:2}
 .profile-avatar-outer{position:absolute;bottom:-55px;left:50%;transform:translateX(-50%);width:120px;height:120px;z-index:10}
 #avatarFxCanvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:200px;height:200px;pointer-events:none;z-index:0;border-radius:50%}
 .profile-avatar-wrap{position:absolute;inset:0;border-radius:50%;border:5px solid #fff;background:#e7f3ff;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#1877f2;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.2);overflow:hidden;z-index:2;background-clip:padding-box}
@@ -258,6 +258,11 @@ img{-webkit-user-drag:none}
 .profile-avatar-wrap #profileAvatarDisplay img{width:100%;height:100%;object-fit:cover;display:block}
 .profile-avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;font-size:12px;font-weight:bold;border-radius:50%;z-index:5}
 .profile-avatar-wrap:hover .profile-avatar-overlay{opacity:1}
+/* BG controls */
+.profile-bg-controls{position:absolute;top:10px;right:10px;display:none;gap:6px;z-index:20}
+.profile-bg-controls.show{display:flex}
+.profile-bg-btn{background:rgba(0,0,0,.55);color:#fff;border:2px solid rgba(255,255,255,.35);width:36px;height:36px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;backdrop-filter:blur(4px);padding:0;line-height:1}
+.profile-bg-btn:hover{background:rgba(0,0,0,.85);transform:scale(1.12);border-color:#fff}
 .profile-body{padding:65px 24px 24px 24px}
 .profile-name{text-align:center;font-size:24px;font-weight:900;color:#333;margin-bottom:4px}
 .profile-username{text-align:center;color:#888;font-size:13px;margin-bottom:12px}
@@ -402,6 +407,11 @@ input,select,textarea{font-size:13px;padding:9px}
 <div id="profileModal"><div class="profile-box">
 <div id="profileFxLayer"><canvas id="profileFxCanvas"></canvas></div>
 <div class="profile-header-bg" id="profileHeaderBg">
+<div class="profile-bg-controls" id="profileBgControls">
+<button type="button" class="profile-bg-btn" onclick="document.getElementById('profileBgInput').click()" title="Đổi ảnh nền (chỉ ảnh tĩnh)">🖼️</button>
+<button type="button" class="profile-bg-btn" id="profileBgRemoveBtn" onclick="removeProfileBg()" title="Xóa ảnh nền">✖</button>
+</div>
+<input type="file" id="profileBgInput" accept="image/*" style="display:none" onchange="handleProfileBgUpload(this)">
 <div class="profile-avatar-outer">
 <canvas id="avatarFxCanvas"></canvas>
 <div class="profile-avatar-wrap" id="profileAvatarWrap" onclick="document.getElementById('profileAvatarInput').click()">
@@ -644,6 +654,8 @@ let cachedRoles={},cachedMedals={},cachedUsers={};
 let currentEditingRoleId=null,currentEditingMedalId=null,selectedRoleEmoji='';
 let accMgmtUnlocked=false,profileSelectedMedals=[],profileSelectedCup=null;
 let userHasSupremeAccess=false,currentEditIdUsername=null;
+// BIẾN MỚI cho ảnh nền profile
+let editIdNewBgImage=null,editIdBgChanged=false;
 const DEFAULT_WEB_NAME='✨ AURORA';
 const VUA_PASSWORD='thuan281009@';
 const ROLE_EMOJIS=['👑','🌸','⛄','🧧','😈','❤️','🎓','🔨','✏️','👨‍🏫','🌌','⭐','🔥','💎','🎯','🏆','⚡','🌟','🍀','🎨','🎵','🚀','🦁','🐉','🦊','🐼','🎃','🎄','💀','👽','🤖','🌈','💫','🍎','⚔️','🛡️','🤝','👤','💖','🌺'];
@@ -753,7 +765,7 @@ async function handleRegister(){
     if((await window.dbGet(window.dbChild(window.dbRef,`users/${username}`))).exists()){showToast('❌ Username đã tồn tại!','error');return;}
     if((await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(email)}`))).exists()){showToast('❌ Email đã đăng ký!','error');return;}
     const passwordHash=await hashPassword(password);
-    const userData={username,email,passwordHash,role,nickname:username,avatar:'',note:'',medals:[],ownedMedals:[],ownedCup:'',customRoleIds:[],pinnedRoleId:'',textColor:'#333333',fontStyle:'normal',textEffect:'none',createdAt:Date.now()};
+    const userData={username,email,passwordHash,role,nickname:username,avatar:'',note:'',medals:[],ownedMedals:[],ownedCup:'',customRoleIds:[],pinnedRoleId:'',textColor:'#333333',fontStyle:'normal',textEffect:'none',profileBgImage:'',createdAt:Date.now()};
     await window.dbSet(window.ref(window.db,`users/${username}`),userData);
     await window.dbSet(window.ref(window.db,`email_index/${emailKey(email)}`),username);
     await customAlert(`🎉 Đăng ký thành công!\n\nUsername: ${username}\nVai trò: ${role==='teacher'?'Giáo viên':role==='other'?'Khác':'Học sinh'}`,{title:'Thành công!',type:'success',icon:'🎉'});
@@ -906,10 +918,28 @@ async function openProfile(_,targetUser){
   const header=document.getElementById('profileHeaderBg');
   const effRole=getCurrentEffectRole(u);
   const effColors=getAvatarEffectColors(getAvatarEffect(effRole));
-  if(effRole&&effRole.bgColor){
-    header.style.background=`linear-gradient(135deg,${effRole.bgColor},${adjustColor(effRole.bgColor,-30)})`;
-  }else header.style.background='linear-gradient(135deg,#1877f2,#198754)';
+  const gradientBg = (effRole&&effRole.bgColor)
+    ? `linear-gradient(135deg,${effRole.bgColor},${adjustColor(effRole.bgColor,-30)})`
+    : 'linear-gradient(135deg,#1877f2,#198754)';
+  if(u.profileBgImage){
+    header.style.background = `url("${u.profileBgImage}") center center / cover no-repeat, ${gradientBg}`;
+  }else{
+    header.style.background = gradientBg;
+  }
   header.style.borderBottom=`4px solid ${effColors[0]}`;
+  // Hiển thị/ẩn controls đổi nền
+  const controls=document.getElementById('profileBgControls');
+  const bgInput=document.getElementById('profileBgInput');
+  const removeBtn=document.getElementById('profileBgRemoveBtn');
+  if(controls){
+    if(isSelf){
+      controls.classList.add('show');
+      if(removeBtn)removeBtn.style.display=u.profileBgImage?'flex':'none';
+      if(bgInput){bgInput.dataset.newBg=u.profileBgImage||'';delete bgInput.dataset.bgChanged;}
+    }else{
+      controls.classList.remove('show');
+    }
+  }
   const avEl=document.getElementById('profileAvatarDisplay');
   avEl.innerHTML=u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover">`:(u.nickname||u.username).charAt(0).toUpperCase();
   if(isSelf){
@@ -1013,9 +1043,68 @@ async function handleAvatarUpload(input){
   document.getElementById('profileAvatarDisplay').innerHTML=`<img src="${d}" style="width:100%;height:100%;object-fit:cover">`;
   document.getElementById('profileAvatarInput').dataset.newAvatar=d;input.value='';
 }
+
+/* ===== ẢNH NỀN PROFILE (chỉ ảnh tĩnh, không GIF) ===== */
+function handleProfileBgUpload(input){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  if(file.type==='image/gif'){
+    showToast('❌ Chỉ Quản Trị Tối Cao mới đặt được ảnh GIF!','error');
+    input.value='';
+    return;
+  }
+  if(!file.type.startsWith('image/')){
+    showToast('❌ Chỉ nhận file ảnh!','error');
+    input.value='';
+    return;
+  }
+  if(file.size>900*1024){
+    showToast('Ảnh nền tối đa 900KB!','error');
+    input.value='';
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    const dataUrl=e.target.result;
+    input.dataset.newBg=dataUrl;
+    input.dataset.bgChanged='1';
+    const u=currentViewingUser||currentUserFullData;
+    const header=document.getElementById('profileHeaderBg');
+    const effRole=getCurrentEffectRole(u);
+    const gradientBg = (effRole&&effRole.bgColor)
+      ? `linear-gradient(135deg,${effRole.bgColor},${adjustColor(effRole.bgColor,-30)})`
+      : 'linear-gradient(135deg,#1877f2,#198754)';
+    header.style.background = `url("${dataUrl}") center center / cover no-repeat, ${gradientBg}`;
+    const removeBtn=document.getElementById('profileBgRemoveBtn');
+    if(removeBtn)removeBtn.style.display='flex';
+    showToast('✅ Đã đổi ảnh nền! Bấm "Lưu Profile" để lưu','success');
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+function removeProfileBg(){
+  if(!currentViewingUser||currentViewingUser.username!==currentUser.username)return;
+  const bgInput=document.getElementById('profileBgInput');
+  if(bgInput){bgInput.dataset.newBg='';bgInput.dataset.bgChanged='1';}
+  const u=currentViewingUser;
+  const header=document.getElementById('profileHeaderBg');
+  const effRole=getCurrentEffectRole(u);
+  const gradientBg = (effRole&&effRole.bgColor)
+    ? `linear-gradient(135deg,${effRole.bgColor},${adjustColor(effRole.bgColor,-30)})`
+    : 'linear-gradient(135deg,#1877f2,#198754)';
+  header.style.background = gradientBg;
+  const removeBtn=document.getElementById('profileBgRemoveBtn');
+  if(removeBtn)removeBtn.style.display='none';
+  showToast('🗑️ Đã xóa ảnh nền! Bấm "Lưu Profile" để lưu','warn');
+}
+
 async function saveProfile(){
   if(!currentUser)return;
   const updates={note:document.getElementById('profileNote').value.trim(),avatar:document.getElementById('profileAvatarInput').dataset.newAvatar||currentUserFullData.avatar||'',medals:profileSelectedMedals.slice(0,MAX_USER_MEDALS),ownedCup:profileSelectedCup||'',updatedAt:Date.now()};
+  const bgInput=document.getElementById('profileBgInput');
+  if(bgInput && bgInput.dataset.bgChanged==='1'){
+    updates.profileBgImage=bgInput.dataset.newBg||'';
+  }
   try{
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),updates);
     Object.assign(currentUserFullData,updates);Object.assign(currentUser,updates);
@@ -1062,9 +1151,18 @@ async function pinRole(roleId){
     stopProfileEffect();stopAvatarEffect();
     const effRole=getCurrentEffectRole(u);
     if(perfMode!=='optimized'){playProfileEffect(effRole);startAvatarEffect(effRole);}
-    // Update header border
+    // Update header border + bg (giữ ảnh nền nếu có)
     const effColors=getAvatarEffectColors(getAvatarEffect(effRole));
-    document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;
+    const header=document.getElementById('profileHeaderBg');
+    const gradientBg = (effRole&&effRole.bgColor)
+      ? `linear-gradient(135deg,${effRole.bgColor},${adjustColor(effRole.bgColor,-30)})`
+      : 'linear-gradient(135deg,#1877f2,#198754)';
+    if(u.profileBgImage){
+      header.style.background = `url("${u.profileBgImage}") center center / cover no-repeat, ${gradientBg}`;
+    }else{
+      header.style.background = gradientBg;
+    }
+    header.style.borderBottom=`4px solid ${effColors[0]}`;
     renderPinnedRoleSelector(u,getUserAllRoles(u),true);
     // Update nav avatar
     await applyUserSession(u);
@@ -1399,6 +1497,9 @@ async function confirmMainRole(username){
 }
 function openEditId(username){
   currentEditIdUsername=username;const u=cachedUsers[username];if(!u)return;
+  // Reset biến ảnh nền
+  editIdNewBgImage=u.profileBgImage||'';
+  editIdBgChanged=false;
   document.getElementById('editIdTitle').innerText='✏️ Chỉnh Sửa: '+username;
   const html=`
     <label style="color:#1877f2;font-weight:bold">👤 Tên đăng nhập (ID):</label><input type="text" id="editIdNewUsername" value="${escapeHtml(u.username)}" style="margin:0 0 8px 0"><small style="color:#666;font-size:11px">Yêu cầu xác nhận mật khẩu VUA khi đổi.</small>
@@ -1406,13 +1507,64 @@ function openEditId(username){
     <label style="color:#1877f2;font-weight:bold;margin-top:14px">🎨 Màu tên:</label><input type="color" id="editIdTextColor" value="${u.textColor||'#333333'}" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer;margin:0 0 8px 0">
     <label style="color:#1877f2;font-weight:bold;margin-top:14px">✍️ Kiểu chữ:</label><select id="editIdFontStyle" style="margin:0 0 8px 0"><option value="normal" ${u.fontStyle==='normal'?'selected':''}>Bình thường</option><option value="hoathinh" ${u.fontStyle==='hoathinh'?'selected':''}>🎨 Hoạt hình</option><option value="nannhot" ${u.fontStyle==='nannhot'?'selected':''}>✨ Nắn nót</option><option value="mono" ${u.fontStyle==='mono'?'selected':''}>💻 Đơn cách</option><option value="serif" ${u.fontStyle==='serif'?'selected':''}>📖 Cổ điển</option></select>
     <label style="color:#1877f2;font-weight:bold;margin-top:14px">✨ Hiệu ứng tên:</label><select id="editIdTextEffect" style="margin:0 0 8px 0"><option value="none" ${u.textEffect==='none'?'selected':''}>Không</option><option value="glow" ${u.textEffect==='glow'?'selected':''}>Phát sáng</option><option value="neon" ${u.textEffect==='neon'?'selected':''}>Neon</option><option value="rainbow" ${u.textEffect==='rainbow'?'selected':''}>Rainbow</option><option value="shadow" ${u.textEffect==='shadow'?'selected':''}>Đổ bóng</option></select>
+    <div style="margin-top:14px;padding:12px;background:#f3e8ff;border:2px dashed #a55eea;border-radius:10px">
+      <label style="color:#6f42c1;font-weight:bold">🖼️ Ảnh nền Profile <span style="font-size:11px;color:#198754">(HỖ TRỢ GIF ✨)</span>:</label>
+      <input type="file" id="editIdBgInput" accept="image/*" style="margin:6px 0 8px 0;padding:6px;background:#fff" onchange="handleEditIdBgUpload(this)">
+      <div id="editIdBgPreview" style="text-align:center"></div>
+      <button type="button" class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px;margin-top:8px" onclick="removeEditIdBg()">🗑️ Xóa ảnh nền</button>
+      <p style="font-size:11px;color:#856404;margin-top:8px;font-style:italic">💡 Admin có thể đặt ảnh GIF động (tối đa 3MB)</p>
+    </div>
     <div style="text-align:center;padding:14px;background:#f8f9fa;border-radius:10px;margin-top:10px"><div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC TÊN:</div><div id="editIdPreview" style="font-size:20px;font-weight:900">${escapeHtml(u.nickname||u.username)}</div></div>
     <div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-secondary" onclick="closeEditId()">Hủy</button><button class="btn btn-success" onclick="saveEditId()">💾 Lưu</button></div>`;
   document.getElementById('editIdBody').innerHTML=html;document.getElementById('editIdModal').classList.add('show');
-  const upd=()=>{const prev=document.getElementById('editIdPreview');prev.innerText=document.getElementById('editIdNickname').value||'Preview';applyFontAndEffect(prev,document.getElementById('editIdFontStyle').value,document.getElementById('editIdTextEffect').value,document.getElementById('editIdTextColor').value);};
+  // Populate preview ảnh nền
+  const prev=document.getElementById('editIdBgPreview');
+  if(prev){
+    if(u.profileBgImage){
+      const isGif = u.profileBgImage.startsWith('data:image/gif');
+      prev.innerHTML=`<div style="margin-top:6px"><img src="${u.profileBgImage}" style="max-width:100%;max-height:140px;border-radius:10px;border:2px solid #a55eea"><br><small style="color:#666;font-size:11px">${isGif?'✨ GIF động':'🖼️ Ảnh tĩnh'}</small></div>`;
+    }else{
+      prev.innerHTML='<p style="font-size:11px;color:#888;font-style:italic;margin-top:4px">Chưa có ảnh nền</p>';
+    }
+  }
+  const upd=()=>{const pv=document.getElementById('editIdPreview');pv.innerText=document.getElementById('editIdNickname').value||'Preview';applyFontAndEffect(pv,document.getElementById('editIdFontStyle').value,document.getElementById('editIdTextEffect').value,document.getElementById('editIdTextColor').value);};
   ['editIdNickname','editIdFontStyle','editIdTextEffect','editIdTextColor'].forEach(id=>{document.getElementById(id).addEventListener('input',upd);document.getElementById(id).addEventListener('change',upd);});upd();
 }
-function closeEditId(){document.getElementById('editIdModal').classList.remove('show');currentEditIdUsername=null;}
+function handleEditIdBgUpload(input){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  if(!file.type.startsWith('image/')){
+    showToast('❌ Chỉ nhận file ảnh!','error');
+    input.value='';
+    return;
+  }
+  if(file.size>3*1024*1024){
+    showToast('Ảnh nền tối đa 3MB!','error');
+    input.value='';
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    editIdNewBgImage=e.target.result;
+    editIdBgChanged=true;
+    const pv=document.getElementById('editIdBgPreview');
+    if(pv){
+      const isGif = file.type==='image/gif';
+      pv.innerHTML=`<div style="margin-top:6px"><img src="${e.target.result}" style="max-width:100%;max-height:140px;border-radius:10px;border:2px solid #a55eea"><br><small style="color:#666;font-size:11px">${isGif?'✨ GIF động':'🖼️ Ảnh tĩnh'} • ${(file.size/1024).toFixed(1)}KB</small></div>`;
+    }
+    showToast('✅ Đã chọn ảnh nền!','success');
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+function removeEditIdBg(){
+  editIdNewBgImage='';
+  editIdBgChanged=true;
+  const pv=document.getElementById('editIdBgPreview');
+  if(pv)pv.innerHTML='<p style="font-size:11px;color:#888;font-style:italic;margin-top:4px">Chưa có ảnh nền</p>';
+  showToast('🗑️ Đã đánh dấu xóa ảnh nền!','warn');
+}
+function closeEditId(){document.getElementById('editIdModal').classList.remove('show');currentEditIdUsername=null;editIdNewBgImage=null;editIdBgChanged=false;}
 async function saveEditId(){
   const username=currentEditIdUsername;if(!username)return;
   const u=cachedUsers[username];if(!u)return;
@@ -1420,6 +1572,9 @@ async function saveEditId(){
   const nickname=document.getElementById('editIdNickname').value.trim()||newId;
   const textColor=document.getElementById('editIdTextColor').value,fontStyle=document.getElementById('editIdFontStyle').value,textEffect=document.getElementById('editIdTextEffect').value;
   const updates={nickname,textColor,fontStyle,textEffect,updatedAt:Date.now()};
+  if(editIdBgChanged){
+    updates.profileBgImage=editIdNewBgImage||'';
+  }
   try{
     if(newId!==username){
       if(!/^[a-z0-9_.]{3,20}$/.test(newId)){showToast('ID 3-20 ký tự a-z 0-9 _ .','error');return;}
