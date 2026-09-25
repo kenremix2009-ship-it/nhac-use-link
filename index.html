@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Aurora - Hệ Thống Kiểm Tra Trực Tuyến</title>
+<link rel="icon" id="webFavicon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='78' font-size='80'%3E📚%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" id="webFaviconApple">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1311,9 +1313,20 @@ async function checkAuthOnLoad(){const s=localStorage.getItem('aurora_user');if(
 function applyLogo(url){
   cachedLogoUrl=url||'';
   const img=document.getElementById('webLogoImg');
-  if(!img)return;
-  if(url){img.src=url;img.style.display='block';}
-  else{img.src='';img.style.display='none';}
+  if(img){
+    if(url){img.src=url;img.style.display='block';}
+    else{img.src='';img.style.display='none';}
+  }
+  // ===== FAVICON TAB TRÌNH DUYỆT =====
+  const DEFAULT_FAV="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='78' font-size='80'%3E📚%3C/text%3E%3C/svg%3E";
+  const fav=document.getElementById('webFavicon');
+  const favApple=document.getElementById('webFaviconApple');
+  if(fav){
+    if(url){fav.href=url;fav.type='';}
+    else{fav.href=DEFAULT_FAV;fav.type='image/svg+xml';}
+  }
+  if(favApple)favApple.href=url||DEFAULT_FAV;
+  // ===== PREVIEW =====
   const prev=document.getElementById('logoPreviewImg');
   const empty=document.getElementById('logoPreviewEmpty');
   if(prev&&empty){
@@ -2192,3 +2205,4 @@ addQuestionV2('mc');addQuestionV2('tf');
 </script>
 </body>
 </html>
+
