@@ -191,16 +191,16 @@ body.fx-shake{animation:screenShake .65s cubic-bezier(.36,.07,.19,.97)}
 .shield-particle.play{animation:shieldParticle 1.55s ease-out forwards}
 @keyframes shieldParticle{0%{opacity:0;transform:translate(-50%,-50%) scale(0)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.3)}100%{opacity:0;transform:translate(calc(-50% + var(--tx,0)),calc(-50% + var(--ty,0))) scale(.4)}}
 .smart-flash{position:fixed;inset:0;pointer-events:none;z-index:999998;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(255,255,200,.95) 0%,rgba(255,220,50,.5) 30%,transparent 75%)}
-.smart-flash.play{animation:smartFlash 5s ease-out forwards}
+.smart-flash.play{animation:smartFlash 2.6s ease-out forwards}
 @keyframes smartFlash{0%{opacity:0}8%{opacity:.7}18%{opacity:.2}30%{opacity:.85}45%{opacity:.3}60%{opacity:.65}80%{opacity:.35}100%{opacity:0}}
 .smart-bulb{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:170px;pointer-events:none;z-index:999999;opacity:0;filter:drop-shadow(0 0 40px #ffeb3b) drop-shadow(0 0 80px #ffc107) drop-shadow(0 0 130px #ff9800)}
-.smart-bulb.play{animation:bulbLight 5s cubic-bezier(.34,1.56,.64,1) forwards}
+.smart-bulb.play{animation:bulbLight 2.6s cubic-bezier(.34,1.56,.64,1) forwards}
 @keyframes bulbLight{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-30deg);filter:drop-shadow(0 0 0 #ffeb3b) brightness(1)}8%{opacity:1;transform:translate(-50%,-50%) scale(1.65) rotate(0);filter:drop-shadow(0 0 60px #ffeb3b) brightness(2.4)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.15) rotate(5deg);filter:drop-shadow(0 0 55px #ffeb3b) brightness(2)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.35) rotate(-3deg);filter:drop-shadow(0 0 65px #ffeb3b) brightness(2.2)}45%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(4deg);filter:drop-shadow(0 0 55px #ffeb3b) brightness(1.9)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.3) rotate(-2deg);filter:drop-shadow(0 0 70px #ffeb3b) brightness(2.1)}85%{opacity:1;transform:translate(-50%,-50%) scale(1.18) rotate(1deg);filter:drop-shadow(0 0 50px #ffeb3b) brightness(1.8)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.6) rotate(0);filter:drop-shadow(0 0 0 #ffeb3b) brightness(1)}}
 .smart-ring{position:fixed;top:50%;left:50%;width:220px;height:220px;border-radius:50%;border:6px solid #ffeb3b;transform:translate(-50%,-50%) scale(0);opacity:0;z-index:999997;pointer-events:none;box-shadow:0 0 50px #ffeb3b,inset 0 0 40px #ffeb3b,0 0 100px #ffc107}
-.smart-ring.play{animation:smartRing 2.2s ease-out forwards}
+.smart-ring.play{animation:smartRing 1.4s ease-out forwards}
 @keyframes smartRing{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}18%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-50%) scale(6.5);opacity:0}}
 .smart-particle{position:fixed;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,#fff8b0,#ffd700);box-shadow:0 0 15px #ffeb3b,0 0 35px #ffc107;pointer-events:none;z-index:999999;opacity:0;top:50%;left:50%}
-.smart-particle.play{animation:smartParticle 2.6s ease-out forwards}
+.smart-particle.play{animation:smartParticle 1.6s ease-out forwards}
 @keyframes smartParticle{0%{opacity:0;transform:translate(-50%,-50%) scale(0)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.6)}100%{opacity:0;transform:translate(calc(-50% + var(--tx,0)),calc(-50% + var(--ty,0))) scale(.3)}}
 #welcomeFxLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
 #welcomeFxCanvas{width:100%;height:100%;display:block}
@@ -288,6 +288,7 @@ img{-webkit-user-drag:none}
 .nav-user .avatar{width:28px;height:28px;border-radius:50%;background:#fff;color:#1877f2;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;overflow:hidden;position:relative}
 .nav-user .avatar img{width:100%;height:100%;object-fit:cover;position:relative;z-index:2}
 .nav-user .avatar>span{position:relative;z-index:2}
+.nav-user .avatar .avatar-bg-layer{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;border-radius:50%;z-index:0;overflow:hidden;pointer-events:none}
 .nav-user .logout-btn{background:transparent;border:none;color:#fff;cursor:pointer;font-size:15px;padding:2px 4px;border-radius:50%}
 .user-role-badge{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
 #profileModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:99999999;padding:15px;backdrop-filter:blur(8px);overflow-y:auto}
@@ -298,7 +299,7 @@ img{-webkit-user-drag:none}
 #avatarFxCanvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:200px;height:200px;pointer-events:none;z-index:0;border-radius:50%}
 .profile-avatar-wrap{position:absolute;inset:0;border-radius:50%;border:5px solid #fff;background:#e7f3ff;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#1877f2;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.2);overflow:hidden;z-index:2;background-clip:padding-box}
 .profile-avatar-wrap .avatar-bg-layer{position:absolute;inset:0;border-radius:50%;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;pointer-events:none;overflow:hidden}
-.profile-avatar-wrap #profileAvatarDisplay{width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;position:relative;z-index:3}
+.profile-avatar-wrap #profileAvatarDisplay{width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;position:relative;z-index:3;box-sizing:border-box;transition:padding .3s}
 .profile-avatar-wrap #profileAvatarDisplay img{width:100%;height:100%;object-fit:cover;display:block}
 .profile-avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;font-size:12px;font-weight:bold;border-radius:50%;z-index:5}
 .profile-avatar-wrap:hover .profile-avatar-overlay{opacity:1}
@@ -396,7 +397,6 @@ img{-webkit-user-drag:none}
 #userAvatarBgModal .avatar-preview-container{position:relative;width:180px;height:180px;margin:14px auto;border-radius:50%;border:4px solid #fff;box-shadow:0 8px 24px rgba(0,0,0,.2);overflow:hidden;background:#e7f3ff;display:flex;align-items:center;justify-content:center;font-size:60px;font-weight:900;color:#1877f2}
 #userAvatarBgModal .avatar-preview-container .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0}
 #userAvatarBgModal .avatar-preview-container .overlay-text{position:relative;z-index:2}
-/* ===== Avatar crop modal ===== */
 #avatarCropModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:center;z-index:9999999999;padding:15px;backdrop-filter:blur(8px);overflow-y:auto}
 #avatarCropModal.show{display:flex}
 .avatar-crop-box{background:#fff;border-radius:20px;padding:20px;max-width:420px;width:100%;text-align:center}
@@ -404,7 +404,6 @@ img{-webkit-user-drag:none}
 .avatar-crop-stage:active{cursor:grabbing}
 #avatarCropCanvas{display:block;width:100%;height:100%;user-select:none;pointer-events:none}
 .avatar-crop-circle-guide{position:absolute;inset:0;border-radius:50%;pointer-events:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.85)}
-/* ===== Small BG buttons on profile header ===== */
 .profile-bg-btn{position:absolute;top:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);border:2px solid #fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.25);z-index:20;transition:all .2s;padding:0}
 .profile-bg-btn:hover{transform:scale(1.12);background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .profile-bg-btn:active{transform:scale(.98)}
@@ -465,7 +464,6 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="userAvatarBgModal" class="modal-overlay"><div class="modal-box" style="max-width:500px"><div class="modal-header"><h3 id="userAvatarBgTitle">🖼️ Ảnh nền Avatar</h3><button class="close-btn" onclick="closeUserAvatarBg()">✖</button></div><div id="userAvatarBgBody"></div></div></div>
 
-<!-- ===== AVATAR CROP MODAL ===== -->
 <div id="avatarCropModal">
   <div class="avatar-crop-box">
     <div class="modal-header"><h3>✂️ Căn chỉnh Avatar</h3><button class="close-btn" onclick="closeAvatarCrop()">✖</button></div>
@@ -485,7 +483,6 @@ input,select,textarea{font-size:13px;padding:9px}
   </div>
 </div>
 
-<!-- ===== DELETE HISTORY MODAL ===== -->
 <div id="deleteHistoryModal" class="modal-overlay">
   <div class="modal-box" style="max-width:520px">
     <div class="modal-header">
@@ -803,16 +800,12 @@ let cstTimer=null;
 function showCenterSquareToast(icon,title,msg,type='success',duration=2200){const el=document.getElementById('centerSquareToast');if(!el)return;document.getElementById('cstIcon').innerText=icon||'✅';document.getElementById('cstTitle').innerText=title||'Thông báo';document.getElementById('cstMsg').innerText=msg||'';el.className='';el.classList.add(type);void el.offsetWidth;el.classList.add('show');if(cstTimer)clearTimeout(cstTimer);cstTimer=setTimeout(()=>{el.classList.remove('show');cstTimer=null;},duration);}
 function showToast(message,type='success'){if(type===true)type='error';if(type===false||type===undefined||type===null)type='success';const t=document.getElementById('systemToast');t.innerText=message;t.className=type+' show';t.style.display='block';t.style.opacity='1';setTimeout(()=>{t.className=type;t.style.opacity='0';setTimeout(()=>{t.style.display='none';},400);},3500);}
 
-/* ============================================================
-   🤖 PHÂN TÍCH AI (đang thử nghiệm) — Đọc câu hỏi (kể cả ảnh)
-   và đề xuất công thức / cách giải theo môn học
-   ============================================================ */
+/* 🤖 AI ANALYSIS */
 function generateAIAnalysis(q){
   if(!q)return '<i>Không có dữ liệu câu hỏi.</i>';
   const lines=[];
   const txt=((q.content||q.question||'')+' '+(q.options?q.options.map(o=>o.text||'').join(' '):'')).toLowerCase();
   const hasImage=!!q.imageData;
-
   const mathPatterns=/phương trình|đạo hàm|tích phân|logarit|log\b|ln\b|hình học|tam giác|diện tích|chu vi|thể tích|tính toán|giải toán|biểu thức|hàm số|đồ thị|sin\b|cos\b|tan\b|căn bậc|bậc hai|bậc 3|x²|x\^|f\(x\)|giới hạn|liên tục|ma trận|vector|xác suất|tổ hợp|chỉnh hợp|cấp số|số phức|bất đẳng thức|gtln|gtnn|\bmax\b|\bmin\b|toán|số nguyên|phân số|số thực|tập hợp|mệnh đề|đạo hàm|nguyên hàm/;
   const physPatterns=/vận tốc|gia tốc|lực|năng lượng|điện trở|dòng điện|hiệu điện thế|nhiệt lượng|khối lượng|trọng lực|động năng|thế năng|công suất|cường độ|từ trường|cảm ứng|sóng|dao động|con lắc|định luật|newton|\bohm\b|jun|lý\b|vật lý|vật lí|quang học|thấu kính|khúc xạ|phản xạ|hạt nhân|phóng xạ|tụ điện|cuộn cảm/;
   const chemPatterns=/phản ứng|hóa học|mol\b|nguyên tử|phân tử|axit|bazơ|muối|oxi hóa|khử|dung dịch|nồng độ|kim loại|phi kim|este|cacbon|hidrocacbon|ancol|axit cacboxylic|polime|điện phân|\bph\b|hóa|hoá|nguyên tố|bảng tuần hoàn|liên kết hóa học|khối lượng mol|thể tích khí|nồng độ mol/;
@@ -821,133 +814,20 @@ function generateAIAnalysis(q){
   const litPatterns=/tác giả|tác phẩm|thơ\b|văn học|nhân vật|biện pháp tu từ|ẩn dụ|so sánh|nhân hóa|hoán dụ|nghị luận|phân tích|đoạn trích|ca dao|truyện ngắn|ngữ văn|văn bản|ngôi kể|tình huống truyện|ngôn ngữ|nghệ thuật/;
   const histPatterns=/lịch sử|triều đại|chiến tranh|cách mạng|năm \d{3,4}|khởi nghĩa|đế quốc|phong kiến|thực dân|đảng cộng sản|việt nam dân chủ|chiến dịch|điện biên|kháng chiến|thế chiến|thời kỳ|nhà lý|nhà trần|nhà lê|nhà nguyễn|bác hồ/;
   const geoPatterns=/địa lý|bản đồ|khí hậu|dân số|vùng kinh tế|tỉnh thành|quốc gia|châu lục|địa hình|đất\b|biển đảo|atlat|địa lí|kinh tuyến|vĩ tuyến|sông ngòi|đồng bằng|cao nguyên|gió mùa/;
-
   const isMath=mathPatterns.test(txt),isPhys=physPatterns.test(txt),isChem=chemPatterns.test(txt),isBio=bioPatterns.test(txt),isEng=engPatterns.test(txt),isLit=litPatterns.test(txt),isHist=histPatterns.test(txt),isGeo=geoPatterns.test(txt);
-
-  if(isMath){
-    lines.push('📐 <b>Dạng Toán học</b>');
-    if(/phương trình bậc (2|hai)|x²|x\^2|bậc hai|pt bậc hai/.test(txt)){
-      lines.push('• Công thức nghiệm: <b>x = (-b ± √(b²-4ac)) / 2a</b>');
-      lines.push('• Bước 1: Đưa về dạng <i>ax² + bx + c = 0</i>');
-      lines.push('• Bước 2: Tính <b>Δ = b² - 4ac</b>');
-      lines.push('• Bước 3: Δ > 0 → 2 nghiệm phân biệt; Δ = 0 → nghiệm kép; Δ < 0 → vô nghiệm');
-      lines.push('• Định lý Vi-ét: x₁+x₂ = -b/a; x₁·x₂ = c/a');
-    } else if(/đạo hàm/.test(txt)){
-      lines.push('• (xⁿ)\' = n·xⁿ⁻¹');
-      lines.push('• (sin x)\' = cos x; (cos x)\' = -sin x');
-      lines.push('• (u·v)\' = u\'v + uv\''); lines.push('• (u/v)\' = (u\'v - uv\')/v²');
-    } else if(/tích phân|nguyên hàm/.test(txt)){
-      lines.push('• ∫xⁿ dx = xⁿ⁺¹/(n+1) + C (n ≠ -1)');
-      lines.push('• ∫1/x dx = ln|x| + C');
-      lines.push('• Tích phân từng phần: <b>∫u dv = uv - ∫v du</b>');
-    } else if(/logarit|log\b|ln\b/.test(txt)){
-      lines.push('• log(ab) = log a + log b');
-      lines.push('• log(a/b) = log a - log b');
-      lines.push('• log(aⁿ) = n·log a');
-      lines.push('• logₐ b = ln b / ln a');
-    } else if(/lượng giác|sin\b|cos\b|tan\b/.test(txt)){
-      lines.push('• sin²x + cos²x = 1');
-      lines.push('• sin(a±b) = sin a cos b ± cos a sin b');
-      lines.push('• cos(a±b) = cos a cos b ∓ sin a sin b');
-      lines.push('• cos 2x = cos²x - sin²x = 2cos²x - 1 = 1 - 2sin²x');
-    } else if(/hình học|tam giác|diện tích|thể tích|chu vi/.test(txt)){
-      lines.push('• Diện tích tam giác: S = ½·a·h = ½·ab·sin C');
-      lines.push('• Định lý Pythagore: <b>a² + b² = c²</b> (tam giác vuông)');
-      lines.push('• Định lý cosin: a² = b² + c² - 2bc·cos A');
-      lines.push('• Định lý sin: a/sin A = b/sin B = c/sin C = 2R');
-      lines.push('• Thể tích hình trụ: V = πr²h; hình cầu: V = (4/3)πr³');
-    } else if(/xác suất|tổ hợp|chỉnh hợp/.test(txt)){
-      lines.push('• P(A) = n(A)/n(Ω)');
-      lines.push('• Hoán vị: Pₙ = n!; Chỉnh hợp: Aₙᵏ = n!/(n-k)!; Tổ hợp: Cₙᵏ = n!/(k!(n-k)!)');
-    } else if(/cấp số cộng|cấp số nhân/.test(txt)){
-      lines.push('• CSC: uₙ = u₁ + (n-1)d; Sₙ = n/2·(u₁+uₙ)');
-      lines.push('• CSN: uₙ = u₁·qⁿ⁻¹; Sₙ = u₁(1-qⁿ)/(1-q)');
-    } else {
-      lines.push('• Xác định dữ kiện và áp dụng công thức phù hợp');
-      lines.push('• Kiểm tra đơn vị và làm tròn kết quả đúng yêu cầu');
-    }
-  }
-
-  if(isPhys){
-    lines.push('⚛️ <b>Vật lý</b>');
-    if(/vận tốc|quãng đường|thời gian/.test(txt))lines.push('• v = s/t (vận tốc = quãng đường / thời gian)');
-    if(/gia tốc/.test(txt))lines.push('• a = Δv/Δt; v = v₀ + at; s = v₀t + ½at²');
-    if(/lực|newton|F\s*=/.test(txt))lines.push('• F = m·a (Định luật II Newton); P = mg (trọng lực)');
-    if(/động năng|thế năng|năng lượng/.test(txt)){lines.push('• Động năng: Wđ = ½mv²');lines.push('• Thế năng: Wt = mgh');lines.push('• Cơ năng: W = Wđ + Wt (bảo toàn khi không ma sát)');}
-    if(/điện|dòng điện|điện trở/.test(txt))lines.push('• Định luật Ohm: U = I·R; Công suất: P = U·I = I²R = U²/R');
-    if(/sóng|dao động|con lắc/.test(txt)){lines.push('• Chu kỳ con lắc đơn: T = 2π√(l/g)');lines.push('• Bước sóng: λ = v·T = v/f');}
-    if(/nhiệt/.test(txt))lines.push('• Q = mcΔt (nhiệt lượng)');
-    if(/thấu kính|khúc xạ|phản xạ/.test(txt))lines.push('• 1/f = 1/d + 1/d\'; Độ phóng đại: k = -d\'/d');
-  }
-
-  if(isChem){
-    lines.push('🧪 <b>Hóa học</b>');
-    lines.push('• Số mol: <b>n = m/M</b> (khối lượng / khối lượng mol)');
-    lines.push('• Nồng độ mol: C<sub>M</sub> = n/V (mol/lít)');
-    lines.push('• Nồng độ %: C% = (m<sub>ct</sub>/m<sub>dd</sub>)·100%');
-    lines.push('• Thể tích khí ở đktc: V = n·22,4 (lít)');
-    lines.push('• Luôn cân bằng PTHH trước khi tính toán');
-    lines.push('• Áp dụng định luật bảo toàn khối lượng: m<sub>trước</sub> = m<sub>sau</sub>');
-  }
-
-  if(isBio){
-    lines.push('🧬 <b>Sinh học</b>');
-    lines.push('• ADN: A-T, G-X theo nguyên tắc bổ sung');
-    lines.push('• ARN: A-U, G-X');
-    lines.push('• Nhân đôi ADN: 1 ADN → 2 ADN con (k lần → 2ᵏ ADN)');
-    lines.push('• Quang hợp: 6CO₂ + 6H₂O →(ánh sáng/diệp lục) C₆H₁₂O₆ + 6O₂');
-    lines.push('• Hô hấp tế bào: C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP');
-  }
-
-  if(isEng){
-    lines.push('🇬🇧 <b>Tiếng Anh</b>');
-    lines.push('• Chú ý thì (tense) và sự hòa hợp chủ ngữ - động từ');
-    lines.push('• Câu bị động: be + V3/ed (+ by O)');
-    lines.push('• Đọc kỹ ngữ cảnh để chọn đáp án đúng nghĩa');
-    lines.push('• Loại trừ đáp án sai rõ ràng trước');
-  }
-
-  if(isLit){
-    lines.push('📖 <b>Ngữ văn</b>');
-    lines.push('• Xác định thể loại, tác giả, hoàn cảnh sáng tác');
-    lines.push('• Biện pháp tu từ: ẩn dụ, hoán dụ, so sánh, nhân hóa, điệp ngữ');
-    lines.push('• Phân tích 2 mặt: nội dung (ý nghĩa) + nghệ thuật (từ ngữ, hình ảnh)');
-  }
-
-  if(isHist){
-    lines.push('📜 <b>Lịch sử</b>');
-    lines.push('• Chú ý mốc thời gian, sự kiện, nhân vật lịch sử');
-    lines.push('• Trả lời theo cấu trúc: Nguyên nhân → Diễn biến → Kết quả → Ý nghĩa');
-  }
-
-  if(isGeo){
-    lines.push('🌍 <b>Địa lý</b>');
-    lines.push('• Đọc kỹ bản đồ, biểu đồ, atlat');
-    lines.push('• Phân tích số liệu, so sánh vùng miền');
-    lines.push('• Chú ý đơn vị: người/km², triệu tấn, %...');
-  }
-
-  if(q.type==='mc'){
-    lines.push('💡 <b>Mẹo trắc nghiệm:</b> Loại trừ đáp án sai rõ ràng → cân nhắc các đáp án còn lại → chọn đáp án chắc chắn nhất');
-  } else if(q.type==='tf'){
-    lines.push('💡 <b>Đúng/Sai:</b> Đánh giá từng nhánh độc lập. Chú ý từ khóa tuyệt đối: "luôn luôn", "không bao giờ", "chỉ", "tất cả"');
-  } else if(q.type==='sa'){
-    lines.push('💡 <b>Trả lời ngắn:</b> Tính toán cẩn thận, chú ý đơn vị, định dạng số (phân số/thập phân), làm tròn đúng yêu cầu');
-  }
-
-  if(!isMath&&!isPhys&&!isChem&&!isBio&&!isEng&&!isLit&&!isHist&&!isGeo){
-    lines.push('📝 Đọc kỹ đề bài, xác định dữ kiện đã cho và yêu cầu cần tìm');
-    lines.push('• Liên hệ với kiến thức đã học');
-    lines.push('• Kiểm tra lại kết quả trước khi chọn đáp án');
-  }
-
-  if(hasImage){
-    lines.push('🖼️ <b>Câu hỏi có hình ảnh kèm theo</b>');
-    lines.push('• Quan sát kỹ hình ảnh để xác định dữ kiện (số liệu, công thức, hình vẽ)');
-    lines.push('• Đọc nội dung chữ/số trong ảnh nếu có');
-    lines.push('• Kết hợp giữa dữ kiện trong ảnh và công thức phù hợp để giải');
-  }
-
+  if(isMath){lines.push('📐 <b>Dạng Toán học</b>');if(/phương trình bậc (2|hai)|x²|x\^2|bậc hai|pt bậc hai/.test(txt)){lines.push('• Công thức nghiệm: <b>x = (-b ± √(b²-4ac)) / 2a</b>');lines.push('• Δ = b² - 4ac');}else if(/đạo hàm/.test(txt)){lines.push('• (xⁿ)\' = n·xⁿ⁻¹');}else if(/tích phân|nguyên hàm/.test(txt)){lines.push('• ∫xⁿ dx = xⁿ⁺¹/(n+1) + C');}else if(/logarit|log\b|ln\b/.test(txt)){lines.push('• log(ab) = log a + log b');}else{lines.push('• Áp dụng công thức phù hợp');}}
+  if(isPhys){lines.push('⚛️ <b>Vật lý</b>');lines.push('• F = m·a; v = s/t; U = I·R');}
+  if(isChem){lines.push('🧪 <b>Hóa học</b>');lines.push('• n = m/M; C<sub>M</sub> = n/V');}
+  if(isBio){lines.push('🧬 <b>Sinh học</b>');lines.push('• ADN: A-T, G-X');}
+  if(isEng){lines.push('🇬🇧 <b>Tiếng Anh</b>');lines.push('• Chú ý thì và hòa hợp chủ ngữ - động từ');}
+  if(isLit){lines.push('📖 <b>Ngữ văn</b>');lines.push('• Xác định thể loại, biện pháp tu từ');}
+  if(isHist){lines.push('📜 <b>Lịch sử</b>');lines.push('• Chú ý mốc thời gian, sự kiện');}
+  if(isGeo){lines.push('🌍 <b>Địa lý</b>');lines.push('• Đọc kỹ bản đồ, biểu đồ');}
+  if(q.type==='mc')lines.push('💡 <b>Mẹo:</b> Loại trừ đáp án sai rõ ràng trước');
+  else if(q.type==='tf')lines.push('💡 <b>Đúng/Sai:</b> Đánh giá từng nhánh độc lập');
+  else if(q.type==='sa')lines.push('💡 <b>TLN:</b> Chú ý đơn vị, định dạng số');
+  if(!isMath&&!isPhys&&!isChem&&!isBio&&!isEng&&!isLit&&!isHist&&!isGeo){lines.push('📝 Đọc kỹ đề, xác định dữ kiện');lines.push('• Liên hệ kiến thức đã học');}
+  if(hasImage){lines.push('🖼️ <b>Câu hỏi có hình ảnh</b>');lines.push('• Quan sát kỹ hình ảnh');}
   return lines.join('<br>');
 }
 
@@ -955,7 +835,7 @@ function generateAIAnalysis(q){
 function switchAuthTab(tab){document.querySelectorAll('.auth-view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.auth-tabs button').forEach(b=>b.classList.remove('active'));if(tab==='login'){document.getElementById('authViewLogin').classList.add('active');document.getElementById('authTabLogin').classList.add('active');}else if(tab==='register'){document.getElementById('authViewRegister').classList.add('active');document.getElementById('authTabRegister').classList.add('active');}else{document.getElementById('authViewForgot').classList.add('active');document.getElementById('forgotStep1').style.display='block';document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='none';}}
 async function hashPassword(pw){const salt='aurora_salt_2024_v1';const data=pw+salt;try{if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(data));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}}catch(e){}let h=5381;for(let i=0;i<data.length;i++)h=((h<<5)+h)+data.charCodeAt(i);return 'fb_'+Math.abs(h).toString(36);}
 function emailKey(email){return email.trim().toLowerCase().replace(/[.@]/g,'_');}
-async function handleRegister(){const role=document.getElementById('regRole').value,username=document.getElementById('regUsername').value.trim().toLowerCase();const email=document.getElementById('regEmail').value.trim().toLowerCase(),password=document.getElementById('regPassword').value,password2=document.getElementById('regPassword2').value;if(!username||!email||!password||!password2){showToast('Điền đầy đủ!','error');return;}if(!/^[a-z0-9_.]{3,20}$/.test(username)){showToast('Username 3-20 ký tự a-z, 0-9, _ .','error');return;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showToast('Email không hợp lệ!','error');return;}if(password.length<6){showToast('Mật khẩu ≥ 6 ký tự!','error');return;}if(password!==password2){showToast('Mật khẩu không khớp!','error');return;}try{showToast('⏳ Đang xử lý...','info');if((await window.dbGet(window.dbChild(window.dbRef,`users/${username}`))).exists()){showToast('❌ Username đã tồn tại!','error');return;}if((await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(email)}`))).exists()){showToast('❌ Email đã đăng ký!','error');return;}const passwordHash=await hashPassword(password);const userData={username,email,passwordHash,role,nickname:username,avatar:'',avatarBg:'',note:'',medals:[],ownedMedals:[],ownedCup:'',customRoleIds:[],pinnedRoleId:'',textColor:'#333333',fontStyle:'normal',textEffect:'none',createdAt:Date.now()};await window.dbSet(window.ref(window.db,`users/${username}`),userData);await window.dbSet(window.ref(window.db,`email_index/${emailKey(email)}`),username);await customAlert(`🎉 Đăng ký thành công!\n\nUsername: ${username}\nVai trò: ${role==='teacher'?'Giáo viên':role==='other'?'Khác':'Học sinh'}`,{title:'Thành công!',type:'success',icon:'🎉'});document.getElementById('loginIdentifier').value=username;['regUsername','regEmail','regPassword','regPassword2'].forEach(id=>document.getElementById(id).value='');switchAuthTab('login');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function handleRegister(){const role=document.getElementById('regRole').value,username=document.getElementById('regUsername').value.trim().toLowerCase();const email=document.getElementById('regEmail').value.trim().toLowerCase(),password=document.getElementById('regPassword').value,password2=document.getElementById('regPassword2').value;if(!username||!email||!password||!password2){showToast('Điền đầy đủ!','error');return;}if(!/^[a-z0-9_.]{3,20}$/.test(username)){showToast('Username 3-20 ký tự a-z, 0-9, _ .','error');return;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showToast('Email không hợp lệ!','error');return;}if(password.length<6){showToast('Mật khẩu ≥ 6 ký tự!','error');return;}if(password!==password2){showToast('Mật khẩu không khớp!','error');return;}try{showToast('⏳ Đang xử lý...','info');if((await window.dbGet(window.dbChild(window.dbRef,`users/${username}`))).exists()){showToast('❌ Username đã tồn tại!','error');return;}if((await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(email)}`))).exists()){showToast('❌ Email đã đăng ký!','error');return;}const passwordHash=await hashPassword(password);const userData={username,email,passwordHash,role,nickname:username,avatar:'',avatarBg:'',note:'',medals:[],ownedMedals:[],ownedCup:'',ownedCups:[],customRoleIds:[],pinnedRoleId:'',textColor:'#333333',fontStyle:'normal',textEffect:'none',createdAt:Date.now()};await window.dbSet(window.ref(window.db,`users/${username}`),userData);await window.dbSet(window.ref(window.db,`email_index/${emailKey(email)}`),username);await customAlert(`🎉 Đăng ký thành công!\n\nUsername: ${username}\nVai trò: ${role==='teacher'?'Giáo viên':role==='other'?'Khác':'Học sinh'}`,{title:'Thành công!',type:'success',icon:'🎉'});document.getElementById('loginIdentifier').value=username;['regUsername','regEmail','regPassword','regPassword2'].forEach(id=>document.getElementById(id).value='');switchAuthTab('login');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function handleLogin(){const identifier=document.getElementById('loginIdentifier').value.trim().toLowerCase(),password=document.getElementById('loginPassword').value;if(!identifier||!password){showToast('Điền đầy đủ!','error');return;}try{showToast('⏳ Đang đăng nhập...','info');let username=identifier;if(identifier.includes('@')){const s=await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(identifier)}`));if(!s.exists()){showToast('❌ Email chưa đăng ký!','error');return;}username=s.val();}const us=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));if(!us.exists()){showToast('❌ Tài khoản không tồn tại!','error');return;}const u=us.val();if(await hashPassword(password)!==u.passwordHash){showToast('❌ Sai mật khẩu!','error');return;}localStorage.setItem('aurora_user',JSON.stringify({username:u.username}));await applyUserSession(u);document.getElementById('authOverlay').style.display='none';document.getElementById('loginPassword').value='';showToast(`👋 Chào mừng ${u.nickname||u.username}!`,'success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function handleSendResetCode(){const email=document.getElementById('forgotEmail').value.trim().toLowerCase();if(!email){showToast('Nhập email!','error');return;}try{if(!(await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(email)}`))).exists()){showToast('❌ Email chưa đăng ký!','error');return;}const code=String(Math.floor(100000+Math.random()*900000));currentResetEmail=email;await window.dbSet(window.ref(window.db,`password_resets/${emailKey(email)}`),{code,email,expiresAt:Date.now()+10*60*1000,createdAt:Date.now()});document.getElementById('forgotCodeDisplay').innerText=code;document.getElementById('forgotStep1').style.display='none';document.getElementById('forgotStep2').style.display='block';showCenterSquareToast('📧','Mã đã gửi!',`Mã (demo): ${code}\nHết hạn 10 phút`,'success',6000);}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function handleVerifyResetCode(){const code=document.getElementById('forgotCode').value.trim();if(code.length!==6){showToast('Nhập mã 6 số!','error');return;}try{const s=await window.dbGet(window.dbChild(window.dbRef,`password_resets/${emailKey(currentResetEmail)}`));if(!s.exists()){showToast('❌ Mã không tồn tại!','error');return;}const d=s.val();if(Date.now()>d.expiresAt){showToast('❌ Mã hết hạn!','error');return;}if(d.code!==code){showToast('❌ Mã không đúng!','error');return;}document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='block';showToast('✅ Nhập mật khẩu mới','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
@@ -970,6 +850,9 @@ function getCurrentEffectRole(u){if(!u)return DEFAULT_ROLES.student;if(u.pinnedR
 function renderUserRoleBadges(u){return getUserAllRoles(u).map(r=>renderRoleBadge(r)).join(' ');}
 function renderRoleBadge(role,cls='user-role-badge'){if(!role)return '';const aura=role.auraEnabled?`box-shadow:0 0 8px ${role.auraColor||'#ffc107'},0 0 16px ${role.auraColor||'#ffc107'};`:'';return `<span class="${cls}" style="background:${role.bgColor};color:${role.textColor};${aura}">${role.emoji||''} ${escapeHtml(role.name||'')}</span>`;}
 
+/* Helper: lấy danh sách cups của user (backward compat) */
+function getUserOwnedCups(u){if(!u)return[];if(Array.isArray(u.ownedCups)&&u.ownedCups.length)return u.ownedCups.slice();if(u.ownedCup)return [u.ownedCup];return [];}
+
 /* USER SESSION */
 async function applyUserSession(u){
   currentUser=u;currentUserFullData=u;
@@ -978,10 +861,13 @@ async function applyUserSession(u){
   if(nav){
     const builtin=getBuiltinRole(u);
     const initial=(u.nickname||u.username).charAt(0).toUpperCase();
-    const bgHtml=u.avatarBg?`<div class="avatar-bg-layer" style="background-image:url('${u.avatarBg}')"></div>`:'';
-    const avatarInner=u.avatar?`<img src="${u.avatar}">`:`<span>${initial}</span>`;
+    const hasBg=!!u.avatarBg;
+    const bgHtml=hasBg?`<div class="avatar-bg-layer" style="background-image:url('${u.avatarBg}')"></div>`:'';
+    const imgSz=hasBg?'72%':'100%';
+    const avatarInner=u.avatar?`<img src="${u.avatar}" style="width:${imgSz};height:${imgSz};object-fit:cover;border-radius:50%">`:`<span>${initial}</span>`;
     const medals=(u.medals||[]).slice(0,2).map(m=>{const md=cachedMedals[m];if(!md)return '';return `<span style="font-size:16px" title="${escapeHtml(md.name)}">${medalIcon(md)}</span>`;}).join('');
-    const cupHtml=u.ownedCup&&cachedMedals[u.ownedCup]?`<span style="font-size:16px" title="${escapeHtml(cachedMedals[u.ownedCup].name)}">🏆</span>`:'';
+    const ownedCups=getUserOwnedCups(u);
+    const cupHtml=ownedCups.length&&cachedMedals[ownedCups[0]]?`<span style="font-size:16px" title="${escapeHtml(cachedMedals[ownedCups[0]].name)}">🏆</span>`:'';
     const customCount=(u.customRoleIds||[]).length;
     const customBadge=customCount>0?`<span class="user-role-badge" style="background:#6f42c1;color:#fff;font-size:9px">+${customCount}🎭</span>`:'';
     nav.innerHTML=`<div class="avatar">${bgHtml}${avatarInner}</div><span>${escapeHtml(u.nickname||u.username)}</span>${renderRoleBadge(builtin)}${customBadge}${medals}${cupHtml}<button class="logout-btn" onclick="event.stopPropagation();handleLogout()">🚪</button>`;
@@ -1018,8 +904,7 @@ async function openProfile(_,targetUser){
   const effColors=getAvatarEffectColors(getAvatarEffect(effRole));
   if(effRole&&effRole.bgColor){header.style.background=`linear-gradient(135deg,${effRole.bgColor},${adjustColor(effRole.bgColor,-30)})`;}else header.style.background='linear-gradient(135deg,#1877f2,#198754)';
   header.style.borderBottom=`4px solid ${effColors[0]}`;
-  const avEl=document.getElementById('profileAvatarDisplay');
-  avEl.innerHTML=u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:3">`:`<span style="position:relative;z-index:3">${(u.nickname||u.username).charAt(0).toUpperCase()}</span>`;
+  // Apply avatar bg + display (đã bao gồm set innerHTML)
   applyAvatarBgToProfile(u.avatarBg||'');
   // Small BG buttons - only for self
   document.getElementById('profileBgUploadBtn').style.display=isSelf?'flex':'none';
@@ -1033,7 +918,9 @@ async function openProfile(_,targetUser){
     document.getElementById('profileActionsSelf').style.display='flex';
     document.getElementById('profileActionsOther').style.display='none';
     profileSelectedMedals=(u.medals||[]).slice(0,MAX_USER_MEDALS);
-    profileSelectedCup=u.ownedCup||null;
+    // Cup: dùng ownedCup (display choice) hoặc phần tử đầu tiên của ownedCups
+    const ownedCups=getUserOwnedCups(u);
+    profileSelectedCup=u.ownedCup&&ownedCups.includes(u.ownedCup)?u.ownedCup:(ownedCups[0]||null);
   }else{
     document.getElementById('profileAvatarWrap').onclick=null;
     document.getElementById('profileAvatarOverlay').style.display='none';
@@ -1042,7 +929,8 @@ async function openProfile(_,targetUser){
     document.getElementById('profileActionsSelf').style.display='none';
     document.getElementById('profileActionsOther').style.display='flex';
     profileSelectedMedals=(u.medals||[]).slice(0,MAX_USER_MEDALS);
-    profileSelectedCup=u.ownedCup||null;
+    const ownedCups=getUserOwnedCups(u);
+    profileSelectedCup=u.ownedCup&&ownedCups.includes(u.ownedCup)?u.ownedCup:(ownedCups[0]||null);
   }
   renderProfileMedals(isSelf);
   loadUserStats(u.username);
@@ -1055,14 +943,11 @@ function closeProfile(){document.getElementById('profileModal').classList.remove
 function renderProfileMedals(isSelf=true){const c=document.getElementById('profileMedalsContainer');c.innerHTML='';const cupDiv=document.createElement('div');cupDiv.className='profile-medal-slot cup';if(profileSelectedCup&&cachedMedals[profileSelectedCup]){const cup=cachedMedals[profileSelectedCup];cupDiv.classList.add('filled');cupDiv.innerHTML=`<div class="medal-icon" style="filter:drop-shadow(0 0 8px ${CUP_COLORS[cup.tier]||'#ffd700'})">🏆</div><div class="medal-name">${escapeHtml(cup.name)}</div>`;if(isSelf)cupDiv.innerHTML+=`<div class="remove-medal" onclick="event.stopPropagation();removeProfileCup()">✖</div>`;cupDiv.onclick=()=>showItemDetail(cup,currentViewingUser);}else{cupDiv.innerHTML='<div style="font-size:24px;color:#ccc">🏆</div><div style="font-size:9px;color:#888">Cup</div>';if(isSelf)cupDiv.onclick=()=>openMedalPicker();}c.appendChild(cupDiv);for(let i=0;i<MAX_USER_MEDALS;i++){const div=document.createElement('div');div.className='profile-medal-slot';const mid=profileSelectedMedals[i];if(mid&&cachedMedals[mid]){const m=cachedMedals[mid];div.classList.add('filled');const aura=CUP_COLORS[m.tier]?'box-shadow:0 0 8px '+CUP_COLORS[m.tier]:'';div.innerHTML=`<div class="medal-icon" style="${aura}">${MEDAL_ICONS[m.tier]||'🏅'}</div><div class="medal-name">${escapeHtml(m.name)}</div>`;if(isSelf)div.innerHTML+=`<div class="remove-medal" onclick="event.stopPropagation();removeProfileMedal(${i})">✖</div>`;div.onclick=()=>showItemDetail(m,currentViewingUser);}else{div.innerHTML='<div style="font-size:26px;color:#ccc">+</div>';if(isSelf)div.onclick=()=>openMedalPicker();}c.appendChild(div);}}
 function removeProfileMedal(i){if(!currentUser||currentViewingUser.username!==currentUser.username)return;profileSelectedMedals.splice(i,1);renderProfileMedals(true);}
 function removeProfileCup(){if(!currentUser)return;profileSelectedCup=null;renderProfileMedals(true);}
-function showItemDetail(item,user){if(!item)return;const isCup=item.type==='cup';document.getElementById('itemDetailIcon').innerText=isCup?'🏆':(MEDAL_ICONS[item.tier]||'🏅');document.getElementById('itemDetailName').innerText=item.name||'—';const tierEl=document.getElementById('itemDetailTier');tierEl.innerText=MEDAL_TIER_NAMES[item.tier]||'—';tierEl.style.background=CUP_COLORS[item.tier]||'#ffc107';tierEl.style.color=(item.tier==='diamond'||item.tier==='platinum'||item.tier==='silver')?'#000':'#fff';const descEl=document.getElementById('itemDetailDesc');if(item.description){descEl.style.display='block';descEl.innerText=item.description;}else descEl.style.display='none';const grants=(user&&user.itemGrants)||{},grant=grants[item.id]||{};const grantedDate=grant.grantedAt?new Date(grant.grantedAt).toLocaleString('vi-VN'):'—';const grantedBy=grant.grantedBy||'—',note=grant.note||'—';let meta=`<b>📅 Thời gian trao:</b> ${grantedDate}<br><b>👤 Người trao:</b> ${escapeHtml(grantedBy)}<br><b>📝 Ghi chú:</b> ${escapeHtml(note)}<br>`;if(isCup)meta+=`<b>🔢 Số lượng:</b> 1/1 (Cup độc quyền)<br>`;else if(item.maxOwners>0){const granted=getMedalGrantedCount(item.id);meta+=`<b>🔢 Số lượng:</b> ${granted}/${item.maxOwners}<br>`;}else meta+=`<b>🔢 Số lượng:</b> Không giới hạn<br>`;document.getElementById('itemDetailMeta').innerHTML=meta;document.getElementById('itemDetailModal').classList.add('show');}
-function getMedalGrantedCount(medalId){let count=0;Object.values(cachedUsers).forEach(u=>{if((u.ownedMedals||[]).includes(medalId))count++;});return count;}
+function showItemDetail(item,user){if(!item)return;const isCup=item.type==='cup';document.getElementById('itemDetailIcon').innerText=isCup?'🏆':(MEDAL_ICONS[item.tier]||'🏅');document.getElementById('itemDetailName').innerText=item.name||'—';const tierEl=document.getElementById('itemDetailTier');tierEl.innerText=MEDAL_TIER_NAMES[item.tier]||'—';tierEl.style.background=CUP_COLORS[item.tier]||'#ffc107';tierEl.style.color=(item.tier==='diamond'||item.tier==='platinum'||item.tier==='silver')?'#000':'#fff';const descEl=document.getElementById('itemDetailDesc');if(item.description){descEl.style.display='block';descEl.innerText=item.description;}else descEl.style.display='none';const grants=(user&&user.itemGrants)||{},grant=grants[item.id]||{};const grantedDate=grant.grantedAt?new Date(grant.grantedAt).toLocaleString('vi-VN'):'—';const grantedBy=grant.grantedBy||'—',note=grant.note||'—';let meta=`<b>📅 Thời gian trao:</b> ${grantedDate}<br><b>👤 Người trao:</b> ${escapeHtml(grantedBy)}<br><b>📝 Ghi chú:</b> ${escapeHtml(note)}<br>`;if(isCup){const ownedCups=getUserOwnedCups(user);meta+=`<b>🔢 Số cup sở hữu:</b> ${ownedCups.length}<br>`;}else if(item.maxOwners>0){const granted=getMedalGrantedCount(item.id);meta+=`<b>🔢 Số lượng:</b> ${granted}/${item.maxOwners}<br>`;}else meta+=`<b>🔢 Số lượng:</b> Không giới hạn<br>`;document.getElementById('itemDetailMeta').innerHTML=meta;document.getElementById('itemDetailModal').classList.add('show');}
+function getMedalGrantedCount(medalId){let count=0;Object.values(cachedUsers).forEach(u=>{if((u.ownedMedals||[]).includes(medalId))count++;if(getUserOwnedCups(u).includes(medalId))count++;});return count;}
 
-/* ============================================================
-   AVATAR CROP
-   ============================================================ */
+/* AVATAR CROP */
 const avatarCropState={img:null,offsetX:0,offsetY:0,scale:1,dragging:false,lastX:0,lastY:0,stageSize:300};
-
 async function handleAvatarUpload(input){
   if(!input.files||!input.files[0])return;
   const file=input.files[0];
@@ -1113,8 +998,10 @@ function applyAvatarCrop(){
   const cx=size/2,cy=size/2;const iw=st.img.width*st.scale,ih=st.img.height*st.scale;
   ctx.drawImage(st.img,cx-iw/2+st.offsetX,cy-ih/2+st.offsetY,iw,ih);
   const dataUrl=canvas.toDataURL('image/png');
-  document.getElementById('profileAvatarDisplay').innerHTML=`<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:3">`;
   document.getElementById('profileAvatarInput').dataset.newAvatar=dataUrl;
+  // Re-render avatar display dùng dataUrl
+  const u=currentViewingUser||currentUserFullData;
+  if(u){u.avatar=dataUrl;const hasBg=!!u.avatarBg;applyAvatarBgToProfile(u.avatarBg||'');}
   closeAvatarCrop();showToast('✅ Đã cắt avatar! Bấm "Lưu Profile" để hoàn tất.','success');
 }
 function closeAvatarCrop(){document.getElementById('avatarCropModal').classList.remove('show');avatarCropState.img=null;avatarCropState.dragging=false;}
@@ -1122,7 +1009,17 @@ function closeAvatarCrop(){document.getElementById('avatarCropModal').classList.
 async function saveProfile(){
   if(!currentUser)return;
   const newAvatar=document.getElementById('profileAvatarInput').dataset.newAvatar;
-  const updates={note:document.getElementById('profileNote').value.trim(),avatar:newAvatar||currentUserFullData.avatar||'',avatarBg:currentUserFullData.avatarBg||'',medals:profileSelectedMedals.slice(0,MAX_USER_MEDALS),ownedCup:profileSelectedCup||'',updatedAt:Date.now()};
+  const u=currentUserFullData;
+  const ownedCups=getUserOwnedCups(u);
+  const updates={
+    note:document.getElementById('profileNote').value.trim(),
+    avatar:newAvatar||u.avatar||'',
+    avatarBg:u.avatarBg||'',
+    medals:profileSelectedMedals.slice(0,MAX_USER_MEDALS),
+    ownedCup:profileSelectedCup||'',
+    ownedCups:ownedCups,
+    updatedAt:Date.now()
+  };
   try{
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),updates);
     Object.assign(currentUserFullData,updates);Object.assign(currentUser,updates);
@@ -1133,8 +1030,29 @@ async function saveProfile(){
 }
 async function loadUserStats(username){let count=0,sum=0;try{const [lb,qp]=await Promise.all([window.dbGet(window.dbChild(window.dbRef,'leaderboard')),window.dbGet(window.dbChild(window.dbRef,'qp_leaderboard'))]);const all=[...(lb.val()?Object.values(lb.val()):[]),...(qp.val()?Object.values(qp.val()):[])];all.forEach(exam=>{if(exam&&typeof exam==='object')Object.values(exam).forEach(r=>{if(r.username===username){count++;sum+=r.score||0;}});});}catch(e){}document.getElementById('profileTestCount').innerText=count;document.getElementById('profileAvgScore').innerText=count>0?(sum/count).toFixed(1):'0';}
 
-/* ẢNH NỀN AVATAR — FIXED */
-function applyAvatarBgToProfile(bgUrl){const layer=document.getElementById('profileAvatarBgLayer');if(!layer)return;if(bgUrl){layer.style.display='block';layer.style.backgroundImage=`url('${bgUrl}')`;}else{layer.style.display='none';layer.style.backgroundImage='';}}
+/* ẢNH NỀN AVATAR - FIXED */
+function applyAvatarBgToProfile(bgUrl){
+  const layer=document.getElementById('profileAvatarBgLayer');
+  const avEl=document.getElementById('profileAvatarDisplay');
+  if(!layer)return;
+  if(bgUrl){
+    layer.style.display='block';
+    layer.style.backgroundImage=`url('${bgUrl}')`;
+  }else{
+    layer.style.display='none';
+    layer.style.backgroundImage='';
+  }
+  // Update avatar display size để lộ ảnh nền
+  if(avEl){
+    const u=currentViewingUser||currentUserFullData;
+    if(u){
+      const hasBg=!!bgUrl;
+      const sz=hasBg?'74%':'100%';
+      const fs=hasBg?'36px':'48px';
+      avEl.innerHTML=u.avatar?`<img src="${u.avatar}" style="width:${sz};height:${sz};object-fit:cover;border-radius:50%;position:relative;z-index:3">`:`<span style="position:relative;z-index:3;font-size:${fs}">${(u.nickname||u.username).charAt(0).toUpperCase()}</span>`;
+    }
+  }
+}
 
 async function handleAvatarBgUpload(input){
   if(!input.files||!input.files[0]){return;}
@@ -1148,10 +1066,9 @@ async function handleAvatarBgUpload(input){
     if(!d||!d.startsWith('data:image')){showToast('❌ File ảnh không hợp lệ!','error');input.value='';return;}
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{avatarBg:d,updatedAt:Date.now()});
     currentUserFullData.avatarBg=d;currentUser.avatarBg=d;
+    if(currentViewingUser&&currentViewingUser.username===currentUser.username){currentViewingUser.avatarBg=d;}
     applyAvatarBgToProfile(d);
     await applyUserSession(currentUserFullData);
-    // Reapply on profile view
-    if(currentViewingUser&&currentViewingUser.username===currentUser.username){currentViewingUser.avatarBg=d;}
     showToast('✅ Đã cập nhật ảnh nền avatar!','success');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
   input.value='';
@@ -1176,7 +1093,7 @@ function openUserAvatarBg(username){
   const cur=u.avatarBg||'';
   const bgStyle=cur?`background-image:url('${cur}')`:'';
   const initial=(u.nickname||u.username).charAt(0).toUpperCase();
-  const avatarInner=u.avatar?`<img src="${u.avatar}" style="position:relative;z-index:2;width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<span class="overlay-text">${initial}</span>`;
+  const avatarInner=u.avatar?`<img src="${u.avatar}" style="position:relative;z-index:2;width:74%;height:74%;object-fit:cover;border-radius:50%">`:`<span class="overlay-text">${initial}</span>`;
   const html=`
     <p style="font-size:13px;color:#666;margin-bottom:8px">Chỉnh ảnh nền hiển thị phía sau avatar. <b style="color:#6f42c1">Hỗ trợ cả GIF động!</b></p>
     <div class="avatar-preview-container">
@@ -1226,9 +1143,7 @@ async function removeUserAvatarBg(username){
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
-/* ============================================================
-   🗑️ XÓA LỊCH SỬ BẢNG XẾP HẠNG
-   ============================================================ */
+/* XÓA LỊCH SỬ */
 function openDeleteHistoryModal(){
   document.getElementById('deleteHistoryPass').value='';
   document.getElementById('deleteHistoryStep1').style.display='block';
@@ -1271,7 +1186,6 @@ async function confirmDeleteClone(){
   const msg=userFilter?`Xóa lịch sử đề "${code}" của user "${userFilter}"?\n\nKhông thể hoàn tác!`:`Xóa lịch sử đề "${code}" (chỉ bản ghi clone/anonymous)?\n\nKhông thể hoàn tác!`;
   if(!await customConfirm(msg,{icon:'⚠️',title:'Xác nhận xóa',okClass:'danger',okText:'XÓA'}))return;
   try{
-    // Load users for clone detection
     const usersSnap=await window.dbGet(window.dbChild(window.dbRef,'users'));
     const users=usersSnap.exists()?usersSnap.val():{};
     let totalDeleted=0;
@@ -1287,7 +1201,6 @@ async function confirmDeleteClone(){
         if(userFilter){
           if(uname===userFilter||nick===userFilter||name.includes(userFilter))shouldDelete=true;
         }else{
-          // Clone = username trống HOẶC username không tồn tại trong users
           if(!uname||!users[uname])shouldDelete=true;
         }
         if(shouldDelete){
@@ -1318,7 +1231,7 @@ function togglePinRoleSelector(){const list=document.getElementById('profilePinn
 function renderPinnedRoleSelector(u,allRoles,isSelf){const box=document.getElementById('profilePinnedRoleBox');const list=document.getElementById('profilePinnedRoleList');const rolesFiltered=allRoles.filter(r=>r.emoji);if(rolesFiltered.length<2){box.style.display='none';return;}box.style.display='block';list.classList.remove('open');document.getElementById('pinRoleToggleIcon').innerText='▶';const pinnedId=u.pinnedRoleId||'';list.innerHTML=rolesFiltered.map(r=>{const realId=r.id||'';const isPinned=pinnedId===realId;const aura=r.auraEnabled?`box-shadow:0 0 8px ${r.auraColor||'#ffc107'},0 0 16px ${r.auraColor||'#ffc107'};`:'';return `<span class="pin-role-item ${isPinned?'pinned':''}" style="background:${r.bgColor};color:${r.textColor};${aura}" onclick="${isSelf?`pinRole('${realId}')`:'void(0)'}" title="${isSelf?'Bấm để ghim':'Chỉ chủ tài khoản đổi được'}">${r.emoji} ${escapeHtml(r.name)}</span>`;}).join('');}
 async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);if(perfMode!=='optimized'){playProfileEffect(effRole);startAvatarEffect(effRole);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
-/* PROFILE NỀN EFFECT */
+/* PROFILE FX */
 let profileFxRAF=null,profileFxAutoStop=null;
 function stopProfileEffect(){if(profileFxRAF)cancelAnimationFrame(profileFxRAF);profileFxRAF=null;if(profileFxAutoStop)clearTimeout(profileFxAutoStop);profileFxAutoStop=null;const c=document.getElementById('profileFxCanvas');if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}}
 function playProfileEffect(role){
@@ -1352,7 +1265,7 @@ function playProfileEffect(role){
   loop();profileFxAutoStop=setTimeout(()=>stopProfileEffect(),duration);
 }
 
-/* AVATAR EFFECT */
+/* AVATAR FX */
 let avatarFxRAF=null;
 function stopAvatarEffect(){if(avatarFxRAF)cancelAnimationFrame(avatarFxRAF);avatarFxRAF=null;const c=document.getElementById('avatarFxCanvas');if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}}
 function startAvatarEffect(role){
@@ -1384,8 +1297,31 @@ function startAvatarEffect(role){
 }
 
 /* MEDAL PICKER */
-function openMedalPicker(){if(!currentUser||!currentViewingUser||currentViewingUser.username!==currentUser.username)return;const owned=(currentUserFullData.ownedMedals||[]),ownedCup=currentUserFullData.ownedCup||'';const grid=document.getElementById('medalPickerGrid');if(!owned.length&&!ownedCup){grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;padding:20px 0">Bạn chưa được trao huy chương/cup nào.</p>';}else{let html='';if(ownedCup&&cachedMedals[ownedCup]){const c=cachedMedals[ownedCup];const isSel=profileSelectedCup===ownedCup;html+=`<div class="medal-item cup-card ${isSel?'selected':''}" onclick="toggleCupSelection('${ownedCup}',this)"><div class="medal-icon-lg">🏆</div><div class="medal-name-sm">${escapeHtml(c.name)}</div><div class="medal-tier-sm" style="color:${CUP_COLORS[c.tier]}">Cup • ${MEDAL_TIER_NAMES[c.tier]}</div></div>`;}owned.forEach(mid=>{const m=cachedMedals[mid];if(!m)return;const isSel=profileSelectedMedals.includes(mid);html+=`<div class="medal-item ${isSel?'selected':''}" onclick="toggleMedalSelection('${mid}',this)"><div class="medal-icon-lg">${MEDAL_ICONS[m.tier]||'🏅'}</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm">${MEDAL_TIER_NAMES[m.tier]}</div></div>`;});grid.innerHTML=html;}document.getElementById('medalPickerModal').classList.add('show');}
-function toggleCupSelection(mid,el){if(profileSelectedCup===mid){profileSelectedCup=null;el.classList.remove('selected');}else{profileSelectedCup=mid;el.classList.add('selected');}renderProfileMedals(true);}
+function openMedalPicker(){
+  if(!currentUser||!currentViewingUser||currentViewingUser.username!==currentUser.username)return;
+  const owned=(currentUserFullData.ownedMedals||[]);
+  const ownedCups=getUserOwnedCups(currentUserFullData);
+  const grid=document.getElementById('medalPickerGrid');
+  if(!owned.length&&!ownedCups.length){
+    grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;padding:20px 0">Bạn chưa được trao huy chương/cup nào.</p>';
+  }else{
+    let html='';
+    // Tất cả cup đang sở hữu
+    ownedCups.forEach(cid=>{
+      const c=cachedMedals[cid];if(!c)return;
+      const isSel=profileSelectedCup===cid;
+      html+=`<div class="medal-item cup-card ${isSel?'selected':''}" onclick="toggleCupSelection('${cid}',this)"><div class="medal-icon-lg">🏆</div><div class="medal-name-sm">${escapeHtml(c.name)}</div><div class="medal-tier-sm" style="color:${CUP_COLORS[c.tier]}">Cup • ${MEDAL_TIER_NAMES[c.tier]}</div></div>`;
+    });
+    owned.forEach(mid=>{
+      const m=cachedMedals[mid];if(!m)return;
+      const isSel=profileSelectedMedals.includes(mid);
+      html+=`<div class="medal-item ${isSel?'selected':''}" onclick="toggleMedalSelection('${mid}',this)"><div class="medal-icon-lg">${MEDAL_ICONS[m.tier]||'🏅'}</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm">${MEDAL_TIER_NAMES[m.tier]}</div></div>`;
+    });
+    grid.innerHTML=html;
+  }
+  document.getElementById('medalPickerModal').classList.add('show');
+}
+function toggleCupSelection(mid,el){if(profileSelectedCup===mid){profileSelectedCup=null;el.classList.remove('selected');}else{profileSelectedCup=mid;document.querySelectorAll('#medalPickerGrid .cup-card').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');}renderProfileMedals(true);}
 function toggleMedalSelection(mid,el){const idx=profileSelectedMedals.indexOf(mid);if(idx>=0){profileSelectedMedals.splice(idx,1);el.classList.remove('selected');}else{if(profileSelectedMedals.length>=MAX_USER_MEDALS){showToast(`Tối đa ${MAX_USER_MEDALS} huy chương!`,'warn');return;}profileSelectedMedals.push(mid);el.classList.add('selected');}renderProfileMedals(true);}
 function closeMedalPicker(){document.getElementById('medalPickerModal').classList.remove('show');}
 function confirmMedalPick(){closeMedalPicker();showToast('✅ Bấm "Lưu Profile" để hoàn tất','success');}
@@ -1401,7 +1337,7 @@ function filterAccList(){
   const c=document.getElementById('accUserListContainer');
   const list=Object.keys(cachedUsers).filter(u=>{const user=cachedUsers[u];if(search){const hay=(u+' '+(user.email||'')+' '+(user.nickname||'')).toLowerCase();if(!hay.includes(search))return false;}if(rf){if(rf==='custom'){if(!user.customRoleIds||!user.customRoleIds.length)return false;}else if(user.role!==rf)return false;}return true;});
   if(!list.length){c.innerHTML='<p style="text-align:center;color:#888;padding:20px 0">Không có tài khoản nào</p>';return;}
-  c.innerHTML=list.map(u=>{const user=cachedUsers[u];const initial=(user.nickname||u).charAt(0).toUpperCase();const bgHtml=user.avatarBg?`<div class="avatar-bg-layer" style="background-image:url('${user.avatarBg}')"></div>`:'';const avatarInner=user.avatar?`<img src="${user.avatar}">`:`<span style="position:relative;z-index:2">${initial}</span>`;const created=user.createdAt?new Date(user.createdAt).toLocaleDateString('vi-VN'):'—';return `<div class="acc-user-row"><div class="acc-avatar" onclick="viewUserProfile('${u}')">${bgHtml}${avatarInner}</div><div class="acc-info"><div class="acc-name">${escapeHtml(u)} ${user.nickname&&user.nickname!==u?`<span style="color:#666;font-weight:normal;font-size:12px">(${escapeHtml(user.nickname)})</span>`:''}</div><div class="acc-email">📧 ${escapeHtml(user.email||'—')}</div><div class="acc-meta"><span>📅 ${created}</span><span>${renderUserRoleBadges(user)}</span></div></div><div class="acc-actions"><button style="background:#0d6efd" onclick="viewUserProfile('${u}')">👁️</button><button style="background:#6f42c1" onclick="manageUserRoles('${u}')">🎭 Vai trò</button><button style="background:#198754" onclick="manageMainRole('${u}')">👑 Vai trò chính</button><button style="background:#ffc107;color:#000" onclick="openEditId('${u}')">✏️ ID</button><button style="background:#a55eea" onclick="openUserAvatarBg('${u}')">🖼️ BG</button><button style="background:#d63384" onclick="openGrantItemForUser('${u}')">🎁 Trao</button></div></div>`;}).join('');
+  c.innerHTML=list.map(u=>{const user=cachedUsers[u];const initial=(user.nickname||u).charAt(0).toUpperCase();const hasBg=!!user.avatarBg;const bgHtml=hasBg?`<div class="avatar-bg-layer" style="background-image:url('${user.avatarBg}')"></div>`:'';const imgSz=hasBg?'74%':'100%';const avatarInner=user.avatar?`<img src="${user.avatar}" style="width:${imgSz};height:${imgSz};object-fit:cover;border-radius:50%;position:relative;z-index:2">`:`<span style="position:relative;z-index:2">${initial}</span>`;const created=user.createdAt?new Date(user.createdAt).toLocaleDateString('vi-VN'):'—';return `<div class="acc-user-row"><div class="acc-avatar" onclick="viewUserProfile('${u}')">${bgHtml}${avatarInner}</div><div class="acc-info"><div class="acc-name">${escapeHtml(u)} ${user.nickname&&user.nickname!==u?`<span style="color:#666;font-weight:normal;font-size:12px">(${escapeHtml(user.nickname)})</span>`:''}</div><div class="acc-email">📧 ${escapeHtml(user.email||'—')}</div><div class="acc-meta"><span>📅 ${created}</span><span>${renderUserRoleBadges(user)}</span></div></div><div class="acc-actions"><button style="background:#0d6efd" onclick="viewUserProfile('${u}')">👁️</button><button style="background:#6f42c1" onclick="manageUserRoles('${u}')">🎭 Vai trò</button><button style="background:#198754" onclick="manageMainRole('${u}')">👑 Vai trò chính</button><button style="background:#ffc107;color:#000" onclick="openEditId('${u}')">✏️ ID</button><button style="background:#a55eea" onclick="openUserAvatarBg('${u}')">🖼️ BG</button><button style="background:#d63384" onclick="openGrantItemForUser('${u}')">🎁 Trao</button></div></div>`;}).join('');
 }
 function viewUserProfile(username){const u=cachedUsers[username];if(!u){showToast('Không tìm thấy user!','error');return;}openProfile(null,u);}
 async function manageUserRoles(username){const u=cachedUsers[username];if(!u)return;await loadRolesCache();const currentIds=u.customRoleIds||[];let html=`<p style="font-size:13px;color:#666;margin-bottom:10px">Chọn tối đa ${MAX_USER_ROLES} vai trò cho <b>${escapeHtml(username)}</b>:</p>`;const roleIds=Object.keys(cachedRoles);if(!roleIds.length){html+='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Chưa có vai trò nào.</p>';}else{html+='<div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto">';roleIds.forEach(rid=>{const r=cachedRoles[rid];const sel=currentIds.includes(rid);html+=`<div style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid ${sel?'#198754':'#e0e0e0'};border-radius:10px;background:${sel?'#e7ffee':'#fff'};cursor:pointer" onclick="toggleUserRolePick('${rid}',this)">${renderRoleBadge({...r,id:rid})}<span style="margin-left:auto;font-size:18px">${sel?'✅':'⭕'}</span></div>`;});html+='</div>';}html+=`<div style="margin-top:14px;padding:10px;background:#f0f8ff;border-radius:8px;font-size:12px;color:#666">Đã chọn: <b id="rolePickCount">${currentIds.length}</b>/${MAX_USER_ROLES}</div>`;html+=`<button class="btn btn-success" style="margin-top:12px" onclick="saveUserRolePicks('${username}')">💾 Lưu Lựa Chọn</button>`;document.getElementById('supremeModalTitle').innerText='Quản Lí Vai Trò: '+username;document.getElementById('supremeModalContent').innerHTML=html;document.getElementById('supremeDetailModal').style.display='flex';window._userRolePicks=currentIds.slice();}
@@ -1427,7 +1363,7 @@ async function saveRole(){const name=document.getElementById('roleName').value.t
 async function deleteRole(rid){if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}const vua=await customPrompt('Nhập mật khẩu VUA để xóa:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}if(!await customConfirm('Xóa vai trò này?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;try{await window.dbRemove(window.ref(window.db,`system/roles/${rid}`));delete cachedRoles[rid];showToast('🗑️ Đã xóa!','warn');loadRoleList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
 function openMedalListPanel(){document.getElementById('medalListPanel').style.display='block';document.getElementById('accMgmtPanel').style.display='none';document.getElementById('roleListPanel').style.display='none';loadMedalList();}
 function closeMedalListPanel(){document.getElementById('medalListPanel').style.display='none';document.getElementById('accMgmtPanel').style.display='block';}
-async function loadMedalList(){await loadMedalsCache();const c=document.getElementById('medalListContainer');const ids=Object.keys(cachedMedals);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có huy chương/cup nào.</p>';return;}c.innerHTML=ids.map(mid=>{const m=cachedMedals[mid];const isCup=m.type==='cup';const icon=isCup?'🏆':(MEDAL_ICONS[m.tier]||'🏅');const count=getMedalGrantedCount(mid);let countTxt=isCup?`Đã trao: ${count}/1`:(m.maxOwners>0?`Đã trao: ${count}/${m.maxOwners}`:`Đã trao: ${count}`);return `<div class="role-card" style="border-color:${isCup?CUP_COLORS[m.tier]||'#a55eea':'#ffc107'}"><span style="font-size:40px;filter:drop-shadow(0 0 6px ${CUP_COLORS[m.tier]||'#ffd700'})">${icon}</span><div class="role-info"><div style="font-weight:bold;color:#333;font-size:14px">${escapeHtml(m.name)} ${isCup?'<span style="font-size:10px;background:#a55eea;color:#fff;padding:2px 8px;border-radius:10px">CUP</span>':''}</div><div style="font-size:11px;color:#888;margin-top:3px">Bậc: <b style="color:${CUP_COLORS[m.tier]}">${MEDAL_TIER_NAMES[m.tier]}</b> • ${countTxt}</div></div><div class="role-actions"><button style="background:#0d6efd" onclick="openMedalEditor('${mid}')">✏️</button><button style="background:#dc3545" onclick="deleteMedal('${mid}')">🗑️</button></div></div>`;}).join('');}
+async function loadMedalList(){await loadMedalsCache();const c=document.getElementById('medalListContainer');const ids=Object.keys(cachedMedals);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có huy chương/cup nào.</p>';return;}c.innerHTML=ids.map(mid=>{const m=cachedMedals[mid];const isCup=m.type==='cup';const icon=isCup?'🏆':(MEDAL_ICONS[m.tier]||'🏅');const count=getMedalGrantedCount(mid);let countTxt=isCup?`Đã trao: ${count} (không giới hạn)`:(m.maxOwners>0?`Đã trao: ${count}/${m.maxOwners}`:`Đã trao: ${count}`);return `<div class="role-card" style="border-color:${isCup?CUP_COLORS[m.tier]||'#a55eea':'#ffc107'}"><span style="font-size:40px;filter:drop-shadow(0 0 6px ${CUP_COLORS[m.tier]||'#ffd700'})">${icon}</span><div class="role-info"><div style="font-weight:bold;color:#333;font-size:14px">${escapeHtml(m.name)} ${isCup?'<span style="font-size:10px;background:#a55eea;color:#fff;padding:2px 8px;border-radius:10px">CUP</span>':''}</div><div style="font-size:11px;color:#888;margin-top:3px">Bậc: <b style="color:${CUP_COLORS[m.tier]}">${MEDAL_TIER_NAMES[m.tier]}</b> • ${countTxt}</div></div><div class="role-actions"><button style="background:#0d6efd" onclick="openMedalEditor('${mid}')">✏️</button><button style="background:#dc3545" onclick="deleteMedal('${mid}')">🗑️</button></div></div>`;}).join('');}
 function openMedalEditor(mid){currentEditingMedalId=mid||null;const m=mid&&cachedMedals[mid]?cachedMedals[mid]:{type:'medal',name:'',tier:'gold',description:'',maxOwners:0};document.getElementById('medalEditorTitle').innerText=mid?'✏️ Sửa':'🏅 Tạo Huy Chương / 🏆 Cup';document.getElementById('medalType').value=m.type||'medal';document.getElementById('medalName').value=m.name||'';document.getElementById('medalTier').value=m.tier||'gold';document.getElementById('medalDescription').value=m.description||'';document.getElementById('medalMaxOwners').value=m.maxOwners||0;updateMedalTypeFields();updateMedalPreview();document.getElementById('medalEditorModal').classList.add('show');}
 function closeMedalEditor(){document.getElementById('medalEditorModal').classList.remove('show');}
 function updateMedalTypeFields(){const type=document.getElementById('medalType').value;document.getElementById('medalMaxOwnersBox').style.display=type==='cup'?'none':'block';}
@@ -1437,11 +1373,82 @@ document.addEventListener('change',e=>{if(e.target.id==='medalTier')updateMedalP
 async function saveMedal(){const name=document.getElementById('medalName').value.trim(),tier=document.getElementById('medalTier').value,type=document.getElementById('medalType').value;const description=document.getElementById('medalDescription').value.trim(),maxOwners=type==='cup'?1:(parseInt(document.getElementById('medalMaxOwners').value)||0);if(!name){showToast('Nhập tên!','error');return;}try{const mid=currentEditingMedalId||('medal_'+Date.now());const data={name,tier,type,description,maxOwners,updatedAt:Date.now()};if(!currentEditingMedalId)data.createdAt=Date.now();await window.dbSet(window.ref(window.db,`system/medals/${mid}`),data);cachedMedals[mid]=data;showToast(`✅ Đã lưu!`,'success');closeMedalEditor();loadMedalList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function deleteMedal(mid){if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}const vua=await customPrompt('Nhập mật khẩu VUA để xóa:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}if(!await customConfirm('Xóa?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;try{await window.dbRemove(window.ref(window.db,`system/medals/${mid}`));delete cachedMedals[mid];showToast('🗑️ Đã xóa!','warn');loadMedalList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
 let grantTargetUser=null;
-function openGrantItemForUser(username){const u=cachedUsers[username];if(!u)return;grantTargetUser=username;const ownedMedals=u.ownedMedals||[],ownedCup=u.ownedCup||'';const availableMedals=Object.keys(cachedMedals).filter(mid=>{const m=cachedMedals[mid];if(m.type==='cup')return false;if(ownedMedals.includes(mid))return false;if(m.maxOwners>0){const g=getMedalGrantedCount(mid);if(g>=m.maxOwners)return false;}return true;});const availableCups=Object.keys(cachedMedals).filter(mid=>{const m=cachedMedals[mid];if(m.type!=='cup')return false;const g=getMedalGrantedCount(mid);if(g>=1&&!ownedCup)return false;return true;});let html=`<div style="font-weight:bold;color:#1877f2;margin-bottom:8px">🎁 Trao tặng cho: <span style="color:#d32f2f">${escapeHtml(username)}</span></div>`;if(!availableMedals.length&&!availableCups.length){html+=`<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Không còn huy chương/cup nào có thể trao.</p>`;}else{html+=`<div class="medal-grid" id="grantItemGrid">`;availableCups.forEach(mid=>{const m=cachedMedals[mid];html+=`<div class="medal-item cup-card" onclick="pickGrantItem('${mid}',this)"><div class="medal-icon-lg">🏆</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm" style="color:${CUP_COLORS[m.tier]}">Cup • ${MEDAL_TIER_NAMES[m.tier]}</div></div>`;});availableMedals.forEach(mid=>{const m=cachedMedals[mid];html+=`<div class="medal-item" onclick="pickGrantItem('${mid}',this)"><div class="medal-icon-lg">${MEDAL_ICONS[m.tier]}</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm">${MEDAL_TIER_NAMES[m.tier]}${m.maxOwners>0?` • ${getMedalGrantedCount(mid)}/${m.maxOwners}`:''}</div></div>`;});html+=`</div>`;}html+=`<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-secondary" onclick="document.getElementById('supremeDetailModal').style.display='none'">Đóng</button></div>`;document.getElementById('supremeModalTitle').innerText='🎁 Trao Tặng';document.getElementById('supremeModalContent').innerHTML=html;document.getElementById('supremeDetailModal').style.display='flex';}
+function openGrantItemForUser(username){
+  const u=cachedUsers[username];if(!u)return;grantTargetUser=username;
+  const ownedMedals=u.ownedMedals||[],ownedCups=getUserOwnedCups(u);
+  // Huy chương: bỏ những cái đã có, giới hạn số lượng
+  const availableMedals=Object.keys(cachedMedals).filter(mid=>{
+    const m=cachedMedals[mid];
+    if(m.type==='cup')return false;
+    if(ownedMedals.includes(mid))return false;
+    if(m.maxOwners>0){const g=getMedalGrantedCount(mid);if(g>=m.maxOwners)return false;}
+    return true;
+  });
+  // Cup: KHÔNG giới hạn số người sở hữu, nhưng không trao trùng cup đã có
+  const availableCups=Object.keys(cachedMedals).filter(mid=>{
+    const m=cachedMedals[mid];
+    if(m.type!=='cup')return false;
+    if(ownedCups.includes(mid))return false;
+    return true;
+  });
+  let html=`<div style="font-weight:bold;color:#1877f2;margin-bottom:8px">🎁 Trao tặng cho: <span style="color:#d32f2f">${escapeHtml(username)}</span></div>`;
+  if(!availableMedals.length&&!availableCups.length){
+    html+=`<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Không còn huy chương/cup nào có thể trao.</p>`;
+  }else{
+    html+=`<div class="medal-grid" id="grantItemGrid">`;
+    availableCups.forEach(mid=>{
+      const m=cachedMedals[mid];
+      html+=`<div class="medal-item cup-card" onclick="pickGrantItem('${mid}',this)"><div class="medal-icon-lg">🏆</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm" style="color:${CUP_COLORS[m.tier]}">Cup • ${MEDAL_TIER_NAMES[m.tier]}</div></div>`;
+    });
+    availableMedals.forEach(mid=>{
+      const m=cachedMedals[mid];
+      html+=`<div class="medal-item" onclick="pickGrantItem('${mid}',this)"><div class="medal-icon-lg">${MEDAL_ICONS[m.tier]}</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm">${MEDAL_TIER_NAMES[m.tier]}${m.maxOwners>0?` • ${getMedalGrantedCount(mid)}/${m.maxOwners}`:''}</div></div>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-secondary" onclick="document.getElementById('supremeDetailModal').style.display='none'">Đóng</button></div>`;
+  document.getElementById('supremeModalTitle').innerText='🎁 Trao Tặng';
+  document.getElementById('supremeModalContent').innerHTML=html;
+  document.getElementById('supremeDetailModal').style.display='flex';
+}
 function pickGrantItem(mid,el){document.querySelectorAll('#grantItemGrid .medal-item').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');document.getElementById('supremeDetailModal').style.display='none';openGrantModal(grantTargetUser,mid);}
 function openGrantModal(username,itemId){const u=cachedUsers[username],item=cachedMedals[itemId];if(!u||!item)return;const isCup=item.type==='cup';document.getElementById('grantItemTitle').innerText=`🎁 Trao ${isCup?'Cup':'Huy Chương'}`;document.getElementById('grantItemInfo').innerHTML=`<div style="display:flex;align-items:center;gap:10px"><span style="font-size:40px">${isCup?'🏆':MEDAL_ICONS[item.tier]}</span><div><div style="font-weight:bold">${escapeHtml(item.name)}</div><div style="font-size:11px;color:#666">Bậc: ${MEDAL_TIER_NAMES[item.tier]} • Trao cho: <b>${escapeHtml(username)}</b></div></div></div>`;const now=new Date();const localISO=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('grantTime').value=localISO;document.getElementById('grantNote').value='';document.getElementById('grantItemModal').classList.add('show');window._grantItemId=itemId;window._grantUsername=username;}
 function closeGrantItem(){document.getElementById('grantItemModal').classList.remove('show');}
-async function confirmGrantItem(){const itemId=window._grantItemId,username=window._grantUsername;if(!itemId||!username)return;const grantedAt=new Date(document.getElementById('grantTime').value).getTime()||Date.now(),note=document.getElementById('grantNote').value.trim()||'Trao tặng';const item=cachedMedals[itemId],u=cachedUsers[username];if(!item||!u)return;try{const updates={updatedAt:Date.now()};const itemGrants=u.itemGrants||{};itemGrants[itemId]={grantedAt,grantedBy:currentUser.username,note};updates.itemGrants=itemGrants;if(item.type==='cup'){if(u.ownedCup&&u.ownedCup!==itemId){showToast('❌ User đã có cup khác!','error');return;}updates.ownedCup=itemId;}else{if(!u.ownedMedals)u.ownedMedals=[];if(u.ownedMedals.includes(itemId)){showToast('❌ Đã có huy chương này!','error');return;}if(item.maxOwners>0){const g=getMedalGrantedCount(itemId);if(g>=item.maxOwners){showToast(`❌ Đã đạt giới hạn ${item.maxOwners}!`,'error');return;}}updates.ownedMedals=[...u.ownedMedals,itemId];}await window.dbUpdate(window.ref(window.db,`users/${username}`),updates);Object.assign(cachedUsers[username],updates);if(currentUser&&currentUser.username===username){Object.assign(currentUser,updates);Object.assign(currentUserFullData,updates);await applyUserSession(currentUserFullData);}closeGrantItem();showCenterSquareToast('🎁','Đã trao!',`${item.name} → ${username}`,'success',3000);filterAccList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function confirmGrantItem(){
+  const itemId=window._grantItemId,username=window._grantUsername;
+  if(!itemId||!username)return;
+  const grantedAt=new Date(document.getElementById('grantTime').value).getTime()||Date.now(),note=document.getElementById('grantNote').value.trim()||'Trao tặng';
+  const item=cachedMedals[itemId],u=cachedUsers[username];
+  if(!item||!u)return;
+  try{
+    const updates={updatedAt:Date.now()};
+    const itemGrants=u.itemGrants||{};
+    itemGrants[itemId]={grantedAt,grantedBy:currentUser.username,note};
+    updates.itemGrants=itemGrants;
+    if(item.type==='cup'){
+      // KHÔNG giới hạn: user có thể sở hữu nhiều cup
+      const ownedCups=getUserOwnedCups(u);
+      if(ownedCups.includes(itemId)){showToast('❌ Đã có cup này!','error');return;}
+      const newCups=[...ownedCups,itemId];
+      updates.ownedCups=newCups;
+      if(!u.ownedCup)updates.ownedCup=itemId;
+    }else{
+      if(!u.ownedMedals)u.ownedMedals=[];
+      if(u.ownedMedals.includes(itemId)){showToast('❌ Đã có huy chương này!','error');return;}
+      if(item.maxOwners>0){const g=getMedalGrantedCount(itemId);if(g>=item.maxOwners){showToast(`❌ Đã đạt giới hạn ${item.maxOwners}!`,'error');return;}}
+      updates.ownedMedals=[...u.ownedMedals,itemId];
+    }
+    await window.dbUpdate(window.ref(window.db,`users/${username}`),updates);
+    Object.assign(cachedUsers[username],updates);
+    if(currentUser&&currentUser.username===username){
+      Object.assign(currentUser,updates);Object.assign(currentUserFullData,updates);
+      await applyUserSession(currentUserFullData);
+    }
+    closeGrantItem();
+    showCenterSquareToast('🎁','Đã trao!',`${item.name} → ${username}`,'success',3000);
+    filterAccList();
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
 async function loadSecurityPasswords(){try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/security_passwords'));const list=s.val()||{};cachedPasswords=Object.values(list).map(p=>(p.value||'').toUpperCase()).filter(v=>v);renderSecurityPassList(list);}catch(e){cachedPasswords=[];}try{const ps=await window.dbGet(window.dbChild(window.dbRef,'system/partner_password'));cachedPartnerPassword=ps.exists()?(ps.val().value||''):'';updatePartnerPassStatus();}catch(e){cachedPartnerPassword='';}}
 function updatePartnerPassStatus(){const el=document.getElementById('partnerPassStatus');if(el)el.innerHTML=cachedPartnerPassword?'✅ Đã đặt mật khẩu Partner':'⚠️ Chưa đặt mật khẩu Partner';}
 function checkSecurityPassword(pass){if(!pass)return false;const p=pass.trim();if(p===VUA_PASSWORD)return true;if(cachedPartnerPassword&&p===cachedPartnerPassword)return true;return cachedPasswords.includes(p.toUpperCase());}
@@ -1501,7 +1508,8 @@ function dismissCheatAlert(){document.getElementById('cheatAlertModal').style.di
 function playGalaxyEffect(){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const o=document.createElement('div');o.className='galaxy-overlay';c.appendChild(o);setTimeout(()=>o.remove(),2100);const core=document.createElement('div');core.className='galaxy-core play';c.appendChild(core);setTimeout(()=>core.remove(),2000);for(let i=0;i<30;i++){const s=document.createElement('div');s.className='galaxy-star play';const a=(Math.PI*2*i)/30;const d=200+Math.random()*320;s.style.left='50%';s.style.top='50%';s.style.setProperty('--tx',Math.cos(a)*d+'px');s.style.setProperty('--ty',Math.sin(a)*d+'px');c.appendChild(s);setTimeout(()=>s.remove(),2100);}}
 function playLightningEffect(cardEl){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const r=cardEl?cardEl.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0,height:0};const cx=r.left+r.width/2,cy=r.top+r.height/2;const f=document.createElement('div');f.className='lightning-flash play';c.appendChild(f);setTimeout(()=>f.remove(),1500);const b=document.createElement('div');b.className='lightning-bolt play';b.innerText='⚡';b.style.left=(cx-55)+'px';b.style.top=(cy-55)+'px';c.appendChild(b);setTimeout(()=>b.remove(),1300);for(let i=0;i<10;i++){const m=document.createElement('div');m.className='mini-bolt play';m.innerText='⚡';m.style.left=(cx+(Math.random()-.5)*90)+'px';m.style.top=(cy+(Math.random()-.5)*90)+'px';m.style.setProperty('--tx',((Math.random()-.5)*520)+'px');m.style.setProperty('--ty',((Math.random()-.5)*520)+'px');c.appendChild(m);setTimeout(()=>m.remove(),1900);}}
 function playShieldEffect(){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const s=document.createElement('div');s.className='shield-burst play';s.innerText='🛡️';c.appendChild(s);setTimeout(()=>s.remove(),1700);for(let i=0;i<4;i++){const r=document.createElement('div');r.className='shield-ring play';r.style.animationDelay=(i*0.12)+'s';c.appendChild(r);setTimeout(()=>r.remove(),2100);}for(let i=0;i<24;i++){const p=document.createElement('div');p.className='shield-particle play';const a=(Math.PI*2*i)/24;const d=150+Math.random()*260;p.style.setProperty('--tx',Math.cos(a)*d+'px');p.style.setProperty('--ty',Math.sin(a)*d+'px');c.appendChild(p);setTimeout(()=>p.remove(),1900);}}
-function playSmartEffect(){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const flash=document.createElement('div');flash.className='smart-flash play';c.appendChild(flash);setTimeout(()=>flash.remove(),5200);const bulb=document.createElement('div');bulb.className='smart-bulb play';bulb.innerText='💡';c.appendChild(bulb);setTimeout(()=>bulb.remove(),5200);for(let i=0;i<5;i++){const ring=document.createElement('div');ring.className='smart-ring play';ring.style.animationDelay=(i*0.35)+'s';if(i%2===1){ring.style.borderColor='#fff8b0';ring.style.boxShadow='0 0 60px #fff8b0, inset 0 0 45px #fff8b0, 0 0 120px #ffeb3b';}c.appendChild(ring);setTimeout(()=>ring.remove(),5500);}for(let i=0;i<32;i++){const p=document.createElement('div');p.className='smart-particle play';const ang=(Math.PI*2*i)/32+Math.random()*0.2;const dist=280+Math.random()*420;p.style.setProperty('--tx',Math.cos(ang)*dist+'px');p.style.setProperty('--ty',Math.sin(ang)*dist+'px');p.style.animationDelay=(i*0.03)+'s';c.appendChild(p);setTimeout(()=>p.remove(),3100);}}
+// GIẢM THỜI GIAN HIỆU ỨNG BÓNG ĐÈN
+function playSmartEffect(){if(!fxAllowed())return;const c=document.getElementById('fxContainer');const flash=document.createElement('div');flash.className='smart-flash play';c.appendChild(flash);setTimeout(()=>flash.remove(),2800);const bulb=document.createElement('div');bulb.className='smart-bulb play';bulb.innerText='💡';c.appendChild(bulb);setTimeout(()=>bulb.remove(),2800);for(let i=0;i<5;i++){const ring=document.createElement('div');ring.className='smart-ring play';ring.style.animationDelay=(i*0.35)+'s';if(i%2===1){ring.style.borderColor='#fff8b0';ring.style.boxShadow='0 0 60px #fff8b0, inset 0 0 45px #fff8b0, 0 0 120px #ffeb3b';}c.appendChild(ring);setTimeout(()=>ring.remove(),2900);}for(let i=0;i<32;i++){const p=document.createElement('div');p.className='smart-particle play';const ang=(Math.PI*2*i)/32+Math.random()*0.2;const dist=280+Math.random()*420;p.style.setProperty('--tx',Math.cos(ang)*dist+'px');p.style.setProperty('--ty',Math.sin(ang)*dist+'px');p.style.animationDelay=(i*0.03)+'s';c.appendChild(p);setTimeout(()=>p.remove(),2900);}}
 function fxAllowed(){return perfMode!=='optimized';}
 
 /* QR / EXAM CODE / LIVE ROOM etc */
@@ -1515,8 +1523,8 @@ function openQRScanModal(){if(qrScanActive)return;const m=document.getElementByI
 function onQRCodeScanned(text){let examCode='',practiceCode='';try{if(text.includes('?')){const p=new URLSearchParams(text.split('?')[1]);examCode=p.get('exam')||'';practiceCode=p.get('practice')||'';}else{const p=text.split(':');if(p.length>=2)examCode=p[1].trim().toUpperCase();}}catch(e){}if(!examCode&&!practiceCode){showToast('❌ QR không hợp lệ!','error');return;}stopQRScanner();closeQRScanModal();if(practiceCode){document.getElementById('examModeSelect').value='practice';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='practice'));document.querySelector('.mode-dd-icon').innerText='⚡';document.querySelector('.mode-dd-label').innerText='Bài Luyện Nhanh';document.getElementById('lblCodeText').innerText='Mã Bài Luyện Nhanh:';document.getElementById('extraPassBox').style.display='block';document.getElementById('studentExamCode').value=practiceCode;}else{document.getElementById('examModeSelect').value='live';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='live'));document.querySelector('.mode-dd-icon').innerText='🛡️';document.querySelector('.mode-dd-label').innerText='Phòng Thi Chuyên Dụng';document.getElementById('lblCodeText').innerText='Mã Bài Kiểm Tra:';document.getElementById('extraPassBox').style.display='block';document.getElementById('studentExamCode').value=examCode;}showToast('📱 Đã nhận mã!','info');}
 function stopQRScanner(){if(html5QrCodeScanner){try{html5QrCodeScanner.stop().then(()=>{try{html5QrCodeScanner.clear();}catch(e){}html5QrCodeScanner=null;}).catch(()=>{html5QrCodeScanner=null;});}catch(e){html5QrCodeScanner=null;}}qrScanActive=false;}
 function closeQRScanModal(){stopQRScanner();document.getElementById('qrScanModal').classList.remove('show');document.getElementById('qrReaderContainer').innerHTML='';}
-function resetTeacherForm(){if(!confirm('Đặt lại form?'))return;['examCode','examTitle','liveRoomPass'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('examType').value='pdf';['teacherPdfInput','teacherImgInput','autoKeyImageInput'].forEach(id=>document.getElementById(id).value='');document.getElementById('advExamOptionsToggle').checked=false;document.getElementById('advExamOptionsPanel').style.display='none';document.getElementById('advEnableTimer').checked=true;document.getElementById('advTimerInputBox').style.display='block';document.getElementById('examDuration').value='45';document.getElementById('advEnableAntiCheat').checked=true;document.getElementById('advAntiCheatBox').style.display='block';document.getElementById('advCheatThreshold').value='7';document.getElementById('advCheatLimitType').value='unlimited';document.getElementById('advCheatLimitInputBox').style.display='none';document.getElementById('advMaxWarnings').value='5';document.getElementById('advEnableAttemptLimit').checked=false;document.getElementById('advMaxAttempts').value='1';document.getElementById('advEnableAINote').checked=false;document.getElementById('enableLiveRoom').checked=false;document.getElementById('liveRoomConfigBox').style.display='none';document.getElementById('liveRoomLimit').value='50';document.getElementById('builderMC').innerHTML='';document.getElementById('builderTF').innerHTML='';document.getElementById('builderSA').innerHTML='';document.getElementById('pdfUploadSection').style.display='block';document.getElementById('imageUploadSection').style.display='none';addQuestionV2('mc');addQuestionV2('tf');showToast('🔄 Đã đặt lại!','success');}
-function resetQpForm(){if(!confirm('Đặt lại form?'))return;['qpTitle','qpCode','qpPassword'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('qpEnableAdvanced').checked=false;document.getElementById('qpAdvancedPanel').style.display='none';document.getElementById('qpQuestionsContainer').innerHTML='';addQpQuestionItem();showToast('🔄 Đã đặt lại!','success');}
+async function resetTeacherForm(){if(!await customConfirm('Đặt lại form?',{icon:'🔄',title:'Xác nhận'}))return;['examCode','examTitle','liveRoomPass'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('examType').value='pdf';['teacherPdfInput','teacherImgInput','autoKeyImageInput'].forEach(id=>document.getElementById(id).value='');document.getElementById('advExamOptionsToggle').checked=false;document.getElementById('advExamOptionsPanel').style.display='none';document.getElementById('advEnableTimer').checked=true;document.getElementById('advTimerInputBox').style.display='block';document.getElementById('examDuration').value='45';document.getElementById('advEnableAntiCheat').checked=true;document.getElementById('advAntiCheatBox').style.display='block';document.getElementById('advCheatThreshold').value='7';document.getElementById('advCheatLimitType').value='unlimited';document.getElementById('advCheatLimitInputBox').style.display='none';document.getElementById('advMaxWarnings').value='5';document.getElementById('advEnableAttemptLimit').checked=false;document.getElementById('advMaxAttempts').value='1';document.getElementById('advEnableAINote').checked=false;document.getElementById('enableLiveRoom').checked=false;document.getElementById('liveRoomConfigBox').style.display='none';document.getElementById('liveRoomLimit').value='50';document.getElementById('builderMC').innerHTML='';document.getElementById('builderTF').innerHTML='';document.getElementById('builderSA').innerHTML='';document.getElementById('pdfUploadSection').style.display='block';document.getElementById('imageUploadSection').style.display='none';addQuestionV2('mc');addQuestionV2('tf');showToast('🔄 Đã đặt lại!','success');}
+async function resetQpForm(){if(!await customConfirm('Đặt lại form?',{icon:'🔄',title:'Xác nhận'}))return;['qpTitle','qpCode','qpPassword'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('qpEnableAdvanced').checked=false;document.getElementById('qpAdvancedPanel').style.display='none';document.getElementById('qpQuestionsContainer').innerHTML='';addQpQuestionItem();showToast('🔄 Đã đặt lại!','success');}
 function addQuestionV2(type,defaultAns='',customBranches=null){const cid=type==='mc'?'builderMC':(type==='tf'?'builderTF':'builderSA');const c=document.getElementById(cid),idx=c.children.length+1;const div=document.createElement('div');div.className='q-build-item';div.dataset.type=type;const defScore=type==='mc'?.25:(type==='tf'?1:.5);let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><strong>Câu ${idx}</strong><div style="display:flex;gap:5px"><button class="btn btn-secondary" style="width:auto;padding:2px 6px;font-size:11px" onclick="toggleAdvancedQSettings(this)">⚙️</button><button class="btn btn-danger" style="width:auto;padding:2px 6px;font-size:11px" onclick="this.parentElement.parentElement.parentElement.remove()">Xóa</button></div></div>`;if(type==='mc')h+=`<div style="display:flex;gap:10px;align-items:center"><label style="margin:0">ĐA đúng:</label><select class="correct-ans" style="width:100px;margin:0">${['A','B','C','D'].map(l=>`<option value="${l}" ${defaultAns===l?'selected':''}>${l}</option>`).join('')}</select></div>`;else if(type==='tf')h+=`<div><label style="font-size:12px">Số nhánh:</label><input type="number" class="tf-branch-count" value="${customBranches?customBranches.length:4}" min="1" max="10" style="padding:4px;margin-bottom:6px" onchange="updateTfV2Inputs(this)"><div class="tf-branches-builder"></div></div>`;else h+=`<div><label>ĐA đúng:</label><input type="text" class="correct-ans" value="${defaultAns}" placeholder="..."></div>`;h+=`<div class="advanced-q-panel" style="display:none;margin-top:8px;background:#fff;border:1px dashed #ccc;padding:8px;border-radius:4px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label style="font-size:11px">Điểm:</label><input type="number" class="q-score-custom" value="${defScore}" step="0.05" style="padding:4px;margin:0"></div><div><label style="font-size:11px">Ảnh giải:</label><input type="file" class="q-exp-img-input" accept="image/*" style="font-size:11px;padding:2px;margin:0"></div></div><div style="margin-top:6px"><label style="font-size:11px">Chú thích:</label><textarea class="q-explanation" rows="2" placeholder="..." style="margin:0;font-size:12px"></textarea></div></div>`;div.innerHTML=h;c.appendChild(div);if(type==='tf')updateTfV2Inputs(div.querySelector('.tf-branch-count'),customBranches);}
 function toggleAdvancedQSettings(btn){const p=btn.parentElement.parentElement.parentElement.querySelector('.advanced-q-panel');p.style.display=p.style.display==='none'?'block':'none';}
 function updateTfV2Inputs(ci,preset){const w=ci.parentElement.querySelector('.tf-branches-builder');const n=parseInt(ci.value)||4;const letters=['a','b','c','d','e','f','g','h'];let h='<div style="display:flex;flex-direction:column;gap:4px;margin-top:4px">';for(let i=0;i<n;i++){const l=letters[i]||(i+1),pa=preset&&preset[i]?preset[i]:'Đ';h+=`<div style="display:flex;align-items:center;justify-content:space-between;background:#fff;padding:4px 8px;border:1px solid #ddd;border-radius:4px"><span style="font-size:12px;font-weight:bold">Nhánh ${l}:</span><select class="tf-branch-ans-${i}" style="width:70px;padding:2px;margin:0;font-size:12px"><option value="Đ" ${pa==='Đ'?'selected':''}>Đúng</option><option value="S" ${pa==='S'?'selected':''}>Sai</option></select></div>`;}h+='</div>';w.innerHTML=h;}
@@ -1591,10 +1599,10 @@ function setSmartCorrect(i,l){if(smartExamQuestions[i]){smartExamQuestions[i].co
 function setSmartTF(i,bi,v){if(smartExamQuestions[i]){if(!smartExamQuestions[i]._tfBranches)smartExamQuestions[i]._tfBranches=['Đ','Đ','S','S'];smartExamQuestions[i]._tfBranches[bi]=v;renderSmartQuestionsList();}}
 function setSmartBranchCount(i,c){c=parseInt(c);if(!smartExamQuestions[i])return;const q=smartExamQuestions[i];if(!q._tfBranches)q._tfBranches=[];if(c>q._tfBranches.length)for(let j=q._tfBranches.length;j<c;j++)q._tfBranches.push('Đ');else q._tfBranches=q._tfBranches.slice(0,c);renderSmartQuestionsList();}
 function changeSmartType(i,nt){if(!smartExamQuestions[i])return;const q=smartExamQuestions[i];if(q.type===nt)return;q.type=nt;if(nt==='mc'){q.score=.25;if(!q.options||q.options.length<2)q.options=[{label:'A',text:''},{label:'B',text:''},{label:'C',text:''},{label:'D',text:''}];q.correctAnswer='';q._tfBranches=null;}else if(nt==='tf'){q.score=1;q.options=[];if(!q._tfBranches)q._tfBranches=['Đ','Đ','S','S'];q.correctAnswer=q._tfBranches.join(',');}else if(nt==='sa'){q.score=.5;q.options=[];q._tfBranches=null;q.correctAnswer='';}renderSmartQuestionsList();showToast(`✅ Đổi câu ${i+1}!`,'success');}
-function removeSmartQuestion(i){if(!confirm('Xóa?'))return;smartExamQuestions.splice(i,1);smartExamQuestions.forEach((q,j)=>q.id=j+1);renderSmartQuestionsList();const st={mc:0,tf:0,sa:0};smartExamQuestions.forEach(q=>{if(st[q.type]!==undefined)st[q.type]++;});document.getElementById('smartExamStats').innerHTML=`Còn <b>${smartExamQuestions.length}</b> câu`;}
+async function removeSmartQuestion(i){if(!await customConfirm('Xóa?',{icon:'🗑️',okClass:'danger'}))return;smartExamQuestions.splice(i,1);smartExamQuestions.forEach((q,j)=>q.id=j+1);renderSmartQuestionsList();const st={mc:0,tf:0,sa:0};smartExamQuestions.forEach(q=>{if(st[q.type]!==undefined)st[q.type]++;});document.getElementById('smartExamStats').innerHTML=`Còn <b>${smartExamQuestions.length}</b> câu`;}
 function addSmartQuestion(t){smartExamQuestions.push({id:smartExamQuestions.length+1,type:t||'mc',content:'',imageData:'',options:t==='mc'?[{label:'A',text:''},{label:'B',text:''},{label:'C',text:''},{label:'D',text:''}]:[],correctAnswer:'',score:t==='mc'?.25:(t==='tf'?1:.5),note:'',_tfBranches:t==='tf'?['Đ','Đ','S','S']:null});renderSmartQuestionsList();}
-function reparseSmartExam(){if(!smartExamRawText){showToast('Chưa có dữ liệu!','error');return;}if(!confirm('Mất chỉnh sửa. Tiếp tục?'))return;if(smartExamPdfDoc&&!smartExamUsedOCR){parseExamTextAndCropImages(smartExamPdfDoc,smartExamRawText,document.getElementById('smartExamProgressText'),document.getElementById('smartExamProgressBar')).then(p=>{smartExamQuestions=p.questions;smartExamStats=p.stats;renderSmartQuestionsList();showToast(`🔄 ${smartExamQuestions.length} câu`,'success');});}else{const p=parseExamTextOnly(smartExamRawText);smartExamQuestions=p.questions;smartExamStats=p.stats;renderSmartQuestionsList();showToast(`🔄 ${smartExamQuestions.length} câu`,'success');}}
-function cancelSmartExam(){if(!confirm('Hủy?'))return;smartExamRawText='';smartExamQuestions=[];smartExamStats={mc:0,sa:0,tf:0,ambiguous:0};smartExamPdfDoc=null;smartExamUsedOCR=false;document.getElementById('smartExamPreviewContainer').style.display='none';document.getElementById('smartExamConfigBox').style.display='none';document.getElementById('smartExamProgress').style.display='none';document.getElementById('smartExamAnswerUploadBox').style.display='none';document.getElementById('smartExamPdfInput').value='';document.getElementById('smartExamCode').value='';document.getElementById('smartExamTitle').value='';showCenterSquareToast('🗑️','Đã hủy','','warn');}
+async function reparseSmartExam(){if(!smartExamRawText){showToast('Chưa có dữ liệu!','error');return;}if(!await customConfirm('Mất chỉnh sửa. Tiếp tục?',{icon:'🔄'}))return;if(smartExamPdfDoc&&!smartExamUsedOCR){parseExamTextAndCropImages(smartExamPdfDoc,smartExamRawText,document.getElementById('smartExamProgressText'),document.getElementById('smartExamProgressBar')).then(p=>{smartExamQuestions=p.questions;smartExamStats=p.stats;renderSmartQuestionsList();showToast(`🔄 ${smartExamQuestions.length} câu`,'success');});}else{const p=parseExamTextOnly(smartExamRawText);smartExamQuestions=p.questions;smartExamStats=p.stats;renderSmartQuestionsList();showToast(`🔄 ${smartExamQuestions.length} câu`,'success');}}
+async function cancelSmartExam(){if(!await customConfirm('Hủy?',{icon:'❌',okClass:'danger'}))return;smartExamRawText='';smartExamQuestions=[];smartExamStats={mc:0,sa:0,tf:0,ambiguous:0};smartExamPdfDoc=null;smartExamUsedOCR=false;document.getElementById('smartExamPreviewContainer').style.display='none';document.getElementById('smartExamConfigBox').style.display='none';document.getElementById('smartExamProgress').style.display='none';document.getElementById('smartExamAnswerUploadBox').style.display='none';document.getElementById('smartExamPdfInput').value='';document.getElementById('smartExamCode').value='';document.getElementById('smartExamTitle').value='';showCenterSquareToast('🗑️','Đã hủy','','warn');}
 async function handleSmartAnswerFile(input){if(!input.files||!input.files.length)return;const f=input.files[0],pv=document.getElementById('smartAnswerPreview');pv.style.display='block';pv.style.background='#fff3cd';pv.style.color='#856404';pv.innerText='⏳ Đang đọc...';try{let text='';if(f.name.toLowerCase().endsWith('.txt'))text=await f.text();else if(f.name.toLowerCase().endsWith('.pdf')){const b=await f.arrayBuffer();const pdf=await pdfjsLib.getDocument({data:b}).promise;for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i);const tc=await pg.getTextContent();text+='\n'+tc.items.map(it=>it.str).join(' ');}}const ans=parseAnswerText(text);if(!ans.length){pv.style.background='#f8d7da';pv.style.color='#842029';pv.innerText='⚠️ Không tìm thấy!';input.value='';return;}applyAnswersToQuestions(ans);pv.style.background='#d1e7dd';pv.style.color='#0f5132';pv.innerText=`✅ Đã gán ${ans.length} ĐA!`;}catch(e){pv.style.background='#f8d7da';pv.style.color='#842029';pv.innerText='❌ '+e.message;}input.value='';}
 async function handleSmartAnswerImage(input){if(!input.files||!input.files.length)return;const f=input.files[0],pv=document.getElementById('smartAnswerPreview');pv.style.display='block';pv.style.background='#fff3cd';pv.style.color='#856404';pv.innerText='🔍 OCR...';try{const d=await fileToBase64(f);const r=await Tesseract.recognize(d,'vie+eng',{logger:m=>{if(m.status==='recognizing text')pv.innerText=`🔍 OCR ${Math.round(m.progress*100)}%`;}});const ans=parseAnswerText(r.data.text||'');if(!ans.length){pv.style.background='#f8d7da';pv.innerText='⚠️ Không tìm thấy!';input.value='';return;}applyAnswersToQuestions(ans);pv.style.background='#d1e7dd';pv.style.color='#0f5132';pv.innerText=`✅ Đã gán ${ans.length} ĐA!`;}catch(e){pv.innerText='❌ '+e.message;}input.value='';}
 function parseAnswerText(text){if(!text)return[];const a=[];const c=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace(/\u00A0/g,' ');let m;const cp=/(\d{1,3})\s*[.:)\-]\s*([A-Da-d])\b/g;while((m=cp.exec(c))!==null)a.push({num:parseInt(m[1]),ans:m[2].toUpperCase()});const lp=/^(?:Câu|CÂU|Cau)\s*(\d{1,3})\s*[.:)\-]?\s*([A-Da-d])\b/gm;while((m=lp.exec(c))!==null){const n=parseInt(m[1]);if(!a.find(x=>x.num===n))a.push({num:n,ans:m[2].toUpperCase()});}const seen=new Set();return a.filter(x=>{if(seen.has(x.num))return false;seen.add(x.num);return true;}).sort((a,b)=>a.num-b.num);}
@@ -1624,6 +1632,7 @@ function toggleQpAntiCheatType(){document.getElementById('qpMaxWarningBox').styl
 async function loadAllSupremeExams(){const tb=document.getElementById('supremeExamsTableBody');tb.innerHTML='<tr><td colspan="4">⏳ Đang tải...</td></tr>';const [examsSnap,qpSnap]=await Promise.all([window.dbGet(window.dbChild(window.dbRef,'exams')),window.dbGet(window.dbChild(window.dbRef,'quick_practices'))]);let html='',c=0;if(examsSnap.exists()){const exams=examsSnap.val();Object.keys(exams).forEach(code=>{const e=exams[code];c++;let tl='<span style="background:#e7f3ff;color:#1877f2;padding:2px 6px;border-radius:4px;font-weight:bold">Chính thức</span>';if(e.isLiveRoom)tl='<span style="background:#d1e7dd;color:#0f5132;padding:2px 6px;border-radius:4px;font-weight:bold">🛡️ Chuyên dụng</span>';if(e.source==='smart-pdf-v4')tl='<span style="background:#fff3cd;color:#856404;padding:2px 6px;border-radius:4px;font-weight:bold">🎓 Thông minh</span>';html+=`<tr><td><b>${escapeHtml(code)}</b></td><td>${escapeHtml(e.title||'')}</td><td>${tl}</td><td><div style="display:flex;gap:6px;justify-content:center"><button class="btn btn-secondary" style="padding:2px 8px;font-size:11px;width:auto" onclick="supremeViewDetail('exam','${code}')">👁️</button><button class="btn btn-danger" style="padding:2px 8px;font-size:11px;width:auto" onclick="supremeDeleteData('exams','${code}')">🗑️</button></div></td></tr>`;});}if(qpSnap.exists()){const qps=qpSnap.val();Object.keys(qps).forEach(code=>{const q=qps[code];c++;html+=`<tr><td><b>${escapeHtml(code)}</b></td><td>${escapeHtml(q.title||'')}</td><td><span style="background:#fff3cd;color:#856404;padding:2px 6px;border-radius:4px;font-weight:bold">⚡ Bài luyện</span></td><td><div style="display:flex;gap:6px;justify-content:center"><button class="btn btn-secondary" style="padding:2px 8px;font-size:11px;width:auto" onclick="supremeViewDetail('qp','${code}')">👁️</button><button class="btn btn-danger" style="padding:2px 8px;font-size:11px;width:auto" onclick="supremeDeleteData('quick_practices','${code}')">🗑️</button></div></td></tr>`;});}if(!c)html='<tr><td colspan="4">Không có đề nào</td></tr>';tb.innerHTML=html;}
 async function supremeViewDetail(type,code){const path=type==='exam'?`exams/${code}`:`quick_practices/${code}`;const s=await window.dbGet(window.dbChild(window.dbRef,path));if(!s.exists()){showToast('Không tìm thấy!','error');return;}const data=s.val();document.getElementById('supremeModalTitle').innerText=`Chi Tiết [${code}]`;let html=`<p><b>Mã:</b> ${escapeHtml(code)} | <b>Tên:</b> ${escapeHtml(data.title||'')}</p><hr style="margin:10px 0">`;if(type==='exam'){if(data.isLiveRoom)html+='<p>🛡️ Phòng live: BẬT</p>';if(data.source==='smart-pdf-v4')html+='<p>🎓 Đề thông minh</p>';html+='<b>Đáp án:</b>';(data.questions||[]).forEach(q=>{html+=`<div style="background:#f8f9fa;padding:8px;border-radius:6px;margin-top:8px"><b>Câu ${q.id} (${q.type}):</b> <b style="color:#1877f2">${escapeHtml(q.correctAnswer)}</b></div>`;});}else{html+='<b>Câu hỏi:</b>';(data.questions||[]).forEach(q=>{const opts=(q.options||[]).map(o=>`${o.label}. ${o.text}`).join(' | ');html+=`<div style="background:#f8f9fa;padding:8px;border-radius:6px;margin-top:8px"><b>Câu ${q.id}:</b> ${escapeHtml(q.question||'')}<br>- ĐA: ${escapeHtml(opts)}<br>- Đúng: <b style="color:#1877f2">${escapeHtml(q.correct)}</b></div>`;});}document.getElementById('supremeModalContent').innerHTML=html;document.getElementById('supremeDetailModal').style.display='flex';}
 async function supremeDeleteData(folder,code){if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}if(!await customConfirm(`Xóa vĩnh viễn [${code}]?`,{icon:'🗑️',okClass:'danger'}))return;await window.dbRemove(window.ref(window.db,`${folder}/${code}`));if(folder==='exams'){await window.dbRemove(window.ref(window.db,`leaderboard/${code}`));await window.dbRemove(window.ref(window.db,`liverooms/${code}`));}else{await window.dbRemove(window.ref(window.db,`qp_rooms/${code}`));await window.dbRemove(window.ref(window.db,`qp_leaderboard/${code}`));}showToast('🗑️ Đã xóa!','warn');loadAllSupremeExams();}
+
 window.addEventListener('DOMContentLoaded',()=>{
   checkAuthOnLoad();initPerfMode();updateQrFabVisibility();
   setTimeout(()=>{try{const u=new URLSearchParams(location.search),ep=u.get('exam'),pp=u.get('practice');if(ep){document.getElementById('examModeSelect').value='live';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='live'));document.querySelector('.mode-dd-icon').innerText='🛡️';document.querySelector('.mode-dd-label').innerText='Phòng Thi Chuyên Dụng';document.getElementById('lblCodeText').innerText='Mã Bài Kiểm Tra:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Phòng Thi:';document.getElementById('studentExamCode').value=ep.toUpperCase();showToast('📱 Đã nhận mã!','info');if(history.replaceState)history.replaceState({},document.title,location.pathname);}else if(pp){document.getElementById('examModeSelect').value='practice';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='practice'));document.querySelector('.mode-dd-icon').innerText='⚡';document.querySelector('.mode-dd-label').innerText='Bài Luyện Nhanh';document.getElementById('lblCodeText').innerText='Mã Bài Luyện Nhanh:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Bài Luyện:';document.getElementById('studentExamCode').value=pp.toUpperCase();showToast('📱 Đã nhận mã!','info');if(history.replaceState)history.replaceState({},document.title,location.pathname);}}catch(e){}},1200);
