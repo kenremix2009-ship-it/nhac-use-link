@@ -26,7 +26,7 @@ body{background:#f0f2f5;color:#333}
 .btn-success{background:#198754}.btn-success:hover{background:#157347}
 .btn-warning{background:#ffc107;color:#000}.btn-warning:hover{background:#ffca2c}
 .form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-input[type="text"],input[type="number"],input[type="password"],input[type="email"],select,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;margin-top:5px;margin-bottom:12px;font-size:14px}
+input[type="text"],input[type="number"],input[type="password"],input[type="email"],input[type="datetime-local"],select,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;margin-top:5px;margin-bottom:12px;font-size:14px}
 label{font-weight:600;font-size:13px;color:#444;display:block}
 .view-section{display:none}.view-section.active{display:block}
 .section-title{background:#e7f3ff;color:#1877f2;padding:8px 12px;border-radius:6px;font-weight:bold;margin:15px 0 10px 0;font-size:15px;display:flex;justify-content:space-between;align-items:center}
@@ -57,7 +57,7 @@ th,td{border:1px solid #ddd;padding:8px;text-align:center;font-size:13px}
 th{background:#f4f6f8;font-weight:600}
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;justify-content:center;align-items:center;z-index:9999;padding:15px}
 .modal-overlay.show{display:flex}
-.modal-overlay.z-top{z-index:99999999!important}
+.modal-overlay.z-top{z-index:999999999!important}
 .modal-box{background:#fff;width:100%;max-width:450px;padding:20px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.3);position:relative;max-height:90vh;overflow-y:auto}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid #eee;padding-bottom:8px}
 .modal-header h3{font-size:16px;color:#1877f2}
@@ -67,9 +67,7 @@ th{background:#f4f6f8;font-weight:600}
 #systemToast.error{background:linear-gradient(135deg,#dc3545,#bb2d3b)}
 #systemToast.info{background:linear-gradient(135deg,#0d6efd,#0b5ed7)!important}
 #systemToast.warn{background:linear-gradient(135deg,#ffc107,#e0a800)!important;color:#000!important}
-
-/* ========== CUSTOM ALERT (Center) ========== */
-#customAlertOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.65);display:none;justify-content:center;align-items:center;z-index:999999998;padding:15px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#customAlertOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.65);display:none;justify-content:center;align-items:center;z-index:999999998;padding:15px;backdrop-filter:blur(6px)}
 #customAlertOverlay.show{display:flex}
 .custom-alert-box{background:#fff;border-radius:24px;padding:32px 28px 24px 28px;max-width:440px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:caIn .5s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
 @keyframes caIn{0%{transform:scale(.7) translateY(30px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
@@ -78,32 +76,27 @@ th{background:#f4f6f8;font-weight:600}
 .custom-alert-box.error::before{background:linear-gradient(90deg,#dc3545,#bb2d3b)}
 .custom-alert-box.warn::before{background:linear-gradient(90deg,#ffc107,#e0a800)}
 .custom-alert-box.info::before{background:linear-gradient(90deg,#0d6efd,#0b5ed7)}
-.ca-icon{font-size:64px;line-height:1;margin-bottom:14px;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.15));animation:caFloat 2.5s ease-in-out infinite}
-@keyframes caFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.05)}}
+.ca-icon{font-size:64px;line-height:1;margin-bottom:14px;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.15))}
 .ca-title{font-size:20px;font-weight:900;color:#1877f2;margin-bottom:8px}
 .ca-msg{font-size:14px;color:#555;line-height:1.6;margin-bottom:20px;white-space:pre-wrap;word-break:break-word}
 .ca-input{width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-size:15px;margin-bottom:18px;transition:all .3s}
 .ca-input:focus{outline:none;border-color:#1877f2;box-shadow:0 0 0 4px rgba(24,119,242,.15)}
 .ca-actions{display:flex;gap:10px}
-.ca-actions button{flex:1;padding:13px 20px;border-radius:12px;font-weight:bold;font-size:15px;cursor:pointer;border:none;transition:transform .15s}
-.ca-actions button:active{transform:scale(.96)}
+.ca-actions button{flex:1;padding:13px 20px;border-radius:12px;font-weight:bold;font-size:15px;cursor:pointer;border:none}
 .ca-btn-cancel{background:#f0f2f5;color:#333}
 .ca-btn-ok{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;box-shadow:0 6px 18px rgba(24,119,242,.35)}
-.ca-btn-ok.success{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 6px 18px rgba(25,135,84,.35)}
-.ca-btn-ok.danger{background:linear-gradient(135deg,#dc3545,#bb2d3b);box-shadow:0 6px 18px rgba(220,53,69,.35)}
-.ca-btn-ok.warn{background:linear-gradient(135deg,#ffc107,#e0a800);color:#000;box-shadow:0 6px 18px rgba(255,193,7,.4)}
-
-/* ========== CENTER SQUARE TOAST ========== */
+.ca-btn-ok.success{background:linear-gradient(135deg,#198754,#157347)}
+.ca-btn-ok.danger{background:linear-gradient(135deg,#dc3545,#bb2d3b)}
+.ca-btn-ok.warn{background:linear-gradient(135deg,#ffc107,#e0a800);color:#000}
 #centerSquareToast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.5);background:#fff;border-radius:24px;padding:32px 40px;box-shadow:0 25px 70px rgba(0,0,0,.45);z-index:99999999;text-align:center;opacity:0;pointer-events:none;transition:all .45s cubic-bezier(.34,1.56,.64,1);min-width:230px;max-width:92vw}
 #centerSquareToast.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
-#centerSquareToast .cst-icon{font-size:60px;line-height:1;margin-bottom:12px;display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,.15))}
+#centerSquareToast .cst-icon{font-size:60px;line-height:1;margin-bottom:12px;display:block}
 #centerSquareToast .cst-title{font-size:18px;font-weight:900;margin-bottom:8px;color:#1877f2}
 #centerSquareToast .cst-msg{font-size:13px;color:#555;line-height:1.5;white-space:pre-wrap}
 #centerSquareToast.success{border-top:6px solid #198754}#centerSquareToast.success .cst-title{color:#198754}
 #centerSquareToast.error{border-top:6px solid #dc3545}#centerSquareToast.error .cst-title{color:#dc3545}
 #centerSquareToast.warn{border-top:6px solid #ffc107}#centerSquareToast.warn .cst-title{color:#e0a800}
 #centerSquareToast.info{border-top:6px solid #0d6efd}#centerSquareToast.info .cst-title{color:#0d6efd}
-
 #globalBroadcastBanner{position:fixed;left:0;width:100%;padding:15px 25px;text-align:center;font-weight:bold;z-index:99999999;display:none;box-shadow:0 4px 15px rgba(0,0,0,.3)}
 #globalBroadcastBanner.pos-top{top:0}
 #globalBroadcastBanner.pos-middle{top:50%;transform:translateY(-50%)}
@@ -132,8 +125,6 @@ th{background:#f4f6f8;font-weight:600}
 #studentLoginView .floating-shape{position:absolute;border-radius:50%;opacity:.15;pointer-events:none;z-index:-1}
 #studentLoginView .student-card{position:relative;z-index:1}
 #studentLoginView .student-card h2{background:linear-gradient(90deg,#1877f2,#198754,#1877f2);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-#studentLoginView .student-card input{border:2px solid #e0e0e0}
-#studentLoginView .student-card input:focus{outline:none;border-color:#1877f2;box-shadow:0 0 0 4px rgba(24,119,242,.15)}
 body.exam-active #studentLoginView::before,body.exam-active #studentLoginView .floating-shape{display:none!important}
 #forcedSubmitModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:center;z-index:999999999;padding:15px}
 #forcedSubmitModal.show{display:flex}
@@ -147,6 +138,7 @@ body.exam-active #studentLoginView::before,body.exam-active #studentLoginView .f
 #perfModeModal .perf-box{background:#fff;width:100%;max-width:480px;padding:28px 22px 22px 22px;border-radius:20px;text-align:center}
 #perfModeModal h3{font-size:20px;color:#1877f2;margin-bottom:8px;font-weight:900}
 .perf-option{display:flex;align-items:flex-start;gap:14px;padding:16px 14px;border:2px solid #e0e0e0;border-radius:14px;cursor:pointer;margin-bottom:12px;text-align:left;background:#fff}
+.perf-option:hover{border-color:#1877f2}
 .perf-icon{font-size:40px;line-height:1;flex-shrink:0}
 .perf-text{flex:1}
 .perf-title{font-size:16px;font-weight:900;color:#1877f2;margin-bottom:4px}
@@ -251,24 +243,18 @@ img{-webkit-user-drag:none}
 .auth-view .link{color:#1877f2;font-size:13px;text-align:right;display:block;margin:-6px 0 10px 0;cursor:pointer;font-weight:700}
 .auth-view .link.center{text-align:center;margin-top:14px}
 .code-display{background:#fff3cd;border:2px dashed #ffc107;padding:12px;border-radius:10px;text-align:center;font-size:22px;font-weight:900;color:#856404;letter-spacing:6px;margin-bottom:12px;font-family:'Courier New',monospace}
-
-/* NAV USER */
 .nav-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);padding:4px 12px 4px 4px;border-radius:20px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s}
 .nav-user:hover{background:rgba(255,255,255,.25)}
 .nav-user .avatar{width:28px;height:28px;border-radius:50%;background:#fff;color:#1877f2;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;overflow:hidden}
 .nav-user .avatar img{width:100%;height:100%;object-fit:cover}
 .nav-user .logout-btn{background:transparent;border:none;color:#fff;cursor:pointer;font-size:15px;padding:2px 4px;border-radius:50%}
-.user-role-badge{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:700;white-space:nowrap}
-
-/* ROLE BADGES with effects */
-.role-badge-mini{padding:2px 8px;border-radius:12px;font-weight:700;font-size:11px;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
-.role-badge-mini.aura{box-shadow:0 0 8px currentColor,0 0 14px currentColor}
+.user-role-badge{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
 
 /* PROFILE */
 #profileModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:99999999;padding:15px;backdrop-filter:blur(8px);overflow-y:auto}
 #profileModal.show{display:flex}
 .profile-box{background:#fff;border-radius:24px;padding:0;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,.6);position:relative}
-.profile-header-bg{background:linear-gradient(135deg,#1877f2,#198754);height:130px;border-radius:24px 24px 0 0;position:relative;transition:all .5s}
+.profile-header-bg{background:linear-gradient(135deg,#1877f2,#198754);height:130px;border-radius:24px 24px 0 0;position:relative;transition:all .5s;overflow:hidden}
 .profile-avatar-wrap{position:absolute;bottom:-55px;left:50%;transform:translateX(-50%);width:120px;height:120px;border-radius:50%;border:5px solid #fff;overflow:hidden;background:#e7f3ff;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#1877f2;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .profile-avatar-wrap img{width:100%;height:100%;object-fit:cover}
 .profile-avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;font-size:12px;font-weight:bold;border-radius:50%}
@@ -281,9 +267,11 @@ img{-webkit-user-drag:none}
 .profile-section label{font-size:12px;color:#666;font-weight:700;display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
 .profile-section input,.profile-section textarea{width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:10px;font-size:14px;margin:0}
 .profile-medals{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:14px;background:#f8f9fa;border-radius:12px;min-height:70px}
-.profile-medal-slot{width:66px;height:80px;border:2px dashed #ccc;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fff;position:relative;padding:4px;text-align:center;transition:all .25s}
+.profile-medal-slot{width:70px;height:84px;border:2px dashed #ccc;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fff;position:relative;padding:4px;text-align:center;transition:all .25s}
 .profile-medal-slot:hover{border-color:#ffc107;transform:translateY(-2px)}
 .profile-medal-slot.filled{border-style:solid;border-color:#ffc107;background:linear-gradient(135deg,#fffbe6,#fff)}
+.profile-medal-slot.cup{border-style:solid;border-color:#a55eea;background:linear-gradient(135deg,#f3e8ff,#fff);grid-column:span 1}
+.profile-medal-slot.cup.filled{box-shadow:0 0 12px #a55eea}
 .profile-medal-slot .medal-icon{font-size:32px;line-height:1}
 .profile-medal-slot .medal-name{font-size:9px;color:#666;margin-top:3px;line-height:1.15;word-break:break-word;max-width:100%}
 .profile-medal-slot .remove-medal{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:#dc3545;color:#fff;border:2px solid #fff;font-size:11px;display:none;align-items:center;justify-content:center;cursor:pointer;font-weight:bold}
@@ -294,75 +282,67 @@ img{-webkit-user-drag:none}
 .profile-stat-label{font-size:11px;color:#666;font-weight:bold;text-transform:uppercase;margin-top:4px}
 .profile-actions{display:flex;gap:8px;margin-top:14px}
 .profile-actions .btn{flex:1}
-
-/* PROFILE EFFECT LAYER */
-#profileFxLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10;border-radius:24px}
+#profileFxLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;border-radius:24px}
 #profileFxCanvas{width:100%;height:100%;display:block}
+
+/* MEDAL/CUP detail popup */
+#itemDetailModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:center;z-index:999999998;padding:15px;backdrop-filter:blur(8px)}
+#itemDetailModal.show{display:flex}
+.item-detail-box{background:#fff;border-radius:24px;padding:28px 24px;max-width:440px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6);position:relative;overflow:hidden}
+.item-detail-icon{font-size:80px;line-height:1;margin-bottom:12px;filter:drop-shadow(0 6px 15px rgba(0,0,0,.2))}
+.item-detail-name{font-size:22px;font-weight:900;color:#333;margin-bottom:6px}
+.item-detail-tier{display:inline-block;padding:4px 14px;border-radius:20px;font-weight:bold;font-size:12px;margin-bottom:14px}
+.item-detail-desc{background:#f8f9fa;padding:14px;border-radius:12px;font-size:13px;color:#555;line-height:1.6;text-align:left;margin-bottom:14px;white-space:pre-wrap}
+.item-detail-meta{background:#f0f8ff;padding:12px;border-radius:12px;font-size:12px;color:#333;text-align:left;line-height:1.7;margin-bottom:14px}
+.item-detail-meta b{color:#1877f2}
 
 /* ACCOUNT MANAGEMENT */
 .acc-user-row{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:10px;margin-bottom:8px;background:#fff;flex-wrap:wrap;transition:all .2s}
 .acc-user-row:hover{border-color:#6f42c1;box-shadow:0 4px 12px rgba(111,66,193,.1)}
-.acc-avatar{width:44px;height:44px;border-radius:50%;background:#1877f2;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;flex-shrink:0;overflow:hidden}
+.acc-avatar{width:44px;height:44px;border-radius:50%;background:#1877f2;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;flex-shrink:0;overflow:hidden;cursor:pointer}
 .acc-avatar img{width:100%;height:100%;object-fit:cover}
 .acc-info{flex:1;min-width:180px}
 .acc-name{font-weight:bold;font-size:14px;color:#333;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .acc-email{font-size:12px;color:#666;margin-top:3px}
 .acc-meta{font-size:11px;color:#999;margin-top:3px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .acc-actions{display:flex;gap:5px;flex-wrap:wrap}
-.acc-actions button{border:none;padding:7px 11px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;color:#fff;transition:transform .15s}
-.acc-actions button:active{transform:scale(.95)}
-
-/* ROLE CARD */
+.acc-actions button{border:none;padding:7px 11px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;color:#fff}
 .role-card{background:#fff;border:2px solid #e0e0e0;border-radius:14px;padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;transition:all .25s}
 .role-card:hover{border-color:#6f42c1;transform:translateY(-2px);box-shadow:0 8px 24px rgba(111,66,193,.15)}
 .role-preview{padding:8px 18px;border-radius:20px;font-weight:bold;font-size:13px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .role-info{flex:1;min-width:140px;font-size:12px;color:#666}
 .role-actions{display:flex;gap:5px}
 .role-actions button{border:none;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;color:#fff}
-
-/* ROLE EDITOR */
 #roleEditorModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:center;z-index:99999999;padding:15px;backdrop-filter:blur(6px);overflow-y:auto}
 #roleEditorModal.show{display:flex}
 .role-editor-box{background:#fff;border-radius:20px;padding:24px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;margin:auto}
 .role-editor-box h3{color:#6f42c1;margin-bottom:16px;font-weight:900;font-size:18px}
 .role-emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:8px 0}
 .role-emoji-grid button{padding:8px 4px;border:2px solid #e0e0e0;background:#fff;border-radius:10px;font-size:22px;cursor:pointer;transition:all .15s}
-.role-emoji-grid button:hover{border-color:#6f42c1;transform:scale(1.08)}
 .role-emoji-grid button.selected{border-color:#6f42c1;background:#f0ebff;box-shadow:0 0 10px rgba(111,66,193,.4)}
-
-/* MEDAL PICKER */
-#medalPickerModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:99999999;padding:15px;backdrop-filter:blur(6px)}
+#medalPickerModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:999999999;padding:15px;backdrop-filter:blur(6px)}
 #medalPickerModal.show{display:flex}
-.medal-picker-box{background:#fff;border-radius:20px;padding:24px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto}
-.medal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-top:12px}
-.medal-item{padding:12px;border:2px solid #e0e0e0;border-radius:12px;text-align:center;cursor:pointer;background:#fff;transition:all .2s}
-.medal-item:hover{border-color:#ffc107;transform:translateY(-3px);box-shadow:0 8px 20px rgba(255,193,7,.25)}
+.medal-picker-box{background:#fff;border-radius:20px;padding:24px;max-width:600px;width:100%;max-height:85vh;overflow-y:auto}
+.medal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:12px}
+.medal-item{padding:12px;border:2px solid #e0e0e0;border-radius:12px;text-align:center;cursor:pointer;background:#fff;transition:all .2s;position:relative}
+.medal-item:hover{border-color:#ffc107;transform:translateY(-3px)}
 .medal-item.selected{border-color:#198754;background:#e7ffee;box-shadow:0 0 12px rgba(25,135,84,.4)}
-.medal-icon-lg{font-size:36px;line-height:1}
+.medal-icon-lg{font-size:40px;line-height:1}
 .medal-name-sm{font-size:11px;color:#555;margin-top:4px;font-weight:bold;word-break:break-word}
 .medal-tier-sm{font-size:10px;margin-top:2px}
-
-/* PASSWORD BADGES */
+.medal-item.cup-card{border-color:#a55eea}
+.medal-item.cup-card.selected{border-color:#a55eea;background:#f3e8ff;box-shadow:0 0 12px #a55eea}
 .pw-list-item{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:10px 12px;border-radius:10px;border:1px solid #eee;gap:8px;flex-wrap:wrap;margin-bottom:6px}
 .pw-badge{padding:2px 8px;border-radius:12px;font-size:10px;font-weight:bold;display:inline-flex;align-items:center;gap:3px;margin-left:6px}
 .pw-badge.security{background:#e7f3ff;color:#1877f2;border:1px solid #1877f2}
 .pw-badge.partner{background:#f8d7da;color:#dc3545;border:1px solid #dc3545}
-
-/* SECTION DIVIDER */
 .section-divider{display:flex;align-items:center;gap:10px;margin:24px 0 14px 0}
 .section-divider::before,.section-divider::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,transparent,#1877f2,transparent)}
 .section-divider span{font-weight:900;color:#1877f2;font-size:16px;padding:6px 14px;background:#e7f3ff;border-radius:20px;white-space:nowrap}
-
-/* JSON VIEWER */
-.json-view{background:#1e1e1e;color:#d4d4d4;padding:12px;border-radius:8px;font-family:'Courier New',monospace;font-size:11px;max-height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;line-height:1.5}
-
-/* TABS within Supreme */
 .supreme-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;background:#f8f9fa;padding:6px;border-radius:12px}
 .supreme-tab{flex:1;min-width:140px;padding:12px 16px;background:#fff;border:2px solid transparent;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px;color:#555;text-align:center;transition:all .25s}
-.supreme-tab:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.08)}
 .supreme-tab.active{background:linear-gradient(135deg,#6f42c1,#5a32a3);color:#fff;border-color:#6f42c1;box-shadow:0 6px 20px rgba(111,66,193,.35)}
-.supreme-tab.active.gold{background:linear-gradient(135deg,#ffc107,#e0a800);color:#000;border-color:#ffc107}
-.supreme-tab.active.red{background:linear-gradient(135deg,#dc3545,#bb2d3b);border-color:#dc3545}
+.sub-history-row{background:#fff;border:1px solid #e0e0e0;padding:10px;border-radius:8px;margin-bottom:6px;font-size:12px}
 
 @media(max-width:768px){
   .navbar{padding:8px;gap:6px}
@@ -383,7 +363,6 @@ img{-webkit-user-drag:none}
   .opt-btn{width:42px;height:42px}
   .tf-sub-btn{width:36px;height:36px}
   #systemToast{top:15px;right:10px;left:10px;font-size:13px;text-align:center}
-  .guide-tab{min-width:45%;font-size:11px;padding:10px 6px}
   .auth-box{padding:26px 20px 20px 20px}
   .nav-user{padding:3px 8px 3px 3px;font-size:11px}
   .nav-user .avatar{width:24px;height:24px;font-size:12px}
@@ -404,7 +383,7 @@ img{-webkit-user-drag:none}
     <span class="ca-icon" id="caIcon">ℹ️</span>
     <div class="ca-title" id="caTitle">Thông báo</div>
     <div class="ca-msg" id="caMsg"></div>
-    <input type="text" class="ca-input" id="caInput" style="display:none" placeholder="">
+    <input type="text" class="ca-input" id="caInput" style="display:none">
     <div class="ca-actions" id="caActions">
       <button class="ca-btn-cancel" id="caCancelBtn" onclick="closeCustomAlert(false)">Hủy</button>
       <button class="ca-btn-ok" id="caOkBtn" onclick="closeCustomAlert(true)">OK</button>
@@ -412,11 +391,23 @@ img{-webkit-user-drag:none}
   </div>
 </div>
 
-<!-- MEDAL PICKER MODAL (highest z-index) -->
+<!-- ITEM DETAIL MODAL (medal/cup details) -->
+<div id="itemDetailModal">
+  <div class="item-detail-box">
+    <div class="item-detail-icon" id="itemDetailIcon">🏅</div>
+    <div class="item-detail-name" id="itemDetailName">—</div>
+    <div class="item-detail-tier" id="itemDetailTier" style="background:#ffc107;color:#000">Vàng</div>
+    <div class="item-detail-desc" id="itemDetailDesc" style="display:none"></div>
+    <div class="item-detail-meta" id="itemDetailMeta"></div>
+    <button class="btn btn-secondary" style="margin-top:6px" onclick="document.getElementById('itemDetailModal').classList.remove('show')">Đóng</button>
+  </div>
+</div>
+
+<!-- MEDAL PICKER -->
 <div id="medalPickerModal" class="modal-overlay z-top">
   <div class="medal-picker-box">
-    <div class="modal-header"><h3>🏅 Chọn Huy Chương</h3><button class="close-btn" onclick="closeMedalPicker()">✖</button></div>
-    <p style="font-size:12px;color:#666;margin-bottom:8px">Chọn huy chương bạn muốn gắn vào profile (tối đa 4):</p>
+    <div class="modal-header"><h3>🏅 Chọn Huy Chương / 🏆 Cup</h3><button class="close-btn" onclick="closeMedalPicker()">✖</button></div>
+    <p style="font-size:12px;color:#666;margin-bottom:8px">Chọn huy chương/cup muốn gắn vào profile (huy chương tối đa 4, cup tối đa 1):</p>
     <div class="medal-grid" id="medalPickerGrid"></div>
     <div style="margin-top:14px;display:flex;gap:8px">
       <button class="btn btn-secondary" onclick="closeMedalPicker()">Đóng</button>
@@ -425,29 +416,27 @@ img{-webkit-user-drag:none}
   </div>
 </div>
 
-<!-- ROLE EDITOR MODAL -->
+<!-- ROLE EDITOR -->
 <div id="roleEditorModal" class="modal-overlay">
   <div class="role-editor-box">
     <h3 id="roleEditorTitle">🎭 Tạo Vai Trò Mới</h3>
     <label>Tên vai trò:</label>
-    <input type="text" id="roleName" placeholder="VD: Trùm cuối, Siêu sao, Huyền thoại...">
+    <input type="text" id="roleName" placeholder="VD: Trùm cuối, Siêu sao...">
     <div class="form-grid-2">
       <div><label>Màu nền:</label><input type="color" id="roleBg" value="#1877f2" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div>
       <div><label>Màu chữ:</label><input type="color" id="roleText" value="#ffffff" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div>
     </div>
-    <label style="margin-top:8px"><input type="checkbox" id="roleAuraEnabled" style="width:16px;height:16px"> ✨ Bật hiệu ứng Aura (phát sáng)</label>
+    <label style="margin-top:8px"><input type="checkbox" id="roleAuraEnabled" style="width:16px;height:16px"> ✨ Bật hiệu ứng Aura</label>
     <div id="roleAuraBox" style="display:none;margin-top:6px">
       <label>Màu Aura:</label>
       <input type="color" id="roleAuraColor" value="#ffc107" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer">
     </div>
-    <label style="margin-top:12px">🎭 Emoji vai trò (quyết định hiệu ứng profile):</label>
+    <label style="margin-top:12px">🎭 Emoji vai trò:</label>
     <div class="role-emoji-grid" id="roleEmojiGrid"></div>
     <label style="margin-top:12px">🏅 Huy chương đi kèm (tùy chọn):</label>
-    <div class="form-grid-2">
-      <div><select id="roleMedalId" style="margin:0"><option value="">Không có huy chương</option></select></div>
-    </div>
+    <select id="roleMedalId" style="margin:0"><option value="">Không có</option></select>
     <div style="text-align:center;padding:16px;margin-top:14px;background:#f8f9fa;border-radius:12px">
-      <div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC VAI TRÒ:</div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC:</div>
       <span id="rolePreview" class="role-preview" style="font-size:14px"></span>
     </div>
     <div style="display:flex;gap:8px;margin-top:16px">
@@ -457,18 +446,32 @@ img{-webkit-user-drag:none}
   </div>
 </div>
 
-<!-- MEDAL EDITOR MODAL -->
+<!-- MEDAL/CUP EDITOR -->
 <div id="medalEditorModal" class="modal-overlay">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width:520px">
     <div class="modal-header"><h3 id="medalEditorTitle">🏅 Tạo Huy Chương</h3><button class="close-btn" onclick="closeMedalEditor()">✖</button></div>
-    <label>Tên huy chương:</label>
-    <input type="text" id="medalName" placeholder="VD: Huy chương Toán, Siêu sao học tập...">
-    <label>Bậc huy chương:</label>
-    <select id="medalTier">
-      <option value="gold">🥇 Vàng</option>
-      <option value="silver">🥈 Bạc</option>
-      <option value="bronze">🥉 Đồng</option>
+    <label>Loại:</label>
+    <select id="medalType" onchange="updateMedalTypeFields()">
+      <option value="medal">🏅 Huy Chương (tối đa 4/user)</option>
+      <option value="cup">🏆 Cup (tối đa 1/user)</option>
     </select>
+    <label>Tên:</label>
+    <input type="text" id="medalName" placeholder="VD: Huy chương Toán, Cup vô địch...">
+    <label>Bậc:</label>
+    <select id="medalTier">
+      <option value="bronze">🥉 Đồng</option>
+      <option value="silver">🥈 Bạc</option>
+      <option value="gold" selected>🥇 Vàng</option>
+      <option value="platinum">💠 Bạch Kim</option>
+      <option value="diamond">💎 Kim Cương</option>
+      <option value="supreme">👑 Tối Thượng</option>
+    </select>
+    <div id="medalMaxOwnersBox">
+      <label>Số lượng người có thể sở hữu (0 = không giới hạn):</label>
+      <input type="number" id="medalMaxOwners" value="0" min="0">
+    </div>
+    <label>Giới thiệu (admin ghi chú):</label>
+    <textarea id="medalDescription" rows="3" placeholder="VD: Trao cho học sinh đạt top 1 thi tháng..."></textarea>
     <div style="text-align:center;padding:16px;background:#f8f9fa;border-radius:12px;margin-top:8px">
       <div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC:</div>
       <span id="medalPreview" style="font-size:44px">🥇</span>
@@ -476,19 +479,43 @@ img{-webkit-user-drag:none}
     </div>
     <div style="display:flex;gap:8px;margin-top:14px">
       <button class="btn btn-secondary" onclick="closeMedalEditor()">Hủy</button>
-      <button class="btn btn-success" onclick="saveMedal()">💾 Lưu Huy Chương</button>
+      <button class="btn btn-success" onclick="saveMedal()">💾 Lưu</button>
     </div>
   </div>
 </div>
 
-<!-- PROFILE MODAL -->
+<!-- GRANT ITEM MODAL -->
+<div id="grantItemModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header"><h3 id="grantItemTitle">🎁 Trao Tặng</h3><button class="close-btn" onclick="closeGrantItem()">✖</button></div>
+    <div id="grantItemInfo" style="background:#f8f9fa;padding:12px;border-radius:10px;margin-bottom:12px;font-size:13px"></div>
+    <label>Thời gian trao:</label>
+    <input type="datetime-local" id="grantTime">
+    <label>Ghi chú trao tặng (VD: Top 1 thi tháng):</label>
+    <textarea id="grantNote" rows="2" placeholder="Ghi chú..."></textarea>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-secondary" onclick="closeGrantItem()">Hủy</button>
+      <button class="btn btn-success" onclick="confirmGrantItem()">🎁 Trao Tặng</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT ID MODAL -->
+<div id="editIdModal" class="modal-overlay">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header"><h3 id="editIdTitle">✏️ Chỉnh Sửa ID & Hiển Thị</h3><button class="close-btn" onclick="closeEditId()">✖</button></div>
+    <div id="editIdBody"></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
 <div id="profileModal">
   <div class="profile-box">
     <div id="profileFxLayer"><canvas id="profileFxCanvas"></canvas></div>
     <div class="profile-header-bg" id="profileHeaderBg">
-      <div class="profile-avatar-wrap" onclick="document.getElementById('profileAvatarInput').click()">
+      <div class="profile-avatar-wrap" id="profileAvatarWrap" onclick="document.getElementById('profileAvatarInput').click()">
         <div id="profileAvatarDisplay">?</div>
-        <div class="profile-avatar-overlay">📷 Đổi</div>
+        <div class="profile-avatar-overlay" id="profileAvatarOverlay">📷 Đổi</div>
       </div>
       <input type="file" id="profileAvatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
     </div>
@@ -500,42 +527,23 @@ img{-webkit-user-drag:none}
         <div class="profile-stat-card"><div class="profile-stat-num" id="profileTestCount">0</div><div class="profile-stat-label">Bài đã làm</div></div>
         <div class="profile-stat-card"><div class="profile-stat-num" id="profileAvgScore">0</div><div class="profile-stat-label">Điểm TB</div></div>
       </div>
-      <div class="profile-section"><label>🎭 Biệt danh</label><input type="text" id="profileNickname" placeholder="Nhập biệt danh..."></div>
-      <div class="profile-section"><label>📝 Ghi chú</label><textarea id="profileNote" rows="2" placeholder="Ghi chú cá nhân..."></textarea></div>
+      <div class="profile-section" id="profileNoteSection"><label>📝 Ghi chú</label><textarea id="profileNote" rows="2" placeholder="Ghi chú cá nhân..."></textarea></div>
       <div class="profile-section">
-        <label style="display:flex;justify-content:space-between;align-items:center"><span>🏅 Huy chương (tối đa 4)</span><button class="btn btn-warning" style="width:auto;padding:4px 10px;font-size:11px" onclick="openMedalPicker()">➕ Thêm</button></label>
+        <label style="display:flex;justify-content:space-between;align-items:center"><span>🏅 Huy chương &amp; 🏆 Cup</span><button class="btn btn-warning" id="profileAddMedalBtn" style="width:auto;padding:4px 10px;font-size:11px" onclick="openMedalPicker()">➕ Thêm</button></label>
         <div class="profile-medals" id="profileMedalsContainer"></div>
       </div>
-      <div class="profile-section"><label>🎨 Màu tên</label><input type="color" id="profileTextColor" value="#333333" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div>
-      <div class="profile-section">
-        <label>✍️ Kiểu chữ</label>
-        <select id="profileFontStyle">
-          <option value="normal">Bình thường</option>
-          <option value="hoathinh">🎨 Hoạt hình</option>
-          <option value="nannhot">✨ Nắn nót</option>
-          <option value="mono">💻 Đơn cách</option>
-          <option value="serif">📖 Cổ điển</option>
-        </select>
-      </div>
-      <div class="profile-section">
-        <label>✨ Hiệu ứng tên</label>
-        <select id="profileTextEffect">
-          <option value="none">Không</option>
-          <option value="glow">Phát sáng</option>
-          <option value="neon">Neon</option>
-          <option value="rainbow">Rainbow</option>
-          <option value="shadow">Đổ bóng</option>
-        </select>
-      </div>
-      <div class="profile-actions">
+      <div class="profile-actions" id="profileActionsSelf">
         <button class="btn btn-secondary" onclick="closeProfile()">Đóng</button>
         <button class="btn btn-success" onclick="saveProfile()">💾 Lưu Profile</button>
+      </div>
+      <div class="profile-actions" id="profileActionsOther" style="display:none">
+        <button class="btn btn-secondary" onclick="closeProfile()">Đóng</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- AUTH OVERLAY -->
+<!-- AUTH -->
 <div id="authOverlay">
   <div class="auth-box">
     <h2>✨ AURORA</h2>
@@ -599,14 +607,14 @@ img{-webkit-user-drag:none}
   <div class="perf-box">
     <div style="font-size:56px;line-height:1;margin-bottom:10px">⚙️</div>
     <h3>CHỌN CHẾ ĐỘ HIỂN THỊ</h3>
-    <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Chọn chế độ phù hợp thiết bị. Có thể đổi lại trong mục Hướng Dẫn.</p>
+    <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Chọn chế độ phù hợp thiết bị.</p>
     <div class="perf-option" onclick="choosePerfMode('full')">
       <span class="perf-icon">✨</span>
-      <div class="perf-text"><div class="perf-title">1. Đầy đủ</div><div class="perf-sub">Bật tất cả hiệu ứng đẹp mắt. Phù hợp máy khỏe, PC, laptop.</div></div>
+      <div class="perf-text"><div class="perf-title">1. Đầy đủ</div><div class="perf-sub">Bật tất cả hiệu ứng đẹp mắt.</div></div>
     </div>
     <div class="perf-option" onclick="choosePerfMode('optimized')">
       <span class="perf-icon">⚡</span>
-      <div class="perf-text"><div class="perf-title">2. Tối ưu <span class="perf-badge" id="perfRecommendBadge">💡 Máy yếu khuyên dùng</span></div><div class="perf-sub">Tắt hiệu ứng nặng, giảm animation, không lag.</div></div>
+      <div class="perf-text"><div class="perf-title">2. Tối ưu <span class="perf-badge" id="perfRecommendBadge">💡</span></div><div class="perf-sub">Tắt hiệu ứng nặng.</div></div>
     </div>
   </div>
 </div>
@@ -624,9 +632,9 @@ img{-webkit-user-drag:none}
   <div class="modal-box" style="max-width:420px;text-align:center">
     <div class="modal-header"><h3>👑 XÁC THỰC TỐI CAO</h3><button class="close-btn" onclick="document.getElementById('supremePasswordModal').style.display='none'">✖</button></div>
     <div style="font-size:48px;margin-bottom:8px">🔐</div>
-    <p style="font-size:13px;color:#555;margin-bottom:12px">Nhập mật khẩu VUA hoặc PARTNER để truy cập:</p>
+    <p style="font-size:13px;color:#555;margin-bottom:12px">Nhập mật khẩu VUA hoặc PARTNER:</p>
     <input type="password" id="supremePassInput" placeholder="Mật khẩu..." style="margin-bottom:15px">
-    <div style="font-size:11px;color:#888;margin-bottom:12px;font-style:italic">💡 Vua = full quyền • Partner = giới hạn (không xóa được gì)</div>
+    <div style="font-size:11px;color:#888;margin-bottom:12px;font-style:italic">💡 Vua = full quyền • Partner = giới hạn</div>
     <button class="btn btn-warning" onclick="verifySupremePassword()">Xác Nhận</button>
   </div>
 </div>
@@ -683,20 +691,17 @@ img{-webkit-user-drag:none}
     </div>
     <div id="examManageRoom" style="display:none;background:#f0f8ff;padding:12px;border-radius:6px;border:1px solid #d0e8ff;margin-top:10px">
       <b style="color:#6f42c1">📊 Phòng Quản Lý Chi Tiết</b>
-      <p style="font-size:12px;color:#666;margin:6px 0">Xem chi tiết và số lần làm của từng tài khoản:</p>
-      <div id="examManageResultsContainer" style="max-height:400px;overflow-y:auto"></div>
+      <div id="examManageResultsContainer" style="max-height:400px;overflow-y:auto;margin-top:8px"></div>
     </div>
   </div>
 </div>
 
-<!-- CENTER TOAST -->
 <div id="centerSquareToast"><span class="cst-icon" id="cstIcon">✅</span><div class="cst-title" id="cstTitle">Thông báo</div><div class="cst-msg" id="cstMsg"></div></div>
 <div id="globalBroadcastBanner" class="pos-top"></div>
 <audio id="globalAudioPlayer" style="display:none" loop></audio>
 <div id="systemToast"></div>
 <div id="loadingOverlay"><div class="spinner"></div><h3 style="color:#1877f2">loading...</h3></div>
 
-<!-- WELCOME -->
 <div id="welcomeModal" style="display:none">
   <div id="welcomeFxLayer"><canvas id="welcomeFxCanvas"></canvas></div>
   <div id="welcomeModalBox">
@@ -707,7 +712,6 @@ img{-webkit-user-drag:none}
   </div>
 </div>
 
-<!-- CHEAT ALERT -->
 <div class="modal-overlay" id="cheatAlertModal">
   <div class="modal-box" style="text-align:center;max-width:400px;padding:25px">
     <div style="font-size:40px;color:#dc3545;margin-bottom:10px">⚠️</div>
@@ -720,7 +724,6 @@ img{-webkit-user-drag:none}
   </div>
 </div>
 
-<!-- FORCED SUBMIT -->
 <div id="forcedSubmitModal">
   <div class="forced-submit-box">
     <span class="forced-submit-emoji" id="forcedSubmitEmoji">🚫</span>
@@ -766,14 +769,14 @@ img{-webkit-user-drag:none}
         <div class="mode-dropdown-menu" id="modeDropdownMenu">
           <div class="mode-dropdown-item active" data-mode="normal" onclick="selectExamMode('normal', this)"><span class="mode-dd-item-icon">♾️</span><div class="mode-dd-item-text"><div class="mode-dd-item-title">Thi Tự Do</div><div class="mode-dd-item-desc">Vào thi ngay</div></div></div>
           <div class="mode-dropdown-item" data-mode="live" onclick="selectExamMode('live', this)"><span class="mode-dd-item-icon">🛡️</span><div class="mode-dd-item-text"><div class="mode-dd-item-title">Phòng Thi Chuyên Dụng</div><div class="mode-dd-item-desc">Cần mật khẩu</div></div></div>
-          <div class="mode-dropdown-item" data-mode="practice" onclick="selectExamMode('practice', this)"><span class="mode-dd-item-icon">⚡</span><div class="mode-dd-item-text"><div class="mode-dd-item-title">Bài Luyện Nhanh</div><div class="mode-dd-item-desc">Luyện tập tức thì</div></div></div>
+          <div class="mode-dropdown-item" data-mode="practice" onclick="selectExamMode('practice', this)"><span class="mode-dd-item-icon">⚡</span><div class="mode-dd-item-text"><div class="mode-dd-item-title">Bài Luyện Nhanh</div><div class="mode-dd-item-desc">Luyện tập</div></div></div>
           <div class="mode-dropdown-item" data-mode="axcm" onclick="selectExamMode('axcm', this)"><span class="mode-dd-item-icon">🎓</span><div class="mode-dd-item-text"><div class="mode-dd-item-title">Thông Minh (AXCM)</div><div class="mode-dd-item-desc">Đề cắt ảnh</div></div></div>
         </div>
       </div>
       <input type="hidden" id="examModeSelect" value="normal">
       <label>🎭 Biệt danh:</label>
       <input type="text" id="studentName" readonly style="background:#f8f9fa;color:#666;cursor:not-allowed">
-      <small style="color:#888;font-size:11px;display:block;margin-top:-8px;margin-bottom:10px">💡 Lấy từ tài khoản — bấm tên trên navbar để đổi.</small>
+      <small style="color:#888;font-size:11px;display:block;margin-top:-8px;margin-bottom:10px">💡 Bấm tên trên navbar để đổi.</small>
       <label id="lblCodeText">Mã Bài Kiểm Tra:</label>
       <input type="text" id="studentExamCode" placeholder="Nhập mã...">
       <div id="extraPassBox" style="display:none">
@@ -794,7 +797,7 @@ img{-webkit-user-drag:none}
       <h2 style="font-size:18px">🛠️ Tạo Đề Kiểm Tra V2</h2>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn btn-warning" style="width:auto;padding:6px 12px;font-size:13px" onclick="resetTeacherForm()">🔄 Đặt Lại</button>
-        <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:13px" onclick="openAdvancedModal()">⚙️ Nâng Cao & Quản Lý</button>
+        <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:13px" onclick="openAdvancedModal()">⚙️ Nâng Cao</button>
       </div>
     </div>
     <hr style="margin:10px 0">
@@ -811,22 +814,21 @@ img{-webkit-user-drag:none}
       </label>
       <div id="advExamOptionsPanel" style="display:none;margin-top:10px">
         <div style="margin-bottom:10px">
-          <label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="advEnableTimer" checked onchange="toggleAdvTimerInput()" style="width:16px;height:16px"> ⏱️ Đếm ngược thời gian</label>
-          <div id="advTimerInputBox" style="margin-top:5px"><label style="font-size:12px">Thời gian:</label><select id="examDuration"><option value="15">15P</option><option value="30">30P</option><option value="45" selected>45P</option><option value="90">90P</option><option value="120">120P</option></select></div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="advEnableTimer" checked onchange="toggleAdvTimerInput()" style="width:16px;height:16px"> ⏱️ Đếm ngược</label>
+          <div id="advTimerInputBox" style="margin-top:5px"><select id="examDuration"><option value="15">15P</option><option value="30">30P</option><option value="45" selected>45P</option><option value="90">90P</option><option value="120">120P</option></select></div>
         </div>
         <div style="margin-bottom:10px">
           <label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="advEnableAntiCheat" checked onchange="toggleAdvAntiCheatInput()" style="width:16px;height:16px"> 🛡️ Chống gian lận</label>
           <div id="advAntiCheatBox" style="margin-top:5px">
-            <label style="font-size:12px">Rời tab (giây):</label>
-            <input type="number" id="advCheatThreshold" value="7" min="1" style="padding:6px">
+            <label style="font-size:12px">Rời tab (giây):</label><input type="number" id="advCheatThreshold" value="7" min="1" style="padding:6px">
             <label style="font-size:12px;margin-top:6px">Giới hạn:</label>
             <select id="advCheatLimitType" onchange="toggleAdvCheatLimitInput()" style="padding:6px"><option value="unlimited">Không</option><option value="limited">Có</option></select>
             <div id="advCheatLimitInputBox" style="display:none;margin-top:5px"><label style="font-size:12px">Tối đa:</label><input type="number" id="advMaxWarnings" value="5" min="1" style="padding:6px"></div>
           </div>
         </div>
         <div style="margin-bottom:10px">
-          <div class="adv-inline-row"><label><input type="checkbox" id="advEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="advMaxAttempts" value="1" min="1" style="width:80px"></div>
-          <div class="adv-inline-row"><label><input type="checkbox" id="advEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="advEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="advMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="advEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div>
         </div>
         <div style="border-top:1px dashed #1877f2;padding-top:8px;margin-top:8px">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#1877f2;font-weight:bold;font-size:13px"><input type="checkbox" id="enableLiveRoom" onchange="toggleLiveRoomConfig()" style="width:16px;height:16px"> 🛡️ Phòng Thi Chuyên Dụng</label>
@@ -947,7 +949,7 @@ img{-webkit-user-drag:none}
       <button class="btn" style="width:auto" onclick="loadLeaderboard()">Xem</button>
     </div>
     <div class="table-responsive">
-      <table><thead><tr><th>Hạng</th><th>Tài khoản (Biệt danh)</th><th>Điểm</th><th>TG</th><th>Chi Tiết</th></tr></thead><tbody id="lbTableBody"><tr><td colspan="5" style="color:#888">Nhập mã để xem</td></tr></tbody></table>
+      <table><thead><tr><th>Hạng</th><th>Tài khoản (Biệt danh)</th><th>Điểm</th><th>TG</th><th>Hồ sơ</th><th>Chi Tiết</th></tr></thead><tbody id="lbTableBody"><tr><td colspan="6" style="color:#888">Nhập mã để xem</td></tr></tbody></table>
     </div>
   </div>
 </div>
@@ -957,7 +959,7 @@ img{-webkit-user-drag:none}
   <div class="card" style="max-width:1000px;margin:0 auto">
     <div style="text-align:center;padding-bottom:15px;border-bottom:2px solid #eee;margin-bottom:20px">
       <h1 style="font-size:24px;font-weight:900;color:#1877f2">📖 HƯỚNG DẪN</h1>
-      <p style="font-size:13px;color:#666;margin-top:6px">Cẩm nang hệ thống <b>AURORA</b></p>
+      <p style="font-size:13px;color:#666;margin-top:6px">Cẩm nang <b>AURORA</b></p>
     </div>
     <div class="guide-tabs">
       <div class="guide-tab active" onclick="switchGuideTab('teacher', this)">👨‍🏫 Giáo Viên</div>
@@ -974,26 +976,26 @@ img{-webkit-user-drag:none}
       <div class="guide-section-title">🛠️ Tạo Đề</div>
       <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Vào tab <b>GIÁO VIÊN</b>, nhập mã + tên đề.</div></div>
       <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Chọn PDF/Ảnh đề.</div></div>
-      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Mở cài đặt nâng cao: giới hạn lần làm, ghi chú AI, chống gian lận, phòng live.</div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Mở cài đặt nâng cao: giới hạn lần, ghi chú AI, chống gian lận, phòng live.</div></div>
       <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">Thêm câu hỏi → Lưu & phát hành.</div></div>
-      <div class="guide-tip">💡 Mật khẩu VUA có thể thay thế mọi mật khẩu bảo mật!</div>
     </div>
     <div class="guide-panel" id="guide-student">
       <div class="guide-section-title">🧑‍🎓 Làm Bài</div>
       <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Đăng nhập → Biệt danh tự động.</div></div>
       <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Chọn chế độ: Tự Do / Chuyên Dụng / Luyện Nhanh / Thông Minh.</div></div>
-      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Bấm tên trên navbar để mở profile — đổi avatar, biệt danh, gắn huy chương.</div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Bấm tên trên navbar → mở profile.</div></div>
     </div>
     <div class="guide-panel" id="guide-lb">
       <div class="guide-section-title">🏆 Xếp Hạng</div>
       <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Vào tab XẾP HẠNG, nhập mã bài → Xem.</div></div>
-      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Trong màn hình kết quả, bấm BXH Trực Tiếp để xem realtime.</div></div>
+      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Bấm icon 👤 để xem profile người khác.</div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Bấm BXH Trực Tiếp trong màn hình kết quả để xem realtime.</div></div>
     </div>
     <div class="guide-panel" id="guide-supreme">
       <div class="guide-section-title">👑 Tối Cao</div>
       <div class="guide-warning">🔒 Yêu cầu mật khẩu VUA hoặc PARTNER.</div>
-      <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Quản lí tài khoản:</b> Xem/thêm vai trò, huy chương, sửa username, xem lịch sử.</div></div>
-      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Quản lý đề:</b> Xem/xóa đề, bài luyện.</div></div>
+      <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Quản lí tài khoản:</b> Xem/thêm vai trò, huy chương/cup, sửa ID, trao tặng.</div></div>
+      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Quản lý đề:</b> Xem/xóa đề.</div></div>
       <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>Broadcast, Audio, Mật khẩu, Welcome config</b>.</div></div>
     </div>
   </div>
@@ -1028,8 +1030,8 @@ img{-webkit-user-drag:none}
         <div><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="qpEnableAntiCheat" checked onchange="toggleQpAntiCheatConfig()" style="width:16px;height:16px"> 🛡️ Chống gian lận</label><div id="qpAntiCheatBox" style="margin-top:5px"><select id="qpAntiCheatType" onchange="toggleQpAntiCheatType()" style="padding:6px;margin-bottom:5px"><option value="limited">Có hạn</option><option value="infinite">Vô hạn</option></select><div id="qpMaxWarningBox"><input type="number" id="qpMaxWarnings" value="5" min="1" style="padding:6px;margin:0"></div></div></div>
       </div>
       <div style="margin-top:10px">
-        <div class="adv-inline-row"><label><input type="checkbox" id="qpEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="qpMaxAttempts" value="1" min="1" style="width:80px"></div>
-        <div class="adv-inline-row"><label><input type="checkbox" id="qpEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="qpEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="qpMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="qpEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div>
       </div>
       <div style="margin-top:10px"><label style="display:flex;align-items:center;gap:6px;font-weight:bold;color:#1877f2"><input type="checkbox" id="qpUseLayoutV2" checked style="width:16px;height:16px"> ✨ Giao diện V2</label></div>
       <div style="margin-top:10px"><label>Giới hạn HS:</label><input type="number" id="qpLimit" value="50"></div>
@@ -1061,7 +1063,7 @@ img{-webkit-user-drag:none}
       <p style="font-size:12px;font-weight:bold;color:#1877f2">👥 HS:</p>
       <div class="table-responsive" style="max-height:150px;overflow-y:auto;margin-bottom:15px"><table><thead><tr><th>STT</th><th>Tài khoản</th><th>TT</th><th></th></tr></thead><tbody id="qpManageStudentsBody"><tr><td colspan="4">Chưa có</td></tr></tbody></table></div>
       <p style="font-size:12px;font-weight:bold;color:#1877f2">📊 KQ:</p>
-      <div class="table-responsive" style="max-height:200px;overflow-y:auto"><table><thead><tr><th>Hạng</th><th>Tài khoản</th><th>Điểm</th><th>TG</th><th>Chi Tiết</th></tr></thead><tbody id="qpManageResultsBody"><tr><td colspan="5">Chưa có</td></tr></tbody></table></div>
+      <div class="table-responsive" style="max-height:200px;overflow-y:auto"><table><thead><tr><th>Hạng</th><th>Tài khoản</th><th>Điểm</th><th>TG</th><th>Hồ sơ</th><th>Chi Tiết</th></tr></thead><tbody id="qpManageResultsBody"><tr><td colspan="6">Chưa có</td></tr></tbody></table></div>
     </div>
   </div>
 
@@ -1087,8 +1089,8 @@ img{-webkit-user-drag:none}
         <div><label style="font-size:12px">Chế độ:</label><select id="smartExamParseMode" style="padding:6px;margin:0"><option value="auto">Tự động</option><option value="image">Cắt ảnh</option><option value="text">Chỉ Text</option></select></div>
       </div>
       <div style="margin-top:10px">
-        <div class="adv-inline-row"><label><input type="checkbox" id="smartEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="smartMaxAttempts" value="1" min="1" style="width:80px"></div>
-        <div class="adv-inline-row"><label><input type="checkbox" id="smartEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="smartEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="smartMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="smartEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div>
       </div>
     </div>
     <div id="smartExamAnswerUploadBox" style="display:none;background:linear-gradient(135deg,#fff7e6,#fffbe6);border:2px dashed #ffc107;padding:14px;border-radius:10px;margin-bottom:12px">
@@ -1131,7 +1133,7 @@ img{-webkit-user-drag:none}
   </div>
 </div>
 
-<!-- SUPREME VIEW (SPLIT 2 TABS) -->
+<!-- SUPREME VIEW -->
 <div id="supremeView" class="view-section">
   <div class="card" style="border:2px solid #ffc107">
     <h2 style="color:#d32f2f;margin-bottom:15px">👑 KHU VỰC TỐI CAO</h2>
@@ -1153,14 +1155,12 @@ img{-webkit-user-drag:none}
       </div>
 
       <div id="accMgmtPanel" style="display:none">
-        <!-- Action Buttons -->
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
           <button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:13px" onclick="loadAllUsers()">🔄 Tải DS</button>
           <button class="btn" style="width:auto;padding:8px 14px;font-size:13px;background:#6f42c1" onclick="openRoleListPanel()">🎭 Quản Lí Vai Trò</button>
-          <button class="btn" style="width:auto;padding:8px 14px;font-size:13px;background:#ffc107;color:#000" onclick="openMedalListPanel()">🏅 Quản Lí Huy Chương</button>
+          <button class="btn" style="width:auto;padding:8px 14px;font-size:13px;background:#ffc107;color:#000" onclick="openMedalListPanel()">🏅 Quản Lí Huy Chương/Cup</button>
         </div>
 
-        <!-- Filters -->
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
           <input type="text" id="accSearchInput" placeholder="🔍 Tìm username/email..." style="margin:0;flex:1;min-width:150px;padding:8px" oninput="filterAccList()">
           <select id="accRoleFilter" style="margin:0;width:auto;padding:8px" onchange="filterAccList()">
@@ -1171,11 +1171,9 @@ img{-webkit-user-drag:none}
           </select>
         </div>
 
-        <!-- Users list -->
         <div id="accUserListContainer" style="max-height:600px;overflow-y:auto"><p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Bấm "Tải DS" để xem</p></div>
       </div>
 
-      <!-- Role List Panel (sub-view) -->
       <div id="roleListPanel" style="display:none">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
           <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:13px" onclick="closeRoleListPanel()">← Quay Lại</button>
@@ -1184,17 +1182,16 @@ img{-webkit-user-drag:none}
         <div id="roleListContainer"></div>
       </div>
 
-      <!-- Medal List Panel (sub-view) -->
       <div id="medalListPanel" style="display:none">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
           <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:13px" onclick="closeMedalListPanel()">← Quay Lại</button>
-          <button class="btn btn-success" style="width:auto;padding:8px 14px;font-size:13px" onclick="openMedalEditor()">➕ Tạo Huy Chương Mới</button>
+          <button class="btn btn-success" style="width:auto;padding:8px 14px;font-size:13px" onclick="openMedalEditor()">➕ Tạo Huy Chương/Cup Mới</button>
         </div>
         <div id="medalListContainer"></div>
       </div>
     </div>
 
-    <!-- TAB 2: SYSTEM MANAGEMENT -->
+    <!-- TAB 2: SYSTEM -->
     <div id="supremeTabSystem" style="display:none">
       <div class="section-title"><span>0. TÊN WEBSITE</span></div>
       <div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:20px">
@@ -1215,7 +1212,7 @@ img{-webkit-user-drag:none}
         <div><label>Vị trí:</label><select id="supremeBroadcastPosition"><option value="top">Trên cùng</option><option value="middle">Giữa</option><option value="bottom">Dưới cùng</option></select></div>
       </div>
       <div class="form-grid-2">
-        <div><label>Font:</label><select id="supremeFontFamily"><option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option><option value="Arial, Helvetica, sans-serif">Arial</option><option value="'Times New Roman', Times, serif">Times New Roman</option><option value="'Courier New', Courier, monospace">Courier New</option></select></div>
+        <div><label>Font:</label><select id="supremeFontFamily"><option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option><option value="Arial, Helvetica, sans-serif">Arial</option><option value="'Times New Roman', Times, serif">Times New Roman</option></select></div>
         <div><label>Cỡ chữ (px):</label><input type="number" id="supremeFontSize" value="16" min="10" max="72"></div>
       </div>
       <div class="form-grid-2">
@@ -1224,10 +1221,10 @@ img{-webkit-user-drag:none}
       </div>
       <div class="form-grid-2">
         <div><label>Thời gian (giây):</label><input type="number" id="supremeDurationSec" value="10" min="1"></div>
-        <div><label>Độ mờ (0.1-1.0):</label><input type="number" id="supremeOpacity" value="0.95" step="0.05"></div>
+        <div><label>Độ mờ:</label><input type="number" id="supremeOpacity" value="0.95" step="0.05"></div>
       </div>
       <button class="btn btn-success" style="margin-top:10px" onclick="sendGlobalBroadcast()">📢 Phát Thông Báo Ngay</button>
-      <button class="btn btn-danger" style="margin-top:8px;padding:8px;font-size:13px" onclick="clearGlobalBroadcast()">🗑️ Xóa Thông Báo Hiện Tại</button>
+      <button class="btn btn-danger" style="margin-top:8px;padding:8px;font-size:13px" onclick="clearGlobalBroadcast()">🗑️ Xóa Thông Báo</button>
       <p style="font-size:12px;color:#666;margin-top:8px">Đang hiển thị: <span id="currentCloudNotice" style="color:#1877f2;font-weight:bold">Không có</span></p>
 
       <div class="section-title" style="margin-top:25px"><span>3. HỆ THỐNG NHẠC ĐỒNG BỘ</span></div>
@@ -1235,16 +1232,16 @@ img{-webkit-user-drag:none}
         <label for="supremeAudioFileInput" class="btn btn-secondary" style="display:inline-block;width:auto;padding:8px 16px;font-size:13px;cursor:pointer;margin:0">➕ Thêm file nhạc</label>
         <input type="file" id="supremeAudioFileInput" accept="audio/*" style="display:none" onchange="uploadSupremeAudio(this)">
       </div>
-      <div id="supremeAudioListContainer"><p style="font-size:13px;color:#888;font-style:italic">Chưa có file nhạc nào</p></div>
+      <div id="supremeAudioListContainer"><p style="font-size:13px;color:#888;font-style:italic">Chưa có file nhạc</p></div>
       <div style="display:flex;gap:10px;margin-top:10px"><button class="btn btn-danger" onclick="stopGlobalAudio()">🛑 Dừng Nhạc</button></div>
       <p style="font-size:12px;color:#666;margin-top:8px">Trạng thái: <span id="currentAudioStatus" style="color:#198754;font-weight:bold">Đang tắt</span></p>
 
-      <div class="section-title" style="margin-top:25px"><span>4. MẬT KHẨU BẢO MẬT GIÁO VIÊN</span></div>
+      <div class="section-title" style="margin-top:25px"><span>4. MẬT KHẨU BẢO MẬT & PARTNER</span></div>
       <div style="background:#fff3cd;border-left:4px solid #ffc107;padding:10px;border-radius:6px;font-size:12px;color:#856404;margin-bottom:10px">
-        ℹ️ Mật khẩu VUA và PARTNER có thể thay thế bất kỳ mật khẩu BẢO MẬT nào. Mật khẩu mặc định THUANBAKHI đã bị xóa.
+        ℹ️ Mật khẩu VUA thay thế mọi mật khẩu BẢO MẬT. Partner có thể vào Tối Cao nhưng không xóa được gì.
       </div>
       <div class="form-grid-2">
-        <div><label>Mật khẩu mới:</label><input type="text" id="newSecPass"></div>
+        <div><label>Mật khẩu Bảo Mật mới:</label><input type="text" id="newSecPass"></div>
         <div><label>Ghi chú:</label><input type="text" id="newSecPassNote"></div>
       </div>
       <div class="form-grid-2">
@@ -1255,10 +1252,11 @@ img{-webkit-user-drag:none}
 
       <div class="section-divider"><span>🔐 Mật Khẩu Partner</span></div>
       <div style="background:#f8d7da;border:2px dashed #dc3545;padding:14px;border-radius:10px;margin-bottom:15px">
-        <p style="font-size:13px;color:#842029;margin-bottom:10px"><b>💡 Mật khẩu Partner:</b> Cho phép vào khu vực Tối Cao nhưng KHÔNG thể xóa mật khẩu/tên đăng nhập/mật khẩu vua của người khác.</p>
+        <p style="font-size:13px;color:#842029;margin-bottom:10px"><b>💡 Partner:</b> Cho phép vào Tối Cao nhưng KHÔNG thể xóa mật khẩu/username/mật khẩu vua của người khác.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <input type="password" id="partnerPassInput" placeholder="Nhập mật khẩu partner mới..." style="margin:0;flex:1;min-width:200px">
-          <button class="btn btn-danger" style="width:auto;padding:10px 16px" onclick="setPartnerPassword()">🔐 Đặt Mật Khẩu Partner</button>
+          <input type="password" id="partnerPassInput" placeholder="Mật khẩu partner mới..." style="margin:0;flex:1;min-width:200px">
+          <button class="btn btn-danger" style="width:auto;padding:10px 16px" onclick="setPartnerPassword()">🔐 Đặt</button>
+          <button class="btn btn-secondary" style="width:auto;padding:10px 16px" onclick="removePartnerPassword()">🗑️ Xóa Partner</button>
         </div>
         <div id="partnerPassStatus" style="font-size:12px;color:#842029;margin-top:8px"></div>
       </div>
@@ -1279,11 +1277,11 @@ img{-webkit-user-drag:none}
         </div>
         <div class="form-grid-2">
           <div><label>Màu aura:</label><input type="color" id="welcomeAuraColor" value="#ffc107" style="width:100%;height:38px;padding:2px;border-radius:6px;border:1px solid #ccc;cursor:pointer"></div>
-          <div><label>Cường độ aura (px):</label><input type="number" id="welcomeAuraIntensity" value="25" min="0"></div>
+          <div><label>Cường độ aura:</label><input type="number" id="welcomeAuraIntensity" value="25" min="0"></div>
         </div>
         <div class="form-grid-2">
-          <div><label>Font:</label><select id="welcomeFontFamily"><option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option><option value="Arial, Helvetica, sans-serif">Arial</option><option value="'Times New Roman', Times, serif">Times New Roman</option></select></div>
-          <div><label>Cỡ chữ (px):</label><input type="number" id="welcomeFontSize" value="14" min="10" max="30"></div>
+          <div><label>Font:</label><select id="welcomeFontFamily"><option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option><option value="Arial, Helvetica, sans-serif">Arial</option></select></div>
+          <div><label>Cỡ chữ:</label><input type="number" id="welcomeFontSize" value="14"></div>
         </div>
         <div class="form-grid-2">
           <div><label>Hiệu ứng chữ:</label><select id="welcomeTextEffect"><option value="none">Không</option><option value="neon">Neon</option><option value="glow">Glow</option><option value="3d">3D</option><option value="gradient">Gradient</option></select></div>
@@ -1309,13 +1307,11 @@ img{-webkit-user-drag:none}
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
 </div>
 
-<!-- QP PRACTICING -->
 <div id="qpPracticingView" class="view-section" style="max-width:800px;margin:20px auto;padding:0 10px">
   <div class="card">
     <div id="qpCheatWarningBanner" class="card" style="background:#fff3cd;border:1px solid #ffeeba;padding:8px 12px;margin-bottom:10px;font-size:13px;display:none;justify-content:space-between;align-items:center">
@@ -1360,6 +1356,7 @@ window.db=db;window.ref=ref;window.dbRef=ref(db);window.dbSet=set;window.dbGet=g
    GLOBAL STATE
    ============================================================ */
 let currentUser=null,currentUserFullData=null;
+let currentViewingUser=null; // Khi xem profile người khác
 let currentExamData=null,examTimer=null,timeLeft=0,studentNameGlobal='',studentSessionKeyGlobal='',isExamActive=false,pendingActionType='';
 let activeStudentRoomListener=null,managedLiveCodeGlobal='',liveRoomDashboardListener=null;
 let currentQpData=null,qpTimer=null,qpTimeLeft=0,managedQpCodeGlobal='',activeQpRoomListener=null,isQpActive=false,currentQpV2Index=0,qpStudentAnswers={};
@@ -1383,9 +1380,9 @@ let currentResetEmail='';
 let cachedRoles={},cachedMedals={},cachedUsers={};
 let currentEditingRoleId=null,currentEditingMedalId=null,selectedRoleEmoji='';
 let accMgmtUnlocked=false;
-let profileSelectedMedals=[],profileMedalTempSelection=[];
-let selectedMedalSlotForPicker=0;
-let userHasSupremeAccess=false; // true if entered via VUA or PARTNER
+let profileSelectedMedals=[],profileSelectedCup=null;
+let userHasSupremeAccess=false;
+let currentEditIdUsername=null;
 const DEFAULT_WEB_NAME='✨ AURORA';
 const VUA_PASSWORD='thuan281009@';
 const ROLE_EMOJIS=['👑','🌸','⛄','🧧','😈','❤️','🎓','🔨','✏️','👨‍🏫','🌌','⭐','🔥','💎','🎯','🏆','⚡','🌟','🍀','🎨','🎵','🚀','🦁','🐉','🦊','🐼','🎃','🎄','💀','👽','🤖','🌈','💫','🍎','⚔️','🛡️','🌟'];
@@ -1395,7 +1392,21 @@ const DEFAULT_ROLES={
   student:{id:'student',name:'Học sinh',bgColor:'#e7f3ff',textColor:'#1877f2',emoji:'🧑‍🎓',auraEnabled:false,auraColor:'#1877f2',builtin:true},
   teacher:{id:'teacher',name:'Giáo viên',bgColor:'#198754',textColor:'#ffffff',emoji:'👨‍🏫',auraEnabled:false,auraColor:'#198754',builtin:true}
 };
-const MEDAL_ICONS={gold:'🥇',silver:'🥈',bronze:'🥉'};
+const MEDAL_ICONS={
+  bronze:'🥉',silver:'🥈',gold:'🥇',platinum:'💠',diamond:'💎',supreme:'👑'
+};
+const MEDAL_TIER_NAMES={
+  bronze:'Đồng',silver:'Bạc',gold:'Vàng',platinum:'Bạch Kim',diamond:'Kim Cương',supreme:'Tối Thượng'
+};
+const CUP_ICONS={
+  bronze:'🏆',silver:'🏆',gold:'🏆',platinum:'🏆',diamond:'🏆',supreme:'🏆'
+};
+const CUP_COLORS={
+  bronze:'#cd7f32',silver:'#c0c0c0',gold:'#ffd700',platinum:'#e5e4e2',diamond:'#b9f2ff',supreme:'#a55eea'
+};
+const CUP_AURAS={
+  bronze:'#cd7f32',silver:'#c0c0c0',gold:'#ffd700',platinum:'#e5e4e2',diamond:'#b9f2ff',supreme:'#a55eea'
+};
 const ROLE_EFFECT_MAP={
   '👑':'crown_coins','🌸':'petals','⛄':'snowflakes','🧧':'lucky_money','😈':'dark_flames',
   '❤️':'hearts','🎓':'graduation','🔨':'hammers','✏️':'pencils','👨‍🏫':'book',
@@ -1431,7 +1442,6 @@ function showCustomAlert(opts){
       inp.value=opts.defaultValue||'';
       inp.placeholder=opts.placeholder||'';
       inp.type=opts.inputType||'text';
-      setTimeout(()=>inp.focus(),150);
     }else inp.style.display='none';
     if(opts.type==='confirm'||opts.type==='prompt'){
       cancelBtn.style.display='block';
@@ -1452,18 +1462,12 @@ function closeCustomAlert(ok){
   const resolver=caResolve;caResolve=null;
   if(resolver)resolver(ok?(val||true):false);
 }
-function customConfirm(msg,opts={}){
-  return showCustomAlert({icon:opts.icon||'❓',title:opts.title||'Xác nhận',message:msg,type:'confirm',okText:opts.okText||'Đồng ý',cancelText:opts.cancelText||'Hủy',okClass:opts.okClass||'success'});
-}
-function customPrompt(msg,opts={}){
-  return showCustomAlert({icon:opts.icon||'✏️',title:opts.title||'Nhập thông tin',message:msg,type:'prompt',input:true,defaultValue:opts.defaultValue||'',placeholder:opts.placeholder||'',inputType:opts.inputType||'text',okText:opts.okText||'Xác nhận'});
-}
-function customAlert(msg,opts={}){
-  return showCustomAlert({icon:opts.icon||'ℹ️',title:opts.title||'Thông báo',message:msg,type:opts.type||'info',okText:opts.okText||'OK'});
-}
+function customConfirm(msg,opts={}){return showCustomAlert({icon:opts.icon||'❓',title:opts.title||'Xác nhận',message:msg,type:'confirm',okText:opts.okText||'Đồng ý',cancelText:opts.cancelText||'Hủy',okClass:opts.okClass||'success'});}
+function customPrompt(msg,opts={}){return showCustomAlert({icon:opts.icon||'✏️',title:opts.title||'Nhập thông tin',message:msg,type:'prompt',input:true,defaultValue:opts.defaultValue||'',placeholder:opts.placeholder||'',inputType:opts.inputType||'text',okText:opts.okText||'Xác nhận'});}
+function customAlert(msg,opts={}){return showCustomAlert({icon:opts.icon||'ℹ️',title:opts.title||'Thông báo',message:msg,type:opts.type||'info',okText:opts.okText||'OK'});}
 
 /* ============================================================
-   TOAST / CENTER TOAST
+   TOAST
    ============================================================ */
 let cstTimer=null;
 function showCenterSquareToast(icon,title,msg,type='success',duration=2200){
@@ -1490,12 +1494,7 @@ function switchAuthTab(tab){
   document.querySelectorAll('.auth-tabs button').forEach(b=>b.classList.remove('active'));
   if(tab==='login'){document.getElementById('authViewLogin').classList.add('active');document.getElementById('authTabLogin').classList.add('active');}
   else if(tab==='register'){document.getElementById('authViewRegister').classList.add('active');document.getElementById('authTabRegister').classList.add('active');}
-  else{
-    document.getElementById('authViewForgot').classList.add('active');
-    document.getElementById('forgotStep1').style.display='block';
-    document.getElementById('forgotStep2').style.display='none';
-    document.getElementById('forgotStep3').style.display='none';
-  }
+  else{document.getElementById('authViewForgot').classList.add('active');document.getElementById('forgotStep1').style.display='block';document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='none';}
 }
 async function hashPassword(pw){
   const salt='aurora_salt_2024_v1';const data=pw+salt;
@@ -1520,7 +1519,7 @@ async function handleRegister(){
     if((await window.dbGet(window.dbChild(window.dbRef,`users/${username}`))).exists()){showToast('❌ Username đã tồn tại!','error');return;}
     if((await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(email)}`))).exists()){showToast('❌ Email đã đăng ký!','error');return;}
     const passwordHash=await hashPassword(password);
-    const userData={username,email,passwordHash,role,nickname:username,avatar:'',note:'',medals:[],ownedMedals:[],customRoleIds:[],textColor:'#333333',fontStyle:'normal',textEffect:'none',createdAt:Date.now()};
+    const userData={username,email,passwordHash,role,nickname:username,avatar:'',note:'',medals:[],ownedMedals:[],ownedCup:'',customRoleIds:[],textColor:'#333333',fontStyle:'normal',textEffect:'none',createdAt:Date.now()};
     await window.dbSet(window.ref(window.db,`users/${username}`),userData);
     await window.dbSet(window.ref(window.db,`email_index/${emailKey(email)}`),username);
     await customAlert(`🎉 Đăng ký thành công!\n\nUsername: ${username}\nVai trò: ${role==='teacher'?'Giáo viên':'Học sinh'}\n\nVui lòng đăng nhập.`,{title:'Thành công!',type:'success',icon:'🎉'});
@@ -1599,43 +1598,23 @@ async function handleResetPassword(){
 /* ============================================================
    ROLE / MEDAL CACHE
    ============================================================ */
-async function loadRolesCache(){
-  try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/roles'));cachedRoles=s.exists()?s.val():{};}catch(e){cachedRoles={};}
-}
-async function loadMedalsCache(){
-  try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/medals'));cachedMedals=s.exists()?s.val():{};}catch(e){cachedMedals={};}
-}
-function getBuiltinRole(u){
-  if(u.role==='teacher')return {...DEFAULT_ROLES.teacher};
-  return {...DEFAULT_ROLES.student};
-}
-function getUserCustomRoles(u){
-  const ids=u.customRoleIds||[];
-  return ids.map(id=>cachedRoles[id]).filter(Boolean).map(r=>({...r,id:Object.keys(cachedRoles).find(k=>cachedRoles[k]===r)||''}));
-}
-function getUserAllRoles(u){
-  // returns array of {roleId, roleInfo} - max 3 custom roles + 1 builtin
-  const builtin=getBuiltinRole(u);
-  const custom=getUserCustomRoles(u);
-  // re-map with IDs
-  const customWithIds=(u.customRoleIds||[]).map(id=>({id,...cachedRoles[id]})).filter(r=>r.name);
-  return [builtin, ...customWithIds];
-}
-function renderUserRoleBadges(u,small=true){
+async function loadRolesCache(){try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/roles'));cachedRoles=s.exists()?s.val():{};}catch(e){cachedRoles={};}}
+async function loadMedalsCache(){try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/medals'));cachedMedals=s.exists()?s.val():{};}catch(e){cachedMedals={};}}
+function getBuiltinRole(u){if(u.role==='teacher')return {...DEFAULT_ROLES.teacher};return {...DEFAULT_ROLES.student};}
+function renderUserRoleBadges(u){
   const roles=[];
   const builtin=getBuiltinRole(u);
-  roles.push(renderRoleBadge(builtin,small?'role-badge-mini':'user-role-badge'));
+  roles.push(renderRoleBadge(builtin));
   (u.customRoleIds||[]).forEach(id=>{
     const r=cachedRoles[id];
-    if(r)roles.push(renderRoleBadge({...r,id},small?'role-badge-mini':'user-role-badge'));
+    if(r)roles.push(renderRoleBadge({...r,id}));
   });
   return roles.join(' ');
 }
 function renderRoleBadge(role,cls='user-role-badge'){
   if(!role)return '';
   const aura=role.auraEnabled?`box-shadow:0 0 8px ${role.auraColor||'#ffc107'},0 0 16px ${role.auraColor||'#ffc107'};`:'';
-  const auraClass=role.auraEnabled?' aura':'';
-  return `<span class="${cls}${auraClass}" style="background:${role.bgColor};color:${role.textColor};${aura}">${role.emoji||''} ${escapeHtml(role.name||'')}</span>`;
+  return `<span class="${cls}" style="background:${role.bgColor};color:${role.textColor};${aura}">${role.emoji||''} ${escapeHtml(role.name||'')}</span>`;
 }
 
 /* ============================================================
@@ -1649,24 +1628,27 @@ async function applyUserSession(u){
     const builtin=getBuiltinRole(u);
     const initial=(u.nickname||u.username).charAt(0).toUpperCase();
     const avatarHtml=u.avatar?`<img src="${u.avatar}">`:initial;
-    const medals=(u.medals||[]).slice(0,2).map(m=>{
-      const md=cachedMedals[m];if(!md)return '';
-      return `<span style="font-size:16px" title="${escapeHtml(md.name)}">${MEDAL_ICONS[md.tier]||'🥇'}</span>`;
-    }).join('');
+    const medals=(u.medals||[]).slice(0,2).map(m=>{const md=cachedMedals[m];if(!md)return '';return `<span style="font-size:16px" title="${escapeHtml(md.name)}">${medalIcon(md)}</span>`;}).join('');
+    const cupHtml=u.ownedCup&&cachedMedals[u.ownedCup]?`<span style="font-size:16px" title="${escapeHtml(cachedMedals[u.ownedCup].name)}">🏆</span>`:'';
     const customCount=(u.customRoleIds||[]).length;
     const customBadge=customCount>0?`<span class="user-role-badge" style="background:#6f42c1;color:#fff;font-size:9px">+${customCount}🎭</span>`:'';
-    nav.innerHTML=`<div class="avatar">${avatarHtml}</div><span>${escapeHtml(u.nickname||u.username)}</span>${renderRoleBadge(builtin)}${customBadge}${medals}<button class="logout-btn" onclick="event.stopPropagation();handleLogout()">🚪</button>`;
+    nav.innerHTML=`<div class="avatar">${avatarHtml}</div><span>${escapeHtml(u.nickname||u.username)}</span>${renderRoleBadge(builtin)}${customBadge}${medals}${cupHtml}<button class="logout-btn" onclick="event.stopPropagation();handleLogout()">🚪</button>`;
     nav.style.display='flex';
-    nav.onclick=()=>openProfile();
+    nav.onclick=()=>openProfile(null,u);
   }
   const nf=document.getElementById('studentName');
   if(nf)nf.value=u.nickname||u.username;
+}
+function medalIcon(md){
+  if(!md)return '🏅';
+  if(md.type==='cup')return '🏆';
+  return MEDAL_ICONS[md.tier]||'🏅';
 }
 function handleLogout(){
   customConfirm('Bạn có chắc muốn đăng xuất?',{icon:'🚪',title:'Đăng xuất',okClass:'danger'}).then(ok=>{
     if(!ok)return;
     localStorage.removeItem('aurora_user');
-    currentUser=null;currentUserFullData=null;userHasSupremeAccess=false;
+    currentUser=null;currentUserFullData=null;userHasSupremeAccess=false;accMgmtUnlocked=false;
     document.getElementById('navUserInfo').style.display='none';
     document.getElementById('authOverlay').style.display='flex';
     ['loginPassword','studentName'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
@@ -1686,50 +1668,66 @@ async function checkAuthOnLoad(){
 }
 
 /* ============================================================
-   PROFILE
+   PROFILE (view self & others)
    ============================================================ */
-function openProfile(){
+async function openProfile(_,targetUser){
   if(!currentUser)return;
-  const u=currentUserFullData;
-  const builtin=getBuiltinRole(u);
+  await loadRolesCache();await loadMedalsCache();
+  const u=targetUser||currentUserFullData;
+  currentViewingUser=u;
+  const isSelf=!targetUser||u.username===currentUser.username;
+  
   document.getElementById('profileNameDisplay').innerText=u.nickname||u.username;
-  document.getElementById('profileNameDisplay').style.color=u.textColor||'#333';
   applyFontAndEffect(document.getElementById('profileNameDisplay'),u.fontStyle,u.textEffect,u.textColor);
   document.getElementById('profileUsernameDisplay').innerText='@'+u.username;
+  
   // Roles
   const rolesEl=document.getElementById('profileRolesDisplay');
+  const builtin=getBuiltinRole(u);
   const allRoles=[builtin];
   (u.customRoleIds||[]).forEach(id=>{if(cachedRoles[id])allRoles.push({id,...cachedRoles[id]});});
   rolesEl.innerHTML=allRoles.map(r=>renderRoleBadge(r)).join('');
-  // Header bg from first custom role
+  
+  // Header bg
   const header=document.getElementById('profileHeaderBg');
   const firstCustom=allRoles.find(r=>r.id&&r.id!=='student'&&r.id!=='teacher');
   if(firstCustom&&firstCustom.bgColor){
     header.style.background=`linear-gradient(135deg,${firstCustom.bgColor},${adjustColor(firstCustom.bgColor,-30)})`;
-    header.style.borderColor=firstCustom.auraEnabled?firstCustom.auraColor:'transparent';
     if(firstCustom.auraEnabled)header.style.boxShadow=`0 0 20px ${firstCustom.auraColor},inset 0 0 30px ${firstCustom.auraColor}44`;
-  }else{
-    header.style.background='linear-gradient(135deg,#1877f2,#198754)';
-    header.style.boxShadow='none';
-  }
+    else header.style.boxShadow='none';
+  }else{header.style.background='linear-gradient(135deg,#1877f2,#198754)';header.style.boxShadow='none';}
+  
   // Avatar
   const avEl=document.getElementById('profileAvatarDisplay');
   avEl.innerHTML=u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover">`:(u.nickname||u.username).charAt(0).toUpperCase();
-  // Fields
-  document.getElementById('profileNickname').value=u.nickname||u.username;
-  document.getElementById('profileNote').value=u.note||'';
-  document.getElementById('profileTextColor').value=u.textColor||'#333333';
-  document.getElementById('profileFontStyle').value=u.fontStyle||'normal';
-  document.getElementById('profileTextEffect').value=u.textEffect||'none';
-  document.getElementById('profileAvatarInput').dataset.newAvatar=u.avatar||'';
-  profileSelectedMedals=(u.medals||[]).slice(0,MAX_USER_MEDALS);
-  renderProfileMedals();
-  loadUserStats(u.username);
-  // Play effect if has custom role
-  if(firstCustom&&!perfMode.includes('optimized')){
-    playProfileEffect(firstCustom,header);
+  
+  // Fields — self only
+  if(isSelf){
+    document.getElementById('profileNote').value=u.note||'';
+    document.getElementById('profileAvatarWrap').onclick=()=>document.getElementById('profileAvatarInput').click();
+    document.getElementById('profileAvatarOverlay').style.display='flex';
+    document.getElementById('profileNoteSection').style.display='block';
+    document.getElementById('profileAddMedalBtn').style.display='inline-block';
+    document.getElementById('profileActionsSelf').style.display='flex';
+    document.getElementById('profileActionsOther').style.display='none';
+    profileSelectedMedals=(u.medals||[]).slice(0,MAX_USER_MEDALS);
+    profileSelectedCup=u.ownedCup||null;
+  }else{
+    document.getElementById('profileAvatarWrap').onclick=null;
+    document.getElementById('profileAvatarOverlay').style.display='none';
+    document.getElementById('profileNoteSection').style.display='none';
+    document.getElementById('profileAddMedalBtn').style.display='none';
+    document.getElementById('profileActionsSelf').style.display='none';
+    document.getElementById('profileActionsOther').style.display='flex';
+    profileSelectedMedals=(u.medals||[]).slice(0,MAX_USER_MEDALS);
+    profileSelectedCup=u.ownedCup||null;
   }
+  
+  renderProfileMedals(isSelf);
+  loadUserStats(u.username);
   document.getElementById('profileModal').classList.add('show');
+  
+  if(firstCustom&&perfMode!=='optimized')playProfileEffect(firstCustom);
 }
 function adjustColor(hex,amt){
   const c=hex.replace('#','');
@@ -1738,30 +1736,43 @@ function adjustColor(hex,amt){
   return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
 }
 function applyFontAndEffect(el,fontStyle,textEffect,color){
-  const fonts={
-    'normal':"inherit",
-    'hoathinh':"'Comic Sans MS', cursive",
-    'nannhot':"Georgia, serif",
-    'mono':"'Courier New', monospace",
-    'serif':"'Times New Roman', serif"
-  };
+  const fonts={'normal':"inherit",'hoathinh':"'Comic Sans MS', cursive",'nannhot':"Georgia, serif",'mono':"'Courier New', monospace",'serif':"'Times New Roman', serif"};
   el.style.fontFamily=fonts[fontStyle]||'inherit';
   el.style.color=color||'#333';
-  el.className=el.className.replace(/\btext-effect-\S+/g,'').trim();
+  el.style.webkitTextFillColor='';
+  el.style.background='';
+  el.style.webkitBackgroundClip='';
+  el.style.backgroundClip='';
   if(textEffect==='glow')el.style.textShadow=`0 0 8px ${color||'#fff'},0 0 16px ${color||'#fff'}`;
   else if(textEffect==='neon')el.style.textShadow=`0 0 4px ${color},0 0 10px ${color},0 0 20px ${color},0 0 40px ${color}`;
   else if(textEffect==='rainbow'){
     el.style.background='linear-gradient(90deg,#ff4d4f,#ffc107,#198754,#1877f2,#a55eea,#ff4d4f)';
     el.style.backgroundSize='300% auto';
-    el.style.webkitBackgroundClip='text';el.style.backgroundClip='text';
+    el.style.webkitBackgroundClip='text';
+    el.style.backgroundClip='text';
     el.style.webkitTextFillColor='transparent';
-    el.classList.add('rainbow-anim');
+    el.style.animation='shineText 3s linear infinite';
   }else if(textEffect==='shadow')el.style.textShadow='3px 3px 6px rgba(0,0,0,.4)';
   else el.style.textShadow='none';
 }
-function closeProfile(){document.getElementById('profileModal').classList.remove('show');stopProfileEffect();}
-function renderProfileMedals(){
+function closeProfile(){document.getElementById('profileModal').classList.remove('show');stopProfileEffect();currentViewingUser=null;}
+function renderProfileMedals(isSelf=true){
   const c=document.getElementById('profileMedalsContainer');c.innerHTML='';
+  // Cup slot
+  const cupDiv=document.createElement('div');
+  cupDiv.className='profile-medal-slot cup';
+  if(profileSelectedCup&&cachedMedals[profileSelectedCup]){
+    const cup=cachedMedals[profileSelectedCup];
+    cupDiv.classList.add('filled');
+    cupDiv.innerHTML=`<div class="medal-icon" style="filter:drop-shadow(0 0 8px ${CUP_COLORS[cup.tier]||'#ffd700'})">🏆</div><div class="medal-name">${escapeHtml(cup.name)}</div>`;
+    if(isSelf)cupDiv.innerHTML+=`<div class="remove-medal" onclick="event.stopPropagation();removeProfileCup()">✖</div>`;
+    cupDiv.onclick=()=>showItemDetail(cup,currentViewingUser);
+  }else{
+    cupDiv.innerHTML='<div style="font-size:24px;color:#ccc">🏆</div><div style="font-size:9px;color:#888">Cup</div>';
+    if(isSelf)cupDiv.onclick=()=>openMedalPicker();
+  }
+  c.appendChild(cupDiv);
+  // Medal slots
   for(let i=0;i<MAX_USER_MEDALS;i++){
     const div=document.createElement('div');
     div.className='profile-medal-slot';
@@ -1769,42 +1780,55 @@ function renderProfileMedals(){
     if(mid&&cachedMedals[mid]){
       const m=cachedMedals[mid];
       div.classList.add('filled');
-      div.innerHTML=`<div class="medal-icon">${MEDAL_ICONS[m.tier]||'🏅'}</div><div class="medal-name">${escapeHtml(m.name)}</div><div class="remove-medal" onclick="event.stopPropagation();removeProfileMedal(${i})">✖</div>`;
-      div.onclick=()=>openMedalPicker(i);
+      const aura=MEDAL_TIER_NAMES[m.tier]?'box-shadow:0 0 8px '+CUP_COLORS[m.tier]:'';
+      div.innerHTML=`<div class="medal-icon" style="${aura}">${MEDAL_ICONS[m.tier]||'🏅'}</div><div class="medal-name">${escapeHtml(m.name)}</div>`;
+      if(isSelf)div.innerHTML+=`<div class="remove-medal" onclick="event.stopPropagation();removeProfileMedal(${i})">✖</div>`;
+      div.onclick=()=>showItemDetail(m,currentViewingUser);
     }else{
       div.innerHTML='<div style="font-size:26px;color:#ccc">+</div>';
-      div.onclick=()=>openMedalPicker(i);
+      if(isSelf)div.onclick=()=>openMedalPicker();
     }
     c.appendChild(div);
   }
 }
-function removeProfileMedal(i){profileSelectedMedals.splice(i,1);renderProfileMedals();}
-function openMedalPicker(slotIdx=0){
-  selectedMedalSlotForPicker=slotIdx;
-  const owned=(currentUserFullData.ownedMedals||[]);
-  const grid=document.getElementById('medalPickerGrid');
-  if(owned.length===0){
-    grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;padding:20px 0">Bạn chưa được cấp huy chương nào. Liên hệ Admin!</p>';
-  }else{
-    grid.innerHTML=owned.map(mid=>{
-      const m=cachedMedals[mid];if(!m)return '';
-      const isSel=profileSelectedMedals.includes(mid);
-      return `<div class="medal-item ${isSel?'selected':''}" onclick="toggleMedalSelection('${mid}',this)"><div class="medal-icon-lg">${MEDAL_ICONS[m.tier]}</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm">${m.tier==='gold'?'Vàng':m.tier==='silver'?'Bạc':'Đồng'}</div></div>`;
-    }).join('');
-  }
-  document.getElementById('medalPickerModal').classList.add('show');
+function removeProfileMedal(i){if(!currentUser||currentViewingUser.username!==currentUser.username)return;profileSelectedMedals.splice(i,1);renderProfileMedals(true);}
+function removeProfileCup(){if(!currentUser)return;profileSelectedCup=null;renderProfileMedals(true);}
+function showItemDetail(item,user){
+  if(!item)return;
+  const isCup=item.type==='cup';
+  document.getElementById('itemDetailIcon').innerText=isCup?'🏆':(MEDAL_ICONS[item.tier]||'🏅');
+  document.getElementById('itemDetailName').innerText=item.name||'—';
+  const tierEl=document.getElementById('itemDetailTier');
+  tierEl.innerText=MEDAL_TIER_NAMES[item.tier]||'—';
+  tierEl.style.background=CUP_COLORS[item.tier]||'#ffc107';
+  tierEl.style.color=item.tier==='diamond'||item.tier==='platinum'||item.tier==='silver'?'#000':'#fff';
+  const descEl=document.getElementById('itemDetailDesc');
+  if(item.description){descEl.style.display='block';descEl.innerText=item.description;}
+  else descEl.style.display='none';
+  // Meta
+  const grants=(user&&user.itemGrants)||{};
+  const grant=grants[item.id]||{};
+  const grantedDate=grant.grantedAt?new Date(grant.grantedAt).toLocaleString('vi-VN'):'—';
+  const grantedBy=grant.grantedBy||'—';
+  const note=grant.note||'—';
+  let meta=`<b>📅 Thời gian trao:</b> ${grantedDate}<br>`;
+  meta+=`<b>👤 Người trao:</b> ${escapeHtml(grantedBy)}<br>`;
+  meta+=`<b>📝 Ghi chú:</b> ${escapeHtml(note)}<br>`;
+  if(isCup)meta+=`<b>🔢 Số lượng:</b> 1/1 (Cup độc quyền)<br>`;
+  else if(item.maxOwners>0){
+    const granted=getMedalGrantedCount(item.id);
+    meta+=`<b>🔢 Số lượng:</b> ${granted}/${item.maxOwners}<br>`;
+  }else meta+=`<b>🔢 Số lượng:</b> Không giới hạn<br>`;
+  document.getElementById('itemDetailMeta').innerHTML=meta;
+  document.getElementById('itemDetailModal').classList.add('show');
 }
-function toggleMedalSelection(mid,el){
-  const idx=profileSelectedMedals.indexOf(mid);
-  if(idx>=0){profileSelectedMedals.splice(idx,1);el.classList.remove('selected');}
-  else{
-    if(profileSelectedMedals.length>=MAX_USER_MEDALS){showToast(`Tối đa ${MAX_USER_MEDALS} huy chương!`,'warn');return;}
-    profileSelectedMedals.push(mid);el.classList.add('selected');
-  }
-  renderProfileMedals();
+function getMedalGrantedCount(medalId){
+  let count=0;
+  Object.values(cachedUsers).forEach(u=>{
+    if((u.ownedMedals||[]).includes(medalId))count++;
+  });
+  return count;
 }
-function closeMedalPicker(){document.getElementById('medalPickerModal').classList.remove('show');renderProfileMedals();}
-function confirmMedalPick(){closeMedalPicker();showToast('✅ Đã cập nhật! Bấm Lưu để hoàn tất.','success');}
 async function handleAvatarUpload(input){
   if(!input.files||!input.files[0])return;
   const file=input.files[0];
@@ -1817,13 +1841,10 @@ async function handleAvatarUpload(input){
 async function saveProfile(){
   if(!currentUser)return;
   const updates={
-    nickname:document.getElementById('profileNickname').value.trim()||currentUser.username,
     note:document.getElementById('profileNote').value.trim(),
-    avatar:document.getElementById('profileAvatarInput').dataset.newAvatar||'',
+    avatar:document.getElementById('profileAvatarInput').dataset.newAvatar||currentUserFullData.avatar||'',
     medals:profileSelectedMedals.slice(0,MAX_USER_MEDALS),
-    textColor:document.getElementById('profileTextColor').value,
-    fontStyle:document.getElementById('profileFontStyle').value,
-    textEffect:document.getElementById('profileTextEffect').value,
+    ownedCup:profileSelectedCup||'',
     updatedAt:Date.now()
   };
   try{
@@ -1846,7 +1867,7 @@ async function loadUserStats(username){
 }
 
 /* ============================================================
-   PROFILE EFFECT (canvas animation)
+   PROFILE EFFECT
    ============================================================ */
 let profileFxRAF=null,profileFxAutoStop=null;
 function stopProfileEffect(){
@@ -1854,11 +1875,10 @@ function stopProfileEffect(){
   if(profileFxAutoStop)clearTimeout(profileFxAutoStop);profileFxAutoStop=null;
   const c=document.getElementById('profileFxCanvas');if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}
 }
-function playProfileEffect(role,headerEl){
+function playProfileEffect(role){
   if(perfMode==='optimized')return;
   stopProfileEffect();
-  const canvas=document.getElementById('profileFxCanvas');
-  if(!canvas)return;
+  const canvas=document.getElementById('profileFxCanvas');if(!canvas)return;
   const box=canvas.parentElement;
   canvas.width=box.offsetWidth||600;canvas.height=box.offsetHeight||500;
   const ctx=canvas.getContext('2d');
@@ -1879,10 +1899,7 @@ function playProfileEffect(role,headerEl){
     for(let i=0;i<40;i++)particles.push({x:Math.random()*W(),y:-Math.random()*H(),vy:2+Math.random()*3,vx:(Math.random()-.5)*1.5,w:20,h:28,rot:Math.random()*Math.PI*2});
   }else if(effectType==='hearts'){
     for(let i=0;i<40;i++)particles.push({x:Math.random()*W(),y:H()+Math.random()*H()*.3,vy:-1-Math.random()*2,vx:(Math.random()-.5)*1.2,r:10+Math.random()*10,alpha:0.6+Math.random()*.4});
-  }else if(effectType==='sparkles'||effectType==='starfall'||effectType==='sparkle'){
-    for(let i=0;i<60;i++)particles.push({x:Math.random()*W(),y:Math.random()*H(),r:1+Math.random()*3,phase:Math.random()*Math.PI*2,speed:.02+Math.random()*.04});
   }else if(effectType==='fire_bg'||effectType==='lightning_bg'||effectType==='galaxy_bg'||effectType==='rainbow_bg'||effectType==='shield_bg'||effectType==='dark_flames'||effectType==='halloween_bg'||effectType==='christmas_bg'){
-    // simple background tint + particles
     for(let i=0;i<60;i++)particles.push({x:Math.random()*W(),y:Math.random()*H(),r:1+Math.random()*3,phase:Math.random()*Math.PI*2,speed:.02+Math.random()*.04});
   }else{
     for(let i=0;i<50;i++)particles.push({x:Math.random()*W(),y:Math.random()*H(),r:1+Math.random()*3,phase:Math.random()*Math.PI*2,speed:.02+Math.random()*.04});
@@ -1894,85 +1911,41 @@ function playProfileEffect(role,headerEl){
     ctx.clearRect(0,0,W(),H());
     
     if(effectType==='crown_coins'){
-      // coins falling
-      ctx.save();
-      let coinsCount=0;
-      particles.forEach(p=>{
-        p.y+=p.vy;p.x+=p.vx;p.rot+=0.03;
-        // stop at bottom to form mound
-        const stopY=H()-30-Math.random()*0;
-        if(p.y>H()-40)p.y=H()-40;
+      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=0.03;if(p.y>H()-40)p.y=H()-40;
         ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
         ctx.fillStyle='#ffd700';ctx.strokeStyle='#b8860b';ctx.lineWidth=2;
         ctx.beginPath();ctx.ellipse(0,0,p.r,p.r*.6,0,0,Math.PI*2);ctx.fill();ctx.stroke();
         ctx.fillStyle='#b8860b';ctx.font='bold '+(p.r)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('₫',0,0);
-        ctx.restore();
-        coinsCount++;
-      });
-      ctx.restore();
-      // Crown descending
+        ctx.restore();});
       if(crown){
         if(crown.y<crown.targetY)crown.y+=3;
         ctx.save();ctx.translate(W()/2,crown.y);ctx.rotate(crown.rot*(1-progress));
         ctx.font='64px serif';ctx.textAlign='center';ctx.textBaseline='middle';
         ctx.shadowBlur=aura?30:20;ctx.shadowColor=aura?role.auraColor:'#ffd700';
-        ctx.fillText('👑',0,0);
-        ctx.restore();
-        if(aura){const g=ctx.createRadialGradient(W()/2,crown.y,0,W()/2,crown.y,100);g.addColorStop(0,role.auraColor+'66');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W(),H());}
+        ctx.fillText('👑',0,0);ctx.restore();
       }
     }else if(effectType==='petals'){
-      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=p.rv;
-        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
-        ctx.fillStyle=role.bgColor||'#ffb3d9';ctx.globalAlpha=.85;
-        ctx.beginPath();ctx.ellipse(0,0,p.r,p.r*.5,0,0,Math.PI*2);ctx.fill();
-        ctx.restore();});
+      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=p.rv;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=role.bgColor||'#ffb3d9';ctx.globalAlpha=.85;ctx.beginPath();ctx.ellipse(0,0,p.r,p.r*.5,0,0,Math.PI*2);ctx.fill();ctx.restore();});
     }else if(effectType==='snowflakes'){
-      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;
-        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(elapsed*.001+p.x);
-        ctx.fillStyle='#fff';ctx.shadowBlur=10;ctx.shadowColor='#a8d8ff';
-        ctx.font=p.r*2+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-        ctx.fillText('❄️',0,0);
-        ctx.restore();});
+      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;ctx.save();ctx.translate(p.x,p.y);ctx.font=p.r*2+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('❄️',0,0);ctx.restore();});
     }else if(effectType==='lucky_money'){
-      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=.03;
-        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
-        ctx.fillStyle='#dc3545';ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-        ctx.fillStyle='#ffd700';ctx.font='bold 14px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🧧',0,0);
-        ctx.restore();});
+      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=.03;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.font='24px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🧧',0,0);ctx.restore();});
     }else if(effectType==='hearts'){
-      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.alpha-=.003;
-        if(p.alpha<=0){p.alpha=.7;p.y=H()+20;p.x=Math.random()*W();}
-        ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle='#ff4d6d';ctx.shadowBlur=15;ctx.shadowColor='#ff4d6d';
-        ctx.font=p.r*2+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('❤️',p.x,p.y);
-        ctx.restore();});
+      particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.alpha-=.003;if(p.alpha<=0){p.alpha=.7;p.y=H()+20;p.x=Math.random()*W();}ctx.save();ctx.globalAlpha=p.alpha;ctx.font=p.r*2+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('❤️',p.x,p.y);ctx.restore();});
     }else if(effectType==='galaxy_bg'){
       const g=ctx.createRadialGradient(W()/2,H()/2,0,W()/2,H()/2,Math.max(W(),H())*.7);
-      g.addColorStop(0,'rgba(74,158,255,.15)');g.addColorStop(.5,'rgba(165,94,234,.1)');g.addColorStop(1,'transparent');
+      g.addColorStop(0,'rgba(74,158,255,.15)');g.addColorStop(1,'transparent');
       ctx.fillStyle=g;ctx.fillRect(0,0,W(),H());
-      particles.forEach(p=>{p.phase+=p.speed;ctx.globalAlpha=.4+Math.abs(Math.sin(p.phase))*.6;
-        ctx.fillStyle='#fff';ctx.shadowBlur=10;ctx.shadowColor='#4a9eff';
-        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();});
+      particles.forEach(p=>{p.phase+=p.speed;ctx.globalAlpha=.4+Math.abs(Math.sin(p.phase))*.6;ctx.fillStyle='#fff';ctx.shadowBlur=10;ctx.shadowColor='#4a9eff';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();});
       ctx.globalAlpha=1;ctx.shadowBlur=0;
     }else if(effectType==='fire_bg'||effectType==='dark_flames'){
-      particles.forEach(p=>{p.phase+=p.speed*2;
-        ctx.globalAlpha=.3+Math.abs(Math.sin(p.phase))*.5;
-        ctx.fillStyle=effectType==='dark_flames'?'#a55eea':'#ff9800';
-        ctx.shadowBlur=15;ctx.shadowColor=ctx.fillStyle;
-        ctx.beginPath();ctx.arc(p.x,p.y,p.r*2,0,Math.PI*2);ctx.fill();});
+      particles.forEach(p=>{p.phase+=p.speed*2;ctx.globalAlpha=.3+Math.abs(Math.sin(p.phase))*.5;ctx.fillStyle=effectType==='dark_flames'?'#a55eea':'#ff9800';ctx.shadowBlur=15;ctx.shadowColor=ctx.fillStyle;ctx.beginPath();ctx.arc(p.x,p.y,p.r*2,0,Math.PI*2);ctx.fill();});
       ctx.globalAlpha=1;ctx.shadowBlur=0;
     }else if(effectType==='rainbow_bg'){
       const hue=(elapsed/30)%360;
       ctx.fillStyle=`hsla(${hue},80%,60%,.15)`;ctx.fillRect(0,0,W(),H());
-      particles.forEach(p=>{p.phase+=p.speed;ctx.fillStyle=`hsl(${(hue+p.phase*50)%360},100%,70%)`;
-        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();});
     }else{
-      // sparkles default
-      particles.forEach(p=>{p.phase+=p.speed;
-        ctx.globalAlpha=.4+Math.abs(Math.sin(p.phase))*.6;
-        ctx.fillStyle=role.auraEnabled?role.auraColor:'#ffd700';
-        ctx.shadowBlur=12;ctx.shadowColor=ctx.fillStyle;
-        ctx.font=(p.r*6)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-        ctx.fillText('✨',p.x,p.y);});
+      particles.forEach(p=>{p.phase+=p.speed;ctx.globalAlpha=.4+Math.abs(Math.sin(p.phase))*.6;ctx.fillStyle=role.auraEnabled?role.auraColor:'#ffd700';ctx.shadowBlur=12;ctx.shadowColor=ctx.fillStyle;ctx.font=(p.r*6)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('✨',p.x,p.y);});
       ctx.globalAlpha=1;ctx.shadowBlur=0;
     }
     
@@ -1984,6 +1957,49 @@ function playProfileEffect(role,headerEl){
 }
 
 /* ============================================================
+   MEDAL PICKER
+   ============================================================ */
+function openMedalPicker(){
+  if(!currentUser||!currentViewingUser||currentViewingUser.username!==currentUser.username)return;
+  const owned=(currentUserFullData.ownedMedals||[]);
+  const ownedCup=currentUserFullData.ownedCup||'';
+  const grid=document.getElementById('medalPickerGrid');
+  if(!owned.length&&!ownedCup){
+    grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;padding:20px 0">Bạn chưa được trao huy chương/cup nào.</p>';
+  }else{
+    let html='';
+    if(ownedCup&&cachedMedals[ownedCup]){
+      const c=cachedMedals[ownedCup];
+      const isSel=profileSelectedCup===ownedCup;
+      html+=`<div class="medal-item cup-card ${isSel?'selected':''}" onclick="toggleCupSelection('${ownedCup}',this)"><div class="medal-icon-lg">🏆</div><div class="medal-name-sm">${escapeHtml(c.name)}</div><div class="medal-tier-sm" style="color:${CUP_COLORS[c.tier]}">Cup • ${MEDAL_TIER_NAMES[c.tier]}</div></div>`;
+    }
+    owned.forEach(mid=>{
+      const m=cachedMedals[mid];if(!m)return;
+      const isSel=profileSelectedMedals.includes(mid);
+      html+=`<div class="medal-item ${isSel?'selected':''}" onclick="toggleMedalSelection('${mid}',this)"><div class="medal-icon-lg">${MEDAL_ICONS[m.tier]||'🏅'}</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm">${MEDAL_TIER_NAMES[m.tier]}</div></div>`;
+    });
+    grid.innerHTML=html;
+  }
+  document.getElementById('medalPickerModal').classList.add('show');
+}
+function toggleCupSelection(mid,el){
+  if(profileSelectedCup===mid){profileSelectedCup=null;el.classList.remove('selected');}
+  else{profileSelectedCup=mid;el.classList.add('selected');}
+  renderProfileMedals(true);
+}
+function toggleMedalSelection(mid,el){
+  const idx=profileSelectedMedals.indexOf(mid);
+  if(idx>=0){profileSelectedMedals.splice(idx,1);el.classList.remove('selected');}
+  else{
+    if(profileSelectedMedals.length>=MAX_USER_MEDALS){showToast(`Tối đa ${MAX_USER_MEDALS} huy chương!`,'warn');return;}
+    profileSelectedMedals.push(mid);el.classList.add('selected');
+  }
+  renderProfileMedals(true);
+}
+function closeMedalPicker(){document.getElementById('medalPickerModal').classList.remove('show');}
+function confirmMedalPick(){closeMedalPicker();showToast('✅ Bấm "Lưu Profile" để hoàn tất','success');}
+
+/* ============================================================
    SUPREME ACCESS
    ============================================================ */
 function checkSupremeAccess(){
@@ -1993,7 +2009,6 @@ function checkSupremeAccess(){
 async function verifySupremePassword(){
   const p=document.getElementById('supremePassInput').value.trim();
   if(!p){showToast('Nhập mật khẩu!','error');return;}
-  // Reload cache to be sure
   await loadSecurityPasswords();
   if(p===VUA_PASSWORD){
     userHasSupremeAccess=true;
@@ -2001,17 +2016,13 @@ async function verifySupremePassword(){
     showToast('👑 Chào mừng Nhà Phát Triển!','success');
     switchView('supremeView');
     loadAllSupremeExams();loadSupremeAudioList();loadSecurityPassList();
-    updatePartnerPassStatus();
   }else if(cachedPartnerPassword&&p===cachedPartnerPassword){
     userHasSupremeAccess='partner';
     document.getElementById('supremePasswordModal').style.display='none';
     showToast('🤝 Chào mừng Đối Tác! (Quyền hạn giới hạn)','info');
     switchView('supremeView');
     loadAllSupremeExams();loadSupremeAudioList();loadSecurityPassList();
-    updatePartnerPassStatus();
-  }else{
-    showToast('❌ Sai mật khẩu!','error');
-  }
+  }else showToast('❌ Sai mật khẩu!','error');
 }
 
 /* ============================================================
@@ -2072,77 +2083,38 @@ function filterAccList(){
     const avatar=user.avatar?`<img src="${user.avatar}">`:(user.nickname||u).charAt(0).toUpperCase();
     const created=user.createdAt?new Date(user.createdAt).toLocaleDateString('vi-VN'):'—';
     return `<div class="acc-user-row">
-      <div class="acc-avatar">${avatar}</div>
+      <div class="acc-avatar" onclick="viewUserProfile('${u}')">${avatar}</div>
       <div class="acc-info">
         <div class="acc-name">${escapeHtml(u)} ${user.nickname&&user.nickname!==u?`<span style="color:#666;font-weight:normal;font-size:12px">(${escapeHtml(user.nickname)})</span>`:''}</div>
         <div class="acc-email">📧 ${escapeHtml(user.email||'—')}</div>
         <div class="acc-meta"><span>📅 ${created}</span><span>${renderUserRoleBadges(user)}</span></div>
       </div>
       <div class="acc-actions">
-        <button style="background:#0d6efd" onclick="viewUserDetail('${u}')">👁️ Chi tiết</button>
+        <button style="background:#0d6efd" onclick="viewUserProfile('${u}')">👁️ Profile</button>
         <button style="background:#6f42c1" onclick="manageUserRoles('${u}')">🎭 Vai trò</button>
-        <button style="background:#ffc107;color:#000" onclick="editUsername('${u}')">✏️ Sửa ID</button>
+        <button style="background:#ffc107;color:#000" onclick="openEditId('${u}')">✏️ Sửa ID</button>
+        <button style="background:#198754" onclick="openGrantItemForUser('${u}')">🎁 Trao</button>
       </div>
     </div>`;
   }).join('');
 }
-async function viewUserDetail(username){
-  const u=cachedUsers[username];if(!u)return;
-  const builtin=getBuiltinRole(u);
-  const custom=(u.customRoleIds||[]).map(id=>cachedRoles[id]).filter(Boolean);
-  const medals=(u.ownedMedals||[]).map(id=>cachedMedals[id]).filter(Boolean);
-  document.getElementById('supremeModalTitle').innerText='Chi Tiết: '+username;
-  document.getElementById('supremeModalContent').innerHTML=`
-    <div style="background:#f8f9fa;padding:14px;border-radius:10px;margin-bottom:10px">
-      <p><b>👤 Username:</b> ${escapeHtml(u.username)}</p>
-      <p><b>📧 Email:</b> ${escapeHtml(u.email||'—')}</p>
-      <p><b>🎭 Biệt danh:</b> ${escapeHtml(u.nickname||'—')}</p>
-      <p><b>👑 Vai trò chính:</b> ${renderRoleBadge(builtin)}</p>
-      <p><b>🎭 Vai trò tùy chỉnh:</b> ${custom.length?custom.map(r=>renderRoleBadge({...r,id:'x'})).join(' '):'Chưa có'}</p>
-      <p><b>🏅 Huy chương sở hữu:</b> ${medals.length?medals.map(m=>`${MEDAL_ICONS[m.tier]} ${escapeHtml(m.name)}`).join(', '):'Chưa có'}</p>
-      <p><b>📝 Ghi chú:</b> ${escapeHtml(u.note||'—')}</p>
-      <p><b>🔐 Mật khẩu (hash):</b> <code style="font-size:10px;word-break:break-all">${escapeHtml((u.passwordHash||'').slice(0,50))}...</code></p>
-      <p><b>📅 Ngày tạo:</b> ${u.createdAt?new Date(u.createdAt).toLocaleString('vi-VN'):'—'}</p>
-    </div>
-    <h4 style="color:#1877f2;margin-bottom:6px">📊 Lịch sử làm bài</h4>
-    <div id="userHistoryContainer" style="max-height:250px;overflow-y:auto"><p style="text-align:center;color:#888">Đang tải...</p></div>
-  `;
-  document.getElementById('supremeDetailModal').style.display='flex';
-  loadUserHistory(username);
-}
-async function loadUserHistory(username){
-  try{
-    const [lb,qp]=await Promise.all([window.dbGet(window.dbChild(window.dbRef,'leaderboard')),window.dbGet(window.dbChild(window.dbRef,'qp_leaderboard'))]);
-    const hist=[];
-    (lb.val()?Object.entries(lb.val()):[]).forEach(([code,rows])=>{
-      Object.values(rows||{}).filter(r=>r.username===username).forEach(r=>hist.push({code,type:'Đề thi',...r}));
-    });
-    (qp.val()?Object.entries(qp.val()):[]).forEach(([code,rows])=>{
-      Object.values(rows||{}).filter(r=>r.username===username).forEach(r=>hist.push({code,type:'Bài luyện',...r}));
-    });
-    hist.sort((a,b)=>b.timestamp-a.timestamp);
-    const c=document.getElementById('userHistoryContainer');
-    if(!hist.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic">Chưa làm bài nào</p>';return;}
-    c.innerHTML=hist.map(h=>{
-      const d=new Date(h.timestamp).toLocaleString('vi-VN');
-      const m=Math.floor((h.timeSpent||0)/60),s=(h.timeSpent||0)%60;
-      return `<div class="sub-history-row"><b>${h.code}</b> (${h.type}) • Điểm: <b style="color:#1877f2">${h.score}</b> • TG: ${m}p${s}s • ${d}</div>`;
-    }).join('');
-  }catch(e){document.getElementById('userHistoryContainer').innerHTML='<p style="color:#dc3545">Lỗi tải lịch sử</p>';}
+function viewUserProfile(username){
+  const u=cachedUsers[username];
+  if(!u){showToast('Không tìm thấy user!','error');return;}
+  openProfile(null,u);
 }
 async function manageUserRoles(username){
   const u=cachedUsers[username];if(!u)return;
   await loadRolesCache();
   const currentIds=u.customRoleIds||[];
-  let html=`<p style="font-size:13px;color:#666;margin-bottom:10px">Chọn tối đa ${MAX_USER_ROLES} vai trò tùy chỉnh cho <b>${escapeHtml(username)}</b>:</p>`;
+  let html=`<p style="font-size:13px;color:#666;margin-bottom:10px">Chọn tối đa ${MAX_USER_ROLES} vai trò cho <b>${escapeHtml(username)}</b>:</p>`;
   const roleIds=Object.keys(cachedRoles);
-  if(!roleIds.length){html+='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Chưa có vai trò nào. Tạo ở "Quản Lí Vai Trò" trước!</p>';}
+  if(!roleIds.length){html+='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Chưa có vai trò nào.</p>';}
   else{
     html+='<div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto">';
     roleIds.forEach(rid=>{
-      const r=cachedRoles[rid];
-      const sel=currentIds.includes(rid);
-      html+=`<div style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid ${sel?'#198754':'#e0e0e0'};border-radius:10px;background:${sel?'#e7ffee':'#fff'};cursor:pointer" onclick="toggleUserRolePick('${username}','${rid}',this)">
+      const r=cachedRoles[rid];const sel=currentIds.includes(rid);
+      html+=`<div style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid ${sel?'#198754':'#e0e0e0'};border-radius:10px;background:${sel?'#e7ffee':'#fff'};cursor:pointer" onclick="toggleUserRolePick('${rid}',this)">
         ${renderRoleBadge({...r,id:rid})}
         <span style="margin-left:auto;font-size:18px">${sel?'✅':'⭕'}</span>
       </div>`;
@@ -2150,13 +2122,13 @@ async function manageUserRoles(username){
     html+='</div>';
   }
   html+=`<div style="margin-top:14px;padding:10px;background:#f0f8ff;border-radius:8px;font-size:12px;color:#666">Đã chọn: <b id="rolePickCount">${currentIds.length}</b>/${MAX_USER_ROLES}</div>`;
-  document.getElementById('supremeModalTitle').innerText='Quản Lí Vai Trò Cho '+username;
+  html+=`<button class="btn btn-success" style="margin-top:12px" onclick="saveUserRolePicks('${username}')">💾 Lưu Lựa Chọn</button>`;
+  document.getElementById('supremeModalTitle').innerText='Quản Lí Vai Trò: '+username;
   document.getElementById('supremeModalContent').innerHTML=html;
   document.getElementById('supremeDetailModal').style.display='flex';
   window._userRolePicks=currentIds.slice();
-  window._rolePickUsername=username;
 }
-function toggleUserRolePick(username,rid,el){
+function toggleUserRolePick(rid,el){
   if(!window._userRolePicks)window._userRolePicks=[];
   const idx=window._userRolePicks.indexOf(rid);
   if(idx>=0){window._userRolePicks.splice(idx,1);el.style.borderColor='#e0e0e0';el.style.background='#fff';el.querySelector('span:last-child').innerText='⭕';}
@@ -2166,42 +2138,121 @@ function toggleUserRolePick(username,rid,el){
   }
   document.getElementById('rolePickCount').innerText=window._userRolePicks.length;
 }
-async function saveUserRolePicks(){
-  const username=window._rolePickUsername;if(!username)return;
+async function saveUserRolePicks(username){
   try{
-    await window.dbUpdate(window.ref(window.db,`users/${username}`),{customRoleIds:window._userRolePicks});
-    cachedUsers[username].customRoleIds=window._userRolePicks.slice();
+    await window.dbUpdate(window.ref(window.db,`users/${username}`),{customRoleIds:window._userRolePicks||[]});
+    if(cachedUsers[username])cachedUsers[username].customRoleIds=(window._userRolePicks||[]).slice();
     if(currentUser&&currentUser.username===username){
       const s=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));
       await applyUserSession(s.val());
     }
-    showToast('✅ Đã cập nhật vai trò!','success');
+    showToast('✅ Đã cập nhật!','success');
     document.getElementById('supremeDetailModal').style.display='none';
     filterAccList();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
-async function editUsername(oldUsername){
-  const vua=await customPrompt(`Nhập mật khẩu VUA để đổi tên đăng nhập của "${oldUsername}":`,{icon:'🔐',title:'Xác thực',inputType:'password',okText:'Xác nhận'});
-  if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu VUA!','error');return;}
-  const newUsername=await customPrompt(`Đổi "${oldUsername}" thành tên mới (chữ thường, số, _ .):`,{icon:'✏️',title:'Đổi Username',placeholder:'VD: newname'});
-  if(!newUsername)return;
-  const nu=newUsername.trim().toLowerCase();
-  if(!/^[a-z0-9_.]{3,20}$/.test(nu)){showToast('Tên 3-20 ký tự a-z 0-9 _ .','error');return;}
-  if(cachedUsers[nu]){showToast('❌ Tên đã tồn tại!','error');return;}
-  const user=cachedUsers[oldUsername];
+
+/* ============================================================
+   EDIT ID (username + display + color + font + effect)
+   ============================================================ */
+function openEditId(username){
+  currentEditIdUsername=username;
+  const u=cachedUsers[username];if(!u)return;
+  document.getElementById('editIdTitle').innerText='✏️ Chỉnh Sửa: '+username;
+  const html=`
+    <label style="color:#1877f2;font-weight:bold">👤 Tên đăng nhập (ID):</label>
+    <input type="text" id="editIdNewUsername" value="${escapeHtml(u.username)}" style="margin:0 0 8px 0">
+    <small style="color:#666;font-size:11px">Yêu cầu xác nhận mật khẩu VUA khi đổi.</small>
+    
+    <label style="color:#1877f2;font-weight:bold;margin-top:14px">🎭 Biệt danh:</label>
+    <input type="text" id="editIdNickname" value="${escapeHtml(u.nickname||u.username)}" style="margin:0 0 8px 0">
+    
+    <label style="color:#1877f2;font-weight:bold;margin-top:14px">🎨 Màu tên:</label>
+    <input type="color" id="editIdTextColor" value="${u.textColor||'#333333'}" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer;margin:0 0 8px 0">
+    
+    <label style="color:#1877f2;font-weight:bold;margin-top:14px">✍️ Kiểu chữ:</label>
+    <select id="editIdFontStyle" style="margin:0 0 8px 0">
+      <option value="normal" ${u.fontStyle==='normal'?'selected':''}>Bình thường</option>
+      <option value="hoathinh" ${u.fontStyle==='hoathinh'?'selected':''}>🎨 Hoạt hình</option>
+      <option value="nannhot" ${u.fontStyle==='nannhot'?'selected':''}>✨ Nắn nót</option>
+      <option value="mono" ${u.fontStyle==='mono'?'selected':''}>💻 Đơn cách</option>
+      <option value="serif" ${u.fontStyle==='serif'?'selected':''}>📖 Cổ điển</option>
+    </select>
+    
+    <label style="color:#1877f2;font-weight:bold;margin-top:14px">✨ Hiệu ứng tên:</label>
+    <select id="editIdTextEffect" style="margin:0 0 8px 0">
+      <option value="none" ${u.textEffect==='none'?'selected':''}>Không</option>
+      <option value="glow" ${u.textEffect==='glow'?'selected':''}>Phát sáng</option>
+      <option value="neon" ${u.textEffect==='neon'?'selected':''}>Neon</option>
+      <option value="rainbow" ${u.textEffect==='rainbow'?'selected':''}>Rainbow</option>
+      <option value="shadow" ${u.textEffect==='shadow'?'selected':''}>Đổ bóng</option>
+    </select>
+    
+    <div style="text-align:center;padding:14px;background:#f8f9fa;border-radius:10px;margin-top:10px">
+      <div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC TÊN:</div>
+      <div id="editIdPreview" style="font-size:20px;font-weight:900">${escapeHtml(u.nickname||u.username)}</div>
+    </div>
+    
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-secondary" onclick="closeEditId()">Hủy</button>
+      <button class="btn btn-success" onclick="saveEditId()">💾 Lưu</button>
+    </div>
+  `;
+  document.getElementById('editIdBody').innerHTML=html;
+  document.getElementById('editIdModal').classList.add('show');
+  // Live preview
+  const upd=()=>{
+    const prev=document.getElementById('editIdPreview');
+    prev.innerText=document.getElementById('editIdNickname').value||'Preview';
+    applyFontAndEffect(prev,document.getElementById('editIdFontStyle').value,document.getElementById('editIdTextEffect').value,document.getElementById('editIdTextColor').value);
+  };
+  ['editIdNickname','editIdFontStyle','editIdTextEffect','editIdTextColor'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',upd);
+    document.getElementById(id).addEventListener('change',upd);
+  });
+  upd();
+}
+function closeEditId(){document.getElementById('editIdModal').classList.remove('show');currentEditIdUsername=null;}
+async function saveEditId(){
+  const username=currentEditIdUsername;if(!username)return;
+  const u=cachedUsers[username];if(!u)return;
+  const newId=document.getElementById('editIdNewUsername').value.trim().toLowerCase();
+  const nickname=document.getElementById('editIdNickname').value.trim()||newId;
+  const textColor=document.getElementById('editIdTextColor').value;
+  const fontStyle=document.getElementById('editIdFontStyle').value;
+  const textEffect=document.getElementById('editIdTextEffect').value;
+  
+  const updates={nickname,textColor,fontStyle,textEffect,updatedAt:Date.now()};
+  
   try{
-    await window.dbSet(window.ref(window.db,`users/${nu}`),{...user,username:nu});
-    await window.dbRemove(window.ref(window.db,`users/${oldUsername}`));
-    if(user.email)await window.dbSet(window.ref(window.db,`email_index/${emailKey(user.email)}`),nu);
-    if(currentUser&&currentUser.username===oldUsername){
-      localStorage.setItem('aurora_user',JSON.stringify({username:nu}));
-      const s=await window.dbGet(window.dbChild(window.dbRef,`users/${nu}`));
-      await applyUserSession(s.val());
+    // Nếu đổi ID → cần VUA xác nhận
+    if(newId!==username){
+      if(!/^[a-z0-9_.]{3,20}$/.test(newId)){showToast('ID 3-20 ký tự a-z 0-9 _ .','error');return;}
+      if(cachedUsers[newId]){showToast('❌ ID đã tồn tại!','error');return;}
+      const vua=await customPrompt('Nhập mật khẩu VUA để xác nhận đổi ID:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});
+      if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}
+      await window.dbSet(window.ref(window.db,`users/${newId}`),{...u,...updates,username:newId});
+      await window.dbRemove(window.ref(window.db,`users/${username}`));
+      if(u.email)await window.dbSet(window.ref(window.db,`email_index/${emailKey(u.email)}`),newId);
+      delete cachedUsers[username];
+      cachedUsers[newId]={...u,...updates,username:newId};
+      if(currentUser&&currentUser.username===username){
+        localStorage.setItem('aurora_user',JSON.stringify({username:newId}));
+        const s=await window.dbGet(window.dbChild(window.dbRef,`users/${newId}`));
+        await applyUserSession(s.val());
+      }
+      showToast('✅ Đã đổi ID & lưu!','success');
+    }else{
+      await window.dbUpdate(window.ref(window.db,`users/${username}`),updates);
+      Object.assign(cachedUsers[username],updates);
+      if(currentUser&&currentUser.username===username){
+        Object.assign(currentUser,updates);Object.assign(currentUserFullData,updates);
+        await applyUserSession(currentUserFullData);
+      }
+      showToast('✅ Đã lưu!','success');
     }
-    delete cachedUsers[oldUsername];
-    cachedUsers[nu]={...user,username:nu};
+    closeEditId();
     filterAccList();
-    showToast('✅ Đã đổi tên!','success');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
@@ -2222,14 +2273,14 @@ async function loadRoleList(){
   await loadRolesCache();
   const c=document.getElementById('roleListContainer');
   const ids=Object.keys(cachedRoles);
-  if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có vai trò nào</p>';return;}
+  if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có vai trò nào. Bấm "Tạo Vai Trò Mới" để bắt đầu!</p>';return;}
   c.innerHTML=ids.map(rid=>{
     const r=cachedRoles[rid];
     const aura=r.auraEnabled?`box-shadow:0 0 10px ${r.auraColor},0 0 20px ${r.auraColor};`:'';
     const medal=r.medalId&&cachedMedals[r.medalId]?`<br><small>🏅 ${escapeHtml(cachedMedals[r.medalId].name)}</small>`:'';
     return `<div class="role-card">
       <span class="role-preview" style="background:${r.bgColor};color:${r.textColor};${aura}">${r.emoji||''} ${escapeHtml(r.name)}</span>
-      <div class="role-info">${r.auraEnabled?'✨ Aura bật':'Aura tắt'}${medal}</div>
+      <div class="role-info">${r.auraEnabled?'✨ Aura':'Aura tắt'}${medal}</div>
       <div class="role-actions">
         <button style="background:#0d6efd" onclick="openRoleEditor('${rid}')">✏️ Sửa</button>
         <button style="background:#dc3545" onclick="deleteRole('${rid}')">🗑️ Xóa</button>
@@ -2249,16 +2300,14 @@ function openRoleEditor(rid){
   document.getElementById('roleAuraColor').value=r.auraColor||'#ffc107';
   // Medal options
   const ms=document.getElementById('roleMedalId');
-  ms.innerHTML='<option value="">Không có huy chương</option>'+Object.keys(cachedMedals).map(id=>`<option value="${id}" ${r.medalId===id?'selected':''}>${MEDAL_ICONS[cachedMedals[id].tier]} ${escapeHtml(cachedMedals[id].name)}</option>`).join('');
+  ms.innerHTML='<option value="">Không có huy chương</option>'+Object.keys(cachedMedals).filter(id=>cachedMedals[id].type!=='cup').map(id=>`<option value="${id}" ${r.medalId===id?'selected':''}>${MEDAL_ICONS[cachedMedals[id].tier]} ${escapeHtml(cachedMedals[id].name)}</option>`).join('');
   selectedRoleEmoji=r.emoji||'👑';
   renderRoleEmojiGrid();
   updateRolePreview();
   document.getElementById('roleEditorModal').classList.add('show');
 }
 function closeRoleEditor(){document.getElementById('roleEditorModal').classList.remove('show');}
-function renderRoleEmojiGrid(){
-  document.getElementById('roleEmojiGrid').innerHTML=ROLE_EMOJIS.map(e=>`<button class="${e===selectedRoleEmoji?'selected':''}" onclick="pickRoleEmoji('${e}')">${e}</button>`).join('');
-}
+function renderRoleEmojiGrid(){document.getElementById('roleEmojiGrid').innerHTML=ROLE_EMOJIS.map(e=>`<button class="${e===selectedRoleEmoji?'selected':''}" onclick="pickRoleEmoji('${e}')">${e}</button>`).join('');}
 function pickRoleEmoji(e){selectedRoleEmoji=e;renderRoleEmojiGrid();updateRolePreview();}
 function updateRolePreview(){
   const name=document.getElementById('roleName').value||'Tên vai trò';
@@ -2267,16 +2316,13 @@ function updateRolePreview(){
   const aura=document.getElementById('roleAuraEnabled').checked;
   const ac=document.getElementById('roleAuraColor').value;
   const el=document.getElementById('rolePreview');
+  if(!el)return;
   el.style.background=bg;el.style.color=txt;
   el.style.boxShadow=aura?`0 0 12px ${ac},0 0 24px ${ac}`:'none';
   el.innerText=`${selectedRoleEmoji} ${name}`;
 }
-document.addEventListener('input',e=>{
-  if(['roleName','roleBg','roleText','roleAuraColor'].includes(e.target.id))updateRolePreview();
-});
-document.addEventListener('change',e=>{
-  if(e.target.id==='roleAuraEnabled'){document.getElementById('roleAuraBox').style.display=e.target.checked?'block':'none';updateRolePreview();}
-});
+document.addEventListener('input',e=>{if(['roleName','roleBg','roleText','roleAuraColor'].includes(e.target.id))updateRolePreview();});
+document.addEventListener('change',e=>{if(e.target.id==='roleAuraEnabled'){document.getElementById('roleAuraBox').style.display=e.target.checked?'block':'none';updateRolePreview();}});
 async function saveRole(){
   const name=document.getElementById('roleName').value.trim();
   if(!name){showToast('Nhập tên vai trò!','error');return;}
@@ -2301,7 +2347,8 @@ async function saveRole(){
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function deleteRole(rid){
-  const vua=await customPrompt('Nhập mật khẩu VUA để xóa vai trò:',{icon:'🔐',title:'Xác thực',inputType:'password'});
+  if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}
+  const vua=await customPrompt('Nhập mật khẩu VUA để xóa vai trò:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});
   if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}
   const ok=await customConfirm('Xóa vai trò này?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'});
   if(!ok)return;
@@ -2309,7 +2356,7 @@ async function deleteRole(rid){
 }
 
 /* ============================================================
-   MEDAL LIST PANEL
+   MEDAL/CUP LIST PANEL
    ============================================================ */
 function openMedalListPanel(){
   document.getElementById('medalListPanel').style.display='block';
@@ -2325,14 +2372,19 @@ async function loadMedalList(){
   await loadMedalsCache();
   const c=document.getElementById('medalListContainer');
   const ids=Object.keys(cachedMedals);
-  if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có huy chương nào</p>';return;}
+  if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có huy chương/cup nào. Bấm "Tạo Mới" để bắt đầu!</p>';return;}
   c.innerHTML=ids.map(mid=>{
     const m=cachedMedals[mid];
-    return `<div class="role-card" style="border-color:#ffc107">
-      <span style="font-size:36px">${MEDAL_ICONS[m.tier]}</span>
+    const isCup=m.type==='cup';
+    const icon=isCup?'🏆':(MEDAL_ICONS[m.tier]||'🏅');
+    const count=getMedalGrantedCount(mid);
+    let countTxt=isCup?`Đã trao: ${count}/1`:(m.maxOwners>0?`Đã trao: ${count}/${m.maxOwners}`:`Đã trao: ${count} (không giới hạn)`);
+    return `<div class="role-card" style="border-color:${isCup?CUP_COLORS[m.tier]||'#a55eea':'#ffc107'}">
+      <span style="font-size:40px;filter:drop-shadow(0 0 6px ${CUP_COLORS[m.tier]||'#ffd700'})">${icon}</span>
       <div class="role-info">
-        <div style="font-weight:bold;color:#333;font-size:14px">${escapeHtml(m.name)}</div>
-        <div style="font-size:11px;color:#888">Bậc: ${m.tier==='gold'?'Vàng':m.tier==='silver'?'Bạc':'Đồng'}</div>
+        <div style="font-weight:bold;color:#333;font-size:14px">${escapeHtml(m.name)} ${isCup?'<span style="font-size:10px;background:#a55eea;color:#fff;padding:2px 8px;border-radius:10px">CUP</span>':''}</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">Bậc: <b style="color:${CUP_COLORS[m.tier]}">${MEDAL_TIER_NAMES[m.tier]}</b> • ${countTxt}</div>
+        ${m.description?`<div style="font-size:11px;color:#666;margin-top:3px;font-style:italic">${escapeHtml(m.description).slice(0,80)}${m.description.length>80?'...':''}</div>`:''}
       </div>
       <div class="role-actions">
         <button style="background:#0d6efd" onclick="openMedalEditor('${mid}')">✏️ Sửa</button>
@@ -2343,43 +2395,188 @@ async function loadMedalList(){
 }
 function openMedalEditor(mid){
   currentEditingMedalId=mid||null;
-  const m=mid&&cachedMedals[mid]?cachedMedals[mid]:{name:'',tier:'gold'};
-  document.getElementById('medalEditorTitle').innerText=mid?'✏️ Sửa Huy Chương':'🏅 Tạo Huy Chương';
+  const m=mid&&cachedMedals[mid]?cachedMedals[mid]:{type:'medal',name:'',tier:'gold',description:'',maxOwners:0};
+  document.getElementById('medalEditorTitle').innerText=mid?'✏️ Sửa':'🏅 Tạo Huy Chương / 🏆 Cup';
+  document.getElementById('medalType').value=m.type||'medal';
   document.getElementById('medalName').value=m.name||'';
   document.getElementById('medalTier').value=m.tier||'gold';
+  document.getElementById('medalDescription').value=m.description||'';
+  document.getElementById('medalMaxOwners').value=m.maxOwners||0;
+  updateMedalTypeFields();
   updateMedalPreview();
   document.getElementById('medalEditorModal').classList.add('show');
 }
 function closeMedalEditor(){document.getElementById('medalEditorModal').classList.remove('show');}
+function updateMedalTypeFields(){
+  const type=document.getElementById('medalType').value;
+  document.getElementById('medalMaxOwnersBox').style.display=type==='cup'?'none':'block';
+}
 function updateMedalPreview(){
   const t=document.getElementById('medalTier').value;
-  const n=document.getElementById('medalName').value||'Tên huy chương';
-  document.getElementById('medalPreview').innerText=MEDAL_ICONS[t];
+  const type=document.getElementById('medalType').value;
+  const n=document.getElementById('medalName').value||(type==='cup'?'Tên Cup':'Tên huy chương');
+  const icon=type==='cup'?'🏆':(MEDAL_ICONS[t]||'🏅');
+  document.getElementById('medalPreview').innerText=icon;
+  document.getElementById('medalPreview').style.filter=`drop-shadow(0 0 10px ${CUP_COLORS[t]||'#ffd700'})`;
   document.getElementById('medalPreviewName').innerText=n;
+  document.getElementById('medalPreviewName').style.color=CUP_COLORS[t]||'#333';
 }
 document.addEventListener('input',e=>{if(e.target.id==='medalName')updateMedalPreview();});
-document.addEventListener('change',e=>{if(e.target.id==='medalTier')updateMedalPreview();});
+document.addEventListener('change',e=>{
+  if(e.target.id==='medalTier')updateMedalPreview();
+  if(e.target.id==='medalType'){updateMedalTypeFields();updateMedalPreview();}
+});
 async function saveMedal(){
   const name=document.getElementById('medalName').value.trim();
   const tier=document.getElementById('medalTier').value;
-  if(!name){showToast('Nhập tên huy chương!','error');return;}
+  const type=document.getElementById('medalType').value;
+  const description=document.getElementById('medalDescription').value.trim();
+  const maxOwners=type==='cup'?1:(parseInt(document.getElementById('medalMaxOwners').value)||0);
+  if(!name){showToast('Nhập tên!','error');return;}
+  // Kiểm tra: nếu là cup và đã có cup khác trùng tên? không cần
   try{
     const mid=currentEditingMedalId||('medal_'+Date.now());
-    const data={name,tier,updatedAt:Date.now()};
+    const data={name,tier,type,description,maxOwners,updatedAt:Date.now()};
     if(!currentEditingMedalId)data.createdAt=Date.now();
     await window.dbSet(window.ref(window.db,`system/medals/${mid}`),data);
     cachedMedals[mid]=data;
-    showToast('✅ Đã lưu huy chương!','success');
+    showToast(`✅ Đã lưu ${type==='cup'?'Cup':'huy chương'}!`,'success');
     closeMedalEditor();
     loadMedalList();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function deleteMedal(mid){
-  const vua=await customPrompt('Nhập mật khẩu VUA để xóa huy chương:',{icon:'🔐',title:'Xác thực',inputType:'password'});
+  if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}
+  const vua=await customPrompt('Nhập mật khẩu VUA để xóa:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});
   if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}
-  const ok=await customConfirm('Xóa huy chương này?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'});
+  const ok=await customConfirm('Xóa huy chương/cup này?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'});
   if(!ok)return;
   try{await window.dbRemove(window.ref(window.db,`system/medals/${mid}`));delete cachedMedals[mid];showToast('🗑️ Đã xóa!','warn');loadMedalList();}catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+
+/* ============================================================
+   GRANT ITEM (trao tặng)
+   ============================================================ */
+let grantTargetUser=null;
+function openGrantItemForUser(username){
+  const u=cachedUsers[username];if(!u)return;
+  grantTargetUser=username;
+  // Danh sách huy chương/cup khả dụng
+  const ownedMedals=u.ownedMedals||[];
+  const ownedCup=u.ownedCup||'';
+  const availableMedals=Object.keys(cachedMedals).filter(mid=>{
+    const m=cachedMedals[mid];
+    if(m.type==='cup')return false;
+    if(ownedMedals.includes(mid))return false;
+    if(m.maxOwners>0){
+      const granted=getMedalGrantedCount(mid);
+      if(granted>=m.maxOwners)return false;
+    }
+    return true;
+  });
+  const availableCups=Object.keys(cachedMedals).filter(mid=>{
+    const m=cachedMedals[mid];
+    if(m.type!=='cup')return false;
+    // Cup chỉ có 1 — nếu đã trao cho ai rồi thì ẩn (dù có thể trao lại)
+    const granted=getMedalGrantedCount(mid);
+    if(granted>=1&&!ownedCup)return false; // đã trao cho người khác
+    return true;
+  });
+  
+  let html=`<div style="font-weight:bold;color:#1877f2;margin-bottom:8px">🎁 Trao tặng cho: <span style="color:#d32f2f">${escapeHtml(username)}</span></div>`;
+  
+  if(!availableMedals.length&&!availableCups.length){
+    html+=`<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Không còn huy chương/cup nào có thể trao.</p>`;
+  }else{
+    html+=`<div class="medal-grid" id="grantItemGrid">`;
+    availableCups.forEach(mid=>{
+      const m=cachedMedals[mid];
+      html+=`<div class="medal-item cup-card" onclick="pickGrantItem('${mid}',this)"><div class="medal-icon-lg">🏆</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm" style="color:${CUP_COLORS[m.tier]}">Cup • ${MEDAL_TIER_NAMES[m.tier]}</div></div>`;
+    });
+    availableMedals.forEach(mid=>{
+      const m=cachedMedals[mid];
+      html+=`<div class="medal-item" onclick="pickGrantItem('${mid}',this)"><div class="medal-icon-lg">${MEDAL_ICONS[m.tier]}</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm">${MEDAL_TIER_NAMES[m.tier]}${m.maxOwners>0?` • ${getMedalGrantedCount(mid)}/${m.maxOwners}`:''}</div></div>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-secondary" onclick="document.getElementById('supremeDetailModal').style.display='none'">Đóng</button></div>`;
+  document.getElementById('supremeModalTitle').innerText='🎁 Trao Tặng';
+  document.getElementById('supremeModalContent').innerHTML=html;
+  document.getElementById('supremeDetailModal').style.display='flex';
+  window._grantSelectedItem=null;
+}
+function pickGrantItem(mid,el){
+  document.querySelectorAll('#grantItemGrid .medal-item').forEach(x=>x.classList.remove('selected'));
+  el.classList.add('selected');
+  window._grantSelectedItem=mid;
+  // Đóng modal chọn → mở modal grant info
+  document.getElementById('supremeDetailModal').style.display='none';
+  openGrantModal(grantTargetUser,mid);
+}
+function openGrantModal(username,itemId){
+  const u=cachedUsers[username];const item=cachedMedals[itemId];
+  if(!u||!item)return;
+  const isCup=item.type==='cup';
+  document.getElementById('grantItemTitle').innerText=`🎁 Trao ${isCup?'Cup':'Huy Chương'}`;
+  document.getElementById('grantItemInfo').innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:40px">${isCup?'🏆':MEDAL_ICONS[item.tier]}</span>
+      <div>
+        <div style="font-weight:bold">${escapeHtml(item.name)}</div>
+        <div style="font-size:11px;color:#666">Bậc: ${MEDAL_TIER_NAMES[item.tier]} • Trao cho: <b>${escapeHtml(username)}</b></div>
+        ${item.description?`<div style="font-size:11px;color:#888;font-style:italic;margin-top:4px">"${escapeHtml(item.description)}"</div>`:''}
+      </div>
+    </div>
+  `;
+  const now=new Date();
+  const localISO=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
+  document.getElementById('grantTime').value=localISO;
+  document.getElementById('grantNote').value='';
+  document.getElementById('grantItemModal').classList.add('show');
+  window._grantItemId=itemId;
+  window._grantUsername=username;
+}
+function closeGrantItem(){document.getElementById('grantItemModal').classList.remove('show');}
+async function confirmGrantItem(){
+  const itemId=window._grantItemId;
+  const username=window._grantUsername;
+  if(!itemId||!username)return;
+  const grantedAt=new Date(document.getElementById('grantTime').value).getTime()||Date.now();
+  const note=document.getElementById('grantNote').value.trim()||'Trao tặng';
+  const item=cachedMedals[itemId];if(!item)return;
+  const u=cachedUsers[username];if(!u)return;
+  
+  try{
+    const updates={updatedAt:Date.now()};
+    const itemGrants=u.itemGrants||{};
+    itemGrants[itemId]={grantedAt,grantedBy:currentUser.username,note};
+    updates.itemGrants=itemGrants;
+    
+    if(item.type==='cup'){
+      if(u.ownedCup&&u.ownedCup!==itemId){showToast('❌ User đã có cup khác!','error');return;}
+      updates.ownedCup=itemId;
+    }else{
+      if(!u.ownedMedals)u.ownedMedals=[];
+      if(u.ownedMedals.includes(itemId)){showToast('❌ Đã có huy chương này!','error');return;}
+      if(u.ownedMedals.length>=20){showToast('❌ User đã có quá nhiều huy chương!','error');return;}
+      // Check max owners
+      if(item.maxOwners>0){
+        const granted=getMedalGrantedCount(itemId);
+        if(granted>=item.maxOwners){showToast(`❌ Đã đạt giới hạn ${item.maxOwners}!`,'error');return;}
+      }
+      updates.ownedMedals=[...u.ownedMedals,itemId];
+    }
+    
+    await window.dbUpdate(window.ref(window.db,`users/${username}`),updates);
+    Object.assign(cachedUsers[username],updates);
+    if(currentUser&&currentUser.username===username){
+      Object.assign(currentUser,updates);Object.assign(currentUserFullData,updates);
+      await applyUserSession(currentUserFullData);
+    }
+    closeGrantItem();
+    showCenterSquareToast('🎁','Đã trao!',`${item.name} → ${username}`,'success',3000);
+    filterAccList();
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
 /* ============================================================
@@ -2424,8 +2621,8 @@ async function addSecurityPassword(){
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function deleteSecurityPassword(key,label){
-  if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa mật khẩu!','error');return;}
-  const vua=await customPrompt('Nhập mật khẩu VUA để xóa:',{icon:'🔐',title:'Xác thực',inputType:'password'});
+  if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}
+  const vua=await customPrompt('Nhập mật khẩu VUA để xóa:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});
   if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}
   const ok=await customConfirm(`Xóa mật khẩu: ${label||key}?`,{icon:'🗑️',title:'Xác nhận',okClass:'danger'});
   if(!ok)return;
@@ -2434,30 +2631,35 @@ async function deleteSecurityPassword(key,label){
 function renderSecurityPassList(list){
   const c=document.getElementById('securityPassListContainer');if(!c)return;
   const keys=Object.keys(list||{});
-  if(!keys.length){c.innerHTML='<p style="font-size:13px;color:#888;font-style:italic;text-align:center">Chưa có mật khẩu nào</p>';return;}
-  c.innerHTML=keys.map(k=>{
-    const p=list[k];
-    return `<div class="pw-list-item">
-      <div style="flex:1;min-width:120px">
-        <div style="font-size:13px;font-weight:bold">🔑 ${(p.value||'').slice(0,3)}${'•'.repeat(Math.max(0,(p.value||'').length-3))}<span class="pw-badge security">🛡️ Bảo mật</span></div>
-        <div style="font-size:11px;color:#888;margin-top:2px">${escapeHtml(p.label||'')}</div>
-      </div>
-      <button class="btn btn-danger" style="width:auto;padding:4px 10px;font-size:12px" onclick="deleteSecurityPassword('${k}','${(p.label||'').replace(/'/g,"\\'")}')">🗑️</button>
-    </div>`;
-  }).join('');
-  // Add partner badge if exists
+  let html='';
+  if(!keys.length){
+    html='<p style="font-size:13px;color:#888;font-style:italic;text-align:center;padding:8px 0">Chưa có mật khẩu bảo mật nào</p>';
+  }else{
+    html=keys.map(k=>{
+      const p=list[k];
+      return `<div class="pw-list-item">
+        <div style="flex:1;min-width:120px">
+          <div style="font-size:13px;font-weight:bold">🔑 ${(p.value||'').slice(0,3)}${'•'.repeat(Math.max(0,(p.value||'').length-3))}<span class="pw-badge security">🛡️ Bảo mật</span></div>
+          <div style="font-size:11px;color:#888;margin-top:2px">${escapeHtml(p.label||'')}</div>
+        </div>
+        <button class="btn btn-danger" style="width:auto;padding:4px 10px;font-size:12px" onclick="deleteSecurityPassword('${k}','${(p.label||'').replace(/'/g,"\\'")}')">🗑️</button>
+      </div>`;
+    }).join('');
+  }
   if(cachedPartnerPassword){
-    c.innerHTML+=`<div class="pw-list-item" style="border-color:#dc3545">
+    html+=`<div class="pw-list-item" style="border-color:#dc3545">
       <div style="flex:1;min-width:120px">
         <div style="font-size:13px;font-weight:bold">🤝 ${cachedPartnerPassword.slice(0,3)}${'•'.repeat(Math.max(0,cachedPartnerPassword.length-3))}<span class="pw-badge partner">🤝 Partner</span></div>
         <div style="font-size:11px;color:#888;margin-top:2px">Mật khẩu đối tác</div>
       </div>
+      <button class="btn btn-danger" style="width:auto;padding:4px 10px;font-size:12px" onclick="removePartnerPassword()">🗑️</button>
     </div>`;
   }
+  c.innerHTML=html;
 }
 async function setPartnerPassword(){
-  if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể tạo mật khẩu Partner!','error');return;}
-  const vua=await customPrompt('Nhập mật khẩu VUA để đặt mật khẩu Partner:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});
+  if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể tạo Partner!','error');return;}
+  const vua=await customPrompt('Nhập mật khẩu VUA để đặt Partner:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});
   if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}
   const pass=document.getElementById('partnerPassInput').value.trim();
   if(!pass||pass.length<4){showToast('Mật khẩu ≥ 4 ký tự!','error');return;}
@@ -2466,27 +2668,31 @@ async function setPartnerPassword(){
     cachedPartnerPassword=pass;
     updatePartnerPassStatus();
     document.getElementById('partnerPassInput').value='';
+    loadSecurityPasswords();
     showToast('✅ Đã đặt mật khẩu Partner!','success');
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+async function removePartnerPassword(){
+  if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa Partner!','error');return;}
+  const vua=await customPrompt('Nhập mật khẩu VUA để xóa Partner:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});
+  if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}
+  const ok=await customConfirm('Xóa mật khẩu Partner?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'});
+  if(!ok)return;
+  try{
+    await window.dbRemove(window.ref(window.db,'system/partner_password'));
+    cachedPartnerPassword='';
+    updatePartnerPassStatus();
+    loadSecurityPasswords();
+    showToast('🗑️ Đã xóa Partner!','warn');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
 /* ============================================================
-   WEB CONFIG / BROADCAST / AUDIO
+   WEB CONFIG
    ============================================================ */
-async function saveWebName(){
-  const name=document.getElementById('supremeWebName').value.trim();
-  if(!name){showToast('Nhập tên!','error');return;}
-  try{await window.dbSet(window.ref(window.db,'system/web_config'),{name,updatedAt:Date.now()});showToast('✅ Đã lưu!','success');}catch(e){showToast('❌ '+e.message,'error');}
-}
-async function resetWebName(){
-  if(!await customConfirm('Reset tên website mặc định?',{icon:'🔄'}))return;
-  try{await window.dbSet(window.ref(window.db,'system/web_config'),{name:DEFAULT_WEB_NAME,updatedAt:Date.now()});showToast('🔄 Đã reset!','warn');}catch(e){showToast('❌ '+e.message,'error');}
-}
-function applyWebName(name){
-  const n=name||DEFAULT_WEB_NAME;
-  const l=document.getElementById('webLogo');if(l)l.innerText=n;
-  document.title=n+' - Hệ Thống Kiểm Tra Trực Tuyến';
-}
+async function saveWebName(){const name=document.getElementById('supremeWebName').value.trim();if(!name){showToast('Nhập tên!','error');return;}try{await window.dbSet(window.ref(window.db,'system/web_config'),{name,updatedAt:Date.now()});showToast('✅ Đã lưu!','success');}catch(e){showToast('❌ '+e.message,'error');}}
+async function resetWebName(){if(!await customConfirm('Reset tên website mặc định?',{icon:'🔄'}))return;try{await window.dbSet(window.ref(window.db,'system/web_config'),{name:DEFAULT_WEB_NAME,updatedAt:Date.now()});showToast('🔄 Đã reset!','warn');}catch(e){showToast('❌ '+e.message,'error');}}
+function applyWebName(name){const n=name||DEFAULT_WEB_NAME;const l=document.getElementById('webLogo');if(l)l.innerText=n;document.title=n+' - Hệ Thống Kiểm Tra Trực Tuyến';}
 function loadWebConfig(){
   if(webConfigListener)webConfigListener();
   webConfigListener=window.onValue(window.ref(window.db,'system/web_config'),s=>{
@@ -2497,17 +2703,7 @@ function loadWebConfig(){
 async function sendGlobalBroadcast(){
   const text=document.getElementById('supremeBroadcastText').value.trim();
   if(!text){showToast('Nhập nội dung!','error');return;}
-  const data={
-    text,
-    position:document.getElementById('supremeBroadcastPosition').value,
-    fontFamily:document.getElementById('supremeFontFamily').value,
-    fontSize:parseInt(document.getElementById('supremeFontSize').value)||16,
-    bgColor:document.getElementById('supremeBgColor').value,
-    textColor:document.getElementById('supremeTextColor').value,
-    durationSec:parseInt(document.getElementById('supremeDurationSec').value)||10,
-    opacity:parseFloat(document.getElementById('supremeOpacity').value)||0.95,
-    timestamp:Date.now()
-  };
+  const data={text,position:document.getElementById('supremeBroadcastPosition').value,fontFamily:document.getElementById('supremeFontFamily').value,fontSize:parseInt(document.getElementById('supremeFontSize').value)||16,bgColor:document.getElementById('supremeBgColor').value,textColor:document.getElementById('supremeTextColor').value,durationSec:parseInt(document.getElementById('supremeDurationSec').value)||10,opacity:parseFloat(document.getElementById('supremeOpacity').value)||0.95,timestamp:Date.now()};
   await window.dbSet(window.ref(window.db,'system/broadcast'),data);
   showToast('📢 Đã phát!','success');
   document.getElementById('supremeBroadcastText').value='';
@@ -2541,12 +2737,7 @@ async function uploadSupremeAudio(input){
   }catch(e){showToast('❌ '+e.message,'error');input.value='';}
 }
 async function playSupremeAudio(key){try{await window.dbSet(window.ref(window.db,'system/audio'),{audioKey:key,isPlaying:true,timestamp:Date.now()});showToast('🎵 Đang phát!','success');}catch(e){showToast('❌ '+e.message,'error');}}
-async function deleteSupremeAudio(key){
-  if(!await customConfirm('Xóa file nhạc?',{icon:'🗑️'}))return;
-  await window.dbRemove(window.ref(window.db,`system/audio_list/${key}`));
-  await window.dbRemove(window.ref(window.db,`system/audio_chunks/${key}`));
-  showToast('🗑️ Đã xóa!','warn');
-}
+async function deleteSupremeAudio(key){if(!await customConfirm('Xóa file nhạc?',{icon:'🗑️'}))return;await window.dbRemove(window.ref(window.db,`system/audio_list/${key}`));await window.dbRemove(window.ref(window.db,`system/audio_chunks/${key}`));showToast('🗑️ Đã xóa!','warn');}
 async function stopGlobalAudio(){await window.dbSet(window.ref(window.db,'system/audio'),{audioKey:'',isPlaying:false,timestamp:Date.now()});showToast('🛑 Đã dừng','warn');}
 
 /* ============================================================
@@ -2626,8 +2817,6 @@ function startWelcomeFx(type){
   else if(['halloween','christmas','tet'].includes(type)){const ems=type==='tet'?['🌸','🌺','🧧','🏮','🌼']:type==='christmas'?['🎄','🎅','❄️','🎁','🔔','⛄']:['🎃','🦇','👻','🕷️','💀','🕸️'];for(let i=0;i<40;i++)particles.push({x:Math.random()*W(),y:Math.random()*H(),vx:(Math.random()-.5)*1.5,vy:.3+Math.random()*1.5,s:24+Math.random()*24,e:ems[Math.floor(Math.random()*ems.length)],r:Math.random()*Math.PI*2,rv:(Math.random()-.5)*.05});}
   else if(type==='fireworks'){for(let i=0;i<40;i++)particles.push({x:Math.random()*W(),y:H()+Math.random()*60,vx:(Math.random()-.5)*1.5,vy:-8-Math.random()*4,s:2+Math.random()*2,life:1,decay:.015,c:`hsl(${Math.random()*360},100%,60%)`});}
   else if(type==='matrix'){const fs=16,cols=Math.floor(W()/fs),drops=new Array(cols).fill(0).map(()=>Math.random()*H()/fs);const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789アイウエオ';let last=0;const loop=t=>{if(t-last>50){ctx.fillStyle='rgba(0,0,0,0.08)';ctx.fillRect(0,0,W(),H());ctx.fillStyle='#0f0';ctx.font=fs+'px monospace';for(let i=0;i<cols;i++){ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*fs,drops[i]*fs);if(drops[i]*fs>H()&&Math.random()>.975)drops[i]=0;drops[i]+=.5;}last=t;}welcomeFxRAF=requestAnimationFrame(loop);};requestAnimationFrame(loop);welcomeFxAutoStopTimer=setTimeout(()=>{if(welcomeFxRAF)cancelAnimationFrame(welcomeFxRAF);ctx.clearRect(0,0,canvas.width,canvas.height);},WELCOME_FX_DURATION_MS);return;}
-  else particles=[];
-
   const loop=()=>{
     ctx.clearRect(0,0,W(),H());
     if(type==='galaxy'){const cx=W()/2,cy=H()/2;const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W(),H())*.6);g.addColorStop(0,'rgba(165,94,234,0.25)');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W(),H());ctx.globalCompositeOperation='lighter';particles.forEach(p=>{p.a+=p.sp;const x=cx+Math.cos(p.a)*p.r,y=cy+Math.sin(p.a)*p.r*.55;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,y,p.s,0,Math.PI*2);ctx.fill();});ctx.globalCompositeOperation='source-over';}
@@ -2656,7 +2845,7 @@ function compareShortAnswer(a,b){if(!a&&!b)return true;if(!a||!b)return false;co
    MODE / VIEW
    ============================================================ */
 function getExamMode(){return document.getElementById('examModeSelect').value||'normal';}
-function toggleModeDropdown(e){e.stopPropagation();const m=document.getElementById('modeDropdownMenu');m.classList.toggle('open');}
+function toggleModeDropdown(e){e.stopPropagation();document.getElementById('modeDropdownMenu').classList.toggle('open');}
 document.addEventListener('click',e=>{const dd=document.getElementById('modeDropdown');if(dd&&!dd.contains(e.target))document.getElementById('modeDropdownMenu').classList.remove('open');});
 function selectExamMode(mode,el){
   document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.remove('active'));
@@ -2792,7 +2981,7 @@ function onQRCodeScanned(text){
   stopQRScanner();closeQRScanModal();
   if(practiceCode){document.getElementById('examModeSelect').value='practice';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='practice'));document.querySelector('.mode-dd-icon').innerText='⚡';document.querySelector('.mode-dd-label').innerText='Bài Luyện Nhanh';document.getElementById('lblCodeText').innerText='Mã Bài Luyện Nhanh:';document.getElementById('extraPassBox').style.display='block';document.getElementById('studentExamCode').value=practiceCode;}
   else{document.getElementById('examModeSelect').value='live';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='live'));document.querySelector('.mode-dd-icon').innerText='🛡️';document.querySelector('.mode-dd-label').innerText='Phòng Thi Chuyên Dụng';document.getElementById('lblCodeText').innerText='Mã Bài Kiểm Tra:';document.getElementById('extraPassBox').style.display='block';document.getElementById('studentExamCode').value=examCode;}
-  showToast('📱 Đã nhận mã, nhập tên/mật khẩu!','info');
+  showToast('📱 Đã nhận mã!','info');
 }
 function stopQRScanner(){if(html5QrCodeScanner){try{html5QrCodeScanner.stop().then(()=>{try{html5QrCodeScanner.clear();}catch(e){}html5QrCodeScanner=null;}).catch(()=>{html5QrCodeScanner=null;});}catch(e){html5QrCodeScanner=null;}}qrScanActive=false;}
 function closeQRScanModal(){stopQRScanner();document.getElementById('qrScanModal').classList.remove('show');document.getElementById('qrReaderContainer').innerHTML='';}
@@ -2841,7 +3030,7 @@ function resetQpForm(){
 }
 
 /* ============================================================
-   BUILD QUESTION V2
+   BUILD QUESTION
    ============================================================ */
 function addQuestionV2(type,defaultAns='',customBranches=null){
   const cid=type==='mc'?'builderMC':(type==='tf'?'builderTF':'builderSA');
@@ -3040,16 +3229,16 @@ async function openQpManagementRoom(){
     if(!k.length){tb.innerHTML='<tr><td colspan="4">Chưa có</td></tr>';return;}
     k.forEach((id,i)=>{
       const s=st[id];
-      tb.innerHTML+=`<tr><td>#${i+1}</td><td>${escapeHtml(s.name||'')}</td><td style="color:${s.status==='testing'?'green':'orange'}">${s.status==='testing'?'Đang làm':'Chờ'}</td><td><button class="btn btn-danger" style="padding:2px 6px;font-size:11px;width:auto" onclick="kickQpStudent('${code}','${id}')">Kick</button></td></tr>`;
+      tb.innerHTML+=`<tr><td>#${i+1}</td><td><span style="cursor:pointer;color:#1877f2;text-decoration:underline" onclick="viewUserProfile('${s.username||''}')">${escapeHtml(s.name||'')}</span></td><td style="color:${s.status==='testing'?'green':'orange'}">${s.status==='testing'?'Đang làm':'Chờ'}</td><td><button class="btn btn-danger" style="padding:2px 6px;font-size:11px;width:auto" onclick="kickQpStudent('${code}','${id}')">Kick</button></td></tr>`;
     });
   });
   window.onValue(window.ref(window.db,`qp_leaderboard/${code}`),snap=>{
     const tb=document.getElementById('qpManageResultsBody');tb.innerHTML='';
-    if(!snap.exists()){tb.innerHTML='<tr><td colspan="5">Chưa có KQ</td></tr>';return;}
+    if(!snap.exists()){tb.innerHTML='<tr><td colspan="6">Chưa có KQ</td></tr>';return;}
     const h=Object.values(snap.val());h.sort((a,b)=>(b.score!==a.score)?b.score-a.score:a.timeSpent-b.timeSpent);
     h.forEach((r,i)=>{
       const m=Math.floor(r.timeSpent/60),s=r.timeSpent%60;
-      tb.innerHTML+=`<tr><td>#${i+1}</td><td>${escapeHtml(r.name||'')}</td><td><b style="color:#1877f2">${r.score}</b></td><td>${m}p${s}s</td><td><button class="toggle-exp-btn" onclick="viewQpSubmissionDetail('${code}','${r.username}')">&gt;</button></td></tr>`;
+      tb.innerHTML+=`<tr><td>#${i+1}</td><td>${escapeHtml(r.name||'')}</td><td><b style="color:#1877f2">${r.score}</b></td><td>${m}p${s}s</td><td><button class="btn btn-success" style="padding:2px 6px;font-size:11px;width:auto" onclick="viewUserProfile('${r.username}')">👁️</button></td><td><button class="toggle-exp-btn" onclick="viewQpSubmissionDetail('${code}','${r.username}')">&gt;</button></td></tr>`;
     });
   });
 }
@@ -3135,7 +3324,7 @@ async function connectLiveRoomDashboard(){
     if(!k.length){tb.innerHTML='<tr><td colspan="6">Chưa có HS</td></tr>';return;}
     k.forEach((id,i)=>{
       const s=st[id];const w=s.cheatWarnings||0,lt=Math.round((s.totalLeaveTime||0)/1000);
-      tb.innerHTML+=`<tr><td>#${i+1}</td><td>${escapeHtml(s.name||'')}</td><td style="color:${s.status==='testing'?'green':'orange'}">${s.status==='testing'?'Đang làm':'Chờ'}</td><td><b style="color:${w>0?'red':'green'}">${w}</b></td><td><b>${lt}s</b></td><td><button class="btn btn-danger" style="padding:2px 6px;font-size:11px;width:auto" onclick="kickLiveStudent('${c}','${id}')">Kick</button></td></tr>`;
+      tb.innerHTML+=`<tr><td>#${i+1}</td><td><span style="cursor:pointer;color:#1877f2;text-decoration:underline" onclick="viewUserProfile('${s.username||''}')">${escapeHtml(s.name||'')}</span></td><td style="color:${s.status==='testing'?'green':'orange'}">${s.status==='testing'?'Đang làm':'Chờ'}</td><td><b style="color:${w>0?'red':'green'}">${w}</b></td><td><b>${lt}s</b></td><td><button class="btn btn-danger" style="padding:2px 6px;font-size:11px;width:auto" onclick="kickLiveStudent('${c}','${id}')">Kick</button></td></tr>`;
     });
   });
 }
@@ -3164,6 +3353,7 @@ async function connectExamManageRoom(){
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
           <b>👤 ${escapeHtml(u)}</b>
           <span style="font-size:11px;color:#666">${rows.length} lần • Cao nhất: <b style="color:#1877f2">${best}</b></span>
+          <button class="btn btn-success" style="width:auto;padding:4px 10px;font-size:11px" onclick="viewUserProfile('${u}')">👁️ Profile</button>
           <button class="toggle-exp-btn" onclick="toggleExamManageDetail('${c}','${u}')">Chi tiết ▾</button>
         </div>
         <div id="emDetail_${u.replace(/[^a-z0-9]/gi,'_')}" style="display:none;margin-top:8px;font-size:12px;background:#f8f9fa;padding:8px;border-radius:6px"></div>
@@ -3375,7 +3565,7 @@ async function launchOfficialExamInterface(){
 }
 
 /* ============================================================
-   CHEAT HANDLING
+   CHEAT
    ============================================================ */
 async function handleTabLeaveEvent(away){
   if(!currentAntiCheatEnabled)return;
@@ -3504,22 +3694,34 @@ async function submitQpPractice(forced=false){
 }
 
 /* ============================================================
-   LEADERBOARD
+   LEADERBOARD (with profile button)
    ============================================================ */
 async function loadLeaderboard(){
   const code=document.getElementById('searchLbCode').value.trim().toUpperCase();
-  const tb=document.getElementById('lbTableBody');tb.innerHTML='<tr><td colspan="5">⏳ Đang tải...</td></tr>';
+  const tb=document.getElementById('lbTableBody');tb.innerHTML='<tr><td colspan="6">⏳ Đang tải...</td></tr>';
   if(!code){showToast('Nhập mã!','error');return;}
   let s=await window.dbGet(window.dbChild(window.dbRef,`leaderboard/${code}`));
   if(!s.exists())s=await window.dbGet(window.dbChild(window.dbRef,`qp_leaderboard/${code}`));
-  if(!s.exists()){tb.innerHTML='<tr><td colspan="5">Chưa có dữ liệu</td></tr>';return;}
+  if(!s.exists()){tb.innerHTML='<tr><td colspan="6">Chưa có dữ liệu</td></tr>';return;}
   const h=Object.values(s.val());h.sort((a,b)=>(b.score!==a.score)?b.score-a.score:a.timeSpent-b.timeSpent);
   tb.innerHTML=h.map((r,i)=>{
     const m=Math.floor(r.timeSpent/60),sx=r.timeSpent%60;
     const w=r.cheatWarnings||0,ls=r.totalLeaveTime||0;const rid='lb_detail_'+i;
-    return `<tr><td><b>#${i+1}</b></td><td>${escapeHtml(r.name||'')}</td><td><b style="color:#1877f2">${r.score}</b></td><td>${m}p${sx}s</td><td><button class="toggle-exp-btn" onclick="toggleLbDetail('${rid}')">&gt;</button><div id="${rid}" style="display:none;text-align:left;font-size:12px;margin-top:5px;background:#f8f9fa;padding:6px;border-radius:4px">- Cảnh cáo: <b style="color:red">${w} lần</b><br>- Rời phòng: <b>${ls} giây</b></div></td></tr>`;
+    const profileBtn=r.username?`<button class="btn btn-success" style="padding:2px 8px;font-size:11px;width:auto" onclick="viewLeaderboardProfile('${r.username}')">👤</button>`:'—';
+    return `<tr><td><b>#${i+1}</b></td><td>${escapeHtml(r.name||'')}</td><td><b style="color:#1877f2">${r.score}</b></td><td>${m}p${sx}s</td><td>${profileBtn}</td><td><button class="toggle-exp-btn" onclick="toggleLbDetail('${rid}')">&gt;</button><div id="${rid}" style="display:none;text-align:left;font-size:12px;margin-top:5px;background:#f8f9fa;padding:6px;border-radius:4px">- Cảnh cáo: <b style="color:red">${w} lần</b><br>- Rời phòng: <b>${ls} giây</b></div></td></tr>`;
   }).join('');
   showToast('📊 Đã tải!','success');
+}
+async function viewLeaderboardProfile(username){
+  if(!username){showToast('Không có username!','error');return;}
+  let u=cachedUsers[username];
+  if(!u){
+    try{const s=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));if(s.exists()){u=s.val();cachedUsers[username]=u;}}
+    catch(e){}
+  }
+  if(!u){showToast('❌ Không tìm thấy user!','error');return;}
+  await loadRolesCache();await loadMedalsCache();
+  openProfile(null,u);
 }
 function toggleLbDetail(id){const el=document.getElementById(id),b=el.previousElementSibling;if(el.style.display==='block'){el.style.display='none';b.innerText='>';}else{el.style.display='block';b.innerText='v';}}
 function switchGuideTab(tab,btn){document.querySelectorAll('.guide-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.guide-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('guide-'+tab);if(p)p.classList.add('active');}
@@ -3532,7 +3734,7 @@ async function toggleLiveLB(viewId){
   const el=document.getElementById(container);
   if(el.style.display==='block'){el.style.display='none';if(liveLBListener){liveLBListener();liveLBListener=null;}return;}
   el.style.display='block';
-  el.innerHTML='<div class="live-lb-box"><h4>🏆 Bảng Xếp Hạng Trực Tiếp <span style="font-size:11px;color:#888">(realtime)</span></h4><div class="live-lb-list" id="liveLBList_'+viewId+'">Đang tải...</div></div>';
+  el.innerHTML='<div class="live-lb-box" style="background:#fff;border:2px solid #1877f2;border-radius:12px;padding:14px;margin-top:12px"><h4 style="color:#1877f2;font-size:14px;margin-bottom:10px">🏆 Bảng Xếp Hạng Trực Tiếp <span style="font-size:11px;color:#888">(realtime)</span></h4><div id="liveLBList_'+viewId+'" style="max-height:300px;overflow-y:auto">Đang tải...</div></div>';
   const code=currentExamData?currentExamData.code:currentQpData?currentQpData.code:'';
   const path=currentExamData?`leaderboard/${code}`:`qp_leaderboard/${code}`;
   if(!code){document.getElementById('liveLBList_'+viewId).innerText='Không có dữ liệu';return;}
@@ -3543,15 +3745,11 @@ async function toggleLiveLB(viewId){
     const list=document.getElementById('liveLBList_'+viewId);if(!list)return;
     if(!rows.length){list.innerHTML='<p style="text-align:center;color:#888;font-size:12px;padding:14px 0">Chưa có ai nộp</p>';return;}
     list.innerHTML=rows.map((r,idx)=>{
-      const rank=idx+1;let rc='';if(rank===1)rc='gold';else if(rank===2)rc='silver';else if(rank===3)rc='bronze';
+      const rank=idx+1;
       const isMe=r.username===currentUser?.username;
       const m=Math.floor((r.timeSpent||0)/60),s=(r.timeSpent||0)%60;
-      return `<div class="live-lb-row ${isMe?'me':''}">
-        <div class="live-lb-rank ${rc}">${rank}</div>
-        <div style="flex:1;text-align:left">${escapeHtml(r.name||'—')}${isMe?' <span style="font-size:10px;background:#1877f2;color:#fff;padding:1px 6px;border-radius:8px">BẠN</span>':''}</div>
-        <div style="font-weight:bold;color:#1877f2">${r.score}</div>
-        <div style="font-size:11px;color:#888">${m}p${s}s</div>
-      </div>`;
+      const profileBtn=r.username?`<button class="btn btn-success" style="padding:2px 6px;font-size:10px;width:auto" onclick="viewLeaderboardProfile('${r.username}')">👤</button>`:'';
+      return `<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;margin-bottom:4px;background:${isMe?'#e7f3ff':'#f8f9fa'};border:${isMe?'2px solid #1877f2':'1px solid #eee'};font-size:12px"><b style="min-width:24px;color:#1877f2">#${rank}</b><div style="flex:1;text-align:left">${escapeHtml(r.name||'—')}${isMe?' <span style="font-size:9px;background:#1877f2;color:#fff;padding:1px 5px;border-radius:8px">BẠN</span>':''}</div><b style="color:#1877f2">${r.score}</b><span style="font-size:10px;color:#888">${m}p${s}s</span>${profileBtn}</div>`;
     }).join('');
   });
 }
@@ -3757,7 +3955,7 @@ async function executeSaveSmartExam(){
   const questions=smartExamQuestions.map((q,i)=>{const d={id:i+1,type:q.type,score:q.score||(q.type==='mc'?.25:(q.type==='tf'?1:.5)),explanation:'',expImage:'',imageData:q.imageData||'',aiNote:''};if(q.type==='mc')d.correctAnswer=(q.correctAnswer||'').toUpperCase();else if(q.type==='sa')d.correctAnswer=(q.correctAnswer||'').trim();else if(q.type==='tf')d.correctAnswer=(q._tfBranches||['Đ','Đ','S','S']).join(',');return d;});
   redistributeScores(questions,10);redistributeTfBranchScores(questions);
   const exam={code,title,duration,timerEnabled:true,antiCheatEnabled:true,cheatThreshold:7,cheatLimitType:'unlimited',maxWarnings:5,attemptLimit,aiNote,isLiveRoom:false,livePassword:'',liveLimit:50,media:{type:'image',files:[]},questions,source:'smart-pdf-v4',creator:currentUser.username,createdAt:Date.now()};
-  try{await window.dbSet(window.ref(window.db,'exams/'+code),exam);await window.dbSet(window.ref(window.db,'liverooms/'+code),{status:'waiting'});showCenterSquareToast('✅','Đã lưu!',`[${code}] ${questions.length} câu`,'success',2600);cancelSmartExam();}catch(e){showCenterToast('❌','Lỗi lưu','','error');}
+  try{await window.dbSet(window.ref(window.db,'exams/'+code),exam);await window.dbSet(window.ref(window.db,'liverooms/'+code),{status:'waiting'});showCenterSquareToast('✅','Đã lưu!',`[${code}] ${questions.length} câu`,'success',2600);cancelSmartExam();}catch(e){showCenterSquareToast('❌','Lỗi lưu','','error');}
 }
 
 /* ============================================================
@@ -3872,15 +4070,9 @@ window.addEventListener('DOMContentLoaded',()=>{
       if(currentLoadedAudioKey!==d.audioKey){if(s)s.innerText='Đang tải ⏳';const b=await getAudioBlobFromChunks(d.audioKey);if(!b){if(s)s.innerText='Lỗi ❌';return;}audioBlobCache[d.audioKey]=b;a.src=URL.createObjectURL(b);currentLoadedAudioKey=d.audioKey;}
       tryPlayGlobalAudio();
     });
-    // Add save role picks button to modal
-    const savePicksBtn=document.createElement('button');
-    savePicksBtn.className='btn btn-success';
-    savePicksBtn.style.marginTop='14px';
-    savePicksBtn.innerText='💾 Lưu Lựa Chọn Vai Trò';
-    savePicksBtn.onclick=saveUserRolePicks;
-    document.getElementById('supremeModalContent').addEventListener('DOMNodeInserted',()=>{
-      const c=document.getElementById('supremeModalContent');
-      if(c.querySelector('#rolePickCount')&&!c.querySelector('.save-role-picks')){savePicksBtn.classList.add('save-role-picks');c.appendChild(savePicksBtn);}
+    // Watch users to keep cache fresh
+    window.onValue(window.ref(window.db,'users'),snap=>{
+      if(snap.exists())cachedUsers=snap.val();
     });
   },800);
 });
