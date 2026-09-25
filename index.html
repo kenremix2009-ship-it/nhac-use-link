@@ -404,6 +404,13 @@ img{-webkit-user-drag:none}
 .avatar-crop-stage:active{cursor:grabbing}
 #avatarCropCanvas{display:block;width:100%;height:100%;user-select:none;pointer-events:none}
 .avatar-crop-circle-guide{position:absolute;inset:0;border-radius:50%;pointer-events:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.85)}
+/* ===== Small BG buttons on profile header ===== */
+.profile-bg-btn{position:absolute;top:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);border:2px solid #fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.25);z-index:20;transition:all .2s;padding:0}
+.profile-bg-btn:hover{transform:scale(1.12);background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.profile-bg-btn:active{transform:scale(.98)}
+.profile-bg-btn#profileBgUploadBtn{right:46px}
+.profile-bg-btn#profileBgRemoveBtn{right:8px;background:rgba(255,235,235,.95)}
+.profile-bg-btn#profileBgRemoveBtn:hover{background:#ffdede}
 @media(max-width:768px){
 .navbar{padding:8px;gap:6px}
 .logo{font-size:15px;width:100%;text-align:center}
@@ -434,6 +441,9 @@ input,select,textarea{font-size:13px;padding:9px}
 .custom-alert-box{padding:26px 20px 18px 20px}
 .ca-icon{font-size:52px}
 .avatar-crop-stage{width:240px;height:240px}
+.profile-bg-btn{width:28px;height:28px;font-size:13px;top:6px}
+.profile-bg-btn#profileBgUploadBtn{right:40px}
+.profile-bg-btn#profileBgRemoveBtn{right:6px}
 }
 </style>
 </head>
@@ -475,9 +485,59 @@ input,select,textarea{font-size:13px;padding:9px}
   </div>
 </div>
 
+<!-- ===== DELETE HISTORY MODAL ===== -->
+<div id="deleteHistoryModal" class="modal-overlay">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <h3>🗑️ Xóa Lịch Sử Thi</h3>
+      <button class="close-btn" onclick="closeDeleteHistoryModal()">✖</button>
+    </div>
+    <div id="deleteHistoryStep1">
+      <div style="font-size:44px;text-align:center;margin-bottom:10px">🔐</div>
+      <p style="font-size:13px;color:#555;margin-bottom:12px;text-align:center">Nhập mật khẩu <b>VUA</b> hoặc <b>PARTNER</b> để tiếp tục:</p>
+      <input type="password" id="deleteHistoryPass" placeholder="Mật khẩu..." autocomplete="off">
+      <button class="btn btn-warning" onclick="verifyDeleteHistoryPass()">Xác Nhận</button>
+    </div>
+    <div id="deleteHistoryStep2" style="display:none">
+      <p style="font-weight:bold;color:#d32f2f;margin-bottom:12px;text-align:center">Chọn hành động xóa:</p>
+      <button class="btn" style="background:linear-gradient(135deg,#ff9800,#e65100);margin-bottom:10px;padding:14px" onclick="chooseDeleteMode('clone')">🗑️ XÓA CLONE / ĐƠN</button>
+      <p style="font-size:11px;color:#666;text-align:center;margin:-4px 0 12px 0">Xóa theo mã đề, có thể chọn 1 người cụ thể hoặc chỉ xóa clone</p>
+      <button class="btn btn-danger" style="padding:14px" onclick="chooseDeleteMode('all')">💥 XÓA TẤT CẢ</button>
+      <p style="font-size:11px;color:#666;text-align:center;margin-top:6px">Xóa toàn bộ lịch sử của mọi người kể cả clone</p>
+      <button class="btn btn-secondary" style="margin-top:14px;padding:8px;font-size:13px" onclick="backDeleteHistoryStep()">← Quay Lại</button>
+    </div>
+    <div id="deleteHistoryStep3Clone" style="display:none">
+      <div style="background:#fff3cd;padding:10px;border-radius:8px;margin-bottom:12px;font-size:12px;color:#856404;line-height:1.5">
+        ℹ️ <b>Mã đề</b> áp dụng cho cả <b>Đề thi</b> và <b>Bài luyện</b>.<br>
+        👤 Bỏ trống tên người → <b>chỉ xóa clone</b> (bản ghi không có username hoặc user không tồn tại).
+      </div>
+      <label>📋 Mã đề thi / bài luyện:</label>
+      <input type="text" id="delCloneCode" placeholder="VD: TOAN12" autocomplete="off">
+      <label>👤 Tên người dùng (bỏ trống = chỉ xóa clone):</label>
+      <input type="text" id="delCloneUser" placeholder="VD: user123 (tùy chọn)" autocomplete="off">
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-secondary" onclick="backDeleteHistoryStep()">← Quay lại</button>
+        <button class="btn btn-danger" onclick="confirmDeleteClone()">🗑️ Xóa</button>
+      </div>
+    </div>
+    <div id="deleteHistoryStep3All" style="display:none">
+      <div style="background:#f8d7da;border:2px dashed #dc3545;padding:14px;border-radius:10px;margin-bottom:12px">
+        <p style="font-weight:bold;color:#842029;font-size:14px;line-height:1.6">⚠️ CẢNH BÁO<br>Thao tác này sẽ xóa <b>TOÀN BỘ</b> dữ liệu lịch sử thi của <b>MỌI NGƯỜI</b> kể cả clone trên tất cả các bảng xếp hạng!<br><br>Không thể hoàn tác!</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" onclick="backDeleteHistoryStep()">← Quay lại</button>
+        <button class="btn btn-danger" onclick="confirmDeleteAll()">💥 XÓA TẤT CẢ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="profileModal"><div class="profile-box">
 <div id="profileFxLayer"><canvas id="profileFxCanvas"></canvas></div>
 <div class="profile-header-bg" id="profileHeaderBg">
+<button class="profile-bg-btn" id="profileBgUploadBtn" onclick="event.stopPropagation();document.getElementById('profileAvatarBgInput').click()" title="Đổi ảnh nền avatar">🖼️</button>
+<button class="profile-bg-btn" id="profileBgRemoveBtn" onclick="event.stopPropagation();removeProfileAvatarBg()" title="Xóa ảnh nền">🗑️</button>
+<input type="file" id="profileAvatarBgInput" accept="image/*" style="display:none" onchange="handleAvatarBgUpload(this)">
 <div class="profile-avatar-outer">
 <canvas id="avatarFxCanvas"></canvas>
 <div class="profile-avatar-wrap" id="profileAvatarWrap" onclick="document.getElementById('profileAvatarInput').click()">
@@ -494,7 +554,6 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="profile-roles" id="profileRolesDisplay"></div>
 <div id="profilePinnedRoleBox"><button type="button" id="pinRoleToggleBtn" onclick="togglePinRoleSelector()"><span>🎯 Chọn vai trò hiển thị hiệu ứng</span><span id="pinRoleToggleIcon">▶</span></button><div id="profilePinnedRoleList"></div></div>
 <div class="profile-stats"><div class="profile-stat-card"><div class="profile-stat-num" id="profileTestCount">0</div><div class="profile-stat-label">Bài đã làm</div></div><div class="profile-stat-card"><div class="profile-stat-num" id="profileAvgScore">0</div><div class="profile-stat-label">Điểm TB</div></div></div>
-<div class="profile-section" id="profileAvatarBgSection"><label style="display:flex;justify-content:space-between;align-items:center"><span>🖼️ Ảnh nền Avatar</span><button class="btn btn-secondary" style="width:auto;padding:4px 10px;font-size:11px" onclick="removeProfileAvatarBg()">🗑️ Xóa</button></label><input type="file" id="profileAvatarBgInput" accept="image/*,image/gif" onchange="handleAvatarBgUpload(this)" style="padding:6px;font-size:12px"><small style="color:#888;font-size:11px;display:block;margin-top:-4px">💡 Ảnh tĩnh PNG/JPG/WEBP/GIF. Tối đa 1.5MB.</small></div>
 <div class="profile-section" id="profileNoteSection"><label>📝 Ghi chú</label><textarea id="profileNote" rows="2" placeholder="Ghi chú cá nhân..."></textarea></div>
 <div class="profile-section"><label style="display:flex;justify-content:space-between;align-items:center"><span>🏅 Huy chương &amp; 🏆 Cup</span><button class="btn btn-warning" id="profileAddMedalBtn" style="width:auto;padding:4px 10px;font-size:11px" onclick="openMedalPicker()">➕ Thêm</button></label><div class="profile-medals" id="profileMedalsContainer"></div></div>
 <div class="profile-actions" id="profileActionsSelf"><button class="btn btn-secondary" onclick="closeProfile()">Đóng</button><button class="btn btn-success" onclick="saveProfile()">💾 Lưu Profile</button></div>
@@ -567,7 +626,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div id="advExamOptionsPanel" style="display:none;margin-top:10px">
 <div style="margin-bottom:10px"><label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="advEnableTimer" checked onchange="toggleAdvTimerInput()" style="width:16px;height:16px"> ⏱️ Đếm ngược</label><div id="advTimerInputBox" style="margin-top:5px"><select id="examDuration"><option value="15">15P</option><option value="30">30P</option><option value="45" selected>45P</option><option value="90">90P</option><option value="120">120P</option></select></div></div>
 <div style="margin-bottom:10px"><label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="advEnableAntiCheat" checked onchange="toggleAdvAntiCheatInput()" style="width:16px;height:16px"> 🛡️ Chống gian lận</label><div id="advAntiCheatBox" style="margin-top:5px"><label style="font-size:12px">Rời tab (giây):</label><input type="number" id="advCheatThreshold" value="7" min="1" style="padding:6px"><label style="font-size:12px;margin-top:6px">Giới hạn:</label><select id="advCheatLimitType" onchange="toggleAdvCheatLimitInput()" style="padding:6px"><option value="unlimited">Không</option><option value="limited">Có</option></select><div id="advCheatLimitInputBox" style="display:none;margin-top:5px"><label style="font-size:12px">Tối đa:</label><input type="number" id="advMaxWarnings" value="5" min="1" style="padding:6px"></div></div></div>
-<div style="margin-bottom:10px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="advEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="advMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div><div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="advEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div></div>
+<div style="margin-bottom:10px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="advEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="advMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div><div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="advEnableAINote" style="width:16px;height:16px"> 🤖 Phân tích AI (đang thử nghiệm)</label></div></div>
 <div style="border-top:1px dashed #1877f2;padding-top:8px;margin-top:8px"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#1877f2;font-weight:bold;font-size:13px"><input type="checkbox" id="enableLiveRoom" onchange="toggleLiveRoomConfig()" style="width:16px;height:16px"> 🛡️ Phòng Thi Chuyên Dụng</label><div id="liveRoomConfigBox" style="display:none;margin-top:6px"><div class="form-grid-2" style="gap:6px"><div><label style="font-size:12px">Mật khẩu:</label><input type="password" id="liveRoomPass" style="padding:6px"></div><div><label style="font-size:12px">Giới hạn HS:</label><input type="number" id="liveRoomLimit" value="50" style="padding:6px"></div></div></div></div>
 </div></div>
 <div id="pdfUploadSection" style="margin-top:10px"><label>File PDF:</label><input type="file" id="teacherPdfInput" accept="application/pdf"></div>
@@ -593,18 +652,18 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="qpResultView" class="view-section" style="max-width:900px;margin:20px auto;padding:0 10px"><div class="card"><div style="text-align:center;border-bottom:1px solid #eee;padding-bottom:12px;position:relative"><h2 style="color:#1877f2;font-size:20px">🎉 Kết Quả Bài Luyện</h2><h1 style="font-size:38px;color:#1877f2;margin:8px 0" id="qpResultScore">0 / 10</h1><p id="qpResultDetailText" style="font-size:13px"></p><button class="btn btn-warning" style="position:absolute;top:10px;right:10px;width:auto;padding:6px 12px;font-size:12px" onclick="toggleLiveLB('qpResultView')">🏆 BXH Trực Tiếp</button></div><div id="qpLiveLB" style="display:none"></div><h3 style="margin-top:15px;margin-bottom:10px;font-size:15px">🔍 Chi Tiết</h3><div id="qpResultReviewContainer"></div><button class="btn" style="margin-top:15px" onclick="switchView('studentLoginView')">Về Trang Chủ</button></div></div>
 
-<div id="leaderboardView" class="view-section"><div class="card"><h2>🏆 BẢNG XẾP HẠNG</h2><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><input type="text" id="searchLbCode" placeholder="Nhập mã bài..." style="margin:0;flex:1;min-width:150px"><button class="btn" style="width:auto" onclick="loadLeaderboard()">Xem</button></div><div class="table-responsive"><table><thead><tr><th>Hạng</th><th>Tài khoản (Biệt danh)</th><th>Điểm</th><th>TG</th><th>Hồ sơ</th><th>Chi Tiết</th></tr></thead><tbody id="lbTableBody"><tr><td colspan="6" style="color:#888">Nhập mã để xem</td></tr></tbody></table></div></div></div>
+<div id="leaderboardView" class="view-section"><div class="card"><h2>🏆 BẢNG XẾP HẠNG</h2><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center"><input type="text" id="searchLbCode" placeholder="Nhập mã bài..." style="margin:0;flex:1;min-width:150px"><button class="btn" style="width:auto" onclick="loadLeaderboard()">Xem</button><button class="btn btn-danger" style="width:auto;padding:10px 14px;font-size:13px;white-space:nowrap" onclick="openDeleteHistoryModal()" title="Xóa lịch sử thi (cần mật khẩu VUA/PARTNER)">🗑️ Xóa Lịch Sử</button></div><div class="table-responsive"><table><thead><tr><th>Hạng</th><th>Tài khoản (Biệt danh)</th><th>Điểm</th><th>TG</th><th>Hồ sơ</th><th>Chi Tiết</th></tr></thead><tbody id="lbTableBody"><tr><td colspan="6" style="color:#888">Nhập mã để xem</td></tr></tbody></table></div></div></div>
 
-<div id="guideView" class="view-section"><div class="card" style="max-width:1000px;margin:0 auto"><div style="text-align:center;padding-bottom:15px;border-bottom:2px solid #eee;margin-bottom:20px"><h1 style="font-size:24px;font-weight:900;color:#1877f2">📖 HƯỚNG DẪN</h1><p style="font-size:13px;color:#666;margin-top:6px">Cẩm nang <b>AURORA</b></p></div><div class="guide-tabs"><div class="guide-tab active" onclick="switchGuideTab('teacher', this)">👨‍🏫 Giáo Viên</div><div class="guide-tab" onclick="switchGuideTab('student', this)">🧑‍🎓 Học Sinh</div><div class="guide-tab" onclick="switchGuideTab('lb', this)">🏆 Xếp Hạng</div><div class="guide-tab" onclick="switchGuideTab('supreme', this)">👑 Tối Cao</div></div><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:14px;border-radius:10px;margin-bottom:20px"><h3 style="font-size:15px;color:#1877f2;margin-bottom:10px">⚙️ Chế độ hiển thị</h3><p style="font-size:13px;margin-bottom:10px">Hiện tại: <b id="currentPerfModeText" style="color:#198754">Đầy đủ</b></p><button class="btn btn-success" style="width:auto;padding:8px 14px;font-size:13px" onclick="openPerfModeModal()">🎨 Đổi chế độ</button></div><div class="guide-panel active" id="guide-teacher"><div class="guide-section-title">🛠️ Tạo Đề</div><div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Vào tab <b>GIÁO VIÊN</b>, nhập mã + tên đề.</div></div><div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Chọn PDF/Ảnh đề.</div></div><div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Mở cài đặt nâng cao.</div></div><div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">Thêm câu hỏi → Lưu.</div></div></div><div class="guide-panel" id="guide-student"><div class="guide-section-title">🧑‍🎓 Làm Bài</div><div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Đăng nhập → Biệt danh tự động.</div></div><div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Chọn chế độ.</div></div><div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Bấm tên trên navbar → mở profile.</div></div></div><div class="guide-panel" id="guide-lb"><div class="guide-section-title">🏆 Xếp Hạng</div><div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Vào XẾP HẠNG, nhập mã → Xem.</div></div><div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Bấm 👤 để xem profile.</div></div></div><div class="guide-panel" id="guide-supreme"><div class="guide-section-title">👑 Tối Cao</div><div class="guide-warning">🔒 Yêu cầu mật khẩu VUA hoặc PARTNER.</div><div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Quản lí tài khoản</b>: vai trò, huy chương, sửa ID, ảnh nền BG.</div></div><div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Quản lý đề</b>: xem/xóa.</div></div><div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>Broadcast, Audio, Mật khẩu</b>.</div></div></div></div></div>
+<div id="guideView" class="view-section"><div class="card" style="max-width:1000px;margin:0 auto"><div style="text-align:center;padding-bottom:15px;border-bottom:2px solid #eee;margin-bottom:20px"><h1 style="font-size:24px;font-weight:900;color:#1877f2">📖 HƯỚNG DẪN</h1><p style="font-size:13px;color:#666;margin-top:6px">Cẩm nang <b>AURORA</b></p></div><div class="guide-tabs"><div class="guide-tab active" onclick="switchGuideTab('teacher', this)">👨‍🏫 Giáo Viên</div><div class="guide-tab" onclick="switchGuideTab('student', this)">🧑‍🎓 Học Sinh</div><div class="guide-tab" onclick="switchGuideTab('lb', this)">🏆 Xếp Hạng</div><div class="guide-tab" onclick="switchGuideTab('supreme', this)">👑 Tối Cao</div></div><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:14px;border-radius:10px;margin-bottom:20px"><h3 style="font-size:15px;color:#1877f2;margin-bottom:10px">⚙️ Chế độ hiển thị</h3><p style="font-size:13px;margin-bottom:10px">Hiện tại: <b id="currentPerfModeText" style="color:#198754">Đầy đủ</b></p><button class="btn btn-success" style="width:auto;padding:8px 14px;font-size:13px" onclick="openPerfModeModal()">🎨 Đổi chế độ</button></div><div class="guide-panel active" id="guide-teacher"><div class="guide-section-title">🛠️ Tạo Đề</div><div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Vào tab <b>GIÁO VIÊN</b>, nhập mã + tên đề.</div></div><div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Chọn PDF/Ảnh đề.</div></div><div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Mở cài đặt nâng cao.</div></div><div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">Thêm câu hỏi → Lưu.</div></div></div><div class="guide-panel" id="guide-student"><div class="guide-section-title">🧑‍🎓 Làm Bài</div><div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Đăng nhập → Biệt danh tự động.</div></div><div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Chọn chế độ.</div></div><div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Bấm tên trên navbar → mở profile.</div></div></div><div class="guide-panel" id="guide-lb"><div class="guide-section-title">🏆 Xếp Hạng</div><div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Vào XẾP HẠNG, nhập mã → Xem.</div></div><div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Bấm 👤 để xem profile.</div></div><div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Bấm <b>🗑️ Xóa Lịch Sử</b> → nhập mật khẩu VUA/PARTNER để dọn dẹp.</div></div></div><div class="guide-panel" id="guide-supreme"><div class="guide-section-title">👑 Tối Cao</div><div class="guide-warning">🔒 Yêu cầu mật khẩu VUA hoặc PARTNER.</div><div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Quản lí tài khoản</b>: vai trò, huy chương, sửa ID, ảnh nền BG.</div></div><div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Quản lý đề</b>: xem/xóa.</div></div><div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>Broadcast, Audio, Mật khẩu</b>.</div></div></div></div></div>
 
 <div id="advancedModelView" class="view-section">
 <div class="card"><h2>⚙️ Mô Hình Nâng Cao (GV)</h2><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px"><button class="btn" style="width:auto" onclick="switchSubModule('quickPracticeCreate')">⚡ Tạo Bài Luyện</button><button class="btn btn-secondary" style="width:auto" onclick="switchSubModule('quickPracticeManage')">🛡️ Quản Lý Bài Luyện</button><button class="btn btn-warning" style="width:auto;color:#000" onclick="switchSubModule('smartExamCreate')">🎓 Tạo Đề Thông Minh</button><button class="btn" style="width:auto;background:linear-gradient(135deg,#6f42c1,#5a32a3);color:#fff" onclick="switchSubModule('documentLibrary')">📚 Kho Tài Liệu</button></div></div>
 
-<div id="quickPracticeCreate" class="card sub-module-box" style="display:none"><h3 style="color:#1877f2;margin-bottom:10px">⚡ Tạo Bài Luyện Nhanh</h3><hr style="margin:10px 0"><div class="form-grid-2"><div><label>Tên:</label><input type="text" id="qpTitle"></div><div><label>Mã:</label><input type="text" id="qpCode"></div></div><div style="margin-bottom:12px"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#1877f2"><input type="checkbox" id="qpEnableAdvanced" onchange="toggleQpAdvancedPanel()" style="width:16px;height:16px"> ⚙️ Cài đặt nâng cao</label></div><div id="qpAdvancedPanel" class="advanced-settings-panel"><div class="form-grid-2"><div><label>Mật khẩu phòng:</label><input type="password" id="qpPassword"></div><div><label style="display:flex;align-items:center;gap:6px;margin-top:8px"><input type="checkbox" id="qpIsAdvancedMode" checked style="width:16px;height:16px"> Bài luyện nâng cao</label></div></div><div class="form-grid-2" style="margin-top:10px"><div><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="qpEnableTimer" checked onchange="toggleQpTimerConfig()" style="width:16px;height:16px"> ⏱️ Thời gian</label><div id="qpTimerInputBox" style="margin-top:5px"><input type="number" id="qpDurationMinutes" value="15" min="1"></div></div><div><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="qpEnableAntiCheat" checked onchange="toggleQpAntiCheatConfig()" style="width:16px;height:16px"> 🛡️ Chống gian lận</label><div id="qpAntiCheatBox" style="margin-top:5px"><select id="qpAntiCheatType" onchange="toggleQpAntiCheatType()" style="padding:6px;margin-bottom:5px"><option value="limited">Có hạn</option><option value="infinite">Vô hạn</option></select><div id="qpMaxWarningBox"><input type="number" id="qpMaxWarnings" value="5" min="1" style="padding:6px;margin:0"></div></div></div></div><div style="margin-top:10px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="qpEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="qpMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div><div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="qpEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div></div><div style="margin-top:10px"><label style="display:flex;align-items:center;gap:6px;font-weight:bold;color:#1877f2"><input type="checkbox" id="qpUseLayoutV2" checked style="width:16px;height:16px"> ✨ Giao diện V2</label></div><div style="margin-top:10px"><label>Giới hạn HS:</label><input type="number" id="qpLimit" value="50"></div></div><h4 style="margin-top:15px">📋 Câu Hỏi</h4><button class="btn btn-secondary" style="width:auto;padding:4px 10px;font-size:12px;margin-bottom:10px" onclick="addQpQuestionItem()">+ Thêm</button><div id="qpQuestionsContainer"></div><button class="btn btn-success" style="margin-top:15px;padding:12px" onclick="promptSaveQuickPractice()">💾 Khởi Tạo</button><button class="btn btn-warning" style="margin-top:8px;padding:10px" onclick="resetQpForm()">🔄 Đặt Lại</button></div>
+<div id="quickPracticeCreate" class="card sub-module-box" style="display:none"><h3 style="color:#1877f2;margin-bottom:10px">⚡ Tạo Bài Luyện Nhanh</h3><hr style="margin:10px 0"><div class="form-grid-2"><div><label>Tên:</label><input type="text" id="qpTitle"></div><div><label>Mã:</label><input type="text" id="qpCode"></div></div><div style="margin-bottom:12px"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#1877f2"><input type="checkbox" id="qpEnableAdvanced" onchange="toggleQpAdvancedPanel()" style="width:16px;height:16px"> ⚙️ Cài đặt nâng cao</label></div><div id="qpAdvancedPanel" class="advanced-settings-panel"><div class="form-grid-2"><div><label>Mật khẩu phòng:</label><input type="password" id="qpPassword"></div><div><label style="display:flex;align-items:center;gap:6px;margin-top:8px"><input type="checkbox" id="qpIsAdvancedMode" checked style="width:16px;height:16px"> Bài luyện nâng cao</label></div></div><div class="form-grid-2" style="margin-top:10px"><div><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="qpEnableTimer" checked onchange="toggleQpTimerConfig()" style="width:16px;height:16px"> ⏱️ Thời gian</label><div id="qpTimerInputBox" style="margin-top:5px"><input type="number" id="qpDurationMinutes" value="15" min="1"></div></div><div><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="qpEnableAntiCheat" checked onchange="toggleQpAntiCheatConfig()" style="width:16px;height:16px"> 🛡️ Chống gian lận</label><div id="qpAntiCheatBox" style="margin-top:5px"><select id="qpAntiCheatType" onchange="toggleQpAntiCheatType()" style="padding:6px;margin-bottom:5px"><option value="limited">Có hạn</option><option value="infinite">Vô hạn</option></select><div id="qpMaxWarningBox"><input type="number" id="qpMaxWarnings" value="5" min="1" style="padding:6px;margin:0"></div></div></div></div><div style="margin-top:10px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="qpEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="qpMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div><div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="qpEnableAINote" style="width:16px;height:16px"> 🤖 Phân tích AI (đang thử nghiệm)</label></div></div><div style="margin-top:10px"><label style="display:flex;align-items:center;gap:6px;font-weight:bold;color:#1877f2"><input type="checkbox" id="qpUseLayoutV2" checked style="width:16px;height:16px"> ✨ Giao diện V2</label></div><div style="margin-top:10px"><label>Giới hạn HS:</label><input type="number" id="qpLimit" value="50"></div></div><h4 style="margin-top:15px">📋 Câu Hỏi</h4><button class="btn btn-secondary" style="width:auto;padding:4px 10px;font-size:12px;margin-bottom:10px" onclick="addQpQuestionItem()">+ Thêm</button><div id="qpQuestionsContainer"></div><button class="btn btn-success" style="margin-top:15px;padding:12px" onclick="promptSaveQuickPractice()">💾 Khởi Tạo</button><button class="btn btn-warning" style="margin-top:8px;padding:10px" onclick="resetQpForm()">🔄 Đặt Lại</button></div>
 
 <div id="quickPracticeManage" class="card sub-module-box" style="display:none"><h3 style="color:#1877f2;margin-bottom:10px">🛡️ Quản Lý Bài Luyện</h3><div class="form-grid-2"><input type="text" id="manageQpCode" placeholder="Mã bài..."><input type="password" id="manageQpPass" placeholder="Mật khẩu..."></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px"><button class="btn btn-success" style="width:auto" onclick="openQpManagementRoom()">📡 Kết Nối</button><button class="btn btn-secondary" style="width:auto;background:#0d6efd" onclick="showQpQRCode()">📱 QR</button><button class="btn btn-warning" style="width:auto" onclick="showQpPassword()">🔑 MK</button></div><div id="qpManagementDashboard" style="display:none;background:#f8f9fa;padding:12px;border-radius:6px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:5px"><b>Trạng thái (<span id="qpManageCount">0</span>)</b><div style="display:flex;gap:5px"><button class="btn btn-success" style="width:auto;padding:4px 10px;font-size:12px" onclick="updateQpStatus('started')">🚀 BĐ</button><button class="btn btn-danger" style="width:auto;padding:4px 10px;font-size:12px" onclick="updateQpStatus('ended')">🛑 KT</button><button class="btn btn-danger" style="width:auto;padding:4px 10px;font-size:12px" onclick="deleteQpExam()">🗑️ Xóa</button></div></div><p style="font-size:12px;font-weight:bold;color:#1877f2">👥 HS:</p><div class="table-responsive" style="max-height:150px;overflow-y:auto;margin-bottom:15px"><table><thead><tr><th>STT</th><th>Tài khoản</th><th>TT</th><th></th></tr></thead><tbody id="qpManageStudentsBody"><tr><td colspan="4">Chưa có</td></tr></tbody></table></div><p style="font-size:12px;font-weight:bold;color:#1877f2">📊 KQ:</p><div class="table-responsive" style="max-height:200px;overflow-y:auto"><table><thead><tr><th>Hạng</th><th>Tài khoản</th><th>Điểm</th><th>TG</th><th>Hồ sơ</th><th>Chi Tiết</th></tr></thead><tbody id="qpManageResultsBody"><tr><td colspan="6">Chưa có</td></tr></tbody></table></div></div></div>
 
-<div id="smartExamCreate" class="card sub-module-box" style="display:none"><h3 style="color:#1877f2;margin-bottom:10px">🎓 Tạo Đề Thông Minh (V4)</h3><hr style="margin:10px 0"><div style="background:#f0f8ff;border:2px dashed #1877f2;padding:20px;border-radius:12px;text-align:center;margin-bottom:15px"><div style="font-size:48px">📄</div><label for="smartExamPdfInput" class="btn btn-success" style="display:inline-block;width:auto;padding:12px 24px;font-size:14px;cursor:pointer;margin:10px 0">📤 Chọn PDF</label><input type="file" id="smartExamPdfInput" accept="application/pdf" style="display:none" onchange="handleSmartExamUpload(this)"></div><div id="smartExamProgress" style="display:none;background:#fff3cd;padding:12px;border-radius:8px;margin-bottom:15px"><div style="display:flex;align-items:center;gap:10px"><div class="spinner" style="width:24px;height:24px;border-width:3px;margin:0"></div><span id="smartExamProgressText" style="font-weight:bold;color:#856404;font-size:13px">Đang xử lý...</span></div><div style="background:#fff;border-radius:6px;height:8px;margin-top:8px;overflow:hidden"><div id="smartExamProgressBar" style="height:100%;background:linear-gradient(90deg,#1877f2,#198754);width:0%;transition:width .3s"></div></div></div><div id="smartExamConfigBox" style="display:none;background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:15px"><h4 style="font-size:14px;color:#1877f2;margin-bottom:8px">⚙️ Cấu hình</h4><div class="form-grid-2"><div><label style="font-size:12px">Mã:</label><input type="text" id="smartExamCode" placeholder="VD: TOAN12" style="padding:6px;margin:0"></div><div><label style="font-size:12px">Tên:</label><input type="text" id="smartExamTitle" style="padding:6px;margin:0"></div></div><div class="form-grid-2" style="margin-top:8px"><div><label style="font-size:12px">Thời gian (phút):</label><input type="number" id="smartExamDuration" value="45" style="padding:6px;margin:0"></div><div><label style="font-size:12px">Chế độ:</label><select id="smartExamParseMode" style="padding:6px;margin:0"><option value="auto">Tự động</option><option value="image">Cắt ảnh</option><option value="text">Chỉ Text</option></select></div></div><div style="margin-top:10px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="smartEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="smartMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div><div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="smartEnableAINote" style="width:16px;height:16px"> 🤖 Ghi chú AI</label></div></div></div><div id="smartExamAnswerUploadBox" style="display:none;background:linear-gradient(135deg,#fff7e6,#fffbe6);border:2px dashed #ffc107;padding:14px;border-radius:10px;margin-bottom:12px"><h4 style="font-size:14px;color:#856404;margin-bottom:8px">🔑 Upload Đáp Án</h4><div style="display:flex;gap:8px;flex-wrap:wrap"><label for="smartAnswerFileInput" class="btn btn-warning" style="display:inline-block;width:auto;padding:8px 14px;font-size:13px;cursor:pointer;margin:0">📁 File</label><input type="file" id="smartAnswerFileInput" accept=".txt,.pdf" style="display:none" onchange="handleSmartAnswerFile(this)"><label for="smartAnswerImageInput" class="btn btn-warning" style="display:inline-block;width:auto;padding:8px 14px;font-size:13px;cursor:pointer;margin:0">🖼️ Ảnh</label><input type="file" id="smartAnswerImageInput" accept="image/*" style="display:none" onchange="handleSmartAnswerImage(this)"></div><div id="smartAnswerPreview" style="margin-top:10px;font-size:12px;color:#0f5132;background:#d1e7dd;padding:8px;border-radius:6px;display:none"></div></div><div id="smartExamPreviewContainer" style="display:none"><div style="background:#d1e7dd;border-left:4px solid #198754;padding:10px;border-radius:8px;margin-bottom:12px;font-size:13px;color:#0f5132">✅ Đã phân tích! <span id="smartExamStats"></span></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><button class="btn" style="width:auto;background:#0d6efd;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('mc')">➕ MC</button><button class="btn" style="width:auto;background:#198754;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('tf')">➕ Đ/S</button><button class="btn" style="width:auto;background:#6f42c1;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('sa')">➕ TLN</button><button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:13px" onclick="reparseSmartExam()">🔄 Lại</button></div><div id="smartQuestionsList" style="max-height:650px;overflow-y:auto;padding-right:6px"></div><button class="btn btn-success" style="margin-top:15px;padding:14px" onclick="promptSaveSmartExam()">💾 Lưu Đề</button><button class="btn btn-secondary" style="margin-top:8px;padding:10px" onclick="cancelSmartExam()">❌ Hủy</button></div></div>
+<div id="smartExamCreate" class="card sub-module-box" style="display:none"><h3 style="color:#1877f2;margin-bottom:10px">🎓 Tạo Đề Thông Minh (V4)</h3><hr style="margin:10px 0"><div style="background:#f0f8ff;border:2px dashed #1877f2;padding:20px;border-radius:12px;text-align:center;margin-bottom:15px"><div style="font-size:48px">📄</div><label for="smartExamPdfInput" class="btn btn-success" style="display:inline-block;width:auto;padding:12px 24px;font-size:14px;cursor:pointer;margin:10px 0">📤 Chọn PDF</label><input type="file" id="smartExamPdfInput" accept="application/pdf" style="display:none" onchange="handleSmartExamUpload(this)"></div><div id="smartExamProgress" style="display:none;background:#fff3cd;padding:12px;border-radius:8px;margin-bottom:15px"><div style="display:flex;align-items:center;gap:10px"><div class="spinner" style="width:24px;height:24px;border-width:3px;margin:0"></div><span id="smartExamProgressText" style="font-weight:bold;color:#856404;font-size:13px">Đang xử lý...</span></div><div style="background:#fff;border-radius:6px;height:8px;margin-top:8px;overflow:hidden"><div id="smartExamProgressBar" style="height:100%;background:linear-gradient(90deg,#1877f2,#198754);width:0%;transition:width .3s"></div></div></div><div id="smartExamConfigBox" style="display:none;background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:15px"><h4 style="font-size:14px;color:#1877f2;margin-bottom:8px">⚙️ Cấu hình</h4><div class="form-grid-2"><div><label style="font-size:12px">Mã:</label><input type="text" id="smartExamCode" placeholder="VD: TOAN12" style="padding:6px;margin:0"></div><div><label style="font-size:12px">Tên:</label><input type="text" id="smartExamTitle" style="padding:6px;margin:0"></div></div><div class="form-grid-2" style="margin-top:8px"><div><label style="font-size:12px">Thời gian (phút):</label><input type="number" id="smartExamDuration" value="45" style="padding:6px;margin:0"></div><div><label style="font-size:12px">Chế độ:</label><select id="smartExamParseMode" style="padding:6px;margin:0"><option value="auto">Tự động</option><option value="image">Cắt ảnh</option><option value="text">Chỉ Text</option></select></div></div><div style="margin-top:10px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="smartEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="smartMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div><div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="smartEnableAINote" style="width:16px;height:16px"> 🤖 Phân tích AI (đang thử nghiệm)</label></div></div></div><div id="smartExamAnswerUploadBox" style="display:none;background:linear-gradient(135deg,#fff7e6,#fffbe6);border:2px dashed #ffc107;padding:14px;border-radius:10px;margin-bottom:12px"><h4 style="font-size:14px;color:#856404;margin-bottom:8px">🔑 Upload Đáp Án</h4><div style="display:flex;gap:8px;flex-wrap:wrap"><label for="smartAnswerFileInput" class="btn btn-warning" style="display:inline-block;width:auto;padding:8px 14px;font-size:13px;cursor:pointer;margin:0">📁 File</label><input type="file" id="smartAnswerFileInput" accept=".txt,.pdf" style="display:none" onchange="handleSmartAnswerFile(this)"><label for="smartAnswerImageInput" class="btn btn-warning" style="display:inline-block;width:auto;padding:8px 14px;font-size:13px;cursor:pointer;margin:0">🖼️ Ảnh</label><input type="file" id="smartAnswerImageInput" accept="image/*" style="display:none" onchange="handleSmartAnswerImage(this)"></div><div id="smartAnswerPreview" style="margin-top:10px;font-size:12px;color:#0f5132;background:#d1e7dd;padding:8px;border-radius:6px;display:none"></div></div><div id="smartExamPreviewContainer" style="display:none"><div style="background:#d1e7dd;border-left:4px solid #198754;padding:10px;border-radius:8px;margin-bottom:12px;font-size:13px;color:#0f5132">✅ Đã phân tích! <span id="smartExamStats"></span></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><button class="btn" style="width:auto;background:#0d6efd;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('mc')">➕ MC</button><button class="btn" style="width:auto;background:#198754;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('tf')">➕ Đ/S</button><button class="btn" style="width:auto;background:#6f42c1;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('sa')">➕ TLN</button><button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:13px" onclick="reparseSmartExam()">🔄 Lại</button></div><div id="smartQuestionsList" style="max-height:650px;overflow-y:auto;padding-right:6px"></div><button class="btn btn-success" style="margin-top:15px;padding:14px" onclick="promptSaveSmartExam()">💾 Lưu Đề</button><button class="btn btn-secondary" style="margin-top:8px;padding:10px" onclick="cancelSmartExam()">❌ Hủy</button></div></div>
 
 <div id="documentLibrary" class="card sub-module-box" style="display:none"><h3 style="color:#6f42c1;margin-bottom:10px">📚 Kho Tài Liệu</h3><hr style="margin:10px 0"><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:14px"><label>🔐 Mật khẩu:</label><input type="password" id="docLibraryPass" placeholder="..."></div><div class="doc-upload-zone"><div style="font-size:42px;margin-bottom:6px">📤</div><label for="docLibraryFileInput" class="btn btn-success" style="display:inline-block;width:auto;padding:10px 22px;font-size:14px;cursor:pointer;margin:0">Chọn File</label><input type="file" id="docLibraryFileInput" accept=".pdf,.txt,.doc,.docx,.ppt,.pptx,.xls,.xlsx,image/*" style="display:none" onchange="handleDocLibraryUpload(this)"><p style="font-size:12px;color:#856404;margin-top:10px">Tối đa 8MB/file</p></div><h4 style="margin-top:10px;margin-bottom:8px;font-size:14px;color:#1877f2">📋 DS Tài Liệu</h4><div id="docLibraryListContainer" style="min-height:80px"><p style="font-size:13px;color:#888;font-style:italic">Đang tải...</p></div></div>
 </div>
@@ -745,7 +804,8 @@ function showCenterSquareToast(icon,title,msg,type='success',duration=2200){cons
 function showToast(message,type='success'){if(type===true)type='error';if(type===false||type===undefined||type===null)type='success';const t=document.getElementById('systemToast');t.innerText=message;t.className=type+' show';t.style.display='block';t.style.opacity='1';setTimeout(()=>{t.className=type;t.style.opacity='0';setTimeout(()=>{t.style.display='none';},400);},3500);}
 
 /* ============================================================
-   🤖 AI ANALYSIS — Phân tích câu hỏi để đưa ra công thức/cách giải
+   🤖 PHÂN TÍCH AI (đang thử nghiệm) — Đọc câu hỏi (kể cả ảnh)
+   và đề xuất công thức / cách giải theo môn học
    ============================================================ */
 function generateAIAnalysis(q){
   if(!q)return '<i>Không có dữ liệu câu hỏi.</i>';
@@ -753,18 +813,20 @@ function generateAIAnalysis(q){
   const txt=((q.content||q.question||'')+' '+(q.options?q.options.map(o=>o.text||'').join(' '):'')).toLowerCase();
   const hasImage=!!q.imageData;
 
-  const mathPatterns=/phương trình|đạo hàm|tích phân|logarit|log\b|ln\b|hình học|tam giác|diện tích|chu vi|thể tích|tính toán|giải toán|biểu thức|hàm số|đồ thị|sin\b|cos\b|tan\b|căn bậc|bậc hai|bậc 3|x²|x\^|f\(x\)|giới hạn|liên tục|ma trận|vector|xác suất|tổ hợp|chỉnh hợp|cấp số|số phức|bất đẳng thức|gtln|gtnn|max|min/;
-  const physPatterns=/vận tốc|gia tốc|lực|năng lượng|điện trở|dòng điện|hiệu điện thế|nhiệt lượng|khối lượng|trọng lực|động năng|thế năng|công suất|cường độ|từ trường|cảm ứng|sóng|dao động|con lắc|định luật|newton|ohm|jun/;
-  const chemPatterns=/phản ứng|hóa học|mol\b|nguyên tử|phân tử|axit|bazơ|muối|oxi hóa|khử|dung dịch|nồng độ|kim loại|phi kim|este|cacbon|hidrocacbon|ancol|axit cacboxylic|polime|điện phân|ph\b/;
-  const bioPatterns=/tế bào|adn|arn|gen\b|di truyền|sinh vật|trao đổi chất|quang hợp|hô hấp|enzym|protein|nhiễm sắc thể|đột biến|tiến hóa|sinh thái|quần thể/;
-  const engPatterns=/grammar|verb\b|tense|passive|active|preposition|english|tiếng anh|choose the|complete the|which of|fill in|reading comprehension|vocabulary/;
-  const litPatterns=/tác giả|tác phẩm|thơ\b|văn học|nhân vật|biện pháp tu từ|ẩn dụ|so sánh|nhân hóa|hoán dụ|nghị luận|phân tích|đoạn trích|ca dao|truyện ngắn/;
-  const histPatterns=/lịch sử|triều đại|chiến tranh|cách mạng|năm \d{3,4}|khởi nghĩa|đế quốc|phong kiến|thực dân|đảng cộng sản|việt nam dân chủ/;
-  const geoPatterns=/địa lý|bản đồ|khí hậu|dân số|vùng kinh tế|tỉnh thành|quốc gia|châu lục|địa hình|đất\b|biển đảo|atlat/;
+  const mathPatterns=/phương trình|đạo hàm|tích phân|logarit|log\b|ln\b|hình học|tam giác|diện tích|chu vi|thể tích|tính toán|giải toán|biểu thức|hàm số|đồ thị|sin\b|cos\b|tan\b|căn bậc|bậc hai|bậc 3|x²|x\^|f\(x\)|giới hạn|liên tục|ma trận|vector|xác suất|tổ hợp|chỉnh hợp|cấp số|số phức|bất đẳng thức|gtln|gtnn|\bmax\b|\bmin\b|toán|số nguyên|phân số|số thực|tập hợp|mệnh đề|đạo hàm|nguyên hàm/;
+  const physPatterns=/vận tốc|gia tốc|lực|năng lượng|điện trở|dòng điện|hiệu điện thế|nhiệt lượng|khối lượng|trọng lực|động năng|thế năng|công suất|cường độ|từ trường|cảm ứng|sóng|dao động|con lắc|định luật|newton|\bohm\b|jun|lý\b|vật lý|vật lí|quang học|thấu kính|khúc xạ|phản xạ|hạt nhân|phóng xạ|tụ điện|cuộn cảm/;
+  const chemPatterns=/phản ứng|hóa học|mol\b|nguyên tử|phân tử|axit|bazơ|muối|oxi hóa|khử|dung dịch|nồng độ|kim loại|phi kim|este|cacbon|hidrocacbon|ancol|axit cacboxylic|polime|điện phân|\bph\b|hóa|hoá|nguyên tố|bảng tuần hoàn|liên kết hóa học|khối lượng mol|thể tích khí|nồng độ mol/;
+  const bioPatterns=/tế bào|adn|arn|\bgen\b|di truyền|sinh vật|trao đổi chất|quang hợp|hô hấp|enzym|protein|nhiễm sắc thể|đột biến|tiến hóa|sinh thái|quần thể|sinh học|sinh lí|hệ sinh thái|nguyên phân|giảm phân|thụ tinh/;
+  const engPatterns=/grammar|\bverb\b|tense|passive|active|preposition|english|tiếng anh|choose the|complete the|which of|fill in|reading comprehension|vocabulary|to be|present|past|future|perfect|conditional|relative clause/;
+  const litPatterns=/tác giả|tác phẩm|thơ\b|văn học|nhân vật|biện pháp tu từ|ẩn dụ|so sánh|nhân hóa|hoán dụ|nghị luận|phân tích|đoạn trích|ca dao|truyện ngắn|ngữ văn|văn bản|ngôi kể|tình huống truyện|ngôn ngữ|nghệ thuật/;
+  const histPatterns=/lịch sử|triều đại|chiến tranh|cách mạng|năm \d{3,4}|khởi nghĩa|đế quốc|phong kiến|thực dân|đảng cộng sản|việt nam dân chủ|chiến dịch|điện biên|kháng chiến|thế chiến|thời kỳ|nhà lý|nhà trần|nhà lê|nhà nguyễn|bác hồ/;
+  const geoPatterns=/địa lý|bản đồ|khí hậu|dân số|vùng kinh tế|tỉnh thành|quốc gia|châu lục|địa hình|đất\b|biển đảo|atlat|địa lí|kinh tuyến|vĩ tuyến|sông ngòi|đồng bằng|cao nguyên|gió mùa/;
 
-  if(mathPatterns.test(txt)){
+  const isMath=mathPatterns.test(txt),isPhys=physPatterns.test(txt),isChem=chemPatterns.test(txt),isBio=bioPatterns.test(txt),isEng=engPatterns.test(txt),isLit=litPatterns.test(txt),isHist=histPatterns.test(txt),isGeo=geoPatterns.test(txt);
+
+  if(isMath){
     lines.push('📐 <b>Dạng Toán học</b>');
-    if(/phương trình bậc (2|hai)|x²|x\^2|bậc hai/.test(txt)){
+    if(/phương trình bậc (2|hai)|x²|x\^2|bậc hai|pt bậc hai/.test(txt)){
       lines.push('• Công thức nghiệm: <b>x = (-b ± √(b²-4ac)) / 2a</b>');
       lines.push('• Bước 1: Đưa về dạng <i>ax² + bx + c = 0</i>');
       lines.push('• Bước 2: Tính <b>Δ = b² - 4ac</b>');
@@ -797,41 +859,47 @@ function generateAIAnalysis(q){
     } else if(/xác suất|tổ hợp|chỉnh hợp/.test(txt)){
       lines.push('• P(A) = n(A)/n(Ω)');
       lines.push('• Hoán vị: Pₙ = n!; Chỉnh hợp: Aₙᵏ = n!/(n-k)!; Tổ hợp: Cₙᵏ = n!/(k!(n-k)!)');
+    } else if(/cấp số cộng|cấp số nhân/.test(txt)){
+      lines.push('• CSC: uₙ = u₁ + (n-1)d; Sₙ = n/2·(u₁+uₙ)');
+      lines.push('• CSN: uₙ = u₁·qⁿ⁻¹; Sₙ = u₁(1-qⁿ)/(1-q)');
     } else {
       lines.push('• Xác định dữ kiện và áp dụng công thức phù hợp');
       lines.push('• Kiểm tra đơn vị và làm tròn kết quả đúng yêu cầu');
     }
   }
 
-  if(physPatterns.test(txt)){
+  if(isPhys){
     lines.push('⚛️ <b>Vật lý</b>');
     if(/vận tốc|quãng đường|thời gian/.test(txt))lines.push('• v = s/t (vận tốc = quãng đường / thời gian)');
-    if(/gia tốc/.test(txt))lines.push('• a = Δv/Δt');
+    if(/gia tốc/.test(txt))lines.push('• a = Δv/Δt; v = v₀ + at; s = v₀t + ½at²');
     if(/lực|newton|F\s*=/.test(txt))lines.push('• F = m·a (Định luật II Newton); P = mg (trọng lực)');
     if(/động năng|thế năng|năng lượng/.test(txt)){lines.push('• Động năng: Wđ = ½mv²');lines.push('• Thế năng: Wt = mgh');lines.push('• Cơ năng: W = Wđ + Wt (bảo toàn khi không ma sát)');}
     if(/điện|dòng điện|điện trở/.test(txt))lines.push('• Định luật Ohm: U = I·R; Công suất: P = U·I = I²R = U²/R');
     if(/sóng|dao động|con lắc/.test(txt)){lines.push('• Chu kỳ con lắc đơn: T = 2π√(l/g)');lines.push('• Bước sóng: λ = v·T = v/f');}
     if(/nhiệt/.test(txt))lines.push('• Q = mcΔt (nhiệt lượng)');
+    if(/thấu kính|khúc xạ|phản xạ/.test(txt))lines.push('• 1/f = 1/d + 1/d\'; Độ phóng đại: k = -d\'/d');
   }
 
-  if(chemPatterns.test(txt)){
+  if(isChem){
     lines.push('🧪 <b>Hóa học</b>');
     lines.push('• Số mol: <b>n = m/M</b> (khối lượng / khối lượng mol)');
     lines.push('• Nồng độ mol: C<sub>M</sub> = n/V (mol/lít)');
     lines.push('• Nồng độ %: C% = (m<sub>ct</sub>/m<sub>dd</sub>)·100%');
+    lines.push('• Thể tích khí ở đktc: V = n·22,4 (lít)');
     lines.push('• Luôn cân bằng PTHH trước khi tính toán');
     lines.push('• Áp dụng định luật bảo toàn khối lượng: m<sub>trước</sub> = m<sub>sau</sub>');
   }
 
-  if(bioPatterns.test(txt)){
+  if(isBio){
     lines.push('🧬 <b>Sinh học</b>');
     lines.push('• ADN: A-T, G-X theo nguyên tắc bổ sung');
     lines.push('• ARN: A-U, G-X');
     lines.push('• Nhân đôi ADN: 1 ADN → 2 ADN con (k lần → 2ᵏ ADN)');
-    lines.push('• Quang hợp: 6CO₂ + 6H₂O →(ánh sáng/ diệp lục) C₆H₁₂O₆ + 6O₂');
+    lines.push('• Quang hợp: 6CO₂ + 6H₂O →(ánh sáng/diệp lục) C₆H₁₂O₆ + 6O₂');
+    lines.push('• Hô hấp tế bào: C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP');
   }
 
-  if(engPatterns.test(txt)){
+  if(isEng){
     lines.push('🇬🇧 <b>Tiếng Anh</b>');
     lines.push('• Chú ý thì (tense) và sự hòa hợp chủ ngữ - động từ');
     lines.push('• Câu bị động: be + V3/ed (+ by O)');
@@ -839,20 +907,20 @@ function generateAIAnalysis(q){
     lines.push('• Loại trừ đáp án sai rõ ràng trước');
   }
 
-  if(litPatterns.test(txt)){
+  if(isLit){
     lines.push('📖 <b>Ngữ văn</b>');
     lines.push('• Xác định thể loại, tác giả, hoàn cảnh sáng tác');
     lines.push('• Biện pháp tu từ: ẩn dụ, hoán dụ, so sánh, nhân hóa, điệp ngữ');
     lines.push('• Phân tích 2 mặt: nội dung (ý nghĩa) + nghệ thuật (từ ngữ, hình ảnh)');
   }
 
-  if(histPatterns.test(txt)){
+  if(isHist){
     lines.push('📜 <b>Lịch sử</b>');
     lines.push('• Chú ý mốc thời gian, sự kiện, nhân vật lịch sử');
     lines.push('• Trả lời theo cấu trúc: Nguyên nhân → Diễn biến → Kết quả → Ý nghĩa');
   }
 
-  if(geoPatterns.test(txt)){
+  if(isGeo){
     lines.push('🌍 <b>Địa lý</b>');
     lines.push('• Đọc kỹ bản đồ, biểu đồ, atlat');
     lines.push('• Phân tích số liệu, so sánh vùng miền');
@@ -867,17 +935,17 @@ function generateAIAnalysis(q){
     lines.push('💡 <b>Trả lời ngắn:</b> Tính toán cẩn thận, chú ý đơn vị, định dạng số (phân số/thập phân), làm tròn đúng yêu cầu');
   }
 
-  if(!txt.trim() && hasImage){
-    lines.push('🖼️ <b>Câu hỏi có hình ảnh</b>');
-    lines.push('• Quan sát kỹ hình ảnh để xác định dữ kiện');
-    lines.push('• Đọc nội dung chữ trong ảnh nếu có');
-    lines.push('• Xác định yêu cầu và áp dụng kiến thức phù hợp với dạng bài');
-  }
-
-  if(!lines.length){
+  if(!isMath&&!isPhys&&!isChem&&!isBio&&!isEng&&!isLit&&!isHist&&!isGeo){
     lines.push('📝 Đọc kỹ đề bài, xác định dữ kiện đã cho và yêu cầu cần tìm');
     lines.push('• Liên hệ với kiến thức đã học');
     lines.push('• Kiểm tra lại kết quả trước khi chọn đáp án');
+  }
+
+  if(hasImage){
+    lines.push('🖼️ <b>Câu hỏi có hình ảnh kèm theo</b>');
+    lines.push('• Quan sát kỹ hình ảnh để xác định dữ kiện (số liệu, công thức, hình vẽ)');
+    lines.push('• Đọc nội dung chữ/số trong ảnh nếu có');
+    lines.push('• Kết hợp giữa dữ kiện trong ảnh và công thức phù hợp để giải');
   }
 
   return lines.join('<br>');
@@ -953,12 +1021,14 @@ async function openProfile(_,targetUser){
   const avEl=document.getElementById('profileAvatarDisplay');
   avEl.innerHTML=u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:3">`:`<span style="position:relative;z-index:3">${(u.nickname||u.username).charAt(0).toUpperCase()}</span>`;
   applyAvatarBgToProfile(u.avatarBg||'');
+  // Small BG buttons - only for self
+  document.getElementById('profileBgUploadBtn').style.display=isSelf?'flex':'none';
+  document.getElementById('profileBgRemoveBtn').style.display=isSelf?'flex':'none';
   if(isSelf){
     document.getElementById('profileNote').value=u.note||'';
     document.getElementById('profileAvatarWrap').onclick=()=>document.getElementById('profileAvatarInput').click();
     document.getElementById('profileAvatarOverlay').style.display='flex';
     document.getElementById('profileNoteSection').style.display='block';
-    document.getElementById('profileAvatarBgSection').style.display='block';
     document.getElementById('profileAddMedalBtn').style.display='inline-block';
     document.getElementById('profileActionsSelf').style.display='flex';
     document.getElementById('profileActionsOther').style.display='none';
@@ -968,7 +1038,6 @@ async function openProfile(_,targetUser){
     document.getElementById('profileAvatarWrap').onclick=null;
     document.getElementById('profileAvatarOverlay').style.display='none';
     document.getElementById('profileNoteSection').style.display='none';
-    document.getElementById('profileAvatarBgSection').style.display='none';
     document.getElementById('profileAddMedalBtn').style.display='none';
     document.getElementById('profileActionsSelf').style.display='none';
     document.getElementById('profileActionsOther').style.display='flex';
@@ -990,7 +1059,7 @@ function showItemDetail(item,user){if(!item)return;const isCup=item.type==='cup'
 function getMedalGrantedCount(medalId){let count=0;Object.values(cachedUsers).forEach(u=>{if((u.ownedMedals||[]).includes(medalId))count++;});return count;}
 
 /* ============================================================
-   AVATAR CROP — Căn ảnh avatar trước khi lưu
+   AVATAR CROP
    ============================================================ */
 const avatarCropState={img:null,offsetX:0,offsetY:0,scale:1,dragging:false,lastX:0,lastY:0,stageSize:300};
 
@@ -1008,162 +1077,99 @@ async function handleAvatarUpload(input){
   }catch(e){showToast('❌ '+(e.message||e),'error');}
   input.value='';
 }
-
 function openAvatarCrop(img){
   const modal=document.getElementById('avatarCropModal');
   const canvas=document.getElementById('avatarCropCanvas');
   const stage=document.getElementById('avatarCropStage');
   const stageSize=stage.clientWidth||300;
-  canvas.width=stageSize;
-  canvas.height=stageSize;
-  avatarCropState.img=img;
-  avatarCropState.stageSize=stageSize;
-  // Fit ảnh vào khung (cover)
+  canvas.width=stageSize;canvas.height=stageSize;
+  avatarCropState.img=img;avatarCropState.stageSize=stageSize;
   const baseScale=Math.max(stageSize/img.width,stageSize/img.height);
-  avatarCropState.scale=baseScale;
-  avatarCropState.offsetX=0;
-  avatarCropState.offsetY=0;
+  avatarCropState.scale=baseScale;avatarCropState.offsetX=0;avatarCropState.offsetY=0;
   const zoomEl=document.getElementById('avatarCropZoom');
   zoomEl.min=(baseScale*0.8).toFixed(2);
   zoomEl.max=(baseScale*4).toFixed(2);
-  zoomEl.step='0.01';
-  zoomEl.value=baseScale.toFixed(2);
+  zoomEl.step='0.01';zoomEl.value=baseScale.toFixed(2);
   drawAvatarCrop();
   modal.classList.add('show');
-
-  // Drag events
-  canvas.style.pointerEvents='auto';
-  stage.onpointerdown=(e)=>{
-    avatarCropState.dragging=true;
-    avatarCropState.lastX=e.clientX;
-    avatarCropState.lastY=e.clientY;
-    try{stage.setPointerCapture(e.pointerId);}catch(err){}
-    stage.style.cursor='grabbing';
-  };
-  stage.onpointermove=(e)=>{
-    if(!avatarCropState.dragging)return;
-    const dx=e.clientX-avatarCropState.lastX;
-    const dy=e.clientY-avatarCropState.lastY;
-    avatarCropState.offsetX+=dx;
-    avatarCropState.offsetY+=dy;
-    avatarCropState.lastX=e.clientX;
-    avatarCropState.lastY=e.clientY;
-    drawAvatarCrop();
-  };
-  const endDrag=(e)=>{
-    avatarCropState.dragging=false;
-    stage.style.cursor='grab';
-    try{stage.releasePointerCapture(e.pointerId);}catch(err){}
-  };
-  stage.onpointerup=endDrag;
-  stage.onpointercancel=endDrag;
-  stage.onpointerleave=(e)=>{if(avatarCropState.dragging){endDrag(e);}};
-
-  zoomEl.oninput=(e)=>{
-    avatarCropState.scale=parseFloat(e.target.value);
-    drawAvatarCrop();
-  };
+  stage.onpointerdown=(e)=>{avatarCropState.dragging=true;avatarCropState.lastX=e.clientX;avatarCropState.lastY=e.clientY;try{stage.setPointerCapture(e.pointerId);}catch(err){}stage.style.cursor='grabbing';};
+  stage.onpointermove=(e)=>{if(!avatarCropState.dragging)return;const dx=e.clientX-avatarCropState.lastX,dy=e.clientY-avatarCropState.lastY;avatarCropState.offsetX+=dx;avatarCropState.offsetY+=dy;avatarCropState.lastX=e.clientX;avatarCropState.lastY=e.clientY;drawAvatarCrop();};
+  const endDrag=(e)=>{avatarCropState.dragging=false;stage.style.cursor='grab';try{stage.releasePointerCapture(e.pointerId);}catch(err){}};
+  stage.onpointerup=endDrag;stage.onpointercancel=endDrag;stage.onpointerleave=(e)=>{if(avatarCropState.dragging){endDrag(e);}};
+  zoomEl.oninput=(e)=>{avatarCropState.scale=parseFloat(e.target.value);drawAvatarCrop();};
 }
-
 function drawAvatarCrop(){
   const canvas=document.getElementById('avatarCropCanvas');
   if(!canvas||!avatarCropState.img)return;
-  const ctx=canvas.getContext('2d');
-  const size=canvas.width;
-  const st=avatarCropState;
-  ctx.clearRect(0,0,size,size);
-  ctx.fillStyle='#1a1a1a';
-  ctx.fillRect(0,0,size,size);
-  const cx=size/2, cy=size/2;
-  const iw=st.img.width*st.scale;
-  const ih=st.img.height*st.scale;
-  const x=cx-iw/2+st.offsetX;
-  const y=cy-ih/2+st.offsetY;
-  ctx.drawImage(st.img,x,y,iw,ih);
+  const ctx=canvas.getContext('2d');const size=canvas.width;const st=avatarCropState;
+  ctx.clearRect(0,0,size,size);ctx.fillStyle='#1a1a1a';ctx.fillRect(0,0,size,size);
+  const cx=size/2,cy=size/2;const iw=st.img.width*st.scale,ih=st.img.height*st.scale;
+  ctx.drawImage(st.img,cx-iw/2+st.offsetX,cy-ih/2+st.offsetY,iw,ih);
 }
-
 function applyAvatarCrop(){
-  const st=avatarCropState;
-  if(!st.img){showToast('❌ Không có ảnh!','error');return;}
-  const size=st.stageSize||300;
-  const canvas=document.createElement('canvas');
-  canvas.width=size;
-  canvas.height=size;
-  const ctx=canvas.getContext('2d');
-  ctx.beginPath();
-  ctx.arc(size/2,size/2,size/2,0,Math.PI*2);
-  ctx.clip();
-  const cx=size/2, cy=size/2;
-  const iw=st.img.width*st.scale;
-  const ih=st.img.height*st.scale;
-  const x=cx-iw/2+st.offsetX;
-  const y=cy-ih/2+st.offsetY;
-  ctx.drawImage(st.img,x,y,iw,ih);
+  const st=avatarCropState;if(!st.img){showToast('❌ Không có ảnh!','error');return;}
+  const size=st.stageSize||300;const canvas=document.createElement('canvas');canvas.width=size;canvas.height=size;
+  const ctx=canvas.getContext('2d');ctx.beginPath();ctx.arc(size/2,size/2,size/2,0,Math.PI*2);ctx.clip();
+  const cx=size/2,cy=size/2;const iw=st.img.width*st.scale,ih=st.img.height*st.scale;
+  ctx.drawImage(st.img,cx-iw/2+st.offsetX,cy-ih/2+st.offsetY,iw,ih);
   const dataUrl=canvas.toDataURL('image/png');
   document.getElementById('profileAvatarDisplay').innerHTML=`<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:3">`;
   document.getElementById('profileAvatarInput').dataset.newAvatar=dataUrl;
-  closeAvatarCrop();
-  showToast('✅ Đã cắt avatar! Bấm "Lưu Profile" để hoàn tất.','success');
+  closeAvatarCrop();showToast('✅ Đã cắt avatar! Bấm "Lưu Profile" để hoàn tất.','success');
 }
-
-function closeAvatarCrop(){
-  document.getElementById('avatarCropModal').classList.remove('show');
-  avatarCropState.img=null;
-  avatarCropState.dragging=false;
-}
+function closeAvatarCrop(){document.getElementById('avatarCropModal').classList.remove('show');avatarCropState.img=null;avatarCropState.dragging=false;}
 
 async function saveProfile(){
   if(!currentUser)return;
   const newAvatar=document.getElementById('profileAvatarInput').dataset.newAvatar;
-  const updates={
-    note:document.getElementById('profileNote').value.trim(),
-    avatar:newAvatar||currentUserFullData.avatar||'',
-    avatarBg:currentUserFullData.avatarBg||'',
-    medals:profileSelectedMedals.slice(0,MAX_USER_MEDALS),
-    ownedCup:profileSelectedCup||'',
-    updatedAt:Date.now()
-  };
+  const updates={note:document.getElementById('profileNote').value.trim(),avatar:newAvatar||currentUserFullData.avatar||'',avatarBg:currentUserFullData.avatarBg||'',medals:profileSelectedMedals.slice(0,MAX_USER_MEDALS),ownedCup:profileSelectedCup||'',updatedAt:Date.now()};
   try{
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),updates);
-    Object.assign(currentUserFullData,updates);
-    Object.assign(currentUser,updates);
+    Object.assign(currentUserFullData,updates);Object.assign(currentUser,updates);
     delete document.getElementById('profileAvatarInput').dataset.newAvatar;
     await applyUserSession(currentUserFullData);
-    showToast('✅ Đã lưu profile!','success');
-    closeProfile();
+    showToast('✅ Đã lưu profile!','success');closeProfile();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
-
 async function loadUserStats(username){let count=0,sum=0;try{const [lb,qp]=await Promise.all([window.dbGet(window.dbChild(window.dbRef,'leaderboard')),window.dbGet(window.dbChild(window.dbRef,'qp_leaderboard'))]);const all=[...(lb.val()?Object.values(lb.val()):[]),...(qp.val()?Object.values(qp.val()):[])];all.forEach(exam=>{if(exam&&typeof exam==='object')Object.values(exam).forEach(r=>{if(r.username===username){count++;sum+=r.score||0;}});});}catch(e){}document.getElementById('profileTestCount').innerText=count;document.getElementById('profileAvgScore').innerText=count>0?(sum/count).toFixed(1):'0';}
 
-/* ẢNH NỀN AVATAR */
+/* ẢNH NỀN AVATAR — FIXED */
 function applyAvatarBgToProfile(bgUrl){const layer=document.getElementById('profileAvatarBgLayer');if(!layer)return;if(bgUrl){layer.style.display='block';layer.style.backgroundImage=`url('${bgUrl}')`;}else{layer.style.display='none';layer.style.backgroundImage='';}}
+
 async function handleAvatarBgUpload(input){
-  if(!input.files||!input.files[0])return;
+  if(!input.files||!input.files[0]){return;}
   const file=input.files[0];
-  if(!file.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh!','error');input.value='';return;}
-  if(file.size>1.5*1024*1024){showToast('Ảnh tối đa 1.5MB!','error');input.value='';return;}
+  if(!currentUser){showToast('🔐 Chưa đăng nhập!','error');input.value='';return;}
+  if(!file.type||!file.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh (PNG/JPG/WEBP/GIF)!','error');input.value='';return;}
+  if(file.size>3*1024*1024){showToast('Ảnh tối đa 3MB!','error');input.value='';return;}
   try{
+    showToast('⏳ Đang xử lý ảnh nền...','info');
     const d=await fileToBase64(file);
+    if(!d||!d.startsWith('data:image')){showToast('❌ File ảnh không hợp lệ!','error');input.value='';return;}
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{avatarBg:d,updatedAt:Date.now()});
     currentUserFullData.avatarBg=d;currentUser.avatarBg=d;
     applyAvatarBgToProfile(d);
     await applyUserSession(currentUserFullData);
+    // Reapply on profile view
+    if(currentViewingUser&&currentViewingUser.username===currentUser.username){currentViewingUser.avatarBg=d;}
     showToast('✅ Đã cập nhật ảnh nền avatar!','success');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
   input.value='';
 }
+
 async function removeProfileAvatarBg(){
-  if(!currentUser)return;
+  if(!currentUser){showToast('🔐 Chưa đăng nhập!','error');return;}
   if(!await customConfirm('Xóa ảnh nền avatar?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;
   try{
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{avatarBg:'',updatedAt:Date.now()});
     currentUserFullData.avatarBg='';currentUser.avatarBg='';
+    if(currentViewingUser&&currentViewingUser.username===currentUser.username)currentViewingUser.avatarBg='';
     applyAvatarBgToProfile('');
     await applyUserSession(currentUserFullData);
     showToast('🗑️ Đã xóa ảnh nền!','warn');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
+
 function openUserAvatarBg(username){
   const u=cachedUsers[username];if(!u)return;
   document.getElementById('userAvatarBgTitle').innerText='🖼️ Ảnh nền Avatar — '+username;
@@ -1178,8 +1184,8 @@ function openUserAvatarBg(username){
       ${avatarInner}
     </div>
     <label style="font-weight:bold;color:#6f42c1;margin-top:8px">📤 Chọn ảnh/GIF:</label>
-    <input type="file" id="adminAvatarBgInput" accept="image/*,image/gif" onchange="handleAdminAvatarBgUpload(this,'${username}')" style="padding:6px">
-    <small style="color:#888;font-size:11px;display:block;margin-top:-4px">💡 Hỗ trợ PNG/JPG/WEBP/GIF. Tối đa 2MB.</small>
+    <input type="file" id="adminAvatarBgInput" accept="image/*" onchange="handleAdminAvatarBgUpload(this,'${username}')" style="padding:6px">
+    <small style="color:#888;font-size:11px;display:block;margin-top:-4px">💡 Hỗ trợ PNG/JPG/WEBP/GIF. Tối đa 3MB.</small>
     <div style="display:flex;gap:8px;margin-top:14px">
       <button class="btn btn-secondary" onclick="closeUserAvatarBg()">Đóng</button>
       <button class="btn btn-danger" onclick="removeUserAvatarBg('${username}')">🗑️ Xóa ảnh nền</button>
@@ -1191,16 +1197,15 @@ function closeUserAvatarBg(){document.getElementById('userAvatarBgModal').classL
 async function handleAdminAvatarBgUpload(input,username){
   if(!input.files||!input.files[0])return;
   const file=input.files[0];
-  if(file.size>2*1024*1024){showToast('Ảnh tối đa 2MB!','error');input.value='';return;}
-  if(!file.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh!','error');input.value='';return;}
+  if(!file.type||!file.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh!','error');input.value='';return;}
+  if(file.size>3*1024*1024){showToast('Ảnh tối đa 3MB!','error');input.value='';return;}
   try{
     const d=await fileToBase64(file);
     await window.dbUpdate(window.ref(window.db,`users/${username}`),{avatarBg:d,updatedAt:Date.now()});
     if(cachedUsers[username])cachedUsers[username].avatarBg=d;
     if(currentUser&&currentUser.username===username){
       currentUserFullData.avatarBg=d;currentUser.avatarBg=d;
-      applyAvatarBgToProfile(d);
-      await applyUserSession(currentUserFullData);
+      applyAvatarBgToProfile(d);await applyUserSession(currentUserFullData);
     }
     closeUserAvatarBg();
     showCenterSquareToast('✅','Đã lưu!',`Ảnh nền cho ${username}`,'success',2600);
@@ -1215,12 +1220,96 @@ async function removeUserAvatarBg(username){
     if(cachedUsers[username])cachedUsers[username].avatarBg='';
     if(currentUser&&currentUser.username===username){
       currentUserFullData.avatarBg='';currentUser.avatarBg='';
-      applyAvatarBgToProfile('');
-      await applyUserSession(currentUserFullData);
+      applyAvatarBgToProfile('');await applyUserSession(currentUserFullData);
     }
-    closeUserAvatarBg();
-    showToast('🗑️ Đã xóa!','warn');
-    filterAccList();
+    closeUserAvatarBg();showToast('🗑️ Đã xóa!','warn');filterAccList();
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+
+/* ============================================================
+   🗑️ XÓA LỊCH SỬ BẢNG XẾP HẠNG
+   ============================================================ */
+function openDeleteHistoryModal(){
+  document.getElementById('deleteHistoryPass').value='';
+  document.getElementById('deleteHistoryStep1').style.display='block';
+  document.getElementById('deleteHistoryStep2').style.display='none';
+  document.getElementById('deleteHistoryStep3Clone').style.display='none';
+  document.getElementById('deleteHistoryStep3All').style.display='none';
+  document.getElementById('deleteHistoryModal').classList.add('show');
+}
+function closeDeleteHistoryModal(){document.getElementById('deleteHistoryModal').classList.remove('show');}
+async function verifyDeleteHistoryPass(){
+  const pass=document.getElementById('deleteHistoryPass').value.trim();
+  if(!pass){showToast('Nhập mật khẩu!','error');return;}
+  await loadSecurityPasswords();
+  if(pass===VUA_PASSWORD||(cachedPartnerPassword&&pass===cachedPartnerPassword)){
+    document.getElementById('deleteHistoryStep1').style.display='none';
+    document.getElementById('deleteHistoryStep2').style.display='block';
+    showToast('✅ Đã xác thực!','success');
+  }else{showToast('❌ Sai mật khẩu VUA hoặc PARTNER!','error');}
+}
+function chooseDeleteMode(mode){
+  document.getElementById('deleteHistoryStep2').style.display='none';
+  if(mode==='clone'){
+    document.getElementById('delCloneCode').value='';
+    document.getElementById('delCloneUser').value='';
+    document.getElementById('deleteHistoryStep3Clone').style.display='block';
+  }else{
+    document.getElementById('deleteHistoryStep3All').style.display='block';
+  }
+}
+function backDeleteHistoryStep(){
+  document.getElementById('deleteHistoryStep1').style.display='none';
+  document.getElementById('deleteHistoryStep2').style.display='block';
+  document.getElementById('deleteHistoryStep3Clone').style.display='none';
+  document.getElementById('deleteHistoryStep3All').style.display='none';
+}
+async function confirmDeleteClone(){
+  const code=document.getElementById('delCloneCode').value.trim().toUpperCase();
+  const userFilter=document.getElementById('delCloneUser').value.trim().toLowerCase();
+  if(!code){showToast('Nhập mã đề!','error');return;}
+  const msg=userFilter?`Xóa lịch sử đề "${code}" của user "${userFilter}"?\n\nKhông thể hoàn tác!`:`Xóa lịch sử đề "${code}" (chỉ bản ghi clone/anonymous)?\n\nKhông thể hoàn tác!`;
+  if(!await customConfirm(msg,{icon:'⚠️',title:'Xác nhận xóa',okClass:'danger',okText:'XÓA'}))return;
+  try{
+    // Load users for clone detection
+    const usersSnap=await window.dbGet(window.dbChild(window.dbRef,'users'));
+    const users=usersSnap.exists()?usersSnap.val():{};
+    let totalDeleted=0;
+    for(const basePath of ['leaderboard','qp_leaderboard']){
+      const snap=await window.dbGet(window.dbChild(window.dbRef,`${basePath}/${code}`));
+      if(!snap.exists())continue;
+      const records=snap.val();
+      for(const [key,rec] of Object.entries(records)){
+        const uname=(rec.username||'').toLowerCase();
+        const nick=(rec.nickname||'').toLowerCase();
+        const name=(rec.name||'').toLowerCase();
+        let shouldDelete=false;
+        if(userFilter){
+          if(uname===userFilter||nick===userFilter||name.includes(userFilter))shouldDelete=true;
+        }else{
+          // Clone = username trống HOẶC username không tồn tại trong users
+          if(!uname||!users[uname])shouldDelete=true;
+        }
+        if(shouldDelete){
+          await window.dbRemove(window.ref(window.db,`${basePath}/${code}/${key}`));
+          totalDeleted++;
+        }
+      }
+    }
+    if(totalDeleted===0){showToast('⚠️ Không có bản ghi nào khớp!','warn');}
+    else{showCenterSquareToast('🗑️','Đã xóa!',`${totalDeleted} bản ghi lịch sử`,'success',3000);}
+    closeDeleteHistoryModal();
+    try{loadLeaderboard();}catch(e){}
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+async function confirmDeleteAll(){
+  if(!await customConfirm('Bạn CÓ CHẮC CHẮN muốn xóa TẤT CẢ lịch sử thi?\n\nThao tác này sẽ xóa vĩnh viễn dữ liệu của MỌI NGƯỜI kể cả clone trên tất cả các bảng xếp hạng!\n\nKhông thể hoàn tác!',{icon:'💥',title:'XÁC NHẬN XÓA TẤT CẢ',okClass:'danger',okText:'XÓA TẤT CẢ'}))return;
+  try{
+    await window.dbRemove(window.ref(window.db,'leaderboard'));
+    await window.dbRemove(window.ref(window.db,'qp_leaderboard'));
+    showCenterSquareToast('💥','Đã xóa tất cả!','Toàn bộ lịch sử thi đã bị xóa','success',3200);
+    closeDeleteHistoryModal();
+    try{loadLeaderboard();}catch(e){}
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
@@ -1472,19 +1561,19 @@ window.addEventListener('blur',()=>{if(!isExamActive&&!isQpActive)return;tabLeav
 window.addEventListener('focus',()=>{if((!isExamActive&&!isQpActive)||!tabLeaveStartTime)return;handleTabLeaveEvent(Date.now()-tabLeaveStartTime);tabLeaveStartTime=null;});
 function selectOpt(btn,val){const p=btn.parentElement;p.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');p.dataset.val=val;}
 function selectTfSub(btn,val){const p=btn.parentElement;p.querySelectorAll('.tf-sub-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');p.dataset.val=val;}
-async function submitStudentExam(forced=false){if(!forced&&!await customConfirm('Xác nhận nộp bài?',{icon:'📤',title:'Nộp bài'}))return;if(!isExamActive&&forced!=='already')return;clearInterval(examTimer);isExamActive=false;setExamActiveClass(false);stopLiveWaitingPoll();const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}let total=0,rev='';currentExamData.questions.forEach(q=>{let ans='',ok=false,earned=0;if(q.type==='mc'){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);ans=g?g.dataset.val||'':'';ok=ans.toLowerCase()===q.correctAnswer.toLowerCase();if(ok)earned=q.score;}else if(q.type==='tf'){const ca=q.correctAnswer.split(',');const sa=[];let se=0;let bs=q.branchScores;if(!bs||bs.length!==ca.length){const e=q.score/ca.length;bs=new Array(ca.length).fill(e);}ca.forEach((c,i)=>{const r=document.querySelector(`.tf-branch-opts[data-qid="${q.id}"][data-index="${i}"]`);const v=(r&&r.dataset.val)?r.dataset.val:'_';sa.push(v);if(v===c)se+=bs[i];});ans=sa.join(',');earned=se;ok=se>0;}else{const inp=document.querySelector(`.student-sa-input[data-qid="${q.id}"]`);ans=inp?inp.value.trim():'';ok=compareShortAnswer(ans,q.correctAnswer);if(ok)earned=q.score;}total+=earned;let exp='';if(q.explanation)exp+=`<p>${q.explanation}</p>`;if(q.expImage)exp+=`<img src="${q.expImage}" class="img-preview" style="margin-top:5px">`;if(!q.explanation&&!q.expImage&&currentEnableAINote)exp=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;margin-top:5px;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 Phân tích AI:</b><br>${generateAIAnalysis(q)}</div>`;const hasExp=exp;const imgHtml=q.imageData?`<img src="${q.imageData}" class="img-preview" style="margin-bottom:5px;border:1px solid #e0e0e0;border-radius:4px">`:'';rev+=`<div style="border:1px solid #ddd;padding:10px;border-radius:6px;margin-bottom:8px;background:${ok?'#e7f3ff':'#fff2f0'};font-size:13px">${imgHtml}<strong>Câu ${q.id}:</strong> <span style="color:${ok?'#1877f2':'#ff4d4f'};font-weight:bold">${ok?'✓ Đúng':'✗ Sai'} (+${earned.toFixed(2)}đ)</span><div>- Bạn chọn: <b>${ans||'Chưa làm'}</b></div>${!ok?`<div>- ĐA đúng: <b style="color:#1877f2">${q.correctAnswer}</b></div>`:''}${hasExp?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleResultExp(this)">></button><div class="explanation-box">${exp}</div></div>`:''}</div>`;});let max=0;currentExamData.questions.forEach(q=>max+=q.score||0);if(max<=0)max=10;const final=Math.round((total/max)*10*100)/100,spent=currentTimerEnabled?((currentExamData.duration*60)-timeLeft):0;document.getElementById('resultScore').innerText=`${final} / 10`;document.getElementById('resultDetailText').innerText=currentTimerEnabled?`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`:'Không giới hạn';document.getElementById('resultReviewContainer').innerHTML=rev;const submitName=currentUser?`${currentUser.username} (${studentNameGlobal})`:studentNameGlobal;try{await window.dbPush(window.ref(window.db,'leaderboard/'+currentExamData.code),{name:submitName,username:currentUser?currentUser.username:'',nickname:studentNameGlobal,score:final,timeSpent:spent,cheatWarnings,totalLeaveTime:Math.round(totalTabLeaveTime/1000),timestamp:Date.now()});}catch(e){}showToast('📤 Đã nộp!','success');showResultPopup(final,10,()=>switchView('studentResultView'));}
+async function submitStudentExam(forced=false){if(!forced&&!await customConfirm('Xác nhận nộp bài?',{icon:'📤',title:'Nộp bài'}))return;if(!isExamActive&&forced!=='already')return;clearInterval(examTimer);isExamActive=false;setExamActiveClass(false);stopLiveWaitingPoll();const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}let total=0,rev='';currentExamData.questions.forEach(q=>{let ans='',ok=false,earned=0;if(q.type==='mc'){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);ans=g?g.dataset.val||'':'';ok=ans.toLowerCase()===q.correctAnswer.toLowerCase();if(ok)earned=q.score;}else if(q.type==='tf'){const ca=q.correctAnswer.split(',');const sa=[];let se=0;let bs=q.branchScores;if(!bs||bs.length!==ca.length){const e=q.score/ca.length;bs=new Array(ca.length).fill(e);}ca.forEach((c,i)=>{const r=document.querySelector(`.tf-branch-opts[data-qid="${q.id}"][data-index="${i}"]`);const v=(r&&r.dataset.val)?r.dataset.val:'_';sa.push(v);if(v===c)se+=bs[i];});ans=sa.join(',');earned=se;ok=se>0;}else{const inp=document.querySelector(`.student-sa-input[data-qid="${q.id}"]`);ans=inp?inp.value.trim():'';ok=compareShortAnswer(ans,q.correctAnswer);if(ok)earned=q.score;}total+=earned;let exp='';if(q.explanation)exp+=`<p>${q.explanation}</p>`;if(q.expImage)exp+=`<img src="${q.expImage}" class="img-preview" style="margin-top:5px">`;if(!q.explanation&&!q.expImage&&currentEnableAINote)exp=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;margin-top:5px;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 Phân tích AI (đang thử nghiệm):</b><br>${generateAIAnalysis(q)}</div>`;const hasExp=exp;const imgHtml=q.imageData?`<img src="${q.imageData}" class="img-preview" style="margin-bottom:5px;border:1px solid #e0e0e0;border-radius:4px">`:'';rev+=`<div style="border:1px solid #ddd;padding:10px;border-radius:6px;margin-bottom:8px;background:${ok?'#e7f3ff':'#fff2f0'};font-size:13px">${imgHtml}<strong>Câu ${q.id}:</strong> <span style="color:${ok?'#1877f2':'#ff4d4f'};font-weight:bold">${ok?'✓ Đúng':'✗ Sai'} (+${earned.toFixed(2)}đ)</span><div>- Bạn chọn: <b>${ans||'Chưa làm'}</b></div>${!ok?`<div>- ĐA đúng: <b style="color:#1877f2">${q.correctAnswer}</b></div>`:''}${hasExp?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleResultExp(this)">></button><div class="explanation-box">${exp}</div></div>`:''}</div>`;});let max=0;currentExamData.questions.forEach(q=>max+=q.score||0);if(max<=0)max=10;const final=Math.round((total/max)*10*100)/100,spent=currentTimerEnabled?((currentExamData.duration*60)-timeLeft):0;document.getElementById('resultScore').innerText=`${final} / 10`;document.getElementById('resultDetailText').innerText=currentTimerEnabled?`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`:'Không giới hạn';document.getElementById('resultReviewContainer').innerHTML=rev;const submitName=currentUser?`${currentUser.username} (${studentNameGlobal})`:studentNameGlobal;try{await window.dbPush(window.ref(window.db,'leaderboard/'+currentExamData.code),{name:submitName,username:currentUser?currentUser.username:'',nickname:studentNameGlobal,score:final,timeSpent:spent,cheatWarnings,totalLeaveTime:Math.round(totalTabLeaveTime/1000),timestamp:Date.now()});}catch(e){}showToast('📤 Đã nộp!','success');showResultPopup(final,10,()=>switchView('studentResultView'));}
 async function cancelStudentExam(){if(!await customConfirm('Thoát?',{icon:'🚪',okClass:'danger'}))return;clearInterval(examTimer);isExamActive=false;setExamActiveClass(false);stopLiveWaitingPoll();const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}if(currentExamData&&currentExamData.isLiveRoom&&studentSessionKeyGlobal){try{await window.dbRemove(window.ref(window.db,`liverooms/${currentExamData.code}/students/${studentSessionKeyGlobal}`));}catch(e){}}currentExamData=null;studentNameGlobal='';studentSessionKeyGlobal='';cheatWarnings=0;totalTabLeaveTime=0;tabLeaveStartTime=null;document.getElementById('examMediaContainer').innerHTML='';document.getElementById('studentAnswerSheet').innerHTML='';showToast('🚪 Đã thoát','warn');switchView('studentLoginView');}
 async function cancelStudentExamSilently(){clearInterval(examTimer);isExamActive=false;setExamActiveClass(false);stopLiveWaitingPoll();const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}if(currentExamData&&currentExamData.isLiveRoom&&studentSessionKeyGlobal){try{await window.dbRemove(window.ref(window.db,`liverooms/${currentExamData.code}/students/${studentSessionKeyGlobal}`));}catch(e){}}currentExamData=null;studentNameGlobal='';studentSessionKeyGlobal='';cheatWarnings=0;totalTabLeaveTime=0;tabLeaveStartTime=null;document.getElementById('examMediaContainer').innerHTML='';document.getElementById('studentAnswerSheet').innerHTML='';switchView('studentLoginView');}
 function toggleResultExp(btn){const b=btn.nextElementSibling;if(b.style.display==='block'){b.style.display='none';btn.innerText='>';}else{b.style.display='block';btn.innerText='v';}}
 async function cancelQpPractice(){if(!await customConfirm('Thoát?',{icon:'🚪',okClass:'danger'}))return;clearInterval(qpTimer);isQpActive=false;stopQpWaitingPoll();if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}currentQpData=null;studentNameGlobal='';qpStudentAnswers={};currentQpV2Index=0;cheatWarnings=0;totalTabLeaveTime=0;tabLeaveStartTime=null;document.getElementById('qpPlayQuestionsContainer').innerHTML='';showToast('🚪 Đã thoát','warn');switchView('studentLoginView');}
 function launchQpPracticeInterface(){isQpActive=true;currentQpV2Index=0;qpStudentAnswers={};document.getElementById('qpPlayTitle').innerText=currentQpData.title;if(currentQpData.enableAntiCheat){document.getElementById('qpCheatWarningBanner').style.display='flex';cheatWarnings=0;totalTabLeaveTime=0;document.getElementById('qpCheatWarningBadge').innerText='Cảnh báo: 0';}else document.getElementById('qpCheatWarningBanner').style.display='none';if(currentQpData.useLayoutV2)renderQpQuestionV2Item();else renderQpLayoutV1();if(currentQpData.enableTimer){qpTimeLeft=(currentQpData.durationMinutes||15)*60;document.getElementById('qpPlayTimer').style.display='block';clearInterval(qpTimer);qpTimer=setInterval(()=>{qpTimeLeft--;const m=Math.floor(qpTimeLeft/60),s=qpTimeLeft%60;document.getElementById('qpPlayTimer').innerText=`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;if(qpTimeLeft<=0){clearInterval(qpTimer);showForcedSubmitModal('timeout','Hết thời gian');}},1000);}else{qpTimeLeft=0;document.getElementById('qpPlayTimer').style.display='none';clearInterval(qpTimer);qpTimer=setInterval(()=>{qpTimeLeft++;},1000);}switchView('qpPracticingView');if(currentQpData.isAdvancedMode){activeQpRoomListener=window.onValue(window.ref(window.db,`qp_rooms/${currentQpData.code}`),snap=>{const d=snap.val()||{};if(d.status==='ended'&&isQpActive){if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}showForcedSubmitModal('qp','GV đã kết thúc');}});}}
 function renderQpLayoutV1(){const c=document.getElementById('qpPlayQuestionsContainer');c.innerHTML='';document.getElementById('qpPrevBtn').style.display='none';document.getElementById('qpNextBtn').style.display='none';document.getElementById('qpSubmitBtn').style.display='block';currentQpData.questions.forEach((q,idx)=>{let opt='';q.options.forEach(o=>{opt+=`<div class="opt-btn" onclick="selectQpOpt(this,${q.id},'${o.label}')" style="width:auto;height:auto;padding:8px 12px;border-radius:6px">${o.label}. ${o.text}</div>`;});const hasExp=q.explanation||q.expImage;c.innerHTML+=`<div class="card" style="background:#fdfdfd;border:1px solid #ddd;margin-bottom:12px"><p style="font-weight:bold;margin-bottom:6px">Câu ${idx+1} (${q.score||.25}đ): ${q.question}</p>${q.image?`<img src="${q.image}" class="img-preview">`:''}<div class="opt-group" data-qid="${q.id}" style="flex-direction:column;gap:6px">${opt}</div><div id="qp-feedback-${q.id}" style="font-size:13px;font-weight:bold;margin-top:6px"></div>${hasExp?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleQpExp(${q.id})">></button><div id="qp-exp-${q.id}" class="explanation-box">${q.explanation?`<p>${q.explanation}</p>`:''}${q.expImage?`<img src="${q.expImage}" class="img-preview">`:''}</div></div>`:''}</div>`;});}
-function renderQpQuestionV2Item(){const c=document.getElementById('qpPlayQuestionsContainer');const q=currentQpData.questions[currentQpV2Index],tot=currentQpData.questions.length;const done=qpStudentAnswers.hasOwnProperty(q.id),saved=done?qpStudentAnswers[q.id]:'';document.getElementById('qpPrevBtn').style.display=currentQpV2Index>0?'block':'none';const nb=document.getElementById('qpNextBtn'),sb=document.getElementById('qpSubmitBtn');if(currentQpV2Index<tot-1){nb.style.display='block';nb.innerText=done?'Tiếp Tục ➡️':'Xác Nhận & Tiếp ➡️';sb.style.display='none';}else{nb.style.display='none';sb.style.display='block';sb.innerText=done?'📤 Nộp Bài':'Xác Nhận & Nộp';}let opt='';q.options.forEach(o=>{let sel=saved===o.label,st='';if(done){if(o.label===saved)st=(saved===q.correct)?'background:#1877f2;color:white;':'background:#dc3545;color:white;';else if(o.label===q.correct)st='background:#1877f2;color:white;';}const ev=done?'':`onclick="selectQpOpt(this,${q.id},'${o.label}')"`;opt+=`<div class="opt-btn ${sel?'selected':''}" ${ev} style="width:auto;height:auto;padding:8px 12px;border-radius:6px;${st}${done?'cursor:not-allowed;opacity:0.8;':'cursor:pointer;'}">${o.label}. ${o.text}</div>`;});let fb='';if(done)fb=saved===q.correct?'<span style="color:#1877f2">✓ Chính xác!</span>':`<span style="color:#dc3545">✗ Sai! ĐA đúng: ${q.correct}</span>`;const hasExp=q.explanation||q.expImage||currentQpData.aiNote;c.innerHTML=`<div class="card" style="background:#fdfdfd;border:1px solid #ddd"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:bold;color:#1877f2">Câu ${currentQpV2Index+1}/${tot} ${done?'<span style="color:red;font-size:12px">(Khóa)</span>':''}</span><span style="font-size:12px;color:#666">${q.score||.25}đ</span></div><p style="font-weight:bold;margin-bottom:8px">${q.question}</p>${q.image?`<img src="${q.image}" class="img-preview">`:''}<div class="opt-group" data-qid="${q.id}" data-val="${saved}" style="flex-direction:column;gap:6px">${opt}</div><div id="qp-feedback-${q.id}" style="font-size:13px;font-weight:bold;margin-top:6px">${fb}</div>${(hasExp&&done)?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleQpExp(${q.id})">></button><div id="qp-exp-${q.id}" class="explanation-box">${q.explanation?`<p>${q.explanation}</p>`:''}${q.expImage?`<img src="${q.expImage}" class="img-preview">`:''}${!q.explanation&&currentQpData.aiNote?`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 Phân tích AI:</b><br>${generateAIAnalysis({type:'mc',question:q.question,options:q.options,imageData:q.image})}</div>`:''}</div></div>`:''}</div>`;}
+function renderQpQuestionV2Item(){const c=document.getElementById('qpPlayQuestionsContainer');const q=currentQpData.questions[currentQpV2Index],tot=currentQpData.questions.length;const done=qpStudentAnswers.hasOwnProperty(q.id),saved=done?qpStudentAnswers[q.id]:'';document.getElementById('qpPrevBtn').style.display=currentQpV2Index>0?'block':'none';const nb=document.getElementById('qpNextBtn'),sb=document.getElementById('qpSubmitBtn');if(currentQpV2Index<tot-1){nb.style.display='block';nb.innerText=done?'Tiếp Tục ➡️':'Xác Nhận & Tiếp ➡️';sb.style.display='none';}else{nb.style.display='none';sb.style.display='block';sb.innerText=done?'📤 Nộp Bài':'Xác Nhận & Nộp';}let opt='';q.options.forEach(o=>{let sel=saved===o.label,st='';if(done){if(o.label===saved)st=(saved===q.correct)?'background:#1877f2;color:white;':'background:#dc3545;color:white;';else if(o.label===q.correct)st='background:#1877f2;color:white;';}const ev=done?'':`onclick="selectQpOpt(this,${q.id},'${o.label}')"`;opt+=`<div class="opt-btn ${sel?'selected':''}" ${ev} style="width:auto;height:auto;padding:8px 12px;border-radius:6px;${st}${done?'cursor:not-allowed;opacity:0.8;':'cursor:pointer;'}">${o.label}. ${o.text}</div>`;});let fb='';if(done)fb=saved===q.correct?'<span style="color:#1877f2">✓ Chính xác!</span>':`<span style="color:#dc3545">✗ Sai! ĐA đúng: ${q.correct}</span>`;const hasExp=q.explanation||q.expImage||currentQpData.aiNote;c.innerHTML=`<div class="card" style="background:#fdfdfd;border:1px solid #ddd"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:bold;color:#1877f2">Câu ${currentQpV2Index+1}/${tot} ${done?'<span style="color:red;font-size:12px">(Khóa)</span>':''}</span><span style="font-size:12px;color:#666">${q.score||.25}đ</span></div><p style="font-weight:bold;margin-bottom:8px">${q.question}</p>${q.image?`<img src="${q.image}" class="img-preview">`:''}<div class="opt-group" data-qid="${q.id}" data-val="${saved}" style="flex-direction:column;gap:6px">${opt}</div><div id="qp-feedback-${q.id}" style="font-size:13px;font-weight:bold;margin-top:6px">${fb}</div>${(hasExp&&done)?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleQpExp(${q.id})">></button><div id="qp-exp-${q.id}" class="explanation-box">${q.explanation?`<p>${q.explanation}</p>`:''}${q.expImage?`<img src="${q.expImage}" class="img-preview">`:''}${!q.explanation&&currentQpData.aiNote?`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 Phân tích AI (đang thử nghiệm):</b><br>${generateAIAnalysis({type:'mc',question:q.question,options:q.options,imageData:q.image})}</div>`:''}</div></div>`:''}</div>`;}
 function nextQpQuestionV2(){const q=currentQpData.questions[currentQpV2Index];if(!qpStudentAnswers.hasOwnProperty(q.id)){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);const v=g?g.dataset.val:'';if(!v){showToast('Chọn 1 đáp án!','error');return;}qpStudentAnswers[q.id]=v;}if(currentQpV2Index<currentQpData.questions.length-1){currentQpV2Index++;renderQpQuestionV2Item();}}
 function prevQpQuestionV2(){if(currentQpV2Index>0){currentQpV2Index--;renderQpQuestionV2Item();}}
 function selectQpOpt(btn,qid,label){if(!isQpActive)return;const g=btn.parentElement;g.querySelectorAll('.opt-btn').forEach(b=>{b.classList.remove('selected');b.style.background='white';b.style.color='#333';});btn.classList.add('selected');btn.style.background='#1877f2';btn.style.color='white';g.dataset.val=label;}
 function toggleQpExp(qid){const b=document.getElementById(`qp-exp-${qid}`);const btn=b.previousElementSibling;if(b.style.display==='block'){b.style.display='none';btn.innerText='>';}else{b.style.display='block';btn.innerText='v';}}
-async function submitQpPractice(forced=false){if(!forced&&!await customConfirm('Nộp bài?',{icon:'📤'}))return;if(!isQpActive&&forced!=='already')return;isQpActive=false;clearInterval(qpTimer);if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();let total=0,max=0,rev='';currentQpData.questions.forEach(q=>{const qs=q.score||.25;max+=qs;let v='';if(currentQpData.useLayoutV2){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);if(g&&g.dataset.val&&!qpStudentAnswers.hasOwnProperty(q.id))qpStudentAnswers[q.id]=g.dataset.val;v=qpStudentAnswers[q.id]||'';}else{const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);v=g?(g.dataset.val||''):'';}const ok=v&&v===q.correct,una=!v;if(ok)total+=qs;const sc=una?'#1877f2':(ok?'#1877f2':'#ff4d4f'),stt=una?'Chưa làm':(ok?'✓ Đúng':'✗ Sai');let exp='';if(q.explanation)exp+=`<p>${q.explanation}</p>`;if(q.expImage)exp+=`<img src="${q.expImage}" class="img-preview">`;if(!q.explanation&&!q.expImage&&currentQpData.aiNote)exp=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 Phân tích AI:</b><br>${generateAIAnalysis({type:'mc',question:q.question,options:q.options,imageData:q.image})}</div>`;const hasExp=exp;rev+=`<div style="border:1px solid #ddd;padding:10px;border-radius:6px;margin-bottom:8px;background:${una?'#e7f3ff':(ok?'#e7f3ff':'#fff2f0')};font-size:13px"><strong>Câu ${q.id}:</strong> <span style="color:${sc};font-weight:bold">${stt} (+${qs}đ)</span><div style="margin-top:4px">- Bạn chọn: <b>${v||'Không'}</b><br>${!ok?`- ĐA đúng: <b style="color:#1877f2">${q.correct}</b>`:''}</div>${hasExp?`<div style="margin-top:5px"><button class="toggle-exp-btn" onclick="toggleResultExp(this)">></button><div class="explanation-box">${exp}</div></div>`:''}</div>`;});const final=Math.round((total/max)*10*100)/100,spent=currentQpData.enableTimer?((currentQpData.durationMinutes||15)*60)-qpTimeLeft:qpTimeLeft;document.getElementById('qpResultScore').innerText=`${final} / 10`;document.getElementById('qpResultDetailText').innerText=`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`;document.getElementById('qpResultReviewContainer').innerHTML=rev;const submitName=currentUser?`${currentUser.username} (${studentNameGlobal})`:studentNameGlobal;try{await window.dbPush(window.ref(window.db,`qp_leaderboard/${currentQpData.code}`),{name:submitName,username:currentUser?currentUser.username:'',nickname:studentNameGlobal,score:final,timeSpent:spent,timestamp:Date.now()});}catch(e){}showToast('📤 Đã nộp!','success');showResultPopup(final,10,()=>switchView('qpResultView'));}
+async function submitQpPractice(forced=false){if(!forced&&!await customConfirm('Nộp bài?',{icon:'📤'}))return;if(!isQpActive&&forced!=='already')return;isQpActive=false;clearInterval(qpTimer);if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();let total=0,max=0,rev='';currentQpData.questions.forEach(q=>{const qs=q.score||.25;max+=qs;let v='';if(currentQpData.useLayoutV2){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);if(g&&g.dataset.val&&!qpStudentAnswers.hasOwnProperty(q.id))qpStudentAnswers[q.id]=g.dataset.val;v=qpStudentAnswers[q.id]||'';}else{const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);v=g?(g.dataset.val||''):'';}const ok=v&&v===q.correct,una=!v;if(ok)total+=qs;const sc=una?'#1877f2':(ok?'#1877f2':'#ff4d4f'),stt=una?'Chưa làm':(ok?'✓ Đúng':'✗ Sai');let exp='';if(q.explanation)exp+=`<p>${q.explanation}</p>`;if(q.expImage)exp+=`<img src="${q.expImage}" class="img-preview">`;if(!q.explanation&&!q.expImage&&currentQpData.aiNote)exp=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 Phân tích AI (đang thử nghiệm):</b><br>${generateAIAnalysis({type:'mc',question:q.question,options:q.options,imageData:q.image})}</div>`;const hasExp=exp;rev+=`<div style="border:1px solid #ddd;padding:10px;border-radius:6px;margin-bottom:8px;background:${una?'#e7f3ff':(ok?'#e7f3ff':'#fff2f0')};font-size:13px"><strong>Câu ${q.id}:</strong> <span style="color:${sc};font-weight:bold">${stt} (+${qs}đ)</span><div style="margin-top:4px">- Bạn chọn: <b>${v||'Không'}</b><br>${!ok?`- ĐA đúng: <b style="color:#1877f2">${q.correct}</b>`:''}</div>${hasExp?`<div style="margin-top:5px"><button class="toggle-exp-btn" onclick="toggleResultExp(this)">></button><div class="explanation-box">${exp}</div></div>`:''}</div>`;});const final=Math.round((total/max)*10*100)/100,spent=currentQpData.enableTimer?((currentQpData.durationMinutes||15)*60)-qpTimeLeft:qpTimeLeft;document.getElementById('qpResultScore').innerText=`${final} / 10`;document.getElementById('qpResultDetailText').innerText=`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`;document.getElementById('qpResultReviewContainer').innerHTML=rev;const submitName=currentUser?`${currentUser.username} (${studentNameGlobal})`:studentNameGlobal;try{await window.dbPush(window.ref(window.db,`qp_leaderboard/${currentQpData.code}`),{name:submitName,username:currentUser?currentUser.username:'',nickname:studentNameGlobal,score:final,timeSpent:spent,timestamp:Date.now()});}catch(e){}showToast('📤 Đã nộp!','success');showResultPopup(final,10,()=>switchView('qpResultView'));}
 async function loadLeaderboard(){const code=document.getElementById('searchLbCode').value.trim().toUpperCase(),tb=document.getElementById('lbTableBody');tb.innerHTML='<tr><td colspan="6">⏳ Đang tải...</td></tr>';if(!code){showToast('Nhập mã!','error');return;}let s=await window.dbGet(window.dbChild(window.dbRef,`leaderboard/${code}`));if(!s.exists())s=await window.dbGet(window.dbChild(window.dbRef,`qp_leaderboard/${code}`));if(!s.exists()){tb.innerHTML='<tr><td colspan="6">Chưa có dữ liệu</td></tr>';return;}const h=Object.values(s.val());h.sort((a,b)=>(b.score!==a.score)?b.score-a.score:a.timeSpent-b.timeSpent);tb.innerHTML=h.map((r,i)=>{const m=Math.floor(r.timeSpent/60),sx=r.timeSpent%60;const w=r.cheatWarnings||0,ls=r.totalLeaveTime||0;const rid='lb_detail_'+i;const profileBtn=r.username?`<button class="btn btn-success" style="padding:2px 8px;font-size:11px;width:auto" onclick="viewLeaderboardProfile('${r.username}')">👤</button>`:'—';return `<tr><td><b>#${i+1}</b></td><td>${escapeHtml(r.name||'')}</td><td><b style="color:#1877f2">${r.score}</b></td><td>${m}p${sx}s</td><td>${profileBtn}</td><td><button class="toggle-exp-btn" onclick="toggleLbDetail('${rid}')">&gt;</button><div id="${rid}" style="display:none;text-align:left;font-size:12px;margin-top:5px;background:#f8f9fa;padding:6px;border-radius:4px">- Cảnh cáo: <b style="color:red">${w} lần</b><br>- Rời phòng: <b>${ls} giây</b></div></td></tr>`;}).join('');showToast('📊 Đã tải!','success');}
 async function viewLeaderboardProfile(username){if(!username){showToast('Không có username!','error');return;}let u=cachedUsers[username];if(!u){try{const s=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));if(s.exists()){u=s.val();cachedUsers[username]=u;}}catch(e){}}if(!u){showToast('❌ Không tìm thấy user!','error');return;}await loadRolesCache();await loadMedalsCache();openProfile(null,u);}
 function toggleLbDetail(id){const el=document.getElementById(id),b=el.previousElementSibling;if(el.style.display==='block'){el.style.display='none';b.innerText='>';}else{el.style.display='block';b.innerText='v';}}
