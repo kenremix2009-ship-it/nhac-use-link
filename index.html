@@ -9,6 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 *{box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:#f0f2f5;color:#333}
@@ -438,6 +439,14 @@ img{-webkit-user-drag:none}
 #specialRoleNotify.elite_teacher .srn-sub{color:#eaf4ff}
 #specialRoleNotify.partner .srn-sub{color:#5a0000}
 
+/* EMAIL STATUS BADGE (NEW) */
+.email-status-badge{display:block;font-size:11px;padding:8px 10px;border-radius:8px;margin:-4px 0 10px 0;text-align:left;line-height:1.5}
+.email-status-badge.ready{background:#d1e7dd;color:#0f5132;border-left:4px solid #198754}
+.email-status-badge.demo{background:#fff3cd;color:#856404;border-left:4px solid #ffc107}
+.email-status-badge.ready code{background:#fff;padding:1px 5px;border-radius:4px;font-size:10px}
+.email-sending{opacity:.7;cursor:not-allowed}
+.email-locked-info{background:#e7f3ff;border-left:4px solid #1877f2;padding:10px 12px;border-radius:8px;font-size:12px;color:#004085;line-height:1.6;margin-bottom:10px;text-align:left}
+
 @media(max-width:768px){
 .navbar{padding:8px;gap:6px}
 .logo{font-size:15px;width:100%;text-align:center}
@@ -596,7 +605,7 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 </div></div>
 
-<div id="authOverlay"><div class="auth-box"><h2>✨ AURORA</h2><p class="auth-sub">🔐 Hệ thống kiểm tra trực tuyến</p><div class="auth-tabs"><button class="active" id="authTabLogin" onclick="switchAuthTab('login')">🔓 Đăng Nhập</button><button id="authTabRegister" onclick="switchAuthTab('register')">📝 Đăng Ký</button></div><div id="authViewLogin" class="auth-view active"><label>Tên đăng nhập hoặc Email:</label><input type="text" id="loginIdentifier" placeholder="Username hoặc email..." autocomplete="username"><label>Mật khẩu:</label><input type="password" id="loginPassword" placeholder="Mật khẩu..." autocomplete="current-password"><a class="link" onclick="switchAuthTab('forgot')">🤔 Quên mật khẩu?</a><button class="btn btn-success" onclick="handleLogin()">🔓 Đăng Nhập</button></div><div id="authViewRegister" class="auth-view"><label>Vai trò:</label><select id="regRole" style="margin-bottom:12px"><option value="student">🧑‍🎓 Học sinh</option><option value="teacher">👨‍🏫 Giáo viên</option><option value="other">👤 Khác</option></select><label>Tên đăng nhập (tên thật):</label><input type="text" id="regUsername" placeholder="3-20 ký tự a-z, 0-9, _ . (không dùng từ ngữ không phù hợp)"><label>Email:</label><input type="email" id="regEmail" placeholder="user@gmail.com"><label>Mật khẩu:</label><input type="password" id="regPassword" placeholder="Ít nhất 6 ký tự..."><label>Xác nhận mật khẩu:</label><input type="password" id="regPassword2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleRegister()">✅ Đăng Ký</button></div><div id="authViewForgot" class="auth-view"><div id="forgotStep1"><label>📧 Email đã đăng ký:</label><input type="email" id="forgotEmail" placeholder="user@gmail.com"><button class="btn btn-warning" onclick="handleSendResetCode()">📨 Gửi Mã</button><a class="link center" onclick="switchAuthTab('login')">← Quay lại</a></div><div id="forgotStep2" style="display:none"><div class="code-display" id="forgotCodeDisplay">------</div><p style="font-size:12px;color:#856404;text-align:center;margin-bottom:12px">Mã đã gửi:</p><label>Mã xác nhận:</label><input type="text" id="forgotCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:bold"><button class="btn btn-success" onclick="handleVerifyResetCode()">✓ Xác Nhận</button><a class="link center" onclick="switchAuthTab('forgot')">← Gửi lại</a></div><div id="forgotStep3" style="display:none"><label>🔐 Mật khẩu mới:</label><input type="password" id="forgotNewPass" placeholder="Ít nhất 6 ký tự..."><label>🔐 Xác nhận:</label><input type="password" id="forgotNewPass2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleResetPassword()">🔐 Đặt Lại</button></div></div></div></div>
+<div id="authOverlay"><div class="auth-box"><h2>✨ AURORA</h2><p class="auth-sub">🔐 Hệ thống kiểm tra trực tuyến</p><div class="auth-tabs"><button class="active" id="authTabLogin" onclick="switchAuthTab('login')">🔓 Đăng Nhập</button><button id="authTabRegister" onclick="switchAuthTab('register')">📝 Đăng Ký</button></div><div id="authViewLogin" class="auth-view active"><label>Tên đăng nhập hoặc Email:</label><input type="text" id="loginIdentifier" placeholder="Username hoặc email..." autocomplete="username"><label>Mật khẩu:</label><input type="password" id="loginPassword" placeholder="Mật khẩu..." autocomplete="current-password"><a class="link" onclick="switchAuthTab('forgot')">🤔 Quên mật khẩu?</a><button class="btn btn-success" onclick="handleLogin()">🔓 Đăng Nhập</button></div><div id="authViewRegister" class="auth-view"><label>Vai trò:</label><select id="regRole" style="margin-bottom:12px"><option value="student">🧑‍🎓 Học sinh</option><option value="teacher">👨‍🏫 Giáo viên</option><option value="other">👤 Khác</option></select><label>Tên đăng nhập (tên thật):</label><input type="text" id="regUsername" placeholder="3-20 ký tự a-z, 0-9, _ . (không dùng từ ngữ không phù hợp)"><label>Email:</label><input type="email" id="regEmail" placeholder="user@gmail.com"><label>Mật khẩu:</label><input type="password" id="regPassword" placeholder="Ít nhất 6 ký tự..."><label>Xác nhận mật khẩu:</label><input type="password" id="regPassword2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleRegister()">✅ Đăng Ký</button></div><div id="authViewForgot" class="auth-view"><div id="forgotStep1"><label>📧 Email đã đăng ký:</label><input type="email" id="forgotEmail" placeholder="user@gmail.com"><div id="forgotEmailStatus" class="email-status-badge demo">⏳ Đang kiểm tra trạng thái email...</div><button class="btn btn-warning" id="forgotSendBtn" onclick="handleSendResetCode(this)">📨 Gửi Mã</button><a class="link center" onclick="switchAuthTab('login')">← Quay lại</a></div><div id="forgotStep2" style="display:none"><div class="email-locked-info" id="forgotEmailLockedInfo" style="display:none">✅ Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (kể cả thư mục Spam/Quảng cáo).</div><div class="code-display" id="forgotCodeDisplay">------</div><p id="forgotCodeLabel" style="font-size:12px;color:#856404;text-align:center;margin-bottom:12px">Mã đã gửi:</p><label>Mã xác nhận:</label><input type="text" id="forgotCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:bold"><button class="btn btn-success" onclick="handleVerifyResetCode()">✓ Xác Nhận</button><a class="link center" onclick="switchAuthTab('forgot')">← Gửi lại</a></div><div id="forgotStep3" style="display:none"><label>🔐 Mật khẩu mới:</label><input type="password" id="forgotNewPass" placeholder="Ít nhất 6 ký tự..."><label>🔐 Xác nhận:</label><input type="password" id="forgotNewPass2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleResetPassword()">🔐 Đặt Lại</button></div></div></div></div>
 
 <div id="perfModeModal" style="display:none"><div class="perf-box"><div style="font-size:56px;line-height:1;margin-bottom:10px">⚙️</div><h3>CHỌN CHẾ ĐỘ HIỂN THỊ</h3><p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Chọn chế độ phù hợp thiết bị.</p><div class="perf-option" onclick="choosePerfMode('full')"><span class="perf-icon">✨</span><div class="perf-text"><div class="perf-title">1. Đầy đủ</div><div class="perf-sub">Bật tất cả hiệu ứng.</div></div></div><div class="perf-option" onclick="choosePerfMode('optimized')"><span class="perf-icon">⚡</span><div class="perf-text"><div class="perf-title">2. Tối ưu <span class="perf-badge" id="perfRecommendBadge">💡</span></div><div class="perf-sub">Tắt hiệu ứng nặng.</div></div></div></div></div>
 
@@ -792,6 +801,27 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="section-title" style="margin-top:25px"><span>5. THÔNG BÁO VÀO WEB (WELCOME)</span></div>
 <div style="background:#f0f8ff;border:1px dashed #1877f2;padding:10px;border-radius:8px;margin-bottom:10px"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#1877f2;font-weight:bold;font-size:13px;margin-bottom:8px"><input type="checkbox" id="welcomeEnabled" checked style="width:16px;height:16px"> 🎉 Bật popup welcome</label><button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:13px" onclick="toggleWelcomeAdvanced()">⚙️ Nâng cao</button></div>
 <div id="welcomeAdvancedPanel" style="display:none;background:#fffbe6;border:1px solid #ffe58f;padding:12px;border-radius:8px"><label>Tiêu đề:</label><input type="text" id="welcomeTitle"><label>Nội dung:</label><textarea id="welcomeContent" rows="4"></textarea><div class="form-grid-2"><div><label>Màu nền:</label><input type="color" id="welcomeBgColor" value="#ffffff" style="width:100%;height:38px;padding:2px;border-radius:6px;border:1px solid #ccc;cursor:pointer"></div><div><label>Màu chữ:</label><input type="color" id="welcomeTextColor" value="#333333" style="width:100%;height:38px;padding:2px;border-radius:6px;border:1px solid #ccc;cursor:pointer"></div></div><div class="form-grid-2"><div><label>Màu aura:</label><input type="color" id="welcomeAuraColor" value="#ffc107" style="width:100%;height:38px;padding:2px;border-radius:6px;border:1px solid #ccc;cursor:pointer"></div><div><label>Cường độ aura:</label><input type="number" id="welcomeAuraIntensity" value="25" min="0"></div></div><div class="form-grid-2"><div><label>Font:</label><select id="welcomeFontFamily"><option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option><option value="Arial, Helvetica, sans-serif">Arial</option></select></div><div><label>Cỡ chữ:</label><input type="number" id="welcomeFontSize" value="14"></div></div><div class="form-grid-2"><div><label>Hiệu ứng chữ:</label><select id="welcomeTextEffect"><option value="none">Không</option><option value="neon">Neon</option><option value="glow">Glow</option><option value="3d">3D</option><option value="gradient">Gradient</option></select></div><div><label style="display:flex;align-items:center;gap:6px;margin-top:8px"><input type="checkbox" id="welcomeCrownEnabled" checked style="width:16px;height:16px"> 👑 Vương miện</label></div></div><label>🎆 Hiệu ứng nền:</label><select id="welcomeEffect"><option value="none">Không có</option><option value="fire">🔥 Lửa</option><option value="fireworks">🎆 Pháo hoa</option><option value="halloween">🎃 Halloween</option><option value="christmas">🎄 Giáng Sinh</option><option value="tet">🧧 Tết</option><option value="galaxy">🌌 Galaxy</option><option value="matrix">💚 Matrix</option><option value="sakura">🌸 Sakura</option><option value="confetti">🎉 Confetti</option><option value="stars">✨ Sao</option></select><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-success" onclick="saveWelcomeConfig()">💾 Lưu</button><button class="btn btn-secondary" onclick="previewWelcome()">👁️ Xem Trước</button></div></div>
+
+<div class="section-title" style="margin-top:25px"><span>6. 📧 CẤU HÌNH GỬI EMAIL (QUÊN MẬT KHẨU)</span></div>
+<div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:10px">
+<p style="font-size:12px;color:#666;margin-bottom:10px">Cấu hình EmailJS để gửi mã đặt lại mật khẩu về email người dùng. Nếu để trống, hệ thống sẽ dùng chế độ demo (hiển thị mã trên màn hình).</p>
+<label>🌐 Public Key:</label>
+<input type="text" id="emailjsPublicKey" placeholder="VD: AbCdEfGhIjKlMnOp..." autocomplete="off">
+<label>📮 Service ID:</label>
+<input type="text" id="emailjsServiceId" placeholder="VD: service_xxxxxxx" autocomplete="off">
+<label>📝 Template ID:</label>
+<input type="text" id="emailjsTemplateId" placeholder="VD: template_xxxxxxx" autocomplete="off">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;margin-top:6px"><input type="checkbox" id="emailjsEnabled" style="width:16px;height:16px"> ✅ Bật gửi email thật</label>
+<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="saveEmailJSConfig()">💾 Lưu Cấu Hình</button><button class="btn btn-warning" style="width:auto;padding:10px 16px" onclick="testEmailJSConfig()">🧪 Gửi Test</button><button class="btn btn-danger" style="width:auto;padding:10px 16px" onclick="clearEmailJSConfig()">🗑️ Xóa Cấu Hình</button></div>
+<p id="emailjsConfigStatus" style="font-size:12px;color:#666;margin-top:10px;padding:8px;background:#f8f9fa;border-radius:6px">ℹ️ Chưa có cấu hình. Đang ở chế độ demo.</p>
+<div style="font-size:11px;color:#856404;background:#fff3cd;border-left:3px solid #ffc107;padding:8px;border-radius:6px;margin-top:10px;line-height:1.6">
+<b>📖 Hướng dẫn nhanh:</b><br>
+1. Truy cập <b>emailjs.com</b> → đăng ký miễn phí<br>
+2. Tạo <b>Email Service</b> (kết nối Gmail/Outlook) → lấy <b>Service ID</b><br>
+3. Tạo <b>Email Template</b> với các biến: <code>{{to_email}}</code>, <code>{{reset_code}}</code>, <code>{{app_name}}</code>, <code>{{message}}</code> → lấy <b>Template ID</b><br>
+4. Vào <b>Account → General</b> → lấy <b>Public Key</b><br>
+5. Điền 3 giá trị trên → nhấn <b>Lưu Cấu Hình</b>
+</div>
 </div>
 </div>
 </div>
@@ -859,6 +889,175 @@ const DEFAULT_ROLES={
 const MEDAL_ICONS={bronze:'🥉',silver:'🥈',gold:'🥇',platinum:'💠',diamond:'💎',supreme:'👑'};
 const MEDAL_TIER_NAMES={bronze:'Đồng',silver:'Bạc',gold:'Vàng',platinum:'Bạch Kim',diamond:'Kim Cương',supreme:'Tối Thượng'};
 const CUP_COLORS={bronze:'#cd7f32',silver:'#c0c0c0',gold:'#ffd700',platinum:'#e5e4e2',diamond:'#b9f2ff',supreme:'#a55eea'};
+
+/* ============ ⚠️ CẤU HÌNH EMAILJS (MỚI) ============ */
+/* Đăng ký tại https://www.emailjs.com/ để lấy 3 giá trị dưới đây.
+   - Nếu điền đầy đủ: mã reset sẽ được GỬI VỀ EMAIL thật.
+   - Nếu để trống: hệ thống tự động fallback về chế độ DEMO (hiện mã trên màn hình).
+   - Có thể cấu hình ngay trong trang web: Tab 👑 TỐI CAO → ⚙️ Quản Trị Hệ Thống → mục "6. 📧 CẤU HÌNH GỬI EMAIL"
+*/
+const EMAILJS_CONFIG={
+  publicKey:'', // VD: 'AbCdEfGhIjKlMnOp...'
+  serviceId:'', // VD: 'service_xxxxxxx'
+  templateId:'', // VD: 'template_xxxxxxx'
+  enabled:false
+};
+let emailJSInitialized=false;
+let cachedEmailJSConfig=null;
+
+/* Khởi tạo EmailJS với config */
+function initEmailJS(cfg){
+  const c=cfg||cachedEmailJSConfig||EMAILJS_CONFIG;
+  if(!c||!c.enabled)return false;
+  if(!c.publicKey||!c.serviceId||!c.templateId)return false;
+  try{
+    if(typeof emailjs==='undefined'){console.warn('EmailJS SDK chưa tải');return false;}
+    emailjs.init({publicKey:c.publicKey});
+    emailJSInitialized=true;
+    return true;
+  }catch(e){console.error('initEmailJS error:',e);return false;}
+}
+
+/* Load cấu hình EmailJS từ Firebase */
+async function loadEmailJSConfigFromDB(){
+  try{
+    const s=await window.dbGet(window.dbChild(window.dbRef,'system/emailjs_config'));
+    if(s.exists()){
+      cachedEmailJSConfig=s.val();
+      if(cachedEmailJSConfig&&cachedEmailJSConfig.enabled&&cachedEmailJSConfig.publicKey&&!cachedEmailJSConfig.publicKey.includes('YOUR_')){
+        initEmailJS(cachedEmailJSConfig);
+      }
+      updateEmailJSStatusUI();
+      fillEmailJSForm(cachedEmailJSConfig);
+    }else{
+      cachedEmailJSConfig=null;
+      updateEmailJSStatusUI();
+    }
+  }catch(e){console.warn('loadEmailJSConfigFromDB error:',e);cachedEmailJSConfig=null;updateEmailJSStatusUI();}
+}
+
+/* Cập nhật UI trạng thái EmailJS trong form quên mật khẩu + supreme */
+function updateEmailJSStatusUI(){
+  const c=cachedEmailJSConfig||EMAILJS_CONFIG;
+  const ready=!!(c&&c.enabled&&c.publicKey&&c.serviceId&&c.templateId);
+  // Badge trong form quên mật khẩu
+  const badge=document.getElementById('forgotEmailStatus');
+  if(badge){
+    if(ready){
+      badge.className='email-status-badge ready';
+      badge.innerHTML='✅ <b>Gửi email thật đang BẬT</b> — Mã xác nhận sẽ được gửi đến hộp thư của bạn.';
+    }else{
+      badge.className='email-status-badge demo';
+      badge.innerHTML='⚠️ <b>Chế độ DEMO</b> — Chưa cấu hình gửi email. Mã xác nhận sẽ hiển thị trực tiếp trên màn hình.';
+    }
+  }
+  // Status trong supreme
+  const st=document.getElementById('emailjsConfigStatus');
+  if(st){
+    if(ready){
+      st.style.background='#d1e7dd';st.style.color='#0f5132';
+      st.innerHTML=`✅ Đã cấu hình — Public Key: <code>${escapeHtml((c.publicKey||'').slice(0,8))}...</code> • Service: <code>${escapeHtml(c.serviceId||'')}</code> • Template: <code>${escapeHtml(c.templateId||'')}</code>`;
+    }else{
+      st.style.background='#fff3cd';st.style.color='#856404';
+      st.innerHTML='⚠️ Chưa cấu hình đầy đủ — Hệ thống đang ở chế độ DEMO (hiện mã trên màn hình).';
+    }
+  }
+}
+
+/* Điền form cấu hình EmailJS trong supreme */
+function fillEmailJSForm(cfg){
+  if(!cfg)cfg=EMAILJS_CONFIG;
+  const pk=document.getElementById('emailjsPublicKey');if(pk)pk.value=cfg.publicKey||'';
+  const si=document.getElementById('emailjsServiceId');if(si)si.value=cfg.serviceId||'';
+  const ti=document.getElementById('emailjsTemplateId');if(ti)ti.value=cfg.templateId||'';
+  const en=document.getElementById('emailjsEnabled');if(en)en.checked=!!cfg.enabled;
+}
+
+/* Hàm gửi email reset qua EmailJS */
+async function sendResetEmailViaEmailJS(email,code){
+  const c=cachedEmailJSConfig||EMAILJS_CONFIG;
+  if(!c||!c.enabled)return false;
+  if(!c.publicKey||!c.serviceId||!c.templateId)return false;
+  if(!emailJSInitialized){if(!initEmailJS(c))return false;}
+  try{
+    const appName=(document.getElementById('webLogo')?.innerText||'AURORA').trim()||'AURORA';
+    const message=`Mã đặt lại mật khẩu ${appName} của bạn là: ${code}\nMã có hiệu lực trong 10 phút.\nNếu bạn không yêu cầu, hãy bỏ qua email này.`;
+    const templateParams={
+      to_email:email,
+      email:email,
+      user_email:email,
+      reset_code:code,
+      code:code,
+      verification_code:code,
+      app_name:appName,
+      website_name:appName,
+      message:message,
+      expiry:'10 phút',
+      expiry_minutes:'10'
+    };
+    const resp=await emailjs.send(c.serviceId,c.templateId,templateParams,{publicKey:c.publicKey});
+    return !!(resp&&(resp.status===200||resp.status===0));
+  }catch(e){
+    console.error('EmailJS send error:',e);
+    return false;
+  }
+}
+
+/* ====== FUNC QUẢN LÝ CẤU HÌNH EMAILJS TRONG SUPREME ====== */
+async function saveEmailJSConfig(){
+  if(userHasSupremeAccess!=='partner'&&userHasSupremeAccess!==true){showToast('❌ Chỉ vào được từ Tối Cao!','error');return;}
+  const publicKey=(document.getElementById('emailjsPublicKey').value||'').trim();
+  const serviceId=(document.getElementById('emailjsServiceId').value||'').trim();
+  const templateId=(document.getElementById('emailjsTemplateId').value||'').trim();
+  const enabled=document.getElementById('emailjsEnabled').checked;
+  if(enabled&&(!publicKey||!serviceId||!templateId)){
+    showToast('❌ Điền đủ Public Key + Service ID + Template ID!','error');return;
+  }
+  try{
+    const cfg={publicKey,serviceId,templateId,enabled,updatedAt:Date.now()};
+    await window.dbSet(window.ref(window.db,'system/emailjs_config'),cfg);
+    cachedEmailJSConfig=cfg;
+    emailJSInitialized=false;
+    if(enabled)initEmailJS(cfg);
+    updateEmailJSStatusUI();
+    showCenterSquareToast('✅','Đã lưu!',enabled?'Gửi email đã được BẬT':'Đang ở chế độ DEMO','success',3000);
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+async function testEmailJSConfig(){
+  if(userHasSupremeAccess!=='partner'&&userHasSupremeAccess!==true){showToast('❌ Chỉ vào được từ Tối Cao!','error');return;}
+  const publicKey=(document.getElementById('emailjsPublicKey').value||'').trim();
+  const serviceId=(document.getElementById('emailjsServiceId').value||'').trim();
+  const templateId=(document.getElementById('emailjsTemplateId').value||'').trim();
+  if(!publicKey||!serviceId||!templateId){showToast('❌ Điền đủ 3 trường trước!','error');return;}
+  const toEmail=await customPrompt('Nhập email nhận thư test:',{icon:'📧',title:'Gửi test',placeholder:'test@gmail.com'});
+  if(!toEmail||!toEmail.includes('@')){if(toEmail)showToast('❌ Email không hợp lệ!','error');return;}
+  try{
+    showToast('⏳ Đang gửi test...','info');
+    if(!emailJSInitialized)emailjs.init({publicKey});
+    const code='123456';
+    const appName=(document.getElementById('webLogo')?.innerText||'AURORA').trim()||'AURORA';
+    const resp=await emailjs.send(serviceId,templateId,{
+      to_email:toEmail,email:toEmail,user_email:toEmail,
+      reset_code:code,code:code,verification_code:code,
+      app_name:appName,website_name:appName,
+      message:`[TEST] Mã đặt lại mật khẩu ${appName}: ${code}`,
+      expiry:'10 phút',expiry_minutes:'10'
+    },{publicKey});
+    if(resp&&(resp.status===200||resp.status===0))showCenterSquareToast('✅','Gửi thành công!',`Đã gửi test đến: ${toEmail}`,'success',4000);
+    else showToast('⚠️ Phản hồi bất thường từ EmailJS','warn');
+  }catch(e){console.error(e);showCenterSquareToast('❌','Gửi thất bại',(e&&e.text)||(e&&e.message)||'Lỗi không xác định','error',5000);}
+}
+async function clearEmailJSConfig(){
+  if(userHasSupremeAccess!=='partner'&&userHasSupremeAccess!==true){showToast('❌ Chỉ vào được từ Tối Cao!','error');return;}
+  if(!await customConfirm('Xóa toàn bộ cấu hình EmailJS?\n\nHệ thống sẽ quay về chế độ DEMO.',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;
+  try{
+    await window.dbRemove(window.ref(window.db,'system/emailjs_config'));
+    cachedEmailJSConfig=null;emailJSInitialized=false;
+    fillEmailJSForm({publicKey:'',serviceId:'',templateId:'',enabled:false});
+    updateEmailJSStatusUI();
+    showToast('🗑️ Đã xóa cấu hình EmailJS!','warn');
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
 
 /* ============ UPDATED: MỖI EMOJI 1 HIỆU ỨNG RIÊNG ============ */
 const ROLE_EFFECT_MAP={
@@ -1080,14 +1279,71 @@ function stopAllAnnouncementListeners(){
 }
 
 /* AUTH */
-function switchAuthTab(tab){document.querySelectorAll('.auth-view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.auth-tabs button').forEach(b=>b.classList.remove('active'));if(tab==='login'){document.getElementById('authViewLogin').classList.add('active');document.getElementById('authTabLogin').classList.add('active');}else if(tab==='register'){document.getElementById('authViewRegister').classList.add('active');document.getElementById('authTabRegister').classList.add('active');}else{document.getElementById('authViewForgot').classList.add('active');document.getElementById('forgotStep1').style.display='block';document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='none';}}
+function switchAuthTab(tab){document.querySelectorAll('.auth-view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.auth-tabs button').forEach(b=>b.classList.remove('active'));if(tab==='login'){document.getElementById('authViewLogin').classList.add('active');document.getElementById('authTabLogin').classList.add('active');}else if(tab==='register'){document.getElementById('authViewRegister').classList.add('active');document.getElementById('authTabRegister').classList.add('active');}else{document.getElementById('authViewForgot').classList.add('active');document.getElementById('forgotStep1').style.display='block';document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='none';// Reset hiển thị code về mặc định
+    const cd=document.getElementById('forgotCodeDisplay');if(cd){cd.style.fontSize='22px';cd.style.letterSpacing='6px';cd.innerText='------';}
+    const cl=document.getElementById('forgotCodeLabel');if(cl){cl.style.display='block';cl.innerText='Mã đã gửi:';}
+    const li=document.getElementById('forgotEmailLockedInfo');if(li)li.style.display='none';
+    const fr=document.getElementById('forgotCode');if(fr)fr.value='';
+    updateEmailJSStatusUI();}}
 async function hashPassword(pw){const salt='aurora_salt_2024_v1';const data=pw+salt;try{if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(data));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}}catch(e){}let h=5381;for(let i=0;i<data.length;i++)h=((h<<5)+h)+data.charCodeAt(i);return 'fb_'+Math.abs(h).toString(36);}
 function emailKey(email){return email.trim().toLowerCase().replace(/[.@]/g,'_');}
 async function handleRegister(){const role=document.getElementById('regRole').value,username=document.getElementById('regUsername').value.trim().toLowerCase();const email=document.getElementById('regEmail').value.trim().toLowerCase(),password=document.getElementById('regPassword').value,password2=document.getElementById('regPassword2').value;if(!username||!email||!password||!password2){showToast('Điền đầy đủ!','error');return;}if(!/^[a-z0-9_.]{3,20}$/.test(username)){showToast('Username 3-20 ký tự a-z, 0-9, _ .','error');return;}if(containsBannedWord(username)){showToast('❌ Tên đăng nhập chứa từ ngữ không phù hợp!','error');return;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showToast('Email không hợp lệ!','error');return;}if(password.length<6){showToast('Mật khẩu ≥ 6 ký tự!','error');return;}if(password!==password2){showToast('Mật khẩu không khớp!','error');return;}try{showToast('⏳ Đang xử lý...','info');if((await window.dbGet(window.dbChild(window.dbRef,`users/${username}`))).exists()){showToast('❌ Username đã tồn tại!','error');return;}if((await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(email)}`))).exists()){showToast('❌ Email đã đăng ký!','error');return;}const passwordHash=await hashPassword(password);const userData={username,email,passwordHash,role,nickname:username,avatar:'',avatarBg:'',note:'',medals:[],ownedMedals:[],ownedCup:'',ownedCups:[],customRoleIds:[],pinnedRoleId:'',textColor:'#333333',fontStyle:'normal',textEffect:'none',createdAt:Date.now()};await window.dbSet(window.ref(window.db,`users/${username}`),userData);await window.dbSet(window.ref(window.db,`email_index/${emailKey(email)}`),username);await customAlert(`🎉 Đăng ký thành công!\n\nUsername: ${username}\nVai trò: ${role==='teacher'?'Giáo viên':role==='other'?'Khác':'Học sinh'}`,{title:'Thành công!',type:'success',icon:'🎉'});document.getElementById('loginIdentifier').value=username;['regUsername','regEmail','regPassword','regPassword2'].forEach(id=>document.getElementById(id).value='');switchAuthTab('login');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function handleLogin(){const identifier=document.getElementById('loginIdentifier').value.trim().toLowerCase(),password=document.getElementById('loginPassword').value;if(!identifier||!password){showToast('Điền đầy đủ!','error');return;}try{showToast('⏳ Đang đăng nhập...','info');let username=identifier;if(identifier.includes('@')){const s=await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(identifier)}`));if(!s.exists()){showToast('❌ Email chưa đăng ký!','error');return;}username=s.val();}const us=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));if(!us.exists()){showToast('❌ Tài khoản không tồn tại!','error');return;}const u=us.val();if(await hashPassword(password)!==u.passwordHash){showToast('❌ Sai mật khẩu!','error');return;}localStorage.setItem('aurora_user',JSON.stringify({username:u.username}));await applyUserSession(u);document.getElementById('authOverlay').style.display='none';document.getElementById('loginPassword').value='';showToast(`👋 Chào mừng ${u.nickname||u.username}!`,'success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
-async function handleSendResetCode(){const email=document.getElementById('forgotEmail').value.trim().toLowerCase();if(!email){showToast('Nhập email!','error');return;}try{if(!(await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(email)}`))).exists()){showToast('❌ Email chưa đăng ký!','error');return;}const code=String(Math.floor(100000+Math.random()*900000));currentResetEmail=email;await window.dbSet(window.ref(window.db,`password_resets/${emailKey(email)}`),{code,email,expiresAt:Date.now()+10*60*1000,createdAt:Date.now()});document.getElementById('forgotCodeDisplay').innerText=code;document.getElementById('forgotStep1').style.display='none';document.getElementById('forgotStep2').style.display='block';showCenterSquareToast('📧','Mã đã gửi!',`Mã (demo): ${code}\nHết hạn 10 phút`,'success',6000);}catch(e){showToast('❌ '+(e.message||e),'error');}}
+
+/* ============ 🔥 UPDATED: GỬI MÃ RESET QUA EMAIL ============ */
+async function handleSendResetCode(btn){
+  const email=document.getElementById('forgotEmail').value.trim().toLowerCase();
+  if(!email){showToast('Nhập email!','error');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showToast('❌ Email không hợp lệ!','error');return;}
+  const btnEl=btn||document.getElementById('forgotSendBtn');
+  if(btnEl){btnEl.disabled=true;btnEl.classList.add('email-sending');btnEl.innerText='⏳ Đang xử lý...';}
+  try{
+    if(!(await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(email)}`))).exists()){
+      showToast('❌ Email chưa đăng ký!','error');
+      if(btnEl){btnEl.disabled=false;btnEl.classList.remove('email-sending');btnEl.innerText='📨 Gửi Mã';}
+      return;
+    }
+    const code=String(Math.floor(100000+Math.random()*900000));
+    currentResetEmail=email;
+    await window.dbSet(window.ref(window.db,`password_resets/${emailKey(email)}`),{
+      code,email,expiresAt:Date.now()+10*60*1000,createdAt:Date.now()
+    });
+    // Chuyển sang bước 2
+    document.getElementById('forgotStep1').style.display='none';
+    document.getElementById('forgotStep2').style.display='block';
+    const codeDisplay=document.getElementById('forgotCodeDisplay');
+    const codeLabel=document.getElementById('forgotCodeLabel');
+    const lockedInfo=document.getElementById('forgotEmailLockedInfo');
+    if(btnEl){btnEl.disabled=false;btnEl.classList.remove('email-sending');btnEl.innerText='📨 Gửi Mã';}
+    // Đảm bảo init config trước khi gửi
+    if(!cachedEmailJSConfig){
+      try{
+        const s=await window.dbGet(window.dbChild(window.dbRef,'system/emailjs_config'));
+        if(s.exists()){cachedEmailJSConfig=s.val();if(cachedEmailJSConfig.enabled)initEmailJS(cachedEmailJSConfig);}
+      }catch(e){}
+    }
+    // Thử gửi email
+    const sent=await sendResetEmailViaEmailJS(email,code);
+    if(sent){
+      // Gửi thành công → ẩn mã, thông báo check email
+      if(codeDisplay){codeDisplay.style.display='none';}
+      if(codeLabel){codeLabel.style.display='none';}
+      if(lockedInfo)lockedInfo.style.display='block';
+      showCenterSquareToast('📧','Đã gửi email!',`Mã xác nhận đã được gửi đến:\n${email}\n\n💡 Kiểm tra cả hộp thư Spam/Quảng cáo.`,'success',7000);
+    }else{
+      // Fallback demo
+      if(codeDisplay){codeDisplay.style.display='block';codeDisplay.innerText=code;codeDisplay.style.fontSize='22px';codeDisplay.style.letterSpacing='6px';}
+      if(codeLabel){codeLabel.style.display='block';codeLabel.innerText='Mã đã tạo (DEMO):';}
+      if(lockedInfo)lockedInfo.style.display='none';
+      showCenterSquareToast('📧','Mã đã tạo!',`Mã (DEMO): ${code}\nHết hạn 10 phút.\n\n💡 Cấu hình EmailJS để gửi qua mail thật (Tab 👑 TỐI CAO).`,'warn',7500);
+    }
+  }catch(e){
+    showToast('❌ '+(e.message||e),'error');
+    if(btnEl){btnEl.disabled=false;btnEl.classList.remove('email-sending');btnEl.innerText='📨 Gửi Mã';}
+  }
+}
 async function handleVerifyResetCode(){const code=document.getElementById('forgotCode').value.trim();if(code.length!==6){showToast('Nhập mã 6 số!','error');return;}try{const s=await window.dbGet(window.dbChild(window.dbRef,`password_resets/${emailKey(currentResetEmail)}`));if(!s.exists()){showToast('❌ Mã không tồn tại!','error');return;}const d=s.val();if(Date.now()>d.expiresAt){showToast('❌ Mã hết hạn!','error');return;}if(d.code!==code){showToast('❌ Mã không đúng!','error');return;}document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='block';showToast('✅ Nhập mật khẩu mới','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
-async function handleResetPassword(){const np=document.getElementById('forgotNewPass').value,np2=document.getElementById('forgotNewPass2').value;if(np.length<6||np!==np2){showToast('Mật khẩu ≥6 và khớp!','error');return;}try{const es=await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(currentResetEmail)}`));const passwordHash=await hashPassword(np);await window.dbUpdate(window.ref(window.db,`users/${es.val()}`),{passwordHash,updatedAt:Date.now()});await window.dbRemove(window.ref(window.db,`password_resets/${emailKey(currentResetEmail)}`));showToast('🎉 Đặt lại thành công!','success');document.getElementById('loginIdentifier').value=currentResetEmail;['forgotNewPass','forgotNewPass2','forgotCode','forgotEmail'].forEach(id=>document.getElementById(id).value='');currentResetEmail='';switchAuthTab('login');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function handleResetPassword(){const np=document.getElementById('forgotNewPass').value,np2=document.getElementById('forgotNewPass2').value;if(np.length<6||np!==np2){showToast('Mật khẩu ≥6 và khớp!','error');return;}try{const es=await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(currentResetEmail)}`));const passwordHash=await hashPassword(np);await window.dbUpdate(window.ref(window.db,`users/${es.val()}`),{passwordHash,updatedAt:Date.now()});await window.dbRemove(window.ref(window.db,`password_resets/${emailKey(currentResetEmail)}`));showToast('🎉 Đặt lại thành công!','success');document.getElementById('loginIdentifier').value=currentResetEmail;['forgotNewPass','forgotNewPass2','forgotCode','forgotEmail'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});currentResetEmail='';switchAuthTab('login');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
 /* ROLE/MEDAL CACHE */
 async function loadRolesCache(){try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/roles'));cachedRoles=s.exists()?s.val():{};}catch(e){cachedRoles={};}}
@@ -1653,8 +1909,8 @@ function confirmMedalPick(){closeMedalPicker();showToast('✅ Bấm "Lưu Profil
 
 /* SUPREME */
 function checkSupremeAccess(){document.getElementById('supremePassInput').value='';document.getElementById('supremePasswordModal').style.display='flex';}
-async function verifySupremePassword(){const p=document.getElementById('supremePassInput').value.trim();if(!p){showToast('Nhập mật khẩu!','error');return;}await loadSecurityPasswords();if(p===VUA_PASSWORD){userHasSupremeAccess=true;document.getElementById('supremePasswordModal').style.display='none';showToast('👑 Chào mừng Nhà Phát Triển!','success');switchView('supremeView');loadAllSupremeExams();loadSupremeAudioList();loadSecurityPassList();}else if(cachedPartnerPassword&&p===cachedPartnerPassword){userHasSupremeAccess='partner';document.getElementById('supremePasswordModal').style.display='none';showToast('🤝 Chào mừng Đối Tác!','info');switchView('supremeView');loadAllSupremeExams();loadSupremeAudioList();loadSecurityPassList();}else showToast('❌ Sai mật khẩu!','error');}
-function switchSupremeTab(tab,el){document.querySelectorAll('.supreme-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('supremeTabAccounts').style.display=tab==='accounts'?'block':'none';document.getElementById('supremeTabSystem').style.display=tab==='system'?'block':'none';if(tab==='accounts'&&accMgmtUnlocked)loadAllUsers();}
+async function verifySupremePassword(){const p=document.getElementById('supremePassInput').value.trim();if(!p){showToast('Nhập mật khẩu!','error');return;}await loadSecurityPasswords();if(p===VUA_PASSWORD){userHasSupremeAccess=true;document.getElementById('supremePasswordModal').style.display='none';showToast('👑 Chào mừng Nhà Phát Triển!','success');switchView('supremeView');loadAllSupremeExams();loadSupremeAudioList();loadSecurityPassList();loadEmailJSConfigFromDB();}else if(cachedPartnerPassword&&p===cachedPartnerPassword){userHasSupremeAccess='partner';document.getElementById('supremePasswordModal').style.display='none';showToast('🤝 Chào mừng Đối Tác!','info');switchView('supremeView');loadAllSupremeExams();loadSupremeAudioList();loadSecurityPassList();loadEmailJSConfigFromDB();}else showToast('❌ Sai mật khẩu!','error');}
+function switchSupremeTab(tab,el){document.querySelectorAll('.supreme-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('supremeTabAccounts').style.display=tab==='accounts'?'block':'none';document.getElementById('supremeTabSystem').style.display=tab==='system'?'block':'none';if(tab==='accounts'&&accMgmtUnlocked)loadAllUsers();if(tab==='system')loadEmailJSConfigFromDB();}
 async function unlockAccountManagement(){const username=document.getElementById('accMgmtUsername').value.trim(),pass=document.getElementById('accMgmtVuaPass').value.trim();if(!username){showToast('Nhập tên đăng nhập!','error');return;}if(pass!==VUA_PASSWORD){showToast('❌ Mật khẩu VUA không đúng!','error');return;}accMgmtUnlocked=true;document.getElementById('accMgmtPanel').style.display='block';document.getElementById('accMgmtVuaPass').value='';await loadRolesCache();await loadMedalsCache();loadAllUsers();showToast('🔓 Đã mở khóa!','success');}
 async function loadAllUsers(){if(!accMgmtUnlocked)return;const c=document.getElementById('accUserListContainer');c.innerHTML='<p style="text-align:center;color:#888;padding:20px 0">⏳ Đang tải...</p>';try{await loadRolesCache();await loadMedalsCache();const s=await window.dbGet(window.dbChild(window.dbRef,'users'));cachedUsers=s.val()||{};filterAccList();}catch(e){c.innerHTML='<p style="color:#dc3545">Lỗi: '+(e.message||e)+'</p>';}}
 function filterAccList(){
@@ -2044,7 +2300,7 @@ async function supremeDeleteData(folder,code){if(userHasSupremeAccess==='partner
 window.addEventListener('DOMContentLoaded',()=>{
   checkAuthOnLoad();initPerfMode();updateQrFabVisibility();
   setTimeout(()=>{try{const u=new URLSearchParams(location.search),ep=u.get('exam'),pp=u.get('practice');if(ep){document.getElementById('examModeSelect').value='live';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='live'));document.querySelector('.mode-dd-icon').innerText='🛡️';document.querySelector('.mode-dd-label').innerText='Phòng Thi Chuyên Dụng';document.getElementById('lblCodeText').innerText='Mã Bài Kiểm Tra:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Phòng Thi:';document.getElementById('studentExamCode').value=ep.toUpperCase();showToast('📱 Đã nhận mã!','info');if(history.replaceState)history.replaceState({},document.title,location.pathname);}else if(pp){document.getElementById('examModeSelect').value='practice';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='practice'));document.querySelector('.mode-dd-icon').innerText='⚡';document.querySelector('.mode-dd-label').innerText='Bài Luyện Nhanh';document.getElementById('lblCodeText').innerText='Mã Bài Luyện Nhanh:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Bài Luyện:';document.getElementById('studentExamCode').value=pp.toUpperCase();showToast('📱 Đã nhận mã!','info');if(history.replaceState)history.replaceState({},document.title,location.pathname);}}catch(e){}},1200);
-  setTimeout(()=>{if(!window.db)return;loadSecurityPasswords();loadWelcomeConfig();loadWebConfig();loadDocLibrary();loadRolesCache();loadMedalsCache();window.onValue(window.ref(window.db,'system/broadcast'),snap=>{const d=snap.val(),b=document.getElementById('globalBroadcastBanner'),n=document.getElementById('currentCloudNotice');if(d&&d.text){b.innerText=d.text;b.style.backgroundColor=d.bgColor||'#ff4d4f';b.style.color=d.textColor||'#fff';b.style.opacity=d.opacity||.95;b.style.fontFamily=d.fontFamily||"'Segoe UI',sans-serif";b.style.fontSize=(d.fontSize||16)+'px';b.classList.remove('pos-top','pos-middle','pos-bottom');const p=d.position||'top';if(p==='middle')b.classList.add('pos-middle');else if(p==='bottom')b.classList.add('pos-bottom');else b.classList.add('pos-top');b.style.display='block';if(n)n.innerText=d.text;if(d.durationSec)setTimeout(()=>{b.style.display='none';},d.durationSec*1000);}else{b.style.display='none';if(n)n.innerText='Không có';}});window.onValue(window.ref(window.db,'system/audio'),async snap=>{const d=snap.val(),a=document.getElementById('globalAudioPlayer'),s=document.getElementById('currentAudioStatus');if(!d||!d.audioKey||!d.isPlaying){pendingGlobalAudioPlay=false;a.pause();a.currentTime=0;if(s)s.innerText='Đang tắt';currentLoadedAudioKey=null;return;}if(currentLoadedAudioKey!==d.audioKey){if(s)s.innerText='Đang tải ⏳';const b=await getAudioBlobFromChunks(d.audioKey);if(!b){if(s)s.innerText='Lỗi ❌';return;}audioBlobCache[d.audioKey]=b;a.src=URL.createObjectURL(b);currentLoadedAudioKey=d.audioKey;}tryPlayGlobalAudio();});window.onValue(window.ref(window.db,'users'),snap=>{if(snap.exists())cachedUsers=snap.val();});},800);
+  setTimeout(()=>{if(!window.db)return;loadSecurityPasswords();loadWelcomeConfig();loadWebConfig();loadDocLibrary();loadRolesCache();loadMedalsCache();loadEmailJSConfigFromDB();window.onValue(window.ref(window.db,'system/broadcast'),snap=>{const d=snap.val(),b=document.getElementById('globalBroadcastBanner'),n=document.getElementById('currentCloudNotice');if(d&&d.text){b.innerText=d.text;b.style.backgroundColor=d.bgColor||'#ff4d4f';b.style.color=d.textColor||'#fff';b.style.opacity=d.opacity||.95;b.style.fontFamily=d.fontFamily||"'Segoe UI',sans-serif";b.style.fontSize=(d.fontSize||16)+'px';b.classList.remove('pos-top','pos-middle','pos-bottom');const p=d.position||'top';if(p==='middle')b.classList.add('pos-middle');else if(p==='bottom')b.classList.add('pos-bottom');else b.classList.add('pos-top');b.style.display='block';if(n)n.innerText=d.text;if(d.durationSec)setTimeout(()=>{b.style.display='none';},d.durationSec*1000);}else{b.style.display='none';if(n)n.innerText='Không có';}});window.onValue(window.ref(window.db,'system/audio'),async snap=>{const d=snap.val(),a=document.getElementById('globalAudioPlayer'),s=document.getElementById('currentAudioStatus');if(!d||!d.audioKey||!d.isPlaying){pendingGlobalAudioPlay=false;a.pause();a.currentTime=0;if(s)s.innerText='Đang tắt';currentLoadedAudioKey=null;return;}if(currentLoadedAudioKey!==d.audioKey){if(s)s.innerText='Đang tải ⏳';const b=await getAudioBlobFromChunks(d.audioKey);if(!b){if(s)s.innerText='Lỗi ❌';return;}audioBlobCache[d.audioKey]=b;a.src=URL.createObjectURL(b);currentLoadedAudioKey=d.audioKey;}tryPlayGlobalAudio();});window.onValue(window.ref(window.db,'users'),snap=>{if(snap.exists())cachedUsers=snap.val();});},800);
 });
 async function getAudioBlobFromChunks(key){try{const s=await window.dbGet(window.dbChild(window.dbRef,`system/audio_chunks/${key}`));if(!s.exists())return null;const obj=s.val();const keys=Object.keys(obj).sort((a,b)=>parseInt(a)-parseInt(b));const blobs=[];for(const k of keys){const b=base64ToBlob(obj[k]);if(b)blobs.push(b);}return new Blob(blobs,{type:'audio/mpeg'});}catch(e){return null;}}
 function base64ToBlob(d){try{const p=d.split(','),mime=p[0].match(/:(.*?);/)[1],bstr=atob(p[1]),n=bstr.length,u=new Uint8Array(n);for(let i=0;i<n;i++)u[i]=bstr.charCodeAt(i);return new Blob([u],{type:mime});}catch(e){return null;}}
