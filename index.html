@@ -4513,90 +4513,14 @@ body[data-fx-level="ultra"] .home-hero {
 body[data-fx-level="ultra"] .btn { box-shadow: 0 0 20px rgba(24,119,242,.5); }
 body[data-fx-level="ultra"] .card:hover { box-shadow: 0 0 40px rgba(24,119,242,.4); }
 
-/* ============ UI FX LAYER (nâng cấp hiệu ứng nền theo theme) ============ */
-#uiFxLayer {
-  position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+/* ============ UI FX 3D LAYER (canvas, hieu ung chieu sau that) ============ */
+#uiFxCanvas {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  display: none;
 }
 .navbar, .container { position: relative; z-index: 2; }
-
-/* ---- Glass: quét sáng + orb mờ trôi nổi ---- */
-.fx-glass-orb {
-  position: absolute; border-radius: 50%; filter: blur(2px);
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), rgba(120,180,255,.05) 70%);
-  animation: fxGlassFloat linear infinite;
-  opacity: .55;
-}
-@keyframes fxGlassFloat {
-  0%   { transform: translate3d(0,110vh,0) scale(.8); opacity: 0; }
-  10%  { opacity: .55; }
-  90%  { opacity: .5; }
-  100% { transform: translate3d(20px,-15vh,0) scale(1.15); opacity: 0; }
-}
-.fx-glass-sweep {
-  position: absolute; top: 0; left: -40%; width: 35%; height: 100%;
-  background: linear-gradient(100deg, transparent, rgba(255,255,255,.10) 45%, rgba(255,255,255,.22) 50%, rgba(255,255,255,.10) 55%, transparent);
-  animation: fxGlassSweep 7s ease-in-out infinite;
-}
-@keyframes fxGlassSweep { 0%,100% { left: -40%; } 50% { left: 110%; } }
-
-/* ---- Weather: mưa rơi + mây trôi ---- */
-.fx-rain {
-  position: absolute; top: -10%; width: 1px; height: 60px;
-  background: linear-gradient(180deg, transparent, rgba(255,255,255,.65));
-  animation: fxRainFall linear infinite;
-}
-@keyframes fxRainFall { 0% { transform: translateY(0); opacity: .8; } 100% { transform: translateY(115vh); opacity: .3; } }
-.fx-cloud {
-  position: absolute; border-radius: 50%; background: rgba(255,255,255,.18); filter: blur(14px);
-  animation: fxCloudDrift linear infinite;
-}
-@keyframes fxCloudDrift { 0% { transform: translateX(-15vw); } 100% { transform: translateX(115vw); } }
-
-/* ---- Nature: lá rơi xoay nhẹ ---- */
-.fx-leaf {
-  position: absolute; top: -8%; font-size: 20px;
-  animation: fxLeafFall linear infinite;
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,.15));
-}
-@keyframes fxLeafFall {
-  0%   { transform: translate3d(0,0,0) rotate(0deg); opacity: 0; }
-  8%   { opacity: .9; }
-  50%  { transform: translate3d(30px,55vh,0) rotate(180deg); }
-  92%  { opacity: .85; }
-  100% { transform: translate3d(-15px,112vh,0) rotate(360deg); opacity: 0; }
-}
-
-/* ---- Fantasy: hạt phép thuật bay lên lấp lánh ---- */
-.fx-spark {
-  position: absolute; bottom: -5%; border-radius: 50%;
-  background: radial-gradient(circle, #f3e5ff, #ba68c8 60%, transparent 75%);
-  box-shadow: 0 0 10px 2px rgba(186,104,200,.85);
-  animation: fxSparkRise linear infinite;
-}
-@keyframes fxSparkRise {
-  0%   { transform: translate3d(0,0,0) scale(.4); opacity: 0; }
-  10%  { opacity: 1; }
-  100% { transform: translate3d(var(--fx-drift,20px),-110vh,0) scale(1); opacity: 0; }
-}
-
-/* ---- Cosmic: sao băng lướt qua ---- */
-.fx-shootingstar {
-  position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%;
-  box-shadow: 0 0 6px 2px #fff;
-  animation: fxShoot linear infinite;
-}
-.fx-shootingstar::before {
-  content: ''; position: absolute; top: 0; right: 0; width: 90px; height: 1px;
-  background: linear-gradient(90deg, #fff, transparent); transform-origin: right center; transform: rotate(200deg);
-}
-@keyframes fxShoot {
-  0%   { transform: translate3d(0,0,0); opacity: 0; }
-  4%   { opacity: 1; }
-  18%  { transform: translate3d(-38vw,38vh,0); opacity: 0; }
-  100% { opacity: 0; }
-}
 @media (prefers-reduced-motion: reduce) {
-  #uiFxLayer { display: none !important; }
+  #uiFxCanvas { display: none !important; }
 }
   </style>
 </head>
@@ -7755,75 +7679,108 @@ function applyUITheme(theme) {
   spawnUIFx(theme);
 }
 
-/* ---------- UI FX LAYER (particle nâng cấp theo theme) ---------- */
+/* ---------- UI FX 3D ENGINE (canvas, chieu sau perspective that) ---------- */
+const fx3D = { canvas: null, ctx: null, particles: [], raf: null, w: 0, h: 0, mx: 0, my: 0, theme: null };
+const FX_THEMES = {
+  glass:   { count: 55,  color: [200,225,255], shape: 'orb',    mode: 'warp', speed: 1.6, glow: true  },
+  weather: { count: 150, color: [210,230,255], shape: 'streak', mode: 'fall', speed: 3.2, glow: false },
+  nature:  { count: 45,  color: [110,190,110], shape: 'leaf',   mode: 'fall', speed: 0.7, glow: false },
+  fantasy: { count: 80,  color: [230,150,255], shape: 'spark',  mode: 'rise', speed: 1.1, glow: true  },
+  cosmic:  { count: 240, color: [255,255,255], shape: 'star',   mode: 'warp', speed: 2.6, glow: true  }
+};
+function ensureFxCanvas() {
+  let c = document.getElementById('uiFxCanvas');
+  if (!c) {
+    c = document.createElement('canvas');
+    c.id = 'uiFxCanvas';
+    document.body.insertBefore(c, document.body.firstChild);
+    fx3D.canvas = c; fx3D.ctx = c.getContext('2d');
+    const resize = () => { c.width = innerWidth; c.height = innerHeight; fx3D.w = innerWidth; fx3D.h = innerHeight; };
+    resize();
+    addEventListener('resize', resize);
+    addEventListener('pointermove', e => {
+      fx3D.mx = (e.clientX / innerWidth - 0.5);
+      fx3D.my = (e.clientY / innerHeight - 0.5);
+    }, { passive: true });
+  }
+  return c;
+}
+function fxMakeParticle(cfg, h) {
+  const z = Math.random() * 1000 + 1;
+  return {
+    x: (Math.random() - 0.5) * 2200,
+    y: cfg.mode === 'fall' ? -Math.random() * h * 2 - 50 : (cfg.mode === 'rise' ? h + Math.random() * h : (Math.random() - 0.5) * 2200),
+    z, vy: cfg.speed * (0.6 + Math.random() * 0.8),
+    drift: (Math.random() - 0.5) * 0.7,
+    rot: Math.random() * Math.PI * 2, rotV: (Math.random() - 0.5) * 0.03
+  };
+}
 function spawnUIFx(theme) {
-  let layer = document.getElementById('uiFxLayer');
-  if (!layer) {
-    layer = document.createElement('div');
-    layer.id = 'uiFxLayer';
-    document.body.insertBefore(layer, document.body.firstChild);
+  cancelAnimationFrame(fx3D.raf);
+  const canvas = ensureFxCanvas();
+  const cfg = FX_THEMES[theme];
+  canvas.style.display = cfg ? 'block' : 'none';
+  fx3D.theme = theme; fx3D.particles = [];
+  if (!cfg) return;
+  for (let i = 0; i < cfg.count; i++) fx3D.particles.push(fxMakeParticle(cfg, fx3D.h || innerHeight));
+  const FOCAL = 320;
+  function loop() {
+    const ctx = fx3D.ctx;
+    if (!ctx || !fx3D.w) { fx3D.raf = requestAnimationFrame(loop); return; }
+    ctx.clearRect(0, 0, fx3D.w, fx3D.h);
+    const cx = fx3D.w / 2, cy = fx3D.h / 2;
+    const [r, g, b] = cfg.color;
+    for (const p of fx3D.particles) {
+      if (cfg.mode === 'warp') {
+        p.z -= cfg.speed * 5;
+        if (p.z < 1) { p.z = 1000; p.x = (Math.random() - 0.5) * 2200; p.y = (Math.random() - 0.5) * 2200; }
+      } else if (cfg.mode === 'fall') {
+        p.y += p.vy * (0.4 + (1000 - p.z) / 1000);
+        p.x += p.drift + fx3D.mx * 1.5;
+        if (p.y - (1000 - p.z) / 4 > fx3D.h + 60) { p.y = -60; p.x = (Math.random() - 0.5) * 2200; }
+      } else if (cfg.mode === 'rise') {
+        p.y -= cfg.speed * (0.4 + (1000 - p.z) / 1000);
+        p.x += p.drift; p.z -= 0.5;
+        if (p.y < -60 || p.z < 1) { p.z = Math.random() * 1000 + 1; p.y = fx3D.h + 40; p.x = (Math.random() - 0.5) * 2200; }
+      }
+      p.rot += p.rotV;
+      const scale = FOCAL / (FOCAL + p.z);
+      const sx = cx + p.x * scale + fx3D.mx * 50 * scale;
+      const sy = (cfg.mode === 'warp' ? cy + p.y * scale : p.y) + fx3D.my * 50 * scale;
+      if (sx < -50 || sx > fx3D.w + 50 || sy < -80 || sy > fx3D.h + 80) continue;
+      const baseSize = cfg.shape === 'streak' ? 2.6 : cfg.shape === 'star' ? 2.2 : cfg.shape === 'leaf' ? 11 : cfg.shape === 'spark' ? 3.4 : 9;
+      const size = Math.max(0.5, scale * baseSize);
+      const alpha = Math.min(1, scale * 1.35);
+      ctx.save(); ctx.globalAlpha = alpha;
+      if (cfg.shape === 'streak') {
+        ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+        ctx.lineWidth = size * 0.6; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(sx, sy);
+        ctx.lineTo(sx - fx3D.mx * 14, sy - size * 9); ctx.stroke();
+      } else if (cfg.shape === 'star') {
+        if (cfg.glow) { ctx.shadowColor = `rgba(${r},${g},${b},.9)`; ctx.shadowBlur = size * 3; }
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+        ctx.beginPath(); ctx.arc(sx, sy, size, 0, 7); ctx.fill();
+      } else if (cfg.shape === 'orb') {
+        const grad = ctx.createRadialGradient(sx, sy, 0, sx, sy, size * 3.4);
+        grad.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.9})`);
+        grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(sx, sy, size * 3.4, 0, 7); ctx.fill();
+      } else if (cfg.shape === 'leaf') {
+        ctx.translate(sx, sy); ctx.rotate(p.rot);
+        ctx.fillStyle = `rgba(${r + 25},${g},${b - 10},${alpha})`;
+        ctx.beginPath(); ctx.ellipse(0, 0, size * 0.55, size, 0, 0, 7); ctx.fill();
+      } else if (cfg.shape === 'spark') {
+        if (cfg.glow) { ctx.shadowColor = `rgba(${r},${g},${b},1)`; ctx.shadowBlur = size * 4.5; }
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+        ctx.beginPath(); ctx.arc(sx, sy, size * 0.5, 0, 7); ctx.fill();
+      }
+      ctx.restore();
+    }
+    fx3D.raf = requestAnimationFrame(loop);
   }
-  layer.innerHTML = '';
-  if (!theme || theme === 'default') return;
-  const rnd = (a, b) => a + Math.random() * (b - a);
-  const frag = document.createDocumentFragment();
-
-  if (theme === 'glass') {
-    for (let i = 0; i < 10; i++) {
-      const o = document.createElement('div');
-      o.className = 'fx-glass-orb';
-      const size = rnd(40, 130);
-      o.style.cssText = `width:${size}px;height:${size}px;left:${rnd(0,100)}%;
-        animation-duration:${rnd(14,26)}s;animation-delay:-${rnd(0,20)}s;`;
-      frag.appendChild(o);
-    }
-    const sweep = document.createElement('div');
-    sweep.className = 'fx-glass-sweep';
-    frag.appendChild(sweep);
-  } else if (theme === 'weather') {
-    for (let i = 0; i < 55; i++) {
-      const r = document.createElement('div');
-      r.className = 'fx-rain';
-      r.style.cssText = `left:${rnd(0,100)}%;animation-duration:${rnd(.6,1.3)}s;animation-delay:-${rnd(0,2)}s;`;
-      frag.appendChild(r);
-    }
-    for (let i = 0; i < 5; i++) {
-      const c = document.createElement('div');
-      c.className = 'fx-cloud';
-      const w = rnd(160,320);
-      c.style.cssText = `width:${w}px;height:${w*.4}px;top:${rnd(2,20)}%;
-        animation-duration:${rnd(40,70)}s;animation-delay:-${rnd(0,50)}s;`;
-      frag.appendChild(c);
-    }
-  } else if (theme === 'nature') {
-    const leaves = ['🍃','🍂','🌿'];
-    for (let i = 0; i < 16; i++) {
-      const l = document.createElement('div');
-      l.className = 'fx-leaf';
-      l.textContent = leaves[i % leaves.length];
-      l.style.cssText = `left:${rnd(0,100)}%;font-size:${rnd(14,24)}px;
-        animation-duration:${rnd(9,18)}s;animation-delay:-${rnd(0,16)}s;`;
-      frag.appendChild(l);
-    }
-  } else if (theme === 'fantasy') {
-    for (let i = 0; i < 30; i++) {
-      const s = document.createElement('div');
-      s.className = 'fx-spark';
-      const size = rnd(3,7);
-      s.style.cssText = `left:${rnd(0,100)}%;width:${size}px;height:${size}px;
-        --fx-drift:${rnd(-40,40)}px;animation-duration:${rnd(5,11)}s;animation-delay:-${rnd(0,10)}s;`;
-      frag.appendChild(s);
-    }
-  } else if (theme === 'cosmic') {
-    for (let i = 0; i < 6; i++) {
-      const st = document.createElement('div');
-      st.className = 'fx-shootingstar';
-      st.style.cssText = `top:${rnd(0,45)}%;left:${rnd(50,100)}%;
-        animation-duration:${rnd(4,8)}s;animation-delay:-${rnd(0,12)}s;`;
-      frag.appendChild(st);
-    }
-  }
-  layer.appendChild(frag);
+  loop();
 }
 async function saveUITheme() {
   try {
