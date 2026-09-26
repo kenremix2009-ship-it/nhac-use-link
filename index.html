@@ -4210,6 +4210,308 @@
   .home-grid, .home-grid.wide { grid-template-columns: 1fr; }
   .home-hero { padding: 32px 20px; }
 }
+/* ============ EXPANDABLE SUPREME SECTIONS ============ */
+.supreme-section {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: all .25s;
+}
+.supreme-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #f8f9fa, #eef2f7);
+  cursor: pointer;
+  user-select: none;
+  font-weight: 700;
+  font-size: 14px;
+  color: #1877f2;
+  border-left: 4px solid #1877f2;
+}
+.supreme-section-header:hover { background: linear-gradient(135deg, #e7f3ff, #dbeaff); }
+.supreme-section-toggle {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #1877f2; color: #fff; border: none;
+  font-size: 15px; font-weight: 900; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .3s;
+  flex-shrink: 0;
+}
+.supreme-section.open .supreme-section-toggle { transform: rotate(180deg); }
+.supreme-section-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s ease, padding .3s ease;
+  padding: 0 14px;
+}
+.supreme-section.open .supreme-section-body {
+  max-height: 5000px;
+  padding: 14px;
+}
+
+/* ============ UI THEME SWITCHER ============ */
+.ui-switch-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px; margin-top: 10px;
+}
+.ui-switch-item {
+  padding: 14px 10px; border-radius: 14px; text-align: center;
+  border: 2px solid #e0e0e0; background: #fff;
+  cursor: pointer; transition: all .25s; font-size: 12px; font-weight: 700;
+}
+.ui-switch-item:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.ui-switch-item.active { border-color: #198754; background: #e7ffee; box-shadow: 0 0 15px rgba(25,135,84,.35); }
+.ui-switch-item .ui-icon { font-size: 34px; line-height: 1; display: block; margin-bottom: 6px; }
+
+/* ============ FX LEVEL SWITCHER ============ */
+.fx-level-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px; margin-top: 10px;
+}
+.fx-level-item {
+  padding: 14px; border-radius: 14px; text-align: center;
+  border: 2px solid #e0e0e0; background: #fff;
+  cursor: pointer; transition: all .25s; font-size: 12.5px; font-weight: 700;
+}
+.fx-level-item:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.fx-level-item.active { border-color: #6f42c1; background: #f3e8ff; color: #6f42c1; box-shadow: 0 0 15px rgba(111,66,193,.35); }
+
+/* ============ CONTENT EDITOR BOXES ============ */
+.content-editor-box {
+  background: #fff; border: 2px solid #e0e0e0; border-radius: 14px;
+  padding: 16px; margin-bottom: 12px;
+}
+.content-editor-box label {
+  font-weight: 800; color: #1877f2; font-size: 13px;
+  display: block; margin-bottom: 8px;
+}
+.content-editor-box textarea {
+  width: 100%; min-height: 100px; border: 2px solid #e0e0e0;
+  border-radius: 10px; padding: 10px; font-size: 13px; resize: vertical;
+  box-sizing: border-box;
+}
+.content-editor-box textarea:focus {
+  outline: none; border-color: #1877f2; box-shadow: 0 0 0 4px rgba(24,119,242,.15);
+}
+
+/* ============ TOGGLE SWITCH ============ */
+.toggle-switch {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; background: #f8f9fa; border-radius: 12px;
+  margin-bottom: 10px; font-size: 13.5px; font-weight: 600;
+}
+.toggle-switch input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 48px; height: 26px; border-radius: 13px;
+  background: #ccc; position: relative; cursor: pointer; margin: 0; padding: 0;
+  transition: background .3s; flex-shrink: 0;
+}
+.toggle-switch input[type="checkbox"]:checked { background: #198754; }
+.toggle-switch input[type="checkbox"]::before {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px; border-radius: 50%; background: #fff;
+  transition: left .3s; box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+.toggle-switch input[type="checkbox"]:checked::before { left: 25px; }
+
+/* ============ VOLUME CONTROL ============ */
+.volume-control {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px; background: #f8f9fa; border-radius: 12px;
+  margin-bottom: 10px;
+}
+.volume-control input[type="range"] {
+  flex: 1; margin: 0; padding: 0;
+  height: 8px; border-radius: 4px;
+  -webkit-appearance: none; appearance: none;
+  background: linear-gradient(90deg,#1877f2,#198754);
+  outline: none;
+}
+.volume-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; border: 3px solid #1877f2; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(24,119,242,.4);
+}
+.volume-control input[type="range"]::-moz-range-thumb {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; border: 3px solid #1877f2; cursor: pointer;
+}
+.volume-value {
+  min-width: 48px; text-align: center;
+  font-weight: 900; color: #1877f2; font-size: 15px;
+}
+
+/* ============ UI THEMES (áp dụng cho body) ============ */
+body.ui-glass {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+}
+body.ui-glass .navbar {
+  background: rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+body.ui-glass .card {
+  background: rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255,255,255,.15);
+  color: #e7f3ff;
+}
+body.ui-glass .card h2, body.ui-glass .card h3, body.ui-glass .card h4 { color: #7ac0ff; }
+body.ui-glass label { color: #b8d4ff; }
+body.ui-glass input, body.ui-glass select, body.ui-glass textarea {
+  background: rgba(255,255,255,.1) !important;
+  border: 1px solid rgba(255,255,255,.25) !important;
+  color: #fff;
+}
+body.ui-glass .nav-tabs button { color: #c8d8f0; }
+body.ui-glass .nav-tabs button.active,
+body.ui-glass .nav-tabs button:hover {
+  background: linear-gradient(135deg, #1877f2, #0d5fd6);
+  box-shadow: 0 0 20px rgba(24,119,242,.6);
+}
+
+body.ui-weather {
+  background: linear-gradient(180deg, #1565c0 0%, #4a90d9 40%, #81d4fa 100%);
+  min-height: 100vh;
+}
+body.ui-weather .navbar {
+  background: linear-gradient(135deg, #0d47a1, #1976d2) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+body.ui-weather .card {
+  background: rgba(255,255,255,.95) !important;
+  border: 1px solid rgba(255,255,255,.8);
+  box-shadow: 0 10px 30px rgba(21,101,192,.25);
+}
+body.ui-weather .home-hero {
+  background: linear-gradient(135deg, #1565c0, #81d4fa) !important;
+}
+body.ui-weather .nav-tabs button.active {
+  background: linear-gradient(135deg, #0288d1, #01579b) !important;
+}
+
+body.ui-nature {
+  background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 40%, #a5d6a7 100%);
+  min-height: 100vh;
+}
+body.ui-nature .navbar {
+  background: linear-gradient(135deg, #1b5e20, #43a047) !important;
+}
+body.ui-nature .card {
+  background: rgba(255,255,255,.96) !important;
+  border: 1px solid rgba(67,160,71,.25);
+  box-shadow: 0 8px 24px rgba(27,94,32,.15);
+}
+body.ui-nature .home-hero {
+  background: linear-gradient(135deg, #2e7d32, #81c784) !important;
+}
+body.ui-nature .nav-tabs button.active {
+  background: linear-gradient(135deg, #43a047, #1b5e20) !important;
+}
+
+body.ui-fantasy {
+  background: radial-gradient(circle at 20% 30%, #2a1a4a 0%, #1a0d2e 40%, #0d0518 100%);
+  min-height: 100vh;
+}
+body.ui-fantasy .navbar {
+  background: linear-gradient(135deg, #4a148c, #6a1b9a) !important;
+  box-shadow: 0 0 30px rgba(156,39,176,.5);
+}
+body.ui-fantasy .card {
+  background: rgba(30,15,60,.85) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(186,104,200,.4);
+  color: #e1bee7;
+  box-shadow: 0 0 30px rgba(156,39,176,.3);
+}
+body.ui-fantasy .card h2, body.ui-fantasy .card h3 { color: #e1bee7; text-shadow: 0 0 15px #ba68c8; }
+body.ui-fantasy label { color: #ce93d8; }
+body.ui-fantasy input, body.ui-fantasy select, body.ui-fantasy textarea {
+  background: rgba(60,30,100,.6) !important;
+  border: 1px solid rgba(186,104,200,.5) !important;
+  color: #f3e5f5;
+}
+body.ui-fantasy .nav-tabs button.active {
+  background: linear-gradient(135deg, #7b1fa2, #4a148c) !important;
+  box-shadow: 0 0 25px rgba(156,39,176,.8);
+}
+
+body.ui-cosmic {
+  background: radial-gradient(ellipse at top, #0b1026 0%, #050816 50%, #000 100%);
+  min-height: 100vh;
+  position: relative;
+}
+body.ui-cosmic::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 30% 60%, #fff, transparent),
+    radial-gradient(2px 2px at 50% 40%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 90% 30%, #fff, transparent),
+    radial-gradient(2px 2px at 15% 90%, #fff, transparent),
+    radial-gradient(1px 1px at 65% 15%, #fff, transparent);
+  background-size: 200px 200px, 300px 300px, 250px 250px, 180px 180px, 220px 220px, 280px 280px, 240px 240px;
+  animation: cosmicDrift 60s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .7;
+}
+@keyframes cosmicDrift {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 200px 200px, -300px 300px, 250px -250px, -180px -180px, 220px 220px, -280px 280px, 240px -240px; }
+}
+body.ui-cosmic .navbar {
+  background: rgba(5,8,22,.9) !important;
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(100,150,255,.3);
+  box-shadow: 0 0 40px rgba(70,100,255,.3);
+}
+body.ui-cosmic .card {
+  background: rgba(10,15,35,.85) !important;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(100,150,255,.25);
+  color: #c8d8ff;
+  box-shadow: 0 0 30px rgba(70,100,255,.2);
+}
+body.ui-cosmic .card h2, body.ui-cosmic .card h3 { color: #7ac0ff; text-shadow: 0 0 12px #4a9eff; }
+body.ui-cosmic label { color: #a8c8ff; }
+body.ui-cosmic input, body.ui-cosmic select, body.ui-cosmic textarea {
+  background: rgba(20,30,60,.7) !important;
+  border: 1px solid rgba(100,150,255,.4) !important;
+  color: #e0ecff;
+}
+body.ui-cosmic .nav-tabs button.active {
+  background: linear-gradient(135deg, #4a9eff, #0d5fd6) !important;
+  box-shadow: 0 0 25px rgba(74,158,255,.8);
+}
+
+/* ============ FX LEVEL (data-fx-level) ============ */
+body[data-fx-level="cute"] .card { border-radius: 20px; }
+body[data-fx-level="cute"] .btn { border-radius: 14px; }
+body[data-fx-level="cute"] .home-info { border-radius: 22px; }
+
+body[data-fx-level="realistic"] .home-hero { box-shadow: 0 25px 60px rgba(0,0,0,.35); }
+body[data-fx-level="realistic"] .card { box-shadow: 0 12px 35px rgba(0,0,0,.12); }
+
+body[data-fx-level="fantasy"] .home-hero {
+  background: linear-gradient(135deg, #4a148c, #7b1fa2, #ba68c8) !important;
+  box-shadow: 0 0 40px rgba(186,104,200,.6);
+}
+body[data-fx-level="fantasy"] .card { box-shadow: 0 0 25px rgba(186,104,200,.3); }
+
+body[data-fx-level="ultra"] .home-hero {
+  background: linear-gradient(135deg, #ff0080, #7928ca, #4a9eff) !important;
+  box-shadow: 0 0 60px rgba(120,40,202,.6);
+}
+body[data-fx-level="ultra"] .btn { box-shadow: 0 0 20px rgba(24,119,242,.5); }
+body[data-fx-level="ultra"] .card:hover { box-shadow: 0 0 40px rgba(24,119,242,.4); }
   </style>
 </head>
 
@@ -5480,11 +5782,11 @@
       <div class="card" style="border:2px solid #ffc107">
         <h2 style="color:#d32f2f;margin-bottom:15px">👑 KHU VỰC TỐI CAO</h2>
         <div class="supreme-tabs">
-          <div class="supreme-tab active" onclick="switchSupremeTab('accounts', this)">👥 Quản Lí Tài Khoản</div>
-          <div class="supreme-tab" onclick="switchSupremeTab('system', this)">⚙️ Quản Trị Hệ Thống</div>
-          <div class="supreme-tab" onclick="switchSupremeTab('config', this)">🔧 Cấu Hình</div>
-        </div>
-
+  <div class="supreme-tab active" onclick="switchSupremeTab('accounts', this)">👥 Quản Lí Tài Khoản</div>
+  <div class="supreme-tab" onclick="switchSupremeTab('system', this)">⚙️ Quản Trị Hệ Thống</div>
+  <div class="supreme-tab" onclick="switchSupremeTab('interface', this)">🎨 Tùy Chỉnh Giao Diện</div>
+  <div class="supreme-tab" onclick="switchSupremeTab('config', this)">🔧 Cấu Hình</div>
+</div>
         <div id="supremeTabAccounts">
           <div style="background:#f0f8ff;border:1px dashed #6f42c1;padding:12px;border-radius:8px;margin-bottom:15px">
             <p style="font-size:12px;color:#666;margin-bottom:10px">🔒 Nhập tên đăng nhập bất kỳ + mật khẩu VUA:</p>
@@ -5711,7 +6013,120 @@
                 onclick="previewWelcome()">👁️ Xem Trước</button></div>
           </div>
         </div>
+        <!-- ================== TAB: TÙY CHỈNH GIAO DIỆN ================== -->
+        <div id="supremeTabInterface" style="display:none">
+          
+          <!-- 1. UI THEME -->
+          <div class="supreme-section open" id="secUITheme">
+            <div class="supreme-section-header" onclick="toggleSupremeSection('secUITheme')">
+              <span>🎨 Đổi Giao Diện (UI)</span>
+              <button class="supreme-section-toggle" onclick="event.stopPropagation();toggleSupremeSection('secUITheme')">^</button>
+            </div>
+            <div class="supreme-section-body">
+              <p style="font-size:12px;color:#666;margin-bottom:10px">Chọn phong cách giao diện cho toàn bộ website:</p>
+              <div class="ui-switch-grid">
+                <div class="ui-switch-item active" data-ui="default" onclick="setUITheme('default', this)">
+                  <span class="ui-icon">🎯</span>Cơ Bản
+                </div>
+                <div class="ui-switch-item" data-ui="glass" onclick="setUITheme('glass', this)">
+                  <span class="ui-icon">💎</span>Glass UI
+                </div>
+                <div class="ui-switch-item" data-ui="weather" onclick="setUITheme('weather', this)">
+                  <span class="ui-icon">🌤️</span>Weather UI
+                </div>
+                <div class="ui-switch-item" data-ui="nature" onclick="setUITheme('nature', this)">
+                  <span class="ui-icon">🌿</span>Nature UI
+                </div>
+                <div class="ui-switch-item" data-ui="fantasy" onclick="setUITheme('fantasy', this)">
+                  <span class="ui-icon">🔮</span>Fantasy UI
+                </div>
+                <div class="ui-switch-item" data-ui="cosmic" onclick="setUITheme('cosmic', this)">
+                  <span class="ui-icon">🌌</span>Cosmic UI
+                </div>
+              </div>
+              <button class="btn btn-success" style="margin-top:12px" onclick="saveUITheme()">💾 Lưu Giao Diện</button>
+            </div>
+          </div>
 
+          <!-- 2. FX LEVEL -->
+          <div class="supreme-section" id="secFXLevel">
+            <div class="supreme-section-header" onclick="toggleSupremeSection('secFXLevel')">
+              <span>✨ Cấp Độ Hiệu Ứng</span>
+              <button class="supreme-section-toggle" onclick="event.stopPropagation();toggleSupremeSection('secFXLevel')">^</button>
+            </div>
+            <div class="supreme-section-body">
+              <p style="font-size:12px;color:#666;margin-bottom:10px">Chọn phong cách hiệu ứng chuyển động:</p>
+              <div class="fx-level-grid">
+                <div class="fx-level-item active" data-fx="default" onclick="setFXLevel('default', this)">🎯 Cơ Bản</div>
+                <div class="fx-level-item" data-fx="cute" onclick="setFXLevel('cute', this)">🧸 Cute</div>
+                <div class="fx-level-item" data-fx="realistic" onclick="setFXLevel('realistic', this)">🎬 Realistic</div>
+                <div class="fx-level-item" data-fx="fantasy" onclick="setFXLevel('fantasy', this)">🐉 Fantasy</div>
+                <div class="fx-level-item" data-fx="ultra" onclick="setFXLevel('ultra', this)">⚡ Ultra</div>
+              </div>
+              <button class="btn btn-success" style="margin-top:12px" onclick="saveFXLevel()">💾 Lưu Cấp Hiệu Ứng</button>
+            </div>
+          </div>
+
+          <!-- 3. CONTENT EDITOR -->
+          <div class="supreme-section" id="secHomeContent">
+            <div class="supreme-section-header" onclick="toggleSupremeSection('secHomeContent')">
+              <span>📝 Tùy Chỉnh Nội Dung Trang Chủ</span>
+              <button class="supreme-section-toggle" onclick="event.stopPropagation();toggleSupremeSection('secHomeContent')">^</button>
+            </div>
+            <div class="supreme-section-body">
+              <div class="content-editor-box">
+                <label>💡 Ô 1 — Giới thiệu Website</label>
+                <textarea id="cfgAboutText" placeholder="Giới thiệu về website..."></textarea>
+              </div>
+              <div class="content-editor-box">
+                <label>📈 Ô 2 — Xu hướng người dùng</label>
+                <textarea id="cfgTrendText" placeholder="Mô tả xu hướng người dùng..."></textarea>
+              </div>
+              <div class="content-editor-box">
+                <label>📢 Ô 3 — Thông báo cập nhật</label>
+                <textarea id="cfgUpdateNotice" placeholder="Thông báo cập nhật phiên bản..."></textarea>
+              </div>
+
+              <div class="toggle-switch">
+                <span>👥 Hiển thị số người đang online</span>
+                <input type="checkbox" id="cfgShowOnline" checked>
+              </div>
+              <div class="toggle-switch">
+                <span>📊 Hiển thị tổng số người đã tham gia</span>
+                <input type="checkbox" id="cfgShowTotal" checked>
+              </div>
+              <div class="toggle-switch">
+                <span>📢 Hiển thị banner thông báo cập nhật</span>
+                <input type="checkbox" id="cfgShowUpdateBanner">
+              </div>
+
+              <button class="btn btn-success" style="margin-top:10px" onclick="saveHomeContent()">💾 Lưu Nội Dung</button>
+            </div>
+          </div>
+
+          <!-- 4. MUSIC VOLUME -->
+          <div class="supreme-section" id="secMusicVolume">
+            <div class="supreme-section-header" onclick="toggleSupremeSection('secMusicVolume')">
+              <span>🎵 Điều Chỉnh Âm Lượng Nhạc</span>
+              <button class="supreme-section-toggle" onclick="event.stopPropagation();toggleSupremeSection('secMusicVolume')">^</button>
+            </div>
+            <div class="supreme-section-body">
+              <div class="volume-control">
+                <span style="font-size:22px">🔊</span>
+                <input type="range" id="musicVolumeSlider" min="0" max="100" value="70" oninput="onVolumeChange(this.value)">
+                <span class="volume-value" id="musicVolumeValue">70%</span>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                <button class="btn btn-warning" style="width:auto;padding:8px 16px" onclick="toggleMuteMusic()">
+                  <span id="muteBtnLabel">🔇 Tắt Nhạc</span>
+                </button>
+                <button class="btn btn-success" style="width:auto;padding:8px 16px" onclick="saveVolume()">💾 Lưu Âm Lượng</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- ============ END TAB: TÙY CHỈNH GIAO DIỆN ============ -->
         <div id="supremeTabConfig" style="display:none">
 
           <div id="configGate" class="config-gate">
@@ -6661,20 +7076,23 @@
         } else showToast('❌ Sai mật khẩu!', 'error');
       }
       function switchSupremeTab(tab, el) {
-        document.querySelectorAll('.supreme-tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        document.getElementById('supremeTabAccounts').style.display = tab === 'accounts' ? 'block' : 'none';
-        document.getElementById('supremeTabSystem').style.display = tab === 'system' ? 'block' : 'none';
-        document.getElementById('supremeTabConfig').style.display = tab === 'config' ? 'block' : 'none';
-        if (tab === 'accounts' && accMgmtUnlocked) loadAllUsers();
-        if (tab === 'system') {loadEmailJSConfigFromDB();}
-        if (tab === 'config') {
-          configTabUnlocked = false;
-          document.getElementById('configGate').style.display = 'block';
-          document.getElementById('configPanel').style.display = 'none';
-          document.getElementById('configVuaPass').value = '';
-        }
-      }
+  document.querySelectorAll('.supreme-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('supremeTabAccounts').style.display = tab === 'accounts' ? 'block' : 'none';
+  document.getElementById('supremeTabSystem').style.display = tab === 'system' ? 'block' : 'none';
+  const ifaceTab = document.getElementById('supremeTabInterface');
+  if (ifaceTab) ifaceTab.style.display = tab === 'interface' ? 'block' : 'none';
+  document.getElementById('supremeTabConfig').style.display = tab === 'config' ? 'block' : 'none';
+  if (tab === 'accounts' && accMgmtUnlocked) loadAllUsers();
+  if (tab === 'system') { loadEmailJSConfigFromDB(); }
+  if (tab === 'interface') { loadHomeConfig(); loadUIAndFXConfig(); }
+  if (tab === 'config') {
+    configTabUnlocked = false;
+    document.getElementById('configGate').style.display = 'block';
+    document.getElementById('configPanel').style.display = 'none';
+    document.getElementById('configVuaPass').value = '';
+  }
+}
       async function unlockAccountManagement() {const username = document.getElementById('accMgmtUsername').value.trim(), pass = document.getElementById('accMgmtVuaPass').value.trim(); if (!username) {showToast('Nhập tên đăng nhập!', 'error'); return;} if (pass !== VUA_PASSWORD) {showToast('❌ Mật khẩu VUA không đúng!', 'error'); return;} accMgmtUnlocked = true; document.getElementById('accMgmtPanel').style.display = 'block'; document.getElementById('accMgmtVuaPass').value = ''; await loadRolesCache(); await loadMedalsCache(); loadAllUsers(); showToast('🔓 Đã mở khóa!', 'success');}
       async function loadAllUsers() {if (!accMgmtUnlocked) return; const c = document.getElementById('accUserListContainer'); c.innerHTML = '<p style="text-align:center;color:#888;padding:20px 0">⏳ Đang tải...</p>'; try {await loadRolesCache(); await loadMedalsCache(); const s = await window.dbGet(window.dbChild(window.dbRef, 'users')); cachedUsers = s.val() || {}; filterAccList();} catch (e) {c.innerHTML = '<p style="color:#dc3545">Lỗi: ' + (e.message || e) + '</p>';} }
       function filterAccList() {
@@ -7219,6 +7637,144 @@ window.applyUserSession = async function(u) {
   startOnlineHeartbeat();
   return r;
 };
+/* ====================================================================
+   TAB TÙY CHỈNH GIAO DIỆN — UI THEMES, FX LEVELS, VOLUME, HOME CONTENT
+   ==================================================================== */
+
+let currentUITheme = 'default';
+let currentFXLevel = 'default';
+let musicVolume = 0.7;
+let isMusicMuted = false;
+
+/* ---------- Expand / Collapse Supreme Sections ---------- */
+function toggleSupremeSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+/* ---------- UI THEME ---------- */
+async function setUITheme(theme, el) {
+  document.querySelectorAll('.ui-switch-item').forEach(x => x.classList.remove('active'));
+  if (el) el.classList.add('active');
+  currentUITheme = theme;
+  applyUITheme(theme);
+  try {
+    await window.dbSet(window.ref(window.db, 'system/ui_config/theme'), theme);
+    showToast('🎨 Đã đổi giao diện: ' + theme.toUpperCase(), 'success');
+  } catch (e) { showToast('⚠️ Lỗi lưu giao diện', 'warn'); }
+}
+function applyUITheme(theme) {
+  document.body.classList.remove('ui-glass','ui-weather','ui-nature','ui-fantasy','ui-cosmic');
+  if (theme && theme !== 'default') document.body.classList.add('ui-' + theme);
+}
+async function saveUITheme() {
+  try {
+    await window.dbSet(window.ref(window.db, 'system/ui_config/theme'), currentUITheme);
+    showCenterSquareToast('✅', 'Đã lưu!', 'Giao diện: ' + currentUITheme, 'success', 3000);
+  } catch (e) { showToast('❌ ' + e.message, 'error'); }
+}
+
+/* ---------- FX LEVEL ---------- */
+async function setFXLevel(level, el) {
+  document.querySelectorAll('.fx-level-item').forEach(x => x.classList.remove('active'));
+  if (el) el.classList.add('active');
+  currentFXLevel = level;
+  document.body.dataset.fxLevel = level;
+  try {
+    await window.dbSet(window.ref(window.db, 'system/ui_config/fx_level'), level);
+    showToast('✨ Đã đổi cấp hiệu ứng: ' + level.toUpperCase(), 'success');
+  } catch (e) { showToast('⚠️ Lỗi lưu hiệu ứng', 'warn'); }
+}
+async function saveFXLevel() {
+  try {
+    await window.dbSet(window.ref(window.db, 'system/ui_config/fx_level'), currentFXLevel);
+    showCenterSquareToast('✅', 'Đã lưu!', 'Cấp hiệu ứng: ' + currentFXLevel, 'success', 3000);
+  } catch (e) { showToast('❌ ' + e.message, 'error'); }
+}
+
+/* ---------- MUSIC VOLUME ---------- */
+function onVolumeChange(val) {
+  musicVolume = parseInt(val) / 100;
+  const valEl = document.getElementById('musicVolumeValue');
+  if (valEl) valEl.innerText = val + '%';
+  const player = document.getElementById('globalAudioPlayer');
+  if (player) player.volume = isMusicMuted ? 0 : musicVolume;
+}
+function toggleMuteMusic() {
+  isMusicMuted = !isMusicMuted;
+  const player = document.getElementById('globalAudioPlayer');
+  if (player) player.volume = isMusicMuted ? 0 : musicVolume;
+  const lbl = document.getElementById('muteBtnLabel');
+  if (lbl) lbl.innerText = isMusicMuted ? '🔊 Bật Nhạc' : '🔇 Tắt Nhạc';
+}
+async function saveVolume() {
+  try {
+    await window.dbSet(window.ref(window.db, 'system/ui_config/volume'), musicVolume);
+    await window.dbSet(window.ref(window.db, 'system/ui_config/muted'), isMusicMuted);
+    showCenterSquareToast('✅', 'Đã lưu!', 'Âm lượng: ' + Math.round(musicVolume*100) + '%', 'success', 3000);
+  } catch (e) { showToast('❌ ' + e.message, 'error'); }
+}
+
+/* ---------- HOME CONTENT ---------- */
+async function saveHomeContent() {
+  const data = {
+    aboutText: (document.getElementById('cfgAboutText')?.value || '').trim(),
+    trendText: (document.getElementById('cfgTrendText')?.value || '').trim(),
+    updateNotice: (document.getElementById('cfgUpdateNotice')?.value || '').trim(),
+    showOnline: document.getElementById('cfgShowOnline')?.checked !== false,
+    showTotal: document.getElementById('cfgShowTotal')?.checked !== false,
+    showUpdateBanner: document.getElementById('cfgShowUpdateBanner')?.checked === true,
+    updatedAt: Date.now()
+  };
+  try {
+    await window.dbSet(window.ref(window.db, 'system/home_config'), data);
+    showCenterSquareToast('✅', 'Đã lưu!', 'Nội dung trang chủ đã cập nhật', 'success', 3000);
+  } catch (e) { showToast('❌ ' + e.message, 'error'); }
+}
+
+/* ---------- LOAD UI + FX ---------- */
+function loadUIAndFXConfig() {
+  window.onValue(window.ref(window.db, 'system/ui_config'), snap => {
+    const cfg = snap.val() || {};
+    if (cfg.theme) {
+      currentUITheme = cfg.theme;
+      applyUITheme(cfg.theme);
+      document.querySelectorAll('.ui-switch-item').forEach(x => {
+        x.classList.toggle('active', x.dataset.ui === cfg.theme);
+      });
+    }
+    if (cfg.fx_level) {
+      currentFXLevel = cfg.fx_level;
+      document.body.dataset.fxLevel = cfg.fx_level;
+      document.querySelectorAll('.fx-level-item').forEach(x => {
+        x.classList.toggle('active', x.dataset.fx === cfg.fx_level);
+      });
+    }
+    if (typeof cfg.volume === 'number') {
+      musicVolume = cfg.volume;
+      isMusicMuted = cfg.muted === true;
+      const slider = document.getElementById('musicVolumeSlider');
+      if (slider) {
+        slider.value = Math.round(musicVolume * 100);
+        const valEl = document.getElementById('musicVolumeValue');
+        if (valEl) valEl.innerText = Math.round(musicVolume * 100) + '%';
+      }
+      const player = document.getElementById('globalAudioPlayer');
+      if (player) player.volume = isMusicMuted ? 0 : musicVolume;
+      const lbl = document.getElementById('muteBtnLabel');
+      if (lbl) lbl.innerText = isMusicMuted ? '🔊 Bật Nhạc' : '🔇 Tắt Nhạc';
+    }
+  });
+}
+
+/* ---------- INIT ---------- */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (window.db) {
+      loadUIAndFXConfig();
+    }
+  }, 1400);
+});
     </script>
 </body>
 
