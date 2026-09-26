@@ -538,12 +538,10 @@ img{-webkit-user-drag:none}
 @keyframes bubbleUp{0%{bottom:-80px;opacity:0;transform:translateX(0) scale(.6)}15%{opacity:1}85%{opacity:1}100%{bottom:110vh;opacity:0;transform:translateX(40px) scale(1.1)}}
 
 /* ==================== NEW EFFECT ANIMATIONS ==================== */
-/* Hammer slam */
 .fx-hammer-slam{position:fixed;top:0;left:50%;transform:translate(-50%,-100%) scale(0);font-size:200px;z-index:99999999999;pointer-events:none;filter:drop-shadow(0 0 30px #8B4513) drop-shadow(0 0 60px #ff8c00)}
 .fx-hammer-slam.play{animation:hammerSlam 2.2s cubic-bezier(.4,0,.6,1) forwards}
 @keyframes hammerSlam{0%{top:0;transform:translate(-50%,-100%) scale(0);opacity:0}20%{top:15%;transform:translate(-50%,-50%) scale(2.2);opacity:1}45%{top:15%;transform:translate(-50%,-50%) scale(2.4);opacity:1}60%{top:60%;transform:translate(-50%,-50%) scale(2.4) rotate(10deg);opacity:1}70%{top:60%;transform:translate(-50%,-50%) scale(2.4) rotate(0deg);opacity:1}85%{top:60%;transform:translate(-50%,-50%) scale(2.4) rotate(0deg);opacity:1}100%{top:60%;transform:translate(-50%,-50%) scale(0);opacity:0}}
 
-/* Crown drop with halo */
 .fx-crown-drop{position:fixed;top:-150px;left:50%;transform:translateX(-50%);font-size:150px;z-index:99999999999;pointer-events:none;opacity:0;filter:drop-shadow(0 0 25px #ffd700) drop-shadow(0 0 50px #ffc107)}
 .fx-crown-drop.play{animation:crownDropDown 3.5s cubic-bezier(.25,.9,.4,1) forwards}
 @keyframes crownDropDown{0%{top:-150px;opacity:0;transform:translateX(-50%) scale(.6)}25%{top:15%;opacity:1;transform:translateX(-50%) scale(1.3)}40%{top:22%;opacity:1;transform:translateX(-50%) scale(1.1)}50%{top:25%;opacity:1;transform:translateX(-50%) scale(1.15)}70%{top:25%;opacity:1;transform:translateX(-50%) scale(1.15)}100%{top:25%;opacity:0;transform:translateX(-50%) scale(1.5)}}
@@ -551,7 +549,6 @@ img{-webkit-user-drag:none}
 .fx-crown-halo.play{animation:crownHalo 3.5s ease-out forwards}
 @keyframes crownHalo{0%{transform:translate(-50%,-50%) scale(0);opacity:0}30%{transform:translate(-50%,-50%) scale(1);opacity:1}70%{transform:translate(-50%,-50%) scale(1.4);opacity:.8}100%{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
 
-/* Spider-man web swing (new) */
 .fx-spidey-new{position:fixed;top:-150px;left:60%;transform:translateX(-50%);font-size:150px;z-index:99999999999;pointer-events:none;filter:drop-shadow(0 0 25px #dc3545)}
 .fx-spidey-new.play{animation:spideySwingNew 4s ease-in-out forwards}
 @keyframes spideySwingNew{0%{top:-150px;left:60%;transform:translateX(-50%) rotate(-25deg);opacity:0}15%{top:12%;left:55%;transform:translateX(-50%) rotate(0deg);opacity:1}35%{top:18%;left:45%;transform:translateX(-50%) rotate(-8deg) scaleX(-1);opacity:1}55%{top:15%;left:40%;transform:translateX(-50%) rotate(5deg);opacity:1}75%{top:12%;left:45%;transform:translateX(-50%) rotate(-5deg) scaleX(-1);opacity:1}100%{top:-150px;left:50%;transform:translateX(-50%) rotate(15deg);opacity:0}}
@@ -559,7 +556,6 @@ img{-webkit-user-drag:none}
 .fx-web-shoot.play{animation:webShoot 1s ease-out forwards}
 @keyframes webShoot{0%{width:0;opacity:0;transform:translate(-50%,-50%) rotate(0deg)}30%{width:300px;opacity:1}100%{width:500px;opacity:0;transform:translate(-50%,-50%) rotate(20deg)}}
 
-/* Handshake + gold shield */
 .fx-handshake{position:fixed;top:50%;left:50%;font-size:120px;z-index:99999999999;pointer-events:none;transform:translate(-50%,-50%);width:0;height:0}
 .fx-handshake .hand-l,.fx-handshake .hand-r{position:absolute;top:-60px;font-size:120px;opacity:0;line-height:1}
 .fx-handshake .hand-l{left:-150px;transform:scaleX(-1)}
@@ -572,7 +568,6 @@ img{-webkit-user-drag:none}
 .fx-handshake.play .shield-gold{animation:goldShieldAppear 3s ease-out forwards}
 @keyframes goldShieldAppear{0%,45%{opacity:0;transform:scale(0) rotate(0)}65%{opacity:1;transform:scale(1.4) rotate(15deg)}80%{opacity:1;transform:scale(1) rotate(0)}100%{opacity:0;transform:scale(1.3) rotate(-10deg)}}
 
-/* Admin special effect (diamond crown) */
 .fx-admin-crown{position:fixed;top:-150px;left:50%;transform:translateX(-50%);font-size:130px;z-index:99999999999;pointer-events:none;opacity:0;filter:drop-shadow(0 0 30px #4a9eff) drop-shadow(0 0 60px #a55eea)}
 .fx-admin-crown.play{animation:adminCrownDrop 4s cubic-bezier(.25,.9,.4,1) forwards}
 @keyframes adminCrownDrop{0%{top:-150px;opacity:0;transform:translateX(-50%) scale(.5) rotate(-20deg)}30%{top:15%;opacity:1;transform:translateX(-50%) scale(1.2) rotate(0)}50%{top:22%;opacity:1;transform:translateX(-50%) scale(1) rotate(0)}75%{top:22%;opacity:1;transform:translateX(-50%) scale(1.05) rotate(0)}100%{top:22%;opacity:0;transform:translateX(-50%) scale(1.4) rotate(0)}}
@@ -585,25 +580,40 @@ img{-webkit-user-drag:none}
 @keyframes adminTextIn{0%{opacity:0;transform:translateX(-50%) scale(.3)}25%{opacity:1;transform:translateX(-50%) scale(1.2)}40%{transform:translateX(-50%) scale(1)}75%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) scale(1.5)}}
 
 /* ==================== AVATAR FRAME OVERLAYS ==================== */
-.avatar-frame-overlay{position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:6;display:none}
+.avatar-frame-overlay{position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:8;display:none}
 .avatar-frame-overlay.active{display:block}
 .avatar-frame-overlay.frame-crown{box-shadow:inset 0 0 0 3px #ffd700,0 0 15px #ffd700,0 0 30px #ffc107;border:3px solid #ffd700}
-.avatar-frame-overlay.frame-crown::before{content:'👑';position:absolute;top:-32px;left:50%;transform:translateX(-50%);font-size:30px;filter:drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ffc107);animation:crownFloatAvatar 1.5s ease-in-out infinite}
+.avatar-frame-overlay.frame-crown::before{content:'👑';position:absolute;top:-36px;left:50%;transform:translateX(-50%);font-size:34px;filter:drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ffc107);animation:crownFloatAvatar 1.5s ease-in-out infinite}
 @keyframes crownFloatAvatar{0%,100%{transform:translateX(-50%) translateY(0) scale(1)}50%{transform:translateX(-50%) translateY(-6px) scale(1.1)}}
 .avatar-frame-overlay.frame-handshake{box-shadow:inset 0 0 0 3px #4a9eff,0 0 15px #4a9eff,0 0 25px #7ac0ff;border:3px solid #4a9eff}
-.avatar-frame-overlay.frame-handshake::after{content:'🤝';position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:26px;filter:drop-shadow(0 0 8px #4a9eff) drop-shadow(0 0 15px #1877f2);animation:handshakeBob 1.2s ease-in-out infinite}
+.avatar-frame-overlay.frame-handshake::after{content:'🤝';position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:30px;filter:drop-shadow(0 0 8px #4a9eff) drop-shadow(0 0 15px #1877f2);animation:handshakeBob 1.2s ease-in-out infinite}
 @keyframes handshakeBob{0%,100%{transform:translateX(-50%) rotate(-5deg)}50%{transform:translateX(-50%) rotate(5deg)}}
 .avatar-frame-overlay.frame-admin{box-shadow:inset 0 0 0 4px #fff,0 0 20px #ff0000,0 0 20px #ffff00,0 0 20px #00ff00;border:4px solid transparent;animation:adminFrameSpin 3s linear infinite}
 @keyframes adminFrameSpin{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
-.avatar-frame-overlay.frame-admin::before{content:'💎';position:absolute;top:-35px;left:50%;transform:translateX(-50%);font-size:32px;filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 25px #4a9eff) drop-shadow(0 0 40px #a55eea);animation:adminCrownFloat 2s ease-in-out infinite}
+.avatar-frame-overlay.frame-admin::before{content:'💎';position:absolute;top:-40px;left:50%;transform:translateX(-50%);font-size:36px;filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 25px #4a9eff) drop-shadow(0 0 40px #a55eea);animation:adminCrownFloat 2s ease-in-out infinite}
 @keyframes adminCrownFloat{0%,100%{transform:translateX(-50%) translateY(0) scale(1);filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 25px #4a9eff) drop-shadow(0 0 40px #a55eea) hue-rotate(0deg)}50%{transform:translateX(-50%) translateY(-8px) scale(1.15);filter:drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #ff00ff) drop-shadow(0 0 45px #00ffff) hue-rotate(180deg)}}
 .avatar-frame-overlay.frame-hammer{box-shadow:inset 0 0 0 3px #8B4513,0 0 15px #8B4513,0 0 25px #ff8c00;border:3px solid #8B4513}
-.avatar-frame-overlay.frame-hammer::before{content:'🔨';position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:28px;filter:drop-shadow(0 0 10px #ff8c00);animation:hammerFrameHit 1.5s ease-in-out infinite}
+.avatar-frame-overlay.frame-hammer::before{content:'🔨';position:absolute;top:-34px;left:50%;transform:translateX(-50%);font-size:32px;filter:drop-shadow(0 0 10px #ff8c00);animation:hammerFrameHit 1.5s ease-in-out infinite}
 @keyframes hammerFrameHit{0%,100%{transform:translateX(-50%) rotate(-20deg)}50%{transform:translateX(-50%) rotate(20deg)}}
 .avatar-frame-overlay.frame-spidey{box-shadow:inset 0 0 0 3px #dc3545,0 0 15px #dc3545,0 0 25px #ff6b6b;border:3px solid #dc3545}
-.avatar-frame-overlay.frame-spidey::before{content:'🕷️';position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:28px;filter:drop-shadow(0 0 10px #dc3545);animation:spideyFrameSway 2s ease-in-out infinite}
+.avatar-frame-overlay.frame-spidey::before{content:'🕷️';position:absolute;top:-34px;left:50%;transform:translateX(-50%);font-size:32px;filter:drop-shadow(0 0 10px #dc3545);animation:spideyFrameSway 2s ease-in-out infinite}
 @keyframes spideyFrameSway{0%,100%{transform:translateX(-50%) rotate(-8deg)}50%{transform:translateX(-50%) rotate(8deg)}}
 .avatar-frame-overlay.frame-default{box-shadow:inset 0 0 0 3px rgba(255,255,255,.6),0 0 15px rgba(24,119,242,.5);border:3px solid rgba(255,255,255,.7)}
+
+/* Profile special FX layer — scoped size reductions so effects fit inside profile modal */
+.profile-special-fx .fx-hammer-slam{font-size:110px !important}
+.profile-special-fx .fx-crown-drop{font-size:90px !important;top:-100px !important}
+.profile-special-fx .fx-crown-halo{width:220px !important;height:220px !important}
+.profile-special-fx .fx-spidey-new{font-size:100px !important}
+.profile-special-fx .fx-admin-crown{font-size:100px !important;top:-100px !important}
+.profile-special-fx .fx-admin-aura{width:280px !important;height:280px !important}
+.profile-special-fx .fx-admin-text{font-size:32px !important;letter-spacing:5px !important;top:62% !important}
+.profile-special-fx .fx-handshake{font-size:80px !important}
+.profile-special-fx .fx-handshake .hand-l,.profile-special-fx .fx-handshake .hand-r{font-size:80px !important;top:-40px !important}
+.profile-special-fx .fx-handshake .hand-l{left:-100px !important}
+.profile-special-fx .fx-handshake .hand-r{right:-100px !important}
+.profile-special-fx .fx-handshake .shield-gold{font-size:90px !important;top:-45px !important;left:-45px !important}
+.profile-special-fx .fx-web-shoot{height:6px !important}
 
 /* ==================== NAME TAG ==================== */
 .name-tag{display:inline-block;padding:3px 12px;border-radius:14px;font-size:12px;font-weight:700;margin-left:6px;position:relative;vertical-align:middle;line-height:1.35;white-space:nowrap;border:1.5px solid rgba(255,255,255,.5);box-shadow:0 2px 8px rgba(0,0,0,.1)}
@@ -817,9 +827,9 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="profile-avatar-wrap" id="profileAvatarWrap" onclick="document.getElementById('profileAvatarInput').click()">
 <div class="avatar-bg-layer" id="profileAvatarBgLayer" style="display:none"></div>
 <div id="profileAvatarDisplay">?</div>
-<div class="avatar-frame-overlay" id="profileAvatarFrame"></div>
 <div class="profile-avatar-overlay" id="profileAvatarOverlay">📷 Đổi</div>
 </div>
+<div class="avatar-frame-overlay" id="profileAvatarFrame"></div>
 </div>
 <input type="file" id="profileAvatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
 </div>
@@ -1894,7 +1904,7 @@ async function openProfile(_,targetUser){
   }
   renderProfileMedals(isSelf);
   loadUserStats(u.username);
-  // Frame overlay
+  // Frame overlay (now sibling of avatar-wrap so crown is not clipped)
   const frameEl=document.getElementById('profileAvatarFrame');
   const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));
   frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');
@@ -1956,9 +1966,11 @@ async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(
 
 /* PROFILE FX — burst animations (5-7s) */
 let profileFxRAF=null,profileFxAutoStop=null;
-function stopProfileEffect(){if(profileFxRAF)cancelAnimationFrame(profileFxRAF);profileFxRAF=null;if(profileFxAutoStop)clearTimeout(profileFxAutoStop);profileFxAutoStop=null;const c=document.getElementById('profileFxCanvas');if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}}
+function stopProfileEffect(){if(profileFxRAF)cancelAnimationFrame(profileFxRAF);profileFxRAF=null;if(profileFxAutoStop)clearTimeout(profileFxAutoStop);profileFxAutoStop=null;const c=document.getElementById('profileFxCanvas');if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}
+  const modal=document.getElementById('profileModal');
+  if(modal)modal.querySelectorAll('.profile-special-fx').forEach(el=>el.remove());
+}
 function playProfileEffect(role){if(perfMode==='optimized')return;if(role&&isBaseRole(role))return;stopProfileEffect();
-  // Special animations use DOM-based overlay inside profileModal
   const effectType=getAvatarEffect(role);
   const modal=document.getElementById('profileModal');
   if(modal&&!modal.classList.contains('show'))return;
@@ -1968,14 +1980,12 @@ function playProfileEffect(role){if(perfMode==='optimized')return;if(role&&isBas
     profileFxAutoStop=setTimeout(()=>stopProfileEffect(),6000);
     return;
   }
-  // Fallback canvas particle
   const canvas=document.getElementById('profileFxCanvas');if(!canvas)return;const box=canvas.parentElement;canvas.width=box.offsetWidth||600;canvas.height=box.offsetHeight||500;const ctx=canvas.getContext('2d');const W=()=>canvas.width,H=()=>canvas.height;let particles=[];const startTime=Date.now();const duration=6000;const EFFECT_EMOJI={'petals_red':'🌺','hearts_sparkle':'💖','graduation':'🎓','pencils':'✏️','teacher_spark':'📚','sparkle_star':'🌟','soft_glow':'💠','starfall':'⭐','diamonds':'💎','targets':'🎯','lightning_bg':'⚡','clovers':'🍀','colors':'🎨','music_notes':'🎵','rockets':'🚀','mane':'🦁','dragon':'🐉','fox':'🦊','pandas':'🐼','halloween_bg':'🎃','christmas_bg':'🎄','skull':'💀','alien':'👽','robots':'🤖','rainbow_bg':'🌈','comets':'💫','apples':'🍎','swords':'⚔️','shield_bg':'🛡️','sparkles':'✨','default':'✨','coin_rain':'₫','petals':'🌸','snowflakes':'❄️','lucky_money':'🧧','hearts':'❤️','dark_flames':'🔥','fire_bg':'🔥','galaxy_bg':'✨'};const emoji=EFFECT_EMOJI[effectType]||'✨';const colors=getAvatarEffectColors(effectType);for(let i=0;i<35;i++)particles.push({x:Math.random()*W(),y:Math.random()*H(),vy:.5+Math.random()*1.5,vx:(Math.random()-.5)*1,r:10+Math.random()*14,rot:Math.random()*Math.PI*2,rv:(Math.random()-.5)*.05,phase:Math.random()*Math.PI*2,phaseSp:.02+Math.random()*.04,alpha:.6+Math.random()*.4,color:colors[Math.floor(Math.random()*colors.length)]});const loop=()=>{const elapsed=Date.now()-startTime,progress=Math.min(1,elapsed/duration);ctx.clearRect(0,0,W(),H());particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=p.rv;p.phase+=p.phaseSp;if(p.y>H()+30){p.y=-30;p.x=Math.random()*W();}});particles.forEach(p=>{ctx.save();ctx.globalAlpha=.5+Math.abs(Math.sin(p.phase))*.5;ctx.font=p.r+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowBlur=10;ctx.shadowColor=p.color;ctx.fillText(emoji,p.x,p.y);ctx.restore();});ctx.globalAlpha=1;ctx.shadowBlur=0;if(progress<1)profileFxRAF=requestAnimationFrame(loop);else ctx.clearRect(0,0,W(),H());};loop();profileFxAutoStop=setTimeout(()=>stopProfileEffect(),duration);}
 
 /* ========== ROLE SPECIAL ANIMATION (Profile modal layer) ========== */
 function playRoleSpecialAnimation(effectType,container){
   if(perfMode==='optimized')return;
   if(!container)return;
-  // remove previous special fx
   container.querySelectorAll('.profile-special-fx').forEach(el=>el.remove());
   const layer=document.createElement('div');
   layer.className='profile-special-fx';
@@ -1986,7 +1996,7 @@ function playRoleSpecialAnimation(effectType,container){
     mk('fx-hammer-slam','🔨','position:absolute;top:0;left:50%');
   }else if(effectType==='crown_drop'||effectType==='trophy'){
     mk('fx-crown-halo','','position:absolute;top:50%;left:50%');
-    mk('fx-crown-drop','👑','position:absolute;top:-150px;left:50%');
+    mk('fx-crown-drop','👑','position:absolute;top:-100px;left:50%');
   }else if(effectType==='handshake_shield'){
     const h=document.createElement('div');h.className='fx-handshake play';h.style.cssText='position:absolute;top:50%;left:50%';
     h.innerHTML='<div class="hand-l">✋</div><div class="hand-r">✋</div><div class="shield-gold">🛡️</div>';layer.appendChild(h);
@@ -1995,8 +2005,8 @@ function playRoleSpecialAnimation(effectType,container){
     mk('fx-web-shoot','','position:absolute;top:50%;left:50%');
   }else if(effectType==='admin_special'){
     mk('fx-admin-aura','','position:absolute;top:50%;left:50%');
-    mk('fx-admin-crown','💎','position:absolute;top:-150px;left:50%');
-    mk('fx-admin-text','ADMIN SEVER','position:absolute;top:65%;left:50%');
+    mk('fx-admin-crown','💎','position:absolute;top:-100px;left:50%');
+    mk('fx-admin-text','ADMIN SEVER','position:absolute;top:62%;left:50%');
   }
   container.appendChild(layer);
   setTimeout(()=>{layer.remove();},dur);
@@ -2254,16 +2264,13 @@ async function getAudioBlobFromChunks(key){
     let fullBase64='';
     for(const k of keys){
       let chunk=obj[k]||'';
-      // chunk is now pure base64 (no data URI prefix). Handle legacy stored with prefix too
       if(chunk.indexOf(',')>=0)chunk=chunk.split(',')[1]||'';
       fullBase64+=chunk;
     }
     if(!fullBase64)return null;
-    // Decode once
     const bstr=atob(fullBase64);
     const u=new Uint8Array(bstr.length);
     for(let i=0;i<bstr.length;i++)u[i]=bstr.charCodeAt(i);
-    // Determine mime from audio_list metadata
     let mime='audio/mpeg';
     try{const meta=await window.dbGet(window.dbChild(window.dbRef,`system/audio_list/${key}`));if(meta.exists()&&meta.val().mime)mime=meta.val().mime;}catch(e){}
     return new Blob([u],{type:mime});
@@ -2396,7 +2403,6 @@ function showBigNotification(id,n){
   if(n.image){img.src=n.image;img.style.display='block';}else{img.style.display='none';}
   if(n.auraEnabled){aura.style.display='block';aura.style.background=`radial-gradient(circle,${n.auraColor||'#ffc107'}55,transparent 70%)`;}else{aura.style.display='none';}
   overlay.classList.add('show');
-  // Play effect inside overlay so it's on same layer as notification
   if(n.effect){playEntertainmentEffectInContainer(n.effect,Math.max(n.duration||8,3),overlay);}
   const dur=Math.max((n.duration||8)*1000,1500);
   setTimeout(()=>{
@@ -2509,16 +2515,12 @@ let activeFxTimeout=null;
 function stopEntertainmentEffect(){
   const c=document.getElementById('fxContainer');
   if(c){c.querySelectorAll('.fx-money-rain,.fx-snow-rain,.fx-confetti-rain,.fx-heart-rise,.fx-fire-flames,.fx-star-shine,.fx-bat-fly,.fx-ghost-float,.fx-balloon-rise,.fx-flower-petals,.fx-sakura-petals,.fx-leaf-fall,.fx-clover-fall,.fx-diamond-fall,.fx-comet-fly,.fx-sparkle-fall,.fx-bubble-float,.fx-candy-fall,.fx-pizza-fall,.fx-crown-drop,.fx-banned-stamp,.fx-dragon,.fx-christmas-tree,.fx-heart-explode,.fx-broken-heart,.fx-spiderman,.fx-fire-evolution,.fx-lightning-strike,.fx-water-wave,.fx-alien-abduction,.fx-ufo-fly,.fx-skull-rise,.fx-rainbow-arc,.fx-firework-burst,.fx-hammer-slam,.fx-crown-halo,.fx-crown-drop,.fx-spidey-new,.fx-web-shoot,.fx-handshake,.fx-admin-crown,.fx-admin-aura,.fx-admin-text').forEach(el=>el.remove());}
-  // Also cleanup inside bigNotifyOverlay
   const overlay=document.getElementById('bigNotifyOverlay');
   if(overlay){overlay.querySelectorAll('.fx-money-rain,.fx-snow-rain,.fx-confetti-rain,.fx-heart-rise,.fx-fire-flames,.fx-star-shine,.fx-bat-fly,.fx-ghost-float,.fx-balloon-rise,.fx-flower-petals,.fx-sakura-petals,.fx-leaf-fall,.fx-clover-fall,.fx-diamond-fall,.fx-comet-fly,.fx-sparkle-fall,.fx-bubble-float,.fx-candy-fall,.fx-pizza-fall,.fx-crown-drop,.fx-banned-stamp,.fx-dragon,.fx-christmas-tree,.fx-heart-explode,.fx-broken-heart,.fx-spiderman,.fx-fire-evolution,.fx-lightning-strike,.fx-water-wave,.fx-alien-abduction,.fx-ufo-fly,.fx-skull-rise,.fx-rainbow-arc,.fx-firework-burst,.fx-hammer-slam,.fx-crown-halo,.fx-spidey-new,.fx-web-shoot,.fx-handshake,.fx-admin-crown,.fx-admin-aura,.fx-admin-text').forEach(el=>el.remove());}
   if(activeFxTimeout){clearTimeout(activeFxTimeout);activeFxTimeout=null;}
 }
 function playEntertainmentEffectInContainer(id,durationSec,container){
-  // Same as playEntertainmentEffect but with custom container (for notification same layer)
-  const originalContainer=document.getElementById('fxContainer');
-  // Temporarily create a scoped container
-  const scope=container||originalContainer;
+  const scope=container||document.getElementById('fxContainer');
   if(!scope)return;
   stopEntertainmentEffect();
   playEntertainmentEffectInternal(id,durationSec,scope);
