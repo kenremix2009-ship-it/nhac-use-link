@@ -3926,6 +3926,22 @@
       border-radius: 8px
     }
 
+    /* Homepage and configurable visual themes */
+    #homeView { min-height: calc(100vh - 120px); background: radial-gradient(circle at 15% 10%, #dff1ff, transparent 34%), radial-gradient(circle at 85% 20%, #e5ffe9, transparent 32%), #f0f2f5 }
+    .home-hero { max-width: 1050px; margin: 0 auto 15px; padding: 42px 28px; border-radius: 24px; color: #fff; background: linear-gradient(135deg, #0d5fd6, #1877f2 45%, #198754); box-shadow: 0 18px 45px rgba(24,119,242,.25); position: relative; overflow: hidden }
+    .home-hero h1 { font-size: clamp(26px, 5vw, 46px); margin-bottom: 10px }
+    .home-hero p { max-width: 720px; line-height: 1.7; font-size: 15px }
+    .home-grid { max-width: 1050px; margin: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px }
+    .home-info { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 5px 18px rgba(0,0,0,.07); min-height: 130px }
+    .home-info h3 { color: #1877f2; margin-bottom: 8px; font-size: 16px }
+    .home-info p { font-size: 13px; line-height: 1.65; color: #555; white-space: pre-wrap }
+    .home-stat { font-size: 28px; font-weight: 900; color: #198754; margin-top: 8px }
+    body.ui-glass .nav-tabs button, body.ui-glass .home-info { background: rgba(255,255,255,.22); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.35); box-shadow: 0 8px 25px rgba(0,0,0,.15) }
+    body.ui-nature .navbar { background: linear-gradient(135deg,#176b3a,#65b96f) }
+    body.ui-nature .home-hero { background: linear-gradient(135deg,#176b3a,#9acb72) }
+    body.ui-weather .navbar { background: linear-gradient(135deg,#1565c0,#81d4fa) }
+    body.ui-weather .home-hero { background: linear-gradient(135deg,#1565c0,#81d4fa) }
+
     @media(max-width:768px) {
       .navbar {
         padding: 8px;
@@ -3951,6 +3967,8 @@
         padding: 6px;
         flex: 1 1 auto
       }
+
+      .home-grid { grid-template-columns: 1fr }
 
       .container {
         padding: 0 6px
