@@ -4512,6 +4512,39 @@ body[data-fx-level="ultra"] .home-hero {
 }
 body[data-fx-level="ultra"] .btn { box-shadow: 0 0 20px rgba(24,119,242,.5); }
 body[data-fx-level="ultra"] .card:hover { box-shadow: 0 0 40px rgba(24,119,242,.4); }
+/* Auto add expand toggle to old supreme blocks */
+.supreme-tab-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.auto-collapse-toggle {
+  background: #1877f2;
+  color: #fff;
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-weight: 900;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .3s;
+  flex-shrink: 0;
+}
+.auto-collapse-toggle.open { transform: rotate(180deg); }
+.auto-collapse-target {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .5s ease;
+}
+.auto-collapse-target.open {
+  max-height: 9999px;
+}
   </style>
 </head>
 
@@ -6552,6 +6585,13 @@ body[data-fx-level="ultra"] .card:hover { box-shadow: 0 0 40px rgba(24,119,242,.
 
       /* USER SESSION */
       async function applyUserSession(u) {
+              // Áp dụng UI theme ngay khi session có user
+        applyUITheme(currentUITheme);
+        setTimeout(() => {
+          const player = document.getElementById('globalAudioPlayer');
+          if (player) player.volume = isMusicMuted ? 0 : musicVolume;
+          startOnlineHeartbeat();
+        }, 500);
         currentUser = u; currentUserFullData = u;
         await loadRolesCache(); await loadMedalsCache();
         const nav = document.getElementById('navUserInfo');
@@ -7252,7 +7292,25 @@ body[data-fx-level="ultra"] .card:hover { box-shadow: 0 0 40px rgba(24,119,242,.
       function toggleModeDropdown(e) {e.stopPropagation(); document.getElementById('modeDropdownMenu').classList.toggle('open');}
       document.addEventListener('click', e => {const dd = document.getElementById('modeDropdown'); if (dd && !dd.contains(e.target)) document.getElementById('modeDropdownMenu').classList.remove('open');});
       function selectExamMode(mode, el) {document.querySelectorAll('.mode-dropdown-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); document.getElementById('examModeSelect').value = mode; const icons = {normal: '♾️', live: '🛡️', practice: '⚡', axcm: '🎓'}; const labels = {normal: 'Thi Tự Do', live: 'Phòng Thi Chuyên Dụng', practice: 'Bài Luyện Nhanh', axcm: 'Làm Bài Thông Minh'}; document.querySelector('.mode-dd-icon').innerText = icons[mode]; document.querySelector('.mode-dd-label').innerText = labels[mode]; document.getElementById('modeDropdownMenu').classList.remove('open'); const passBox = document.getElementById('extraPassBox'), passLabel = document.getElementById('extraPassLabel'), codeLabel = document.getElementById('lblCodeText'); if (mode === 'practice' || mode === 'live') {passBox.style.display = 'block'; passLabel.innerText = mode === 'practice' ? 'Mật Khẩu Bài Luyện:' : 'Mật Khẩu Phòng Thi:'; codeLabel.innerText = mode === 'practice' ? 'Mã Bài Luyện:' : 'Mã Bài Kiểm Tra:';} else if (mode === 'axcm') {passBox.style.display = 'none'; codeLabel.innerText = 'Mã Đề Thông Minh:';} else {passBox.style.display = 'none'; codeLabel.innerText = 'Mã Bài Kiểm Tra:';} if (perfMode !== 'optimized') {if (mode === 'normal') playGalaxyEffect(); else if (mode === 'practice') playLightningEffect(el); else if (mode === 'live') playShieldEffect(); else if (mode === 'axcm') {playSmartEffect();} } }
-      function switchView(viewId, btn = null) {if (viewId !== 'studentExamView') {document.body.classList.remove('exam-active'); const l = document.querySelector('#studentExamView .exam-layout'); if (l) l.classList.remove('axcm-mode');} document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); document.getElementById(viewId).classList.add('active'); if (btn) {document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active')); btn.classList.add('active');} updateQrFabVisibility();}
+      function switchView(viewId, btn = null) {
+  if (viewId !== 'studentExamView') {
+    document.body.classList.remove('exam-active');
+    const l = document.querySelector('#studentExamView .exam-layout');
+    if (l) l.classList.remove('axcm-mode');
+  }
+  document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById(viewId);
+  if (target) target.classList.add('active');
+  if (btn) {
+    document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  // Nếu là homeView, refresh stats
+  if (viewId === 'homeView') {
+    loadHomeStats();
+  }
+  updateQrFabVisibility();
+}
       function setExamActiveClass(a) {document.body.classList.toggle('exam-active', a);}
       function detectLowEndDevice() {try {const mem = navigator.deviceMemory || 8, cpu = navigator.hardwareConcurrency || 8, ua = navigator.userAgent || ''; const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|CriOS|FxiOS/i.test(ua) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) || window.innerWidth < 1024; return (mem <= 4) || (cpu <= 4) || isMobile;} catch (e) {return false;} }
       function applyPerfMode(mode) {perfMode = mode === 'optimized' ? 'optimized' : 'full'; document.body.classList.toggle('optimized-mode', perfMode === 'optimized'); const t = document.getElementById('currentPerfModeText'); if (t) {t.innerText = perfMode === 'optimized' ? '⚡ Tối ưu' : '✨ Đầy đủ'; t.style.color = perfMode === 'optimized' ? '#e0a800' : '#198754';} }
@@ -7492,8 +7550,26 @@ body[data-fx-level="ultra"] .card:hover { box-shadow: 0 0 40px rgba(24,119,242,.
       window.addEventListener('DOMContentLoaded', () => {
         checkAuthOnLoad(); initPerfMode(); updateQrFabVisibility();
         setTimeout(() => {try {const u = new URLSearchParams(location.search), ep = u.get('exam'), pp = u.get('practice'); if (ep) {document.getElementById('examModeSelect').value = 'live'; document.querySelectorAll('.mode-dropdown-item').forEach(i => i.classList.toggle('active', i.dataset.mode === 'live')); document.querySelector('.mode-dd-icon').innerText = '🛡️'; document.querySelector('.mode-dd-label').innerText = 'Phòng Thi Chuyên Dụng'; document.getElementById('lblCodeText').innerText = 'Mã Bài Kiểm Tra:'; document.getElementById('extraPassBox').style.display = 'block'; document.getElementById('extraPassLabel').innerText = 'Mật Khẩu Phòng Thi:'; document.getElementById('studentExamCode').value = ep.toUpperCase(); showToast('📱 Đã nhận mã!', 'info'); if (history.replaceState) history.replaceState({}, document.title, location.pathname);} else if (pp) {document.getElementById('examModeSelect').value = 'practice'; document.querySelectorAll('.mode-dropdown-item').forEach(i => i.classList.toggle('active', i.dataset.mode === 'practice')); document.querySelector('.mode-dd-icon').innerText = '⚡'; document.querySelector('.mode-dd-label').innerText = 'Bài Luyện Nhanh'; document.getElementById('lblCodeText').innerText = 'Mã Bài Luyện Nhanh:'; document.getElementById('extraPassBox').style.display = 'block'; document.getElementById('extraPassLabel').innerText = 'Mật Khẩu Bài Luyện:'; document.getElementById('studentExamCode').value = pp.toUpperCase(); showToast('📱 Đã nhận mã!', 'info'); if (history.replaceState) history.replaceState({}, document.title, location.pathname);} } catch (e) { } }, 1200);
-        setTimeout(() => {if (!window.db) return; loadSecurityPasswords(); loadWelcomeConfig(); loadWebConfig(); loadDocLibrary(); loadRolesCache(); loadMedalsCache(); loadEmailJSConfigFromDB(); window.onValue(window.ref(window.db, 'system/broadcast'), snap => {const d = snap.val(), b = document.getElementById('globalBroadcastBanner'), n = document.getElementById('currentCloudNotice'); if (d && d.text) {b.innerText = d.text; b.style.backgroundColor = d.bgColor || '#ff4d4f'; b.style.color = d.textColor || '#fff'; b.style.opacity = d.opacity || .95; b.style.fontFamily = d.fontFamily || "'Segoe UI',sans-serif"; b.style.fontSize = (d.fontSize || 16) + 'px'; b.classList.remove('pos-top', 'pos-middle', 'pos-bottom'); const p = d.position || 'top'; if (p === 'middle') b.classList.add('pos-middle'); else if (p === 'bottom') b.classList.add('pos-bottom'); else b.classList.add('pos-top'); b.style.display = 'block'; if (n) n.innerText = d.text; if (d.durationSec) setTimeout(() => {b.style.display = 'none';}, d.durationSec * 1000);} else {b.style.display = 'none'; if (n) n.innerText = 'Không có';} }); window.onValue(window.ref(window.db, 'system/audio'), async snap => {const d = snap.val(), a = document.getElementById('globalAudioPlayer'), s = document.getElementById('currentAudioStatus'); if (!d || !d.audioKey || !d.isPlaying) {pendingGlobalAudioPlay = false; a.pause(); a.currentTime = 0; if (s) s.innerText = 'Đang tắt'; currentLoadedAudioKey = null; return;} if (currentLoadedAudioKey !== d.audioKey) {if (s) s.innerText = 'Đang tải ⏳'; const b = await getAudioBlobFromChunks(d.audioKey); if (!b) {if (s) s.innerText = 'Lỗi ❌'; return;} audioBlobCache[d.audioKey] = b; a.src = URL.createObjectURL(b); currentLoadedAudioKey = d.audioKey;} tryPlayGlobalAudio();}); window.onValue(window.ref(window.db, 'users'), snap => {if (snap.exists()) cachedUsers = snap.val();});}, 800);
-      });
+        setTimeout(() => {if (!window.db) return; loadSecurityPasswords(); loadWelcomeConfig(); loadWebConfig(); loadDocLibrary(); loadRolesCache(); loadMedalsCache(); loadEmailJSConfigFromDB(); loadUIAndFXConfig(); loadHomeConfig(); loadHomeStats(); window.onValue(window.ref(window.db, 'system/broadcast'), snap => {const d = snap.val(), b = document.getElementById('globalBroadcastBanner'), n = document.getElementById('currentCloudNotice'); if (d && d.text) {b.innerText = d.text; b.style.backgroundColor = d.bgColor || '#ff4d4f'; b.style.color = d.textColor || '#fff'; b.style.opacity = d.opacity || .95; b.style.fontFamily = d.fontFamily || "'Segoe UI',sans-serif"; b.style.fontSize = (d.fontSize || 16) + 'px'; b.classList.remove('pos-top', 'pos-middle', 'pos-bottom'); const p = d.position || 'top'; if (p === 'middle') b.classList.add('pos-middle'); else if (p === 'bottom') b.classList.add('pos-bottom'); else b.classList.add('pos-top'); b.style.display = 'block'; if (n) n.innerText = d.text; if (d.durationSec) setTimeout(() => {b.style.display = 'none';}, d.durationSec * 1000);} else {b.style.display = 'none'; if (n) n.innerText = 'Không có';} }); window.onValue(window.ref(window.db, 'system/audio'), async snap => {const d = snap.val(), a = document.getElementById('globalAudioPlayer'), s = document.getElementById('currentAudioStatus'); if (!d || !d.audioKey || !d.isPlaying) {pendingGlobalAudioPlay = false; a.pause(); a.currentTime = 0; if (s) s.innerText = 'Đang tắt'; currentLoadedAudioKey = null; return;} if (currentLoadedAudioKey !== d.audioKey) {if (s) s.innerText = 'Đang tải ⏳'; const b = await getAudioBlobFromChunks(d.audioKey); if (!b) {if (s) s.innerText = 'Lỗi ❌'; return;} audioBlobCache[d.audioKey] = b; a.src = URL.createObjectURL(b); currentLoadedAudioKey = d.audioKey;} if (a) a.volume = isMusicMuted ? 0 : musicVolume; tryPlayGlobalAudio();}); window.onValue(window.ref(window.db, 'users'), snap => {if (snap.exists()) cachedUsers = snap.val();});}, 800);
+              // Auto-load Home + UI config
+        setTimeout(() => {
+          if (!window.db) return;
+          loadHomeConfig();
+          loadHomeStats();
+        }, 1500);
+        });
+      /* ============ APPLY VOLUME TO GLOBAL AUDIO ============ */
+const _origTryPlayGlobalAudio = window.tryPlayGlobalAudio;
+window.tryPlayGlobalAudio = function() {
+  const player = document.getElementById('globalAudioPlayer');
+  if (player) {
+    // Áp dụng âm lượng đã lưu
+    player.volume = isMusicMuted ? 0 : musicVolume;
+  }
+  if (typeof _origTryPlayGlobalAudio === 'function') {
+    _origTryPlayGlobalAudio();
+  }
+};
 
       /* INIT QUESTIONS */
       addQuestionV2('mc'); addQuestionV2('tf');
@@ -7606,15 +7682,36 @@ function loadHomeConfig() {
       const el = document.getElementById('homeHeroIntro');
       if (el) el.innerText = cfg.heroIntro;
     }
-    // Banner
+    
+    // Toggle cards visibility
+    const onlineCard = document.getElementById('homeOnlineCount')?.closest('.home-info');
+    if (onlineCard) onlineCard.style.display = cfg.showOnline !== false ? '' : 'none';
+    const navBadge = document.getElementById('navOnlineBadge');
+    if (navBadge) navBadge.style.display = cfg.showOnline !== false ? 'inline-flex' : 'none';
+    
+    const totalCard = document.getElementById('homeTotalUsers')?.closest('.home-info');
+    if (totalCard) totalCard.style.display = cfg.showTotal !== false ? '' : 'none';
+    
+    // Update banner (với nút đóng)
     const banner = document.getElementById('updateBanner');
     if (banner) {
-      if (cfg.showUpdateBanner && cfg.updateNotice) {
-        banner.innerText = '📢 ' + cfg.updateNotice;
+      const dismissed = sessionStorage.getItem('updateBannerDismissed_' + (cfg.updatedAt || 0));
+      if (cfg.showUpdateBanner && cfg.updateNotice && !dismissed) {
+        banner.innerHTML = '📢 ' + escapeHtml(cfg.updateNotice) +
+          ' <button onclick="dismissUpdateBanner(' + (cfg.updatedAt || 0) + ')" style="background:transparent;border:1px solid #fff;color:#fff;border-radius:6px;padding:2px 10px;margin-left:12px;cursor:pointer;font-weight:bold">✕ Đóng</button>';
         banner.classList.add('show');
       } else {
         banner.classList.remove('show');
       }
+    }
+  });
+}
+
+function dismissUpdateBanner(timestamp) {
+  sessionStorage.setItem('updateBannerDismissed_' + timestamp, '1');
+  const banner = document.getElementById('updateBanner');
+  if (banner) banner.classList.remove('show');
+}
     }
   });
 }
@@ -7775,6 +7872,55 @@ window.addEventListener('load', () => {
     }
   }, 1400);
 });
+/* ============ PRESENCE: XOÁ USER KHI ĐÓNG TAB ============ */
+window.addEventListener('beforeunload', () => {
+  if (!currentUser) return;
+  try {
+    // Đánh dấu user offline (xoá khỏi online list)
+    const path = 'online_users/' + currentUser.username;
+    // Dùng navigator.sendBeacon nếu có, fallback dùng fetch sync
+    if (navigator.sendBeacon) {
+      // Firebase RTDB REST API endpoint
+      const url = `https://kho-du-lieu-de-default-rtdb.firebaseio.com/${path}.json`;
+      navigator.sendBeacon(url, 'null');
+    } else {
+      window.dbRemove(window.ref(window.db, path));
+    }
+  } catch (e) {}
+});
+
+// Cũng xoá khi user logout
+const _origHandleLogout = window.handleLogout;
+window.handleLogout = function() {
+  if (currentUser) {
+    try {
+      window.dbRemove(window.ref(window.db, 'online_users/' + currentUser.username));
+    } catch (e) {}
+  }
+  return _origHandleLogout.apply(this, arguments);
+};
+
+/* ============ CẬP NHẬT ONLINE COUNT ĐỊNH KỲ ============ */
+// Cập nhật lại số online mỗi 20s để loại bỏ user đã rời
+setInterval(() => {
+  const data = document.getElementById('homeOnlineCount');
+  if (!data) return;
+  window.dbGet(window.dbChild(window.dbRef, 'online_users')).then(snap => {
+    const list = snap.val() || {};
+    const now = Date.now();
+    const online = Object.values(list).filter(u => u && u.lastSeen && (now - u.lastSeen) < 60000).length;
+    const hEl = document.getElementById('homeOnlineCount');
+    if (hEl) hEl.innerText = online;
+    const nEl = document.getElementById('navOnlineCount');
+    if (nEl) nEl.innerText = online;
+    // Xoá các entry cũ > 2 phút (dọn dẹp DB)
+    Object.entries(list).forEach(([uname, info]) => {
+      if (info && info.lastSeen && (now - info.lastSeen) > 120000) {
+        window.dbRemove(window.ref(window.db, 'online_users/' + uname)).catch(() => {});
+      }
+    });
+  }).catch(() => {});
+}, 20000);
     </script>
 </body>
 
