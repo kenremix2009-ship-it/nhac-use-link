@@ -867,6 +867,112 @@ body[data-theme="galaxy"] input,body[data-theme="galaxy"] select,body[data-theme
 #emailImagePreviewBox input[type="range"]{width:100%;padding:0;margin:4px 0 10px 0}
 #emailImagePreviewWrap{text-align:center;margin-bottom:10px;overflow:hidden;background:#f8f9fa;padding:10px;border-radius:6px;min-height:80px}
 #emailImagePreview{max-width:100%;display:block}
+/* ============ CUSTOM NAVBAR BUTTONS ============ */
+.aurora-nav-btn{
+  --aurora-rad:12px;
+  --aurora-cwb:#fff;
+  --aurora-cbb:#f00;
+  --aurora-cbt:#000;
+  --aurora-cbts:#fff;
+  --aurora-cbis:#558;
+  --aurora-cla:#fff;
+  --aurora-clb:#00f;
+  --aurora-cot:#000;
+  --aurora-cog:#fff;
+  --aurora-cos:rgba(0,0,0,.27);
+  --aurora-coh:rgba(255,255,255,.33);
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  overflow:clip;
+  overflow-clip-margin:4px;
+  border:2px solid var(--aurora-cwb);
+  border-radius:var(--aurora-rad);
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  font-size:11px;
+  font-weight:600;
+  padding:0;
+  background:transparent;
+  cursor:pointer;
+  filter:saturate(.65) brightness(1.8);
+  min-height:38px;
+  min-width:86px;
+  isolation:isolate;
+}
+.aurora-nav-btn .aurora-gbtn{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  border-radius:var(--aurora-rad);
+  background-color:var(--aurora-cbb);
+  box-shadow:inset 0 0 10px 9px var(--aurora-cbis);
+}
+.aurora-nav-btn .aurora-glayer{
+  position:absolute;
+  left:-160px;
+  top:50%;
+  margin-top:-125px;
+  width:500%;
+  height:250px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:1;
+  background:radial-gradient(
+    ellipse at 65% 180%,
+    var(--aurora-cla),
+    var(--aurora-clb),
+    var(--aurora-cla),
+    var(--aurora-clb),
+    var(--aurora-cla),
+    var(--aurora-clb),
+    var(--aurora-cla),
+    var(--aurora-clb),
+    var(--aurora-cla),
+    var(--aurora-clb),
+    var(--aurora-cla)
+  );
+  mix-blend-mode:difference;
+  animation:auroraRotate 8s linear infinite;
+}
+.aurora-nav-btn .aurora-glayer:nth-of-type(3){
+  mix-blend-mode:color-dodge;
+}
+.aurora-nav-btn .aurora-overlay{
+  position:relative;
+  z-index:3;
+  padding:8px 14px;
+  border-radius:var(--aurora-rad);
+  color:var(--aurora-cot);
+  text-shadow:0 0 4px var(--aurora-cog);
+  box-shadow:inset 0 -4px 4px 0 var(--aurora-cos),inset 0 4px 4px 0 var(--aurora-coh);
+  mix-blend-mode:multiply;
+  animation:auroraOpacityPulse 5s ease infinite;
+  white-space:nowrap;
+  pointer-events:none;
+  transition:transform .3s ease;
+  font-weight:600;
+  letter-spacing:.5px;
+}
+.aurora-nav-btn .aurora-light{
+  position:absolute;
+  pointer-events:none;
+  z-index:2;
+  border-radius:50px;
+  top:50%;
+  left:10%;
+  transform:translateY(-50%);
+  width:80%;
+  height:1.9rem;
+  background-color:#fff5;
+  filter:blur(5px);
+  animation:auroraPulse 3s ease-in-out infinite;
+}
+@keyframes auroraRotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes auroraPulse{0%,100%{opacity:1}50%{opacity:.1}}
+@keyframes auroraOpacityPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.aurora-nav-btn:hover .aurora-overlay{transform:scale(1.1)}
+.aurora-nav-btn:active .aurora-overlay{transform:scale(.95)}
 @media(max-width:768px){
 .navbar{padding:8px;gap:6px}
 .logo{font-size:15px}
@@ -908,6 +1014,8 @@ input,select,textarea{font-size:13px;padding:9px}
 .home-hero p{font-size:13px}
 .theme-switch{--toggle-size:10px}
 #natureThemeOverlay .nt-close{top:10px;right:10px;width:38px;height:38px}
+.aurora-nav-btn{font-size:9px;min-height:32px;min-width:0}
+.aurora-nav-btn .aurora-overlay{padding:6px 10px}
 }
 </style>
 </head><body>
@@ -1088,7 +1196,7 @@ input,select,textarea{font-size:13px;padding:9px}
       </div>
     </div>
   </label>
-  <div class="nav-tabs"><button class="active" onclick="switchView('homeView', this)">🏠 TRANG CHỦ</button><button onclick="switchView('studentLoginView', this)">🧑‍🎓 HỌC SINH</button><button onclick="switchView('teacherView', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="switchView('advancedModelView', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView('guideView', this)">📖 HƯỚNG DẪN</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button></div><div id="navUserInfo" class="nav-user" style="display:none"></div></div></div>
+  <div class="nav-tabs" id="navTabsContainer"><button class="active" onclick="switchView('homeView', this)">🏠 TRANG CHỦ</button><button onclick="switchView('studentLoginView', this)">🧑‍🎓 HỌC SINH</button><button onclick="switchView('teacherView', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="switchView('advancedModelView', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView('guideView', this)">📖 HƯỚNG DẪN</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button></div><div id="navUserInfo" class="nav-user" style="display:none"></div></div></div>
 
 <div class="container">
 
@@ -1290,7 +1398,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-warning">🔒 Yêu cầu mật khẩu VUA (full quyền) hoặc PARTNER (giới hạn).</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>👥 Quản Lí Tài Khoản:</b> Tìm/lọc user, xem profile, gán vai trò tùy chỉnh, đổi vai trò chính, sửa ID + biệt danh + màu tên + font + hiệu ứng chữ, <b>🏷️ Name Tag</b>, đổi ảnh nền header, trao huy chương/cup. Quản lý danh sách vai trò, huy chương/cup.</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>⚙️ Quản Trị Hệ Thống:</b> Tên website, quản lý đề thi/bài luyện, thông báo toàn cầu (banner), mật khẩu bảo mật + partner, cấu hình welcome.</div></div>
-<div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>🔧 Cấu hình:</b> Logo website (navbar + favicon), EmailJS (gửi mail OTP), tên web, <b>Tùy chỉnh giao diện</b> (Trang chủ: hero, 4 ô nội dung, tắt/bật thống kê).</div></div>
+<div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>🔧 Cấu hình:</b> Logo website (navbar + favicon), EmailJS (gửi mail OTP), tên web, <b>Tùy chỉnh giao diện</b> (Trang chủ: hero, 4 ô nội dung, tắt/bật thống kê), <b>📧 Gửi Mail</b>, <b>🎨 Tùy chỉnh nút Button</b>.</div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content"><b>🎮 Trung Tâm Giải Trí:</b> Nhạc đồng bộ (âm lượng, kiểu phát), Thông báo mới (ô vuông giữa màn hình), Trêu ghẹo, Chế độ ngày/đêm + theme, <b>📧 Gửi Email</b>. Chi tiết xem tab <b>🎮 Giải Trí</b>.</div></div>
 <div class="guide-warning">💡 Mỗi mục đều có nút <b>...</b> để mở rộng ra chỉnh sửa, và <b>^</b> để thu gọn.</div>
 </div>
@@ -1300,7 +1408,7 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div style="font-weight:900;color:#6f42c1;margin:12px 0 8px 0">🎵 1. Nhạc Đồng Bộ</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Thêm file nhạc (≤12MB). Bấm ▶ để phát cho <b>tất cả mọi người</b> cùng nghe. Bấm 🗑️ để xóa file.</div></div>
-<div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Âm lượng:</b> kéo thanh → nghe thử ngay. Bấm <b>💾 Lưu</b> để áp dụng cho tất cả. Bấm <b>🔇 Tắt âm</b> để tắt tiếng tạm thời (không ảnh hưởng người khác).</div></div>
+<div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Âm lượng:</b> kéo thanh → nghe thử ngay. Hệ thống <b>tự động đồng bộ realtime</b> cho mọi thiết bị (cả điện thoại). Bấm <b>💾 Lưu</b> để xác nhận, bấm <b>🔇 Tắt âm</b> để tắt tiếng tạm thời (không ảnh hưởng người khác).</div></div>
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>Kiểu phát:</b> 🔂 Lặp lại 1 bài · ⏭️ Tự chuyển bài · 📋 Danh sách phát (tùy chỉnh thứ tự, có nút Reset) · 🔀 Ngẫu nhiên.</div></div>
 
 <div style="font-weight:900;color:#6f42c1;margin:12px 0 8px 0">📢 2. Thông Báo Mới</div>
@@ -1318,11 +1426,11 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>Phiếu câu hỏi:</b> Đưa ra câu hỏi + lựa chọn. Người nhận phải chọn ≥1 đáp án và bấm xác nhận mới tắt được. GV có thể xem lại đáp án trả lời.</div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">2 nút chính: <b>🎬 Phát Hiệu Ứng</b> và <b>📋 Phát Phiếu Câu Hỏi</b>.</div></div>
 
-<div style="font-weight:900;color:#6f42c1;margin:12px 0 8px 0">📧 4. Gửi Email (MỚI)</div>
-<div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Người nhận:</b> 🌐 Tất cả người dùng có email HOẶC 👤 Nhập 1 email cụ thể.</div></div>
+<div style="font-weight:900;color:#6f42c1;margin:12px 0 8px 0">📧 4. Gửi Email (CHUNG / RIÊNG)</div>
+<div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Người nhận:</b> 🌐 Tất cả người dùng có email HOẶC 👤 Nhập 1 email cụ thể (đã hỗ trợ gửi riêng).</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Nội dung:</b> Tiêu đề + nội dung. Có thể thêm <b>đường link</b> (hiển thị theo tên tùy chỉnh) và <b>ảnh</b>.</div></div>
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>Căn chỉnh ảnh:</b> sau khi tải ảnh, dùng thanh trượt chỉnh <b>chiều rộng (%)</b>, <b>chiều cao (px)</b> và <b>căn lề</b> (trái/giữa/phải). Xem trước ngay lập tức.</div></div>
-<div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content"><b>Bắt buộc:</b> Nhập mật khẩu VUA để gửi. Yêu cầu đã cấu hình EmailJS trong tab Cấu hình.</div></div>
+<div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content"><b>Bắt buộc:</b> Nhập mật khẩu VUA để gửi. Yêu cầu đã cấu hình EmailJS trong tab Cấu hình. Nếu gửi riêng bị lỗi → xem mục <b>📧 GỬI MAIL</b> trong Cấu hình để tinh chỉnh tên trường.</div></div>
 
 <div style="font-weight:900;color:#6f42c1;margin:12px 0 8px 0">🌓 5. Chế độ Ngày/Đêm + Theme</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Nút chuyển đổi <b>Sáng/Tối</b> nổi ở góc dưới phải màn hình.</div></div>
@@ -1336,6 +1444,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>☀️ Sáng:</b> Giao diện sáng mặc định.</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>🌙 Tối:</b> Nền đen, chữ sáng, dịu mắt.</div></div>
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Vào <b>👑 TỐI CAO → 🎮 Trung Tâm Giải Trí → 🌓 Chế độ Ngày/Đêm</b> để mở khóa các theme <b>Glow · Hoàng hôn · Sky · Galaxy · 🌿 Thiên nhiên (3D)</b> và chọn áp dụng cho <b>cá nhân</b> hoặc <b>tất cả</b>.</div></div>
+<div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">Vào <b>👑 TỐI CAO → 🔧 Cấu hình → 🎨 Tùy chỉnh nút Button</b> để đổi màu/kiểu nút navbar: Trang Chủ, Học Sinh, Giáo Viên, GV Nâng Cao, Hướng Dẫn.</div></div>
 </div>
 
 </div></div>
@@ -1488,6 +1597,73 @@ input,select,textarea{font-size:13px;padding:9px}
 <p id="emailjsConfigStatus" style="font-size:12px;color:#666;margin-top:10px;padding:8px;background:#f8f9fa;border-radius:6px">ℹ️ Chưa có cấu hình. Đang ở chế độ demo.</p>
 </div></div>
 
+<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>📧 GỬI MAIL (CẤU HÌNH GỬI RIÊNG / TÊN TRƯỜNG EMAILJS)</span><span class="collapse-arrow">▼</span></div>
+<div class="collapse-body collapsed"><div style="background:#fff7e6;border:2px dashed #ffc107;padding:14px;border-radius:10px;margin-bottom:20px">
+<p style="font-size:12px;color:#856404;margin-bottom:10px;line-height:1.6">⚠️ <b>Nếu gửi mail riêng không hoạt động</b>, hãy chỉnh <b>tên trường</b> ở đây để khớp với template EmailJS của bạn (mặc định: <code>to_email</code>, <code>to_name</code>, <code>subject</code>, <code>message</code>). Trên EmailJS, trường <b>To Email</b> của template cần dùng biến tương ứng (VD: <code>{{to_email}}</code>).</p>
+<label>📨 Tên trường Email người nhận:</label>
+<input type="text" id="emailToField" placeholder="to_email" value="to_email">
+<label>👤 Tên trường Tên người nhận:</label>
+<input type="text" id="emailToNameField" placeholder="to_name" value="to_name">
+<label>📝 Tên trường Chủ đề:</label>
+<input type="text" id="emailSubjectField" placeholder="subject" value="subject">
+<label>💬 Tên trường Nội dung:</label>
+<input type="text" id="emailMessageField" placeholder="message" value="message">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;margin-top:6px"><input type="checkbox" id="emailAutoFillAllFields" checked style="width:16px;height:16px"> 🎯 Tự động gửi kèm TẤT CẢ tên trường phổ biến (to_email, email, user_email, recipient...)</label>
+<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+  <button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="saveEmailFieldConfig()">💾 Lưu Cấu Hình Trường</button>
+  <button class="btn btn-warning" style="width:auto;padding:10px 16px" onclick="testSendPrivateEmail()">🧪 Test Gửi Riêng</button>
+</div>
+<div id="emailFieldStatus" style="font-size:12px;color:#856404;margin-top:10px;padding:8px;background:#fff;border-radius:6px">ℹ️ Sẽ dùng để gửi mail riêng (mục 🎮 Giải Trí → 📧 Gửi Email).</div>
+</div></div>
+
+<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🎨 TÙY CHỈNH NÚT BUTTON (NAVBAR)</span><span class="collapse-arrow">▼</span></div>
+<div class="collapse-body collapsed"><div style="background:#f0f8ff;border:2px dashed #1877f2;padding:14px;border-radius:10px;margin-bottom:20px">
+<p style="font-size:12px;color:#666;margin-bottom:10px;line-height:1.6">Tùy chỉnh 5 nút chính trên thanh navbar với phong cách gradient động. Mỗi nút có bộ màu riêng.</p>
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;margin-bottom:12px;padding:10px;background:#fff;border-radius:8px;border:2px solid #1877f2"><input type="checkbox" id="customBtnEnabled" style="width:18px;height:18px"> ✨ Bật giao diện nút tùy chỉnh cho NAVBAR</label>
+<div class="supreme-tabs" id="customBtnTabs" style="margin-bottom:14px">
+  <div class="supreme-tab active" data-btn="home" onclick="switchCustomBtnTab('home', this)">🏠 Trang Chủ</div>
+  <div class="supreme-tab" data-btn="student" onclick="switchCustomBtnTab('student', this)">🧑‍🎓 Học Sinh</div>
+  <div class="supreme-tab" data-btn="teacher" onclick="switchCustomBtnTab('teacher', this)">👨‍🏫 Giáo Viên</div>
+  <div class="supreme-tab" data-btn="advanced" onclick="switchCustomBtnTab('advanced', this)">⚙️ GV Nâng Cao</div>
+  <div class="supreme-tab" data-btn="guide" onclick="switchCustomBtnTab('guide', this)">📖 Hướng Dẫn</div>
+</div>
+<div id="customBtnPanel" style="background:#fff;padding:14px;border-radius:10px;border:1px solid #e0e0e0">
+  <div style="text-align:center;padding:14px;background:#f8f9fa;border-radius:10px;margin-bottom:14px">
+    <div style="font-size:11px;color:#888;margin-bottom:10px">XEM TRƯỚC:</div>
+    <div id="customBtnPreviewWrap" style="display:flex;justify-content:center"></div>
+  </div>
+  <div class="form-grid-2">
+    <div><label style="font-size:11px">🖼️ Màu viền khung:</label><input type="color" id="cbt_wrapperBorder" value="#ffffff" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+    <div><label style="font-size:11px">🎨 Màu nền nút:</label><input type="color" id="cbt_btnBg" value="#ff0000" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+  </div>
+  <div class="form-grid-2">
+    <div><label style="font-size:11px">✍️ Màu chữ nút:</label><input type="color" id="cbt_btnText" value="#000000" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+    <div><label style="font-size:11px">💡 Màu bóng chữ:</label><input type="color" id="cbt_btnTextShadow" value="#ffffff" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+  </div>
+  <div class="form-grid-2">
+    <div><label style="font-size:11px">🌑 Màu inset shadow:</label><input type="color" id="cbt_btnInsetShadow" value="#555588" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+    <div><label style="font-size:11px">🌈 Lớp gradient A:</label><input type="color" id="cbt_layerA" value="#ffffff" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+  </div>
+  <div class="form-grid-2">
+    <div><label style="font-size:11px">🌈 Lớp gradient B:</label><input type="color" id="cbt_layerB" value="#0000ff" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+    <div><label style="font-size:11px">📝 Màu chữ overlay:</label><input type="color" id="cbt_overlayText" value="#000000" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+  </div>
+  <div class="form-grid-2">
+    <div><label style="font-size:11px">✨ Màu glow overlay:</label><input type="color" id="cbt_overlayGlow" value="#ffffff" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+    <div><label style="font-size:11px">🌑 Màu shadow overlay:</label><input type="color" id="cbt_overlayShadow" value="#000000" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+  </div>
+  <div class="form-grid-2">
+    <div><label style="font-size:11px">💡 Màu highlight overlay:</label><input type="color" id="cbt_overlayHighlight" value="#ffffff" style="width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #ccc;cursor:pointer"></div>
+    <div></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+    <button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="saveCustomBtnColors()">💾 Lưu Nút Này</button>
+    <button class="btn btn-warning" style="width:auto;padding:10px 16px" onclick="resetCustomBtnCurrent()">🔄 Reset Nút Này</button>
+    <button class="btn btn-danger" style="width:auto;padding:10px 16px" onclick="resetCustomBtnAll()">🗑️ Reset Tất Cả</button>
+  </div>
+</div>
+</div></div>
+
 <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🌐 TÊN WEBSITE (cấu hình nhanh)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed"><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:20px">
   <input type="text" id="configWebName" placeholder="✨ AURORA" style="margin-bottom:8px">
@@ -1521,7 +1697,7 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 
 <div style="margin-bottom:10px">
-<label>🔊 Âm lượng (đồng bộ mọi người): <span id="musicVolVal" style="color:#1877f2;font-weight:bold">70%</span></label>
+<label>🔊 Âm lượng (đồng bộ mọi người - realtime): <span id="musicVolVal" style="color:#1877f2;font-weight:bold">70%</span></label>
 <input type="range" id="musicVolumeRange" min="0" max="100" value="70" style="width:100%;padding:0;margin:6px 0 0 0" oninput="onMusicVolumeChange(this.value)">
 </div>
 
@@ -1670,7 +1846,8 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>📧 4. GỬI EMAIL (CHUNG / RIÊNG)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed">
 <div style="background:#fff3cd;border:1px solid #ffeeba;padding:10px;border-radius:8px;margin-bottom:12px;font-size:12px;color:#856404;line-height:1.6">
-  ℹ️ Gửi thông báo qua email đến <b>tất cả người dùng</b> hoặc <b>1 người cụ thể</b>. Yêu cầu đã cấu hình EmailJS trong tab <b>🔧 Cấu hình</b> và <b>mật khẩu VUA</b>.
+  ℹ️ Gửi thông báo qua email đến <b>tất cả người dùng</b> hoặc <b>1 người cụ thể</b>. Yêu cầu đã cấu hình EmailJS trong tab <b>🔧 Cấu hình</b> và <b>mật khẩu VUA</b>.<br>
+  💡 Nếu gửi riêng bị lỗi → vào <b>🔧 Cấu hình → 📧 GỬI MAIL</b> để chỉnh tên trường.
 </div>
 
 <div style="background:#f0f8ff;padding:12px;border-radius:10px;margin-bottom:12px">
@@ -2059,6 +2236,25 @@ let prankEffectsListener=null;
 let emailImageData='';
 let preMuteVolume=0.7;
 let natureThemeDismissed=false;
+let customButtonsConfig=null;let currentCustomBtnTab='home';
+const ORIGINAL_NAV_TABS_HTML_DEFAULT='<button class="active" onclick="switchView(\'homeView\', this)">🏠 TRANG CHỦ</button><button onclick="switchView(\'studentLoginView\', this)">🧑‍🎓 HỌC SINH</button><button onclick="switchView(\'teacherView\', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="switchView(\'advancedModelView\', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView(\'guideView\', this)">📖 HƯỚNG DẪN</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button>';
+const DEFAULT_CUSTOM_BUTTONS={
+  enabled:false,
+  buttons:{
+    home:{wrapperBorder:'#ffffff',btnBg:'#1877f2',btnText:'#000000',btnTextShadow:'#ffffff',btnInsetShadow:'#0d5fd6',layerA:'#ffffff',layerB:'#00bfff',overlayText:'#ffffff',overlayGlow:'#1877f2',overlayShadow:'#000000',overlayHighlight:'#ffffff'},
+    student:{wrapperBorder:'#ffffff',btnBg:'#198754',btnText:'#000000',btnTextShadow:'#ffffff',btnInsetShadow:'#0d5f38',layerA:'#ffffff',layerB:'#00ff88',overlayText:'#ffffff',overlayGlow:'#198754',overlayShadow:'#000000',overlayHighlight:'#ffffff'},
+    teacher:{wrapperBorder:'#ffffff',btnBg:'#6f42c1',btnText:'#000000',btnTextShadow:'#ffffff',btnInsetShadow:'#4a2b8a',layerA:'#ffffff',layerB:'#ff00ff',overlayText:'#ffffff',overlayGlow:'#6f42c1',overlayShadow:'#000000',overlayHighlight:'#ffffff'},
+    advanced:{wrapperBorder:'#ffffff',btnBg:'#ffc107',btnText:'#000000',btnTextShadow:'#ffffff',btnInsetShadow:'#b8860b',layerA:'#ffffff',layerB:'#ff8c00',overlayText:'#000000',overlayGlow:'#ffc107',overlayShadow:'#000000',overlayHighlight:'#ffffff'},
+    guide:{wrapperBorder:'#ffffff',btnBg:'#0d6efd',btnText:'#000000',btnTextShadow:'#ffffff',btnInsetShadow:'#084298',layerA:'#ffffff',layerB:'#00ffff',overlayText:'#ffffff',overlayGlow:'#0d6efd',overlayShadow:'#000000',overlayHighlight:'#ffffff'}
+  }
+};
+const NAV_BTN_LABELS={
+  home:'🏠 TRANG CHỦ',
+  student:'🧑‍🎓 HỌC SINH',
+  teacher:'👨‍🏫 GIÁO VIÊN',
+  advanced:'⚙️ GV NÂNG CAO',
+  guide:'📖 HƯỚNG DẪN'
+};
 const DEFAULT_WEB_NAME='✨ AURORA';
 const DEFAULT_FAVICON="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='78' font-size='80'%3E📚%3C/text%3E%3C/svg%3E";
 const VUA_PASSWORD='thuan281009@';
@@ -2268,28 +2464,255 @@ async function sendAdminEmail(){
     if(!initEmailJS(cfg)){showToast('❌ Không khởi tạo được EmailJS!','error');return;}
   }
   const appName=(document.getElementById('webLogo')?.innerText||'AURORA').trim()||'AURORA';
+  const toField=(cfg.toEmailField||'to_email').trim()||'to_email';
+  const toNameField=(cfg.toNameField||'to_name').trim()||'to_name';
+  const subjectField=(cfg.subjectField||'subject').trim()||'subject';
+  const messageField=(cfg.messageField||'message').trim()||'message';
+  const autoFill=cfg.autoFillAllFields!==false;
   showToast(`⏳ Đang gửi ${recipients.length} email...`,'info');
-  let success=0,fail=0;
+  let success=0,fail=0,lastError='';
   for(const to of recipients){
     try{
-      const resp=await emailjs.send(cfg.serviceId,cfg.templateId,{
-        to_email:to,email:to,user_email:to,
-        subject:subject,title:subject,
-        message:html,content:html,html_content:html,
+      const params={
+        [toField]:to,[toNameField]:to.split('@')[0],
+        [subjectField]:subject,[messageField]:html,
+        to_email:to,email:to,user_email:to,to:to,recipient:to,email_to:to,
+        to_name:to.split('@')[0],name:to.split('@')[0],
+        subject:subject,title:subject,message:html,content:html,html_content:html,
         app_name:appName,website_name:appName,
         sender_name:currentUser?(currentUser.nickname||currentUser.username):'Admin'
-      },{publicKey:cfg.publicKey});
-      if(resp&&(resp.status===200||resp.status===0))success++;else fail++;
-    }catch(e){fail++;}
+      };
+      if(!autoFill){
+        Object.keys(params).forEach(k=>{if(![toField,toNameField,subjectField,messageField].includes(k))delete params[k];});
+      }
+      const resp=await emailjs.send(cfg.serviceId,cfg.templateId,params,{publicKey:cfg.publicKey});
+      if(resp&&(resp.status===200||resp.status===0))success++;else{fail++;lastError='Status: '+(resp&&resp.status);}
+    }catch(e){fail++;lastError=(e&&e.text)||(e&&e.message)||'Lỗi không xác định';}
   }
   showCenterSquareToast(
     success>0?'✅':'❌',
     success>0?'Đã gửi!':'Gửi thất bại',
-    `Thành công: ${success}/${recipients.length}${fail?' • Lỗi: '+fail:''}`,
+    `Thành công: ${success}/${recipients.length}${fail?' • Lỗi: '+fail+(lastError?'\n'+lastError:''):''}`,
     success>0?'success':'error',
-    5000
+    6000
   );
   document.getElementById('emailAdminVuaPass').value='';
+}
+
+/* ============ EMAIL FIELD CONFIG (GỬI MAIL) ============ */
+async function saveEmailFieldConfig(){
+  if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}
+  try{
+    const fields={
+      toEmailField:(document.getElementById('emailToField').value||'to_email').trim()||'to_email',
+      toNameField:(document.getElementById('emailToNameField').value||'to_name').trim()||'to_name',
+      subjectField:(document.getElementById('emailSubjectField').value||'subject').trim()||'subject',
+      messageField:(document.getElementById('emailMessageField').value||'message').trim()||'message',
+      autoFillAllFields:document.getElementById('emailAutoFillAllFields').checked
+    };
+    for(const k of Object.keys(fields)){await window.dbSet(window.ref(window.db,'system/emailjs_config/'+k),fields[k]);}
+    if(!cachedEmailJSConfig)cachedEmailJSConfig={};
+    Object.assign(cachedEmailJSConfig,fields);
+    const st=document.getElementById('emailFieldStatus');
+    if(st){st.style.background='#d1e7dd';st.style.color='#0f5132';st.innerHTML='✅ Đã lưu cấu hình trường email! Sẽ áp dụng cho lần gửi tiếp theo.';}
+    showCenterSquareToast('✅','Đã lưu!','Cấu hình trường email','success',2600);
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+async function testSendPrivateEmail(){
+  if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}
+  const cfg=cachedEmailJSConfig;
+  if(!cfg||!cfg.enabled||!cfg.publicKey||!cfg.serviceId||!cfg.templateId){showToast('❌ Chưa cấu hình EmailJS!','error');return;}
+  const toEmail=await customPrompt('Nhập email nhận thư test riêng:',{icon:'📧',title:'Gửi test riêng',placeholder:'test@gmail.com'});
+  if(!toEmail||!toEmail.includes('@')){if(toEmail)showToast('❌ Email không hợp lệ!','error');return;}
+  if(!emailJSInitialized){if(!initEmailJS(cfg)){showToast('❌ Không khởi tạo được EmailJS!','error');return;}}
+  const toField=(cfg.toEmailField||'to_email').trim()||'to_email';
+  const toNameField=(cfg.toNameField||'to_name').trim()||'to_name';
+  const subjectField=(cfg.subjectField||'subject').trim()||'subject';
+  const messageField=(cfg.messageField||'message').trim()||'message';
+  const autoFill=cfg.autoFillAllFields!==false;
+  const appName=(document.getElementById('webLogo')?.innerText||'AURORA').trim()||'AURORA';
+  const params={
+    [toField]:toEmail,[toNameField]:toEmail.split('@')[0],
+    [subjectField]:'[TEST] Email riêng',[messageField]:'Đây là email test gửi riêng.',
+    to_email:toEmail,email:toEmail,user_email:toEmail,to:toEmail,recipient:toEmail,email_to:toEmail,
+    to_name:toEmail.split('@')[0],name:toEmail.split('@')[0],
+    subject:'[TEST] Email riêng',title:'[TEST] Email riêng',message:'Đây là email test gửi riêng.',
+    app_name:appName,website_name:appName,sender_name:'Admin'
+  };
+  if(!autoFill){Object.keys(params).forEach(k=>{if(![toField,toNameField,subjectField,messageField].includes(k))delete params[k];});}
+  try{
+    showToast('⏳ Đang gửi test...','info');
+    const resp=await emailjs.send(cfg.serviceId,cfg.templateId,params,{publicKey:cfg.publicKey});
+    if(resp&&(resp.status===200||resp.status===0)){
+      showCenterSquareToast('✅','Gửi thành công!','Đã gửi test riêng đến: '+toEmail,'success',5000);
+      const st=document.getElementById('emailFieldStatus');if(st){st.style.background='#d1e7dd';st.style.color='#0f5132';st.innerHTML='✅ Gửi test riêng thành công đến '+escapeHtml(toEmail);}
+    } else showToast('⚠️ Phản hồi bất thường','warn');
+  }catch(e){
+    const msg=(e&&e.text)||(e&&e.message)||'Lỗi không xác định';
+    showCenterSquareToast('❌','Gửi thất bại',msg,'error',6000);
+    const st=document.getElementById('emailFieldStatus');if(st){st.style.background='#f8d7da';st.style.color='#842029';st.innerHTML='❌ '+escapeHtml(msg);}
+  }
+}
+function loadEmailFieldConfigUI(){
+  if(!cachedEmailJSConfig)return;
+  const $=id=>document.getElementById(id);
+  if($('emailToField')&&document.activeElement!==$('emailToField'))$('emailToField').value=cachedEmailJSConfig.toEmailField||'to_email';
+  if($('emailToNameField')&&document.activeElement!==$('emailToNameField'))$('emailToNameField').value=cachedEmailJSConfig.toNameField||'to_name';
+  if($('emailSubjectField')&&document.activeElement!==$('emailSubjectField'))$('emailSubjectField').value=cachedEmailJSConfig.subjectField||'subject';
+  if($('emailMessageField')&&document.activeElement!==$('emailMessageField'))$('emailMessageField').value=cachedEmailJSConfig.messageField||'message';
+  if($('emailAutoFillAllFields'))$('emailAutoFillAllFields').checked=cachedEmailJSConfig.autoFillAllFields!==false;
+}
+
+/* ============ CUSTOM NAVBAR BUTTONS ============ */
+function buildAuroraBtnHtml(id,label,onclickAttr,colors){
+  const c=colors||{};
+  const style=[
+    `--aurora-cwb:${c.wrapperBorder||'#ffffff'}`,
+    `--aurora-cbb:${c.btnBg||'#ff0000'}`,
+    `--aurora-cbt:${c.btnText||'#000000'}`,
+    `--aurora-cbts:${c.btnTextShadow||'#ffffff'}`,
+    `--aurora-cbis:${c.btnInsetShadow||'#555588'}`,
+    `--aurora-cla:${c.layerA||'#ffffff'}`,
+    `--aurora-clb:${c.layerB||'#0000ff'}`,
+    `--aurora-cot:${c.overlayText||'#000000'}`,
+    `--aurora-cog:${c.overlayGlow||'#ffffff'}`,
+    `--aurora-cos:${c.overlayShadow||'rgba(0,0,0,.27)'}`,
+    `--aurora-coh:${c.overlayHighlight||'rgba(255,255,255,.33)'}`
+  ].join(';');
+  return `<button class="aurora-nav-btn" data-nav="${id}" onclick="${onclickAttr}" style="${style}"><span class="aurora-gbtn"></span><span class="aurora-glayer"></span><span class="aurora-glayer"></span><span class="aurora-overlay">${label}</span><span class="aurora-light"></span></button>`;
+}
+function renderNavButtons(){
+  const tabs=document.getElementById('navTabsContainer');
+  if(!tabs)return;
+  const cfg=customButtonsConfig||DEFAULT_CUSTOM_BUTTONS;
+  if(!cfg.enabled){
+    tabs.innerHTML=ORIGINAL_NAV_TABS_HTML_DEFAULT;
+    return;
+  }
+  const b=cfg.buttons||{};
+  let html='';
+  html+=buildAuroraBtnHtml('home',NAV_BTN_LABELS.home,"switchView('homeView', this)",b.home);
+  html+=buildAuroraBtnHtml('student',NAV_BTN_LABELS.student,"switchView('studentLoginView', this)",b.student);
+  html+=buildAuroraBtnHtml('teacher',NAV_BTN_LABELS.teacher,"switchView('teacherView', this)",b.teacher);
+  html+=buildAuroraBtnHtml('advanced',NAV_BTN_LABELS.advanced,"switchView('advancedModelView', this)",b.advanced);
+  html+=buildAuroraBtnHtml('guide',NAV_BTN_LABELS.guide,"switchView('guideView', this)",b.guide);
+  html+='<button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button>';
+  tabs.innerHTML=html;
+  const cur=document.querySelector('.nav-tabs button.active');
+  if(!cur){const homeBtn=tabs.querySelector('button[data-nav="home"]');if(homeBtn)homeBtn.classList.add('active');}
+}
+function listenCustomButtons(){
+  window.onValue(window.ref(window.db,'system/custom_buttons'),snap=>{
+    if(!snap.exists()){
+      customButtonsConfig=JSON.parse(JSON.stringify(DEFAULT_CUSTOM_BUTTONS));
+      renderNavButtons();
+      return;
+    }
+    const data=snap.val()||{};
+    customButtonsConfig={
+      enabled:!!data.enabled,
+      buttons:Object.assign(JSON.parse(JSON.stringify(DEFAULT_CUSTOM_BUTTONS.buttons)),data.buttons||{})
+    };
+    renderNavButtons();
+    syncCustomBtnUIFromConfig();
+  });
+}
+function syncCustomBtnUIFromConfig(){
+  if(!customButtonsConfig)return;
+  const $=id=>document.getElementById(id);
+  if($('customBtnEnabled')&&document.activeElement!==$('customBtnEnabled'))$('customBtnEnabled').checked=!!customButtonsConfig.enabled;
+  const cur=customButtonsConfig.buttons[currentCustomBtnTab];
+  if(cur&&document.getElementById('cbt_wrapperBorder'))applyCustomBtnFieldsToUI(cur);
+  renderCustomBtnPreview();
+}
+function applyCustomBtnFieldsToUI(c){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||'#000000';};
+  set('cbt_wrapperBorder',c.wrapperBorder);
+  set('cbt_btnBg',c.btnBg);
+  set('cbt_btnText',c.btnText);
+  set('cbt_btnTextShadow',c.btnTextShadow);
+  set('cbt_btnInsetShadow',c.btnInsetShadow);
+  set('cbt_layerA',c.layerA);
+  set('cbt_layerB',c.layerB);
+  set('cbt_overlayText',c.overlayText);
+  set('cbt_overlayGlow',c.overlayGlow);
+  set('cbt_overlayShadow',c.overlayShadow);
+  set('cbt_overlayHighlight',c.overlayHighlight);
+}
+function readCustomBtnFieldsFromUI(){
+  return {
+    wrapperBorder:document.getElementById('cbt_wrapperBorder').value,
+    btnBg:document.getElementById('cbt_btnBg').value,
+    btnText:document.getElementById('cbt_btnText').value,
+    btnTextShadow:document.getElementById('cbt_btnTextShadow').value,
+    btnInsetShadow:document.getElementById('cbt_btnInsetShadow').value,
+    layerA:document.getElementById('cbt_layerA').value,
+    layerB:document.getElementById('cbt_layerB').value,
+    overlayText:document.getElementById('cbt_overlayText').value,
+    overlayGlow:document.getElementById('cbt_overlayGlow').value,
+    overlayShadow:document.getElementById('cbt_overlayShadow').value,
+    overlayHighlight:document.getElementById('cbt_overlayHighlight').value
+  };
+}
+function renderCustomBtnPreview(){
+  const wrap=document.getElementById('customBtnPreviewWrap');
+  if(!wrap)return;
+  if(!customButtonsConfig)customButtonsConfig=JSON.parse(JSON.stringify(DEFAULT_CUSTOM_BUTTONS));
+  const label=NAV_BTN_LABELS[currentCustomBtnTab]||'BUTTON';
+  const fake=CUSTOM_BTN_FAKE_HANDLER;
+  const html=buildAuroraBtnHtml('preview',label,'void(0);',customButtonsConfig.buttons[currentCustomBtnTab]);
+  wrap.innerHTML=html;
+  const btn=wrap.querySelector('.aurora-nav-btn');
+  if(btn)btn.style.cursor='default';
+}
+const CUSTOM_BTN_FAKE_HANDLER='void(0);';
+function switchCustomBtnTab(tab,el){
+  currentCustomBtnTab=tab;
+  document.querySelectorAll('#customBtnTabs .supreme-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  if(!customButtonsConfig)customButtonsConfig=JSON.parse(JSON.stringify(DEFAULT_CUSTOM_BUTTONS));
+  const c=customButtonsConfig.buttons[tab]||DEFAULT_CUSTOM_BUTTONS.buttons[tab];
+  applyCustomBtnFieldsToUI(c);
+  renderCustomBtnPreview();
+}
+async function saveCustomBtnColors(){
+  if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}
+  if(!customButtonsConfig)customButtonsConfig=JSON.parse(JSON.stringify(DEFAULT_CUSTOM_BUTTONS));
+  customButtonsConfig.buttons[currentCustomBtnTab]=readCustomBtnFieldsFromUI();
+  const enabledEl=document.getElementById('customBtnEnabled');
+  if(enabledEl)customButtonsConfig.enabled=enabledEl.checked;
+  try{
+    await window.dbSet(window.ref(window.db,'system/custom_buttons'),customButtonsConfig);
+    renderNavButtons();
+    showCenterSquareToast('✅','Đã lưu!',`Nút ${NAV_BTN_LABELS[currentCustomBtnTab]} đã cập nhật`,'success',2600);
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+async function resetCustomBtnCurrent(){
+  if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}
+  if(!await customConfirm('Reset màu nút này về mặc định?',{icon:'🔄'}))return;
+  if(!customButtonsConfig)customButtonsConfig=JSON.parse(JSON.stringify(DEFAULT_CUSTOM_BUTTONS));
+  customButtonsConfig.buttons[currentCustomBtnTab]={...DEFAULT_CUSTOM_BUTTONS.buttons[currentCustomBtnTab]};
+  applyCustomBtnFieldsToUI(customButtonsConfig.buttons[currentCustomBtnTab]);
+  renderCustomBtnPreview();
+  try{
+    await window.dbSet(window.ref(window.db,'system/custom_buttons'),customButtonsConfig);
+    renderNavButtons();
+    showToast('🔄 Đã reset nút!','warn');
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+async function resetCustomBtnAll(){
+  if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}
+  if(!await customConfirm('Reset TẤT CẢ nút về mặc định?',{icon:'🔄'}))return;
+  customButtonsConfig=JSON.parse(JSON.stringify(DEFAULT_CUSTOM_BUTTONS));
+  const enabledEl=document.getElementById('customBtnEnabled');
+  if(enabledEl)customButtonsConfig.enabled=enabledEl.checked;
+  try{
+    await window.dbSet(window.ref(window.db,'system/custom_buttons'),customButtonsConfig);
+    renderNavButtons();
+    applyCustomBtnFieldsToUI(customButtonsConfig.buttons[currentCustomBtnTab]);
+    renderCustomBtnPreview();
+    showToast('🔄 Đã reset tất cả!','warn');
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
 /* ============ COLLAPSE ============ */
@@ -2424,13 +2847,13 @@ async function handleSendResetCode(btn){const email=document.getElementById('for
 async function handleVerifyResetCode(){const code=document.getElementById('forgotCode').value.trim();if(code.length!==6){showToast('Nhập mã 6 số!','error');return;}try{const s=await window.dbGet(window.dbChild(window.dbRef,`password_resets/${emailKey(currentResetEmail)}`));if(!s.exists()){showToast('❌ Mã không tồn tại!','error');return;}const d=s.val();if(Date.now()>d.expiresAt){showToast('❌ Mã hết hạn!','error');return;}if(d.code!==code){showToast('❌ Mã không đúng!','error');return;}document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='block';showToast('✅ Nhập mật khẩu mới','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function handleResetPassword(){const np=document.getElementById('forgotNewPass').value,np2=document.getElementById('forgotNewPass2').value;if(np.length<6||np!==np2){showToast('Mật khẩu ≥6 và khớp!','error');return;}try{const es=await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(currentResetEmail)}`));const passwordHash=await hashPassword(np);await window.dbUpdate(window.ref(window.db,`users/${es.val()}`),{passwordHash,updatedAt:Date.now()});await window.dbRemove(window.ref(window.db,`password_resets/${emailKey(currentResetEmail)}`));showToast('🎉 Đặt lại thành công!','success');document.getElementById('loginIdentifier').value=currentResetEmail;['forgotNewPass','forgotNewPass2','forgotCode','forgotEmail'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});currentResetEmail='';switchAuthTab('login');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 function initEmailJS(cfg){const c=cfg||cachedEmailJSConfig||EMAILJS_CONFIG;if(!c||!c.enabled)return false;if(!c.publicKey||!c.serviceId||!c.templateId)return false;try{if(typeof emailjs==='undefined')return false;emailjs.init({publicKey:c.publicKey});emailJSInitialized=true;return true;}catch(e){return false;}}
-async function loadEmailJSConfigFromDB(){try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/emailjs_config'));if(s.exists()){cachedEmailJSConfig=s.val();if(cachedEmailJSConfig&&cachedEmailJSConfig.enabled&&cachedEmailJSConfig.publicKey&&!cachedEmailJSConfig.publicKey.includes('YOUR_'))initEmailJS(cachedEmailJSConfig);updateEmailJSStatusUI();fillEmailJSForm(cachedEmailJSConfig);}else{cachedEmailJSConfig=null;updateEmailJSStatusUI();}}catch(e){cachedEmailJSConfig=null;updateEmailJSStatusUI();}}
+async function loadEmailJSConfigFromDB(){try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/emailjs_config'));if(s.exists()){cachedEmailJSConfig=s.val();if(cachedEmailJSConfig&&cachedEmailJSConfig.enabled&&cachedEmailJSConfig.publicKey&&!cachedEmailJSConfig.publicKey.includes('YOUR_'))initEmailJS(cachedEmailJSConfig);updateEmailJSStatusUI();fillEmailJSForm(cachedEmailJSConfig);loadEmailFieldConfigUI();}else{cachedEmailJSConfig=null;updateEmailJSStatusUI();}}catch(e){cachedEmailJSConfig=null;updateEmailJSStatusUI();}}
 function updateEmailJSStatusUI(){const c=cachedEmailJSConfig||EMAILJS_CONFIG;const ready=!!(c&&c.enabled&&c.publicKey&&c.serviceId&&c.templateId);const badge=document.getElementById('forgotEmailStatus');if(badge){if(ready){badge.className='email-status-badge ready';badge.innerHTML='✅ <b>Gửi email thật đang BẬT</b> — Mã xác nhận sẽ được gửi đến hộp thư của bạn.';}else{badge.className='email-status-badge demo';badge.innerHTML='⚠️ <b>Chế độ DEMO</b> — Chưa cấu hình gửi email. Mã xác nhận sẽ hiển thị trực tiếp trên màn hình.';}}const st=document.getElementById('emailjsConfigStatus');if(st){if(ready){st.style.background='#d1e7dd';st.style.color='#0f5132';st.innerHTML=`✅ Đã cấu hình — Public Key: <code>${escapeHtml((c.publicKey||'').slice(0,8))}...</code>`;}else{st.style.background='#fff3cd';st.style.color='#856404';st.innerHTML='⚠️ Chưa cấu hình đầy đủ — Hệ thống đang ở chế độ DEMO.';}}}
 function fillEmailJSForm(cfg){if(!cfg)cfg=EMAILJS_CONFIG;const pk=document.getElementById('emailjsPublicKey');if(pk)pk.value=cfg.publicKey||'';const si=document.getElementById('emailjsServiceId');if(si)si.value=cfg.serviceId||'';const ti=document.getElementById('emailjsTemplateId');if(ti)ti.value=cfg.templateId||'';const en=document.getElementById('emailjsEnabled');if(en)en.checked=!!cfg.enabled;}
 async function sendResetEmailViaEmailJS(email,code){const c=cachedEmailJSConfig||EMAILJS_CONFIG;if(!c||!c.enabled)return false;if(!c.publicKey||!c.serviceId||!c.templateId)return false;if(!emailJSInitialized){if(!initEmailJS(c))return false;}try{const appName=(document.getElementById('webLogo')?.innerText||'AURORA').trim()||'AURORA';const message=`Mã đặt lại mật khẩu ${appName} của bạn là: ${code}\nMã có hiệu lực trong 10 phút.`;const resp=await emailjs.send(c.serviceId,c.templateId,{to_email:email,email:email,user_email:email,reset_code:code,code:code,verification_code:code,app_name:appName,website_name:appName,message:message,expiry:'10 phút',expiry_minutes:'10'},{publicKey:c.publicKey});return !!(resp&&(resp.status===200||resp.status===0));}catch(e){return false;}}
-async function saveEmailJSConfig(){if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}const publicKey=(document.getElementById('emailjsPublicKey').value||'').trim();const serviceId=(document.getElementById('emailjsServiceId').value||'').trim();const templateId=(document.getElementById('emailjsTemplateId').value||'').trim();const enabled=document.getElementById('emailjsEnabled').checked;if(enabled&&(!publicKey||!serviceId||!templateId)){showToast('❌ Điền đủ Public Key + Service ID + Template ID!','error');return;}try{const cfg={publicKey,serviceId,templateId,enabled,updatedAt:Date.now()};await window.dbSet(window.ref(window.db,'system/emailjs_config'),cfg);cachedEmailJSConfig=cfg;emailJSInitialized=false;if(enabled)initEmailJS(cfg);updateEmailJSStatusUI();showCenterSquareToast('✅','Đã lưu!',enabled?'Gửi email đã được BẬT':'Đang ở chế độ DEMO','success',4000);}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function saveEmailJSConfig(){if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}const publicKey=(document.getElementById('emailjsPublicKey').value||'').trim();const serviceId=(document.getElementById('emailjsServiceId').value||'').trim();const templateId=(document.getElementById('emailjsTemplateId').value||'').trim();const enabled=document.getElementById('emailjsEnabled').checked;if(enabled&&(!publicKey||!serviceId||!templateId)){showToast('❌ Điền đủ Public Key + Service ID + Template ID!','error');return;}try{const cfg=Object.assign({},cachedEmailJSConfig||{},{publicKey,serviceId,templateId,enabled,updatedAt:Date.now()});await window.dbSet(window.ref(window.db,'system/emailjs_config'),cfg);cachedEmailJSConfig=cfg;emailJSInitialized=false;if(enabled)initEmailJS(cfg);updateEmailJSStatusUI();loadEmailFieldConfigUI();showCenterSquareToast('✅','Đã lưu!',enabled?'Gửi email đã được BẬT':'Đang ở chế độ DEMO','success',4000);}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function testEmailJSConfig(){if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}const publicKey=(document.getElementById('emailjsPublicKey').value||'').trim();const serviceId=(document.getElementById('emailjsServiceId').value||'').trim();const templateId=(document.getElementById('emailjsTemplateId').value||'').trim();if(!publicKey||!serviceId||!templateId){showToast('❌ Điền đủ 3 trường trước!','error');return;}const toEmail=await customPrompt('Nhập email nhận thư test:',{icon:'📧',title:'Gửi test',placeholder:'test@gmail.com'});if(!toEmail||!toEmail.includes('@')){if(toEmail)showToast('❌ Email không hợp lệ!','error');return;}try{showToast('⏳ Đang gửi test...','info');if(!emailJSInitialized)emailjs.init({publicKey});const code='123456';const appName=(document.getElementById('webLogo')?.innerText||'AURORA').trim()||'AURORA';const resp=await emailjs.send(serviceId,templateId,{to_email:toEmail,email:toEmail,user_email:toEmail,reset_code:code,code:code,verification_code:code,app_name:appName,website_name:appName,message:`[TEST] Mã: ${code}`,expiry:'10 phút',expiry_minutes:'10'},{publicKey});if(resp&&(resp.status===200||resp.status===0))showCenterSquareToast('✅','Gửi thành công!',`Đã gửi test đến: ${toEmail}`,'success',4000);else showToast('⚠️ Phản hồi bất thường','warn');}catch(e){showCenterSquareToast('❌','Gửi thất bại',(e&&e.text)||(e&&e.message)||'Lỗi không xác định','error',5000);}}
-async function clearEmailJSConfig(){if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}if(!await customConfirm('Xóa toàn bộ cấu hình EmailJS?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;try{await window.dbRemove(window.ref(window.db,'system/emailjs_config'));cachedEmailJSConfig=null;emailJSInitialized=false;fillEmailJSForm({publicKey:'',serviceId:'',templateId:'',enabled:false});updateEmailJSStatusUI();showToast('🗑️ Đã xóa!','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function clearEmailJSConfig(){if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}if(!await customConfirm('Xóa toàn bộ cấu hình EmailJS?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;try{await window.dbRemove(window.ref(window.db,'system/emailjs_config'));cachedEmailJSConfig=null;emailJSInitialized=false;fillEmailJSForm({publicKey:'',serviceId:'',templateId:'',enabled:false});loadEmailFieldConfigUI();updateEmailJSStatusUI();showToast('🗑️ Đã xóa!','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
 /* ROLES/MEDALS */
 async function loadRolesCache(){try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/roles'));cachedRoles=s.exists()?s.val():{};}catch(e){cachedRoles={};}}
@@ -2884,10 +3307,18 @@ function fxAllowed(){return perfMode!=='optimized';}
 /* ==================== MUSIC ==================== */
 let musicVolume=0.7,musicPlayMode='off',playlistOrder=[],currentPlayingIndex=-1;
 
+let musicVolSaveTimer=null;
 function onMusicVolumeChange(val){
   musicVolume=val/100;
   const el=document.getElementById('musicVolVal');if(el)el.innerText=val+'%';
-  const a=document.getElementById('globalAudioPlayer');if(a)a.volume=musicVolume;
+  const a=document.getElementById('globalAudioPlayer');
+  if(a){try{a.volume=musicVolume;}catch(e){}}
+  if(musicVolSaveTimer)clearTimeout(musicVolSaveTimer);
+  musicVolSaveTimer=setTimeout(()=>{
+    try{
+      window.dbSet(window.ref(window.db,'system/audio/volume'),musicVolume);
+    }catch(e){}
+  },300);
 }
 function onMusicPlayModeChange(val){musicPlayMode=val;try{window.dbSet(window.ref(window.db,'system/audio/playMode'),val);}catch(e){}if(val==='playlist'){document.getElementById('playlistPanel').style.display='block';renderPlaylistOrder();}else{document.getElementById('playlistPanel').style.display='none';}}
 function renderPlaylistOrder(){
@@ -2946,7 +3377,7 @@ async function getAudioBlobFromChunks(key){
 function tryPlayGlobalAudio(){
   const a=document.getElementById('globalAudioPlayer'),s=document.getElementById('currentAudioStatus');
   if(!a||!a.src)return;
-  a.volume=musicVolume;
+  try{a.volume=musicVolume;}catch(e){}
   if(!a.paused)return;
   const p=a.play();
   if(p&&p.then){
@@ -2968,7 +3399,7 @@ function listenGlobalAudio(){
     if(d.volume!==undefined&&typeof d.volume==='number'){
       if(Math.abs(musicVolume-d.volume)>0.001){
         musicVolume=d.volume;
-        a.volume=musicVolume;
+        try{a.volume=musicVolume;}catch(e){}
         const r=document.getElementById('musicVolumeRange');
         if(r&&document.activeElement!==r)r.value=Math.round(musicVolume*100);
         const el=document.getElementById('musicVolVal');
@@ -3533,6 +3964,7 @@ async function confirmDeleteAll(){if(!await customConfirm('XÓA TẤT CẢ? Khô
 window.addEventListener('DOMContentLoaded',()=>{
   checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();
   const savedTheme=localStorage.getItem('aurora_theme')||'light';applyTheme(savedTheme,false);
+  listenCustomButtons();
   setTimeout(()=>{
     if(!window.db)return;
     loadSecurityPasswords();loadWelcomeConfig();loadWebConfig();loadDocLibrary();loadRolesCache();loadMedalsCache();loadEmailJSConfigFromDB();
