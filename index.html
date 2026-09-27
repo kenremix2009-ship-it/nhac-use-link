@@ -3640,40 +3640,83 @@ async function savePlaylistOrder(){try{await window.dbSet(window.ref(window.db,'
 function updateMusicUIFromDB(){window.dbGet(window.dbChild(window.dbRef,'system/audio')).then(s=>{const d=s.val()||{};const v=d.volume!==undefined?Math.round(d.volume*100):70;const r=document.getElementById('musicVolumeRange');if(r)r.value=v;const el=document.getElementById('musicVolVal');if(el)el.innerText=v+'%';musicVolume=v/100;const m=document.getElementById('musicPlayMode');if(m&&d.playMode){m.value=d.playMode;musicPlayMode=d.playMode;if(d.playMode==='playlist'){document.getElementById('playlistPanel').style.display='block';}}if(d.playlistOrder)playlistOrder=d.playlistOrder;renderPlaylistOrder();});}
 async function loadSupremeAudioList(){if(supremeAudioListListener)supremeAudioListListener();supremeAudioListListener=window.onValue(window.ref(window.db,'system/audio_list'),s=>{cachedAudioList=s.val()||{};renderSupremeAudioList(cachedAudioList);renderPlaylistOrder();});}
 function renderSupremeAudioList(list){const c=document.getElementById('supremeAudioListContainer');if(!c)return;const k=Object.keys(list);if(!k.length){c.innerHTML='<p style="font-size:13px;color:#888;font-style:italic">Chưa có file nhạc</p>';return;}c.innerHTML=k.map(key=>`<div class="audio-list-item"><span class="audio-name">🎵 ${escapeHtml(list[key].name||key)}</span><div style="display:flex;gap:6px"><button class="btn btn-success" style="width:auto;padding:4px 10px;font-size:12px" onclick="playSupremeAudio('${key}')">▶</button><button class="btn btn-danger" style="width:auto;padding:4px 10px;font-size:12px" onclick="deleteSupremeAudio('${key}')">🗑️</button></div></div>`).join('');}
-async function uploadSupremeAudio(input){if(!input.files||!input.files.length)return;const f=input.files[0];if(f.size>AUDIO_MAX_SIZE){showToast('Quá 20MB','error');input.value='';return;}showToast('⏳ Đang xử lý...','info');try{const b64=await fileToBase64(f);const p=b64.split(','),mime=p[0].match(/:(.*?);/)[1],data=p[1];const chunks=Math.ceil(data.length/AUDIO_CHUNK_SIZE),key='audio_'+Date.now();for(let i=0;i<chunks;i++){await window.dbSet(window.ref(window.db,`system/audio_chunks/${key}/${i}`),data.slice(i*AUDIO_CHUNK_SIZE,(i+1)*AUDIO_CHUNK_SIZE));}await window.dbSet(window.ref(window.db,`system/audio_list/${key}`),{name:f.name,mime,size:f.size,chunks,timestamp:Date.now()});showToast('✅ Đã thêm!','success');input.value='';}catch(e){showToast('❌ '+e.message,'error');input.value='';}}
-async function playSupremeAudio(key){try{await window.dbSet(window.ref(window.db,'system/audio'),{audioKey:key,isPlaying:true,volume:musicVolume,playMode:musicPlayMode,playlistOrder:playlistOrder,timestamp:Date.now()});showToast('🎵 Đang phát!','success');}catch(e){showToast('❌ '+e.message,'error');}}
-async function deleteSupremeAudio(key){if(!await customConfirm('Xóa file nhạc?',{icon:'🗑️'}))return;try{await window.dbRemove(window.ref(window.db,`system/audio_list/${key}`));await window.dbRemove(window.ref(window.db,`system/audio_chunks/${key}`));delete audioBlobCache[key];if(audioBlobURLCache[key]){try{URL.revokeObjectURL(audioBlobURLCache[key]);}catch(e){}delete audioBlobURLCache[key];}showToast('🗑️ Đã xóa!','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+
+/* ===== FIX: AUDIO UPLOAD với verify chunks ===== */
+async function uploadSupremeAudio(input){
+  if(!input.files||!input.files.length)return;
+  const f=input.files[0];
+  if(f.size>AUDIO_MAX_SIZE){showToast('❌ File quá 20MB!','error');input.value='';return;}
+  showToast('⏳ Đang xử lý...','info');
+  try{
+    const b64=await fileToBase64(f);
+    const p=b64.split(',');
+    if(p.length<2){showToast('❌ File không hợp lệ!','error');input.value='';return;}
+    const mime=(p[0].match(/:(.*?);/)||[])[1]||'audio/mpeg';
+    const data=p[1];
+    if(!data||!data.length){showToast('❌ File rỗng!','error');input.value='';return;}
+    const chunks=Math.ceil(data.length/AUDIO_CHUNK_SIZE);
+    const key='audio_'+Date.now();
+    for(let i=0;i<chunks;i++){
+      const chunk=data.slice(i*AUDIO_CHUNK_SIZE,(i+1)*AUDIO_CHUNK_SIZE);
+      await window.dbSet(window.ref(window.db,`system/audio_chunks/${key}/${i}`),chunk);
+    }
+    await window.dbSet(window.ref(window.db,`system/audio_list/${key}`),{name:f.name,mime,size:f.size,chunks,timestamp:Date.now()});
+    showToast('✅ Đã thêm!','success');
+    input.value='';
+  }catch(e){
+    showToast('❌ '+(e.message||e),'error');
+    input.value='';
+  }
+}
+async function playSupremeAudio(key){try{await window.dbSet(window.ref(window.db,'system/audio'),{audioKey:key,isPlaying:true,volume:musicVolume,playMode:musicPlayMode,playlistOrder:playlistOrder,timestamp:Date.now()});showToast('🎵 Đang phát!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function deleteSupremeAudio(key){if(!await customConfirm('Xóa file nhạc?',{icon:'🗑️'}))return;try{await window.dbRemove(window.ref(window.db,`system/audio_list/${key}`));await window.dbRemove(window.ref(window.db,`system/audio_chunks/${key}`));delete audioBlobCache[key];if(audioBlobURLCache[key]){try{URL.revokeObjectURL(audioBlobURLCache[key]);}catch(e){}delete audioBlobURLCache[key];}if(currentLoadedAudioKey===key){currentLoadedAudioKey=null;}showToast('🗑️ Đã xóa!','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function stopGlobalAudio(){try{await window.dbSet(window.ref(window.db,'system/audio'),{audioKey:'',isPlaying:false,timestamp:Date.now()});showToast('🛑 Đã dừng','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
+/* ===== FIX: GET AUDIO BLOB với xử lý lỗi tốt hơn ===== */
 async function getAudioBlobFromChunks(key){
   if(audioBlobCache[key])return audioBlobCache[key];
   try{
     const metaSnap=await window.dbGet(window.dbChild(window.dbRef,`system/audio_list/${key}`));
-    if(!metaSnap.exists())return null;
+    if(!metaSnap.exists()){console.warn('[Audio] Meta not found:',key);return null;}
     const meta=metaSnap.val();
-    const totalChunks=meta.chunks||0;
+    const totalChunks=parseInt(meta.chunks)||0;
     const mime=meta.mime||'audio/mpeg';
-    if(!totalChunks)return null;
+    if(!totalChunks){console.warn('[Audio] No chunks in meta:',key);return null;}
     let fullBase64='';
     for(let i=0;i<totalChunks;i++){
       const cs=await window.dbGet(window.dbChild(window.dbRef,`system/audio_chunks/${key}/${i}`));
-      if(!cs.exists()){console.warn('Missing audio chunk',i);continue;}
+      if(!cs.exists()){console.warn('[Audio] Missing chunk',i,'of',totalChunks,'for',key);return null;}
       let chunkBase64=cs.val();
-      if(typeof chunkBase64!=='string')chunkBase64=String(chunkBase64||'');
+      if(chunkBase64===null||chunkBase64===undefined){console.warn('[Audio] Null chunk',i);return null;}
+      if(typeof chunkBase64!=='string')chunkBase64=String(chunkBase64);
       fullBase64+=chunkBase64;
     }
     const commaIdx=fullBase64.indexOf(',');
-    if(commaIdx>=0&&commaIdx<80)fullBase64=fullBase64.slice(commaIdx+1);
-    fullBase64=fullBase64.replace(/\s+/g,'').replace(/-/g,'+').replace(/_/g,'/');
-    while(fullBase64.length%4!==0)fullBase64+='=';
-    const binStr=atob(fullBase64);
+    if(commaIdx>=0&&commaIdx<200)fullBase64=fullBase64.slice(commaIdx+1);
+    fullBase64=fullBase64.replace(/\s+/g,'');
+    let binStr='';
+    try{
+      binStr=atob(fullBase64);
+    }catch(err1){
+      try{
+        let urlSafe=fullBase64.replace(/-/g,'+').replace(/_/g,'/');
+        while(urlSafe.length%4!==0)urlSafe+='=';
+        binStr=atob(urlSafe);
+      }catch(err2){
+        console.error('[Audio] atob failed:',err2.message);
+        return null;
+      }
+    }
     const len=binStr.length;
     const bytes=new Uint8Array(len);
     for(let j=0;j<len;j++)bytes[j]=binStr.charCodeAt(j);
     const blob=new Blob([bytes],{type:mime});
     audioBlobCache[key]=blob;
     return blob;
-  }catch(e){console.error('getAudioBlob error:',e);return null;}
+  }catch(e){
+    console.error('[Audio] Error loading:',e);
+    return null;
+  }
 }
 
 function tryPlayGlobalAudio(){
@@ -3683,7 +3726,7 @@ function tryPlayGlobalAudio(){
   if(!a.paused)return;
   const p=a.play();
   if(p&&p.then){
-    p.then(()=>{pendingGlobalAudioPlay=false;if(s)s.innerText='Đang phát 🎵';}).catch(()=>{pendingGlobalAudioPlay=true;if(s)s.innerText='Chờ chạm để phát 🔇';});
+    p.then(()=>{pendingGlobalAudioPlay=false;if(s)s.innerText='Đang phát 🎵';}).catch((err)=>{pendingGlobalAudioPlay=true;if(s)s.innerText='Chờ chạm để phát 🔇';console.warn('[Audio] play() blocked:',err&&err.message);});
   }
 }
 ['click','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,()=>{if(pendingGlobalAudioPlay)tryPlayGlobalAudio();},{passive:true}));
@@ -3735,23 +3778,21 @@ function listenGlobalAudio(){
       let blob=audioBlobCache[d.audioKey];
       if(!blob){blob=await getAudioBlobFromChunks(d.audioKey);}
       if(audioLoadRequestKey!==d.audioKey){audioLoadLock=false;return;}
-      if(!blob){if(s)s.innerText='Lỗi ❌';audioLoadLock=false;return;}
+      if(!blob){if(s)s.innerText='Lỗi tải file ❌';audioLoadLock=false;return;}
       let url=audioBlobURLCache[d.audioKey];
       if(!url){url=URL.createObjectURL(blob);audioBlobURLCache[d.audioKey]=url;}
       try{a.pause();}catch(e){}
-      if(a.src&&a.src.startsWith('blob:')&&a.src!==url){
-        try{URL.revokeObjectURL(a.src);}catch(e){}
-      }
+      if(a.src&&a.src.startsWith('blob:')&&a.src!==url){try{URL.revokeObjectURL(a.src);}catch(e){}}
       a.src=url;
       try{a.currentTime=0;}catch(e){}
       currentLoadedAudioKey=d.audioKey;
       a.loop=(d.playMode==='repeat_one');
       tryPlayGlobalAudio();
-    }catch(e){console.error('Audio load error:',e);if(s)s.innerText='Lỗi ❌';}
+    }catch(e){console.error('[Audio] load error:',e);if(s)s.innerText='Lỗi ❌';}
     audioLoadLock=false;
   });
 
-  player.addEventListener('error',(e)=>{console.error('Audio element error:',e);const s=document.getElementById('currentAudioStatus');if(s)s.innerText='Lỗi phát ❌';});
+  player.addEventListener('error',(e)=>{console.error('[Audio] element error:',e);const s=document.getElementById('currentAudioStatus');if(s)s.innerText='Lỗi phát ❌';});
 
   player.addEventListener('ended',async function(){
     if(musicPlayMode==='auto_next'||musicPlayMode==='playlist'||musicPlayMode==='shuffle'){
