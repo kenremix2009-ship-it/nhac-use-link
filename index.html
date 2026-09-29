@@ -29,7 +29,7 @@ body{background:#f0f2f5;color:#333}
 input[type="text"],input[type="number"],input[type="password"],input[type="email"],input[type="datetime-local"],input[type="url"],select,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;margin-bottom:12px;font-size:14px}
 label{font-weight:600;font-size:13px;color:#444;display:block}
 .view-section{display:none}.view-section.active{display:block}
-/* =============== HOME COUNTDOWN =============== */
+/* HOME HERO */
 .home-hero{position:relative;border-radius:20px;overflow:hidden;margin-bottom:18px;padding:0;box-shadow:0 15px 50px rgba(24,119,242,.35);background:linear-gradient(135deg,#0d3fa3 0%,#1877f2 35%,#6f42c1 70%,#198754 100%)}
 .home-hero::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='1' fill='rgba(255,255,255,.35)'/%3E%3C/svg%3E");opacity:.6}
 .home-hero-inner{position:relative;z-index:1;padding:34px 26px 30px 26px;display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap}
@@ -38,13 +38,14 @@ label{font-weight:600;font-size:13px;color:#444;display:block}
 .home-brand-text h1{font-size:30px;font-weight:900;letter-spacing:1px;margin:0;text-shadow:0 3px 10px rgba(0,0,0,.35)}
 .home-brand-text p{font-size:12.5px;opacity:.9;margin-top:3px}
 .countdown-wrap{background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border-radius:18px;padding:16px 20px;border:1px solid rgba(255,255,255,.3);color:#fff;min-width:340px}
-.countdown-title{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.countdown-title{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;justify-content:center}
 .countdown-grid{display:flex;gap:10px;justify-content:center}
 .cd-box{background:rgba(255,255,255,.95);color:#0d3fa3;border-radius:12px;min-width:64px;padding:10px 6px;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,.2)}
 .cd-num{font-size:28px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
 .cd-label{font-size:10px;font-weight:700;color:#666;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
 .cd-colon{font-size:28px;font-weight:900;color:#fff;align-self:center}
-/* =============== ROLE SHOWCASE =============== */
+.cd-msg{font-size:11px;text-align:center;margin-top:8px;opacity:.85}
+/* ROLE SHOWCASE */
 .role-showcase{background:linear-gradient(135deg,#fffbe6,#ffffff);border-radius:18px;padding:20px;margin-bottom:16px;border:2px solid #ffd700;position:relative;overflow:hidden}
 .role-showcase.king-box{background:linear-gradient(135deg,#fffbe6,#ffe082)}
 .role-showcase.partner-box{background:linear-gradient(135deg,#fff0f0,#ffe4e4);border-color:#dc3545}
@@ -68,7 +69,7 @@ label{font-weight:600;font-size:13px;color:#444;display:block}
 .role-card-h.king-card .rc-avatar{border-color:#8b0000}
 .role-card-h.king-card .rc-crown{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:26px;filter:drop-shadow(0 3px 8px rgba(255,215,0,.9));z-index:3}
 .role-card-h.king-card .rc-redribbon{position:absolute;top:-4px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#dc3545,#8b0000);color:#fff;font-size:9px;font-weight:900;padding:3px 14px;border-radius:0 0 10px 10px;box-shadow:0 4px 12px rgba(220,53,69,.5)}
-/* =============== TEACHER SHOWCASE =============== */
+/* TEACHER SHOWCASE */
 .teacher-showcase{background:linear-gradient(135deg,#ffffff,#f0f8ff);border:2px solid #1877f2;border-radius:18px;padding:20px;margin-bottom:16px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
 .teacher-showcase .ts-img{width:180px;height:180px;border-radius:16px;background:linear-gradient(135deg,#1877f2,#198754);display:flex;align-items:center;justify-content:center;font-size:60px;color:#fff;overflow:hidden;flex-shrink:0;box-shadow:0 10px 30px rgba(24,119,242,.35);position:relative}
 .teacher-showcase .ts-img img{width:100%;height:100%;object-fit:cover}
@@ -76,22 +77,18 @@ label{font-weight:600;font-size:13px;color:#444;display:block}
 .teacher-showcase .ts-info h3{font-size:18px;font-weight:900;color:#1877f2;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .teacher-showcase .ts-info p{font-size:13px;color:#555;line-height:1.7;margin-bottom:6px}
 .teacher-showcase .ts-badge{display:inline-block;background:#1877f2;color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;margin-right:6px}
-/* =============== GUIDE LINK =============== */
+/* GUIDE LINK */
 .guide-link-box{margin-bottom:18px;background:linear-gradient(135deg,#6f42c1,#5a32a3);color:#fff;border-radius:18px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;cursor:pointer;box-shadow:0 10px 30px rgba(111,66,193,.35);transition:transform .3s}
 .guide-link-box:hover{transform:translateY(-3px)}
 .guide-link-box h3{font-size:18px;font-weight:900;margin-bottom:4px}
 .guide-link-box p{font-size:13px;opacity:.9}
 .guide-link-box .glb-arrow{font-size:36px}
-/* =============== TAB BAR (SUB) =============== */
+/* TABS */
 .tab-bar{display:flex;gap:6px;background:#f0f2f5;padding:6px;border-radius:14px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tab-bar button{flex:1;min-width:100px;background:transparent;border:none;padding:11px 12px;border-radius:10px;font-weight:800;font-size:13px;color:#555;cursor:pointer;transition:.25s;white-space:nowrap}
 .tab-bar button.active{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;box-shadow:0 6px 18px rgba(24,119,242,.35)}
-.tab-bar button.active.green{background:linear-gradient(135deg,#198754,#157347)}
-.tab-bar button.active.purple{background:linear-gradient(135deg,#6f42c1,#5a32a3)}
-.tab-bar button.active.red{background:linear-gradient(135deg,#dc3545,#bb2d3b)}
-.tab-bar button.active.gold{background:linear-gradient(135deg,#ffc107,#e0a800);color:#000}
 .tab-panel{display:none}.tab-panel.active{display:block}
-/* =============== LIVE ROOM =============== */
+/* LIVE ROOM */
 .liveroom-grid{display:grid;grid-template-columns:1fr 320px;gap:12px;height:calc(100vh - 130px);min-height:500px}
 .lr-stage{background:#0b0d12;border-radius:14px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;color:#fff}
 .lr-stage-video{width:100%;height:100%;object-fit:contain;background:#000}
@@ -99,18 +96,19 @@ label{font-weight:600;font-size:13px;color:#444;display:block}
 .lr-stage-placeholder .lrp-icon{font-size:64px;filter:drop-shadow(0 0 20px rgba(24,119,242,.6))}
 .lr-stage-placeholder .lrp-text{font-size:16px;font-weight:700;color:#fff;text-align:center}
 .lr-stage-placeholder .lrp-code{background:rgba(255,255,255,.1);border:2px dashed #1877f2;padding:12px 24px;border-radius:12px;font-size:26px;font-weight:900;letter-spacing:6px;color:#4a9eff;font-family:'Courier New',monospace}
-.lr-side{background:#1a1d24;border-radius:14px;padding:12px;display:flex;flex-direction:column;color:#fff;overflow:hidden}
+.lr-screen-img{width:100%;height:100%;object-fit:contain;background:#000;display:block}
+.lr-side{background:#1a1d24;border-radius:14px;padding:12px;display:flex;flex-direction:column;color:#fff;overflow:hidden;min-height:300px}
 .lr-side-title{font-size:13px;font-weight:900;color:#4a9eff;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 .lr-participants{flex:1;overflow-y:auto;min-height:120px;max-height:280px}
 .lr-participant{display:flex;align-items:center;gap:8px;padding:6px;border-radius:8px;background:rgba(255,255,255,.04);margin-bottom:5px;font-size:12px}
-.lr-participant .lp-av{width:26px;height:26px;border-radius:50%;background:#1877f2;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;overflow:hidden}
+.lr-participant .lp-av{width:26px;height:26px;border-radius:50%;background:#1877f2;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;overflow:hidden;flex-shrink:0}
 .lr-participant .lp-av img{width:100%;height:100%;object-fit:cover}
 .lr-participant .lp-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
 .lr-participant .lp-actions{display:flex;gap:3px}
 .lr-participant .lp-actions button{background:transparent;border:none;color:#fff;font-size:14px;cursor:pointer;padding:2px 4px;border-radius:5px}
 .lr-participant .lp-actions button:hover{background:rgba(255,255,255,.15)}
 .lr-chat{flex:1;min-height:140px;max-height:240px;overflow-y:auto;padding:6px;background:rgba(0,0,0,.25);border-radius:8px;margin-top:10px;font-size:12px}
-.lr-chat-msg{margin-bottom:6px;line-height:1.4}
+.lr-chat-msg{margin-bottom:6px;line-height:1.4;word-break:break-word}
 .lr-chat-msg b{color:#4a9eff}
 .lr-chat-input{display:flex;gap:6px;margin-top:8px}
 .lr-chat-input input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#fff;font-size:12px;margin:0}
@@ -118,76 +116,67 @@ label{font-weight:600;font-size:13px;color:#444;display:block}
 .lr-ctrl-btn{width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
 .lr-ctrl-btn:hover{background:rgba(255,255,255,.25);transform:translateY(-2px)}
 .lr-ctrl-btn.danger{background:#dc3545}
-.lr-ctrl-btn.success{background:#198754}
 .lr-ctrl-btn.active{background:#1877f2}
 .lr-ctrl-btn.small{width:36px;height:36px;font-size:14px}
-/* toolbar floating */
-#liveToolbar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(160%);background:#1a1d24;border-radius:16px;padding:10px 14px;display:flex;gap:8px;align-items:center;box-shadow:0 15px 40px rgba(0,0,0,.6);z-index:9999;transition:transform .35s cubic-bezier(.34,1.3,.5,1);border:1px solid rgba(255,255,255,.1);flex-wrap:wrap;max-width:96vw}
+.lr-paused-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#fff;z-index:100;font-weight:900;font-size:20px}
+/* TOOLBAR */
+#liveToolbar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(200%);background:#1a1d24;border-radius:16px;padding:10px 14px;display:flex;gap:8px;align-items:center;box-shadow:0 15px 40px rgba(0,0,0,.6);z-index:9999;transition:transform .35s cubic-bezier(.34,1.3,.5,1);border:1px solid rgba(255,255,255,.1);flex-wrap:wrap;max-width:96vw}
 #liveToolbar.show{transform:translateX(-50%) translateY(0)}
 #liveToolbar .tb-btn{width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
 #liveToolbar .tb-btn:hover{background:#1877f2;transform:translateY(-2px)}
 #liveToolbar .tb-btn.active{background:#1877f2;box-shadow:0 0 12px rgba(24,119,242,.6)}
 #liveToolbar .tb-sep{width:1px;height:28px;background:rgba(255,255,255,.15);margin:0 3px}
-#liveToolbar .tb-color{width:36px;height:36px;border-radius:50%;border:2px solid #fff;padding:0;cursor:pointer;flex-shrink:0}
 #liveToolbar input[type="color"]{padding:0;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;background:transparent}
 #liveToolbar input[type="range"]{width:80px;padding:0;margin:0;accent-color:#1877f2}
-#drawCanvas{position:fixed;inset:0;z-index:9998;pointer-events:none;display:none}
+#drawCanvas{position:fixed;inset:0;z-index:9998;pointer-events:none;display:none;touch-action:none}
 #drawCanvas.active{pointer-events:auto;cursor:crosshair;display:block}
 #mobileToolbarFab{position:fixed;bottom:80px;right:16px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border:none;font-size:22px;cursor:pointer;box-shadow:0 10px 30px rgba(24,119,242,.5);z-index:9999;display:none;align-items:center;justify-content:center}
 #mobileToolbarFab.show{display:flex}
-/* =============== THRONE =============== */
+/* THRONE */
 .throne-wrap{position:relative;border-radius:20px;overflow:hidden;min-height:520px;background:radial-gradient(ellipse at 50% 90%,#5a0000 0%,#3a0000 40%,#1a0000 100%);padding:40px 20px 20px 20px;box-shadow:inset 0 0 100px rgba(0,0,0,.8)}
 .throne-title{color:#ffd700;text-align:center;font-size:24px;font-weight:900;letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 20px #ffd700,0 0 40px #ff8c00}
 .throne-sub{color:#ffb84d;text-align:center;font-size:12px;margin-bottom:24px;letter-spacing:1px}
-.throne-stage{display:flex;justify-content:center;align-items:flex-end;gap:16px;min-height:400px;position:relative;padding-top:80px}
+.throne-stage{display:flex;justify-content:center;align-items:flex-end;gap:16px;min-height:400px;position:relative;padding-top:80px;flex-wrap:wrap}
 .throne-seat{position:relative;text-align:center;transition:transform .3s;cursor:pointer}
 .throne-seat:hover{transform:translateY(-6px)}
-.throne-seat .ts-throne{font-size:44px;line-height:1;margin-bottom:-10px;filter:drop-shadow(0 6px 20px currentColor)}
+.throne-seat .ts-throne{font-size:44px;line-height:1;margin-bottom:-10px}
 .throne-seat .ts-frame{width:110px;height:110px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:900;color:#fff;margin:0 auto;position:relative;border:5px solid}
 .throne-seat .ts-frame img{width:100%;height:100%;object-fit:cover}
-.throne-seat .ts-frame::after{content:'';position:absolute;inset:-5px;border-radius:50%;background:conic-gradient(from 0deg,currentColor,transparent,currentColor);animation:throneSpin 4s linear infinite;z-index:-1;opacity:.7}
-@keyframes throneSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
 .throne-seat.top1 .ts-frame{border-color:#dc3545;color:#dc3545;box-shadow:0 0 40px #dc3545,0 0 80px #dc354588;width:130px;height:130px;font-size:42px}
-.throne-seat.top1 .ts-throne{color:#ffd700}
 .throne-seat.top2 .ts-frame{border-color:#a55eea;color:#a55eea;box-shadow:0 0 30px #a55eea,0 0 60px #a55eea88}
-.throne-seat.top2 .ts-throne{color:#c8a2ff}
 .throne-seat.top3 .ts-frame{border-color:#1877f2;color:#1877f2;box-shadow:0 0 30px #1877f2,0 0 60px #1877f288}
-.throne-seat.top3 .ts-throne{color:#4a9eff}
-.throne-seat .ts-name{margin-top:12px;color:#fff;font-weight:900;font-size:14px;text-shadow:0 2px 8px rgba(0,0,0,.6);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left:auto;margin-right:auto}
+.throne-seat .ts-name{margin-top:12px;color:#fff;font-weight:900;font-size:14px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left:auto;margin-right:auto}
 .throne-seat .ts-score{color:#ffd700;font-weight:900;font-size:13px;margin-top:3px}
-.throne-seat .ts-role{font-size:10px;color:#ffb84d;margin-top:3px;font-weight:700;letter-spacing:.5px}
+.throne-seat .ts-role{font-size:10px;color:#ffb84d;margin-top:3px;font-weight:700}
 .throne-crown{position:absolute;top:-46px;left:50%;transform:translateX(-50%);font-size:40px;filter:drop-shadow(0 0 16px #ffd700);animation:crownFloat 2s ease-in-out infinite}
 @keyframes crownFloat{0%,100%{transform:translateX(-50%) translateY(0) scale(1)}50%{transform:translateX(-50%) translateY(-6px) scale(1.08)}}
-/* =============== DOCUMENT LIBRARY =============== */
+/* DOC */
 .doc-item{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #e0e0e0;padding:10px 14px;border-radius:10px;margin-bottom:8px;gap:10px;flex-wrap:wrap;transition:.2s}
 .doc-item:hover{border-color:#1877f2;box-shadow:0 6px 18px rgba(24,119,242,.12)}
 .doc-item .doc-icon{font-size:26px;flex-shrink:0}
 .doc-item .doc-name{font-size:13px;font-weight:800;color:#333;word-break:break-word}
 .doc-item .doc-meta{font-size:11px;color:#888;margin-top:2px}
-/* =============== COURSE =============== */
-.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.course-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.08);transition:.25s;border:1px solid #f0f0f0}
-.course-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(24,119,242,.18)}
+/* COURSE / EXAM */
+.course-grid,.exam-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.course-card,.exam-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.08);transition:.25s;border:1px solid #f0f0f0}
+.course-card:hover,.exam-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(24,119,242,.18)}
 .course-card .cc-cover{height:130px;background:linear-gradient(135deg,#1877f2,#6f42c1);display:flex;align-items:center;justify-content:center;font-size:48px;color:#fff}
 .course-card .cc-body{padding:12px}
-.course-card .cc-title{font-size:14px;font-weight:900;color:#333;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.course-card .cc-title{font-size:14px;font-weight:900;color:#333;margin-bottom:6px}
 .course-card .cc-meta{font-size:11px;color:#888;margin-bottom:8px}
 .course-card .cc-btn{background:#1877f2;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;width:100%}
-/* =============== EXAM LIST (thi thử) =============== */
-.exam-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.exam-card{background:#fff;border:2px solid #e0e0e0;border-radius:14px;padding:14px;transition:.25s;cursor:pointer}
-.exam-card:hover{border-color:#1877f2;transform:translateY(-3px);box-shadow:0 10px 30px rgba(24,119,242,.15)}
+.exam-card{padding:14px;cursor:pointer;border:2px solid #e0e0e0}
 .exam-card .ec-title{font-size:14px;font-weight:900;color:#1877f2;margin-bottom:6px}
 .exam-card .ec-code{display:inline-block;background:#e7f3ff;color:#1877f2;font-weight:900;font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:8px;letter-spacing:1px}
 .exam-card .ec-meta{font-size:11px;color:#888;line-height:1.6}
-/* =============== MODAL =============== */
+/* MODAL */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.65);display:none;justify-content:center;align-items:center;z-index:99990;padding:15px;backdrop-filter:blur(4px);overflow-y:auto}
 .modal-overlay.show{display:flex}
 .modal-box{background:#fff;width:100%;max-width:460px;padding:22px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);position:relative;max-height:90vh;overflow-y:auto;margin:auto}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid #eee;padding-bottom:8px}
 .modal-header h3{font-size:16px;color:#1877f2}
 .close-btn{background:none;border:none;font-size:18px;cursor:pointer;color:#888}
-/* =============== TOASTS =============== */
+/* TOAST */
 #systemToast{position:fixed;top:25px;right:25px;background:linear-gradient(135deg,#198754,#157347);color:#fff;padding:14px 24px;border-radius:12px;font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(25,135,84,.3);z-index:9999999;display:none;transition:all .4s;opacity:0;transform:translateY(-20px);max-width:400px}
 #systemToast.show{opacity:1;transform:translateY(0)}
 #systemToast.error{background:linear-gradient(135deg,#dc3545,#bb2d3b)}
@@ -202,7 +191,7 @@ label{font-weight:600;font-size:13px;color:#444;display:block}
 #centerSquareToast.error{border-top:6px solid #dc3545}#centerSquareToast.error .cst-title{color:#dc3545}
 #centerSquareToast.warn{border-top:6px solid #ffc107}#centerSquareToast.warn .cst-title{color:#e0a800}
 #centerSquareToast.info{border-top:6px solid #0d6efd}#centerSquareToast.info .cst-title{color:#0d6efd}
-/* =============== AUTH =============== */
+/* AUTH */
 #authOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1877f2 0%,#0d5fd6 50%,#198754 100%);display:flex;justify-content:center;align-items:center;z-index:9999999;padding:15px;overflow-y:auto}
 .auth-box{background:#fff;border-radius:20px;padding:30px 26px 24px 26px;max-width:440px;width:100%;box-shadow:0 25px 70px rgba(0,0,0,.5);margin:auto}
 .auth-box h2{text-align:center;color:#1877f2;font-size:22px;margin-bottom:4px;font-weight:900}
@@ -213,8 +202,7 @@ label{font-weight:600;font-size:13px;color:#444;display:block}
 .auth-view{display:none}.auth-view.active{display:block}
 .auth-view input,.auth-view select{width:100%;padding:11px;border:2px solid #e0e0e0;border-radius:10px;margin:0 0 12px 0;font-size:14px}
 .auth-view input:focus,.auth-view select:focus{outline:none;border-color:#1877f2;box-shadow:0 0 0 4px rgba(24,119,242,.15)}
-.code-display{background:#fff3cd;border:2px dashed #ffc107;padding:12px;border-radius:10px;text-align:center;font-size:22px;font-weight:900;color:#856404;letter-spacing:6px;margin-bottom:12px;font-family:'Courier New',monospace}
-/* =============== MISC =============== */
+/* EXAM */
 .exam-layout{display:flex;gap:12px;height:calc(100vh - 140px)}
 .exam-left{flex:6;background:#525659;border-radius:10px;overflow-y:auto;padding:10px;display:flex;flex-direction:column;align-items:center}
 .exam-right{flex:4;background:#fff;border-radius:10px;padding:12px;overflow-y:auto;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,.1)}
@@ -230,35 +218,12 @@ label{font-weight:600;font-size:13px;color:#444;display:block}
 table{width:100%;border-collapse:collapse;margin-top:10px;min-width:400px}
 th,td{border:1px solid #ddd;padding:8px;text-align:center;font-size:13px}
 th{background:#f4f6f8;font-weight:800}
-.collapse-header{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#e7f3ff,#d0e8ff);color:#1877f2;padding:12px 16px;border-radius:10px;font-weight:900;font-size:14px;cursor:pointer;margin-bottom:10px;transition:.25s}
-.collapse-header:hover{transform:translateX(2px)}
-.collapse-header .collapse-arrow{transition:transform .3s}
-.collapse-header.collapsed .collapse-arrow{transform:rotate(-90deg)}
-.collapse-body{overflow:hidden;transition:.35s;padding:0 4px;max-height:2000px}
-.collapse-body.collapsed{max-height:0;padding:0;opacity:0;margin:0}
-.role-users-box{display:flex;flex-wrap:wrap;gap:6px}
+.q-build-item{background:#f8f9fa;border:1px solid #e0e0e0;padding:12px;border-radius:8px;margin-bottom:12px}
+.section-title{background:#e7f3ff;color:#1877f2;padding:8px 12px;border-radius:8px;font-weight:900;margin:15px 0 10px 0;font-size:14px;display:flex;justify-content:space-between;align-items:center}
 .user-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:24px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
 .user-pill:hover{background:#e7f3ff;border-color:#1877f2}
 .user-pill .up-av{width:26px;height:26px;border-radius:50%;background:#1877f2;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;overflow:hidden;flex-shrink:0}
 .user-pill .up-av img{width:100%;height:100%;object-fit:cover}
-.user-pill.king-pill{border-color:#ffd700;background:linear-gradient(135deg,#fffbe6,#fff)}
-.user-pill.partner-pill{border-color:#dc3545;background:linear-gradient(135deg,#fff0f0,#fff)}
-.user-pill.elite-pill{border-color:#0d6efd;background:linear-gradient(135deg,#f0f8ff,#fff)}
-/* Advanced Modal */
-.advanced-settings-panel{background:#fffbe6;border:1px solid #ffe58f;padding:10px;border-radius:8px;margin-top:10px;display:none}
-.q-build-item{background:#f8f9fa;border:1px solid #e0e0e0;padding:12px;border-radius:8px;margin-bottom:12px}
-.section-title{background:#e7f3ff;color:#1877f2;padding:8px 12px;border-radius:8px;font-weight:900;margin:15px 0 10px 0;font-size:14px;display:flex;justify-content:space-between;align-items:center}
-/* Dark mode */
-body[data-theme="dark"]{background:#0f1115;color:#e6e6e6}
-body[data-theme="dark"] .card{background:#1a1d24;color:#e6e6e6}
-body[data-theme="dark"] input,body[data-theme="dark"] select,body[data-theme="dark"] textarea{background:#252931;color:#e6e6e6;border-color:#3a3f4a}
-body[data-theme="dark"] .modal-box{background:#1a1d24;color:#e6e6e6}
-body[data-theme="dark"] th{background:#252931;color:#e6e6e6}
-body[data-theme="dark"] td{border-color:#3a3f4a}
-body[data-theme="dark"] .tab-bar{background:#252931}
-body[data-theme="dark"] .tab-bar button{color:#bbb}
-body[data-theme="dark"] .role-card-h{background:#252931}
-body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
 /* Loading */
 #loadingOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.95);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:99999}
 .spinner{width:50px;height:50px;border:5px solid #e0e0e0;border-top:5px solid #1877f2;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px}
@@ -283,10 +248,11 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
   .exam-left{height:40vh}
   .form-grid-2{grid-template-columns:1fr}
   #systemToast{top:15px;right:10px;left:10px;font-size:13px}
+  #liveToolbar{padding:8px;gap:5px}
+  #liveToolbar .tb-btn{width:34px;height:34px;font-size:14px}
+  #liveToolbar input[type="range"]{width:60px}
 }
-/* Utility */
 .hidden{display:none!important}
-.text-center{text-align:center}
 </style>
 </head>
 <body>
@@ -347,7 +313,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
 
 <!-- ========== HOME VIEW ========== -->
 <div id="homeView" class="view-section active">
-  <!-- Countdown Hero -->
   <div class="home-hero">
     <div class="home-hero-inner">
       <div class="home-brand">
@@ -359,7 +324,7 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       </div>
       <div class="countdown-wrap">
         <div class="countdown-title">⏳ Đếm ngược đến kỳ thi</div>
-        <div class="countdown-grid" id="cdGrid">
+        <div class="countdown-grid">
           <div class="cd-box"><div class="cd-num" id="cdDays">00</div><div class="cd-label">Ngày</div></div>
           <div class="cd-colon">:</div>
           <div class="cd-box"><div class="cd-num" id="cdHours">00</div><div class="cd-label">Giờ</div></div>
@@ -368,29 +333,26 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
           <div class="cd-colon">:</div>
           <div class="cd-box"><div class="cd-num" id="cdSecs">00</div><div class="cd-label">Giây</div></div>
         </div>
+        <div class="cd-msg" id="cdMsg">Chưa cấu hình</div>
       </div>
     </div>
   </div>
 
-  <!-- Founder -->
   <div class="role-showcase king-box" id="founderBox">
     <h3>👑 Người thành lập Web</h3>
     <div class="role-track-wrap"><div class="role-track" id="founderTrack"></div></div>
   </div>
 
-  <!-- Top Elite -->
   <div class="role-showcase elite-box">
     <h3>🌟 Top Ưu Tú</h3>
     <div class="role-track-wrap"><div class="role-track" id="eliteTrack"></div></div>
   </div>
 
-  <!-- Partners -->
   <div class="role-showcase partner-box">
     <h3>🤝 Đối tác</h3>
     <div class="role-track-wrap"><div class="role-track" id="partnerTrack"></div></div>
   </div>
 
-  <!-- Teacher Showcase -->
   <div class="teacher-showcase" id="teacherShowcase">
     <div class="ts-img" id="teacherShowcaseImg">👨‍🏫</div>
     <div class="ts-info">
@@ -401,7 +363,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
     </div>
   </div>
 
-  <!-- Guide link -->
   <div class="guide-link-box" onclick="openGuideFromHome()">
     <div>
       <h3>📖 Chi tiết hướng dẫn sử dụng</h3>
@@ -422,7 +383,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       <button onclick="switchStudentTab('live',this)">🔴 Live room</button>
     </div>
 
-    <!-- Exam Panel -->
     <div id="studentTab-exam" class="tab-panel active">
       <div style="max-width:460px;margin:0 auto">
         <h2 style="text-align:center;margin-bottom:15px;color:#1877f2">🧑‍🎓 Vào Thi</h2>
@@ -445,7 +405,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       </div>
     </div>
 
-    <!-- Course Panel -->
     <div id="studentTab-course" class="tab-panel">
       <div class="tab-bar" style="margin-bottom:14px">
         <button class="active" onclick="switchCourseTab('community',this)">🌐 Cộng đồng</button>
@@ -463,15 +422,11 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       </div>
     </div>
 
-    <!-- Docs Panel -->
     <div id="studentTab-docs" class="tab-panel">
       <h3 style="color:#1877f2;margin-bottom:12px">📄 Kho tài liệu</h3>
-      <div id="studentDocList">
-        <p style="color:#888;text-align:center;padding:20px">Đang tải...</p>
-      </div>
+      <div id="studentDocList"><p style="color:#888;text-align:center;padding:20px">Đang tải...</p></div>
     </div>
 
-    <!-- Mock Exam Panel -->
     <div id="studentTab-mock" class="tab-panel">
       <h3 style="color:#1877f2;margin-bottom:12px">🎯 Bài thi thử có sẵn</h3>
       <div class="exam-grid" id="mockExamGrid">
@@ -479,7 +434,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       </div>
     </div>
 
-    <!-- Live Panel -->
     <div id="studentTab-live" class="tab-panel">
       <h3 style="color:#1877f2;margin-bottom:12px">🔴 Phòng Live đang mở</h3>
       <div style="margin-bottom:12px">
@@ -501,7 +455,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       <button onclick="switchTeacherTab('live',this)">🔴 Live room</button>
     </div>
 
-    <!-- Exam Create Tab -->
     <div id="teacherTab-exam" class="tab-panel active">
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
         <button class="btn" style="width:auto;padding:10px 16px" onclick="switchExamSubTab('create',this)">➕ Tạo bài thi</button>
@@ -510,7 +463,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
         <button class="btn btn-warning" style="width:auto;padding:10px 16px;color:#000" onclick="switchExamSubTab('manage',this)">🗂️ Quản lí chung</button>
       </div>
 
-      <!-- Create Sub -->
       <div id="examSub-create">
         <div class="tab-bar" style="margin-bottom:12px">
           <button class="active" onclick="switchCreateType('free',this)">♾️ Tự do</button>
@@ -542,8 +494,7 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
         </div>
         <div id="createType-pro" style="display:none">
           <div class="card" style="background:#fff8e1">
-            <p style="font-size:13px;color:#856404;margin-bottom:10px">🛡️ Chuyên dụng: Đầy đủ tính năng tự do + cấu hình phòng live/anti-cheat nâng cao.</p>
-            <div id="proCreateContainer"></div>
+            <p style="font-size:13px;color:#856404;margin-bottom:10px">🛡️ Chuyên dụng: Dùng form Tự do phía trên + cấu hình phòng live/anti-cheat.</p>
           </div>
         </div>
         <div id="createType-quick" style="display:none">
@@ -594,7 +545,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
         </div>
       </div>
 
-      <!-- Upload Sub -->
       <div id="examSub-upload" style="display:none">
         <div class="tab-bar" style="margin-bottom:12px">
           <button class="active" onclick="switchUploadType('file',this)">📤 Up file</button>
@@ -619,34 +569,24 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
             <label>Ảnh bìa (emoji hoặc URL):</label>
             <input type="text" id="courseCover" placeholder="📚">
             <button class="btn btn-success" onclick="createCourse()">➕ Tạo khóa học</button>
-            <p style="font-size:12px;color:#888;margin-top:8px">(Chức năng mở rộng sẽ được cập nhật sau)</p>
           </div>
         </div>
       </div>
 
-      <!-- Live Sub -->
       <div id="examSub-live" style="display:none">
         <div class="card" style="background:#fff0f0;border:2px solid #dc3545">
           <h3 style="color:#dc3545;margin-bottom:10px">🔴 Tạo Live Room</h3>
-          <div id="teacherLiveRoomContainer">
-            <p style="font-size:13px;color:#666;margin-bottom:10px">Mỗi tài khoản chỉ có thể tạo 1 phòng live tại một thời điểm.</p>
-            <label>Tên phòng:</label>
-            <input type="text" id="liveRoomName" placeholder="VD: Ôn tập Toán 12">
-            <label>Mật khẩu phòng (tùy chọn):</label>
-            <input type="password" id="liveRoomPassword" placeholder="Bỏ trống = không mật khẩu">
-            <label>Giới hạn học sinh:</label>
-            <input type="number" id="liveRoomMax" value="50" min="1">
-            <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-              <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="liveRoomLockOn" style="width:16px;height:16px"> 🔒 Khóa phòng</label>
-              <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="liveRoomNoChat" style="width:16px;height:16px"> 🚫 Cấm chat</label>
-            </div>
-            <button class="btn btn-danger" style="margin-top:16px;padding:14px" onclick="createLiveRoom()">🔴 Bắt đầu Live Room</button>
-          </div>
-          <div id="existingLiveRoomBox" style="display:none;margin-top:16px"></div>
+          <p style="font-size:13px;color:#666;margin-bottom:10px">Mỗi tài khoản chỉ có thể tạo 1 phòng live tại một thời điểm.</p>
+          <label>Tên phòng:</label>
+          <input type="text" id="liveRoomName" placeholder="VD: Ôn tập Toán 12">
+          <label>Mật khẩu phòng (tùy chọn):</label>
+          <input type="password" id="liveRoomPassword" placeholder="Bỏ trống = không mật khẩu">
+          <label>Giới hạn học sinh:</label>
+          <input type="number" id="liveRoomMax" value="50" min="1">
+          <button class="btn btn-danger" style="margin-top:16px;padding:14px" onclick="createLiveRoom()">🔴 Bắt đầu Live Room</button>
         </div>
       </div>
 
-      <!-- Manage Sub -->
       <div id="examSub-manage" style="display:none">
         <div class="card" style="background:#f8f9fa">
           <h3 style="color:#1877f2;margin-bottom:10px">🗂️ Quản lí chung</h3>
@@ -665,15 +605,13 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       </div>
     </div>
 
-    <!-- Advanced Tab -->
     <div id="teacherTab-advanced" class="tab-panel">
       <div class="card">
         <h3 style="color:#6f42c1;margin-bottom:10px">⚙️ Mô hình nâng cao</h3>
-        <p style="font-size:13px;color:#666;line-height:1.7">Các công cụ tạo đề nâng cao đã được tích hợp vào tab <b>Tạo đề kiểm tra</b>. Quản lí phòng thi chuyển sang <b>Quản lí chung</b>.</p>
+        <p style="font-size:13px;color:#666;line-height:1.7">Các công cụ đã được tích hợp vào tab <b>Tạo đề kiểm tra</b> và <b>Quản lí chung</b>.</p>
       </div>
     </div>
 
-    <!-- Live Tab (Teacher view main) -->
     <div id="teacherTab-live" class="tab-panel">
       <div class="card" style="background:#fff0f0;border:2px solid #dc3545">
         <h3 style="color:#dc3545;margin-bottom:10px">🔴 Live Room của tôi</h3>
@@ -709,7 +647,7 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
     <button class="lr-ctrl-btn" id="lrMicBtn" onclick="toggleLiveMic()" title="Mic">🎤</button>
     <button class="lr-ctrl-btn" id="lrCamBtn" onclick="toggleLiveCam()" title="Camera">📷</button>
     <button class="lr-ctrl-btn" id="lrScreenBtn" onclick="toggleLiveScreen()" title="Chia sẻ màn hình">🖥️</button>
-    <button class="lr-ctrl-btn" id="lrMuteAllBtn" onclick="toggleMuteAll()" title="Mute all">🔇</button>
+    <button class="lr-ctrl-btn" id="lrMuteAllBtn" onclick="toggleMuteAll()" title="Cấm chat">💬</button>
     <button class="lr-ctrl-btn" id="lrPauseBtn" onclick="toggleLivePause()" title="Tạm dừng">⏸️</button>
     <button class="lr-ctrl-btn danger" onclick="endLiveRoom()" title="Kết thúc">📴</button>
   </div>
@@ -807,7 +745,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       <button onclick="switchSupremeTab('home',this)">🏠 Trang chủ</button>
       <button onclick="switchSupremeTab('teacher',this)">🎓 Giáo viên</button>
       <button onclick="switchSupremeTab('guide',this)">📖 Hướng dẫn</button>
-      <button onclick="switchSupremeTab('entertainment',this)">🎮 Giải trí</button>
     </div>
 
     <div id="supremeTab-accounts" class="tab-panel active">
@@ -851,11 +788,18 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       <div class="card">
         <h3 style="color:#1877f2;margin-bottom:10px">🏠 Tùy chỉnh Trang chủ</h3>
         <label>Tiêu đề Hero:</label>
-        <input type="text" id="homeHeroTitleInput">
+        <input type="text" id="homeHeroTitleInput" placeholder="AURORA">
         <label>Slogan:</label>
-        <input type="text" id="homeHeroSubInput">
+        <input type="text" id="homeHeroSubInput" placeholder="Hệ thống kiểm tra trực tuyến thông minh">
         <label>⏰ Thời gian đếm ngược đến kỳ thi:</label>
-        <input type="datetime-local" id="homeCountdownTarget">
+        <input type="datetime-local" id="homeCountdownTarget" onchange="previewCountdown()">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="quickSetCountdown(7)">+7 ngày</button>
+          <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="quickSetCountdown(30)">+30 ngày</button>
+          <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="quickSetCountdown(90)">+90 ngày</button>
+          <button class="btn btn-danger" style="width:auto;padding:6px 12px;font-size:12px" onclick="clearCountdown()">Xóa</button>
+        </div>
+        <p style="font-size:12px;color:#666;margin-bottom:10px">💡 Chọn ngày giờ rồi bấm Lưu. Bộ đếm sẽ tự động chạy ở Trang chủ.</p>
         <button class="btn btn-success" style="margin-top:10px" onclick="saveHomeConfig()">💾 Lưu cấu hình</button>
       </div>
     </div>
@@ -879,15 +823,9 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
       <div class="card">
         <h3 style="color:#1877f2;margin-bottom:10px">📖 Link video hướng dẫn</h3>
         <label>URL video (YouTube, TikTok, v.v.):</label>
-        <input type="url" id="guideVideoUrlInput" placeholder="https://youtube.com/...">
+        <input type="url" id="guideVideoUrlInput" placeholder="https://youtube.com/embed/...">
+        <p style="font-size:12px;color:#666;margin-top:6px">💡 Với YouTube, dùng dạng nhúng: https://www.youtube.com/embed/VIDEO_ID</p>
         <button class="btn btn-success" style="margin-top:10px" onclick="saveGuideVideo()">💾 Lưu</button>
-      </div>
-    </div>
-
-    <div id="supremeTab-entertainment" class="tab-panel">
-      <div class="card">
-        <h3 style="color:#6f42c1;margin-bottom:10px">🎮 Trung tâm giải trí</h3>
-        <p style="font-size:13px;color:#666">Các chức năng giải trí (nhạc, thông báo, trêu ghẹo, email) được giữ lại từ phiên bản cũ.</p>
       </div>
     </div>
   </div>
@@ -914,19 +852,6 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
         <button class="btn btn-danger" style="flex:2" onclick="submitStudentExam(false)">📤 Nộp Bài</button>
       </div>
     </div>
-  </div>
-</div>
-
-<div id="studentWaitingRoomView" class="view-section">
-  <div class="card" style="max-width:600px;margin:40px auto;text-align:center;padding:30px">
-    <h2 style="color:#1877f2">⏳ PHÒNG CHỜ THI</h2>
-    <p id="waitingRoomExamTitle" style="font-weight:800;font-size:16px;margin-top:10px"></p>
-    <div style="background:#f8f9fa;padding:15px;border-radius:8px;text-align:left;margin:20px 0;font-size:14px;line-height:1.8">
-      <p>👤 <b>Thí sinh:</b> <span id="waitStudentName"></span></p>
-      <p>👥 <b>Đang trong phòng:</b> <span id="waitStudentCount" style="color:#1877f2;font-weight:800">1</span></p>
-    </div>
-    <div style="font-size:18px;font-weight:800;color:#d32f2f;background:#ffebee;padding:15px;border-radius:8px">🔔 CHỜ GIÁO VIÊN...</div>
-    <button class="btn btn-secondary" style="margin-top:20px" onclick="leaveWaitingRoom()">🚪 Rời Phòng</button>
   </div>
 </div>
 
@@ -988,7 +913,7 @@ body[data-theme="dark"] .role-card-h .rc-name{color:#e6e6e6}
 <div id="loadingOverlay"><div class="spinner"></div><h3 style="color:#1877f2">Đang xử lý...</h3></div>
 <div id="systemToast"></div>
 <div id="centerSquareToast"><span class="cst-icon" id="cstIcon">✅</span><div class="cst-title" id="cstTitle">Thông báo</div><div class="cst-msg" id="cstMsg"></div></div>
-<div id="globalBroadcastBanner" class="pos-top" style="position:fixed;left:0;width:100%;padding:14px 25px;text-align:center;font-weight:800;z-index:9999999;display:none;box-shadow:0 4px 15px rgba(0,0,0,.3);top:0"></div>
+<div id="globalBroadcastBanner" style="position:fixed;left:0;width:100%;padding:14px 25px;text-align:center;font-weight:800;z-index:9999999;display:none;box-shadow:0 4px 15px rgba(0,0,0,.3);top:0"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
@@ -1001,24 +926,29 @@ window.db=db;window.ref=ref;window.dbRef=ref(db);window.dbSet=set;window.dbGet=g
 <script>
 /* ========== GLOBAL STATE ========== */
 const VUA_PASSWORD='thuan281009@';
-let currentUser=null,currentUserFullData=null,cachedUsers={},cachedRoles={},cachedMedals={};
-let currentExamData=null,examTimer=null,timeLeft=0,studentNameGlobal='',studentSessionKeyGlobal='',isExamActive=false;
+let currentUser=null,currentUserFullData=null,cachedUsers={};
+let currentExamData=null,examTimer=null,timeLeft=0,studentNameGlobal='',isExamActive=false;
 let currentQpData=null,qpTimer=null,qpTimeLeft=0,isQpActive=false,currentQpV2Index=0,qpStudentAnswers={};
 let cheatWarnings=0,totalTabLeaveTime=0,tabLeaveStartTime=null;
 let currentCheatThreshold=7000,currentAntiCheatEnabled=true,currentCheatLimitType='unlimited',currentMaxWarnings=5,currentTimerEnabled=true;
-let activeStudentRoomListener=null,activeQpRoomListener=null;
-let currentHomeConfig=null,currentHomeCountdownListener=null;
-let onlineUsersListener=null,cachedOnlineUsers={},onlineHeartbeatInterval=null;
+let onlineHeartbeatInterval=null;
 let currentTeacherShowcase=null;
 let currentLiveRoomCode=null,currentLiveRoomRole='student';
 let lrMediaStream=null,lrScreenStream=null,lrCamOn=false,lrMicOn=false,lrChatDisabled=false;
-let lrRoomListener=null,lrParticipantsListener=null,lrChatListener=null;
+let lrRoomListener=null,lrParticipantsListener=null,lrChatListener=null,lrScreenListener=null;
 let drawingTool='pen',drawColor='#dc3545',drawWidth=3,isDrawing=false,drawStart=null;
-let currentCourseTab='community';
+/* WebRTC */
+let micStream=null;
+let rtcPeers={}; // peerUsername -> RTCPeerConnection
+let rtcOffersListener=null;
+let rtcAnswerListeners={};
+let rtcCandidateListeners={};
+const RTC_CONFIG={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]};
+/* Screen snapshot */
+let screenSnapshotInterval=null;
 
 const BANNED_WORDS=['dm','dmm','địt','đụ','cặc','lồn','buồi','đéo','đm','vcl','sex','fuck'];
 function containsBannedWord(t){if(!t)return false;const s=String(t).toLowerCase();return BANNED_WORDS.some(w=>s.includes(w));}
-
 function escapeHtml(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 const fileToBase64=f=>new Promise((res,rej)=>{const r=new FileReader();r.readAsDataURL(f);r.onload=()=>res(r.result);r.onerror=rej;});
 
@@ -1040,7 +970,7 @@ function showToast(msg,type='success'){
 }
 function showLoadingSequence(cb){const o=document.getElementById('loadingOverlay');o.style.display='flex';setTimeout(()=>{o.style.display='none';if(cb)cb();},900);}
 
-/* ========== VIEW SWITCHING ========== */
+/* ========== VIEW ========== */
 function switchView(viewId,btn=null){
   document.querySelectorAll('.view-section').forEach(el=>el.classList.remove('active'));
   const el=document.getElementById(viewId);if(el)el.classList.add('active');
@@ -1049,7 +979,7 @@ function switchView(viewId,btn=null){
   if(viewId==='teacherView')loadTeacherLiveStatus();
   if(viewId==='bxhView'){loadServerLB();renderThrone();}
   if(viewId==='homeView')renderHomeRoleUsers();
-  if(viewId!=='liveRoomInterface'){if(!document.getElementById('liveRoomInterface').classList.contains('active'))closeLiveRoomResources();}
+  if(viewId!=='liveRoomInterface'){/* keep resources if going back quickly */}
 }
 
 /* ========== AUTH ========== */
@@ -1064,7 +994,6 @@ async function hashPassword(pw){
   try{if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(data));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}}catch(e){}
   let h=5381;for(let i=0;i<data.length;i++)h=((h<<5)+h)+data.charCodeAt(i);return 'fb_'+Math.abs(h).toString(36);
 }
-function emailKey(email){return email.trim().toLowerCase().replace(/[.@]/g,'_');}
 async function handleRegister(){
   const role=document.getElementById('regRole').value;
   const username=document.getElementById('regUsername').value.trim().toLowerCase();
@@ -1080,10 +1009,7 @@ async function handleRegister(){
   try{
     if((await window.dbGet(window.dbChild(window.dbRef,`users/${username}`))).exists()){showToast('❌ Username đã tồn tại!','error');return;}
     const passwordHash=await hashPassword(password);
-    await window.dbSet(window.ref(window.db,`users/${username}`),{
-      username,email,passwordHash,role,nickname:username,avatar:'',avatarBg:'',medals:[],
-      customRoleIds:[],pinnedRoleId:'',nameTag:null,createdAt:Date.now()
-    });
+    await window.dbSet(window.ref(window.db,`users/${username}`),{username,email,passwordHash,role,nickname:username,avatar:'',avatarBg:'',medals:[],customRoleIds:[],createdAt:Date.now()});
     showCenterSquareToast('🎉','Đăng ký thành công!',`Username: ${username}`,'success',3000);
     document.getElementById('loginIdentifier').value=username;
     ['regUsername','regEmail','regPassword','regPassword2'].forEach(id=>document.getElementById(id).value='');
@@ -1095,8 +1021,7 @@ async function handleLogin(){
   const password=document.getElementById('loginPassword').value;
   if(!identifier||!password){showToast('Điền đầy đủ!','error');return;}
   try{
-    let username=identifier;
-    const s=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));
+    const s=await window.dbGet(window.dbChild(window.dbRef,`users/${identifier}`));
     if(!s.exists()){showToast('❌ Tài khoản không tồn tại!','error');return;}
     const u=s.val();
     if(await hashPassword(password)!==u.passwordHash){showToast('❌ Sai mật khẩu!','error');return;}
@@ -1113,7 +1038,7 @@ async function applyUserSession(u){
   const initial=(u.nickname||u.username).charAt(0).toUpperCase();
   const avatarInner=u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:initial;
   nav.innerHTML=`<div style="width:28px;height:28px;border-radius:50%;background:#fff;color:#1877f2;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;overflow:hidden">${avatarInner}</div><span>${escapeHtml(u.nickname||u.username)}</span><button onclick="event.stopPropagation();handleLogout()" style="background:transparent;border:none;color:#fff;cursor:pointer;font-size:15px;padding:2px 4px">🚪</button>`;
-  nav.style.display='flex';nav.onclick=()=>{showToast('👤 '+u.username);};
+  nav.style.display='flex';
   document.getElementById('studentName').value=u.nickname||u.username;
   startOnlineTracking();
 }
@@ -1139,7 +1064,7 @@ async function checkAuthOnLoad(){
   }catch(e){document.getElementById('authOverlay').style.display='flex';}
 }
 
-/* ========== ONLINE TRACKING ========== */
+/* ========== ONLINE ========== */
 function startOnlineTracking(){
   if(!currentUser)return;
   const hb=()=>{try{window.dbSet(window.ref(window.db,`online_users/${currentUser.username}`),{username:currentUser.username,nickname:currentUser.nickname||currentUser.username,lastSeen:Date.now()});}catch(e){}};
@@ -1152,15 +1077,37 @@ function stopOnlineTracking(){
   if(currentUser){try{window.dbRemove(window.ref(window.db,`online_users/${currentUser.username}`));}catch(e){}}
 }
 
-/* ========== HOME COUNTDOWN ========== */
+/* ========== COUNTDOWN FIXED ========== */
 let countdownInterval=null;
 function startCountdown(targetTime){
   if(countdownInterval)clearInterval(countdownInterval);
-  if(!targetTime){document.getElementById('cdDays').innerText='00';document.getElementById('cdHours').innerText='00';document.getElementById('cdMins').innerText='00';document.getElementById('cdSecs').innerText='00';return;}
-  const target=new Date(targetTime).getTime();
+  const cdMsg=document.getElementById('cdMsg');
+  let target=0;
+  if(targetTime){
+    target=new Date(targetTime).getTime();
+    if(isNaN(target))target=0;
+  }
+  // Fallback: nếu không có target, dùng +30 ngày từ lần load đầu
+  if(!target){
+    if(!window._defaultCountdown){
+      window._defaultCountdown=Date.now()+30*86400000;
+    }
+    target=window._defaultCountdown;
+    if(cdMsg)cdMsg.textContent='(Mặc định: +30 ngày — vào Tối cao để cài)';
+  }else{
+    const dt=new Date(target);
+    if(cdMsg)cdMsg.textContent='🎯 '+dt.toLocaleString('vi-VN');
+  }
   const tick=()=>{
     const now=Date.now();const diff=target-now;
-    if(diff<=0){document.getElementById('cdDays').innerText='00';document.getElementById('cdHours').innerText='00';document.getElementById('cdMins').innerText='00';document.getElementById('cdSecs').innerText='00';return;}
+    if(diff<=0){
+      document.getElementById('cdDays').innerText='00';
+      document.getElementById('cdHours').innerText='00';
+      document.getElementById('cdMins').innerText='00';
+      document.getElementById('cdSecs').innerText='00';
+      if(cdMsg)cdMsg.textContent='⏰ Đã đến thời gian thi!';
+      return;
+    }
     const d=Math.floor(diff/86400000);
     const h=Math.floor((diff%86400000)/3600000);
     const m=Math.floor((diff%3600000)/60000);
@@ -1170,7 +1117,25 @@ function startCountdown(targetTime){
     document.getElementById('cdMins').innerText=String(m).padStart(2,'0');
     document.getElementById('cdSecs').innerText=String(s).padStart(2,'0');
   };
-  tick();countdownInterval=setInterval(tick,1000);
+  tick();
+  countdownInterval=setInterval(tick,1000);
+}
+function previewCountdown(){
+  const v=document.getElementById('homeCountdownTarget').value;
+  if(v)startCountdown(v);
+}
+function quickSetCountdown(days){
+  const target=new Date(Date.now()+days*86400000);
+  const iso=new Date(target.getTime()-target.getTimezoneOffset()*60000).toISOString().slice(0,16);
+  document.getElementById('homeCountdownTarget').value=iso;
+  startCountdown(iso);
+  showToast(`⏰ Đã đặt +${days} ngày`,'info');
+}
+function clearCountdown(){
+  document.getElementById('homeCountdownTarget').value='';
+  window._defaultCountdown=Date.now()+30*86400000;
+  startCountdown(null);
+  showToast('🗑️ Đã xóa, dùng mặc định +30 ngày','info');
 }
 function listenHomeConfig(){
   window.onValue(window.ref(window.db,'system/home_config'),snap=>{
@@ -1178,9 +1143,7 @@ function listenHomeConfig(){
     currentHomeConfig=cfg;
     if(cfg.heroTitle)document.getElementById('homeHeroTitle').innerText=cfg.heroTitle;
     if(cfg.heroSub)document.getElementById('homeHeroSub').innerText=cfg.heroSub;
-    if(cfg.countdownTarget)startCountdown(cfg.countdownTarget);
-    else startCountdown(null);
-    // fill inputs
+    startCountdown(cfg.countdownTarget||null);
     const i=id=>document.getElementById(id);
     if(i('homeHeroTitleInput')&&document.activeElement!==i('homeHeroTitleInput'))i('homeHeroTitleInput').value=cfg.heroTitle||'';
     if(i('homeHeroSubInput')&&document.activeElement!==i('homeHeroSubInput'))i('homeHeroSubInput').value=cfg.heroSub||'';
@@ -1194,7 +1157,11 @@ async function saveHomeConfig(){
     countdownTarget:document.getElementById('homeCountdownTarget').value||'',
     updatedAt:Date.now()
   };
-  try{await window.dbSet(window.ref(window.db,'system/home_config'),cfg);showCenterSquareToast('✅','Đã lưu!','Cấu hình trang chủ','success');}catch(e){showToast('❌ '+e.message,'error');}
+  try{
+    await window.dbSet(window.ref(window.db,'system/home_config'),cfg);
+    startCountdown(cfg.countdownTarget||null);
+    showCenterSquareToast('✅','Đã lưu!','Cấu hình trang chủ','success');
+  }catch(e){showToast('❌ '+e.message,'error');}
 }
 
 /* ========== HOME ROLE CARDS ========== */
@@ -1215,12 +1182,10 @@ function renderTrack(containerId,users,type){
   const c=document.getElementById(containerId);if(!c)return;
   if(roleTrackTimers[containerId]){clearInterval(roleTrackTimers[containerId]);delete roleTrackTimers[containerId];}
   if(!users.length){
-    c.innerHTML=`<div style="padding:14px;color:#888;font-size:12px;text-align:center;width:100%">Chưa có ${type==='king'?'người thành lập':type==='elite'?'top ưu tú':'đối tác'}</p>`;
-    c.style.transform='translateX(0)';
-    return;
+    c.innerHTML=`<div style="padding:14px;color:#888;font-size:12px;text-align:center;width:100%">Chưa có</div>`;
+    c.style.transform='translateX(0)';return;
   }
-  // Duplicate for infinite loop
-  const buildCard=(u,idx)=>{
+  const buildCard=(u)=>{
     const initial=(u.nickname||u.username).charAt(0).toUpperCase();
     const av=u.avatar?`<img src="${u.avatar}">`:initial;
     const roleClass=type==='king'?'king-card':'';
@@ -1229,13 +1194,12 @@ function renderTrack(containerId,users,type){
     const laurel=type!=='king'?'<div class="rc-laurel">🏆</div>':'';
     return `<div class="role-card-h ${roleClass}" onclick="openUserInfoFromHome('${u.username}')">${crown}${laurel}${ribbon}<div class="rc-avatar">${av}</div><div class="rc-name">${escapeHtml(u.nickname||u.username)}</div><div class="rc-sub">@${escapeHtml(u.username)}</div></div>`;
   };
-  const cardW=164; // width + gap
+  const cardW=164;
   let html=users.map(u=>buildCard(u)).join('');
-  // duplicate
-  html+=html;
+  html+=html; // duplicate for loop
   c.innerHTML=html;
+  c.style.transition='none';
   c.style.transform='translateX(0)';
-  // Auto rotate every 3s
   if(users.length>1){
     let offset=0;
     roleTrackTimers[containerId]=setInterval(()=>{
@@ -1243,13 +1207,15 @@ function renderTrack(containerId,users,type){
       const maxOffset=-(users.length*cardW);
       c.style.transition='transform 1s cubic-bezier(.34,1.3,.5,1)';
       c.style.transform=`translateX(${offset}px)`;
-      if(offset<=maxOffset){setTimeout(()=>{c.style.transition='none';offset=0;c.style.transform='translateX(0)';},1000);}
+      if(offset<=maxOffset){
+        setTimeout(()=>{c.style.transition='none';offset=0;c.style.transform='translateX(0)';},1050);
+      }
     },3000);
   }
 }
 function openUserInfoFromHome(username){
   const u=cachedUsers[username];if(!u)return;
-  showCenterSquareToast('👤',u.nickname||u.username,'@'+u.username+' • Vai trò: '+u.role,'info',3000);
+  showCenterSquareToast('👤',u.nickname||u.username,`@${u.username}\nVai trò: ${u.role||'student'}`,'info',3000);
 }
 
 /* ========== TEACHER SHOWCASE ========== */
@@ -1260,13 +1226,12 @@ function listenTeacherShowcase(){
     const img=d.image||'👨‍🏫';
     const imgBox=document.getElementById('teacherShowcaseImg');
     if(imgBox){
-      if(img&&img.startsWith('http'))imgBox.innerHTML=`<img src="${img}" alt="">`;
+      if(img&&/^https?:\/\//i.test(img))imgBox.innerHTML=`<img src="${img}" alt="">`;
       else imgBox.innerText=img;
     }
     document.getElementById('teacherShowcaseName').innerHTML=`<span class="ts-badge">Giáo viên</span>${escapeHtml(d.name||'Đang cập nhật...')}`;
     document.getElementById('teacherShowcaseDesc').innerText=d.desc||'Thông tin giáo viên sẽ được cập nhật tại đây.';
     document.getElementById('teacherShowcaseContact').innerText=d.contact?'📞 Liên hệ: '+d.contact:'';
-    // fill inputs
     const i=id=>document.getElementById(id);
     if(i('teacherShowcaseNameInput')&&document.activeElement!==i('teacherShowcaseNameInput'))i('teacherShowcaseNameInput').value=d.name||'';
     if(i('teacherShowcaseDescInput')&&document.activeElement!==i('teacherShowcaseDescInput'))i('teacherShowcaseDescInput').value=d.desc||'';
@@ -1312,6 +1277,7 @@ function switchStudentTab(tab,btn){
   if(tab==='docs')loadStudentDocs();
   if(tab==='mock')loadMockExams();
   if(tab==='live')loadLiveRoomsList();
+  if(tab==='course')loadCourses();
 }
 function switchTeacherTab(tab,btn){
   document.querySelectorAll('#teacherTabBar button').forEach(b=>b.classList.remove('active'));
@@ -1353,16 +1319,10 @@ function switchSupremeTab(tab,btn){
   document.getElementById('supremeTab-'+tab).classList.add('active');
 }
 function switchCourseTab(tab,btn){
-  currentCourseTab=tab;
   document.querySelectorAll('#studentTab-course .tab-bar button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('courseTab-community').style.display=tab==='community'?'block':'none';
   document.getElementById('courseTab-mine').style.display=tab==='mine'?'block':'none';
-}
-function switchViewTab(container,tabs,tab){
-  document.querySelectorAll(`${container} button`).forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll(tabs).forEach(p=>p.classList.remove('active'));
-  document.getElementById(tabs.replace('.tab-panel','Tab-'+tab))?.classList.add('active');
 }
 
 /* ========== SUPREME ========== */
@@ -1426,8 +1386,14 @@ async function sendGlobalBroadcast(){
 function listenGlobalBroadcast(){
   window.onValue(window.ref(window.db,'system/broadcast'),snap=>{
     const d=snap.val();const b=document.getElementById('globalBroadcastBanner');
-    if(d&&d.text){b.innerText=d.text;b.style.display='block';if(d.position==='middle'){b.style.top='50%';b.style.transform='translateY(-50%)';}else if(d.position==='bottom'){b.style.top='auto';b.style.bottom='0';b.style.transform='none';}else{b.style.top='0';b.style.bottom='auto';b.style.transform='none';}b.style.background='linear-gradient(135deg,#1877f2,#6f42c1)';b.style.color='#fff';setTimeout(()=>{b.style.display='none';},8000);}
-    else b.style.display='none';
+    if(d&&d.text){
+      b.innerText=d.text;b.style.display='block';
+      if(d.position==='middle'){b.style.top='50%';b.style.transform='translateY(-50%)';}
+      else if(d.position==='bottom'){b.style.top='auto';b.style.bottom='0';b.style.transform='none';}
+      else{b.style.top='0';b.style.bottom='auto';b.style.transform='none';}
+      b.style.background='linear-gradient(135deg,#1877f2,#6f42c1)';b.style.color='#fff';
+      setTimeout(()=>{b.style.display='none';},8000);
+    }else b.style.display='none';
   });
 }
 
@@ -1474,6 +1440,18 @@ function startMockExam(code){
   switchStudentTab('exam',document.querySelector('#studentTabBar button:first-child'));
   showToast('📝 Đã chọn đề, bấm Bắt Đầu!','info');
 }
+function loadCourses(){
+  const c=document.getElementById('communityCourseGrid');if(!c)return;
+  window.dbGet(window.dbChild(window.dbRef,'courses')).then(s=>{
+    const list=s.val()||{};
+    const keys=Object.keys(list);
+    if(!keys.length){c.innerHTML='<p style="color:#888;text-align:center;padding:30px;grid-column:1/-1">Chưa có khóa học nào</p>';return;}
+    c.innerHTML=keys.map(k=>{
+      const co=list[k];
+      return `<div class="course-card"><div class="cc-cover">${co.cover&&/^https?:/.test(co.cover)?`<img src="${co.cover}" style="width:100%;height:100%;object-fit:cover">`:co.cover||'📚'}</div><div class="cc-body"><div class="cc-title">${escapeHtml(co.name)}</div><div class="cc-meta">👨‍🏫 ${escapeHtml(co.teacher||'')}</div><button class="cc-btn">📖 Xem</button></div></div>`;
+    }).join('');
+  });
+}
 function loadLiveRoomsList(){
   const c=document.getElementById('liveRoomGrid');if(!c)return;
   c.innerHTML='<p style="color:#888;text-align:center;padding:20px;grid-column:1/-1">Đang tải...</p>';
@@ -1486,11 +1464,16 @@ function loadLiveRoomsList(){
       return `<div class="exam-card" style="border-color:#dc3545" onclick="openLiveJoinModal('${k}')"><div class="ec-code" style="background:#ffe4e4;color:#dc3545">${escapeHtml(k)}</div><div class="ec-title" style="color:#dc3545">🔴 ${escapeHtml(r.name||'Live Room')}</div><div class="ec-meta">👥 ${r.max||50} • ${r.password?'🔒 Có mật khẩu':'🔓 Không mật khẩu'}</div></div>`;
     }).join('');
   });
-  if(!window._liveRoomSearchBound){window._liveRoomSearchBound=true;}
 }
-function filterLiveRooms(){/* filter logic */}
+function filterLiveRooms(){
+  const q=(document.getElementById('liveRoomSearch').value||'').toLowerCase().trim();
+  document.querySelectorAll('#liveRoomGrid .exam-card').forEach(card=>{
+    const txt=card.innerText.toLowerCase();
+    card.style.display=(!q||txt.includes(q))?'block':'none';
+  });
+}
 
-/* ========== TEACHER ========== */
+/* ========== TEACHER UPLOAD ========== */
 async function loadTeacherUploadHistory(){
   const c=document.getElementById('teacherUploadHistory');if(!c)return;
   if(!currentUser){c.innerHTML='<p style="color:#888">Đăng nhập để xem.</p>';return;}
@@ -1512,9 +1495,7 @@ async function handleTeacherDocUpload(input){
   if(f.size>8*1024*1024){showToast('❌ Tối đa 8MB!','error');input.value='';return;}
   try{
     const d=await fileToBase64(f);
-    await window.dbSet(window.ref(window.db,'documents/doc_'+Date.now()),{
-      name:f.name,type:f.type||'',size:f.size,data:d,uploadedBy:currentUser.username,uploadedAt:Date.now()
-    });
+    await window.dbSet(window.ref(window.db,'documents/doc_'+Date.now()),{name:f.name,type:f.type||'',size:f.size,data:d,uploadedBy:currentUser.username,uploadedAt:Date.now()});
     showCenterSquareToast('✅','Đã up!',f.name,'success');
     loadTeacherUploadHistory();
   }catch(e){showToast('❌ '+e.message,'error');}
@@ -1529,10 +1510,7 @@ async function createCourse(){
   const name=document.getElementById('courseName').value.trim();
   if(!name){showToast('Nhập tên khóa học!','error');return;}
   try{
-    await window.dbPush(window.ref(window.db,'courses'),{
-      name,desc:document.getElementById('courseDesc').value.trim(),cover:document.getElementById('courseCover').value.trim()||'📚',
-      teacher:currentUser.username,createdAt:Date.now(),members:[]
-    });
+    await window.dbPush(window.ref(window.db,'courses'),{name,desc:document.getElementById('courseDesc').value.trim(),cover:document.getElementById('courseCover').value.trim()||'📚',teacher:currentUser.username,createdAt:Date.now(),members:[]});
     showCenterSquareToast('✅','Đã tạo!',name,'success');
     document.getElementById('courseName').value='';document.getElementById('courseDesc').value='';
   }catch(e){showToast('❌ '+e.message,'error');}
@@ -1544,8 +1522,11 @@ async function loadTeacherLiveStatus(){
     const s=await window.dbGet(window.dbChild(window.dbRef,'live_rooms'));
     const list=s.val()||{};
     const mine=Object.keys(list).filter(k=>list[k].teacher===currentUser.username&&list[k].status!=='ended');
-    if(!mine.length){c.innerHTML=`<p style="color:#888;font-size:13px;margin-bottom:10px">Bạn chưa có phòng live nào đang mở.</p>
-      <button class="btn btn-danger" style="padding:12px" onclick="switchTeacherTab('exam',document.querySelector('#teacherTabBar button:first-child'));setTimeout(()=>switchExamSubTab('live',null),100)">🔴 Tạo phòng live mới</button>`;return;}
+    if(!mine.length){
+      c.innerHTML=`<p style="color:#888;font-size:13px;margin-bottom:10px">Bạn chưa có phòng live nào đang mở.</p>
+      <button class="btn btn-danger" style="padding:12px" onclick="switchTeacherTab('exam',document.querySelector('#teacherTabBar button:first-child'));setTimeout(()=>switchExamSubTab('live',null),100)">🔴 Tạo phòng live mới</button>`;
+      return;
+    }
     const code=mine[0];const r=list[code];
     c.innerHTML=`<div style="background:#fff;padding:14px;border-radius:12px;border:2px solid #dc3545">
       <div style="font-weight:900;color:#dc3545;margin-bottom:8px">🔴 ${escapeHtml(r.name||'Live Room')}</div>
@@ -1557,6 +1538,8 @@ async function loadTeacherLiveStatus(){
     </div>`;
   }catch(e){c.innerHTML='<p style="color:#dc3545">Lỗi: '+e.message+'</p>';}
 }
+
+/* ========== LIVE ROOM ========== */
 function generateRoomCode(){return String(Math.floor(100000+Math.random()*900000));}
 async function createLiveRoom(){
   if(!currentUser){showToast('🔐 Đăng nhập!','error');return;}
@@ -1571,26 +1554,23 @@ async function createLiveRoom(){
     const code=generateRoomCode();
     await window.dbSet(window.ref(window.db,'live_rooms/'+code),{
       code,name,password:pass,max,teacher:currentUser.username,teacherName:currentUser.nickname||currentUser.username,
-      status:'live',locked:false,chatDisabled:false,paused:false,createdAt:Date.now(),participants:{}
+      status:'live',locked:false,chatDisabled:false,paused:false,shareScreenUser:'',createdAt:Date.now(),participants:{}
     });
     showCenterSquareToast('🔴','Đã tạo phòng!',`Mã: ${code}`,'success',4000);
     joinLiveRoom(code,'teacher');
   }catch(e){showToast('❌ '+e.message,'error');}
 }
-
-/* ========== LIVE ROOM ========== */
 function openLiveJoinModal(code){
-  const s=window.dbGet(window.dbChild(window.dbRef,'live_rooms/'+code));
-  s.then(snap=>{
+  window.dbGet(window.dbChild(window.dbRef,'live_rooms/'+code)).then(snap=>{
     if(!snap.exists()){showToast('❌ Phòng không tồn tại!','error');return;}
     const r=snap.val();
     if(r.status==='ended'){showToast('❌ Phòng đã kết thúc!','error');return;}
     if(r.locked){showToast('🔒 Phòng đã khóa!','error');return;}
     currentLiveRoomCode=code;
+    if(!r.password){joinLiveRoom(code,'student');return;}
     document.getElementById('liveJoinInfo').innerHTML=`<div style="background:#f8f9fa;padding:10px;border-radius:8px;margin-bottom:10px;font-size:13px"><b>${escapeHtml(r.name)}</b><br><small style="color:#888">GV: ${escapeHtml(r.teacherName)}</small></div>`;
     document.getElementById('liveJoinPass').value='';
     document.getElementById('liveRoomJoinModal').classList.add('show');
-    if(!r.password){document.getElementById('liveRoomJoinModal').style.display='none';joinLiveRoom(code,'student');}
   });
 }
 function closeLiveJoinModal(){document.getElementById('liveRoomJoinModal').classList.remove('show');}
@@ -1611,10 +1591,13 @@ async function joinLiveRoom(code,role){
   if(!snap.exists()){showToast('❌ Phòng không tồn tại!','error');return;}
   const r=snap.val();
   document.getElementById('lrRoomCode').innerText=code;
-  // Add participant
+  const stage=document.getElementById('lrStage');
+  if(!r.shareScreenUser){
+    stage.innerHTML=`<div class="lr-stage-placeholder"><div class="lrp-icon">📺</div><div class="lrp-text">Chưa có ai chia sẻ màn hình</div><div class="lrp-code">${code}</div><div style="font-size:12px;color:#888">Chia sẻ mã này cho học sinh</div></div>`;
+  }
   await window.dbUpdate(window.ref(window.db,`live_rooms/${code}/participants/${currentUser.username}`),{
     username:currentUser.username,name:currentUser.nickname||currentUser.username,role,joinedAt:Date.now(),
-    micOn:false,camOn:false,avatar:currentUser.avatar||''
+    micOn:!!lrMicOn,camOn:!!lrCamOn,avatar:currentUser.avatar||''
   });
   switchView('liveRoomInterface');
   // Listen participants
@@ -1627,16 +1610,35 @@ async function joinLiveRoom(code,role){
   lrChatListener=window.onValue(window.ref(window.db,`live_rooms/${code}/chat`),s=>{
     const data=s.val()||{};renderLiveChat(data);
   });
-  // Room state
+  // Listen screen snapshot (students see teacher's shared screen)
+  if(lrScreenListener)lrScreenListener();
+  lrScreenListener=window.onValue(window.ref(window.db,`live_rooms/${code}/screenSnapshot`),s=>{
+    const d=s.val();
+    if(!d||!d.data)return;
+    if(d.from===currentUser.username)return; // skip own
+    renderScreenSnapshot(d.data);
+  });
+  // Listen room state
   if(lrRoomListener)lrRoomListener();
   lrRoomListener=window.onValue(window.ref(window.db,`live_rooms/${code}`),s=>{
     const d=s.val();
     if(!d){showToast('❌ Phòng đã đóng!','error');leaveLiveRoom();return;}
     if(d.status==='ended'){showToast('🛑 Phòng đã kết thúc!','warn');leaveLiveRoom();return;}
     lrChatDisabled=!!d.chatDisabled;
-    document.getElementById('lrLiveStatus').innerText=d.paused?'● PAUSED':'● LIVE';
-    document.getElementById('lrLiveStatus').style.color=d.paused?'#ffc107':'#198754';
-    // student-only controls
+    const ls=document.getElementById('lrLiveStatus');
+    ls.innerText=d.paused?'● TẠM DỪNG':'● LIVE';
+    ls.style.color=d.paused?'#ffc107':'#198754';
+    if(d.paused){
+      if(!document.getElementById('lrPausedOverlay')){
+        const ov=document.createElement('div');
+        ov.id='lrPausedOverlay';ov.className='lr-paused-overlay';
+        ov.innerHTML='<div style="font-size:60px">⏸️</div><div>GIÁO VIÊN ĐÃ TẠM DỪNG</div>';
+        document.getElementById('lrStage').appendChild(ov);
+      }
+    }else{
+      document.getElementById('lrPausedOverlay')?.remove();
+    }
+    // Update controls visibility by role
     if(role==='student'){
       document.getElementById('lrScreenBtn').style.display='none';
       document.getElementById('lrMuteAllBtn').style.display='none';
@@ -1645,15 +1647,34 @@ async function joinLiveRoom(code,role){
       document.getElementById('lrScreenBtn').style.display='flex';
       document.getElementById('lrMuteAllBtn').style.display='flex';
       document.getElementById('lrPauseBtn').style.display='flex';
+      document.getElementById('lrPauseBtn').innerText=d.paused?'▶️':'⏸️';
+      document.getElementById('lrPauseBtn').classList.toggle('active',!!d.paused);
     }
-    if(d.shareScreenUser&&d.shareScreenUser!==currentUser.username){
-      document.querySelector('.lr-stage-placeholder')?.remove?.();
-      document.getElementById('lrStage').innerHTML=`<div style="color:#fff;text-align:center"><div style="font-size:60px">🖥️</div><div style="font-size:14px;margin-top:10px">${escapeHtml(d.shareScreenUser)} đang chia sẻ màn hình</div></div>`;
+    // If no one shares screen, reset stage
+    if(!d.shareScreenUser){
+      const img=document.getElementById('lrScreenImg');
+      if(img&&role!=='teacher'){
+        stage.innerHTML=`<div class="lr-stage-placeholder"><div class="lrp-icon">📺</div><div class="lrp-text">Chưa có ai chia sẻ màn hình</div><div class="lrp-code">${code}</div></div>`;
+      }
     }
   });
   showToast('🔴 Đã vào phòng!','success');
-  // Mobile toolbar
   if(window.innerWidth<768)document.getElementById('mobileToolbarFab').classList.add('show');
+  // Start listening for WebRTC offers (student side and teacher side both use this)
+  startRtcOfferListener();
+}
+function renderScreenSnapshot(dataUrl){
+  const stage=document.getElementById('lrStage');
+  let img=document.getElementById('lrScreenImg');
+  if(!img){
+    stage.innerHTML='';
+    img=document.createElement('img');
+    img.id='lrScreenImg';
+    img.className='lr-screen-img';
+    img.alt='Screen share';
+    stage.appendChild(img);
+  }
+  img.src=dataUrl;
 }
 function renderLiveParticipants(list){
   const c=document.getElementById('lrParticipants');
@@ -1664,7 +1685,9 @@ function renderLiveParticipants(list){
     const initial=(p.name||u).charAt(0).toUpperCase();
     const av=p.avatar?`<img src="${p.avatar}">`:initial;
     const isSelf=u===currentUser?.username;
-    const actions=currentLiveRoomRole==='teacher'&&!isSelf?`<div class="lp-actions"><button onclick="kickLiveParticipant('${u}')" title="Đuổi">🚫</button><button onclick="togglePartMic('${u}',${!!p.micOn})" title="Mic">${p.micOn?'🎤':'🔇'}</button></div>`:(p.micOn?'🎤':'');
+    const actions=currentLiveRoomRole==='teacher'&&!isSelf
+      ? `<div class="lp-actions"><button onclick="kickLiveParticipant('${u}')" title="Đuổi">🚫</button><button onclick="togglePartMic('${u}',${!!p.micOn})" title="Mic">${p.micOn?'🎤':'🔇'}</button></div>`
+      : (p.micOn?'🎤':'');
     return `<div class="lr-participant"><div class="lp-av">${av}</div><div class="lp-name">${escapeHtml(p.name||u)}${p.role==='teacher'?' 👨‍🏫':''}</div><div>${actions}</div></div>`;
   }).join('');
 }
@@ -1682,9 +1705,7 @@ async function sendLiveChat(){
   if(lrChatDisabled){showToast('🚫 Chat đã bị tắt!','warn');return;}
   const inp=document.getElementById('lrChatInput');
   const text=inp.value.trim();if(!text)return;
-  await window.dbPush(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/chat`),{
-    user:currentUser.username,name:currentUser.nickname||currentUser.username,text,ts:Date.now()
-  });
+  await window.dbPush(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/chat`),{user:currentUser.username,name:currentUser.nickname||currentUser.username,text,ts:Date.now()});
   inp.value='';
 }
 async function kickLiveParticipant(username){
@@ -1696,62 +1717,263 @@ async function kickLiveParticipant(username){
 async function togglePartMic(username,currentOn){
   await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/participants/${username}`),{micOn:!currentOn});
 }
-async function toggleLiveMic(){
-  if(!currentUser||!currentLiveRoomCode)return;
-  lrMicOn=!lrMicOn;
-  const btn=document.getElementById('lrMicBtn');
-  btn.classList.toggle('active',lrMicOn);
-  btn.innerText=lrMicOn?'🎤':'🔇';
-  if(lrMicOn){
-    try{lrMediaStream=await navigator.mediaDevices.getUserMedia({audio:true});}catch(e){showToast('❌ Không mở được mic!','error');lrMicOn=false;btn.classList.remove('active');btn.innerText='🎤';return;}
-  }else{
-    if(lrMediaStream){lrMediaStream.getTracks().forEach(t=>t.stop());lrMediaStream=null;}
+
+/* ========== MIC + WEBRTC (FIXED) ========== */
+async function ensureMicStream(){
+  if(micStream&&micStream.active)return micStream;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    throw new Error('Trình duyệt không hỗ trợ mic hoặc trang không phải HTTPS/localhost');
   }
-  await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/participants/${currentUser.username}`),{micOn:lrMicOn});
+  micStream=await navigator.mediaDevices.getUserMedia({
+    audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}
+  });
+  return micStream;
+}
+async function createPeerConnection(peerUsername,isOfferer){
+  if(rtcPeers[peerUsername])return rtcPeers[peerUsername];
+  const pc=new RTCPeerConnection(RTC_CONFIG);
+  rtcPeers[peerUsername]=pc;
+  // Add local mic track if available
+  if(micStream){
+    micStream.getAudioTracks().forEach(t=>{
+      try{pc.addTrack(t,micStream);}catch(e){}
+    });
+  }
+  // Remote audio
+  pc.ontrack=(ev)=>{
+    const stream=ev.streams[0];
+    let audio=document.getElementById('rtc-audio-'+peerUsername);
+    if(!audio){
+      audio=document.createElement('audio');
+      audio.id='rtc-audio-'+peerUsername;
+      audio.autoplay=true;audio.playsInline=true;
+      audio.style.display='none';
+      document.body.appendChild(audio);
+    }
+    audio.srcObject=stream;
+    audio.play().catch(err=>console.warn('Audio autoplay blocked:',err));
+  };
+  pc.onconnectionstatechange=()=>{
+    if(['failed','closed','disconnected'].includes(pc.connectionState)){
+      // cleanup ref
+      setTimeout(()=>{
+        if(rtcPeers[peerUsername]===pc){try{pc.close();}catch(e){}delete rtcPeers[peerUsername];}
+      },1500);
+    }
+  };
+  // ICE candidates
+  const basePath=`live_rooms/${currentLiveRoomCode}/webrtc/${currentUser.username}__${peerUsername}`;
+  pc.onicecandidate=(ev)=>{
+    if(ev.candidate){
+      window.dbPush(window.ref(window.db,basePath+'/candidates/'+(isOfferer?'offerer':'answerer')),ev.candidate.toJSON());
+    }
+  };
+  // Listen remote candidates (once)
+  if(!rtcCandidateListeners[peerUsername]){
+    const remoteSide=isOfferer?'answerer':'offerer';
+    rtcCandidateListeners[peerUsername]=window.onValue(window.ref(window.db,basePath+'/candidates/'+remoteSide),snap=>{
+      const d=snap.val()||{};
+      Object.values(d).forEach(c=>{
+        try{pc.addIceCandidate(new RTCIceCandidate(c)).catch(()=>{});}catch(e){}
+      });
+    });
+  }
+  return pc;
+}
+async function callPeer(peerUsername){
+  if(rtcPeers[peerUsername])return;
+  try{
+    const pc=await createPeerConnection(peerUsername,true);
+    const offer=await pc.createOffer({offerToReceiveAudio:true});
+    await pc.setLocalDescription(offer);
+    const basePath=`live_rooms/${currentLiveRoomCode}/webrtc/${currentUser.username}__${peerUsername}`;
+    await window.dbSet(window.ref(window.db,basePath+'/offer'),{type:offer.type,sdp:offer.sdp,from:currentUser.username,to:peerUsername,ts:Date.now()});
+    // Wait for answer
+    if(rtcAnswerListeners[peerUsername])rtcAnswerListeners[peerUsername]();
+    rtcAnswerListeners[peerUsername]=window.onValue(window.ref(window.db,basePath+'/answer'),async snap=>{
+      const a=snap.val();
+      if(a&&!pc.currentRemoteDescription){
+        try{await pc.setRemoteDescription(new RTCSessionDescription(a));}catch(e){console.warn('setRemoteDescription answer err',e);}
+      }
+    });
+  }catch(e){console.error('callPeer err',e);}
+}
+async function handleIncomingOffer(offerObj){
+  const peerUsername=offerObj.from;
+  if(rtcPeers[peerUsername])return;
+  try{
+    const pc=await createPeerConnection(peerUsername,false);
+    await pc.setRemoteDescription(new RTCSessionDescription({type:offerObj.type,sdp:offerObj.sdp}));
+    const answer=await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    const basePath=`live_rooms/${currentLiveRoomCode}/webrtc/${peerUsername}__${currentUser.username}`;
+    await window.dbSet(window.ref(window.db,basePath+'/answer'),{type:answer.type,sdp:answer.sdp,ts:Date.now()});
+  }catch(e){console.error('handleIncomingOffer err',e);}
+}
+function startRtcOfferListener(){
+  if(rtcOffersListener)rtcOffersListener();
+  const basePath=`live_rooms/${currentLiveRoomCode}/webrtc`;
+  rtcOffersListener=window.onValue(window.ref(window.db,basePath),snap=>{
+    const data=snap.val()||{};
+    Object.keys(data).forEach(key=>{
+      const pair=data[key];
+      if(!pair||!pair.offer)return;
+      const offer=pair.offer;
+      if(offer.to!==currentUser.username)return;
+      if(rtcPeers[offer.from])return;
+      // Ignore own offer
+      if(offer.from===currentUser.username)return;
+      // Only answer newer offers (avoid stale)
+      if(offer.ts && Date.now()-offer.ts>60000) return;
+      handleIncomingOffer(offer);
+    });
+  });
+}
+async function connectToAllWithMic(){
+  // For everyone: connect to all others who already have mic on
+  try{
+    const snap=await window.dbGet(window.dbChild(window.dbRef,`live_rooms/${currentLiveRoomCode}/participants`));
+    const list=snap.val()||{};
+    Object.keys(list).forEach(u=>{
+      if(u===currentUser.username)return;
+      if(!list[u].micOn)return;
+      if(rtcPeers[u])return;
+      // Only one side initiates: the one whose username is "greater" (arbitrary rule) 
+      // to reduce glare. Actually simpler: the caller here is the one who just turned on mic.
+      callPeer(u);
+    });
+  }catch(e){console.error(e);}
+}
+async function toggleLiveMic(){
+  if(!currentUser||!currentLiveRoomCode){showToast('❌ Chưa vào phòng!','error');return;}
+  const btn=document.getElementById('lrMicBtn');
+  if(lrMicOn){
+    // turn OFF
+    if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}
+    lrMicOn=false;
+    btn.classList.remove('active');btn.innerText='🎤';
+    // close peers
+    Object.keys(rtcPeers).forEach(p=>{try{rtcPeers[p].close();}catch(e){}delete rtcPeers[p];});
+    document.querySelectorAll('audio[id^="rtc-audio-"]').forEach(a=>{a.srcObject=null;a.remove();});
+    try{await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/participants/${currentUser.username}`),{micOn:false});}catch(e){}
+    showToast('🔇 Đã tắt mic','info');
+    return;
+  }
+  // turn ON
+  try{
+    btn.innerText='⏳';
+    const stream=await ensureMicStream();
+    lrMicOn=true;
+    btn.classList.add('active');btn.innerText='🎤';
+    // Update participant state FIRST so others can see we have mic on
+    await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/participants/${currentUser.username}`),{micOn:true});
+    // Then connect to those already on
+    await connectToAllWithMic();
+    showToast('🎤 Đã bật mic','success');
+  }catch(e){
+    console.error(e);
+    btn.innerText='🎤';lrMicOn=false;
+    let msg='Không mở được mic';
+    if(e.name==='NotAllowedError')msg='Bạn đã từ chối quyền mic. Cấp quyền trong cài đặt trình duyệt.';
+    else if(e.name==='NotFoundError')msg='Không tìm thấy thiết bị mic.';
+    else if(e.name==='NotReadableError')msg='Mic đang được ứng dụng khác sử dụng.';
+    else if(e.message)msg=e.message;
+    if(location.protocol!=='https:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){
+      msg+=' (Trang cần HTTPS hoặc localhost)';
+    }
+    showToast('❌ '+msg,'error');
+  }
 }
 async function toggleLiveCam(){
   if(!currentUser||!currentLiveRoomCode)return;
-  lrCamOn=!lrCamOn;
   const btn=document.getElementById('lrCamBtn');
-  btn.classList.toggle('active',lrCamOn);
   if(lrCamOn){
-    try{
-      const stream=await navigator.mediaDevices.getUserMedia({video:true});
-      const v=document.createElement('video');
-      v.autoplay=true;v.muted=true;v.playsInline=true;v.srcObject=stream;
-      v.style.cssText='position:absolute;bottom:10px;right:10px;width:180px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.5);z-index:5';
-      v.id='lrLocalCam';
-      document.getElementById('lrStage').appendChild(v);
-      window._lrLocalStream=stream;
-    }catch(e){showToast('❌ Không mở được camera!','error');lrCamOn=false;btn.classList.remove('active');return;}
-  }else{
     if(window._lrLocalStream){window._lrLocalStream.getTracks().forEach(t=>t.stop());window._lrLocalStream=null;}
     document.getElementById('lrLocalCam')?.remove();
-  }
-  await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/participants/${currentUser.username}`),{camOn:lrCamOn});
-}
-async function toggleLiveScreen(){
-  if(currentLiveRoomRole!=='teacher')return;
-  if(lrScreenStream){
-    lrScreenStream.getTracks().forEach(t=>t.stop());lrScreenStream=null;
-    await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}`),{shareScreenUser:''});
-    document.getElementById('lrScreenBtn').classList.remove('active');
+    lrCamOn=false;btn.classList.remove('active');
     return;
   }
   try{
-    lrScreenStream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false});
+    const stream=await navigator.mediaDevices.getUserMedia({video:true});
+    lrCamOn=true;
+    const v=document.createElement('video');
+    v.autoplay=true;v.muted=true;v.playsInline=true;v.srcObject=stream;
+    v.style.cssText='position:absolute;bottom:10px;right:10px;width:180px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.5);z-index:5';
+    v.id='lrLocalCam';
+    document.getElementById('lrStage').appendChild(v);
+    window._lrLocalStream=stream;
+    btn.classList.add('active');
+  }catch(e){showToast('❌ Không mở được camera!','error');}
+}
+
+/* ========== SCREEN SHARE (SNAPSHOT TO FIREBASE) ========== */
+async function toggleLiveScreen(){
+  if(currentLiveRoomRole!=='teacher')return;
+  if(lrScreenStream){stopScreenShare();return;}
+  try{
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){
+      showToast('❌ Trình duyệt không hỗ trợ chia sẻ màn hình','error');return;
+    }
+    lrScreenStream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:10,max:15}},audio:false});
     document.getElementById('lrScreenBtn').classList.add('active');
     await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}`),{shareScreenUser:currentUser.username});
+    // Local preview
     const stage=document.getElementById('lrStage');
     stage.innerHTML='';
     const v=document.createElement('video');
     v.autoplay=true;v.muted=true;v.playsInline=true;v.srcObject=lrScreenStream;
     v.className='lr-stage-video';
     stage.appendChild(v);
-    lrScreenStream.getVideoTracks()[0].onended=()=>{toggleLiveScreen();};
+    // Start snapshot streaming
+    startScreenSnapshot(lrScreenStream);
+    lrScreenStream.getVideoTracks()[0].onended=()=>{stopScreenShare();};
     showToast('🖥️ Đang chia sẻ màn hình','success');
-  }catch(e){showToast('❌ Không chia sẻ được!','error');}
+  }catch(e){
+    console.error(e);
+    showToast('❌ Không chia sẻ được: '+(e.message||e),'error');
+  }
 }
+function startScreenSnapshot(stream){
+  stopScreenSnapshot();
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  const video=document.createElement('video');
+  video.autoplay=true;video.muted=true;video.playsInline=true;
+  video.srcObject=stream;
+  video.play().catch(()=>{});
+  const MAX_W=720;
+  const push=()=>{
+    if(!stream||!stream.active)return;
+    if(video.readyState<2||video.videoWidth===0)return;
+    const ratio=Math.min(1,MAX_W/video.videoWidth);
+    canvas.width=MAX_W;
+    canvas.height=Math.round(video.videoHeight*ratio)||Math.round(video.videoHeight);
+    try{
+      ctx.drawImage(video,0,0,canvas.width,canvas.height);
+      const data=canvas.toDataURL('image/jpeg',0.4);
+      window.dbSet(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/screenSnapshot`),{
+        data,from:currentUser.username,ts:Date.now()
+      }).catch(()=>{});
+    }catch(e){console.warn('snapshot err',e);}
+  };
+  screenSnapshotInterval=setInterval(push,900);
+}
+function stopScreenSnapshot(){
+  if(screenSnapshotInterval){clearInterval(screenSnapshotInterval);screenSnapshotInterval=null;}
+}
+async function stopScreenShare(){
+  stopScreenSnapshot();
+  if(lrScreenStream){lrScreenStream.getTracks().forEach(t=>t.stop());lrScreenStream=null;}
+  document.getElementById('lrScreenBtn').classList.remove('active');
+  if(currentLiveRoomCode){
+    try{await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}`),{shareScreenUser:''});}catch(e){}
+    try{await window.dbRemove(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/screenSnapshot`));}catch(e){}
+  }
+  const stage=document.getElementById('lrStage');
+  const code=currentLiveRoomCode||'------';
+  stage.innerHTML=`<div class="lr-stage-placeholder"><div class="lrp-icon">📺</div><div class="lrp-text">Chưa có ai chia sẻ màn hình</div><div class="lrp-code">${code}</div></div>`;
+}
+
 async function toggleMuteAll(){
   if(currentLiveRoomRole!=='teacher')return;
   const snap=await window.dbGet(window.dbChild(window.dbRef,`live_rooms/${currentLiveRoomCode}`));
@@ -1767,8 +1989,6 @@ async function toggleLivePause(){
   const r=snap.val()||{};
   const newState=!r.paused;
   await window.dbUpdate(window.ref(window.db,`live_rooms/${currentLiveRoomCode}`),{paused:newState,pauseStart:newState?Date.now():null});
-  document.getElementById('lrPauseBtn').innerText=newState?'▶️':'⏸️';
-  document.getElementById('lrPauseBtn').classList.toggle('active',newState);
   showToast(newState?'⏸️ Đã tạm dừng':'▶️ Đã tiếp tục','info');
 }
 async function endLiveRoom(code){
@@ -1778,26 +1998,37 @@ async function endLiveRoom(code){
   try{
     await window.dbUpdate(window.ref(window.db,`live_rooms/${targetCode}`),{status:'ended',endedAt:Date.now()});
     showToast('🛑 Đã kết thúc!','warn');
-    leaveLiveRoom();
+    if(targetCode===currentLiveRoomCode)leaveLiveRoom();
+    else loadTeacherLiveStatus();
   }catch(e){showToast('❌ '+e.message,'error');}
 }
 function leaveLiveRoom(){
-  if(currentUser&&currentLiveRoomCode){
-    try{window.dbRemove(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/participants/${currentUser.username}`));}catch(e){}
-  }
-  closeLiveRoomResources();
-  switchView('studentView');
-}
-function closeLiveRoomResources(){
+  // Stop all media
+  if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}
+  if(lrScreenStream){lrScreenStream.getTracks().forEach(t=>t.stop());lrScreenStream=null;}
+  if(window._lrLocalStream){window._lrLocalStream.getTracks().forEach(t=>t.stop());window._lrLocalStream=null;}
+  stopScreenSnapshot();
+  // Close peer connections
+  Object.keys(rtcPeers).forEach(p=>{try{rtcPeers[p].close();}catch(e){}delete rtcPeers[p];});
+  Object.keys(rtcAnswerListeners).forEach(k=>{try{rtcAnswerListeners[k]();}catch(e){}delete rtcAnswerListeners[k];});
+  Object.keys(rtcCandidateListeners).forEach(k=>{try{rtcCandidateListeners[k]();}catch(e){}delete rtcCandidateListeners[k];});
+  document.querySelectorAll('audio[id^="rtc-audio-"]').forEach(a=>{a.srcObject=null;a.remove();});
+  // Detach listeners
+  if(rtcOffersListener){try{rtcOffersListener();}catch(e){}rtcOffersListener=null;}
   if(lrParticipantsListener){try{lrParticipantsListener();}catch(e){}lrParticipantsListener=null;}
   if(lrChatListener){try{lrChatListener();}catch(e){}lrChatListener=null;}
   if(lrRoomListener){try{lrRoomListener();}catch(e){}lrRoomListener=null;}
-  if(lrMediaStream){lrMediaStream.getTracks().forEach(t=>t.stop());lrMediaStream=null;}
-  if(lrScreenStream){lrScreenStream.getTracks().forEach(t=>t.stop());lrScreenStream=null;}
-  if(window._lrLocalStream){window._lrLocalStream.getTracks().forEach(t=>t.stop());window._lrLocalStream=null;}
-  currentLiveRoomCode=null;
+  if(lrScreenListener){try{lrScreenListener();}catch(e){}lrScreenListener=null;}
+  // Remove from participants
+  if(currentUser&&currentLiveRoomCode){
+    try{window.dbRemove(window.ref(window.db,`live_rooms/${currentLiveRoomCode}/participants/${currentUser.username}`));}catch(e){}
+  }
+  lrMicOn=false;lrCamOn=false;
+  currentLiveRoomCode=null;currentLiveRoomRole='student';
   document.getElementById('mobileToolbarFab').classList.remove('show');
   document.getElementById('liveToolbar').classList.remove('show');
+  document.getElementById('drawCanvas').classList.remove('active');
+  switchView('studentView');
 }
 
 /* ========== TOOLBAR ========== */
@@ -1819,22 +2050,22 @@ function setupCanvas(){
 function setTool(tool){
   drawingTool=tool;
   document.querySelectorAll('#liveToolbar .tb-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tb'+tool.charAt(0).toUpperCase()+tool.slice(1))?.classList.add('active');
+  const map={pen:'tbPen',eraser:'tbEraser',line:'tbLine',arrow:'tbArrow',rect:'tbRect',circle:'tbCircle',text:'tbText'};
+  document.getElementById(map[tool])?.classList.add('active');
 }
 function getCanvasPos(e){
   const r=document.getElementById('drawCanvas').getBoundingClientRect();
   return {x:e.clientX-r.left,y:e.clientY-r.top};
 }
 function startDraw(e){
-  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.id==='liveToolbar')return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.closest('#liveToolbar'))return;
   isDrawing=true;drawStart=getCanvasPos(e);
   const ctx=document.getElementById('drawCanvas').getContext('2d');
-  ctx.beginPath();
   if(drawingTool==='text'){
     const t=prompt('Nhập chữ:');if(t){ctx.fillStyle=drawColor;ctx.font=`${drawWidth*6+14}px 'Segoe UI'`;ctx.fillText(t,drawStart.x,drawStart.y);}
     isDrawing=false;return;
   }
-  ctx.moveTo(drawStart.x,drawStart.y);
+  ctx.beginPath();ctx.moveTo(drawStart.x,drawStart.y);
 }
 function doDraw(e){
   if(!isDrawing)return;
@@ -1845,7 +2076,7 @@ function doDraw(e){
     ctx.strokeStyle=drawColor;ctx.lineWidth=drawWidth;
     ctx.lineTo(pos.x,pos.y);ctx.stroke();
   }else if(drawingTool==='eraser'){
-    ctx.strokeStyle='rgba(0,0,0,1)';ctx.globalCompositeOperation='destination-out';ctx.lineWidth=drawWidth*3;
+    ctx.globalCompositeOperation='destination-out';ctx.lineWidth=drawWidth*3;
     ctx.lineTo(pos.x,pos.y);ctx.stroke();
     ctx.globalCompositeOperation='source-over';
   }
@@ -1874,8 +2105,10 @@ function clearCanvas(){
   const c=document.getElementById('drawCanvas');
   c.getContext('2d').clearRect(0,0,c.width,c.height);
 }
-document.getElementById('tbColor')?.addEventListener('input',e=>drawColor=e.target.value);
-document.getElementById('tbWidth')?.addEventListener('input',e=>drawWidth=parseInt(e.target.value));
+document.addEventListener('input',e=>{
+  if(e.target.id==='tbColor')drawColor=e.target.value;
+  if(e.target.id==='tbWidth')drawWidth=parseInt(e.target.value);
+});
 
 /* ========== EXAM TAKING ========== */
 async function startStudentParticipation(){
@@ -1895,15 +2128,18 @@ async function startStudentParticipation(){
         if(qp.password&&qp.password!==pass){showToast('❌ Sai mật khẩu!','error');return;}
         currentQpData=qp;studentNameGlobal=name;
         launchQpPracticeInterface();
+      }else if(mode==='live'){
+        const s=await window.dbGet(window.dbChild(window.dbRef,`exams/${code}`));
+        if(!s.exists()){showToast('❌ Mã không tồn tại!','error');return;}
+        currentExamData=s.val();
+        if(currentExamData.isLiveRoom&&currentExamData.livePassword&&currentExamData.livePassword!==pass){showToast('❌ Sai mật khẩu phòng!','error');return;}
+        studentNameGlobal=name;studentSessionKeyGlobal='s_'+Date.now();
+        launchOfficialExamInterface();
       }else{
         const s=await window.dbGet(window.dbChild(window.dbRef,`exams/${code}`));
         if(!s.exists()){showToast('❌ Mã không tồn tại!','error');return;}
         currentExamData=s.val();
-        if(currentExamData.isLiveRoom&&currentExamData.livePassword&&currentExamData.livePassword!==pass){
-          showToast('❌ Sai mật khẩu phòng!','error');return;
-        }
-        studentNameGlobal=name;
-        studentSessionKeyGlobal='s_'+Date.now();
+        studentNameGlobal=name;studentSessionKeyGlobal='s_'+Date.now();
         launchOfficialExamInterface();
       }
     }catch(e){showToast('❌ '+e.message,'error');}
@@ -2024,16 +2260,11 @@ async function submitStudentExam(forced=false){
   document.getElementById('resultScore').innerText=`${final} / 10`;
   document.getElementById('resultDetailText').innerText=`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`;
   document.getElementById('resultReviewContainer').innerHTML=rev;
-  try{
-    await window.dbPush(window.ref(window.db,'leaderboard/'+currentExamData.code),{
-      name:studentNameGlobal,username:currentUser.username,nickname:studentNameGlobal,score:final,timeSpent:spent,timestamp:Date.now()
-    });
-  }catch(e){}
+  try{await window.dbPush(window.ref(window.db,'leaderboard/'+currentExamData.code),{name:studentNameGlobal,username:currentUser.username,nickname:studentNameGlobal,score:final,timeSpent:spent,timestamp:Date.now()});}catch(e){}
   showCenterSquareToast(final>=8?'🎉':'📤',final>=8?'Xuất sắc!':'Đã nộp!',`Điểm: ${final}/10`,final>=8?'success':'info',3500);
   switchView('studentResultView');
 }
 async function cancelStudentExam(){if(!confirm('Thoát?'))return;clearInterval(examTimer);isExamActive=false;switchView('studentView');}
-async function cancelStudentExamSilently(){clearInterval(examTimer);isExamActive=false;switchView('studentView');}
 
 /* ========== QP PRACTICE ========== */
 function launchQpPracticeInterface(){
@@ -2048,9 +2279,7 @@ function launchQpPracticeInterface(){
     document.getElementById('qpNextBtn').style.display='none';
     document.getElementById('qpPrevBtn').style.display='none';
     document.getElementById('qpSubmitBtn').style.display='block';
-  }else{
-    renderQpQuestionV2();
-  }
+  }else renderQpQuestionV2();
   if(currentQpData.enableTimer){
     qpTimeLeft=(currentQpData.durationMinutes||15)*60;
     clearInterval(qpTimer);
@@ -2112,11 +2341,7 @@ async function submitQpPractice(forced){
   document.getElementById('qpResultScore').innerText=`${final} / 10`;
   document.getElementById('qpResultDetailText').innerText=`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`;
   document.getElementById('qpResultReviewContainer').innerHTML=rev;
-  try{
-    await window.dbPush(window.ref(window.db,`qp_leaderboard/${currentQpData.code}`),{
-      name:studentNameGlobal,username:currentUser.username,score:final,timeSpent:spent,timestamp:Date.now()
-    });
-  }catch(e){}
+  try{await window.dbPush(window.ref(window.db,`qp_leaderboard/${currentQpData.code}`),{name:studentNameGlobal,username:currentUser.username,score:final,timeSpent:spent,timestamp:Date.now()});}catch(e){}
   showCenterSquareToast(final>=8?'🎉':'📤',final>=8?'Xuất sắc!':'Đã nộp!',`Điểm: ${final}/10`,final>=8?'success':'info',3500);
   switchView('qpResultView');
 }
@@ -2141,10 +2366,7 @@ async function loadLeaderboard(){
 async function loadServerLB(){
   const tb=document.getElementById('serverLBTableBody');if(!tb)return;
   try{
-    const [lb,qp]=await Promise.all([
-      window.dbGet(window.dbChild(window.dbRef,'leaderboard')),
-      window.dbGet(window.dbChild(window.dbRef,'qp_leaderboard'))
-    ]);
+    const [lb,qp]=await Promise.all([window.dbGet(window.dbChild(window.dbRef,'leaderboard')),window.dbGet(window.dbChild(window.dbRef,'qp_leaderboard'))]);
     const byUser={};
     const process=data=>{
       if(!data||typeof data!=='object')return;
@@ -2166,7 +2388,6 @@ async function loadServerLB(){
       const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
       return `<tr><td><b style="font-size:15px">${medal}</b></td><td><b>${escapeHtml(u.nickname)}</b></td><td><b style="color:#1877f2">${u.total.toFixed(2)}</b></td><td>${u.count}</td><td>${u.avg.toFixed(2)}</td><td><button class="btn btn-success" style="padding:2px 8px;font-size:11px;width:auto" onclick="viewUserProfile('${u.username}')">👤</button></td></tr>`;
     }).join('');
-    // store for throne
     window._serverLBData=arr;
   }catch(e){tb.innerHTML='<tr><td colspan="6" style="color:#dc3545">Lỗi: '+e.message+'</td></tr>';}
 }
@@ -2175,15 +2396,16 @@ function renderThrone(){
   const arr=window._serverLBData||[];
   if(!arr.length){stage.innerHTML='<p style="color:#ffb84d;text-align:center;width:100%">Chưa có dữ liệu thành tích</p>';return;}
   const top3=arr.slice(0,3);
-  const order=[1,0,2]; // 2nd, 1st, 3rd for throne visual
+  const order=[1,0,2];
   stage.innerHTML=order.map(i=>{
     const u=top3[i];if(!u)return '';
     const rank=i+1;
     const cls=rank===1?'top1':rank===2?'top2':'top3';
     const crown=rank===1?'<div class="throne-crown">👑</div>':'';
-    const thrones=rank===1?'👑':rank===2?'🏆':rank===3?'🏆':'';
+    const thrones=rank===1?'👑':rank===2?'🏆':'🏆';
     const initial=(u.nickname||u.username).charAt(0).toUpperCase();
-    return `<div class="throne-seat ${cls}" onclick="viewUserProfile('${u.username}')">${crown}<div class="ts-throne">${thrones}</div><div class="ts-frame">${initial}</div><div class="ts-name">${escapeHtml(u.nickname)}</div><div class="ts-score">${u.total.toFixed(2)} điểm</div><div class="ts-role">${rank===1?'TOP 1':rank===2?'TOP 2':'TOP 3'}</div></div>`;
+    const av=u.avatar?`<img src="${u.avatar}">`:initial;
+    return `<div class="throne-seat ${cls}" onclick="viewUserProfile('${u.username}')">${crown}<div class="ts-throne">${thrones}</div><div class="ts-frame">${av}</div><div class="ts-name">${escapeHtml(u.nickname)}</div><div class="ts-score">${u.total.toFixed(2)} điểm</div><div class="ts-role">${rank===1?'TOP 1':rank===2?'TOP 2':'TOP 3'}</div></div>`;
   }).join('');
 }
 async function viewUserProfile(username){
@@ -2226,6 +2448,7 @@ async function handleSmartExamUpload(input){
   }catch(e){pb.style.display='none';showToast('❌ '+e.message,'error');}
   input.value='';
 }
+let smartExamQuestions=[],smartExamStats={mc:0,sa:0,tf:0};
 function parseExamTextOnly(raw){
   const stats={mc:0,sa:0,tf:0},qs=[];
   if(!raw)return {questions:qs,stats};
@@ -2259,13 +2482,12 @@ function renderSmartCard(q,idx){
   const tl=dt==='mc'?'📝 Trắc nghiệm':(dt==='tf'?'🔀 Đúng/Sai':'✍️ TLN');
   let h=`<div class="q-build-item"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><b>Câu ${idx+1}</b><div><button class="btn btn-secondary" style="width:auto;padding:2px 6px;font-size:11px" onclick="changeSmartType(${idx},'mc')">MC</button> <button class="btn btn-secondary" style="width:auto;padding:2px 6px;font-size:11px" onclick="changeSmartType(${idx},'sa')">SA</button> <button class="btn btn-danger" style="width:auto;padding:2px 6px;font-size:11px" onclick="removeSmartQuestion(${idx})">Xóa</button></div></div>`;
   h+=`<div style="font-size:11px;color:#888;margin-bottom:6px">${tl}</div>`;
-  if(q.imageData)h+=`<img src="${q.imageData}" style="max-width:100%;max-height:200px;border-radius:6px;margin-bottom:6px">`;
-  else h+=`<textarea style="width:100%;min-height:50px;font-size:12px;padding:6px;margin:0 0 6px 0" onchange="updateSmartQ(${idx},'content',this.value)">${escapeHtml(q.content||'')}</textarea>`;
+  h+=`<textarea style="width:100%;min-height:50px;font-size:12px;padding:6px;margin:0 0 6px 0" onchange="updateSmartQ(${idx},'content',this.value)">${escapeHtml(q.content||'')}</textarea>`;
   if(dt==='mc'){
     h+=`<div style="font-size:12px">${['A','B','C','D'].map(l=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="width:24px;height:24px;border-radius:50%;background:${q.correctAnswer===l?'#198754':'#f0f2f5'};color:${q.correctAnswer===l?'#fff':'#333'};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;cursor:pointer" onclick="setSmartCorrect(${idx},'${l}')">${l}</span><input type="text" value="${escapeHtml((q.options||[]).find(o=>o.label===l)?.text||'')}" onchange="updateSmartOpt(${idx},'${l}',this.value)" style="flex:1;padding:4px;font-size:12px;margin:0"></div>`).join('')}</div>`;
   }else if(dt==='sa'){
     h+=`<input type="text" value="${escapeHtml(q.correctAnswer||'')}" onchange="updateSmartQ(${idx},'correctAnswer',this.value)" placeholder="Đáp án đúng..." style="padding:6px;font-size:12px;margin:0">`;
-  }else if(dt==='tf'){
+  }else{
     h+=`<input type="text" value="${escapeHtml(q.correctAnswer||'Đ,Đ,S,S')}" onchange="updateSmartQ(${idx},'correctAnswer',this.value)" placeholder="VD: Đ,Đ,S,S" style="padding:6px;font-size:12px;margin:0">`;
   }
   h+='</div>';
@@ -2278,7 +2500,7 @@ function updateSmartOpt(i,label,v){
   const o=smartExamQuestions[i].options.find(x=>x.label===label);
   if(o)o.text=v;else smartExamQuestions[i].options.push({label,text:v});
 }
-function setSmartCorrect(i,l){if(smartExamQuestions[i])smartExamQuestions[i].correctAnswer=l;renderSmartQuestionsList();}
+function setSmartCorrect(i,l){if(smartExamQuestions[i]){smartExamQuestions[i].correctAnswer=l;renderSmartQuestionsList();}}
 function changeSmartType(i,nt){if(smartExamQuestions[i]){smartExamQuestions[i].type=nt;renderSmartQuestionsList();}}
 async function removeSmartQuestion(i){if(!confirm('Xóa câu này?'))return;smartExamQuestions.splice(i,1);renderSmartQuestionsList();}
 function addSmartQuestion(t){smartExamQuestions.push({id:smartExamQuestions.length+1,type:t||'mc',content:'',options:[{label:'A',text:''},{label:'B',text:''},{label:'C',text:''},{label:'D',text:''}],correctAnswer:'',score:t==='mc'?.25:(t==='tf'?1:.5)});renderSmartQuestionsList();}
@@ -2297,7 +2519,7 @@ async function promptSaveSmartExam(){
   }catch(e){showToast('❌ '+e.message,'error');}
 }
 
-/* ========== QUICK PRACTICE CREATE ========== */
+/* ========== QP CREATE ========== */
 function addQpQuestionItem(){
   const c=document.getElementById('qpQuestionsContainer');if(!c)return;
   const idx=c.children.length+1;
@@ -2352,9 +2574,8 @@ function addQuestionV2(type,defaultAns=''){
   const defScore=type==='mc'?.25:(type==='tf'?1:.5);
   let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><b>Câu ${idx}</b><button class="btn btn-danger" style="width:auto;padding:2px 6px;font-size:11px" onclick="this.parentElement.parentElement.remove()">Xóa</button></div>`;
   if(type==='mc')h+=`<label>ĐA đúng:</label><select class="correct-ans" style="padding:6px;font-size:12px">${['A','B','C','D'].map(l=>`<option value="${l}" ${defaultAns===l?'selected':''}>${l}</option>`).join('')}</select>`;
-  else if(type==='tf'){
-    h+=`<label>Số nhánh:</label><input type="number" class="tf-count" value="4" min="1" max="10" onchange="updateTfV2(this)" style="padding:6px;font-size:12px"><div class="tf-builder"></div>`;
-  }else h+=`<label>ĐA đúng:</label><input type="text" class="correct-ans" value="${defaultAns}" placeholder="...">`;
+  else if(type==='tf')h+=`<label>Số nhánh:</label><input type="number" class="tf-count" value="4" min="1" max="10" onchange="updateTfV2(this)" style="padding:6px;font-size:12px"><div class="tf-builder"></div>`;
+  else h+=`<label>ĐA đúng:</label><input type="text" class="correct-ans" value="${defaultAns}" placeholder="...">`;
   h+=`<div style="margin-top:8px"><label style="font-size:12px">Điểm:</label><input type="number" class="q-score" value="${defScore}" step="0.05" style="padding:6px;font-size:12px"></div>`;
   div.innerHTML=h;
   c.appendChild(div);
@@ -2442,7 +2663,7 @@ async function manageDeleteExam(){
   document.getElementById('manageExamResults').innerHTML='';
 }
 
-/* ========== LISTENERS / INIT ========== */
+/* ========== WEB CONFIG / EMAILJS ========== */
 function loadWebConfig(){
   window.onValue(window.ref(window.db,'system/web_config'),s=>{
     const c=s.val()||{};
@@ -2471,6 +2692,7 @@ async function saveEmailJSConfig(){
   try{await window.dbSet(window.ref(window.db,'system/emailjs_config'),cfg);showToast('✅ Đã lưu!','success');}catch(e){showToast('❌ '+e.message,'error');}
 }
 
+/* ========== INIT ========== */
 document.addEventListener('DOMContentLoaded',()=>{
   checkAuthOnLoad();
   listenHomeConfig();
@@ -2480,16 +2702,15 @@ document.addEventListener('DOMContentLoaded',()=>{
   loadWebConfig();
   loadEmailJSConfigFromDB();
 
-  // preload users cache
   window.onValue(window.ref(window.db,'users'),snap=>{
     cachedUsers=snap.val()||{};
     renderHomeRoleUsers();
   });
 
-  // countdown auto
+  // Default countdown starts immediately
   startCountdown(null);
 
-  // tab keyboard for toolbar (teacher live only)
+  // Tab key for teacher toolbar
   document.addEventListener('keydown',e=>{
     if(e.key==='Tab'&&currentLiveRoomRole==='teacher'&&currentLiveRoomCode){
       e.preventDefault();
@@ -2497,19 +2718,13 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
   });
 
-  // mock exams refresh
-  const origSwitchStudentTab=window.switchStudentTab;
-  window.switchStudentTab=function(tab,btn){
-    origSwitchStudentTab(tab,btn);
-  };
+  // Resize canvas if active
+  window.addEventListener('resize',()=>{
+    const c=document.getElementById('drawCanvas');
+    if(c.classList.contains('active'))setupCanvas();
+  });
 
-  // hide FAB on desktop
-  if(window.innerWidth>=768)document.getElementById('mobileToolbarFab').classList.remove('show');
-
-  // contextmenu lock (subtle)
-  document.addEventListener('contextmenu',e=>{if(e.target.tagName==='CANVAS'||e.target.closest('#liveToolbar'))return;e.preventDefault();});
-
-  // load exam modes from URL
+  // URL params
   try{
     const u=new URLSearchParams(location.search);
     const ep=u.get('exam'),pp=u.get('practice');
@@ -2518,21 +2733,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   }catch(e){}
 });
 
-// expose for inline
-window.selectOpt=selectOpt;
-window.selectTfSub=selectTfSub;
-window.selectQpOpt=selectQpOpt;
-window.nextQpQuestionV2=nextQpQuestionV2;
-window.prevQpQuestionV2=prevQpQuestionV2;
-window.submitQpPractice=submitQpPractice;
-window.submitStudentExam=submitStudentExam;
-window.cancelStudentExam=cancelStudentExam;
-window.cancelQpPractice=cancelQpPractice;
-window.startStudentParticipation=startStudentParticipation;
-window.loadLeaderboard=loadLeaderboard;
-window.loadServerLB=loadServerLB;
-window.renderThrone=renderThrone;
-window.viewUserProfile=viewUserProfile;
+/* Expose to inline handlers */
+window.switchView=switchView;
+window.switchAuthTab=switchAuthTab;
+window.handleLogin=handleLogin;
+window.handleRegister=handleRegister;
+window.handleLogout=handleLogout;
 window.switchStudentTab=switchStudentTab;
 window.switchTeacherTab=switchTeacherTab;
 window.switchExamSubTab=switchExamSubTab;
@@ -2543,6 +2749,7 @@ window.switchSupremeTab=switchSupremeTab;
 window.switchCourseTab=switchCourseTab;
 window.openGuideFromHome=openGuideFromHome;
 window.unlockSupremeAccounts=unlockSupremeAccounts;
+window.loadAllUsers=loadAllUsers;
 window.filterAccList=filterAccList;
 window.deleteUserAccount=deleteUserAccount;
 window.saveWebName=saveWebName;
@@ -2551,7 +2758,9 @@ window.saveHomeConfig=saveHomeConfig;
 window.saveTeacherShowcase=saveTeacherShowcase;
 window.saveGuideVideo=saveGuideVideo;
 window.saveEmailJSConfig=saveEmailJSConfig;
-window.loadAllUsers=loadAllUsers;
+window.quickSetCountdown=quickSetCountdown;
+window.clearCountdown=clearCountdown;
+window.previewCountdown=previewCountdown;
 window.loadTeacherUploadHistory=loadTeacherUploadHistory;
 window.handleTeacherDocUpload=handleTeacherDocUpload;
 window.deleteTeacherDoc=deleteTeacherDoc;
@@ -2580,6 +2789,7 @@ window.loadMockExams=loadMockExams;
 window.startMockExam=startMockExam;
 window.loadLiveRoomsList=loadLiveRoomsList;
 window.filterLiveRooms=filterLiveRooms;
+window.loadCourses=loadCourses;
 window.handleSmartExamUpload=handleSmartExamUpload;
 window.promptSaveSmartExam=promptSaveSmartExam;
 window.addSmartQuestion=addSmartQuestion;
@@ -2600,15 +2810,23 @@ window.manageStartExam=manageStartExam;
 window.manageEndExam=manageEndExam;
 window.manageDeleteExam=manageDeleteExam;
 window.downloadDoc=downloadDoc;
-window.handleRegister=handleRegister;
-window.handleLogin=handleLogin;
-window.handleLogout=handleLogout;
-window.switchAuthTab=switchAuthTab;
-window.switchView=switchView;
-window.showCenterSquareToast=showCenterSquareToast;
-window.showToast=showToast;
-window.openUserInfoFromHome=openUserInfoFromHome;
+window.loadLeaderboard=loadLeaderboard;
+window.loadServerLB=loadServerLB;
+window.renderThrone=renderThrone;
+window.viewUserProfile=viewUserProfile;
 window.startStudentParticipation=startStudentParticipation;
+window.selectOpt=selectOpt;
+window.selectTfSub=selectTfSub;
+window.submitStudentExam=submitStudentExam;
+window.cancelStudentExam=cancelStudentExam;
+window.selectQpOpt=selectQpOpt;
+window.nextQpQuestionV2=nextQpQuestionV2;
+window.prevQpQuestionV2=prevQpQuestionV2;
+window.submitQpPractice=submitQpPractice;
+window.cancelQpPractice=cancelQpPractice;
+window.openUserInfoFromHome=openUserInfoFromHome;
+window.showToast=showToast;
+window.showCenterSquareToast=showCenterSquareToast;
 </script>
 </body>
 </html>
