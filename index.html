@@ -161,22 +161,22 @@ body.optimized-mode *{animation-duration:.001s!important;transition-duration:.05
 .mode-dd-item-text{flex:1;text-align:left}
 .mode-dd-item-title{font-size:14px;font-weight:700;color:#333}
 .mode-dd-item-desc{font-size:11px;color:#888;margin-top:2px}
-#fxContainer{position:fixed;inset:0;pointer-events:none;z-index:999990;overflow:hidden}
+#fxContainer{position:fixed;inset:0;pointer-events:none;z-index:999990;overflow:hidden;perspective:1400px;transform-style:preserve-3d}
 .galaxy-overlay{position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(20,30,90,.75) 0%,rgba(0,0,0,.35) 55%,transparent 85%);opacity:0;animation:galaxyFade 1.9s ease-out forwards}
 @keyframes galaxyFade{0%{opacity:0}20%{opacity:1}70%{opacity:1}100%{opacity:0}}
 .galaxy-core{position:fixed;top:50%;left:50%;width:60px;height:60px;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,#fff 0%,#4a9eff 40%,transparent 72%);box-shadow:0 0 60px #4a9eff,0 0 120px #4a9eff,0 0 200px #7aaeff;z-index:999999;pointer-events:none}
 .galaxy-core.play{animation:galaxyCore 1.9s ease-out forwards}
-@keyframes galaxyCore{0%{transform:translate(-50%,-50%) scale(0);opacity:0}20%{transform:translate(-50%,-50%) scale(1.6);opacity:1}60%{transform:translate(-50%,-50%) scale(2.8);opacity:.85}100%{transform:translate(-50%,-50%) scale(7);opacity:0}}
+@keyframes galaxyCore{0%{transform:translate(-50%,-50%) scale(0) rotateX(40deg) rotateY(-30deg);opacity:0;filter:blur(8px)}20%{transform:translate(-50%,-50%) scale(1.6) rotateX(0) rotateY(0);opacity:1;filter:blur(0) drop-shadow(0 0 40px #4a9eff)}60%{transform:translate(-50%,-50%) scale(2.8) rotateX(10deg);opacity:.85}100%{transform:translate(-50%,-50%) scale(7) rotateX(-20deg);opacity:0;filter:blur(12px)}}
 .galaxy-star{position:fixed;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 22px #4a9eff,0 0 32px #7aaeff;pointer-events:none;z-index:999999;opacity:0}
 .galaxy-star.play{animation:starFly 1.7s ease-out forwards}
-@keyframes starFly{0%{opacity:0;transform:scale(.3) translate(0,0)}20%{opacity:1;transform:scale(1.4) translate(calc(var(--tx,0)*.2),calc(var(--ty,0)*.2))}100%{opacity:2;transform:scale(2.2) translate(var(--tx,0),var(--ty,0))}}
+@keyframes starFly{0%{opacity:0;transform:scale(.3) translate3d(0,0,0) rotateZ(0)}20%{opacity:1;transform:scale(1.5) translate3d(calc(var(--tx,0)*.2),calc(var(--ty,0)*.2),40px) rotateZ(90deg)}100%{opacity:0;transform:scale(2.4) translate3d(var(--tx,0),var(--ty,0),-80px) rotateZ(360deg);filter:blur(2px)}}
 .lightning-flash{position:fixed;inset:0;pointer-events:none;z-index:999998;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(255,240,150,.95) 0%,rgba(255,200,0,.5) 35%,transparent 72%)}
 .lightning-flash.play{animation:lightningFlash 1.4s ease-out forwards}
 @keyframes lightningFlash{0%{opacity:0}8%{opacity:1}15%{opacity:.2}25%{opacity:1}40%{opacity:.4}55%{opacity:.9}70%{opacity:.3}100%{opacity:0}}
 .lightning-bolt{position:fixed;pointer-events:none;z-index:999999;font-size:110px;opacity:0;filter:drop-shadow(0 0 20px #ffeb3b) drop-shadow(0 0 40px #ffc107) drop-shadow(0 0 70px #ff9800)}
 .lightning-bolt.play{animation:boltStrike 1.15s cubic-bezier(.34,1.56,.64,1) forwards}
 .lightning-bolt.small{font-size:65px}
-@keyframes boltStrike{0%{opacity:0;transform:scale(.2) rotate(-25deg)}35%{opacity:1;transform:scale(1.55) rotate(6deg)}55%{opacity:1;transform:scale(1.1) rotate(-3deg)}75%{opacity:1;transform:scale(1.3) rotate(2deg)}100%{opacity:0;transform:scale(1.9) rotate(14deg)}}
+@keyframes boltStrike{0%{opacity:0;transform:scale(.2) rotateX(60deg) rotateZ(-25deg);filter:brightness(2)}35%{opacity:1;transform:scale(1.6) rotateX(0) rotateZ(6deg);filter:brightness(1.8) drop-shadow(0 0 40px #ffeb3b)}55%{opacity:1;transform:scale(1.15) rotateX(-8deg) rotateZ(-3deg)}75%{opacity:1;transform:scale(1.35) rotateZ(2deg)}100%{opacity:0;transform:scale(2) rotateX(20deg) rotateZ(14deg);filter:blur(4px)}}
 .mini-bolt{position:fixed;pointer-events:none;z-index:999999;font-size:34px;opacity:0;filter:drop-shadow(0 0 10px #ffeb3b) drop-shadow(0 0 22px #ffc107)}
 .mini-bolt.play{animation:miniBoltFly 1.25s ease-out forwards}
 @keyframes miniBoltFly{0%{opacity:0;transform:scale(.2) rotate(0)}30%{opacity:1;transform:scale(1.4) rotate(200deg)}100%{opacity:0;transform:scale(.7) rotate(620deg) translate(var(--tx,0),var(--ty,0))}}
@@ -187,7 +187,7 @@ body.fx-shake{animation:screenShake .65s cubic-bezier(.36,.07,.19,.97)}
 @keyframes screenShake{10%,90%{transform:translate3d(-2px,0,0)}20%,80%{transform:translate3d(4px,0,0)}30%,50%,70%{transform:translate3d(-6px,0,0)}40%,60%{transform:translate3d(6px,0,0)}}
 .shield-burst{position:fixed;top:50%;left:50%;width:200px;height:200px;transform:translate(-50%,-50%) scale(0);opacity:0;font-size:150px;display:flex;align-items:center;justify-content:center;z-index:999999;pointer-events:none;filter:drop-shadow(0 0 30px #1877f2) drop-shadow(0 0 60px #1877f2)}
 .shield-burst.play{animation:shieldBurst 1.5s ease-out forwards}
-@keyframes shieldBurst{0%{transform:translate(-50%,-50%) scale(.2) rotate(-30deg);opacity:0;filter:drop-shadow(0 0 0 #1877f2) brightness(1)}20%{transform:translate(-50%,-50%) scale(1.35) rotate(0);opacity:1;filter:drop-shadow(0 0 45px #1877f2) brightness(2.6)}45%{transform:translate(-50%,-50%) scale(1) rotate(6deg);opacity:1;filter:drop-shadow(0 0 55px #1877f2) brightness(3)}70%{transform:translate(-50%,-50%) scale(1.12) rotate(-4deg);opacity:1}100%{transform:translate(-50%,-50%) scale(3.2) rotate(0);opacity:0}}
+@keyframes shieldBurst{0%{transform:translate(-50%,-50%) scale(.2) rotateY(-40deg) rotateZ(-30deg);opacity:0;filter:drop-shadow(0 0 0 #1877f2) brightness(1)}20%{transform:translate(-50%,-50%) scale(1.4) rotateY(0) rotateZ(0);opacity:1;filter:drop-shadow(0 0 50px #1877f2) drop-shadow(0 0 90px #4a9eff) brightness(2.8)}45%{transform:translate(-50%,-50%) scale(1.05) rotateY(15deg) rotateZ(6deg);opacity:1;filter:drop-shadow(0 0 60px #1877f2) brightness(3.2)}70%{transform:translate(-50%,-50%) scale(1.15) rotateY(-10deg) rotateZ(-4deg);opacity:1}100%{transform:translate(-50%,-50%) scale(3.5) rotateY(30deg);opacity:0;filter:blur(6px)}}
 .shield-ring{position:fixed;top:50%;left:50%;width:120px;height:120px;border-radius:50%;border:5px solid #1877f2;transform:translate(-50%,-50%) scale(0);opacity:0;z-index:999998;pointer-events:none;box-shadow:0 0 40px #1877f2,inset 0 0 30px #1877f2,0 0 90px #4a9eff}
 .shield-ring.play{animation:shieldRing 1.55s ease-out forwards}
 @keyframes shieldRing{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}20%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-50%) scale(4.2);opacity:0}}
@@ -199,7 +199,7 @@ body.fx-shake{animation:screenShake .65s cubic-bezier(.36,.07,.19,.97)}
 @keyframes smartFlash{0%{opacity:0}8%{opacity:.7}18%{opacity:.2}30%{opacity:.85}45%{opacity:.3}60%{opacity:.65}80%{opacity:.35}100%{opacity:0}}
 .smart-bulb{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:170px;pointer-events:none;z-index:999999;opacity:0;filter:drop-shadow(0 0 40px #ffeb3b) drop-shadow(0 0 80px #ffc107) drop-shadow(0 0 130px #ff9800)}
 .smart-bulb.play{animation:bulbLight 2.6s cubic-bezier(.34,1.56,.64,1) forwards}
-@keyframes bulbLight{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-30deg);filter:drop-shadow(0 0 0 #ffeb3b) brightness(1)}8%{opacity:1;transform:translate(-50%,-50%) scale(1.65) rotate(0);filter:drop-shadow(0 0 60px #ffeb3b) brightness(2.4)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.15) rotate(5deg);filter:drop-shadow(0 0 55px #ffeb3b) brightness(2)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.35) rotate(-3deg);filter:drop-shadow(0 0 65px #ffeb3b) brightness(2.2)}45%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(4deg);filter:drop-shadow(0 0 55px #ffeb3b) brightness(1.9)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.3) rotate(-2deg);filter:drop-shadow(0 0 70px #ffeb3b) brightness(2.1)}85%{opacity:1;transform:translate(-50%,-50%) scale(1.18) rotate(1deg);filter:drop-shadow(0 0 50px #ffeb3b) brightness(1.8)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.6) rotate(0);filter:drop-shadow(0 0 0 #ffeb3b) brightness(1)}}
+@keyframes bulbLight{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotateX(50deg) rotateZ(-30deg);filter:drop-shadow(0 0 0 #ffeb3b) brightness(1)}8%{opacity:1;transform:translate(-50%,-50%) scale(1.7) rotateX(0) rotateZ(0);filter:drop-shadow(0 0 70px #ffeb3b) drop-shadow(0 0 120px #ffc107) brightness(2.6)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotateY(10deg) rotateZ(5deg);filter:drop-shadow(0 0 60px #ffeb3b) brightness(2.2)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.4) rotateY(-8deg) rotateZ(-3deg);filter:drop-shadow(0 0 75px #ffeb3b) brightness(2.4)}45%{opacity:1;transform:translate(-50%,-50%) scale(1.25) rotateZ(4deg);filter:drop-shadow(0 0 60px #ffeb3b) brightness(2)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.35) rotateY(5deg);filter:drop-shadow(0 0 80px #ffeb3b) brightness(2.3)}85%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotateZ(1deg);filter:drop-shadow(0 0 55px #ffeb3b) brightness(1.9)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.8) rotateX(-30deg);filter:blur(8px) brightness(1)}}
 .smart-ring{position:fixed;top:50%;left:50%;width:220px;height:220px;border-radius:50%;border:6px solid #ffeb3b;transform:translate(-50%,-50%) scale(0);opacity:0;z-index:999997;pointer-events:none;box-shadow:0 0 50px #ffeb3b,inset 0 0 40px #ffeb3b,0 0 100px #ffc107}
 .smart-ring.play{animation:smartRing 1.4s ease-out forwards}
 @keyframes smartRing{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}18%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-50%) scale(6.5);opacity:0}}
@@ -451,10 +451,27 @@ img{-webkit-user-drag:none}
 .config-gate p{font-size:13px;color:#666;margin-bottom:14px;line-height:1.6}
 .logo-preview-box{background:#fff;border:2px dashed #1877f2;padding:16px;border-radius:12px;text-align:center;margin:10px 0}
 .logo-preview-box img{max-width:180px;max-height:120px;object-fit:contain;border-radius:8px}
-.home-hero{background:linear-gradient(135deg,#1877f2 0%,#6f42c1 50%,#198754 100%);color:#fff;border-radius:20px;padding:36px 26px;margin-bottom:18px;text-align:center;position:relative;overflow:hidden;box-shadow:0 15px 40px rgba(24,119,242,.35)}
-.home-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.25) 0%,transparent 45%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.2) 0%,transparent 45%)}
-.home-hero h1{font-size:32px;font-weight:900;position:relative;z-index:1;margin-bottom:10px;text-shadow:0 4px 12px rgba(0,0,0,.3)}
+.home-hero{background:linear-gradient(135deg,#1877f2 0%,#6f42c1 50%,#198754 100%);color:#fff;border-radius:20px;padding:28px 22px;margin-bottom:18px;text-align:center;position:relative;overflow:hidden;box-shadow:0 15px 40px rgba(24,119,242,.35),0 0 60px rgba(111,66,193,.25);perspective:1200px}
+.home-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.25) 0%,transparent 45%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.2) 0%,transparent 45%);pointer-events:none}
+.home-hero h1{font-size:28px;font-weight:900;position:relative;z-index:1;margin:0;text-shadow:0 4px 12px rgba(0,0,0,.3),0 0 20px rgba(255,255,255,.3);letter-spacing:1px}
 .home-hero p{font-size:15px;position:relative;z-index:1;opacity:.95;line-height:1.6;max-width:700px;margin:0 auto}
+.countdown-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;text-align:left}
+.countdown-left{flex:0 0 auto;min-width:140px;z-index:2}
+.countdown-right{flex:1;min-width:260px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px}
+.subject-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.subj-tab{background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.35);color:#fff;padding:8px 14px;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer;transition:all .35s cubic-bezier(.34,1.56,.64,1);backdrop-filter:blur(8px);transform:translateZ(0)}
+.subj-tab:hover{background:rgba(255,255,255,.28);transform:translateY(-3px) scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.subj-tab.active{background:linear-gradient(135deg,#fff,#e7f3ff);color:#1877f2;border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.4),0 10px 25px rgba(0,0,0,.3);transform:translateY(-2px) scale(1.08)}
+.countdown-display{background:rgba(0,0,0,.22);border:2px solid rgba(255,255,255,.3);border-radius:18px;padding:16px 28px;text-align:center;backdrop-filter:blur(12px);box-shadow:inset 0 0 30px rgba(255,255,255,.08),0 10px 30px rgba(0,0,0,.25);min-width:280px;transform-style:preserve-3d}
+.cd-label{font-size:14px;font-weight:800;opacity:.95;margin-bottom:6px;letter-spacing:.5px}
+.cd-time{font-size:36px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:2px;text-shadow:0 0 20px rgba(255,255,255,.5),0 4px 12px rgba(0,0,0,.4);line-height:1.2}
+.cd-date{font-size:12px;opacity:.85;margin-top:6px;font-weight:600}
+.cd-status{font-size:13px;margin-top:8px;font-weight:700;padding:4px 12px;border-radius:12px;display:inline-block}
+.cd-status.upcoming{background:rgba(255,255,255,.2)}
+.cd-status.live{background:linear-gradient(135deg,#198754,#157347);animation:pulseLive 1.5s infinite}
+.cd-status.passed{background:rgba(108,117,125,.6)}
+@keyframes pulseLive{0%,100%{box-shadow:0 0 0 0 rgba(25,135,84,.6)}50%{box-shadow:0 0 0 10px rgba(25,135,84,0)}}
+@media(max-width:600px){.countdown-hero{flex-direction:column;text-align:center}.countdown-left{text-align:center}.cd-time{font-size:28px}.subj-tab{padding:6px 10px;font-size:12px}}
 .home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:18px}
 .home-card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,.06);border-top:4px solid #1877f2;transition:all .3s}
 .home-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(24,119,242,.15)}
@@ -541,7 +558,7 @@ img{-webkit-user-drag:none}
 @keyframes hammerSlam{0%{top:0;transform:translate(-50%,-100%) scale(0);opacity:0}20%{top:15%;transform:translate(-50%,-50%) scale(2.2);opacity:1}45%{top:15%;transform:translate(-50%,-50%) scale(2.4);opacity:1}60%{top:60%;transform:translate(-50%,-50%) scale(2.4) rotate(10deg);opacity:1}70%{top:60%;transform:translate(-50%,-50%) scale(2.4) rotate(0deg);opacity:1}85%{top:60%;transform:translate(-50%,-50%) scale(2.4) rotate(0deg);opacity:1}100%{top:60%;transform:translate(-50%,-50%) scale(0);opacity:0}}
 .fx-crown-drop{position:fixed;top:-150px;left:50%;transform:translateX(-50%);font-size:150px;z-index:99999999999;pointer-events:none;opacity:0;filter:drop-shadow(0 0 25px #ffd700) drop-shadow(0 0 50px #ffc107)}
 .fx-crown-drop.play{animation:crownDropDown 3.5s cubic-bezier(.25,.9,.4,1) forwards}
-@keyframes crownDropDown{0%{top:-150px;opacity:0;transform:translateX(-50%) scale(.6)}25%{top:15%;opacity:1;transform:translateX(-50%) scale(1.3)}40%{top:22%;opacity:1;transform:translateX(-50%) scale(1.1)}50%{top:25%;opacity:1;transform:translateX(-50%) scale(1.15)}70%{top:25%;opacity:1;transform:translateX(-50%) scale(1.15)}100%{top:25%;opacity:0;transform:translateX(-50%) scale(1.5)}}
+@keyframes crownDropDown{0%{top:-150px;opacity:0;transform:translateX(-50%) scale(.5) rotateX(40deg) rotateZ(-15deg);filter:blur(4px)}25%{top:15%;opacity:1;transform:translateX(-50%) scale(1.35) rotateX(0) rotateZ(0);filter:drop-shadow(0 0 40px #ffd700) drop-shadow(0 0 80px #ffc107)}40%{top:22%;opacity:1;transform:translateX(-50%) scale(1.12) rotateY(12deg)}50%{top:25%;opacity:1;transform:translateX(-50%) scale(1.18) rotateY(-8deg)}70%{top:25%;opacity:1;transform:translateX(-50%) scale(1.15)}100%{top:25%;opacity:0;transform:translateX(-50%) scale(1.6) rotateX(-20deg);filter:blur(6px)}}
 .fx-crown-halo{position:fixed;top:50%;left:50%;width:300px;height:300px;transform:translate(-50%,-50%) scale(0);border-radius:50%;z-index:99999999998;pointer-events:none;opacity:0;background:radial-gradient(circle,rgba(255,215,0,.65) 0%,rgba(255,215,0,.3) 40%,transparent 70%)}
 .fx-crown-halo.play{animation:crownHalo 3.5s ease-out forwards}
 @keyframes crownHalo{0%{transform:translate(-50%,-50%) scale(0);opacity:0}30%{transform:translate(-50%,-50%) scale(1);opacity:1}70%{transform:translate(-50%,-50%) scale(1.4);opacity:.8}100%{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
@@ -1024,93 +1041,6 @@ input,select,textarea{font-size:13px;padding:9px}
 .aurora-nav-btn .aurora-overlay{padding:6px 10px}
 #roomAnnounceMarquee .ra-track{font-size:14px;}
 }
-
-/* ===== AURORA V2 REDESIGN ===== */
-.cd-hero{background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 45%,#1565c0 100%);border-radius:20px;padding:22px 20px 26px;margin-bottom:18px;color:#fff;box-shadow:0 12px 36px rgba(26,115,232,.35);position:relative;overflow:hidden}
-.cd-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.18),transparent 40%),radial-gradient(circle at 85% 80%,rgba(255,255,255,.12),transparent 40%)}
-.cd-hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1;margin-bottom:16px;flex-wrap:wrap}
-.cd-brand{font-size:22px;font-weight:900;letter-spacing:1px;text-shadow:0 2px 8px rgba(0,0,0,.25)}
-.cd-brand span{opacity:.9;font-size:13px;font-weight:600;display:block;letter-spacing:.5px}
-.cd-title{font-size:15px;font-weight:700;opacity:.95;text-align:right}
-.cd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;position:relative;z-index:1}
-.cd-card{background:rgba(255,255,255,.14);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:14px 12px;text-align:center}
-.cd-card .cd-subj{font-size:13px;font-weight:800;margin-bottom:6px;letter-spacing:.3px}
-.cd-card .cd-when{font-size:11px;opacity:.9;margin-bottom:10px}
-.cd-digits{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
-.cd-digit{background:#fff;color:#1565c0;border-radius:8px;min-width:42px;padding:8px 4px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
-.cd-digit b{display:block;font-size:20px;font-weight:900;line-height:1.1}
-.cd-digit small{font-size:9px;font-weight:700;opacity:.7;text-transform:uppercase}
-.carousel-wrap{position:relative;overflow:hidden;margin-top:8px}
-.carousel-track{display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;padding:8px 4px 14px;scrollbar-width:none;-ms-overflow-style:none}
-.carousel-track::-webkit-scrollbar{display:none}
-.elite-card{flex:0 0 150px;background:linear-gradient(180deg,#1a1a1a 0%,#2d2d2d 100%);border-radius:16px;padding:16px 12px 14px;text-align:center;border:2px solid #c9a227;box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer;position:relative;transition:transform .25s}
-.elite-card:hover{transform:translateY(-4px)}
-.elite-card .ec-laurel{font-size:28px;line-height:1;margin-bottom:4px;filter:drop-shadow(0 2px 4px gold)}
-.elite-card .ec-av{width:72px;height:72px;border-radius:50%;margin:0 auto 8px;background:#111;border:3px solid #c9a227;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#c9a227;position:relative}
-.elite-card .ec-av img{width:100%;height:100%;object-fit:cover}
-.elite-card .ec-ribbon{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#c9a227,#ffd700,#c9a227);color:#1a1a1a;font-size:9px;font-weight:900;padding:2px 10px;border-radius:10px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.3)}
-.elite-card .ec-name{font-size:13px;font-weight:800;color:#ffd700;margin-top:10px}
-.elite-card .ec-role{font-size:10px;color:#bbb;margin-top:2px}
-.founder-premium{background:linear-gradient(135deg,#ffd54f 0%,#ffb300 40%,#ff8f00 100%)!important;border:2px solid #e65100!important;position:relative;overflow:hidden}
-.founder-premium h3{color:#5d4037!important}
-.founder-premium::after{content:'👑';position:absolute;top:8px;right:12px;font-size:28px;opacity:.85;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
-.founder-ribbon{display:inline-block;background:linear-gradient(90deg,#c62828,#e53935,#c62828);color:#fff;font-size:11px;font-weight:900;padding:4px 16px;border-radius:4px;margin-bottom:8px;box-shadow:0 3px 8px rgba(198,40,40,.4);letter-spacing:.5px}
-.teacher-showcase{display:flex;gap:14px;overflow-x:auto;padding:8px 4px 12px;scrollbar-width:thin}
-.teacher-card{flex:0 0 280px;background:#fff;border-radius:16px;padding:16px;display:flex;gap:14px;align-items:center;border:1px solid #e3e8ef;box-shadow:0 4px 16px rgba(0,0,0,.06)}
-.teacher-card .tc-av{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1877f2,#6f42c1);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:28px;color:#fff;font-weight:900}
-.teacher-card .tc-av img{width:100%;height:100%;object-fit:cover}
-.teacher-card .tc-info{flex:1;min-width:0}
-.teacher-card .tc-name{font-size:15px;font-weight:900;color:#1877f2}
-.teacher-card .tc-subj{font-size:12px;color:#666;margin:4px 0}
-.teacher-card .tc-desc{font-size:11px;color:#888;line-height:1.4}
-.hub-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;background:#f0f4f8;padding:8px;border-radius:14px}
-.hub-tab{flex:1;min-width:100px;padding:12px 10px;background:#fff;border:2px solid transparent;border-radius:10px;cursor:pointer;font-weight:800;font-size:13px;color:#555;text-align:center;transition:all .2s}
-.hub-tab.active{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border-color:#1877f2;box-shadow:0 6px 18px rgba(24,119,242,.3)}
-.hub-panel{display:none}.hub-panel.active{display:block}
-.sub-hub-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.sub-hub-tab{padding:8px 14px;background:#eef2f7;border-radius:20px;cursor:pointer;font-size:12px;font-weight:700;color:#555;border:2px solid transparent}
-.sub-hub-tab.active{background:#e7f3ff;color:#1877f2;border-color:#1877f2}
-.guide-footer-link{display:block;text-align:center;margin:24px 0 10px;padding:16px;background:linear-gradient(135deg,#e7f3ff,#f0f7ff);border-radius:14px;border:2px dashed #1877f2;cursor:pointer;font-weight:800;color:#1877f2;font-size:15px;transition:all .2s}
-.guide-footer-link:hover{background:#1877f2;color:#fff}
-.throne-stage{background:linear-gradient(180deg,#1a0a0a 0%,#2d1515 40%,#1a0a0a 100%);border-radius:20px;padding:28px 16px 20px;margin-top:12px;position:relative;overflow:hidden;min-height:320px}
-.throne-stage::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(180,30,30,.35),transparent 60%)}
-.throne-row{display:flex;justify-content:center;align-items:flex-end;gap:18px;position:relative;z-index:1;flex-wrap:wrap}
-.throne-seat{text-align:center;position:relative}
-.throne-seat.t1{order:2}.throne-seat.t2{order:1;margin-bottom:20px}.throne-seat.t3{order:3;margin-bottom:20px}
-.throne-avatar{width:90px;height:90px;border-radius:50%;margin:0 auto 8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:#fff;border:4px solid;box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.throne-seat.t1 .throne-avatar{width:110px;height:110px;border-color:#e53935;background:linear-gradient(135deg,#c62828,#e53935);box-shadow:0 0 30px rgba(229,57,53,.5)}
-.throne-seat.t2 .throne-avatar{border-color:#9c27b0;background:linear-gradient(135deg,#6a1b9a,#9c27b0)}
-.throne-seat.t3 .throne-avatar{border-color:#1565c0;background:linear-gradient(135deg,#0d47a1,#1976d2)}
-.throne-avatar img{width:100%;height:100%;object-fit:cover}
-.throne-name{font-size:13px;font-weight:900;color:#fff;margin-top:6px}
-.throne-score{font-size:12px;color:#ffd700;font-weight:800}
-.throne-rank{font-size:22px;margin-bottom:4px}
-.live-room-card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.live-room-card .lr-info{flex:1;min-width:140px}
-.live-room-card .lr-code{font-weight:900;color:#1877f2;font-size:15px}
-.live-room-card .lr-meta{font-size:12px;color:#888;margin-top:4px}
-.doc-list-item{display:flex;align-items:center;gap:10px;padding:12px;background:#f8f9fa;border-radius:10px;margin-bottom:8px;border:1px solid #eee}
-.doc-list-item .di-icon{font-size:28px}
-.doc-list-item .di-name{font-weight:700;font-size:13px}
-.doc-list-item .di-meta{font-size:11px;color:#888}
-.create-mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
-.create-mode-btn{padding:18px 12px;border-radius:14px;border:2px solid #e0e0e0;background:#fff;cursor:pointer;text-align:center;font-weight:800;font-size:13px;transition:all .2s;color:#333}
-.create-mode-btn:hover,.create-mode-btn.active{border-color:#1877f2;background:#e7f3ff;color:#1877f2;box-shadow:0 6px 16px rgba(24,119,242,.2)}
-.create-mode-btn .cm-icon{font-size:28px;display:block;margin-bottom:6px}
-.teacher-main-tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px}
-.teacher-main-tab{padding:16px 10px;border-radius:12px;background:#fff;border:2px solid #e8ecf0;cursor:pointer;text-align:center;font-weight:800;font-size:13px;transition:all .2s}
-.teacher-main-tab.active{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border-color:#1877f2}
-.teacher-main-tab .tmt-icon{font-size:26px;display:block;margin-bottom:4px}
-@media(max-width:600px){
-  .cd-grid{grid-template-columns:1fr 1fr}
-  .cd-digit{min-width:36px;padding:6px 2px}
-  .cd-digit b{font-size:16px}
-  .elite-card{flex:0 0 130px}
-  .teacher-card{flex:0 0 240px}
-  .throne-avatar{width:70px;height:70px}
-  .throne-seat.t1 .throne-avatar{width:88px;height:88px}
-}
-
 </style>
 </head><body>
 
@@ -1297,36 +1227,25 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="container">
 
 <div id="homeView" class="view-section active">
-  <!-- COUNTDOWN HERO -->
-  <div class="cd-hero">
-    <div class="cd-hero-top">
-      <div class="cd-brand" id="cdBrandName">✨ AURORA<span>Hệ thống kiểm tra trực tuyến</span></div>
-      <div class="cd-title">⏱ Đếm ngược Kỳ thi THPT Quốc gia 2027</div>
+  <div class="home-hero countdown-hero">
+    <div class="countdown-left">
+      <h1 id="homeHeroTitle">✨ AURORA</h1>
     </div>
-    <div class="cd-grid" id="countdownGrid">
-      <div class="cd-card" data-target="2027-06-11T07:30:00">
-        <div class="cd-subj">📖 Ngữ Văn</div>
-        <div class="cd-when">07:30 · 11/06/2027</div>
-        <div class="cd-digits" id="cdVan"><div class="cd-digit"><b>--</b><small>ngày</small></div><div class="cd-digit"><b>--</b><small>giờ</small></div><div class="cd-digit"><b>--</b><small>phút</small></div><div class="cd-digit"><b>--</b><small>giây</small></div></div>
+    <div class="countdown-right">
+      <div class="subject-tabs">
+        <button class="subj-tab active" data-subj="van" onclick="switchCountdownSubj('van',this)">📖 Văn</button>
+        <button class="subj-tab" data-subj="toan" onclick="switchCountdownSubj('toan',this)">📐 Toán</button>
+        <button class="subj-tab" data-subj="tc1" onclick="switchCountdownSubj('tc1',this)">📚 TC 1</button>
+        <button class="subj-tab" data-subj="tc2" onclick="switchCountdownSubj('tc2',this)">📝 TC 2</button>
       </div>
-      <div class="cd-card" data-target="2027-06-11T11:30:00">
-        <div class="cd-subj">📐 Toán học</div>
-        <div class="cd-when">11:30 · 11/06/2027</div>
-        <div class="cd-digits" id="cdToan"><div class="cd-digit"><b>--</b><small>ngày</small></div><div class="cd-digit"><b>--</b><small>giờ</small></div><div class="cd-digit"><b>--</b><small>phút</small></div><div class="cd-digit"><b>--</b><small>giây</small></div></div>
-      </div>
-      <div class="cd-card" data-target="2027-06-12T07:30:00">
-        <div class="cd-subj">🔬 Tự chọn 1</div>
-        <div class="cd-when">07:30 · 12/06/2027</div>
-        <div class="cd-digits" id="cdTC1"><div class="cd-digit"><b>--</b><small>ngày</small></div><div class="cd-digit"><b>--</b><small>giờ</small></div><div class="cd-digit"><b>--</b><small>phút</small></div><div class="cd-digit"><b>--</b><small>giây</small></div></div>
-      </div>
-      <div class="cd-card" data-target="2027-06-12T08:40:00">
-        <div class="cd-subj">🌍 Tự chọn 2</div>
-        <div class="cd-when">08:40 · 12/06/2027</div>
-        <div class="cd-digits" id="cdTC2"><div class="cd-digit"><b>--</b><small>ngày</small></div><div class="cd-digit"><b>--</b><small>giờ</small></div><div class="cd-digit"><b>--</b><small>phút</small></div><div class="cd-digit"><b>--</b><small>giây</small></div></div>
+      <div class="countdown-display">
+        <div class="cd-label" id="cdSubjectLabel">📖 Môn Văn</div>
+        <div class="cd-time" id="cdTimeDisplay">--:--:--:--</div>
+        <div class="cd-date" id="cdDateDisplay">11/06/2027 • 07:30</div>
+        <div class="cd-status upcoming" id="cdStatus">Sắp diễn ra</div>
       </div>
     </div>
   </div>
-
   <div class="home-stats">
     <div class="home-stat online" id="homeOnlineStat">
       <div class="hs-num" id="homeOnlineCount">0</div>
@@ -1337,7 +1256,6 @@ input,select,textarea{font-size:13px;padding:9px}
       <div class="hs-label">👥 Người đã tham gia</div>
     </div>
   </div>
-
   <div class="home-grid">
     <div class="home-card" id="homeIntroCard">
       <h3>📖 Giới thiệu Web</h3>
@@ -1356,67 +1274,27 @@ input,select,textarea{font-size:13px;padding:9px}
       <div class="home-content" id="homeUpdateContent">Đang tải...</div>
     </div>
   </div>
-
-  <!-- TOP ƯU TÚ - horizontal carousel -->
-  <div class="home-card role-elite" style="margin-bottom:18px" id="homeEliteSection">
-    <h3>🌟 Top Ưu Tú</h3>
-    <div class="carousel-wrap">
-      <div class="carousel-track" id="homeElitesList"><p style="color:#888;font-size:12px;padding:10px">Chưa có</p></div>
+  <div class="home-grid" style="margin-bottom:18px">
+    <div class="home-card role-king">
+      <h3>👑 Người thành lập Web</h3>
+      <div class="role-users-box" id="homeFoundersList"><p style="color:#888;font-size:12px">Chưa có</p></div>
     </div>
-  </div>
-
-  <!-- ĐỐI TÁC - horizontal carousel -->
-  <div class="home-card role-partner" style="margin-bottom:18px" id="homePartnerSection">
-    <h3>🤝 Đối tác</h3>
-    <div class="carousel-wrap">
-      <div class="carousel-track" id="homePartnersList"><p style="color:#888;font-size:12px;padding:10px">Chưa có</p></div>
+    <div class="home-card role-partner">
+      <h3>🤝 Đối tác</h3>
+      <div class="role-users-box" id="homePartnersList"><p style="color:#888;font-size:12px">Chưa có</p></div>
     </div>
-  </div>
-
-  <!-- NGƯỜI THÀNH LẬP - vàng + băng đỏ + vương miện -->
-  <div class="home-card founder-premium role-king" style="margin-bottom:18px" id="homeFounderSection">
-    <div class="founder-ribbon">👑 NGƯỜI THÀNH LẬP</div>
-    <h3>Người thành lập Web</h3>
-    <div class="role-users-box" id="homeFoundersList"><p style="color:#5d4037;font-size:12px">Chưa có</p></div>
-  </div>
-
-  <!-- GIÁO VIÊN GIẢNG DẠY -->
-  <div class="home-card" style="margin-bottom:18px" id="homeTeachersSection">
-    <h3>👨‍🏫 Giáo viên giảng dạy</h3>
-    <div class="teacher-showcase" id="homeTeachersList">
-      <div class="teacher-card">
-        <div class="tc-av" id="defaultTeacherAv">📚</div>
-        <div class="tc-info">
-          <div class="tc-name">Đội ngũ AURORA</div>
-          <div class="tc-subj">Mọi môn · Online</div>
-          <div class="tc-desc">Giáo viên giàu kinh nghiệm, tận tâm đồng hành cùng học sinh trên hành trình tri thức.</div>
-        </div>
-      </div>
+    <div class="home-card role-elite">
+      <h3>🌟 Top Ưu Tú</h3>
+      <div class="role-users-box" id="homeElitesList"><p style="color:#888;font-size:12px">Chưa có</p></div>
     </div>
-  </div>
-
-  <!-- hidden devil for compat -->
-  <div style="display:none"><div class="role-users-box" id="homeDevilsList"></div></div>
-
-  <div class="guide-footer-link" onclick="switchView('guideView');document.querySelectorAll('.nav-tabs button').forEach(b=>b.classList.remove('active'));">
-    📖 Chi tiết hướng dẫn — Bấm để xem
+    <div class="home-card role-devil">
+      <h3>😈 DEVIL</h3>
+      <div class="role-users-box" id="homeDevilsList"><p style="color:#888;font-size:12px">Chưa có</p></div>
+    </div>
   </div>
 </div>
 
 <div id="studentLoginView" class="view-section">
-<div class="card" style="margin-bottom:12px">
-  <h2 style="font-size:18px;margin-bottom:12px;color:#1877f2">🧑‍🎓 Khu vực Học sinh</h2>
-  <div class="hub-tabs" id="studentHubTabs">
-    <div class="hub-tab active" data-hub="exam" onclick="switchStudentHub('exam',this)">📝 Làm bài thi</div>
-    <div class="hub-tab" data-hub="course" onclick="switchStudentHub('course',this)">📚 Khóa học</div>
-    <div class="hub-tab" data-hub="docs" onclick="switchStudentHub('docs',this)">📂 Tài liệu</div>
-    <div class="hub-tab" data-hub="practice" onclick="switchStudentHub('practice',this)">⚡ Thi thử</div>
-    <div class="hub-tab" data-hub="live" onclick="switchStudentHub('live',this)">📡 Live room</div>
-  </div>
-</div>
-
-<div id="studentHubExam" class="hub-panel active">
-
 <div class="floating-shape" style="width:200px;height:200px;background:#1877f2;top:5%;left:-50px"></div>
 <div class="floating-shape" style="width:150px;height:150px;background:#198754;top:50%;right:-40px"></div>
 <div class="floating-shape" style="width:100px;height:100px;background:#ffc107;bottom:10%;left:20%"></div>
@@ -1433,81 +1311,10 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 <button class="btn btn-success" style="margin-top:10px" onclick="startStudentParticipation()">🚀 Bắt Đầu</button>
 <button class="btn" style="margin-top:8px;background:linear-gradient(135deg,#0d6efd,#0b5ed7)" onclick="openQRScanModal()">📷 Quét QR</button>
-
+<button class="btn" style="margin-top:8px;background:linear-gradient(135deg,#6f42c1,#5a32a3)" onclick="openDocumentStudentModal()">📚 Tài Liệu</button>
 </div></div>
-</div>
-
-<div id="studentHubCourse" class="hub-panel">
-  <div class="card">
-    <div class="sub-hub-tabs">
-      <div class="sub-hub-tab active" onclick="switchCourseSub('community',this)">🌐 Cộng đồng</div>
-      <div class="sub-hub-tab" onclick="switchCourseSub('mine',this)">📖 Khóa học của tôi</div>
-    </div>
-    <div id="courseCommunityPanel">
-      <p style="text-align:center;color:#888;padding:30px 10px;font-size:14px">🌐 Khóa học cộng đồng sẽ hiển thị tại đây.<br><small>Giáo viên upload khóa học từ mục Upload.</small></p>
-      <div id="communityCourseList"></div>
-    </div>
-    <div id="courseMinePanel" style="display:none">
-      <p style="text-align:center;color:#888;padding:30px 10px;font-size:14px">📖 Khóa học bạn đã tham gia.<br><small>Đăng nhập để xem.</small></p>
-      <div id="myCourseList"></div>
-    </div>
-  </div>
-</div>
-
-<div id="studentHubDocs" class="hub-panel">
-  <div class="card">
-    <h3 style="font-size:16px;color:#1877f2;margin-bottom:12px">📂 Tài liệu giáo viên</h3>
-    <p style="font-size:12px;color:#666;margin-bottom:12px">Tài liệu do giáo viên tải lên (PDF, Word, ảnh...)</p>
-    <button class="btn" style="margin-bottom:12px" onclick="loadStudentDocsHub()">🔄 Tải danh sách</button>
-    <div id="studentDocsHubList"><p style="text-align:center;color:#888">Bấm tải để xem</p></div>
-  </div>
-</div>
-
-<div id="studentHubPractice" class="hub-panel">
-  <div class="card">
-    <h3 style="font-size:16px;color:#1877f2;margin-bottom:12px">⚡ Thi thử — Bài luyện có sẵn</h3>
-    <p style="font-size:12px;color:#666;margin-bottom:12px">Các bài luyện nhanh do thầy cô tạo. Chọn bài và làm ngay.</p>
-    <button class="btn" style="margin-bottom:12px" onclick="loadPracticeListHub()">🔄 Tải danh sách</button>
-    <div id="practiceListHub"><p style="text-align:center;color:#888">Bấm tải để xem</p></div>
-  </div>
-</div>
-
-<div id="studentHubLive" class="hub-panel">
-  <div class="card">
-    <h3 style="font-size:16px;color:#1877f2;margin-bottom:12px">📡 Live Room</h3>
-    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-      <input type="text" id="liveRoomSearchCode" placeholder="Tìm mã phòng live..." style="flex:1;min-width:160px;margin:0">
-      <button class="btn" style="width:auto;padding:10px 16px" onclick="searchLiveRoom()">🔍 Tìm</button>
-      <button class="btn btn-secondary" style="width:auto;padding:10px 16px" onclick="loadLiveRoomsList()">🔄 Làm mới</button>
-    </div>
-    <div id="liveRoomsList"><p style="text-align:center;color:#888;padding:20px">Đang tải phòng live...</p></div>
-  </div>
-</div>
-
-</div>
 
 <div id="teacherView" class="view-section">
-<div class="card" style="margin-bottom:12px">
-  <h2 style="font-size:18px;margin-bottom:12px;color:#1877f2">👨‍🏫 Khu vực Giáo viên</h2>
-  <div class="teacher-main-tabs" id="teacherMainTabs">
-    <div class="teacher-main-tab active" data-t="create" onclick="switchTeacherMain('create',this)"><span class="tmt-icon">📝</span>Tạo đề kiểm tra</div>
-    <div class="teacher-main-tab" data-t="upload" onclick="switchTeacherMain('upload',this)"><span class="tmt-icon">📤</span>Upload file</div>
-    <div class="teacher-main-tab" data-t="liveroom" onclick="switchTeacherMain('liveroom',this)"><span class="tmt-icon">📡</span>Tạo Live room</div>
-    <div class="teacher-main-tab" data-t="manage" onclick="switchTeacherMain('manage',this)"><span class="tmt-icon">⚙️</span>Quản lí chung</div>
-  </div>
-</div>
-
-<div id="teacherPanelCreate" class="hub-panel active">
-  <div class="card" style="margin-bottom:12px">
-    <div class="create-mode-grid">
-      <div class="create-mode-btn active" data-mode="free" onclick="switchCreateMode('free',this)"><span class="cm-icon">♾️</span>Tạo đề tự do</div>
-      <div class="create-mode-btn" data-mode="specialized" onclick="switchCreateMode('specialized',this)"><span class="cm-icon">🛡️</span>Tạo đề chuyên dụng</div>
-      <div class="create-mode-btn" data-mode="practice" onclick="switchCreateMode('practice',this)"><span class="cm-icon">⚡</span>Tạo đề luyện nhanh</div>
-      <div class="create-mode-btn" data-mode="smart" onclick="switchCreateMode('smart',this)"><span class="cm-icon">🎓</span>Tạo đề thông minh</div>
-    </div>
-    <p id="createModeHint" style="font-size:12px;color:#666;margin-bottom:8px">♾️ <b>Tự do:</b> Tạo đề & học sinh vào thi ngay. Quản lí bắt đầu/kết thúc nằm ở <b>Quản lí chung</b>.</p>
-  </div>
-
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px"><h2 style="font-size:18px">🛠️ Tạo Đề Kiểm Tra V2</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-warning" style="width:auto;padding:6px 12px;font-size:13px" onclick="resetTeacherForm()">🔄 Đặt Lại</button><button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:13px" onclick="openAdvancedModal()">⚙️ Nâng Cao</button></div></div>
 <hr style="margin:10px 0">
@@ -1533,73 +1340,7 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="qpWaitingRoomView" class="view-section"><div class="card" style="max-width:600px;margin:40px auto;text-align:center;padding:30px"><h2 style="color:#1877f2">⏳ PHÒNG CHỜ BÀI LUYỆN</h2><p id="qpWaitTitle" style="font-weight:bold;font-size:16px;margin-top:10px"></p><hr style="margin:20px 0"><div style="background:#f8f9fa;padding:15px;border-radius:8px;text-align:left;margin-bottom:20px;font-size:14px;line-height:1.6"><p>👤 <b>Thí sinh:</b> <span id="qpWaitStudentName"></span></p><p>📋 <b>Số câu:</b> <span id="qpWaitQCount" style="color:#1877f2;font-weight:bold">0</span></p><p>👥 <b>Đang trong phòng:</b> <span id="qpWaitStudentCount" style="color:#198754;font-weight:bold">1</span></p></div><div style="font-size:18px;font-weight:bold;color:#d32f2f;background:#ffebee;padding:15px;border-radius:8px">🔔 ĐỢI GIÁO VIÊN...</div><button class="btn btn-secondary" style="margin-top:20px" onclick="leaveQpWaitingRoom()">🚪 Rời Phòng</button></div></div>
 
-
-</div><!-- end teacherPanelCreate -->
-
-
-<div id="teacherPanelUpload" class="hub-panel">
-  <div class="card">
-    <div class="sub-hub-tabs">
-      <div class="sub-hub-tab active" onclick="switchUploadSub('file',this)">📄 Up file tài liệu</div>
-      <div class="sub-hub-tab" onclick="switchUploadSub('course',this)">📚 Up khóa học</div>
-    </div>
-    <div id="uploadFilePanel">
-      <h3 style="font-size:15px;color:#1877f2;margin-bottom:10px">📄 Upload tài liệu cho học sinh</h3>
-      <p style="font-size:12px;color:#666;margin-bottom:10px">Hỗ trợ ảnh, PDF, Word... Học sinh xem tại mục Tài liệu.</p>
-      <label>Chọn file:</label>
-      <input type="file" id="teacherDocUploadInput" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt">
-      <button class="btn btn-success" style="margin-top:8px" onclick="uploadTeacherDocs()">⬆️ Tải lên</button>
-      <hr style="margin:16px 0">
-      <h4 style="font-size:14px;margin-bottom:8px">📋 Lịch sử file đã up</h4>
-      <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px;margin-bottom:10px" onclick="loadTeacherDocHistory()">🔄 Xem lịch sử</button>
-      <div id="teacherDocHistoryList"><p style="color:#888;font-size:12px">Bấm để tải lịch sử</p></div>
-    </div>
-    <div id="uploadCoursePanel" style="display:none">
-      <h3 style="font-size:15px;color:#1877f2;margin-bottom:10px">📚 Upload khóa học</h3>
-      <p style="font-size:12px;color:#666;margin-bottom:10px">Tính năng đang phát triển — sẽ sớm có.</p>
-      <label>Tên khóa học:</label>
-      <input type="text" id="courseUploadName" placeholder="VD: Luyện đề Toán 12">
-      <label>Mô tả:</label>
-      <textarea id="courseUploadDesc" rows="3" placeholder="Mô tả ngắn..."></textarea>
-      <label>File / link:</label>
-      <input type="text" id="courseUploadLink" placeholder="Link Drive / YouTube...">
-      <button class="btn btn-success" onclick="showToast('🚧 Tính năng up khóa học sẽ cập nhật sau','info')">💾 Lưu khóa học</button>
-    </div>
-  </div>
-</div>
-
-<div id="teacherPanelLiveRoom" class="hub-panel">
-  <div class="card">
-    <h3 style="font-size:16px;color:#1877f2;margin-bottom:12px">📡 Tạo Live Room</h3>
-    <p style="font-size:12px;color:#666;margin-bottom:12px">Gắn link buổi live (Zoom/Meet/YouTube...). Hệ thống tạo mã ngẫu nhiên. Học sinh bấm vào sẽ chuyển đến link.</p>
-    <label>Tên buổi live:</label>
-    <input type="text" id="liveRoomTitle" placeholder="VD: Ôn tập Văn buổi 1">
-    <label>Link buổi live:</label>
-    <input type="url" id="liveRoomLink" placeholder="https://...">
-    <label>Mật khẩu (để trống = không cần MK):</label>
-    <input type="password" id="liveRoomPass" placeholder="Tùy chọn">
-    <button class="btn btn-success" style="margin-top:8px" onclick="createLiveRoom()">🚀 Tạo Live Room</button>
-    <div id="liveRoomCreateResult" style="display:none;margin-top:14px;padding:14px;background:#e7f3ff;border-radius:10px;border-left:4px solid #1877f2"></div>
-    <hr style="margin:16px 0">
-    <h4 style="font-size:14px;margin-bottom:8px">📋 Live room của bạn</h4>
-    <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px;margin-bottom:10px" onclick="loadMyLiveRooms()">🔄 Làm mới</button>
-    <div id="myLiveRoomsList"><p style="color:#888;font-size:12px">Chưa có</p></div>
-  </div>
-</div>
-
-<div id="teacherPanelManage" class="hub-panel">
-  <div class="card">
-    <h3 style="font-size:16px;color:#1877f2;margin-bottom:12px">⚙️ Quản lí chung</h3>
-    <p style="font-size:12px;color:#666;margin-bottom:12px">Nhập mã đề + mật khẩu bảo mật để quản lí đề, bắt đầu/kết thúc phòng thi, xóa đề...</p>
-    <button class="btn btn-warning" onclick="openAdvancedModal()">🔐 Mở quản lí đề & phòng (cần MK bảo mật)</button>
-    <p style="font-size:11px;color:#888;margin-top:10px">Bao gồm: quản lí đề tự do · chuyên dụng · luyện nhanh · QR · xóa đề · phòng live dashboard.</p>
-  </div>
-</div>
-
-
-</div><!-- end teacherView -->
 <div id="studentWaitingRoomView" class="view-section"><div class="card" style="max-width:600px;margin:40px auto;text-align:center;padding:30px"><h2 style="color:#1877f2">⏳ PHÒNG CHỜ THI</h2><p id="waitingRoomExamTitle" style="font-weight:bold;font-size:16px;margin-top:10px"></p><hr style="margin:20px 0"><div style="background:#f8f9fa;padding:15px;border-radius:8px;text-align:left;margin-bottom:20px;font-size:14px;line-height:1.6"><p>👤 <b>Thí sinh:</b> <span id="waitStudentName"></span></p><p>👥 <b>Đang trong phòng:</b> <span id="waitStudentCount" style="color:#1877f2;font-weight:bold">1</span></p><p>⏱️ <b>Thời gian:</b> <span id="waitDuration"></span> phút</p></div><div style="font-size:18px;font-weight:bold;color:#d32f2f;background:#ffebee;padding:15px;border-radius:8px">🔔 CHỜ GIÁO VIÊN...</div><button class="btn btn-secondary" style="margin-top:20px" onclick="leaveWaitingRoom()">🚪 Rời Phòng</button></div></div>
-
 
 <div id="studentExamView" class="view-section">
 <div class="card" style="background:#fff3cd;border:1px solid #ffeeba;padding:10px 15px;margin-bottom:10px;font-size:13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><span>🛡️ <b>Chống gian lận:</b> Rời tab > <span id="cheatThresholdDisplay">7</span>s sẽ bị cảnh báo!</span><span id="cheatWarningBadge" style="background:#dc3545;color:#fff;padding:2px 8px;border-radius:10px;font-weight:bold">Cảnh báo: 0</span></div>
@@ -1616,7 +1357,6 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="supreme-tabs" style="margin-top:12px">
   <div class="supreme-tab active" id="lbTabExam" onclick="switchLBSubTab('exam', this)">📋 BXH ĐỀ THI</div>
   <div class="supreme-tab" id="lbTabServer" onclick="switchLBSubTab('server', this)">🌐 BXH TOÀN SEVER</div>
-  <div class="supreme-tab" id="lbTabThrone" onclick="switchLBSubTab('throne', this)">👑 NGAI VÀNG VINH DANH</div>
 </div>
 <div id="lbSubExam">
   <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center"><input type="text" id="searchLbCode" placeholder="Nhập mã bài..." style="margin:0;flex:1;min-width:150px"><button class="btn" style="width:auto" onclick="loadLeaderboard()">Xem</button><button class="btn btn-danger" style="width:auto;padding:10px 14px;font-size:13px;white-space:nowrap" onclick="openDeleteHistoryModal()" title="Xóa lịch sử thi (cần mật khẩu VUA/PARTNER)">🗑️ Xóa Lịch Sử</button></div>
@@ -1641,29 +1381,10 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 </div>
 
-
-<div id="lbSubThrone" style="display:none">
-  <div class="card">
-    <h3 style="text-align:center;color:#c9a227;font-size:18px;margin-bottom:8px">👑 NGAI VÀNG VINH DANH</h3>
-    <p style="text-align:center;font-size:12px;color:#888;margin-bottom:14px">Top 3 xuất sắc nhất toàn server — Vinh danh theo tổng điểm</p>
-    <div class="throne-stage" id="throneStage">
-      <div class="throne-row" id="throneRow">
-        <p style="color:#aaa;text-align:center;width:100%;padding:40px">Đang tải...</p>
-      </div>
-    </div>
-    <button class="btn" style="margin-top:14px" onclick="loadThroneOfGlory()">🔄 Cập nhật Ngai Vàng</button>
-  </div>
-</div>
 <div id="guideView" class="view-section"><div class="card" style="max-width:1000px;margin:0 auto"><div style="text-align:center;padding-bottom:15px;border-bottom:2px solid #eee;margin-bottom:20px"><h1 style="font-size:24px;font-weight:900;color:#1877f2">📖 HƯỚNG DẪN</h1><p style="font-size:13px;color:#666;margin-top:6px">Cẩm nang <b>AURORA</b></p></div><div class="guide-tabs"><div class="guide-tab active" onclick="switchGuideTab('home', this)">🏠 Trang Chủ</div><div class="guide-tab" onclick="switchGuideTab('teacher', this)">👨‍🏫 Giáo Viên</div><div class="guide-tab" onclick="switchGuideTab('student', this)">🧑‍🎓 Học Sinh</div><div class="guide-tab" onclick="switchGuideTab('lb', this)">🏆 Xếp Hạng</div><div class="guide-tab" onclick="switchGuideTab('profile', this)">👤 Hồ Sơ</div><div class="guide-tab" onclick="switchGuideTab('supreme', this)">👑 Tối Cao</div><div class="guide-tab" onclick="switchGuideTab('ent', this)">🎮 Giải Trí</div><div class="guide-tab" onclick="switchGuideTab('theme', this)">🎨 Giao Diện</div></div>
 <div style="background:#f0f8ff;border:1px dashed #1877f2;padding:14px;border-radius:10px;margin-bottom:20px"><h3 style="font-size:15px;color:#1877f2;margin-bottom:10px">⚙️ Chế độ hiển thị</h3><p style="font-size:13px;margin-bottom:10px">Hiện tại: <b id="currentPerfModeText" style="color:#198754">Đầy đủ</b></p><button class="btn btn-success" style="width:auto;padding:8px 14px;font-size:13px" onclick="openPerfModeModal()">🎨 Đổi chế độ</button></div>
 
 <div class="guide-panel active" id="guide-home">
-
-<div class="card" style="margin-bottom:18px;background:#f8fbff;border:1px solid #d0e4ff">
-  <h3 style="font-size:15px;color:#1877f2;margin-bottom:10px">🎬 Video hướng dẫn</h3>
-  <p style="font-size:12px;color:#666;margin-bottom:10px">Gắn link YouTube / TikTok / Facebook... (chỉnh trong Tối Cao)</p>
-  <div id="guideVideoList"><p style="color:#888;font-size:12px">Chưa có video. Admin thêm link tại Tối Cao → Cấu hình hướng dẫn.</p></div>
-</div>
 <div class="guide-section-title">🏠 Trang Chủ (Home)</div>
 <div class="guide-tip">Đây là trang mặc định khi vào web. Cập nhật <b>thời gian thực</b>.</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Hero Banner:</b> Hiển thị tên web + slogan. Có thể chỉnh trong <b>👑 TỐI CAO → 🔧 Cấu hình → Tùy chỉnh giao diện</b>.</div></div>
@@ -1782,19 +1503,6 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 
 <div id="supremeView" class="view-section">
-<div class="card" style="margin-bottom:14px" id="supremeHomeTeachersCard">
-  <div class="section-title"><span>👨‍🏫 Giáo viên trang chủ</span></div>
-  <p style="font-size:12px;color:#666;margin-bottom:8px">Mỗi dòng: Tên|Môn|Mô tả|URL ảnh (tùy chọn). Lưu vào DB.</p>
-  <textarea id="supremeTeachersText" rows="4" placeholder="Nguyễn Văn A|Toán|Thầy dạy Toán 12|https://..."></textarea>
-  <button class="btn btn-success" style="margin-top:8px" onclick="saveHomeTeachersConfig()">💾 Lưu giáo viên trang chủ</button>
-</div>
-<div class="card" style="margin-bottom:14px" id="supremeGuideVideosCard">
-  <div class="section-title"><span>🎬 Video hướng dẫn</span></div>
-  <p style="font-size:12px;color:#666;margin-bottom:8px">Mỗi dòng: Tiêu đề|URL (YouTube/TikTok/...)</p>
-  <textarea id="supremeGuideVideosText" rows="4" placeholder="Hướng dẫn làm bài|https://youtube.com/..."></textarea>
-  <button class="btn btn-success" style="margin-top:8px" onclick="saveGuideVideosConfig()">💾 Lưu video hướng dẫn</button>
-</div>
-
 <div class="card" style="border:2px solid #ffc107">
 <h2 style="color:#d32f2f;margin-bottom:15px">👑 KHU VỰC TỐI CAO</h2>
 <div class="supreme-tabs">
@@ -3330,363 +3038,34 @@ async function resetHomeConfig(){
 function renderHomeRoleUsers(){
   const cfg=currentHomeConfig||DEFAULT_HOME_CONFIG;
   const founders=[],partners=[],elites=[];
-  Object.keys(cachedUsers||{}).forEach(u=>{
+  Object.keys(cachedUsers).forEach(u=>{
     const usr=cachedUsers[u];const role=usr.role;
     if(role==='king')founders.push(usr);
     if(role==='partner')partners.push(usr);
     if(role==='elite_teacher'||role==='devil')elites.push(usr);
   });
-  const renderCarousel=(list,containerId,badge)=>{
+  const render=(list,containerId,cls)=>{
     const c=document.getElementById(containerId);if(!c)return;
-    if(!list.length){c.innerHTML='<p style="color:#888;font-size:12px;padding:10px">Chưa có</p>';return;}
-    c.innerHTML=list.map(u=>{
-      const initial=(u.nickname||u.username||'?').charAt(0).toUpperCase();
-      const av=u.avatar?`<img src="${u.avatar}" alt="">`:initial;
-      return `<div class="elite-card" onclick="viewUserProfile('${u.username}')">
-        <div class="ec-laurel">🌿</div>
-        <div class="ec-av">${av}<div class="ec-ribbon">${badge}</div></div>
-        <div class="ec-name">${escapeHtml(u.nickname||u.username)}</div>
-        <div class="ec-role">@${escapeHtml(u.username)}</div>
-      </div>`;
-    }).join('');
-  };
-  const renderPills=(list,containerId,cls)=>{
-    const c=document.getElementById(containerId);if(!c)return;
-    if(!list.length){c.innerHTML='<p style="color:#5d4037;font-size:12px">Chưa có</p>';return;}
+    if(!list.length){c.innerHTML='<p style="color:#888;font-size:12px">Chưa có</p>';return;}
     c.innerHTML=list.map(u=>{
       const initial=(u.nickname||u.username).charAt(0).toUpperCase();
       const av=u.avatar?`<img src="${u.avatar}">`:initial;
       return `<div class="user-pill ${cls}" onclick="viewUserProfile('${u.username}')"><div class="up-av">${av}</div><span>${escapeHtml(u.nickname||u.username)}</span></div>`;
     }).join('');
   };
-  const eliteSec=document.getElementById('homeEliteSection');
-  const partnerSec=document.getElementById('homePartnerSection');
-  const founderSec=document.getElementById('homeFounderSection');
-  if(eliteSec)eliteSec.style.display=cfg.showElite!==false?'block':'none';
-  if(partnerSec)partnerSec.style.display=cfg.showPartner!==false?'block':'none';
-  if(founderSec)founderSec.style.display=cfg.showKing!==false?'block':'none';
-  renderCarousel(elites,'homeElitesList','⭐ ƯU TÚ');
-  renderCarousel(partners,'homePartnersList','🤝 ĐỐI TÁC');
-  renderPills(founders,'homeFoundersList','king-pill');
-  const devilC=document.getElementById('homeDevilsList');
-  if(devilC)devilC.innerHTML='';
-  startHomeCarousels();
-  loadHomeTeachers();
+  const kingCard=document.getElementById('homeFoundersList')?.closest('.home-card');
+  const partnerCard=document.getElementById('homePartnersList')?.closest('.home-card');
+  const eliteCard=document.getElementById('homeElitesList')?.closest('.home-card');
+  const devilCard=document.getElementById('homeDevilsList')?.closest('.home-card');
+  if(kingCard)kingCard.style.display=cfg.showKing!==false?'block':'none';
+  if(partnerCard)partnerCard.style.display=cfg.showPartner!==false?'block':'none';
+  if(eliteCard)eliteCard.style.display=cfg.showElite!==false?'block':'none';
+  if(devilCard)devilCard.style.display='none';
+  render(founders,'homeFoundersList','king-pill');
+  render(partners,'homePartnersList','partner-pill');
+  render(elites,'homeElitesList','elite-pill');
+  render([],'homeDevilsList','devil-pill');
 }
-
-let _carouselTimers=[];
-function startHomeCarousels(){
-  _carouselTimers.forEach(t=>clearInterval(t));
-  _carouselTimers=[];
-  ['homeElitesList','homePartnersList'].forEach(id=>{
-    const track=document.getElementById(id);
-    if(!track||track.children.length<2)return;
-    const t=setInterval(()=>{
-      if(!track.isConnected)return;
-      const card=track.querySelector('.elite-card');
-      if(!card)return;
-      const w=card.offsetWidth+14;
-      if(track.scrollLeft+track.clientWidth>=track.scrollWidth-10){
-        track.scrollTo({left:0,behavior:'smooth'});
-      }else{
-        track.scrollBy({left:w,behavior:'smooth'});
-      }
-    },3000);
-    _carouselTimers.push(t);
-  });
-}
-
-function loadHomeTeachers(){
-  const c=document.getElementById('homeTeachersList');
-  if(!c)return;
-  const logoEl=document.getElementById('webLogoImg');
-  const logoSrc=(logoEl&&logoEl.src&&logoEl.style.display!=='none')?logoEl.src:'';
-  // Try load from DB config
-  if(window.db){
-    window.dbGet(window.dbChild(window.dbRef,'system/home_teachers')).then(s=>{
-      const list=s.val();
-      if(list&&Array.isArray(list)&&list.length){
-        c.innerHTML=list.map(t=>{
-          const av=t.avatar?`<img src="${t.avatar}">`:(logoSrc?`<img src="${logoSrc}">`:'📚');
-          return `<div class="teacher-card"><div class="tc-av">${av}</div><div class="tc-info"><div class="tc-name">${escapeHtml(t.name||'Giáo viên')}</div><div class="tc-subj">${escapeHtml(t.subject||'')}</div><div class="tc-desc">${escapeHtml(t.desc||'')}</div></div></div>`;
-        }).join('');
-        return;
-      }
-      // default
-      c.innerHTML=`<div class="teacher-card"><div class="tc-av">${logoSrc?`<img src="${logoSrc}">`:'📚'}</div><div class="tc-info"><div class="tc-name">Đội ngũ AURORA</div><div class="tc-subj">Mọi môn · Online</div><div class="tc-desc">Giáo viên giàu kinh nghiệm, tận tâm đồng hành cùng học sinh trên hành trình tri thức.</div></div></div>`;
-    }).catch(()=>{});
-  }
-}
-
-/* COUNTDOWN */
-function updateExamCountdowns(){
-  const cards=document.querySelectorAll('#countdownGrid .cd-card');
-  cards.forEach(card=>{
-    const target=new Date(card.dataset.target).getTime();
-    const now=Date.now();
-    let diff=Math.max(0,target-now);
-    const d=Math.floor(diff/86400000);diff%=86400000;
-    const h=Math.floor(diff/3600000);diff%=3600000;
-    const m=Math.floor(diff/60000);diff%=60000;
-    const s=Math.floor(diff/1000);
-    const box=card.querySelector('.cd-digits');
-    if(!box)return;
-    box.innerHTML=`<div class="cd-digit"><b>${String(d).padStart(2,'0')}</b><small>ngày</small></div><div class="cd-digit"><b>${String(h).padStart(2,'0')}</b><small>giờ</small></div><div class="cd-digit"><b>${String(m).padStart(2,'0')}</b><small>phút</small></div><div class="cd-digit"><b>${String(s).padStart(2,'0')}</b><small>giây</small></div>`;
-  });
-}
-setInterval(updateExamCountdowns,1000);
-setTimeout(updateExamCountdowns,500);
-
-/* STUDENT HUB */
-function switchStudentHub(hub,el){
-  document.querySelectorAll('#studentHubTabs .hub-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  ['exam','course','docs','practice','live'].forEach(h=>{
-    const p=document.getElementById('studentHub'+h.charAt(0).toUpperCase()+h.slice(1));
-    // map: exam->studentHubExam, course->studentHubCourse...
-  });
-  const map={exam:'studentHubExam',course:'studentHubCourse',docs:'studentHubDocs',practice:'studentHubPractice',live:'studentHubLive'};
-  Object.keys(map).forEach(k=>{
-    const p=document.getElementById(map[k]);
-    if(p)p.classList.toggle('active',k===hub);
-  });
-  if(hub==='docs')loadStudentDocsHub();
-  if(hub==='live')loadLiveRoomsList();
-  if(hub==='practice')loadPracticeListHub();
-}
-function switchCourseSub(sub,el){
-  document.querySelectorAll('#studentHubCourse .sub-hub-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  document.getElementById('courseCommunityPanel').style.display=sub==='community'?'block':'none';
-  document.getElementById('courseMinePanel').style.display=sub==='mine'?'block':'none';
-}
-function loadStudentDocsHub(){
-  const c=document.getElementById('studentDocsHubList');
-  if(!c)return;
-  c.innerHTML='<p style="text-align:center">⏳ Đang tải...</p>';
-  if(!window.db){c.innerHTML='<p style="color:#888;text-align:center">Chưa kết nối DB</p>';return;}
-  window.dbGet(window.dbChild(window.dbRef,'documents')).then(s=>{
-    const list=s.val()||{};
-    const keys=Object.keys(list);
-    if(!keys.length){c.innerHTML='<p style="text-align:center;color:#888">Chưa có tài liệu</p>';return;}
-    keys.sort((a,b)=>(list[b].uploadedAt||0)-(list[a].uploadedAt||0));
-    c.innerHTML=keys.map(k=>{
-      const d=list[k];
-      return `<div class="doc-list-item"><div class="di-icon">${typeof getDocIcon==='function'?getDocIcon(d.name,d.type):'📄'}</div><div style="flex:1;min-width:0"><div class="di-name">${escapeHtml(d.name||'')}</div><div class="di-meta">${typeof formatDocSize==='function'?formatDocSize(d.size):''} · ${d.uploader||''}</div></div><button class="btn" style="width:auto;padding:6px 12px;font-size:12px" onclick="downloadDocByKey('${k}')">⬇️</button></div>`;
-    }).join('');
-  }).catch(e=>{c.innerHTML='<p style="color:red">Lỗi tải</p>';});
-}
-function loadPracticeListHub(){
-  const c=document.getElementById('practiceListHub');
-  if(!c)return;
-  c.innerHTML='<p style="text-align:center">⏳ Đang tải...</p>';
-  if(!window.db)return;
-  window.dbGet(window.dbChild(window.dbRef,'quick_practices')).then(s=>{
-    const data=s.val()||{};
-    const keys=Object.keys(data);
-    if(!keys.length){c.innerHTML='<p style="text-align:center;color:#888">Chưa có bài luyện nhanh</p>';return;}
-    c.innerHTML=keys.map(code=>{
-      const e=data[code];
-      return `<div class="live-room-card"><div class="lr-info"><div class="lr-code">${escapeHtml(code)}</div><div class="lr-meta">${escapeHtml(e.title||'Bài luyện')} · ${e.durationMinutes||15} phút</div></div><button class="btn btn-success" style="width:auto;padding:8px 14px;font-size:12px" onclick="joinPracticeFromHub('${code}')">Vào làm</button></div>`;
-    }).join('');
-  }).catch(()=>{c.innerHTML='<p style="color:#888">Không tải được (có thể path khác)</p>';});
-}
-function joinPracticeFromHub(code){
-  switchStudentHub('exam',document.querySelector('#studentHubTabs .hub-tab[data-hub="exam"]'));
-  const modeSel=document.getElementById('examModeSelect');
-  if(modeSel)modeSel.value='practice';
-  try{selectExamMode('practice',document.querySelector('.mode-dropdown-item[data-mode="practice"]'));}catch(e){}
-  const codeIn=document.getElementById('studentExamCode');
-  if(codeIn)codeIn.value=code;
-  showToast('⚡ Đã chọn bài luyện '+code,'info');
-}
-
-/* LIVE ROOMS */
-async function createLiveRoom(){
-  const title=(document.getElementById('liveRoomTitle')?.value||'').trim();
-  const link=(document.getElementById('liveRoomLink')?.value||'').trim();
-  const pass=(document.getElementById('liveRoomPass')?.value||'').trim();
-  if(!title||!link){showToast('❌ Nhập tên và link!','error');return;}
-  const sec=await customPrompt('Nhập mật khẩu bảo mật giáo viên:',{icon:'🔐',title:'Xác thực',inputType:'password'});
-  if(!sec||!checkSecurityPassword(sec)){if(sec)showToast('❌ Sai mật khẩu!','error');return;}
-  const code=('LV'+Math.random().toString(36).slice(2,8)).toUpperCase();
-  const data={code,title,link,pass:pass||'',createdAt:Date.now(),creator:currentUser?.username||'anon',active:true};
-  try{
-    await window.dbSet(window.ref(window.db,`live_rooms/${code}`),data);
-    const box=document.getElementById('liveRoomCreateResult');
-    box.style.display='block';
-    box.innerHTML=`✅ Đã tạo!<br><b>Mã phòng:</b> <span style="font-size:20px;color:#1877f2">${code}</span><br>${pass?'🔒 Có mật khẩu':'🔓 Không cần mật khẩu'}<br><small>Học sinh vào Live room → nhập mã → chuyển tới link</small>`;
-    showToast('📡 Đã tạo Live Room!','success');
-    loadMyLiveRooms();
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
-}
-async function loadLiveRoomsList(){
-  const c=document.getElementById('liveRoomsList');
-  if(!c)return;
-  c.innerHTML='<p style="text-align:center">⏳ Đang tải...</p>';
-  try{
-    const s=await window.dbGet(window.dbChild(window.dbRef,'live_rooms'));
-    const data=s.val()||{};
-    let rooms=Object.values(data).filter(r=>r.active!==false);
-    rooms.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-    if(!rooms.length){c.innerHTML='<p style="text-align:center;color:#888;padding:20px">Chưa có phòng live nào</p>';return;}
-    c.innerHTML=rooms.map(r=>`<div class="live-room-card"><div class="lr-info"><div class="lr-code">${escapeHtml(r.code)}</div><div class="lr-meta">${escapeHtml(r.title||'')} · ${r.pass?'🔒 Có MK':'🔓 Mở'} · ${r.creator||''}</div></div><button class="btn btn-success" style="width:auto;padding:8px 14px;font-size:12px" onclick="joinLiveRoom('${r.code}')">Vào</button></div>`).join('');
-  }catch(e){c.innerHTML='<p style="color:red">Lỗi tải</p>';}
-}
-async function searchLiveRoom(){
-  const code=(document.getElementById('liveRoomSearchCode')?.value||'').trim().toUpperCase();
-  if(!code){loadLiveRoomsList();return;}
-  const c=document.getElementById('liveRoomsList');
-  c.innerHTML='⏳...';
-  try{
-    const s=await window.dbGet(window.dbChild(window.dbRef,`live_rooms/${code}`));
-    if(!s.exists()){c.innerHTML='<p style="text-align:center;color:#888">Không tìm thấy mã '+code+'</p>';return;}
-    const r=s.val();
-    c.innerHTML=`<div class="live-room-card"><div class="lr-info"><div class="lr-code">${escapeHtml(r.code)}</div><div class="lr-meta">${escapeHtml(r.title||'')} · ${r.pass?'🔒':'🔓'}</div></div><button class="btn btn-success" style="width:auto;padding:8px 14px" onclick="joinLiveRoom('${r.code}')">Vào</button></div>`;
-  }catch(e){c.innerHTML='Lỗi';}
-}
-async function joinLiveRoom(code){
-  try{
-    const s=await window.dbGet(window.dbChild(window.dbRef,`live_rooms/${code}`));
-    if(!s.exists()){showToast('❌ Phòng không tồn tại','error');return;}
-    const r=s.val();
-    if(r.pass){
-      const p=await customPrompt('Nhập mật khẩu phòng live:',{icon:'🔒',title:'Mật khẩu Live Room',inputType:'password'});
-      if(p!==r.pass){if(p!==null)showToast('❌ Sai mật khẩu!','error');return;}
-    }
-    window.open(r.link,'_blank');
-    showToast('📡 Đang mở link live...','success');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
-}
-async function loadMyLiveRooms(){
-  const c=document.getElementById('myLiveRoomsList');
-  if(!c)return;
-  try{
-    const s=await window.dbGet(window.dbChild(window.dbRef,'live_rooms'));
-    const data=s.val()||{};
-    const me=currentUser?.username;
-    let rooms=Object.values(data);
-    if(me)rooms=rooms.filter(r=>r.creator===me);
-    if(!rooms.length){c.innerHTML='<p style="color:#888;font-size:12px">Chưa có</p>';return;}
-    c.innerHTML=rooms.map(r=>`<div class="live-room-card"><div class="lr-info"><div class="lr-code">${escapeHtml(r.code)}</div><div class="lr-meta">${escapeHtml(r.title)}</div></div><button class="btn btn-danger" style="width:auto;padding:6px 10px;font-size:11px" onclick="deleteLiveRoom('${r.code}')">🗑️</button></div>`).join('');
-  }catch(e){}
-}
-async function deleteLiveRoom(code){
-  const sec=await customPrompt('MK bảo mật để xóa:',{icon:'🔐',inputType:'password'});
-  if(!sec||!checkSecurityPassword(sec)){if(sec)showToast('❌ Sai MK','error');return;}
-  if(!await customConfirm('Xóa live room '+code+'?',{okClass:'danger'}))return;
-  try{await window.dbRemove(window.ref(window.db,`live_rooms/${code}`));showToast('Đã xóa','warn');loadMyLiveRooms();}catch(e){showToast('❌','error');}
-}
-
-/* TEACHER MAIN */
-function switchTeacherMain(tab,el){
-  document.querySelectorAll('#teacherMainTabs .teacher-main-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  const map={create:'teacherPanelCreate',upload:'teacherPanelUpload',liveroom:'teacherPanelLiveRoom',manage:'teacherPanelManage'};
-  Object.keys(map).forEach(k=>{
-    const p=document.getElementById(map[k]);
-    if(p)p.classList.toggle('active',k===tab);
-  });
-}
-function switchCreateMode(mode,el){
-  document.querySelectorAll('.create-mode-btn').forEach(b=>b.classList.remove('active'));
-  if(el)el.classList.add('active');
-  const hints={
-    free:'♾️ <b>Tự do:</b> Tạo đề & học sinh vào thi ngay. Quản lí bắt đầu/kết thúc nằm ở <b>Quản lí chung</b>.',
-    specialized:'🛡️ <b>Chuyên dụng:</b> Tích hợp đầy đủ tùy chọn (timer, chống gian lận, mật khẩu phòng...).',
-    practice:'⚡ <b>Luyện nhanh:</b> Tạo bài luyện tập nhanh. Quản lí nằm ở Quản lí chung.',
-    smart:'🎓 <b>Thông minh (AXCM):</b> Đề cắt ảnh / OCR. Sau khi tạo vẫn giữ form (không bắt xóa).'
-  };
-  const h=document.getElementById('createModeHint');
-  if(h)h.innerHTML=hints[mode]||'';
-  // Sync mode dropdown if exists
-  try{
-    if(mode==='practice'){/* keep builder same */}
-  }catch(e){}
-}
-function switchUploadSub(sub,el){
-  document.querySelectorAll('#teacherPanelUpload .sub-hub-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  document.getElementById('uploadFilePanel').style.display=sub==='file'?'block':'none';
-  document.getElementById('uploadCoursePanel').style.display=sub==='course'?'block':'none';
-}
-async function uploadTeacherDocs(){
-  const inp=document.getElementById('teacherDocUploadInput');
-  if(!inp||!inp.files||!inp.files.length){showToast('❌ Chọn file!','error');return;}
-  const sec=await customPrompt('MK bảo mật để upload:',{icon:'🔐',inputType:'password'});
-  if(!sec||!checkSecurityPassword(sec)){if(sec)showToast('❌ Sai MK','error');return;}
-  showToast('⏳ Đang upload...','info');
-  // Reuse existing document upload if available
-  if(typeof uploadDocumentFile==='function'){
-    for(const f of inp.files){try{await uploadDocumentFile(f);}catch(e){}}
-  }else if(typeof openDocumentTeacherModal==='function'){
-    openDocumentTeacherModal();
-    showToast('💡 Dùng form upload tài liệu hệ thống','info');
-  }else{
-    showToast('📄 Hãy dùng mục tài liệu trong hệ thống cũ / Tối cao','info');
-  }
-}
-async function loadTeacherDocHistory(){
-  const c=document.getElementById('teacherDocHistoryList');
-  if(!c)return;
-  c.innerHTML='⏳...';
-  try{
-    const s=await window.dbGet(window.dbChild(window.dbRef,'documents'));
-    const list=s.val()||{};
-    const me=currentUser?.username;
-    let keys=Object.keys(list);
-    if(me)keys=keys.filter(k=>list[k].uploader===me||list[k].uploadedBy===me);
-    if(!keys.length){c.innerHTML='<p style="color:#888;font-size:12px">Chưa có file</p>';return;}
-    keys.sort((a,b)=>(list[b].uploadedAt||0)-(list[a].uploadedAt||0));
-    c.innerHTML=keys.map(k=>{
-      const d=list[k];
-      return `<div class="doc-list-item"><div class="di-icon">📄</div><div style="flex:1"><div class="di-name">${escapeHtml(d.name||k)}</div><div class="di-meta">${new Date(d.uploadedAt||0).toLocaleString()}</div></div><button class="btn btn-danger" style="width:auto;padding:4px 8px;font-size:11px" onclick="deleteTeacherDoc('${k}')">🗑️</button></div>`;
-    }).join('');
-  }catch(e){c.innerHTML='Lỗi';}
-}
-async function deleteTeacherDoc(key){
-  if(!await customConfirm('Xóa file này?',{okClass:'danger'}))return;
-  try{await window.dbRemove(window.ref(window.db,`documents/${key}`));showToast('Đã xóa','warn');loadTeacherDocHistory();}catch(e){showToast('❌','error');}
-}
-
-/* THRONE */
-async function loadThroneOfGlory(){
-  const row=document.getElementById('throneRow');
-  if(!row)return;
-  row.innerHTML='<p style="color:#aaa;text-align:center;width:100%;padding:40px">⏳ Đang tải...</p>';
-  try{
-    if(!cachedUsers||!Object.keys(cachedUsers).length){
-      const us=await window.dbGet(window.dbChild(window.dbRef,'users'));
-      cachedUsers=us.val()||{};
-    }
-    const byUser={};
-    for(const path of ['leaderboard','qp_leaderboard']){
-      const s=await window.dbGet(window.dbChild(window.dbRef,path));
-      if(!s.exists())continue;
-      const data=s.val();
-      Object.values(data||{}).forEach(exam=>{
-        Object.values(exam||{}).forEach(rec=>{
-          if(!rec||!rec.username||!cachedUsers[rec.username])return;
-          if(!byUser[rec.username])byUser[rec.username]={username:rec.username,nickname:cachedUsers[rec.username].nickname||rec.nickname||rec.username,avatar:cachedUsers[rec.username].avatar||'',total:0};
-          byUser[rec.username].total+=(rec.score||0);
-        });
-      });
-    }
-    const arr=Object.values(byUser).sort((a,b)=>b.total-a.total).slice(0,3);
-    if(!arr.length){row.innerHTML='<p style="color:#aaa;text-align:center;width:100%;padding:40px">Chưa có dữ liệu</p>';return;}
-    const ranks=['t1','t2','t3'];
-    const medals=['🥇','🥈','🥉'];
-    // order display: t2, t1, t3 visually via CSS order
-    const seats=[arr[1],arr[0],arr[2]].filter(Boolean);
-    const rankIdx=[1,0,2];
-    row.innerHTML=seats.map((u,i)=>{
-      const ri=rankIdx[i];
-      const av=u.avatar?`<img src="${u.avatar}">`:(u.nickname||'?').charAt(0).toUpperCase();
-      return `<div class="throne-seat ${ranks[ri]}" onclick="viewLeaderboardProfile('${u.username}')"><div class="throne-rank">${medals[ri]}</div><div class="throne-avatar">${av}</div><div class="throne-name">${escapeHtml(u.nickname)}</div><div class="throne-score">${u.total.toFixed(1)} điểm</div></div>`;
-    }).join('');
-  }catch(e){row.innerHTML='<p style="color:#f88;text-align:center;width:100%">Lỗi tải</p>';}
-}
-
 
 /* ============ ROOM ANNOUNCEMENT CONFIG ============ */
 function listenRoomAnnounceConfig(){
@@ -4933,7 +4312,7 @@ async function submitQpPractice(forced=false){if(!forced&&!await customConfirm('
 async function loadLeaderboard(){const code=document.getElementById('searchLbCode').value.trim().toUpperCase(),tb=document.getElementById('lbTableBody');tb.innerHTML='<tr><td colspan="6">⏳ Đang tải...</td></tr>';if(!code){showToast('Nhập mã!','error');return;}let s=await window.dbGet(window.dbChild(window.dbRef,`leaderboard/${code}`));if(!s.exists())s=await window.dbGet(window.dbChild(window.dbRef,`qp_leaderboard/${code}`));if(!s.exists()){tb.innerHTML='<tr><td colspan="6">Chưa có dữ liệu</td></tr>';return;}const h=Object.values(s.val());h.sort((a,b)=>(b.score!==a.score)?b.score-a.score:a.timeSpent-b.timeSpent);tb.innerHTML=h.map((r,i)=>{const m=Math.floor(r.timeSpent/60),sx=r.timeSpent%60;const w=r.cheatWarnings||0,ls=r.totalLeaveTime||0;const rid='lb_detail_'+i;const profileBtn=r.username?`<button class="btn btn-success" style="padding:2px 8px;font-size:11px;width:auto" onclick="viewLeaderboardProfile('${r.username}')">👤</button>`:'—';return `<tr><td><b>#${i+1}</b></td><td>${escapeHtml(r.name||'')}</td><td><b style="color:#1877f2">${r.score}</b></td><td>${m}p${sx}s</td><td>${profileBtn}</td><td><button class="toggle-exp-btn" onclick="toggleLbDetail('${rid}')">&gt;</button><div id="${rid}" style="display:none;text-align:left;font-size:12px;margin-top:5px;background:#f8f9fa;padding:6px;border-radius:4px">- Cảnh cáo: <b style="color:red">${w} lần</b><br>- Rời phòng: <b>${ls} giây</b></div></td></tr>`;}).join('');showToast('📊 Đã tải!','success');}
 async function viewLeaderboardProfile(username){if(!username){showToast('Không có username!','error');return;}let u=cachedUsers[username];if(!u){try{const s=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));if(s.exists()){u=s.val();cachedUsers[username]=u;}}catch(e){}}if(!u){showToast('❌ Không tìm thấy user!','error');return;}await loadRolesCache();await loadMedalsCache();openProfile(null,u);}
 function toggleLbDetail(id){const el=document.getElementById(id),b=el.previousElementSibling;if(el.style.display==='block'){el.style.display='none';b.innerText='>';}else{el.style.display='block';b.innerText='v';}}
-function switchLBSubTab(tab,el){document.querySelectorAll('#leaderboardView .supreme-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');const se=document.getElementById('lbSubExam'),ss=document.getElementById('lbSubServer'),st=document.getElementById('lbSubThrone');if(se)se.style.display=tab==='exam'?'block':'none';if(ss)ss.style.display=tab==='server'?'block':'none';if(st)st.style.display=tab==='throne'?'block':'none';if(tab==='server')startServerLBListener();else if(tab==='throne')loadThroneOfGlory();else{if(serverLBListener){try{serverLBListener();}catch(e){}serverLBListener=null;}if(serverLBQpListener){try{serverLBQpListener();}catch(e){}serverLBQpListener=null;}}}
+function switchLBSubTab(tab,el){document.querySelectorAll('#leaderboardView .supreme-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('lbSubExam').style.display=tab==='exam'?'block':'none';document.getElementById('lbSubServer').style.display=tab==='server'?'block':'none';if(tab==='server')startServerLBListener();else{if(serverLBListener){try{serverLBListener();}catch(e){}serverLBListener=null;}if(serverLBQpListener){try{serverLBQpListener();}catch(e){}serverLBQpListener=null;}}}
 function renderServerLB(lbData,qpData){const byUser={};const process=data=>{if(!data||typeof data!=='object')return;Object.values(data).forEach(examData=>{if(!examData||typeof examData!=='object')return;Object.values(examData).forEach(rec=>{if(!rec||!rec.username)return;if(!cachedUsers[rec.username])return;if(!byUser[rec.username])byUser[rec.username]={username:rec.username,nickname:(cachedUsers[rec.username].nickname||rec.nickname||rec.username),total:0,count:0};byUser[rec.username].total+=(rec.score||0);byUser[rec.username].count+=1;});});};process(lbData);process(qpData);const arr=Object.values(byUser).map(u=>({...u,avg:u.count>0?u.total/u.count:0}));arr.sort((a,b)=>b.total-a.total||b.count-a.count);const tb=document.getElementById('serverLBTableBody');if(!tb)return;if(!arr.length){tb.innerHTML='<tr><td colspan="6" style="color:#888;padding:20px">Chưa có dữ liệu thành tích</td></tr>';return;}tb.innerHTML=arr.map((u,i)=>{const profileBtn=`<button class="btn btn-success" style="padding:2px 8px;font-size:11px;width:auto" onclick="viewLeaderboardProfile('${u.username}')">👤</button>`;const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);return `<tr><td><b style="font-size:15px">${medal}</b></td><td><b>${escapeHtml(u.nickname)}</b><br><small style="color:#888;font-size:10px">@${escapeHtml(u.username)}</small></td><td><b style="color:#1877f2;font-size:14px">${u.total.toFixed(2)}</b></td><td>${u.count}</td><td><b style="color:#198754">${u.avg.toFixed(2)}</b></td><td>${profileBtn}</td></tr>`;}).join('');}
 function startServerLBListener(){const tb=document.getElementById('serverLBTableBody');if(tb)tb.innerHTML='<tr><td colspan="6" style="color:#888;padding:18px">⏳ Đang tải dữ liệu...</td></tr>';if(serverLBListener){try{serverLBListener();}catch(e){}serverLBListener=null;}if(serverLBQpListener){try{serverLBQpListener();}catch(e){}serverLBQpListener=null;}let lbCache=null,qpCache=null;const tryRender=()=>{if(lbCache!==null&&qpCache!==null){renderServerLB(lbCache,qpCache);}};window.dbGet(window.dbChild(window.dbRef,'users')).then(s=>{cachedUsers=s.val()||{};});serverLBListener=window.onValue(window.ref(window.db,'leaderboard'),s=>{lbCache=s.val()||{};tryRender();});serverLBQpListener=window.onValue(window.ref(window.db,'qp_leaderboard'),s=>{qpCache=s.val()||{};tryRender();});}
 async function resetServerLB(){const vua=await customPrompt('Nhập mật khẩu VUA để RESET toàn bộ BXH:',{icon:'🔄',title:'Xác thực VUA',inputType:'password'});if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu VUA!','error');return;}if(!await customConfirm('Bạn CÓ CHẮC CHẮN muốn RESET TOÀN BỘ BXH?',{icon:'💥',title:'XÁC NHẬN',okClass:'danger',okText:'RESET NGAY'}))return;try{await window.dbRemove(window.ref(window.db,'leaderboard'));await window.dbRemove(window.ref(window.db,'qp_leaderboard'));showCenterSquareToast('🔄','Đã reset!','Toàn bộ BXH đã được reset về 0','success',4000);}catch(e){showToast('❌ '+(e.message||e),'error');}}
@@ -4956,30 +4335,76 @@ async function confirmDeleteAll(){if(!await customConfirm('XÓA TẤT CẢ? Khô
 /* CONTEXTMENU LOCK */
 (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),c=e.ctrlKey||e.metaKey,sh=e.shiftKey;if(k==='f12'||(c&&k==='u')||(c&&sh&&['i','j','c','k'].includes(k))||(c&&k==='s')||(c&&k==='p')){e.preventDefault();e.stopPropagation();return false;}if(c&&k==='a'){const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable){e.preventDefault();return false;}}},true);document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('copy',e=>{const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable)e.preventDefault();});})();
 
-/* DOMContentLoaded */
 
-function loadGuideVideos(){
-  const c=document.getElementById('guideVideoList');
-  if(!c||!window.db)return;
-  window.dbGet(window.dbChild(window.dbRef,'system/guide_videos')).then(s=>{
-    const list=s.val();
-    if(!list||!Array.isArray(list)||!list.length)return;
-    c.innerHTML=list.map(v=>{
-      const url=v.url||'';
-      let embed='';
-      if(/youtube\.com|youtu\.be/.test(url)){
-        let id=url.match(/(?:v=|youtu\.be\/)([\w-]+)/);
-        if(id)embed=`<iframe width="100%" height="200" src="https://www.youtube.com/embed/${id[1]}" frameborder="0" allowfullscreen style="border-radius:10px;margin-top:6px"></iframe>`;
-      }
-      return `<div style="margin-bottom:14px;padding:12px;background:#fff;border-radius:10px;border:1px solid #e0e0e0"><b style="font-size:13px">${escapeHtml(v.title||'Video')}</b><br><a href="${escapeHtml(url)}" target="_blank" style="font-size:12px;color:#1877f2;word-break:break-all">${escapeHtml(url)}</a>${embed}</div>`;
-    }).join('');
-  }).catch(()=>{});
+/* ========== COUNTDOWN TRƯỚC KỲ THI ========== */
+const EXAM_SCHEDULE = {
+  van:  { label: '📖 Môn Văn',          date: new Date(2027, 5, 11, 7, 30, 0),  display: '11/06/2027 • 07:30' },
+  toan: { label: '📐 Môn Toán',         date: new Date(2027, 5, 11, 11, 30, 0), display: '11/06/2027 • 11:30' },
+  tc1:  { label: '📚 Tự chọn một',      date: new Date(2027, 5, 12, 7, 30, 0),  display: '12/06/2027 • 07:30' },
+  tc2:  { label: '📝 Tự chọn hai',      date: new Date(2027, 5, 12, 8, 40, 0),  display: '12/06/2027 • 08:40' }
+};
+let currentCountdownSubj = 'van';
+let countdownInterval = null;
+
+function switchCountdownSubj(key, btn) {
+  if (!EXAM_SCHEDULE[key]) return;
+  currentCountdownSubj = key;
+  document.querySelectorAll('.subj-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  updateCountdownDisplay();
 }
-const _origSwitchGuide=typeof switchGuideTab==='function'?switchGuideTab:null;
 
-window.addEventListener('DOMContentLoaded',()=>{ setTimeout(loadGuideVideos,1200); setTimeout(updateExamCountdowns,600);
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
 
-  checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();
+function updateCountdownDisplay() {
+  const cfg = EXAM_SCHEDULE[currentCountdownSubj];
+  if (!cfg) return;
+  const now = new Date();
+  const target = cfg.date;
+  const diff = target - now;
+  const labelEl = document.getElementById('cdSubjectLabel');
+  const timeEl = document.getElementById('cdTimeDisplay');
+  const dateEl = document.getElementById('cdDateDisplay');
+  const statusEl = document.getElementById('cdStatus');
+  if (labelEl) labelEl.textContent = cfg.label;
+  if (dateEl) dateEl.textContent = cfg.display;
+  if (diff <= 0) {
+    // đã qua giờ thi
+    if (timeEl) timeEl.textContent = '00:00:00:00';
+    if (statusEl) {
+      statusEl.textContent = 'Đã diễn ra';
+      statusEl.className = 'cd-status passed';
+    }
+    return;
+  }
+  const totalSec = Math.floor(diff / 1000);
+  const days = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const mins = Math.floor((totalSec % 3600) / 60);
+  const secs = totalSec % 60;
+  if (timeEl) timeEl.textContent = pad2(days) + ':' + pad2(hours) + ':' + pad2(mins) + ':' + pad2(secs);
+  // status: nếu còn < 2h coi như sắp live
+  if (statusEl) {
+    if (diff < 2 * 3600 * 1000) {
+      statusEl.textContent = '⚡ Sắp bắt đầu';
+      statusEl.className = 'cd-status live';
+    } else {
+      statusEl.textContent = 'Sắp diễn ra';
+      statusEl.className = 'cd-status upcoming';
+    }
+  }
+}
+
+function startExamCountdown() {
+  if (countdownInterval) clearInterval(countdownInterval);
+  updateCountdownDisplay();
+  countdownInterval = setInterval(updateCountdownDisplay, 1000);
+}
+
+
+/* DOMContentLoaded */
+window.addEventListener('DOMContentLoaded',()=>{
+  checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();startExamCountdown();
   const savedTheme=localStorage.getItem('aurora_theme')||'light';applyTheme(savedTheme,false);
   listenCustomButtons();
   setTimeout(()=>{
@@ -4991,32 +4416,6 @@ window.addEventListener('DOMContentLoaded',()=>{ setTimeout(loadGuideVideos,1200
     try{const u=new URLSearchParams(location.search),ep=u.get('exam'),pp=u.get('practice');if(ep){document.getElementById('examModeSelect').value='live';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='live'));document.querySelector('.mode-dd-icon').innerText='🛡️';document.querySelector('.mode-dd-label').innerText='Phòng Thi Chuyên Dụng';document.getElementById('lblCodeText').innerText='Mã Bài Kiểm Tra:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Phòng Thi:';document.getElementById('studentExamCode').value=ep.toUpperCase();showToast('📱 Đã nhận mã!','info');switchView('studentLoginView');if(history.replaceState)history.replaceState({},document.title,location.pathname);}else if(pp){document.getElementById('examModeSelect').value='practice';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='practice'));document.querySelector('.mode-dd-icon').innerText='⚡';document.querySelector('.mode-dd-label').innerText='Bài Luyện Nhanh';document.getElementById('lblCodeText').innerText='Mã Bài Luyện Nhanh:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Bài Luyện:';document.getElementById('studentExamCode').value=pp.toUpperCase();showToast('📱 Đã nhận mã!','info');switchView('studentLoginView');if(history.replaceState)history.replaceState({},document.title,location.pathname);}}catch(e){}
   },900);
 });
-
-
-async function saveHomeTeachersConfig(){
-  const raw=(document.getElementById('supremeTeachersText')?.value||'').trim();
-  const list=raw.split('\n').map(l=>{
-    const p=l.split('|').map(x=>x.trim());
-    return {name:p[0]||'',subject:p[1]||'',desc:p[2]||'',avatar:p[3]||''};
-  }).filter(x=>x.name);
-  try{
-    await window.dbSet(window.ref(window.db,'system/home_teachers'),list);
-    showToast('✅ Đã lưu giáo viên','success');
-    loadHomeTeachers();
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
-}
-async function saveGuideVideosConfig(){
-  const raw=(document.getElementById('supremeGuideVideosText')?.value||'').trim();
-  const list=raw.split('\n').map(l=>{
-    const p=l.split('|').map(x=>x.trim());
-    return {title:p[0]||'Video',url:p[1]||p[0]||''};
-  }).filter(x=>x.url);
-  try{
-    await window.dbSet(window.ref(window.db,'system/guide_videos'),list);
-    showToast('✅ Đã lưu video','success');
-    loadGuideVideos();
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
-}
 
 /* INIT QUESTIONS */
 addQuestionV2('mc');addQuestionV2('tf');
