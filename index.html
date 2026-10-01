@@ -1239,6 +1239,45 @@ input,select,textarea{font-size:13px;padding:9px}
   .role-avatar-frame-preview{width:150px!important;height:150px!important}
   .role-avatar-frame-preview .raf-inner{font-size:50px!important}
 }
+
+/* ==================== COUNTDOWN (TRANG CHỦ) ==================== */
+#homeCountdownSection{position:relative;border-radius:20px;overflow:hidden;margin-bottom:18px;box-shadow:0 15px 40px rgba(24,119,242,.25);min-height:280px;padding:30px 26px;background:linear-gradient(135deg,#1877f2 0%,#6f42c1 50%,#198754 100%);color:#fff}
+#homeCountdownSection::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.25) 0%,transparent 45%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.2) 0%,transparent 45%)}
+.home-cd-header{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.home-cd-title{font-size:22px;font-weight:900;text-shadow:0 3px 12px rgba(0,0,0,.35);line-height:1.35}
+.home-cd-subtitle{font-size:13px;opacity:.9;margin-top:6px}
+.home-cd-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:640px;margin:0 auto}
+.home-cd-cell{background:rgba(255,255,255,.14);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:14px 8px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.2);transition:transform .25s}
+.home-cd-cell:hover{transform:translateY(-3px)}
+.home-cd-num{font-size:38px;font-weight:900;line-height:1;text-shadow:0 4px 14px rgba(0,0,0,.4);font-variant-numeric:tabular-nums;font-family:'Courier New',monospace}
+.home-cd-lbl{font-size:11px;margin-top:6px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;opacity:.9}
+.home-cd-actions{position:relative;z-index:1;text-align:center;margin-top:20px}
+.home-cd-actions button{display:inline-block;width:auto;padding:10px 22px;border-radius:10px;font-weight:700}
+@media(max-width:640px){.home-cd-num{font-size:26px}.home-cd-cell{padding:10px 4px}.home-cd-title{font-size:16px}}
+/* ==================== THRONE (BXH NGAI VÀNG) ==================== */
+#throneSection{margin-top:18px;background:linear-gradient(180deg,#1a0000 0%,#4a0000 60%,#1a0000 100%);border-radius:22px;padding:24px 16px;position:relative;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 0 60px rgba(255,60,60,.15)}
+#throneSection::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 20%,rgba(255,215,0,.18) 0%,transparent 55%),radial-gradient(circle at 50% 90%,rgba(165,94,234,.15) 0%,transparent 55%);pointer-events:none}
+.throne-title{text-align:center;font-size:22px;font-weight:900;background:linear-gradient(90deg,#ffd700,#ff8c00,#ffd700);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:rainbowSlide 3s linear infinite;margin-bottom:20px;letter-spacing:2px;position:relative;z-index:1}
+.throne-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:end;position:relative;z-index:1;max-width:720px;margin:0 auto}
+.throne-slot{background:rgba(0,0,0,.55);border-radius:16px;padding:14px 10px;text-align:center;border:2px solid;position:relative;transition:transform .3s}
+.throne-slot:hover{transform:translateY(-4px)}
+.throne-slot.rank1{border-color:#ffd700;box-shadow:0 0 30px #ffd700,inset 0 0 30px rgba(255,215,0,.2);grid-column:2;grid-row:1;transform:scale(1.08)}
+.throne-slot.rank2{border-color:#a55eea;box-shadow:0 0 24px #a55eea,inset 0 0 24px rgba(165,94,234,.2);grid-column:1;grid-row:1}
+.throne-slot.rank3{border-color:#4a9eff;box-shadow:0 0 22px #4a9eff,inset 0 0 22px rgba(74,158,255,.2);grid-column:3;grid-row:1}
+.throne-slot.rank1 .throne-avatar{border-color:#ffd700;box-shadow:0 0 24px #ffd700}
+.throne-slot.rank2 .throne-avatar{border-color:#a55eea;box-shadow:0 0 20px #a55eea}
+.throne-slot.rank3 .throne-avatar{border-color:#4a9eff;box-shadow:0 0 18px #4a9eff}
+.throne-avatar{width:76px;height:76px;border-radius:50%;margin:0 auto 8px auto;border:4px solid #fff;overflow:hidden;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:28px;background:#222;color:#fff}
+.throne-avatar img{width:100%;height:100%;object-fit:cover}
+.throne-name{font-size:13px;font-weight:900;color:#fff;margin-bottom:2px;word-break:break-word}
+.throne-score{font-size:11px;font-weight:700;margin-top:4px}
+.throne-crown-icon{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:30px;filter:drop-shadow(0 0 8px currentColor)}
+.throne-slot.rank1 .throne-crown-icon{color:#ffd700}
+.throne-slot.rank2 .throne-crown-icon{color:#a55eea}
+.throne-slot.rank3 .throne-crown-icon{color:#4a9eff}
+@media(max-width:600px){.throne-grid{grid-template-columns:1fr;gap:10px}.throne-slot.rank1{transform:none;grid-column:auto;grid-row:auto}}
+@keyframes rainbowSlide{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
 </style>
 </head><body>
 
@@ -1458,6 +1497,27 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="container">
 
 <div id="homeView" class="view-section active">
+  <!-- Countdown section from deepseek -->
+  <div id="homeCountdownSection">
+    <div class="home-cd-header">
+      <div>
+        <div class="home-cd-title" id="homeCdTitle">Thi Đánh Giá Năng Lực</div>
+        <div class="home-cd-subtitle" id="homeCdSubtitle">⏰ Thời gian đếm ngược đến kỳ thi tiếp theo</div>
+      </div>
+      <div style="text-align:right;font-size:13px;opacity:.95">
+        <div id="homeCdDateLabel">—</div>
+      </div>
+    </div>
+    <div class="home-cd-grid">
+      <div class="home-cd-cell"><div class="home-cd-num" id="cdDay">00</div><div class="home-cd-lbl">Ngày</div></div>
+      <div class="home-cd-cell"><div class="home-cd-num" id="cdHour">00</div><div class="home-cd-lbl">Giờ</div></div>
+      <div class="home-cd-cell"><div class="home-cd-num" id="cdMin">00</div><div class="home-cd-lbl">Phút</div></div>
+      <div class="home-cd-cell"><div class="home-cd-num" id="cdSec">00</div><div class="home-cd-lbl">Giây</div></div>
+    </div>
+    <div class="home-cd-actions">
+      <button class="btn btn-warning" style="width:auto" onclick="switchView('studentLoginView')">🚀 Vào thi ngay</button>
+    </div>
+  </div>
   <div class="home-hero">
     <h1 id="homeHeroTitle">✨ AURORA</h1>
     <p id="homeHeroSub">Hệ thống kiểm tra trực tuyến thông minh — Nơi tri thức tỏa sáng!</p>
@@ -1506,6 +1566,31 @@ input,select,textarea{font-size:13px;padding:9px}
     <div class="home-card role-devil">
       <h3>😈 DEVIL</h3>
       <div class="role-users-box" id="homeDevilsList"><p style="color:#888;font-size:12px">Chưa có</p></div>
+    </div>
+  </div>
+  <!-- NGAI VÀNG VINH DANH (BXH from deepseek) -->
+  <div id="throneSection">
+    <div class="throne-title">👑 NGAI VÀNG VINH DANH 👑</div>
+    <p style="text-align:center;color:#ffd700;font-size:12px;margin-bottom:16px;position:relative;z-index:1">Top 3 học sinh xuất sắc nhất toàn hệ thống</p>
+    <div class="throne-grid" id="throneGrid">
+      <div class="throne-slot rank2">
+        <div class="throne-crown-icon">🥈</div>
+        <div class="throne-avatar" id="throneAv2">?</div>
+        <div class="throne-name" id="throneName2" style="color:#d0a8ff">Đang tải...</div>
+        <div class="throne-score" id="throneScore2" style="color:#a55eea">0 điểm</div>
+      </div>
+      <div class="throne-slot rank1">
+        <div class="throne-crown-icon">🥇</div>
+        <div class="throne-avatar" id="throneAv1">?</div>
+        <div class="throne-name" id="throneName1" style="color:#ffd700">Đang tải...</div>
+        <div class="throne-score" id="throneScore1" style="color:#ffd700">0 điểm</div>
+      </div>
+      <div class="throne-slot rank3">
+        <div class="throne-crown-icon">🥉</div>
+        <div class="throne-avatar" id="throneAv3">?</div>
+        <div class="throne-name" id="throneName3" style="color:#9ac8ff">Đang tải...</div>
+        <div class="throne-score" id="throneScore3" style="color:#4a9eff">0 điểm</div>
+      </div>
     </div>
   </div>
 </div>
@@ -1860,6 +1945,16 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 </div>
 </div>
+
+<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>⏰ THỜI GIAN ĐẾM NGƯỢC (TRANG CHỦ)</span><span class="collapse-arrow">▼</span></div>
+<div class="collapse-body collapsed"><div style="background:#fff7e6;border:2px dashed #ffc107;padding:14px;border-radius:10px;margin-bottom:20px">
+<p style="font-size:12px;color:#856404;margin-bottom:10px">Cấu hình đồng hồ đếm ngược hiển thị ở đầu Trang Chủ (trước khi thi).</p>
+<label>Tiêu đề:</label><input type="text" id="cdTitleInput" placeholder="Thi Đánh Giá Năng Lực">
+<label>Phụ đề:</label><input type="text" id="cdSubtitleInput" placeholder="⏰ Thời gian đếm ngược đến kỳ thi tiếp theo">
+<label>Thời gian đích (Ngày & Giờ):</label>
+<div class="form-grid-2"><input type="date" id="cdDateInput" style="margin:0"><input type="time" id="cdTimeInput" style="margin:0"></div>
+<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="saveCountdownConfig()">💾 Lưu Đếm Ngược</button><button class="btn btn-secondary" style="width:auto;padding:10px 16px" onclick="resetCountdownConfig()">🔄 Reset</button></div>
+</div></div>
 
 <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>📧 CẤU HÌNH GỬI EMAIL (QUÊN MẬT KHẨU)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed"><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:10px">
@@ -3375,7 +3470,7 @@ function getBuiltinRole(u){if(!u||!u.role)return {...DEFAULT_ROLES.student};if(D
 function getUserAllRoles(u){const arr=[getBuiltinRole(u)];(u.customRoleIds||[]).forEach(id=>{if(cachedRoles[id])arr.push({id,...cachedRoles[id]});});return arr;}
 function getCurrentEffectRole(u){if(!u)return DEFAULT_ROLES.student;if(u.pinnedRoleId){if(DEFAULT_ROLES[u.pinnedRoleId])return {...DEFAULT_ROLES[u.pinnedRoleId],id:u.pinnedRoleId};if(cachedRoles[u.pinnedRoleId])return {...cachedRoles[u.pinnedRoleId],id:u.pinnedRoleId};}return getBuiltinRole(u);}
 function renderUserRoleBadges(u){return getUserAllRoles(u).map(r=>renderRoleBadge(r)).join(' ');}
-function renderRoleBadge(role,cls='user-role-badge'){if(!role)return '';const aura=role.auraEnabled?`box-shadow:0 0 8px ${role.auraColor||'#ffc107'},0 0 16px ${role.auraColor||'#ffc107'};`:'';return `<span class="${cls}" style="background:${role.bgColor};color:${role.textColor};${aura}">${role.emoji||''} ${escapeHtml(role.name||'')}</span>`;}
+function renderRoleBadge(role,cls='user-role-badge'){if(!role)return '';const aura=role.auraEnabled?`box-shadow:0 0 8px ${role.auraColor||'#ffc107'},0 0 16px ${role.auraColor||'#ffc107'};`:'';let emojiHtml=role.emoji||'';if(typeof emojiHtml==='string'&&emojiHtml.startsWith('custom:')){const cid=emojiHtml.slice(7);const ce=cachedCustomEmojis[cid];if(ce&&ce.value){if(ce.type==='image')emojiHtml=`<img src="${ce.value}" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;object-fit:contain">`;else emojiHtml=ce.value;}}return `<span class="${cls}" style="background:${role.bgColor};color:${role.textColor};${aura}">${emojiHtml} ${escapeHtml(role.name||'')}</span>`;}
 function getUserOwnedCups(u){if(!u)return[];if(Array.isArray(u.ownedCups)&&u.ownedCups.length)return u.ownedCups.slice();if(u.ownedCup)return [u.ownedCup];return [];}
 function medalIcon(md){if(!md)return '🏅';if(md.type==='cup')return '🏆';return MEDAL_ICONS[md.tier]||'🏅';}
 
@@ -3746,12 +3841,30 @@ async function removeUserAvatarBg(username){if(!await customConfirm('Xóa ảnh 
 /* ROLE/MEDAL LIST */
 function openRoleListPanel(){document.getElementById('roleListPanel').style.display='block';document.getElementById('accMgmtPanel').style.display='none';document.getElementById('medalListPanel').style.display='none';loadRoleList();}
 function closeRoleListPanel(){document.getElementById('roleListPanel').style.display='none';document.getElementById('accMgmtPanel').style.display='block';}
-async function loadRoleList(){await loadRolesCache();const c=document.getElementById('roleListContainer');const ids=Object.keys(cachedRoles);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có vai trò nào.</p>';return;}c.innerHTML=ids.map(rid=>{const r=cachedRoles[rid];const aura=r.auraEnabled?`box-shadow:0 0 10px ${r.auraColor},0 0 20px ${r.auraColor};`:'';const hasFrame=r.avatarFrame?`<span style="font-size:10px;background:#6f42c1;color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px">🖼️ FRAME</span>`:'';return `<div class="role-card"><span class="role-preview" style="background:${r.bgColor};color:${r.textColor};${aura}">${r.emoji||''} ${escapeHtml(r.name)}</span><div class="role-info">${r.auraEnabled?'✨ Aura':'Aura tắt'}${hasFrame}</div><div class="role-actions"><button style="background:#0d6efd" onclick="openRoleEditor('${rid}')">✏️</button><button style="background:#dc3545" onclick="deleteRole('${rid}')">🗑️</button></div></div>`;}).join('');}
+async function loadRoleList(){await loadRolesCache();const c=document.getElementById('roleListContainer');const ids=Object.keys(cachedRoles);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có vai trò nào.</p>';return;}c.innerHTML=ids.map(rid=>{const r=cachedRoles[rid];const aura=r.auraEnabled?`box-shadow:0 0 10px ${r.auraColor},0 0 20px ${r.auraColor};`:'';const hasFrame=r.avatarFrame?`<span style="font-size:10px;background:#6f42c1;color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px">🖼️ FRAME</span>`:'';let emojiDisp=r.emoji||'';if(typeof emojiDisp==='string'&&emojiDisp.startsWith('custom:')){const cid=emojiDisp.slice(7);const ce=cachedCustomEmojis[cid];if(ce&&ce.value){if(ce.type==='image')emojiDisp=`<img src="${ce.value}" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;object-fit:contain">`;else emojiDisp=ce.value;}}return `<div class="role-card"><span class="role-preview" style="background:${r.bgColor};color:${r.textColor};${aura}">${emojiDisp} ${escapeHtml(r.name)}</span><div class="role-info">${r.auraEnabled?'✨ Aura':'Aura tắt'}${hasFrame}</div><div class="role-actions"><button style="background:#0d6efd" onclick="openRoleEditor('${rid}')">✏️</button><button style="background:#dc3545" onclick="deleteRole('${rid}')">🗑️</button></div></div>`;}).join('');}
 function openRoleEditor(rid){currentEditingRoleId=rid||null;const r=rid&&cachedRoles[rid]?cachedRoles[rid]:{name:'',bgColor:'#6f42c1',textColor:'#ffffff',auraEnabled:false,auraColor:'#ffc107',emoji:'👑',medalId:'',avatarFrame:'',avatarFrameOffsetX:0,avatarFrameOffsetY:0,avatarFrameScale:1,avatarFrameRotation:0};document.getElementById('roleEditorTitle').innerText=rid?'✏️ Sửa Vai Trò':'🎭 Tạo Vai Trò Mới';document.getElementById('roleName').value=r.name||'';document.getElementById('roleBg').value=r.bgColor||'#6f42c1';document.getElementById('roleText').value=r.textColor||'#ffffff';document.getElementById('roleAuraEnabled').checked=!!r.auraEnabled;document.getElementById('roleAuraBox').style.display=r.auraEnabled?'block':'none';document.getElementById('roleAuraColor').value=r.auraColor||'#ffc107';const ms=document.getElementById('roleMedalId');ms.innerHTML='<option value="">Không có huy chương</option>'+Object.keys(cachedMedals).filter(id=>cachedMedals[id].type!=='cup').map(id=>`<option value="${id}" ${r.medalId===id?'selected':''}>${MEDAL_ICONS[cachedMedals[id].tier]} ${escapeHtml(cachedMedals[id].name)}</option>`).join('');selectedRoleEmoji=r.emoji||'👑';renderRoleEmojiGrid();updateRolePreview();window._currentRoleAvatarFrame=r.avatarFrame||'';window._currentRoleAvatarFrameAdj={x:r.avatarFrameOffsetX||0,y:r.avatarFrameOffsetY||0,scale:r.avatarFrameScale||1,rotation:r.avatarFrameRotation||0};updateRoleAvatarFramePreview();document.getElementById('roleEditorModal').classList.add('show');}
 function closeRoleEditor(){document.getElementById('roleEditorModal').classList.remove('show');}
-function renderRoleEmojiGrid(){document.getElementById('roleEmojiGrid').innerHTML=ROLE_EMOJIS.map(e=>`<button class="${e===selectedRoleEmoji?'selected':''}" onclick="pickRoleEmoji('${e}')">${e}</button>`).join('');}
+function renderRoleEmojiGrid(){
+  let html=ROLE_EMOJIS.map(e=>`<button class="${e===selectedRoleEmoji?'selected':''}" onclick="pickRoleEmoji('${e}')">${e}</button>`).join('');
+  // Add custom emojis (emoji-type + image-type) so they can be used for roles (including effects)
+  const customIds=Object.keys(cachedCustomEmojis||{});
+  customIds.sort((a,b)=>(cachedCustomEmojis[b].createdAt||0)-(cachedCustomEmojis[a].createdAt||0));
+  customIds.forEach(id=>{
+    const ce=cachedCustomEmojis[id];
+    if(!ce)return;
+    if(ce.type==='emoji'){
+      const selected=selectedRoleEmoji===ce.value;
+      html+=`<button class="${selected?'selected':''}" onclick="pickRoleEmoji('${ce.value}')" title="${escapeHtml(ce.name||'')}">${ce.value}</button>`;
+    }else{
+      const val='custom:'+id;
+      const selected=selectedRoleEmoji===val;
+      html+=`<button class="${selected?'selected':''}" onclick="pickRoleEmoji('${val}')" title="${escapeHtml(ce.name||'')}" style="padding:2px;overflow:hidden"><img src="${ce.value}" style="width:28px;height:28px;object-fit:contain;border-radius:4px"></button>`;
+    }
+  });
+  document.getElementById('roleEmojiGrid').innerHTML=html;
+}
 function pickRoleEmoji(e){selectedRoleEmoji=e;renderRoleEmojiGrid();updateRolePreview();}
-function updateRolePreview(){const name=document.getElementById('roleName').value||'Tên vai trò';const bg=document.getElementById('roleBg').value,txt=document.getElementById('roleText').value,aura=document.getElementById('roleAuraEnabled').checked,ac=document.getElementById('roleAuraColor').value;const el=document.getElementById('rolePreview');if(!el)return;el.style.background=bg;el.style.color=txt;el.style.boxShadow=aura?`0 0 12px ${ac},0 0 24px ${ac}`:'none';el.innerText=`${selectedRoleEmoji} ${name}`;}
+function updateRolePreview(){const name=document.getElementById('roleName').value||'Tên vai trò';const bg=document.getElementById('roleBg').value,txt=document.getElementById('roleText').value,aura=document.getElementById('roleAuraEnabled').checked,ac=document.getElementById('roleAuraColor').value;const el=document.getElementById('rolePreview');if(!el)return;el.style.background=bg;el.style.color=txt;el.style.boxShadow=aura?`0 0 12px ${ac},0 0 24px ${ac}`:'none';let emojiHtml=selectedRoleEmoji||'';if(typeof emojiHtml==='string'&&emojiHtml.startsWith('custom:')){const cid=emojiHtml.slice(7);const ce=cachedCustomEmojis[cid];if(ce&&ce.value){if(ce.type==='image')emojiHtml=`<img src="${ce.value}" style="width:18px;height:18px;vertical-align:middle;border-radius:3px;object-fit:contain">`;else emojiHtml=ce.value;}}el.innerHTML=`${emojiHtml} ${escapeHtml(name)}`;}
 document.addEventListener('input',e=>{if(['roleName','roleBg','roleText','roleAuraColor'].includes(e.target.id))updateRolePreview();});
 document.addEventListener('change',e=>{if(e.target.id==='roleAuraEnabled'){document.getElementById('roleAuraBox').style.display=e.target.checked?'block':'none';updateRolePreview();}});
 async function saveRole(){const name=document.getElementById('roleName').value.trim();if(!name){showToast('Nhập tên vai trò!','error');return;}const adj=window._currentRoleAvatarFrameAdj||{x:0,y:0,scale:1,rotation:0};const data={name,bgColor:document.getElementById('roleBg').value,textColor:document.getElementById('roleText').value,auraEnabled:document.getElementById('roleAuraEnabled').checked,auraColor:document.getElementById('roleAuraColor').value,emoji:selectedRoleEmoji,medalId:document.getElementById('roleMedalId').value,avatarFrame:window._currentRoleAvatarFrame||'',avatarFrameOffsetX:adj.x||0,avatarFrameOffsetY:adj.y||0,avatarFrameScale:adj.scale||1,avatarFrameRotation:adj.rotation||0,updatedAt:Date.now()};try{const rid=currentEditingRoleId||('role_'+Date.now());if(!currentEditingRoleId)data.createdAt=Date.now();await window.dbSet(window.ref(window.db,`system/roles/${rid}`),data);cachedRoles[rid]=data;showToast('✅ Đã lưu!','success');closeRoleEditor();loadRoleList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
@@ -4698,7 +4811,7 @@ async function loadLeaderboard(){const code=document.getElementById('searchLbCod
 async function viewLeaderboardProfile(username){if(!username){showToast('Không có username!','error');return;}let u=cachedUsers[username];if(!u){try{const s=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));if(s.exists()){u=s.val();cachedUsers[username]=u;}}catch(e){}}if(!u){showToast('❌ Không tìm thấy user!','error');return;}await loadRolesCache();await loadMedalsCache();openProfile(null,u);}
 function toggleLbDetail(id){const el=document.getElementById(id),b=el.previousElementSibling;if(el.style.display==='block'){el.style.display='none';b.innerText='>';}else{el.style.display='block';b.innerText='v';}}
 function switchLBSubTab(tab,el){document.querySelectorAll('#leaderboardView .supreme-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('lbSubExam').style.display=tab==='exam'?'block':'none';document.getElementById('lbSubServer').style.display=tab==='server'?'block':'none';if(tab==='server')startServerLBListener();else{if(serverLBListener){try{serverLBListener();}catch(e){}serverLBListener=null;}if(serverLBQpListener){try{serverLBQpListener();}catch(e){}serverLBQpListener=null;}}}
-function renderServerLB(lbData,qpData){const byUser={};const process=data=>{if(!data||typeof data!=='object')return;Object.values(data).forEach(examData=>{if(!examData||typeof examData!=='object')return;Object.values(examData).forEach(rec=>{if(!rec||!rec.username)return;if(!cachedUsers[rec.username])return;if(!byUser[rec.username])byUser[rec.username]={username:rec.username,nickname:(cachedUsers[rec.username].nickname||rec.nickname||rec.username),total:0,count:0};byUser[rec.username].total+=(rec.score||0);byUser[rec.username].count+=1;});});};process(lbData);process(qpData);const arr=Object.values(byUser).map(u=>({...u,avg:u.count>0?u.total/u.count:0}));arr.sort((a,b)=>b.total-a.total||b.count-a.count);const tb=document.getElementById('serverLBTableBody');if(!tb)return;if(!arr.length){tb.innerHTML='<tr><td colspan="6" style="color:#888;padding:20px">Chưa có dữ liệu thành tích</td></tr>';return;}tb.innerHTML=arr.map((u,i)=>{const profileBtn=`<button class="btn btn-success" style="padding:2px 8px;font-size:11px;width:auto" onclick="viewLeaderboardProfile('${u.username}')">👤</button>`;const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);return `<tr><td><b style="font-size:15px">${medal}</b></td><td><b>${escapeHtml(u.nickname)}</b><br><small style="color:#888;font-size:10px">@${escapeHtml(u.username)}</small></td><td><b style="color:#1877f2;font-size:14px">${u.total.toFixed(2)}</b></td><td>${u.count}</td><td><b style="color:#198754">${u.avg.toFixed(2)}</b></td><td>${profileBtn}</td></tr>`;}).join('');}
+function renderServerLB(lbData,qpData){const byUser={};const process=data=>{if(!data||typeof data!=='object')return;Object.values(data).forEach(examData=>{if(!examData||typeof examData!=='object')return;Object.values(examData).forEach(rec=>{if(!rec||!rec.username)return;if(!cachedUsers[rec.username])return;if(!byUser[rec.username])byUser[rec.username]={username:rec.username,nickname:(cachedUsers[rec.username].nickname||rec.nickname||rec.username),total:0,count:0};byUser[rec.username].total+=(rec.score||0);byUser[rec.username].count+=1;});});};process(lbData);process(qpData);const arr=Object.values(byUser).map(u=>({...u,avg:u.count>0?u.total/u.count:0}));arr.sort((a,b)=>b.total-a.total||b.count-a.count);const tb=document.getElementById('serverLBTableBody');if(!tb)return;if(!arr.length){tb.innerHTML='<tr><td colspan="6" style="color:#888;padding:20px">Chưa có dữ liệu thành tích</td></tr>';return;}tb.innerHTML=arr.map((u,i)=>{const profileBtn=`<button class="btn btn-success" style="padding:2px 8px;font-size:11px;width:auto" onclick="viewLeaderboardProfile('${u.username}')">👤</button>`;const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);return `<tr><td><b style="font-size:15px">${medal}</b></td><td><b>${escapeHtml(u.nickname)}</b><br><small style="color:#888;font-size:10px">@${escapeHtml(u.username)}</small></td><td><b style="color:#1877f2;font-size:14px">${u.total.toFixed(2)}</b></td><td>${u.count}</td><td><b style="color:#198754">${u.avg.toFixed(2)}</b></td><td>${profileBtn}</td></tr>`;}).join('');try{renderThroneFromServerLB(arr);}catch(e){}}
 function startServerLBListener(){const tb=document.getElementById('serverLBTableBody');if(tb)tb.innerHTML='<tr><td colspan="6" style="color:#888;padding:18px">⏳ Đang tải dữ liệu...</td></tr>';if(serverLBListener){try{serverLBListener();}catch(e){}serverLBListener=null;}if(serverLBQpListener){try{serverLBQpListener();}catch(e){}serverLBQpListener=null;}let lbCache=null,qpCache=null;const tryRender=()=>{if(lbCache!==null&&qpCache!==null){renderServerLB(lbCache,qpCache);}};window.dbGet(window.dbChild(window.dbRef,'users')).then(s=>{cachedUsers=s.val()||{};});serverLBListener=window.onValue(window.ref(window.db,'leaderboard'),s=>{lbCache=s.val()||{};tryRender();});serverLBQpListener=window.onValue(window.ref(window.db,'qp_leaderboard'),s=>{qpCache=s.val()||{};tryRender();});}
 async function resetServerLB(){const vua=await customPrompt('Nhập mật khẩu VUA để RESET toàn bộ BXH:',{icon:'🔄',title:'Xác thực VUA',inputType:'password'});if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu VUA!','error');return;}if(!await customConfirm('Bạn CÓ CHẮC CHẮN muốn RESET TOÀN BỘ BXH?',{icon:'💥',title:'XÁC NHẬN',okClass:'danger',okText:'RESET NGAY'}))return;try{await window.dbRemove(window.ref(window.db,'leaderboard'));await window.dbRemove(window.ref(window.db,'qp_leaderboard'));showCenterSquareToast('🔄','Đã reset!','Toàn bộ BXH đã được reset về 0','success',4000);}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function deleteServerUserStats(){const username=await customPrompt('Nhập ID của người cần xóa thành tích:',{icon:'🗑️',title:'Xóa thành tích',placeholder:'VD: user123'});if(!username)return;const vua=await customPrompt('Nhập mật khẩu VUA để xác nhận:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}if(!await customConfirm(`Xóa toàn bộ thành tích của "${username}"?`,{icon:'🗑️',title:'XÁC NHẬN',okClass:'danger',okText:'XÓA'}))return;try{let deleted=0;for(const path of ['leaderboard','qp_leaderboard']){const snap=await window.dbGet(window.dbChild(window.dbRef,path));if(!snap.exists())continue;const data=snap.val();for(const code of Object.keys(data)){const records=data[code]||{};for(const key of Object.keys(records)){if(records[key].username===username){await window.dbRemove(window.ref(window.db,`${path}/${code}/${key}`));deleted++;}}}}if(deleted===0)showToast('⚠️ Không tìm thấy!','warn');else showCenterSquareToast('🗑️','Đã xóa!',`${deleted} bản ghi`,'success',4000);}catch(e){showToast('❌ '+(e.message||e),'error');}}
@@ -5161,6 +5274,120 @@ async function saveSafeAreaCalibration(){
 /* CONTEXTMENU LOCK */
 (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),c=e.ctrlKey||e.metaKey,sh=e.shiftKey;if(k==='f12'||(c&&k==='u')||(c&&sh&&['i','j','c','k'].includes(k))||(c&&k==='s')||(c&&k==='p')){e.preventDefault();e.stopPropagation();return false;}if(c&&k==='a'){const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable){e.preventDefault();return false;}}},true);document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('copy',e=>{const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable)e.preventDefault();});})();
 
+
+/* ==================== COUNTDOWN (from deepseek) ==================== */
+let countdownTimerInterval=null;
+let currentCountdownConfig={title:'Thi Đánh Giá Năng Lực',subtitle:'⏰ Thời gian đếm ngược đến kỳ thi tiếp theo',targetTs:0};
+
+function listenCountdownConfig(){
+  window.onValue(window.ref(window.db,'system/countdown_config'),snap=>{
+    const cfg=snap.val()||{};
+    currentCountdownConfig={
+      title:cfg.title||'Thi Đánh Giá Năng Lực',
+      subtitle:cfg.subtitle||'⏰ Thời gian đếm ngược đến kỳ thi tiếp theo',
+      targetTs:cfg.targetTs||0
+    };
+    applyCountdownConfig();
+    startCountdownTick();
+    // Fill admin inputs if present
+    try{
+      if(document.getElementById('cdTitleInput')&&document.activeElement!==document.getElementById('cdTitleInput'))document.getElementById('cdTitleInput').value=currentCountdownConfig.title;
+      if(document.getElementById('cdSubtitleInput')&&document.activeElement!==document.getElementById('cdSubtitleInput'))document.getElementById('cdSubtitleInput').value=currentCountdownConfig.subtitle;
+      if(currentCountdownConfig.targetTs){
+        const d=new Date(currentCountdownConfig.targetTs);
+        if(document.getElementById('cdDateInput'))document.getElementById('cdDateInput').value=d.toISOString().slice(0,10);
+        if(document.getElementById('cdTimeInput'))document.getElementById('cdTimeInput').value=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+      }
+    }catch(e){}
+  });
+}
+function applyCountdownConfig(){
+  const t=document.getElementById('homeCdTitle');if(t)t.innerText=currentCountdownConfig.title;
+  const s=document.getElementById('homeCdSubtitle');if(s)s.innerText=currentCountdownConfig.subtitle;
+  const dl=document.getElementById('homeCdDateLabel');
+  if(dl){
+    if(currentCountdownConfig.targetTs){
+      const d=new Date(currentCountdownConfig.targetTs);
+      dl.innerText=d.toLocaleString('vi-VN',{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    }else dl.innerText='Chưa đặt thời gian';
+  }
+}
+function startCountdownTick(){
+  if(countdownTimerInterval)clearInterval(countdownTimerInterval);
+  const tick=()=>{
+    const now=Date.now();
+    let diff=Math.max(0,(currentCountdownConfig.targetTs||0)-now);
+    const days=Math.floor(diff/86400000);diff%=86400000;
+    const hours=Math.floor(diff/3600000);diff%=3600000;
+    const mins=Math.floor(diff/60000);diff%=60000;
+    const secs=Math.floor(diff/1000);
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.innerText=String(v).padStart(2,'0');};
+    set('cdDay',days);set('cdHour',hours);set('cdMin',mins);set('cdSec',secs);
+  };
+  tick();
+  countdownTimerInterval=setInterval(tick,1000);
+}
+async function saveCountdownConfig(){
+  const title=(document.getElementById('cdTitleInput')?.value||'').trim()||'Thi Đánh Giá Năng Lực';
+  const subtitle=(document.getElementById('cdSubtitleInput')?.value||'').trim()||'⏰ Thời gian đếm ngược đến kỳ thi tiếp theo';
+  const dateStr=document.getElementById('cdDateInput')?.value||'';
+  const timeStr=document.getElementById('cdTimeInput')?.value||'00:00';
+  let targetTs=0;
+  if(dateStr){
+    const [y,m,d]=dateStr.split('-').map(Number);
+    const [hh,mm]=(timeStr||'00:00').split(':').map(Number);
+    targetTs=new Date(y,m-1,d,hh||0,mm||0,0).getTime();
+  }
+  try{
+    await window.dbSet(window.ref(window.db,'system/countdown_config'),{title,subtitle,targetTs,updatedAt:Date.now()});
+    showToast('💾 Đã lưu đếm ngược!','success');
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+async function resetCountdownConfig(){
+  try{
+    await window.dbRemove(window.ref(window.db,'system/countdown_config'));
+    showToast('🔄 Đã reset đếm ngược!','warn');
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+
+/* ==================== THRONE BXH (from deepseek) ==================== */
+function renderThroneFromServerLB(arr){
+  // arr sorted by total desc, take top 3
+  const top=arr.slice(0,3);
+  const slots=[
+    {rank:1,av:'throneAv1',name:'throneName1',score:'throneScore1'},
+    {rank:2,av:'throneAv2',name:'throneName2',score:'throneScore2'},
+    {rank:3,av:'throneAv3',name:'throneName3',score:'throneScore3'}
+  ];
+  slots.forEach((s,i)=>{
+    const u=top[i];
+    const avEl=document.getElementById(s.av);
+    const nameEl=document.getElementById(s.name);
+    const scoreEl=document.getElementById(s.score);
+    if(!avEl||!nameEl||!scoreEl)return;
+    if(!u){
+      avEl.innerHTML='?';
+      nameEl.innerText='—';
+      scoreEl.innerText='0 điểm';
+      return;
+    }
+    const nick=u.nickname||u.username||'?';
+    const userObj=cachedUsers[u.username]||{};
+    if(userObj.avatar){
+      avEl.innerHTML=`<img src="${userObj.avatar}" alt="">`;
+    }else{
+      avEl.innerText=(nick.charAt(0)||'?').toUpperCase();
+    }
+    nameEl.innerText=nick;
+    scoreEl.innerText=(u.total||0).toFixed(2)+' điểm';
+    // click to profile
+    avEl.style.cursor='pointer';
+    avEl.onclick=()=>{if(u.username)viewLeaderboardProfile(u.username);};
+  });
+}
+// Hook into existing renderServerLB to also update throne
+const _origRenderServerLB=typeof renderServerLB==='function'?renderServerLB:null;
+
 /* DOMContentLoaded */
 window.addEventListener('DOMContentLoaded',()=>{
   checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();
@@ -5170,7 +5397,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(!window.db)return;
     loadSecurityPasswords();loadWelcomeConfig();loadWebConfig();loadDocLibrary();loadRolesCache();loadMedalsCache();loadEmailJSConfigFromDB();
     loadCustomEmojis();
-    listenOnlineUsers();listenAllUsersCount();listenHomeConfig();listenBigNotifications();listenQuizSheets();listenPrankEffects();listenGlobalBroadcast();listenGlobalAudio();startThemeListener();
+    listenOnlineUsers();listenAllUsersCount();listenHomeConfig();listenCountdownConfig();listenBigNotifications();listenQuizSheets();listenPrankEffects();listenGlobalBroadcast();listenGlobalAudio();startThemeListener();try{startServerLBListener();}catch(e){};
     listenRoomAnnounceConfig();
     window.onValue(window.ref(window.db,'users'),snap=>{if(snap.exists()){cachedUsers=snap.val();renderHomeRoleUsers();}});
     try{const u=new URLSearchParams(location.search),ep=u.get('exam'),pp=u.get('practice');if(ep){document.getElementById('examModeSelect').value='live';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='live'));document.querySelector('.mode-dd-icon').innerText='🛡️';document.querySelector('.mode-dd-label').innerText='Phòng Thi Chuyên Dụng';document.getElementById('lblCodeText').innerText='Mã Bài Kiểm Tra:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Phòng Thi:';document.getElementById('studentExamCode').value=ep.toUpperCase();showToast('📱 Đã nhận mã!','info');switchView('studentLoginView');if(history.replaceState)history.replaceState({},document.title,location.pathname);}else if(pp){document.getElementById('examModeSelect').value='practice';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='practice'));document.querySelector('.mode-dd-icon').innerText='⚡';document.querySelector('.mode-dd-label').innerText='Bài Luyện Nhanh';document.getElementById('lblCodeText').innerText='Mã Bài Luyện Nhanh:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Bài Luyện:';document.getElementById('studentExamCode').value=pp.toUpperCase();showToast('📱 Đã nhận mã!','info');switchView('studentLoginView');if(history.replaceState)history.replaceState({},document.title,location.pathname);}}catch(e){}
@@ -5183,3 +5410,4 @@ initEcCreatePanel();
 </script>
 </body>
 </html>
+
