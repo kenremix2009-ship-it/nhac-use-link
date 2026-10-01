@@ -1024,32 +1024,68 @@ input,select,textarea{font-size:13px;padding:9px}
 .aurora-nav-btn .aurora-overlay{padding:6px 10px}
 #roomAnnounceMarquee .ra-track{font-size:14px;}
 }
-/* ============ EMOJI EFFECTS MANAGEMENT ============ */
-.effect-sub-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;background:#f8f9fa;padding:6px;border-radius:12px}
-.effect-sub-tab{flex:1;min-width:140px;padding:12px 16px;background:#fff;border:2px solid transparent;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px;color:#555;text-align:center;transition:all .25s}
-.effect-sub-tab.active{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border-color:#1877f2;box-shadow:0 6px 20px rgba(24,119,242,.35)}
-.emoji-mgmt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}
-.emoji-mgmt-card{background:#fff;border:2px solid #e0e0e0;border-radius:12px;padding:10px;text-align:center;position:relative;transition:all .2s}
-.emoji-mgmt-card:hover{border-color:#1877f2;box-shadow:0 4px 14px rgba(24,119,242,.15)}
-.emoji-mgmt-thumb{font-size:38px;line-height:1;margin-bottom:6px;height:64px;display:flex;align-items:center;justify-content:center}
-.emoji-mgmt-thumb img{max-width:100%;max-height:64px;object-fit:contain}
-.emoji-mgmt-name{font-size:12px;font-weight:bold;color:#333;word-break:break-word;margin-bottom:8px;min-height:30px}
-.emoji-mgmt-actions{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
-.emoji-mgmt-actions button{padding:5px 6px;font-size:10px;border-radius:6px;border:none;cursor:pointer;font-weight:bold;color:#fff;flex:1;min-width:0}
-.emoji-source-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.emoji-source-tab{padding:8px 14px;border:2px solid #e0e0e0;background:#fff;border-radius:8px;cursor:pointer;font-weight:bold;font-size:12px}
-.emoji-source-tab.active{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border-color:#1877f2}
-#emojiTrimWrap{position:relative;display:inline-block;max-width:100%;background:#f0f0f0;padding:10px;border-radius:10px;border:2px dashed #1877f2;margin:0 auto;display:block;text-align:center}
-#emojiTrimCanvas{max-width:100%;display:block;cursor:crosshair;border-radius:8px;margin:0 auto;background-image:linear-gradient(45deg,#ddd 25%,transparent 25%),linear-gradient(-45deg,#ddd 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ddd 75%),linear-gradient(-45deg,transparent 75%,#ddd 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0px}
-.emoji-effect-item{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:8px;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.calibration-stage{position:relative;width:100%;max-width:400px;aspect-ratio:1/1;margin:14px auto;background:linear-gradient(135deg,#e7f3ff,#f0f8ff);border-radius:50%;border:3px solid #1877f2;overflow:hidden;cursor:grab;touch-action:none;box-shadow:0 8px 24px rgba(24,119,242,.2)}
-.calibration-stage:active{cursor:grabbing}
-.calibration-layer{position:absolute;top:50%;left:50%;pointer-events:none;max-width:none}
-.calibration-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(24,119,242,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(24,119,242,.15) 1px,transparent 1px);background-size:10% 10%}
-.calibration-safe-area{position:absolute;top:10%;left:10%;right:10%;bottom:10%;border:2px dashed rgba(220,53,69,.5);border-radius:8px;pointer-events:none}
-.role-frame-preview{position:relative;width:120px;height:120px;margin:10px auto;border-radius:50%;background:#e7f3ff;display:flex;align-items:center;justify-content:center;overflow:visible}
-.role-frame-preview .inner-avt{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1877f2,#198754);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:32px}
-.role-frame-preview .frame-img{position:absolute;inset:-10%;width:120%;height:120%;object-fit:contain;pointer-events:none;z-index:5}
+/* ============ EMOJI EFFECTS CONFIG + SAFEAREA + ROLE AVATAR FRAME (NEW) ============ */
+.emoji-config-tabbar{display:flex;gap:6px;background:#f8f9fa;padding:6px;border-radius:12px;margin-bottom:14px}
+.emoji-config-tabbar .ec-tab{flex:1;padding:10px 12px;border-radius:10px;border:2px solid transparent;background:#fff;cursor:pointer;font-weight:700;font-size:13px;text-align:center;color:#555;transition:all .25s}
+.emoji-config-tabbar .ec-tab.active{background:linear-gradient(135deg,#6f42c1,#5a32a3);color:#fff;border-color:#6f42c1}
+.ec-mode-switcher{display:flex;gap:6px;background:#f8f9fa;padding:4px;border-radius:10px;margin-bottom:12px}
+.ec-mode-switcher button{flex:1;padding:9px 10px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-weight:700;font-size:12px;color:#666}
+.ec-mode-switcher button.active{background:#fff;color:#1877f2;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.ec-emoji-picker{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;max-height:220px;overflow-y:auto;padding:8px;background:#f8f9fa;border-radius:10px;margin-bottom:10px}
+.ec-emoji-picker button{padding:6px 2px;border:2px solid #e0e0e0;background:#fff;border-radius:8px;font-size:20px;cursor:pointer;transition:all .15s}
+.ec-emoji-picker button.selected{border-color:#6f42c1;background:#f0ebff;transform:scale(1.05)}
+.ec-img-preview{position:relative;width:220px;height:220px;margin:10px auto;background:repeating-conic-gradient(#eee 0 25%,#fff 0 50%) 50%/20px 20px;border-radius:12px;border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:crosshair}
+.ec-img-preview canvas{max-width:100%;max-height:100%;touch-action:none}
+.ec-shape-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px 0}
+.ec-shape-btn{padding:8px 12px;border:2px solid #e0e0e0;background:#fff;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;color:#555;display:flex;align-items:center;gap:6px}
+.ec-shape-btn.active{border-color:#6f42c1;background:#f0ebff;color:#6f42c1}
+.ec-shape-dot{width:20px;height:20px;background:linear-gradient(135deg,#6f42c1,#a55eea);display:inline-block}
+.ec-shape-dot.circle{border-radius:50%}
+.ec-shape-dot.rounded{border-radius:6px}
+.ec-shape-dot.square{border-radius:0}
+.ec-shape-dot.star{clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.ec-shape-dot.hex{clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}
+.ec-list-item{display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border:1px solid #e0e0e0;border-radius:10px;margin-bottom:8px;flex-wrap:wrap}
+.ec-list-preview{width:48px;height:48px;flex-shrink:0;border-radius:10px;background:#f8f9fa;display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;border:1px solid #eee}
+.ec-list-preview img{width:100%;height:100%;object-fit:contain}
+.ec-list-info{flex:1;min-width:140px}
+.ec-list-name{font-weight:bold;font-size:14px;color:#333}
+.ec-list-meta{font-size:11px;color:#888;margin-top:2px}
+.ec-list-actions{display:flex;gap:5px;flex-wrap:wrap}
+.ec-list-actions button{border:none;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:#fff}
+#safeAreaCalibrationModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);display:none;justify-content:center;align-items:center;z-index:9999999999;padding:15px;backdrop-filter:blur(8px);overflow-y:auto}
+#safeAreaCalibrationModal.show{display:flex}
+.safearea-box{background:#fff;border-radius:20px;padding:22px;max-width:760px;width:100%;max-height:92vh;overflow-y:auto;margin:auto}
+.safearea-stage{position:relative;width:100%;height:400px;background:linear-gradient(135deg,#f0f2f5,#e7f3ff);border-radius:12px;border:2px dashed #1877f2;overflow:hidden;margin:15px 0;touch-action:none;cursor:default}
+.safearea-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(24,119,242,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(24,119,242,.08) 1px,transparent 1px);background-size:20px 20px}
+.safearea-safe-zone{position:absolute;inset:8% 8%;border:2px dashed #198754;border-radius:8px;pointer-events:none}
+.safearea-safe-zone::before{content:'SAFE AREA';position:absolute;top:4px;left:8px;font-size:10px;color:#198754;font-weight:900;letter-spacing:1.5px}
+.safearea-center-line{position:absolute;top:50%;left:0;right:0;border-top:1px dashed rgba(24,119,242,.4);pointer-events:none}
+.safearea-center-line.vertical{top:0;bottom:0;left:50%;right:auto;border-top:none;border-left:1px dashed rgba(24,119,242,.4)}
+.safearea-fx-el{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:60px;cursor:grab;user-select:none;touch-action:none;z-index:5;line-height:1;pointer-events:auto}
+.safearea-fx-el:active{cursor:grabbing}
+.safearea-fx-el img{max-width:100%;max-height:100%;display:block;pointer-events:none}
+.safearea-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.safearea-controls label{font-size:11px}
+.safearea-controls input[type="range"]{padding:0;margin:4px 0 6px 0}
+.role-avatar-frame-preview{position:relative;width:240px;height:240px;margin:14px auto;border-radius:50%;background:linear-gradient(135deg,#e7f3ff,#f0f8ff);overflow:visible}
+.role-avatar-frame-preview .raf-inner{position:absolute;inset:0;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:80px;font-weight:900;color:#1877f2;background:#e7f3ff}
+.role-avatar-frame-preview .raf-inner img{width:100%;height:100%;object-fit:cover}
+.role-avatar-frame-preview .raf-frame{position:absolute;inset:-12%;background-size:contain;background-position:center;background-repeat:no-repeat;pointer-events:none;z-index:8}
+/* Modal "Calibration Screen" (HUD Editor) */
+.hud-editor-stage{position:relative;width:100%;height:420px;background:linear-gradient(135deg,#1a1d24,#252931);border-radius:14px;overflow:hidden;margin:14px 0;touch-action:none}
+.hud-editor-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(74,158,255,.15),transparent 70%)}
+.hud-editor-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(74,158,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(74,158,255,.12) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hud-editor-safe{position:absolute;inset:10% 10%;border:2px dashed #ffc107;border-radius:10px;pointer-events:none}
+.hud-editor-safe::before{content:'SAFE AREA';position:absolute;top:6px;left:8px;font-size:10px;color:#ffc107;font-weight:900;letter-spacing:1.5px}
+.hud-editor-hud{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(4px);color:#fff;font-size:12px;text-align:center;cursor:grab;user-select:none;touch-action:none;z-index:5}
+.hud-editor-hud:active{cursor:grabbing}
+.hud-editor-hud .hud-icon{font-size:52px;line-height:1;margin-bottom:6px}
+.hud-editor-hud .hud-label{font-weight:900;letter-spacing:1px}
+.hud-editor-hud .hud-sub{font-size:10px;opacity:.7;margin-top:4px}
+.hud-editor-mock-profile{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;border-radius:50%;background:linear-gradient(135deg,#4a9eff,#a55eea);display:flex;align-items:center;justify-content:center;color:#fff;font-size:56px;font-weight:900;z-index:2;pointer-events:none}
+.hud-editor-mock-profile::after{content:'';position:absolute;inset:-8px;border:3px solid rgba(255,255,255,.4);border-radius:50%}
+.ec-effect-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:10px;background:#e7f3ff;color:#1877f2;font-size:10px;font-weight:700;margin-top:4px}
 </style>
 </head><body>
 
@@ -1069,20 +1105,38 @@ input,select,textarea{font-size:13px;padding:9px}
 <div id="medalPickerModal" class="modal-overlay z-top"><div class="medal-picker-box"><div class="modal-header"><h3>🏅 Chọn Huy Chương / 🏆 Cup</h3><button class="close-btn" onclick="closeMedalPicker()">✖</button></div><p style="font-size:12px;color:#666;margin-bottom:8px">Chọn huy chương/cup muốn gắn vào profile:</p><div class="medal-grid" id="medalPickerGrid"></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-secondary" onclick="closeMedalPicker()">Đóng</button><button class="btn btn-success" onclick="confirmMedalPick()">💾 Lưu Lựa Chọn</button></div></div></div>
 
 <div id="roleEditorModal" class="modal-overlay"><div class="role-editor-box"><h3 id="roleEditorTitle">🎭 Tạo Vai Trò Mới</h3><label>Tên vai trò:</label><input type="text" id="roleName" placeholder="VD: Trùm cuối, Siêu sao..."><div class="form-grid-2"><div><label>Màu nền:</label><input type="color" id="roleBg" value="#1877f2" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div><div><label>Màu chữ:</label><input type="color" id="roleText" value="#ffffff" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div></div><label style="margin-top:8px"><input type="checkbox" id="roleAuraEnabled" style="width:16px;height:16px"> ✨ Bật hiệu ứng Aura</label><div id="roleAuraBox" style="display:none;margin-top:6px"><label>Màu Aura:</label><input type="color" id="roleAuraColor" value="#ffc107" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div><label style="margin-top:12px">🎭 Emoji vai trò:</label><div class="role-emoji-grid" id="roleEmojiGrid"></div><label style="margin-top:12px">🏅 Huy chương đi kèm (tùy chọn):</label><select id="roleMedalId" style="margin:0"><option value="">Không có</option></select>
-<div class="section-divider" style="margin-top:16px"><span>🖼️ Khung Avatar Vai Trò</span></div>
-<label>Upload khung avatar (.png, .jpg, .jpeg, .webp, .svg, .gif, .apng, .json):</label>
-<input type="file" id="roleAvatarFrameInput" accept="image/*,.json" onchange="handleRoleFrameUpload(this)" style="padding:6px;background:#fff">
-<div id="roleFramePreviewBox" style="text-align:center;margin:10px 0;display:none">
-  <div class="role-frame-preview">
-    <div class="inner-avt">?</div>
-    <img class="frame-img" id="roleFramePreviewImg" alt="">
+<div style="border-top:2px dashed #6f42c1;margin-top:14px;padding-top:12px">
+  <div style="font-weight:900;color:#6f42c1;font-size:13px;margin-bottom:8px">🖼️ KHUNG AVATAR CHO VAI TRÒ</div>
+  <div class="role-avatar-frame-preview" id="roleAvatarFramePreview">
+    <div class="raf-inner" id="rafInner">?</div>
+    <div class="raf-frame" id="rafFrame"></div>
   </div>
-</div>
-<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-  <button class="btn btn-warning" style="width:auto;padding:8px 14px;font-size:13px" onclick="removeRoleFrame()" id="roleRemoveFrameBtn">🗑️ Xóa Khung</button>
-  <button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:13px" onclick="openRoleAvatarCalibration()" id="roleCalibrateBtn">🎯 Căn Chỉnh Avatar</button>
+  <label for="roleAvatarFrameInput" class="btn btn-secondary" style="display:inline-block;width:auto;padding:8px 14px;font-size:12px;cursor:pointer;margin-right:6px">📤 Thêm khung</label>
+  <input type="file" id="roleAvatarFrameInput" accept="image/*" style="display:none" onchange="handleRoleAvatarFrameUpload(this)">
+  <button class="btn btn-warning" style="width:auto;padding:8px 14px;font-size:12px;color:#000;margin-right:6px" onclick="openRoleAvatarAdjust()">🎛️ Căn chỉnh</button>
+  <button class="btn btn-danger" style="width:auto;padding:8px 14px;font-size:12px" onclick="removeRoleAvatarFrame()">🗑️ Xóa khung</button>
+  <div style="font-size:11px;color:#888;margin-top:8px;line-height:1.5">Định dạng: .png, .jpg, .jpeg, .webp, .svg, .gif, .apng, .json. Hỗ trợ Safe Area / UI Scale.</div>
 </div>
 <div style="text-align:center;padding:16px;margin-top:14px;background:#f8f9fa;border-radius:12px"><div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC:</div><span id="rolePreview" class="role-preview" style="font-size:14px"></span></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-secondary" onclick="closeRoleEditor()">Hủy</button><button class="btn btn-success" onclick="saveRole()">💾 Lưu Vai Trò</button></div></div></div>
+
+<div id="roleAvatarAdjustModal" class="modal-overlay"><div class="modal-box" style="max-width:620px"><div class="modal-header"><h3>🎛️ Căn Chỉnh Khung Avatar (HUD Customizer)</h3><button class="close-btn" onclick="closeRoleAvatarAdjust()">✖</button></div><p style="font-size:12px;color:#666;margin-bottom:8px">Kéo thả để di chuyển khung. Dùng thanh trượt để scale / xoay / chỉnh opacity.</p>
+<div class="hud-editor-stage" id="roleAvatarAdjustStage">
+  <div class="hud-editor-bg"></div>
+  <div class="hud-editor-grid"></div>
+  <div class="hud-editor-safe"></div>
+  <div class="hud-editor-mock-profile" id="hudMockAvatar">?</div>
+  <div class="hud-editor-hud" id="hudRoleFrame" style="padding:0;background:transparent;border:none;backdrop-filter:none">
+    <div id="hudRoleFrameInner" style="width:220px;height:220px;background-size:contain;background-position:center;background-repeat:no-repeat;pointer-events:none"></div>
+  </div>
+</div>
+<div class="safearea-controls">
+  <div><label>↔️ X: <span id="rafXVal">0</span></label><input type="range" id="rafRangeX" min="-150" max="150" value="0" oninput="updateRoleAvatarAdjust()"></div>
+  <div><label>↕️ Y: <span id="rafYVal">0</span></label><input type="range" id="rafRangeY" min="-150" max="150" value="0" oninput="updateRoleAvatarAdjust()"></div>
+  <div><label>🔍 Scale: <span id="rafScaleVal">1.00</span></label><input type="range" id="rafRangeScale" min="0.4" max="2.5" step="0.01" value="1" oninput="updateRoleAvatarAdjust()"></div>
+  <div><label>🔄 Xoay: <span id="rafRotVal">0</span>°</label><input type="range" id="rafRangeRot" min="-180" max="180" value="0" oninput="updateRoleAvatarAdjust()"></div>
+</div>
+<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-secondary" onclick="closeRoleAvatarAdjust()">Hủy</button><button class="btn btn-warning" style="color:#000" onclick="resetRoleAvatarAdjust()">🔄 Reset</button><button class="btn btn-success" onclick="saveRoleAvatarAdjust()">💾 Lưu căn chỉnh</button></div>
+</div></div>
 
 <div id="medalEditorModal" class="modal-overlay"><div class="modal-box" style="max-width:520px"><div class="modal-header"><h3 id="medalEditorTitle">🏅 Tạo Huy Chương</h3><button class="close-btn" onclick="closeMedalEditor()">✖</button></div><label>Loại:</label><select id="medalType" onchange="updateMedalTypeFields()"><option value="medal">🏅 Huy Chương</option><option value="cup">🏆 Cup</option></select><label>Tên:</label><input type="text" id="medalName" placeholder="VD: Huy chương Toán"><label>Bậc:</label><select id="medalTier"><option value="bronze">🥉 Đồng</option><option value="silver">🥈 Bạc</option><option value="gold" selected>🥇 Vàng</option><option value="platinum">💠 Bạch Kim</option><option value="diamond">💎 Kim Cương</option><option value="supreme">👑 Tối Thượng</option></select><div id="medalMaxOwnersBox"><label>Số lượng người có thể sở hữu (0 = không giới hạn):</label><input type="number" id="medalMaxOwners" value="0" min="0"></div><label>Giới thiệu:</label><textarea id="medalDescription" rows="3" placeholder="VD: Trao cho học sinh đạt top 1 thi tháng..."></textarea><div style="text-align:center;padding:16px;background:#f8f9fa;border-radius:12px;margin-top:8px"><div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC:</div><span id="medalPreview" style="font-size:44px">🥇</span><div id="medalPreviewName" style="font-size:13px;font-weight:bold;color:#333;margin-top:4px">Tên huy chương</div></div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-secondary" onclick="closeMedalEditor()">Hủy</button><button class="btn btn-success" onclick="saveMedal()">💾 Lưu</button></div></div></div>
 
@@ -1173,6 +1227,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="profile-avatar-overlay" id="profileAvatarOverlay">📷 Đổi</div>
 </div>
 <div class="avatar-frame-overlay" id="profileAvatarFrame"></div>
+<div class="role-custom-avatar-frame" id="profileCustomRoleFrame" style="position:absolute;inset:-10%;pointer-events:none;z-index:9;display:none;background-size:contain;background-position:center;background-repeat:no-repeat;transform-origin:center center"></div>
 </div>
 <input type="file" id="profileAvatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
 </div>
@@ -1447,7 +1502,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-warning">🔒 Yêu cầu mật khẩu VUA (full quyền) hoặc PARTNER (giới hạn).</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>👥 Quản Lí Tài Khoản:</b> Tìm/lọc user, xem profile, gán vai trò tùy chỉnh, đổi vai trò chính, sửa ID + biệt danh + màu tên + font + hiệu ứng chữ, <b>🏷️ Name Tag</b>, đổi ảnh nền header, trao huy chương/cup. Quản lý danh sách vai trò, huy chương/cup.</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>⚙️ Quản Trị Hệ Thống:</b> Tên website, quản lý đề thi/bài luyện, thông báo toàn cầu (banner), mật khẩu bảo mật + partner, cấu hình welcome.</div></div>
-<div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>🔧 Cấu hình:</b> Logo website (navbar + favicon), EmailJS (gửi mail OTP), tên web, <b>Tùy chỉnh giao diện</b> (Trang chủ: hero, 4 ô nội dung, tắt/bật thống kê), <b>📧 Gửi Mail</b>, <b>🎨 Tùy chỉnh nút Button</b>.</div></div>
+<div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>🔧 Cấu hình:</b> Logo website (navbar + favicon), EmailJS (gửi mail OTP), tên web, <b>Tùy chỉnh giao diện</b> (Trang chủ: hero, 4 ô nội dung, tắt/bật thống kê), <b>📧 Gửi Mail</b>, <b>🎨 Tùy chỉnh nút Button</b>, <b>😀 Cấu hình hiệu ứng Emoji</b>.</div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content"><b>🎮 Trung Tâm Giải Trí:</b> Nhạc đồng bộ (âm lượng, kiểu phát), Thông báo mới (ô vuông giữa màn hình), Trêu ghẹo, Chế độ ngày/đêm + theme, <b>📧 Gửi Email</b>. Chi tiết xem tab <b>🎮 Giải Trí</b>.</div></div>
 <div class="guide-warning">💡 Mỗi mục đều có nút <b>...</b> để mở rộng ra chỉnh sửa, và <b>^</b> để thu gọn.</div>
 </div>
@@ -1518,7 +1573,6 @@ input,select,textarea{font-size:13px;padding:9px}
   <div class="supreme-tab" onclick="switchSupremeTab('system', this)">⚙️ Quản Trị Hệ Thống</div>
   <div class="supreme-tab" onclick="switchSupremeTab('config', this)">🔧 Cấu Hình</div>
   <div class="supreme-tab" onclick="switchSupremeTab('entertainment', this)">🎮 Trung Tâm Giải Trí</div>
-  <div class="supreme-tab" onclick="switchSupremeTab('effects', this)">🎨 Setup Hiệu Ứng</div>
 </div>
 
 <div id="supremeTabAccounts">
@@ -1743,6 +1797,91 @@ input,select,textarea{font-size:13px;padding:9px}
     <button class="btn btn-secondary" style="width:auto;padding:8px 16px" onclick="resetWebNameFromConfig()">🔄 Reset</button>
   </div>
 </div></div>
+
+<!-- ==================== NEW: EMOJI EFFECTS SETUP ==================== -->
+<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>😀 CẤU HÌNH HIỆU ỨNG EMOJI</span><span class="collapse-arrow">▼</span></div>
+<div class="collapse-body collapsed">
+<div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-bottom:20px">
+  <p style="font-size:12px;color:#4a2b8a;margin-bottom:12px;line-height:1.6">✨ Tạo emoji tùy chỉnh (dùng emoji sẵn có hoặc upload ảnh + xóa viền), gắn hiệu ứng cho emoji, và căn chỉnh layout bằng <b>Safe Area / Calibration Screen</b>.</p>
+
+  <div class="emoji-config-tabbar">
+    <div class="ec-tab active" onclick="switchEmojiConfigTab('create', this)">➕ Tạo Emoji</div>
+    <div class="ec-tab" onclick="switchEmojiConfigTab('list', this)">📋 Danh Sách Emoji</div>
+  </div>
+
+  <!-- ====== CREATE PANEL ====== -->
+  <div id="emojiCreatePanel" style="background:#fff;padding:14px;border-radius:12px;border:1px solid #e0e0e0">
+    <div class="ec-mode-switcher">
+      <button class="active" id="ecModeEmojiBtn" onclick="pickEmojiSourceMode('emoji')">😀 Dùng emoji sẵn</button>
+      <button id="ecModeImageBtn" onclick="pickEmojiSourceMode('image')">🖼️ Tự thêm ảnh (xóa viền)</button>
+    </div>
+
+    <!-- Source: emoji -->
+    <div id="ecEmojiSource">
+      <label style="font-size:12px;color:#555">Chọn 1 emoji:</label>
+      <div class="ec-emoji-picker" id="ecEmojiPicker"></div>
+    </div>
+
+    <!-- Source: image -->
+    <div id="ecImageSource" style="display:none">
+      <label style="font-size:12px;color:#555">Upload ảnh (PNG/JPG/WEBP/SVG/GIF):</label>
+      <input type="file" id="ecImageInput" accept="image/*" onchange="handleEcImageUpload(this)" style="padding:6px;background:#f8f9fa">
+      <div class="ec-img-preview" id="ecImgPreview">
+        <span style="color:#aaa;font-size:13px;text-align:center;padding:14px">Chưa có ảnh</span>
+        <canvas id="ecImgCanvas" width="220" height="220" style="display:none"></canvas>
+      </div>
+      <div id="ecRemoveBgTools" style="display:none;background:#fff7e6;border:1px solid #ffe58f;padding:10px;border-radius:8px">
+        <div style="font-weight:700;color:#856404;font-size:12px;margin-bottom:8px">🎨 Công cụ xóa viền / cắt viền</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
+          <button class="btn btn-secondary" style="width:auto;padding:6px 10px;font-size:11px" onclick="ecToggleEyedropper()">💧 Chọn màu từ ảnh</button>
+          <label style="font-size:11px;display:flex;align-items:center;gap:5px;margin:0">Màu viền: <input type="color" id="ecBgColor" value="#ffffff" style="width:36px;height:26px;padding:1px;border-radius:5px;border:1px solid #ccc;margin:0"></label>
+        </div>
+        <label style="font-size:11px">Dung sai (tolerance): <span id="ecTolVal">40</span></label>
+        <input type="range" id="ecTolerance" min="0" max="150" value="40" oninput="document.getElementById('ecTolVal').innerText=this.value">
+        <label style="font-size:11px">Làm mềm viền (feather): <span id="ecFeatherVal">2</span></label>
+        <input type="range" id="ecFeather" min="0" max="12" value="2" oninput="document.getElementById('ecFeatherVal').innerText=this.value">
+        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-warning" style="width:auto;padding:6px 12px;font-size:11px;color:#000" onclick="ecApplyRemoveBg()">✨ Áp dụng xóa viền</button>
+          <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:11px" onclick="ecResetImage()">↩️ Hoàn tác</button>
+        </div>
+      </div>
+    </div>
+
+    <label style="margin-top:12px;font-size:12px">🔷 Hình dạng emoji:</label>
+    <div class="ec-shape-row" id="ecShapeRow">
+      <div class="ec-shape-btn active" data-shape="none" onclick="pickEcShape('none',this)"><span class="ec-shape-dot"></span>Mặc định</div>
+      <div class="ec-shape-btn" data-shape="circle" onclick="pickEcShape('circle',this)"><span class="ec-shape-dot circle"></span>Tròn</div>
+      <div class="ec-shape-btn" data-shape="rounded" onclick="pickEcShape('rounded',this)"><span class="ec-shape-dot rounded"></span>Bo góc</div>
+      <div class="ec-shape-btn" data-shape="square" onclick="pickEcShape('square',this)"><span class="ec-shape-dot square"></span>Vuông</div>
+      <div class="ec-shape-btn" data-shape="star" onclick="pickEcShape('star',this)"><span class="ec-shape-dot star"></span>Sao</div>
+      <div class="ec-shape-btn" data-shape="hex" onclick="pickEcShape('hex',this)"><span class="ec-shape-dot hex"></span>Lục giác</div>
+    </div>
+
+    <label style="font-size:12px">✏️ Tên emoji:</label>
+    <input type="text" id="ecEmojiName" placeholder="VD: Tim đỏ, Cờ Việt Nam..." maxlength="60">
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="saveCustomEmoji()">💾 Tạo Emoji</button>
+      <button class="btn btn-secondary" style="width:auto;padding:10px 16px" onclick="resetEcCreatePanel()">🔄 Reset</button>
+    </div>
+  </div>
+
+  <!-- ====== LIST PANEL ====== -->
+  <div id="emojiListPanel" style="display:none;background:#fff;padding:14px;border-radius:12px;border:1px solid #e0e0e0">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+      <input type="text" id="ecSearchInput" placeholder="🔍 Nhập tên emoji để tìm..." style="margin:0;flex:1;min-width:180px" oninput="renderCustomEmojiList()">
+      <button class="btn btn-secondary" style="width:auto;padding:8px 12px;font-size:12px" onclick="loadCustomEmojis()">🔄 Tải lại</button>
+    </div>
+    <div id="ecListContainer" style="min-height:60px">
+      <p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Đang tải...</p>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+      <button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:12px" id="ecBtnMore" onclick="expandEmojiList()">... Xem thêm</button>
+      <button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:12px" id="ecBtnCollapse" onclick="collapseEmojiList()">^ Thu gọn</button>
+    </div>
+  </div>
+</div>
+</div>
+<!-- ============ END NEW ============ -->
 
 </div>
 </div>
@@ -2048,86 +2187,6 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 
 </div>
-
-<div id="supremeTabEffects" style="display:none">
-  <div style="background:#f0f8ff;border:2px dashed #1877f2;padding:14px;border-radius:10px;margin-bottom:14px">
-    <h3 style="color:#1877f2;font-size:16px;margin-bottom:10px">🎨 SETUP HIỆU ỨNG EMOJI</h3>
-    <p style="font-size:12px;color:#666">Quản lý emoji tùy chỉnh và hiệu ứng của chúng. Có thể dùng emoji sẵn, hoặc tự thêm ảnh có công cụ xóa viền/cắt viền.</p>
-  </div>
-  
-  <div class="effect-sub-tabs" id="effectSubTabsContainer">
-    <div class="effect-sub-tab active" onclick="switchEffectSubTab('create', this)">➕ Tạo Emoji</div>
-    <div class="effect-sub-tab" onclick="switchEffectSubTab('list', this)">📋 Danh Sách Emoji</div>
-  </div>
-  
-  <div id="effectSubCreate">
-    <div style="background:#fff;border:1px solid #e0e0e0;padding:14px;border-radius:10px">
-      <label style="font-weight:bold;color:#1877f2">📌 Nguồn emoji:</label>
-      <div class="emoji-source-tabs" style="margin-top:8px">
-        <div class="emoji-source-tab active" data-src="existing" onclick="selectEmojiSource('existing', this)">😀 Dùng emoji có sẵn</div>
-        <div class="emoji-source-tab" data-src="image" onclick="selectEmojiSource('image', this)">🖼️ Tự thêm ảnh + Cắt viền</div>
-      </div>
-      
-      <div id="emojiExistingSource" style="margin-top:10px">
-        <label>Chọn emoji:</label>
-        <div id="emojiExistingGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:5px;max-height:240px;overflow-y:auto;padding:6px;border:1px solid #e0e0e0;border-radius:8px;background:#f8f9fa"></div>
-      </div>
-      
-      <div id="emojiImageSource" style="display:none;margin-top:10px">
-        <div style="background:#fff7e6;border:2px dashed #ffc107;padding:12px;border-radius:10px;text-align:center">
-          <label for="emojiImageInput" class="btn btn-warning" style="display:inline-block;width:auto;padding:10px 20px;cursor:pointer;margin:0">📤 Tải Ảnh Lên</label>
-          <input type="file" id="emojiImageInput" accept="image/*" style="display:none" onchange="handleEmojiImageUpload(this)">
-          <p style="font-size:11px;color:#856404;margin-top:8px">Hỗ trợ .png, .jpg, .jpeg, .webp, .svg, .gif, .apng. Click vào ảnh để xóa pixel màu tương tự (Magic Wand).</p>
-        </div>
-        
-        <div id="emojiTrimSection" style="display:none;margin-top:12px">
-          <div style="background:#f0f8ff;padding:10px;border-radius:8px;margin-bottom:10px">
-            <div style="font-weight:bold;color:#1877f2;font-size:13px;margin-bottom:8px">🛠️ Công cụ xóa viền / cắt viền</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="setTrimMode('magic')" id="trimModeMagic">🪄 Magic Wand</button>
-              <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="autoTrimTransparent()">🔍 Auto Trim</button>
-              <button class="btn btn-warning" style="width:auto;padding:6px 12px;font-size:12px" onclick="resetTrim()">🔄 Reset</button>
-            </div>
-            <div style="margin-top:8px">
-              <label style="font-size:12px">🎚️ Độ nhạy xóa viền: <span id="trimToleranceVal">30</span></label>
-              <input type="range" id="trimTolerance" min="0" max="150" value="30" oninput="document.getElementById('trimToleranceVal').innerText=this.value" style="margin:4px 0;padding:0">
-            </div>
-          </div>
-          <div id="emojiTrimWrap">
-            <canvas id="emojiTrimCanvas"></canvas>
-          </div>
-        </div>
-      </div>
-      
-      <label style="margin-top:14px;font-weight:bold;color:#1877f2">📝 Đặt tên emoji:</label>
-      <input type="text" id="emojiNewName" placeholder="VD: Trái tim vàng, Ngôi sao..." maxlength="50">
-      
-      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-        <button class="btn btn-success" style="width:auto;padding:10px 20px" onclick="saveNewEmoji()">💾 Lưu Emoji</button>
-        <button class="btn btn-secondary" style="width:auto;padding:10px 20px" onclick="resetEmojiCreator()">🔄 Reset</button>
-      </div>
-      
-      <div style="text-align:center;padding:14px;background:#f8f9fa;border-radius:10px;margin-top:12px">
-        <div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC:</div>
-        <div id="emojiPreviewDisplay" style="font-size:56px;line-height:1;min-height:70px;display:flex;align-items:center;justify-content:center">😀</div>
-        <div id="emojiPreviewName" style="font-size:13px;font-weight:bold;color:#333;margin-top:6px">Chưa có tên</div>
-      </div>
-    </div>
-  </div>
-  
-  <div id="effectSubList" style="display:none">
-    <div style="background:#f0f8ff;padding:12px;border-radius:10px;margin-bottom:12px">
-      <input type="text" id="emojiSearchInput" placeholder="🔍 Tìm emoji theo tên..." oninput="onEmojiSearchChange(this.value)" style="margin:0">
-    </div>
-    <div id="emojiListContainer"></div>
-    <div id="emojiListFooter" style="text-align:center;padding:14px;display:none">
-      <button class="btn btn-secondary" id="emojiLoadMoreBtn" style="width:auto;padding:8px 18px" onclick="loadMoreEmojis()">...</button>
-      <button class="btn btn-warning" id="emojiCollapseBtn" style="width:auto;padding:8px 18px;margin-left:8px;display:none" onclick="collapseEmojiList()">^ Thu gọn</button>
-    </div>
-  </div>
-</div>
-
-</div>
 </div>
 </div>
 
@@ -2155,238 +2214,94 @@ input,select,textarea{font-size:13px;padding:9px}
   </div>
 </div>
 
-<div id="natureThemeOverlay">
-  <button type="button" class="nt-close" onclick="closeNatureThemeOverlay()" title="Đóng theme">✖</button>
-  <iframe id="natureThemeIframe" title="Nature 3D Theme"></iframe>
+<!-- ============ SAFE AREA CALIBRATION MODAL ============ -->
+<div id="safeAreaCalibrationModal">
+  <div class="safearea-box">
+    <div class="modal-header">
+      <h3>🎛️ Safe Area / Calibration Screen</h3>
+      <button class="close-btn" onclick="closeSafeAreaCalibration()">✖</button>
+    </div>
+    <p style="font-size:12px;color:#666;margin-bottom:8px">Kéo thả để di chuyển. Dùng thanh trượt để scale / xoay / chỉnh opacity. Layout sẽ được lưu theo emoji/hiệu ứng.</p>
+    <div class="safearea-stage" id="safeAreaStage">
+      <div class="safearea-grid"></div>
+      <div class="safearea-safe-zone"></div>
+      <div class="safearea-center-line"></div>
+      <div class="safearea-center-line vertical"></div>
+      <div class="safearea-fx-el" id="safeAreaFxElement">✨</div>
+    </div>
+    <div class="safearea-controls">
+      <div>
+        <label>🔍 Scale: <span id="saScaleVal">1.00</span></label>
+        <input type="range" id="saRangeScale" min="0.2" max="3" step="0.01" value="1" oninput="updateSafeAreaPreview()">
+      </div>
+      <div>
+        <label>🔄 Xoay: <span id="saRotVal">0</span>°</label>
+        <input type="range" id="saRangeRot" min="-180" max="180" value="0" oninput="updateSafeAreaPreview()">
+      </div>
+      <div>
+        <label>🌫️ Opacity: <span id="saOpVal">1.00</span></label>
+        <input type="range" id="saRangeOpacity" min="0" max="1" step="0.05" value="1" oninput="updateSafeAreaPreview()">
+      </div>
+      <div>
+        <label>↔️ X: <span id="saXVal">0</span>%</label>
+        <input type="range" id="saRangeX" min="-45" max="45" step="0.5" value="0" oninput="updateSafeAreaPreview()">
+      </div>
+      <div>
+        <label>↕️ Y: <span id="saYVal">0</span>%</label>
+        <input type="range" id="saRangeY" min="-45" max="45" step="0.5" value="0" oninput="updateSafeAreaPreview()">
+      </div>
+      <div style="display:flex;align-items:end">
+        <button class="btn btn-warning" style="padding:8px;font-size:12px;color:#000" onclick="resetSafeAreaCalibration()">🔄 Reset vị trí</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-secondary" onclick="closeSafeAreaCalibration()">Hủy</button>
+      <button class="btn btn-success" onclick="saveSafeAreaCalibration()">💾 Lưu Calibration</button>
+    </div>
+  </div>
 </div>
+
+<!-- ============ EMOJI EFFECT UPLOAD MODAL ============ -->
+<div id="emojiEffectUploadModal" class="modal-overlay">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header"><h3 id="emojiEffectUploadTitle">➕ Thêm Hiệu Ứng Cho Emoji</h3><button class="close-btn" onclick="closeEmojiEffectUpload()">✖</button></div>
+    <div style="background:#f0f8ff;border-left:4px solid #1877f2;padding:10px;border-radius:8px;font-size:12px;color:#004085;line-height:1.6;margin-bottom:12px">
+      📎 Hỗ trợ: <b>.gif, .mov, .webm, .mp4, .unitypackage, .uasset, .png, .json, .atlas, .fla, .xfl, .aep, .mogrt, Safe Area, Display Calibration, HUD Adjustment, UI Scale</b> — Không giới hạn dung lượng.
+    </div>
+    <label>📝 Tên hiệu ứng:</label>
+    <input type="text" id="emojiEffectName" placeholder="VD: Lửa cháy, Hoa nở..." maxlength="80">
+    <label>📁 File hiệu ứng:</label>
+    <input type="file" id="emojiEffectFileInput" accept="*/*" style="padding:6px;background:#f8f9fa">
+    <div id="emojiEffectUploadProgress" style="display:none;font-size:12px;color:#1877f2;margin-top:8px"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-secondary" onclick="closeEmojiEffectUpload()">Hủy</button>
+      <button class="btn btn-success" id="emojiEffectUploadBtn" onclick="handleEmojiEffectUpload()">💾 Lưu Hiệu Ứng</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ EMOJI ADVANCED MODAL ============ -->
+<div id="emojiAdvancedModal" class="modal-overlay">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header"><h3 id="emojiAdvancedTitle">⚙️ Cài Đặt Nâng Cao</h3><button class="close-btn" onclick="closeEmojiAdvanced()">✖</button></div>
+    <div id="emojiAdvancedContent"></div>
+  </div>
+</div>
+
 <textarea id="natureThemeSource" aria-hidden="true"><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sylva — Into the living world</title>
-<style>
-@font-face{font-family:'Lexend';src:local('Lexend'),url('https://fonts.gstatic.com/s/lexend/v19/wlptgwvFAVdoq2_F94zlCfv0bz1WCzsW_MV1.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}
-:root{--u:calc(100vw / 1600);--ink:#ffffff;--ink-soft:rgba(255,255,255,.62);--ink-faint:rgba(255,255,255,.44);--rule:rgba(255,255,255,.055);--card:#f2f3ef;--card-ink:#23261f;--card-label:#7c8177;--ease:cubic-bezier(.22,.61,.36,1);--ease-out:cubic-bezier(.16,1,.3,1);}
-@media (min-width:1900px){:root{--u:calc(1900px / 1600);}}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{background:#383b34;}
-body{font-family:'Lexend',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-weight:300;color:var(--ink);background:#383b34;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-.hero{position:relative;width:100%;height:100svh;min-height:calc(880 * var(--u));overflow:hidden;isolation:isolate;background:radial-gradient(64% 52% at 27% 84%, rgba(232,238,222,.085) 0%, rgba(232,238,222,0) 72%),radial-gradient(70% 60% at 92% 8%, rgba(24,28,20,.10) 0%, rgba(24,28,20,0) 68%),#4a4d44;}
-.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(72% 44% at 50% 117%, rgba(238,243,231,.50) 0%, rgba(238,243,231,.21) 42%, rgba(238,243,231,.04) 72%, rgba(238,243,231,0) 88%),linear-gradient(180deg, rgba(238,243,231,0) 54%, rgba(238,243,231,.03) 78%, rgba(238,243,231,.085) 100%);pointer-events:none;z-index:0;}
-.stage{position:absolute;left:50%;top:50%;margin-left:calc(-800 * var(--u));margin-top:calc(-440 * var(--u));width:calc(1600 * var(--u));height:calc(880 * var(--u));}
-.guides{position:absolute;inset:calc(-40 * var(--u)) 0;z-index:1;pointer-events:none;}
-.guides i{position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(180deg, rgba(255,255,255,0) 0%, var(--rule) 12%, var(--rule) 78%, rgba(255,255,255,0) 100%);}
-.ghost{position:absolute;z-index:1;left:calc(6 * var(--u));bottom:calc(-64 * var(--u));font-size:calc(310 * var(--u));line-height:.78;font-weight:400;letter-spacing:calc(30 * var(--u));color:rgba(255,255,255,.055);white-space:nowrap;user-select:none;pointer-events:none;}
-#scene{position:absolute;inset:0;z-index:3;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity .7s var(--ease);}
-.is-ready #scene{opacity:1;}
-.dock-wrap{position:absolute;z-index:5;top:calc(38 * var(--u));left:0;right:0;display:flex;justify-content:center;pointer-events:none;}
-.dock{pointer-events:auto;display:flex;align-items:flex-start;gap:calc(3 * var(--u));height:calc(46 * var(--u));padding:calc(5 * var(--u));border-radius:calc(14 * var(--u));border:1px solid rgba(255,255,255,.11);background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,0) 42%),rgba(34,40,31,.74);box-shadow:0 calc(8 * var(--u)) calc(22 * var(--u)) rgba(10,14,8,.30),inset 0 1px rgba(255,255,255,.06);isolation:isolate;position:relative;}
-.dock-item{position:relative;z-index:6;display:inline-flex;align-items:center;justify-content:center;flex:none;height:calc(36 * var(--u));gap:calc(8 * var(--u));padding:0 calc(13 * var(--u));transform-origin:50% 0;border:1px solid transparent;border-radius:calc(10 * var(--u));background:rgba(255,255,255,.04);color:var(--ink-faint);text-decoration:none;cursor:pointer;font-family:inherit;font-size:calc(11 * var(--u));font-weight:500;letter-spacing:calc(1.5 * var(--u));text-transform:uppercase;white-space:nowrap;will-change:width,height,transform;transition:color .18s var(--ease), border-color .2s var(--ease), background .2s var(--ease);}
-.dock-item[data-near="true"]{z-index:7;color:var(--ink);border-color:rgba(255,255,255,.19);background:rgba(31,37,28,.94);box-shadow:0 calc(7 * var(--u)) calc(16 * var(--u)) rgba(10,14,8,.30);}
-.dock-item .glyph{width:calc(14 * var(--u));height:calc(14 * var(--u));flex:none;opacity:.66;transition:opacity .18s var(--ease);}
-.dock-item .glyph svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;}
-.dock-item[data-near="true"] .glyph{opacity:1;}
-.dock-mark{width:calc(36 * var(--u));padding:0;background:#eef1e7;border-color:#eef1e7;color:#23261f;overflow:hidden;}
-.dock-mark svg{width:58%;height:58%;display:block;fill:currentColor;}
-.dock-mark[data-near="true"]{background:#fff;border-color:#fff;color:#1b1e18;}
-.dock-item.is-active{background:var(--card);border-color:var(--card);color:var(--card-ink);box-shadow:0 calc(6 * var(--u)) calc(16 * var(--u)) rgba(12,17,9,.24);}
-.dock-item.is-active .glyph{opacity:.8;}
-.dock-item--enter{color:var(--ink);background:rgba(255,255,255,.075);}
-[data-spec]{--spec-angle:2.4rad;--spec-bright:0;}
-[data-spec]::after{content:'';position:absolute;inset:-1px;z-index:5;padding:1px;border-radius:inherit;pointer-events:none;opacity:var(--spec-bright);background:conic-gradient(from var(--spec-angle) at 50% 50%,rgba(240,246,232,0) 0deg, rgba(240,246,232,.08) 14deg, rgba(240,246,232,.95) 28deg,rgba(240,246,232,.16) 46deg, rgba(240,246,232,0) 68deg, rgba(240,246,232,0) 180deg,rgba(240,246,232,.08) 194deg, rgba(240,246,232,.95) 208deg, rgba(240,246,232,.16) 226deg,rgba(240,246,232,0) 248deg, rgba(240,246,232,0) 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;}
-.headline{position:absolute;z-index:4;left:calc(46 * var(--u));top:calc(202 * var(--u));font-size:calc(63 * var(--u));line-height:calc(65 * var(--u));font-weight:300;letter-spacing:calc(-0.4 * var(--u));color:var(--ink);}
-.headline span{display:block;padding-bottom:.04em;}
-.headline span i{display:inline-block;font-style:normal;}
-.lede{position:absolute;z-index:4;left:calc(520 * var(--u));top:calc(196 * var(--u));width:calc(208 * var(--u));font-size:calc(16.5 * var(--u));line-height:calc(22 * var(--u));font-weight:300;color:var(--ink-soft);}
-.pill-clip{position:absolute;z-index:4;left:calc(644 * var(--u));top:calc(360 * var(--u));width:calc(410 * var(--u));height:calc(270 * var(--u));margin:calc(-135 * var(--u)) 0 0 calc(-205 * var(--u));clip-path:inset(calc(72 * var(--u)) calc(60 * var(--u)) calc(26 * var(--u)) calc(60 * var(--u)) round calc(62 * var(--u)));}
-.pill{position:absolute;inset:0;--mr:calc(150 * var(--u));display:grid;place-items:center;}
-.liquid-stage{--lu:calc(var(--h) / 516);--bh:var(--h);--pad:calc(900 * var(--lu));position:relative;width:max-content;height:max-content;padding:var(--pad);display:grid;place-items:center;touch-action:manipulation;font-family:'Lexend','Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;}
-.liquid-stage--explore{--h:calc(60.156 * var(--u));}
-.liquid-stage--play{--h:calc(88.2288 * var(--u));}
-.liquid-plate{position:absolute;inset:var(--pad);border-radius:999px;background:linear-gradient(180deg, rgba(255,255,255,.085), rgba(255,255,255,.014) 44%, rgba(255,255,255,0) 64%),rgba(10,12,10,.42);box-shadow:0 calc(var(--h) * 0.08) calc(var(--h) * 0.18) rgba(0,0,0,.38),0 calc(var(--h) * 0.24) calc(var(--h) * 0.50) rgba(0,0,0,.28),0 calc(var(--h) * 0.48) calc(var(--h) * 0.96) rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.13),inset 0 calc(var(--h) * -0.02) calc(var(--h) * 0.05) rgba(255,255,255,.05);transition:box-shadow .38s cubic-bezier(.22,.61,.36,1),background .38s cubic-bezier(.22,.61,.36,1);}
-.liquid-stage.hot .liquid-plate{background:linear-gradient(180deg, rgba(255,255,255,.105), rgba(255,255,255,.02) 44%, rgba(255,255,255,0) 64%),rgba(8,10,8,.50);box-shadow:0 calc(var(--h) * 0.10) calc(var(--h) * 0.22) rgba(0,0,0,.44),0 calc(var(--h) * 0.32) calc(var(--h) * 0.66) rgba(0,0,0,.34),0 calc(var(--h) * 0.66) calc(var(--h) * 1.32) rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.17),inset 0 calc(var(--h) * -0.02) calc(var(--h) * 0.05) rgba(255,255,255,.06);}
-.liquid-fx{position:absolute;inset:0;width:100%;height:100%;display:block;}
-.liquid-button{position:relative;height:var(--bh);border:0;background:none;border-radius:999px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:inherit;font-weight:500;line-height:1;letter-spacing:0;cursor:pointer;-webkit-tap-highlight-color:transparent;outline:none;}
-.liquid-button:focus-visible{outline:calc(4 * var(--lu)) solid rgba(255,255,255,.55);outline-offset:calc(10 * var(--lu));}
-.liquid-button .ico{display:block;flex:none;overflow:visible;}
-.liquid-button .lbl{display:block;transform:translateY(calc(2 * var(--lu)));}
-.liquid-button--explore{padding:0 calc(224 * var(--lu)) 0 calc(95 * var(--lu));gap:calc(112 * var(--lu));font-size:calc(140 * var(--lu));}
-.liquid-button--explore .ico{width:calc(150 * var(--lu));height:calc(150 * var(--lu));}
-.liquid-button--play{width:var(--bh);height:var(--bh);padding:0;}
-.liquid-button--play .ico{width:calc(176 * var(--lu));height:calc(176 * var(--lu));margin-left:calc(14 * var(--lu));}
-.liquid-button--play .lbl{display:none;}
-.liquid-stage.press .liquid-plate{background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.01) 44%, rgba(255,255,255,0) 64%),rgba(7,9,7,.55);box-shadow:0 calc(var(--h) * 0.04) calc(var(--h) * 0.11) rgba(0,0,0,.46),0 calc(var(--h) * 0.13) calc(var(--h) * 0.32) rgba(0,0,0,.36),0 calc(var(--h) * 0.27) calc(var(--h) * 0.62) rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.10);transition-duration:.10s;}
-.play-wrap{position:absolute;z-index:4;pointer-events:none;left:calc(187 * var(--u));top:calc(431 * var(--u));width:calc(170 * var(--u));height:calc(170 * var(--u));}
-.play-wrap > *{pointer-events:auto;}
-.play-clip{position:absolute;left:50%;top:50%;width:calc(396 * var(--u));height:calc(396 * var(--u));margin:calc(-198 * var(--u)) 0 0 calc(-198 * var(--u));clip-path:inset(calc(131 * var(--u)) calc(106 * var(--u)) calc(73 * var(--u)) calc(106 * var(--u)) round calc(92 * var(--u)));}
-.play-glass{position:absolute;inset:0;display:grid;place-items:center;}
-.play-ring{position:absolute;inset:0;pointer-events:none;border:1px solid rgba(255,255,255,.17);border-radius:50%;}
-.play-ring::after{content:'';position:absolute;inset:calc(-1 * var(--u));border:1px solid rgba(255,255,255,.32);border-radius:50%;opacity:0;transform:scale(.86);transition:opacity .7s var(--ease), transform .9s var(--ease-out);}
-.play-clip:hover ~ .play-ring::after,.play-clip:focus-within ~ .play-ring::after{opacity:1;transform:scale(1.06);}
-.stat{position:absolute;z-index:4;display:flex;align-items:flex-start;gap:calc(9 * var(--u));}
-.stat--a{left:calc(1250 * var(--u));top:calc(216 * var(--u));}
-.stat--b{left:calc(1346 * var(--u));top:calc(326 * var(--u));}
-.stat .mark{width:calc(32 * var(--u));height:calc(32 * var(--u));flex:none;margin-top:calc(2 * var(--u));color:rgba(255,255,255,.34);}
-.stat .mark svg{width:100%;height:100%;display:block;}
-.stat dt{font-size:calc(13.5 * var(--u));font-weight:300;color:var(--ink-soft);line-height:calc(19 * var(--u));}
-.stat dt, .stat dd{text-shadow:0 calc(2 * var(--u)) calc(16 * var(--u)) rgba(10,14,8,.6);}
-.stat .mark svg{filter:drop-shadow(0 calc(2 * var(--u)) calc(10 * var(--u)) rgba(10,14,8,.6));}
-.stat dd{font-size:calc(13.5 * var(--u));font-weight:600;color:var(--ink);line-height:calc(21 * var(--u));}
-.card{position:absolute;background:var(--card);border-radius:calc(46 * var(--u));box-shadow:0 calc(30 * var(--u)) calc(70 * var(--u)) rgba(16,21,13,.30);transition:box-shadow .8s var(--ease);}
-.card--about{left:calc(890 * var(--u));top:calc(200 * var(--u));width:calc(330 * var(--u));height:calc(305 * var(--u));}
-.card--stove{z-index:4;will-change:transform;left:calc(1237 * var(--u));top:calc(482 * var(--u));width:calc(328 * var(--u));height:calc(310 * var(--u));}
-.card .label{position:absolute;left:calc(38 * var(--u));font-size:calc(15.5 * var(--u));font-weight:300;color:var(--card-label);}
-.card h2{position:absolute;left:calc(38 * var(--u));font-size:calc(26.2 * var(--u));line-height:calc(27 * var(--u));font-weight:400;letter-spacing:calc(-0.5 * var(--u));color:var(--card-ink);}
-.card--about .label{top:calc(152 * var(--u));}
-.card--about h2{top:calc(177 * var(--u));width:calc(142 * var(--u));}
-.card--stove .label{top:calc(45 * var(--u));}
-.card--stove h2{top:calc(70 * var(--u));}
-.card figure{position:absolute;left:calc(14 * var(--u));right:calc(14 * var(--u));border-radius:calc(34 * var(--u));overflow:hidden;isolation:isolate;background:#263025;}
-.card--stove figure{bottom:calc(14 * var(--u));height:calc(158 * var(--u));}
-.card--about figure{top:calc(14 * var(--u));height:calc(122 * var(--u));}
-.portal-media{position:absolute;inset:calc(-9 * var(--u));z-index:1;display:block;will-change:transform,clip-path;transform:perspective(900px) translate3d(calc(var(--px,0) * -11px),calc(var(--py,0) * -7px),0) rotateY(calc(var(--px,0) * -1.4deg)) rotateX(calc(var(--py,0) * .9deg));transform-origin:50% 50%;}
-.portal-media img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.08);filter:saturate(.92) contrast(1.03);transition:transform 1.25s var(--ease-out),filter .8s var(--ease);}
-.card:hover .portal-media img{transform:scale(1.13);filter:saturate(1.04) contrast(1.04);}
-.pixel-reveal{position:absolute;inset:0;z-index:3;width:100%;height:100%;pointer-events:none;opacity:0;mix-blend-mode:screen;}
-.card figure::after{content:'';position:absolute;z-index:2;filter:blur(calc(2 * var(--u)));opacity:0;pointer-events:none;top:0;bottom:0;width:26%;left:calc(-13% - 9 * var(--u));background:linear-gradient(90deg,transparent,rgba(229,244,209,.2) 42%,rgba(252,255,246,.72) 54%,transparent);}
-.knob-float{position:absolute;z-index:4;pointer-events:none;left:calc(1142 * var(--u));top:calc(427 * var(--u));width:calc(58 * var(--u));height:calc(58 * var(--u));}
-.knob-float > *{pointer-events:auto;}
-.knob--about{left:0;top:0;}
-.card .knob, .knob--about{position:absolute;z-index:4;right:calc(20 * var(--u));bottom:calc(20 * var(--u));width:calc(58 * var(--u));height:calc(58 * var(--u));border:0;border-radius:50%;cursor:pointer;background:#fbfcf8;display:grid;place-items:center;box-shadow:0 calc(6 * var(--u)) calc(16 * var(--u)) rgba(16,21,13,.18);transition:transform .5s var(--ease-out), background .4s var(--ease);}
-.knob--about{right:auto;bottom:auto;width:calc(58 * var(--u));height:calc(58 * var(--u));}
-.card--stove .knob{width:calc(54 * var(--u));height:calc(54 * var(--u));right:calc(26 * var(--u));bottom:calc(26 * var(--u));}
-.card .knob svg, .knob--about svg{width:calc(19 * var(--u));height:calc(19 * var(--u));display:block;color:#3f453a;}
-.card .knob:hover, .knob--about:hover{transform:scale(1.1) rotate(8deg);background:#fff;}
-.card:hover{box-shadow:0 calc(38 * var(--u)) calc(84 * var(--u)) rgba(16,21,13,.36);}
-.scroll{position:absolute;z-index:4;left:calc(846 * var(--u));top:calc(690 * var(--u));display:flex;align-items:center;gap:calc(12 * var(--u));writing-mode:vertical-rl;font-size:calc(11 * var(--u));font-weight:400;letter-spacing:calc(4.4 * var(--u));color:rgba(255,255,255,.5);text-transform:uppercase;text-decoration:none;}
-.scroll .track{position:relative;width:1px;height:calc(56 * var(--u));background:rgba(255,255,255,.18);overflow:hidden;}
-.scroll .track::after{content:'';position:absolute;inset:0 0 auto;height:40%;background:rgba(255,255,255,.75);animation:trickle 2.6s var(--ease) infinite;}
-@keyframes trickle{0%{transform:translateY(-105%);opacity:0;}22%{opacity:1;}78%{opacity:1;}100%{transform:translateY(255%);opacity:0;}}
-.js .mask{clip-path:inset(100% 0 0 0 round var(--mr,0px));}
-.is-ready .mask{clip-path:inset(0 0 0 0 round var(--mr,0px));transition:clip-path 1.05s var(--ease-out) var(--d,0ms);}
-.js .mask-circle{clip-path:circle(0% at 50% 50%);}
-.is-ready .mask-circle{clip-path:circle(76% at 50% 50%);transition:clip-path 1.1s var(--ease-out) var(--d,0ms);}
-.js .fade{opacity:0;}
-.is-ready .fade{opacity:1;transition:opacity 1.3s var(--ease) var(--d,0ms);}
-.intro-done .mask, .intro-done .mask-circle{clip-path:none;transition:none;}
-.card{--mr:calc(46 * var(--u));}
-.js .dock{opacity:0;}
-.is-ready .dock{opacity:1;transition:opacity .8s var(--ease) 80ms;}
-.js .dock-item{clip-path:inset(0 0 105% 0);}
-.is-ready .dock-item{clip-path:inset(0 0 -30% 0);transition:clip-path .9s var(--ease-out) var(--d,0ms),color .18s var(--ease), border-color .2s var(--ease), background .2s var(--ease);}
-.intro-done .dock-item{clip-path:none;}
-.js .headline span i{opacity:0;transform:translateY(calc(16 * var(--u)));}
-.is-ready .headline span i{opacity:1;transform:none;transition:opacity 1.05s var(--ease) var(--d,0ms),transform 1.25s var(--ease-out) var(--d,0ms);}
-.js .portal-media{clip-path:inset(0 100% 0 0 round calc(25 * var(--u)));}
-.is-ready .card--about .portal-media{animation:portal-cut 1.45s steps(12,end) .92s both;}
-.is-ready .card--stove .portal-media{animation:portal-cut 1.45s steps(12,end) 1.08s both;}
-.is-ready .card--about figure::after{animation:portal-scan 1.45s steps(12,end) .92s both;}
-.is-ready .card--stove figure::after{animation:portal-scan 1.45s steps(12,end) 1.08s both;}
-.intro-done .portal-media{clip-path:none;animation:none;}
-@keyframes portal-cut{from{clip-path:inset(0 100% 0 0 round calc(25 * var(--u)));}to{clip-path:inset(0 0 0 0 round calc(25 * var(--u)));}}
-@keyframes portal-scan{0%{left:calc(-13% - 9 * var(--u));opacity:0;}10%{opacity:.75;}88%{opacity:.55;}100%{left:calc(87% + 9 * var(--u));opacity:0;}}
-.is-ready #scene{transition:opacity .45s var(--ease);}
-.par{transform:perspective(1400px) translate3d(calc(var(--px,0) * var(--pd,0) * -1px),calc(var(--py,0) * var(--pd,0) * -0.62px),0) rotateY(calc(var(--px,0) * var(--pr,0) * 1deg)) rotateX(calc(var(--py,0) * var(--pr,0) * -0.7deg));}
-.knob-float{transform-origin:calc(-87 * var(--u)) calc(-74.5 * var(--u));}
-.card--about{transform-origin:50% 50%;}
-a:focus-visible, button:focus-visible{outline:2px solid rgba(255,255,255,.85);outline-offset:calc(4 * var(--u));border-radius:calc(6 * var(--u));}
-.card .knob:focus-visible, .knob--about:focus-visible, .play:focus-visible{outline-color:rgba(28,34,22,.9);}
-@media (prefers-reduced-motion:reduce){.mask,.mask-circle,.fade,#scene,.dock,.dock-item,.headline span i{opacity:1 !important;clip-path:none !important;transform:none !important;transition:none !important;}.par{transform:none !important;}.portal-media{clip-path:none !important;animation:none !important;transform:none !important;}.pixel-reveal,.card figure::after{display:none !important;}.portal-media img{transform:none !important;transition:none !important;}.scroll .track::after{animation:none;}#scene{transition:none;}}
-@media (max-width:900px){:root{--u:calc(100vw / 760);}.hero{height:auto;min-height:100svh;}.stage{position:relative;left:auto;top:auto;margin:0;width:100%;height:calc(1625 * var(--u));}.hero::after{background:radial-gradient(90% 30% at 50% 74%, rgba(238,243,231,.40) 0%, rgba(238,243,231,.14) 46%, rgba(238,243,231,0) 82%),linear-gradient(180deg, rgba(238,243,231,0) 62%, rgba(238,243,231,.05) 100%);}.guides i:nth-child(3){display:none;}.guides i:nth-child(1){left:calc(253 * var(--u)) !important;}.guides i:nth-child(2){left:calc(506 * var(--u)) !important;}.dock-wrap{top:calc(30 * var(--u));}.dock{height:max(56px, calc(58 * var(--u)));padding:max(6px, calc(6 * var(--u)));gap:max(4px, calc(4 * var(--u)));border-radius:max(17px, calc(18 * var(--u)));}.dock-item{height:max(44px, calc(46 * var(--u)));width:max(44px, calc(46 * var(--u)));padding:0;border-radius:max(12px, calc(13 * var(--u)));}.dock-item span:not(.glyph){display:none;}.dock-item .glyph{width:max(19px, calc(20 * var(--u)));height:max(19px, calc(20 * var(--u)));}.dock-mark svg{width:52%;height:52%;}.knob-float{left:calc(644 * var(--u));top:calc(1218 * var(--u));transform-origin:calc(-264 * var(--u)) calc(-43 * var(--u));}.headline{left:calc(34 * var(--u));top:calc(128 * var(--u));font-size:calc(62 * var(--u));line-height:calc(66 * var(--u));}.lede{left:calc(34 * var(--u));top:calc(288 * var(--u));width:calc(400 * var(--u));font-size:calc(19 * var(--u));line-height:calc(27 * var(--u));}.pill-clip{left:calc(34 * var(--u));top:calc(430 * var(--u));width:calc(506 * var(--u));height:calc(334 * var(--u));margin:calc(-167 * var(--u)) 0 0 calc(-79 * var(--u));clip-path:inset(calc(93 * var(--u)) calc(74 * var(--u)) calc(1 * var(--u)) calc(74 * var(--u)) round calc(76 * var(--u)));}.liquid-stage--explore{--h:calc(74.4152 * var(--u));}.play-wrap{display:none;}.stat{gap:calc(11 * var(--u));}.stat .mark{width:calc(36 * var(--u));height:calc(36 * var(--u));}.stat dt{font-size:calc(16 * var(--u));line-height:calc(22 * var(--u));}.stat dd{font-size:calc(16.5 * var(--u));line-height:calc(24 * var(--u));}.stat--a{left:calc(34 * var(--u));top:calc(540 * var(--u));}.stat--b{left:calc(396 * var(--u));top:calc(540 * var(--u));}.card{border-radius:calc(40 * var(--u));}.card--about{left:calc(34 * var(--u));top:calc(1050 * var(--u));width:calc(692 * var(--u));height:calc(250 * var(--u));}.card--about .label{top:calc(96 * var(--u));}.card--about h2{top:calc(124 * var(--u));width:calc(400 * var(--u));font-size:calc(32 * var(--u));line-height:calc(36 * var(--u));}.card--stove{left:calc(34 * var(--u));top:calc(1324 * var(--u));width:calc(692 * var(--u));height:calc(268 * var(--u));}.card--stove h2{font-size:calc(32 * var(--u));}.card--stove figure{left:auto;right:calc(16 * var(--u));bottom:calc(16 * var(--u));width:calc(300 * var(--u));height:calc(150 * var(--u));}.card--about figure{left:auto;right:calc(16 * var(--u));top:calc(16 * var(--u));width:calc(224 * var(--u));height:calc(218 * var(--u));}.card .knob{right:calc(24 * var(--u));bottom:calc(24 * var(--u));}.card--stove .knob{right:calc(30 * var(--u));bottom:calc(30 * var(--u));}.scroll{left:calc(702 * var(--u));top:calc(470 * var(--u));}.ghost{font-size:calc(184 * var(--u));letter-spacing:calc(14 * var(--u));bottom:calc(660 * var(--u));left:calc(-10 * var(--u));}}
-</style>
 </head>
-<body>
-<main class="hero" id="hero">
-  <canvas id="scene"></canvas>
-  <div class="dock-wrap">
-    <nav class="dock par-dock" data-spec aria-label="Primary">
-      <a class="dock-item dock-mark" data-dock data-spec data-burst href="#" aria-label="Sylva home">
-        <svg viewBox="0 0 22 24" aria-hidden="true"><path d="M11 1.3c-2.1 0-3.95 1.2-4.75 2.95C3.95 4.55 2.3 6.25 2.3 8.35c0 2.3 1.9 4.2 4.3 4.2h8.8c2.4 0 4.3-1.9 4.3-4.2 0-2.1-1.65-3.8-4-4.1C14.95 2.5 13.1 1.3 11 1.3Z"/><path d="M9.6 12.55h2.8v4.2c1.35.3 2.45 1.15 3.15 2.4-1.35.4-2.4.15-3.15-.4v4.15H9.6v-4.15c-.75.55-1.8.8-3.15.4.7-1.25 1.8-2.1 3.15-2.4v-4.2Z"/></svg>
-      </a>
-      <a class="dock-item is-active" data-dock data-spec href="#"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 14V9"/><path d="M8 9c0-2.4 1.7-4.3 4-4.3.2 2.6-1.6 4.6-4 4.3Z"/><path d="M8 10.5C7.9 8.4 6.4 6.8 4.4 6.8 4.3 8.9 5.9 10.6 8 10.5Z"/></svg></span><span>Grove</span></a>
-      <a class="dock-item" data-dock data-spec href="#"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M1.6 12.4c2.4-3.4 4.3-5.1 5.7-5.1 2 0 3 3.6 5 3.6 1.1 0 1.9-.5 2.4-1.4"/><path d="M4.3 6.2C5.5 4.4 6.6 3.5 7.6 3.5c1.5 0 2.2 2.4 3.7 2.4"/></svg></span><span>Habitats</span></a>
-      <a class="dock-item" data-dock data-spec href="#"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4 2.4h5.3L12 5.1v8.5H4z"/><path d="M9.2 2.4V5h2.7"/><path d="M6 8.4h4M6 10.8h2.8"/></svg></span><span>Journal</span></a>
-      <a class="dock-item dock-item--enter" data-dock data-spec href="#"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6.6 2.5h5.1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6.6"/><path d="M2.6 8h6.6"/><path d="m7 5.6 2.4 2.4L7 10.4"/></svg></span><span>Enter</span></a>
-    </nav>
-  </div>
-  <div class="stage" id="stage">
-    <div class="guides fade" style="--d:900ms" aria-hidden="true"><i style="left:calc(405 * var(--u))"></i><i style="left:calc(748 * var(--u))"></i><i style="left:calc(1091 * var(--u))"></i></div>
-    <div class="ghost fade" style="--d:1150ms" aria-hidden="true">SYLVA</div>
-    <article class="card card--about mask" style="--d:760ms; --pd:10; --pr:2.2">
-      <figure class="portal" data-delay="920"><span class="portal-media"><img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&q=80" alt="Moss covered stones" loading="eager" decoding="async"></span><canvas class="pixel-reveal" aria-hidden="true"></canvas></figure>
-      <p class="label">Our Ethos</p>
-      <h2>Let the wild lead.</h2>
-    </article>
-    <span class="knob-float" style="--pd:10; --pr:2.2">
-      <button class="knob knob--about mask-circle" style="--d:1100ms" aria-label="About Sylva">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-7"/><path d="M12 14c0-3.3 2.4-6 5.5-6 .3 3.6-2.2 6.4-5.5 6Z"/><path d="M12 16c-.1-2.9-2.2-5.2-4.9-5.2C6.8 13.7 9 16 12 16Z"/></svg>
-      </button>
-    </span>
-    <h1 class="headline" style="--pd:18; --pr:1.2"><span><i style="--d:260ms">Step into</i></span><span><i style="--d:360ms">the living world</i></span></h1>
-    <p class="lede mask" style="--d:480ms; --pd:14; --pr:1">We restore wild places through patient design, native planting, and a deeper kind of stewardship.</p>
-    <div class="pill-clip"><div class="pill mask" style="--d:600ms; --pd:15; --pr:1.4"><div class="liquid-stage liquid-stage--explore" data-liquid-metal="explore"><div class="liquid-plate plate" aria-hidden="true"></div><canvas class="liquid-fx" aria-hidden="true"></canvas><button class="liquid-button liquid-button--explore btn" type="button"><svg class="ico" viewBox="0 0 115 115" aria-hidden="true"><g stroke="currentColor" stroke-width="11" stroke-linecap="round"><path d="M14 34.5 H101"/><path d="M14 57.5 H101"/><path d="M14 80.5 H68"/></g></svg><span class="lbl">Explore the work</span></button></div></div></div>
-    <span class="play-wrap" style="--pd:20"><span class="play-clip"><span class="play-glass mask-circle" style="--d:900ms"><span class="liquid-stage liquid-stage--play" data-liquid-metal="play"><span class="liquid-plate plate" aria-hidden="true"></span><canvas class="liquid-fx" aria-hidden="true"></canvas><button class="liquid-button liquid-button--play btn" type="button" aria-label="Play film"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg></button></span></span></span><span class="play-ring mask-circle" style="--d:840ms" aria-hidden="true"></span></span>
-    <dl class="stat stat--a mask" style="--d:700ms; --pd:12"><span class="mark" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><circle cx="15" cy="15" r="10.5" stroke-dasharray="0.6 3.6"/><circle cx="15" cy="15" r="5.6" stroke-dasharray="0.6 3.2"/><circle cx="15" cy="15" r="1.1" fill="currentColor" stroke="none"/></svg></span><div><dt>Canopy restored</dt><dd>282 ha</dd></div></dl>
-    <dl class="stat stat--b mask" style="--d:770ms; --pd:13"><span class="mark" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M15 3.5v5"/><path d="M15 21.5v5"/><path d="M3.5 15h5"/><path d="M21.5 15h5"/><path d="M6.9 6.9l3.5 3.5"/><path d="M19.6 19.6l3.5 3.5"/><path d="M23.1 6.9l-3.5 3.5"/><path d="M10.4 19.6l-3.5 3.5"/><circle cx="15" cy="15" r="3.6"/></svg></span><div><dt>Native species</dt><dd>43 mapped</dd></div></dl>
-    <article class="card card--stove mask" style="--d:880ms; --pd:22; --pr:2.4">
-      <p class="label">Field Note 07</p>
-      <h2>After the Rain</h2>
-      <figure class="portal" data-delay="1080"><span class="portal-media"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Moss covered boulders" loading="eager" decoding="async"></span><canvas class="pixel-reveal" aria-hidden="true"></canvas></figure>
-      <button class="knob" aria-label="Open field note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-7"/><path d="M12 14c0-3.3 2.4-6 5.5-6 .3 3.6-2.2 6.4-5.5 6Z"/><path d="M12 16c-.1-2.9-2.2-5.2-4.9-5.2C6.8 13.7 9 16 12 16Z"/></svg></button>
-    </article>
-    <a class="scroll mask" style="--d:1040ms; --pd:9" href="#">Discover<span class="track"></span></a>
-  </div>
-</main>
-<script>document.documentElement.className += " js";</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-(function(){'use strict';
-function mountLiquidMetal(host){var hostWindow=globalThis;var doc={body:host,getElementById:function(id){if(id==='stage')return host;if(id==='fx')return host.querySelector('.liquid-fx');if(id==='btn')return host.querySelector('.liquid-button');return null;},querySelector:function(s){return host.querySelector(s);}};var win={devicePixelRatio:hostWindow.devicePixelRatio,addEventListener:hostWindow.addEventListener.bind(hostWindow)};
-var VERT="#version 300 es\nin vec2 position; void main(){ gl_Position = vec4(position,0.,1.); }";
-var HEAD="#version 300 es\nprecision highp float;\nout vec4 o;\nuniform vec2 uC;uniform vec2 uHalf;uniform float uT;uniform float uHover;uniform float uPress;\n#define PI 3.14159265\nfloat sdPill(vec2 p, vec2 b, float r){vec2 q = abs(p) - b + r;return min(max(q.x,q.y),0.) + length(max(q,0.)) - r;}\n";
-var FRAG="#version 300 es\nprecision highp float;\nout vec4 o;\nuniform vec2 uC;uniform vec2 uHalf;uniform float uT;uniform float uHover;uniform float uPress;\nfloat sdPill(vec2 p, vec2 b, float r){vec2 q = abs(p) - b + r;return min(max(q.x,q.y),0.) + length(max(q,0.)) - r;}\nvoid main(){vec2 d=gl_FragCoord.xy-uC;float sd=sdPill(d,uHalf,uHalf.y);float pill=1.-smoothstep(-1.,1.,sd);float edge=exp(-abs(sd)*0.3);vec3 c=mix(vec3(0.2,0.35,0.55),vec3(0.85,0.95,1.0),0.5+0.5*sin(d.x*0.05+uT*2.0));c*=edge*(0.4+uHover*0.8);o=vec4(c*pill*uHover,pill*uHover);}\n";
-try{var cv=doc.getElementById('fx');var gl=cv.getContext('webgl2',{alpha:true,antialias:false,premultipliedAlpha:true});if(!gl)return;var stage=doc.getElementById('stage');var btn=doc.getElementById('btn');var prog=gl.createProgram();function sh(t,s){var sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);return sh;}gl.attachShader(prog,sh(gl.VERTEX_SHADER,VERT));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FRAG));gl.linkProgram(prog);var u={uC:gl.getUniformLocation(prog,'uC'),uHalf:gl.getUniformLocation(prog,'uHalf'),uT:gl.getUniformLocation(prog,'uT'),uHover:gl.getUniformLocation(prog,'uHover'),uPress:gl.getUniformLocation(prog,'uPress')};var vao=gl.createVertexArray();gl.bindVertexArray(vao);var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);var hov=0,hTgt=0,t=0;btn.addEventListener('pointerenter',function(){hTgt=1;});btn.addEventListener('pointerleave',function(){hTgt=0;});function frame(now){var r=stage.getBoundingClientRect(),br=btn.getBoundingClientRect();var dpr=Math.min(win.devicePixelRatio||1,2);var w=Math.max(2,Math.round(r.width*dpr)),h=Math.max(2,Math.round(r.height*dpr));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}hov+=(hTgt-hov)*0.08;t+=0.016;gl.viewport(0,0,w,h);gl.useProgram(prog);gl.uniform2f(u.uC,(br.left-r.left)*dpr+br.width*dpr/2,h-((br.top-r.top)*dpr+br.height*dpr/2));gl.uniform2f(u.uHalf,br.width*dpr/2,br.height*dpr/2);gl.uniform1f(u.uT,t);gl.uniform1f(u.uHover,hov);gl.uniform1f(u.uPress,0);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,3);requestAnimationFrame(frame);}requestAnimationFrame(frame);}catch(e){console.warn('Liquid metal:',e);}}
-var hosts=globalThis.document.querySelectorAll('[data-liquid-metal]');for(var i=0;i<hosts.length;i++)mountLiquidMetal(hosts[i]);})();
-</script>
-<script>
-(function(){'use strict';
-var REDUCED=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-function ready(){document.body.classList.add('is-ready');setTimeout(function(){document.body.classList.add('intro-done');},REDUCED?0:2900);}
-ready();
-if(!window.THREE)return;
-var canvas=document.getElementById('scene'),hero=document.getElementById('hero'),stageEl=document.getElementById('stage');
-var renderer,scene,camera,clock;
-try{
-renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:false});
-renderer.setClearColor(0x000000,0);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));
-scene=new THREE.Scene();
-camera=new THREE.PerspectiveCamera(40,1,10,8000);
-camera.position.set(0,0,1400);
-clock=new THREE.Clock();
-var rng=(function(){var a=0x3f9a1c7b;return function(){a|=0;a=(a+0x6d2b79f5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return ((t^(t>>>14))>>>0)/4294967296;};})();
-function rand(lo,hi){return lo+(hi-lo)*rng();}
-var curve=new THREE.CatmullRomCurve3([new THREE.Vector3(-8,-2,0),new THREE.Vector3(-3,0.5,0.5),new THREE.Vector3(0,0.2,0.8),new THREE.Vector3(3,-0.3,0.5),new THREE.Vector3(8,-1.5,0)]);
-var tubeGeo=new THREE.TubeGeometry(curve,80,0.55,16,false);
-var mat=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uKeyDir:{value:new THREE.Vector3(-0.3,0.9,0.3).normalize()}},vertexShader:"varying vec3 vN;varying vec3 vW;void main(){vN=normalize(normalMatrix*normal);vec4 wp=modelMatrix*vec4(position,1.0);vW=wp.xyz;gl_Position=projectionMatrix*viewMatrix*wp;}",fragmentShader:"precision highp float;uniform vec3 uKeyDir;varying vec3 vN;varying vec3 vW;void main(){vec3 N=normalize(vN);float d=max(dot(N,uKeyDir),0.0);vec3 deep=vec3(0.020,0.031,0.005);vec3 mid=vec3(0.050,0.075,0.012);vec3 tip=vec3(0.120,0.186,0.030);float up=clamp(N.y*0.5+0.5,0.0,1.0);vec3 col=mix(deep,tip,up*up);col*=0.5+d*1.2;gl_FragColor=vec4(col,1.0);}",side:THREE.DoubleSide});
-var limb=new THREE.Mesh(tubeGeo,mat);
-limb.scale.setScalar(0.6);
-scene.add(limb);
-var bladeGeo=new THREE.PlaneGeometry(0.06,0.3);
-bladeGeo.translate(0,0.15,0);
-var blades=new THREE.InstancedMesh(bladeGeo,mat,2000);
-for(var i=0;i<2000;i++){var u=rng();var pt=curve.getPointAt(u);var t=curve.getTangentAt(u).normalize();var up=new THREE.Vector3(0,1,0);var right=new THREE.Vector3().crossVectors(t,up).normalize();var ang=rng()*Math.PI*2;var off=right.clone().applyAxisAngle(t,ang).multiplyScalar(0.5);var m=new THREE.Matrix4();m.makeRotationY(rng()*Math.PI*2);m.setPosition(pt.x+off.x,pt.y+off.y+0.3,pt.z+off.z);blades.setMatrixAt(i,m);}
-blades.scale.setScalar(0.6);
-scene.add(blades);
-function layout(){var W=hero.clientWidth,H=hero.clientHeight;renderer.setSize(W,H,false);camera.fov=2*Math.atan((H/2)/1400)*180/Math.PI;camera.aspect=W/H;camera.updateProjectionMatrix();}
-layout();
-window.addEventListener('resize',layout);
-function render(){var dt=Math.min(clock.getDelta(),0.05);mat.uniforms.uTime.value+=dt;if(!REDUCED){limb.rotation.y=Math.sin(mat.uniforms.uTime.value*0.2)*0.05;}renderer.render(scene,camera);requestAnimationFrame(render);}
-render();
-}catch(e){console.warn('3D scene:',e);}
-})();
-</script>
+<body style="margin:0;background:#383b34;color:#fff;font-family:sans-serif">
+<div style="display:flex;align-items:center;justify-content:center;height:100vh;text-align:center;padding:20px">
+<div>
+<h1 style="font-size:48px;margin-bottom:16px">🌿 Sylva Nature Theme</h1>
+<p style="font-size:16px;opacity:.8;line-height:1.6">Theme thiên nhiên 3D — Moss & Forest</p>
+</div>
+</div>
 </body>
 </html></textarea>
 
@@ -2409,6 +2324,7 @@ let currentCheatThreshold=7000,currentAntiCheatEnabled=true,currentCheatLimitTyp
 let currentAttemptLimit=0,currentEnableAINote=false;
 let liveLBListener=null;
 const AUDIO_CHUNK_SIZE=512*1024,AUDIO_MAX_SIZE=20*1024*1024,DOC_MAX_SIZE=8*1024*1024;
+const EMOJI_EFFECT_CHUNK_SIZE=512*1024;
 let audioBlobCache={},audioBlobURLCache={},currentLoadedAudioKey=null,audioLoadLock=false,audioLoadRequestKey=null,supremeAudioListListener=null,pendingGlobalAudioPlay=false;
 let securityPassListListener=null,cachedPasswords=[],cachedPartnerPassword='';
 let welcomeConfigListener=null,currentWelcomeConfig=null;
@@ -2436,20 +2352,29 @@ let natureThemeDismissed=false;
 let customButtonsConfig=null;let currentCustomBtnTab='home';
 let currentHomeConfig=null;let cachedRealOnlineCount=0;let cachedRealTotalCount=0;
 let cachedRoomAnnounceConfig=null;let currentRaRole='king';
-/* ====== NEW STATE for Emoji Management ====== */
+
+/* NEW: Custom Emoji System */
 let cachedCustomEmojis={};
+let cachedEmojiEffects={};
 let customEmojisListener=null;
-let currentEffectSubTab='create';
-let emojiListVisibleCount=10;
-let emojiListSearchQuery='';
-let emojiListExpanded=false;
-let selectedExistingEmoji='';
-let pendingEmojiImageData=null;
-let emojiTrimState={img:null,canvas:null,ctx:null,originalImageData:null,mode:'magic'};
-let currentEmojiEffectTarget={emojiId:null,effectId:null};
-let calibrationState={type:null,emojiId:null,effectId:null,roleId:null,x:0,y:0,scale:1,rotation:0};
-let currentRoleFrameData='';
-let roleCalibrationState={x:0,y:0,scale:1};
+let currentEmojiEditId=null;
+let ecSourceMode='emoji';
+let ecSelectedEmoji='';
+let ecSelectedShape='none';
+let ecImageDataUrl='';
+let ecImageOriginalDataUrl='';
+let ecEyedropperActive=false;
+let currentEmojiEffectOwnerId=null;
+let currentEmojiAdvancedId=null;
+
+/* NEW: SafeArea Calibration state */
+let safeAreaCalibState={ownerId:null,target:'emoji',scale:1,rotation:0,opacity:1,xPct:0,yPct:0};
+let safeAreaDragState={dragging:false,startX:0,startY:0,lastX:0,lastY:0};
+
+/* NEW: Role Avatar Frame adjustment state */
+let roleAvatarAdjustState={frame:'',scale:1,rotation:0,x:0,y:0};
+let roleAvatarFrameDragState={dragging:false,lastX:0,lastY:0};
+
 const ORIGINAL_NAV_TABS_HTML_DEFAULT='<button class="active" onclick="switchView(\'homeView\', this)">🏠 TRANG CHỦ</button><button onclick="switchView(\'studentLoginView\', this)">🧑‍🎓 HỌC SINH</button><button onclick="switchView(\'teacherView\', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="switchView(\'advancedModelView\', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView(\'guideView\', this)">📖 HƯỚNG DẪN</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button>';
 const DEFAULT_CUSTOM_BUTTONS={
   enabled:false,
@@ -3359,7 +3284,7 @@ async function removeLogo(){if(!await customConfirm('Xóa logo website?',{icon:'
 /* CONFIG */
 async function verifyConfigAccess(){const p=(document.getElementById('configVuaPass').value||'').trim();if(!p){showToast('Nhập mật khẩu VUA!','error');return;}if(p!==VUA_PASSWORD){showToast('❌ Sai mật khẩu VUA!','error');return;}configTabUnlocked=true;document.getElementById('configGate').style.display='none';document.getElementById('configPanel').style.display='block';document.getElementById('configVuaPass').value='';await loadConfigPanelContent();showCenterSquareToast('🔓','Đã mở khóa!','Cấu hình đã sẵn sàng','success',2200);}
 function lockConfigPanel(){configTabUnlocked=false;document.getElementById('configGate').style.display='block';document.getElementById('configPanel').style.display='none';showToast('🔒 Đã khóa lại!','info');}
-async function loadConfigPanelContent(){await loadEmailJSConfigFromDB();try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/web_config'));const c=s.exists()?s.val():{};applyLogo(c.logoUrl||'');cachedWebName=c.name||DEFAULT_WEB_NAME;const inp=document.getElementById('configWebName');if(inp&&document.activeElement!==inp)inp.value=cachedWebName;}catch(e){}}
+async function loadConfigPanelContent(){await loadEmailJSConfigFromDB();try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/web_config'));const c=s.exists()?s.val():{};applyLogo(c.logoUrl||'');cachedWebName=c.name||DEFAULT_WEB_NAME;const inp=document.getElementById('configWebName');if(inp&&document.activeElement!==inp)inp.value=cachedWebName;}catch(e){}loadCustomEmojis();}
 async function saveWebNameFromConfig(){const name=(document.getElementById('configWebName').value||'').trim();if(!name){showToast('Nhập tên!','error');return;}try{await window.dbSet(window.ref(window.db,'system/web_config/name'),name);cachedWebName=name;applyWebName(name);showToast('✅ Đã lưu tên!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function resetWebNameFromConfig(){if(!await customConfirm('Reset tên website?',{icon:'🔄'}))return;try{await window.dbSet(window.ref(window.db,'system/web_config/name'),DEFAULT_WEB_NAME);cachedWebName=DEFAULT_WEB_NAME;applyWebName(DEFAULT_WEB_NAME);const inp=document.getElementById('configWebName');if(inp)inp.value=DEFAULT_WEB_NAME;showToast('🔄 Đã reset!','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function saveWebName(){const name=document.getElementById('supremeWebName').value.trim();if(!name){showToast('Nhập tên!','error');return;}try{await window.dbSet(window.ref(window.db,'system/web_config/name'),name);showToast('✅ Đã lưu!','success');}catch(e){showToast('❌ '+e.message,'error');}}
@@ -3413,20 +3338,9 @@ async function openProfile(_,targetUser){
   renderProfileMedals(isSelf);
   loadUserStats(u.username);
   const frameEl=document.getElementById('profileAvatarFrame');
-  if(effRole&&effRole.avatarFrame){
-    frameEl.className='avatar-frame-overlay active';
-    frameEl.style.background='none';
-    frameEl.style.boxShadow='none';
-    frameEl.style.border='none';
-    frameEl.innerHTML=`<img src="${effRole.avatarFrame}" style="position:absolute;inset:-10%;width:120%;height:120%;object-fit:contain;pointer-events:none;z-index:8">`;
-  } else {
-    frameEl.innerHTML='';
-    frameEl.style.background='';
-    frameEl.style.boxShadow='';
-    frameEl.style.border='';
-    const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));
-    frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');
-  }
+  const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));
+  frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');
+  applyCustomRoleAvatarFrame(effRole);
   if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}else{stopProfileEffect();stopAvatarEffect();}
   document.getElementById('profileModal').classList.add('show');
   if(profileEffectCycleTimer)clearInterval(profileEffectCycleTimer);
@@ -3438,6 +3352,16 @@ async function openProfile(_,targetUser){
       }
     },10000);
   }
+}
+function applyCustomRoleAvatarFrame(role){
+  const el=document.getElementById('profileCustomRoleFrame');
+  if(!el)return;
+  if(!role||!role.avatarFrame){el.style.display='none';el.style.backgroundImage='';el.style.transform='';return;}
+  const x=parseFloat(role.avatarFrameOffsetX||0),y=parseFloat(role.avatarFrameOffsetY||0);
+  const sc=parseFloat(role.avatarFrameScale||1),rot=parseFloat(role.avatarFrameRotation||0);
+  el.style.display='block';
+  el.style.backgroundImage=`url('${role.avatarFrame}')`;
+  el.style.transform=`translate(${x}px,${y}px) scale(${sc}) rotate(${rot}deg)`;
 }
 function adjustColor(hex,amt){const c=hex.replace('#','');let r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);r=Math.max(0,Math.min(255,r+amt));g=Math.max(0,Math.min(255,g+amt));b=Math.max(0,Math.min(255,b+amt));return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function applyFontAndEffect(el,fontStyle,textEffect,color){const fonts={'normal':"inherit",'hoathinh':"'Comic Sans MS', cursive",'nannhot':"Georgia, serif",'mono':"'Courier New', monospace",'serif':"'Times New Roman', serif"};el.style.fontFamily=fonts[fontStyle]||'inherit';el.style.color=color||'#333';el.style.webkitTextFillColor='';el.style.background='';el.style.webkitBackgroundClip='';el.style.backgroundClip='';if(textEffect==='glow')el.style.textShadow=`0 0 8px ${color||'#fff'},0 0 16px ${color||'#fff'}`;else if(textEffect==='neon')el.style.textShadow=`0 0 4px ${color},0 0 10px ${color},0 0 20px ${color},0 0 40px ${color}`;else if(textEffect==='rainbow'){el.style.background='linear-gradient(90deg,#ff4d4f,#ffc107,#198754,#1877f2,#a55eea,#ff4d4f)';el.style.backgroundSize='300% auto';el.style.webkitBackgroundClip='text';el.style.backgroundClip='text';el.style.webkitTextFillColor='transparent';}else if(textEffect==='shadow')el.style.textShadow='3px 3px 6px rgba(0,0,0,.4)';else el.style.textShadow='none';}
@@ -3480,7 +3404,7 @@ function closeAvatarCrop(){document.getElementById('avatarCropModal').classList.
 /* PIN ROLE */
 function togglePinRoleSelector(){const list=document.getElementById('profilePinnedRoleList');const icon=document.getElementById('pinRoleToggleIcon');const isOpen=list.classList.contains('open');if(isOpen){list.classList.remove('open');icon.innerText='▶';}else{list.classList.add('open');icon.innerText='▼';}}
 function renderPinnedRoleSelector(u,allRoles,isSelf){const box=document.getElementById('profilePinnedRoleBox');const list=document.getElementById('profilePinnedRoleList');const rolesFiltered=allRoles.filter(r=>r.emoji);if(rolesFiltered.length<2){box.style.display='none';return;}box.style.display='block';list.classList.remove('open');document.getElementById('pinRoleToggleIcon').innerText='▶';const pinnedId=u.pinnedRoleId||'';list.innerHTML=rolesFiltered.map(r=>{const realId=r.id||'';const isPinned=pinnedId===realId;const aura=r.auraEnabled?`box-shadow:0 0 8px ${r.auraColor||'#ffc107'},0 0 16px ${r.auraColor||'#ffc107'};`:'';return `<span class="pin-role-item ${isPinned?'pinned':''}" style="background:${r.bgColor};color:${r.textColor};${aura}" onclick="${isSelf?`pinRole('${realId}')`:'void(0)'}">${r.emoji} ${escapeHtml(r.name)}</span>`;}).join('');}
-async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);const frameEl=document.getElementById('profileAvatarFrame');const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;applyAvatarBgToProfile(u.avatarBg||'');renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);const frameEl=document.getElementById('profileAvatarFrame');const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');applyCustomRoleAvatarFrame(effRole);if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;applyAvatarBgToProfile(u.avatarBg||'');renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
 /* PROFILE FX */
 let profileFxRAF=null,profileFxAutoStop=null;
@@ -3550,7 +3474,6 @@ function switchSupremeTab(tab,el){
   document.getElementById('supremeTabSystem').style.display=tab==='system'?'block':'none';
   document.getElementById('supremeTabConfig').style.display=tab==='config'?'block':'none';
   document.getElementById('supremeTabEntertainment').style.display=tab==='entertainment'?'block':'none';
-  document.getElementById('supremeTabEffects').style.display=tab==='effects'?'block':'none';
   if(tab==='accounts'){
     if(accMgmtUnlocked) loadAllUsers();
     else {
@@ -3562,7 +3485,6 @@ function switchSupremeTab(tab,el){
   if(tab==='system'){loadEmailJSConfigFromDB();}
   if(tab==='config'){configTabUnlocked=false;document.getElementById('configGate').style.display='block';document.getElementById('configPanel').style.display='none';document.getElementById('configVuaPass').value='';}
   if(tab==='entertainment'){renderNotifyEffectGrid();renderPrankEffectGrid();renderNotifyUserList();renderPrankUserList();loadSupremeAudioList();updateMusicUIFromDB();renderRaRoleConfig();}
-  if(tab==='effects'){listenCustomEmojis();switchEffectSubTab(currentEffectSubTab);renderExistingEmojiGrid();}
 }
 async function unlockAccountManagement(){const username=document.getElementById('accMgmtUsername').value.trim(),pass=document.getElementById('accMgmtVuaPass').value.trim();if(!username){showToast('Nhập tên đăng nhập!','error');return;}if(pass!==VUA_PASSWORD){showToast('❌ Mật khẩu VUA không đúng!','error');return;}accMgmtUnlocked=true;document.getElementById('accMgmtPanel').style.display='block';document.getElementById('accMgmtVuaPass').value='';await loadRolesCache();await loadMedalsCache();loadAllUsers();showToast('🔓 Đã mở khóa!','success');}
 async function loadAllUsers(){if(!accMgmtUnlocked)return;const c=document.getElementById('accUserListContainer');c.innerHTML='<p style="text-align:center;color:#888;padding:20px 0">⏳ Đang tải...</p>';try{await loadRolesCache();await loadMedalsCache();const s=await window.dbGet(window.dbChild(window.dbRef,'users'));cachedUsers=s.val()||{};filterAccList();renderHomeRoleUsers();}catch(e){c.innerHTML='<p style="color:#dc3545">Lỗi: '+(e.message||e)+'</p>';}}
@@ -3671,137 +3593,78 @@ async function removeUserAvatarBg(username){if(!await customConfirm('Xóa ảnh 
 /* ROLE/MEDAL LIST */
 function openRoleListPanel(){document.getElementById('roleListPanel').style.display='block';document.getElementById('accMgmtPanel').style.display='none';document.getElementById('medalListPanel').style.display='none';loadRoleList();}
 function closeRoleListPanel(){document.getElementById('roleListPanel').style.display='none';document.getElementById('accMgmtPanel').style.display='block';}
-async function loadRoleList(){await loadRolesCache();const c=document.getElementById('roleListContainer');const ids=Object.keys(cachedRoles);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có vai trò nào.</p>';return;}c.innerHTML=ids.map(rid=>{const r=cachedRoles[rid];const aura=r.auraEnabled?`box-shadow:0 0 10px ${r.auraColor},0 0 20px ${r.auraColor};`:'';const frameInfo=r.avatarFrame?'<span style="color:#198754;font-size:11px">🖼️ Có khung</span>':'<span style="color:#888;font-size:11px">Không khung</span>';return `<div class="role-card"><span class="role-preview" style="background:${r.bgColor};color:${r.textColor};${aura}">${r.emoji||''} ${escapeHtml(r.name)}</span><div class="role-info">${r.auraEnabled?'✨ Aura':'Aura tắt'} • ${frameInfo}</div><div class="role-actions"><button style="background:#0d6efd" onclick="openRoleEditor('${rid}')">✏️</button><button style="background:#dc3545" onclick="deleteRole('${rid}')">🗑️</button></div></div>`;}).join('');}
-function openRoleEditor(rid){currentEditingRoleId=rid||null;const r=rid&&cachedRoles[rid]?cachedRoles[rid]:{name:'',bgColor:'#6f42c1',textColor:'#ffffff',auraEnabled:false,auraColor:'#ffc107',emoji:'👑',medalId:'',avatarFrame:'',avatarCalibration:{x:0,y:0,scale:1}};document.getElementById('roleEditorTitle').innerText=rid?'✏️ Sửa Vai Trò':'🎭 Tạo Vai Trò Mới';document.getElementById('roleName').value=r.name||'';document.getElementById('roleBg').value=r.bgColor||'#6f42c1';document.getElementById('roleText').value=r.textColor||'#ffffff';document.getElementById('roleAuraEnabled').checked=!!r.auraEnabled;document.getElementById('roleAuraBox').style.display=r.auraEnabled?'block':'none';document.getElementById('roleAuraColor').value=r.auraColor||'#ffc107';const ms=document.getElementById('roleMedalId');ms.innerHTML='<option value="">Không có huy chương</option>'+Object.keys(cachedMedals).filter(id=>cachedMedals[id].type!=='cup').map(id=>`<option value="${id}" ${r.medalId===id?'selected':''}>${MEDAL_ICONS[cachedMedals[id].tier]} ${escapeHtml(cachedMedals[id].name)}</option>`).join('');selectedRoleEmoji=r.emoji||'👑';renderRoleEmojiGrid();updateRolePreview();
-  // New: load frame preview
-  currentRoleFrameData=r.avatarFrame||'';
-  roleCalibrationState=r.avatarCalibration?{...r.avatarCalibration}:{x:0,y:0,scale:1};
-  updateRoleFramePreview();
-  document.getElementById('roleEditorModal').classList.add('show');}
+async function loadRoleList(){await loadRolesCache();const c=document.getElementById('roleListContainer');const ids=Object.keys(cachedRoles);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có vai trò nào.</p>';return;}c.innerHTML=ids.map(rid=>{const r=cachedRoles[rid];const aura=r.auraEnabled?`box-shadow:0 0 10px ${r.auraColor},0 0 20px ${r.auraColor};`:'';const hasFrame=r.avatarFrame?`<span style="font-size:10px;background:#6f42c1;color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px">🖼️ FRAME</span>`:'';return `<div class="role-card"><span class="role-preview" style="background:${r.bgColor};color:${r.textColor};${aura}">${r.emoji||''} ${escapeHtml(r.name)}</span><div class="role-info">${r.auraEnabled?'✨ Aura':'Aura tắt'}${hasFrame}</div><div class="role-actions"><button style="background:#0d6efd" onclick="openRoleEditor('${rid}')">✏️</button><button style="background:#dc3545" onclick="deleteRole('${rid}')">🗑️</button></div></div>`;}).join('');}
+function openRoleEditor(rid){currentEditingRoleId=rid||null;const r=rid&&cachedRoles[rid]?cachedRoles[rid]:{name:'',bgColor:'#6f42c1',textColor:'#ffffff',auraEnabled:false,auraColor:'#ffc107',emoji:'👑',medalId:'',avatarFrame:'',avatarFrameOffsetX:0,avatarFrameOffsetY:0,avatarFrameScale:1,avatarFrameRotation:0};document.getElementById('roleEditorTitle').innerText=rid?'✏️ Sửa Vai Trò':'🎭 Tạo Vai Trò Mới';document.getElementById('roleName').value=r.name||'';document.getElementById('roleBg').value=r.bgColor||'#6f42c1';document.getElementById('roleText').value=r.textColor||'#ffffff';document.getElementById('roleAuraEnabled').checked=!!r.auraEnabled;document.getElementById('roleAuraBox').style.display=r.auraEnabled?'block':'none';document.getElementById('roleAuraColor').value=r.auraColor||'#ffc107';const ms=document.getElementById('roleMedalId');ms.innerHTML='<option value="">Không có huy chương</option>'+Object.keys(cachedMedals).filter(id=>cachedMedals[id].type!=='cup').map(id=>`<option value="${id}" ${r.medalId===id?'selected':''}>${MEDAL_ICONS[cachedMedals[id].tier]} ${escapeHtml(cachedMedals[id].name)}</option>`).join('');selectedRoleEmoji=r.emoji||'👑';renderRoleEmojiGrid();updateRolePreview();window._currentRoleAvatarFrame=r.avatarFrame||'';window._currentRoleAvatarFrameAdj={x:r.avatarFrameOffsetX||0,y:r.avatarFrameOffsetY||0,scale:r.avatarFrameScale||1,rotation:r.avatarFrameRotation||0};updateRoleAvatarFramePreview();document.getElementById('roleEditorModal').classList.add('show');}
 function closeRoleEditor(){document.getElementById('roleEditorModal').classList.remove('show');}
 function renderRoleEmojiGrid(){document.getElementById('roleEmojiGrid').innerHTML=ROLE_EMOJIS.map(e=>`<button class="${e===selectedRoleEmoji?'selected':''}" onclick="pickRoleEmoji('${e}')">${e}</button>`).join('');}
 function pickRoleEmoji(e){selectedRoleEmoji=e;renderRoleEmojiGrid();updateRolePreview();}
 function updateRolePreview(){const name=document.getElementById('roleName').value||'Tên vai trò';const bg=document.getElementById('roleBg').value,txt=document.getElementById('roleText').value,aura=document.getElementById('roleAuraEnabled').checked,ac=document.getElementById('roleAuraColor').value;const el=document.getElementById('rolePreview');if(!el)return;el.style.background=bg;el.style.color=txt;el.style.boxShadow=aura?`0 0 12px ${ac},0 0 24px ${ac}`:'none';el.innerText=`${selectedRoleEmoji} ${name}`;}
-function updateRoleFramePreview(){
-  const box=document.getElementById('roleFramePreviewBox');
-  const img=document.getElementById('roleFramePreviewImg');
-  const rmBtn=document.getElementById('roleRemoveFrameBtn');
-  if(!box)return;
-  if(currentRoleFrameData){
-    box.style.display='block';
-    img.src=currentRoleFrameData;
-    if(rmBtn)rmBtn.style.display='inline-block';
-  } else {
-    box.style.display='none';
-    img.src='';
-    if(rmBtn)rmBtn.style.display='none';
-  }
-}
-async function handleRoleFrameUpload(input){
-  if(!input.files||!input.files[0])return;
-  const file=input.files[0];
-  const validExts=['.png','.jpg','.jpeg','.webp','.svg','.gif','.apng','.json'];
-  const nameLower=(file.name||'').toLowerCase();
-  const ok=validExts.some(ext=>nameLower.endsWith(ext))||(file.type&&file.type.startsWith('image/'));
-  if(!ok){showToast('❌ Định dạng không hỗ trợ!','error');input.value='';return;}
-  if(file.size>4*1024*1024){showToast('Khung tối đa 4MB!','error');input.value='';return;}
-  try{
-    const d=await fileToBase64(file);
-    currentRoleFrameData=d;
-    updateRoleFramePreview();
-    showToast('✅ Đã thêm khung!','success');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
-  input.value='';
-}
-function removeRoleFrame(){
-  currentRoleFrameData='';
-  updateRoleFramePreview();
-  showToast('🗑️ Đã xóa khung!','warn');
-}
-function openRoleAvatarCalibration(){
-  const modal=document.getElementById('roleAvatarCalibrationModal');
-  const stage=document.getElementById('roleCalibrationStage');
-  const avatarEl=document.getElementById('roleCalibrationAvatar');
-  const frameImg=document.getElementById('roleCalibrationFrameImg');
-  if(currentRoleFrameData){
-    frameImg.src=currentRoleFrameData;
-    frameImg.style.display='block';
-  } else {
-    frameImg.style.display='none';
-  }
-  // apply calibration
-  const cal=roleCalibrationState||{x:0,y:0,scale:1};
-  document.getElementById('roleCalScaleRange').value=cal.scale;
-  document.getElementById('roleCalXRange').value=cal.x;
-  document.getElementById('roleCalYRange').value=cal.y;
-  document.getElementById('roleCalScaleVal').innerText=cal.scale.toFixed(2)+'x';
-  document.getElementById('roleCalXVal').innerText=cal.x;
-  document.getElementById('roleCalYVal').innerText=cal.y;
-  applyRoleCalibrationToStage();
-  modal.classList.add('show');
-  // setup drag
-  let dragging=false,lastX=0,lastY=0;
-  stage.onpointerdown=(e)=>{
-    dragging=true;lastX=e.clientX;lastY=e.clientY;
-    try{stage.setPointerCapture(e.pointerId);}catch(err){}
-  };
-  stage.onpointermove=(e)=>{
-    if(!dragging)return;
-    const dx=e.clientX-lastX,dy=e.clientY-lastY;
-    roleCalibrationState.x+=dx;
-    roleCalibrationState.y+=dy;
-    lastX=e.clientX;lastY=e.clientY;
-    document.getElementById('roleCalXRange').value=Math.max(-100,Math.min(100,roleCalibrationState.x));
-    document.getElementById('roleCalYRange').value=Math.max(-100,Math.min(100,roleCalibrationState.y));
-    document.getElementById('roleCalXVal').innerText=roleCalibrationState.x;
-    document.getElementById('roleCalYVal').innerText=roleCalibrationState.y;
-    applyRoleCalibrationToStage();
-  };
-  const endDrag=(e)=>{dragging=false;try{stage.releasePointerCapture(e.pointerId);}catch(err){}};
-  stage.onpointerup=endDrag;
-  stage.onpointercancel=endDrag;
-  stage.onpointerleave=endDrag;
-  document.getElementById('roleCalScaleRange').oninput=(e)=>{
-    roleCalibrationState.scale=parseFloat(e.target.value);
-    document.getElementById('roleCalScaleVal').innerText=roleCalibrationState.scale.toFixed(2)+'x';
-    applyRoleCalibrationToStage();
-  };
-  document.getElementById('roleCalXRange').oninput=(e)=>{
-    roleCalibrationState.x=parseInt(e.target.value);
-    document.getElementById('roleCalXVal').innerText=roleCalibrationState.x;
-    applyRoleCalibrationToStage();
-  };
-  document.getElementById('roleCalYRange').oninput=(e)=>{
-    roleCalibrationState.y=parseInt(e.target.value);
-    document.getElementById('roleCalYVal').innerText=roleCalibrationState.y;
-    applyRoleCalibrationToStage();
-  };
-}
-function applyRoleCalibrationToStage(){
-  const avatarEl=document.getElementById('roleCalibrationAvatar');
-  if(!avatarEl)return;
-  const cal=roleCalibrationState||{x:0,y:0,scale:1};
-  avatarEl.style.transform=`translate(calc(-50% + ${cal.x}px), calc(-50% + ${cal.y}px)) scale(${cal.scale})`;
-}
-function closeRoleAvatarCalibration(){document.getElementById('roleAvatarCalibrationModal').classList.remove('show');}
-function resetRoleAvatarCalibration(){
-  roleCalibrationState={x:0,y:0,scale:1};
-  document.getElementById('roleCalScaleRange').value=1;
-  document.getElementById('roleCalXRange').value=0;
-  document.getElementById('roleCalYRange').value=0;
-  document.getElementById('roleCalScaleVal').innerText='1.00x';
-  document.getElementById('roleCalXVal').innerText='0';
-  document.getElementById('roleCalYVal').innerText='0';
-  applyRoleCalibrationToStage();
-}
-function saveRoleAvatarCalibration(){
-  showToast('✅ Đã lưu căn chỉnh! Bấm "Lưu Vai Trò" để hoàn tất','success');
-  closeRoleAvatarCalibration();
-}
 document.addEventListener('input',e=>{if(['roleName','roleBg','roleText','roleAuraColor'].includes(e.target.id))updateRolePreview();});
 document.addEventListener('change',e=>{if(e.target.id==='roleAuraEnabled'){document.getElementById('roleAuraBox').style.display=e.target.checked?'block':'none';updateRolePreview();}});
-async function saveRole(){const name=document.getElementById('roleName').value.trim();if(!name){showToast('Nhập tên vai trò!','error');return;}const data={name,bgColor:document.getElementById('roleBg').value,textColor:document.getElementById('roleText').value,auraEnabled:document.getElementById('roleAuraEnabled').checked,auraColor:document.getElementById('roleAuraColor').value,emoji:selectedRoleEmoji,medalId:document.getElementById('roleMedalId').value,avatarFrame:currentRoleFrameData||'',avatarCalibration:roleCalibrationState||{x:0,y:0,scale:1},updatedAt:Date.now()};try{const rid=currentEditingRoleId||('role_'+Date.now());if(!currentEditingRoleId)data.createdAt=Date.now();await window.dbSet(window.ref(window.db,`system/roles/${rid}`),data);cachedRoles[rid]=data;showToast('✅ Đã lưu!','success');closeRoleEditor();loadRoleList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function saveRole(){const name=document.getElementById('roleName').value.trim();if(!name){showToast('Nhập tên vai trò!','error');return;}const adj=window._currentRoleAvatarFrameAdj||{x:0,y:0,scale:1,rotation:0};const data={name,bgColor:document.getElementById('roleBg').value,textColor:document.getElementById('roleText').value,auraEnabled:document.getElementById('roleAuraEnabled').checked,auraColor:document.getElementById('roleAuraColor').value,emoji:selectedRoleEmoji,medalId:document.getElementById('roleMedalId').value,avatarFrame:window._currentRoleAvatarFrame||'',avatarFrameOffsetX:adj.x||0,avatarFrameOffsetY:adj.y||0,avatarFrameScale:adj.scale||1,avatarFrameRotation:adj.rotation||0,updatedAt:Date.now()};try{const rid=currentEditingRoleId||('role_'+Date.now());if(!currentEditingRoleId)data.createdAt=Date.now();await window.dbSet(window.ref(window.db,`system/roles/${rid}`),data);cachedRoles[rid]=data;showToast('✅ Đã lưu!','success');closeRoleEditor();loadRoleList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function deleteRole(rid){if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}const vua=await customPrompt('Nhập mật khẩu VUA để xóa:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}if(!await customConfirm('Xóa vai trò này?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;try{await window.dbRemove(window.ref(window.db,`system/roles/${rid}`));delete cachedRoles[rid];showToast('🗑️ Đã xóa!','warn');loadRoleList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
+
+/* NEW: Role avatar frame handler + adjust modal */
+function handleRoleAvatarFrameUpload(input){
+  if(!input.files||!input.files[0]){return;}
+  const file=input.files[0];
+  if(!file.type||!file.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh (PNG/JPG/JPEG/WEBP/SVG/GIF/APNG)!','error');input.value='';return;}
+  if(file.size>5*1024*1024){showToast('Ảnh tối đa 5MB!','error');input.value='';return;}
+  fileToBase64(file).then(d=>{
+    window._currentRoleAvatarFrame=d;
+    updateRoleAvatarFramePreview();
+    showToast('✅ Đã thêm khung avatar!','success');
+  }).catch(e=>showToast('❌ '+(e.message||e),'error'));
+  input.value='';
+}
+function removeRoleAvatarFrame(){if(!window._currentRoleAvatarFrame){showToast('Chưa có khung!','info');return;}window._currentRoleAvatarFrame='';window._currentRoleAvatarFrameAdj={x:0,y:0,scale:1,rotation:0};updateRoleAvatarFramePreview();showToast('🗑️ Đã xóa khung!','warn');}
+function updateRoleAvatarFramePreview(){
+  const frameEl=document.getElementById('rafFrame');
+  const innerEl=document.getElementById('rafInner');
+  if(!frameEl||!innerEl)return;
+  if(window._currentRoleAvatarFrame){
+    frameEl.style.backgroundImage=`url('${window._currentRoleAvatarFrame}')`;
+    innerEl.innerText='';
+    innerEl.style.background='linear-gradient(135deg,#e7f3ff,#f0f8ff)';
+  }else{
+    frameEl.style.backgroundImage='';
+    innerEl.innerText='?';
+  }
+}
+function openRoleAvatarAdjust(){
+  if(!window._currentRoleAvatarFrame){showToast('❌ Chưa có khung! Hãy thêm khung trước.','error');return;}
+  const adj=window._currentRoleAvatarFrameAdj||{x:0,y:0,scale:1,rotation:0};
+  document.getElementById('rafRangeX').value=adj.x||0;
+  document.getElementById('rafRangeY').value=adj.y||0;
+  document.getElementById('rafRangeScale').value=adj.scale||1;
+  document.getElementById('rafRangeRot').value=adj.rotation||0;
+  const innerEl=document.getElementById('hudRoleFrameInner');
+  innerEl.style.backgroundImage=`url('${window._currentRoleAvatarFrame}')`;
+  updateRoleAvatarAdjust();
+  // drag
+  const stage=document.getElementById('hudRoleFrame');
+  stage.onpointerdown=(e)=>{roleAvatarFrameDragState.dragging=true;roleAvatarFrameDragState.lastX=e.clientX;roleAvatarFrameDragState.lastY=e.clientY;try{stage.setPointerCapture(e.pointerId);}catch(err){}};
+  stage.onpointermove=(e)=>{if(!roleAvatarFrameDragState.dragging)return;const dx=e.clientX-roleAvatarFrameDragState.lastX,dy=e.clientY-roleAvatarFrameDragState.lastY;const xEl=document.getElementById('rafRangeX'),yEl=document.getElementById('rafRangeY');xEl.value=Math.max(-150,Math.min(150,parseInt(xEl.value)+dx));yEl.value=Math.max(-150,Math.min(150,parseInt(yEl.value)+dy));roleAvatarFrameDragState.lastX=e.clientX;roleAvatarFrameDragState.lastY=e.clientY;updateRoleAvatarAdjust();};
+  const endDrag=(e)=>{roleAvatarFrameDragState.dragging=false;try{stage.releasePointerCapture(e.pointerId);}catch(err){}};
+  stage.onpointerup=endDrag;stage.onpointercancel=endDrag;
+  document.getElementById('roleAvatarAdjustModal').classList.add('show');
+}
+function updateRoleAvatarAdjust(){
+  const x=parseFloat(document.getElementById('rafRangeX').value)||0;
+  const y=parseFloat(document.getElementById('rafRangeY').value)||0;
+  const sc=parseFloat(document.getElementById('rafRangeScale').value)||1;
+  const rot=parseFloat(document.getElementById('rafRangeRot').value)||0;
+  document.getElementById('rafXVal').innerText=x;
+  document.getElementById('rafYVal').innerText=y;
+  document.getElementById('rafScaleVal').innerText=sc.toFixed(2);
+  document.getElementById('rafRotVal').innerText=rot;
+  const hud=document.getElementById('hudRoleFrame');
+  hud.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) rotate(${rot}deg)`;
+}
+function closeRoleAvatarAdjust(){document.getElementById('roleAvatarAdjustModal').classList.remove('show');}
+function resetRoleAvatarAdjust(){document.getElementById('rafRangeX').value=0;document.getElementById('rafRangeY').value=0;document.getElementById('rafRangeScale').value=1;document.getElementById('rafRangeRot').value=0;updateRoleAvatarAdjust();}
+function saveRoleAvatarAdjust(){window._currentRoleAvatarFrameAdj={x:parseFloat(document.getElementById('rafRangeX').value)||0,y:parseFloat(document.getElementById('rafRangeY').value)||0,scale:parseFloat(document.getElementById('rafRangeScale').value)||1,rotation:parseFloat(document.getElementById('rafRangeRot').value)||0};closeRoleAvatarAdjust();showToast('✅ Đã lưu căn chỉnh khung avatar!','success');}
+
 function openMedalListPanel(){document.getElementById('medalListPanel').style.display='block';document.getElementById('accMgmtPanel').style.display='none';document.getElementById('roleListPanel').style.display='none';loadMedalList();}
 function closeMedalListPanel(){document.getElementById('medalListPanel').style.display='none';document.getElementById('accMgmtPanel').style.display='block';}
 async function loadMedalList(){await loadMedalsCache();const c=document.getElementById('medalListContainer');const ids=Object.keys(cachedMedals);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có huy chương/cup nào.</p>';return;}c.innerHTML=ids.map(mid=>{const m=cachedMedals[mid];const isCup=m.type==='cup';const icon=isCup?'🏆':(MEDAL_ICONS[m.tier]||'🏅');return `<div class="role-card" style="border-color:${isCup?CUP_COLORS[m.tier]||'#a55eea':'#ffc107'}"><span style="font-size:40px;filter:drop-shadow(0 0 6px ${CUP_COLORS[m.tier]||'#ffd700'})">${icon}</span><div class="role-info"><div style="font-weight:bold;color:#333;font-size:14px">${escapeHtml(m.name)} ${isCup?'<span style="font-size:10px;background:#a55eea;color:#fff;padding:2px 8px;border-radius:10px">CUP</span>':''}</div><div style="font-size:11px;color:#888;margin-top:3px">Bậc: <b style="color:${CUP_COLORS[m.tier]}">${MEDAL_TIER_NAMES[m.tier]}</b></div></div><div class="role-actions"><button style="background:#0d6efd" onclick="openMedalEditor('${mid}')">✏️</button><button style="background:#dc3545" onclick="deleteMedal('${mid}')">🗑️</button></div></div>`;}).join('');}
@@ -4084,13 +3947,30 @@ function listenGlobalAudio(){
 /* ==================== BIG NOTIFICATION ==================== */
 function renderNotifyEffectGrid(){
   const g=document.getElementById('notifyEffectGrid');if(!g)return;
-  g.innerHTML=ENTERTAINMENT_EFFECTS.map(e=>`<div onclick="selectNotifyEffect('${e.id}')" title="${escapeHtml(e.name)}" style="cursor:pointer;padding:8px 4px;border:2px solid ${selectedNotifyEffect===e.id?'#198754':'#e0e0e0'};border-radius:10px;text-align:center;background:${selectedNotifyEffect===e.id?'#e7ffee':'#fff'};transition:all .2s"><div style="font-size:22px">${e.emoji}</div><div style="font-size:9px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(e.name)}</div></div>`).join('');
+  const allEffects=[...ENTERTAINMENT_EFFECTS,...getCustomEmojiEffectsAsEntEffects()];
+  g.innerHTML=allEffects.map(e=>`<div onclick="selectNotifyEffect('${e.id}')" title="${escapeHtml(e.name)}" style="cursor:pointer;padding:8px 4px;border:2px solid ${selectedNotifyEffect===e.id?'#198754':'#e0e0e0'};border-radius:10px;text-align:center;background:${selectedNotifyEffect===e.id?'#e7ffee':'#fff'};transition:all .2s"><div style="font-size:22px">${e.emoji||(e.previewHtml||'✨')}</div><div style="font-size:9px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(e.name)}</div></div>`).join('');
 }
 function selectNotifyEffect(id){selectedNotifyEffect=(selectedNotifyEffect===id)?null:id;renderNotifyEffectGrid();}
 function clearNotifyEffect(){selectedNotifyEffect=null;renderNotifyEffectGrid();}
 function renderPrankEffectGrid(){
   const g=document.getElementById('prankEffectGrid');if(!g)return;
-  g.innerHTML=ENTERTAINMENT_EFFECTS.map(e=>`<div onclick="selectPrankEffect('${e.id}')" title="${escapeHtml(e.name)}" style="cursor:pointer;padding:8px 4px;border:2px solid ${selectedPrankEffect===e.id?'#dc3545':'#e0e0e0'};border-radius:10px;text-align:center;background:${selectedPrankEffect===e.id?'#fff5f5':'#fff'};transition:all .2s"><div style="font-size:22px">${e.emoji}</div><div style="font-size:9px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(e.name)}</div></div>`).join('');
+  const allEffects=[...ENTERTAINMENT_EFFECTS,...getCustomEmojiEffectsAsEntEffects()];
+  g.innerHTML=allEffects.map(e=>`<div onclick="selectPrankEffect('${e.id}')" title="${escapeHtml(e.name)}" style="cursor:pointer;padding:8px 4px;border:2px solid ${selectedPrankEffect===e.id?'#dc3545':'#e0e0e0'};border-radius:10px;text-align:center;background:${selectedPrankEffect===e.id?'#fff5f5':'#fff'};transition:all .2s"><div style="font-size:22px">${e.emoji||(e.previewHtml||'✨')}</div><div style="font-size:9px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(e.name)}</div></div>`).join('');
+}
+function getCustomEmojiEffectsAsEntEffects(){
+  const arr=[];
+  Object.keys(cachedCustomEmojis||{}).forEach(eid=>{
+    const e=cachedCustomEmojis[eid];
+    if(!e)return;
+    const baseEmoji=e.type==='emoji'?(e.value||'✨'):'🖼️';
+    arr.push({id:'custom_'+eid,emoji:baseEmoji,name:e.name||'Emoji tùy chỉnh',_isCustomEmoji:true,_emojiData:e});
+  });
+  Object.keys(cachedEmojiEffects||{}).forEach(effId=>{
+    const eff=cachedEmojiEffects[effId];
+    if(!eff)return;
+    arr.push({id:'emojieff_'+effId,emoji:eff.icon||'✨',name:eff.name||'Hiệu ứng'});
+  });
+  return arr;
 }
 function selectPrankEffect(id){selectedPrankEffect=(selectedPrankEffect===id)?null:id;renderPrankEffectGrid();}
 function onNotifyTargetChange(){const v=document.querySelector('input[name="notifyTarget"]:checked').value;document.getElementById('notifyUserSelectBox').style.display=v==='specific'?'block':'none';if(v==='specific')renderNotifyUserList();}
@@ -4318,9 +4198,9 @@ function listenPrankEffects(){
 let activeFxTimeout=null;
 function stopEntertainmentEffect(){
   const c=document.getElementById('fxContainer');
-  if(c){c.querySelectorAll('.fx-money-rain,.fx-snow-rain,.fx-confetti-rain,.fx-heart-rise,.fx-fire-flames,.fx-star-shine,.fx-bat-fly,.fx-ghost-float,.fx-balloon-rise,.fx-flower-petals,.fx-sakura-petals,.fx-leaf-fall,.fx-clover-fall,.fx-diamond-fall,.fx-comet-fly,.fx-sparkle-fall,.fx-bubble-float,.fx-candy-fall,.fx-pizza-fall,.fx-crown-drop,.fx-banned-stamp,.fx-dragon,.fx-christmas-tree,.fx-heart-explode,.fx-broken-heart,.fx-spiderman,.fx-fire-evolution,.fx-lightning-strike,.fx-water-wave,.fx-alien-abduction,.fx-ufo-fly,.fx-skull-rise,.fx-rainbow-arc,.fx-firework-burst,.fx-hammer-slam,.fx-crown-halo,.fx-crown-drop,.fx-spidey-new,.fx-web-shoot,.fx-handshake,.fx-admin-crown,.fx-admin-aura,.fx-admin-text').forEach(el=>el.remove());}
+  if(c){c.querySelectorAll('.fx-money-rain,.fx-snow-rain,.fx-confetti-rain,.fx-heart-rise,.fx-fire-flames,.fx-star-shine,.fx-bat-fly,.fx-ghost-float,.fx-balloon-rise,.fx-flower-petals,.fx-sakura-petals,.fx-leaf-fall,.fx-clover-fall,.fx-diamond-fall,.fx-comet-fly,.fx-sparkle-fall,.fx-bubble-float,.fx-candy-fall,.fx-pizza-fall,.fx-crown-drop,.fx-banned-stamp,.fx-dragon,.fx-christmas-tree,.fx-heart-explode,.fx-broken-heart,.fx-spiderman,.fx-fire-evolution,.fx-lightning-strike,.fx-water-wave,.fx-alien-abduction,.fx-ufo-fly,.fx-skull-rise,.fx-rainbow-arc,.fx-firework-burst,.fx-hammer-slam,.fx-crown-halo,.fx-crown-drop,.fx-spidey-new,.fx-web-shoot,.fx-handshake,.fx-admin-crown,.fx-admin-aura,.fx-admin-text,.fx-custom-img-el,.fx-custom-emoji-el').forEach(el=>el.remove());}
   const overlay=document.getElementById('bigNotifyOverlay');
-  if(overlay){overlay.querySelectorAll('.fx-money-rain,.fx-snow-rain,.fx-confetti-rain,.fx-heart-rise,.fx-fire-flames,.fx-star-shine,.fx-bat-fly,.fx-ghost-float,.fx-balloon-rise,.fx-flower-petals,.fx-sakura-petals,.fx-leaf-fall,.fx-clover-fall,.fx-diamond-fall,.fx-comet-fly,.fx-sparkle-fall,.fx-bubble-float,.fx-candy-fall,.fx-pizza-fall,.fx-crown-drop,.fx-banned-stamp,.fx-dragon,.fx-christmas-tree,.fx-heart-explode,.fx-broken-heart,.fx-spiderman,.fx-fire-evolution,.fx-lightning-strike,.fx-water-wave,.fx-alien-abduction,.fx-ufo-fly,.fx-skull-rise,.fx-rainbow-arc,.fx-firework-burst,.fx-hammer-slam,.fx-crown-halo,.fx-spidey-new,.fx-web-shoot,.fx-handshake,.fx-admin-crown,.fx-admin-aura,.fx-admin-text').forEach(el=>el.remove());}
+  if(overlay){overlay.querySelectorAll('.fx-money-rain,.fx-snow-rain,.fx-confetti-rain,.fx-heart-rise,.fx-fire-flames,.fx-star-shine,.fx-bat-fly,.fx-ghost-float,.fx-balloon-rise,.fx-flower-petals,.fx-sakura-petals,.fx-leaf-fall,.fx-clover-fall,.fx-diamond-fall,.fx-comet-fly,.fx-sparkle-fall,.fx-bubble-float,.fx-candy-fall,.fx-pizza-fall,.fx-crown-drop,.fx-banned-stamp,.fx-dragon,.fx-christmas-tree,.fx-heart-explode,.fx-broken-heart,.fx-spiderman,.fx-fire-evolution,.fx-lightning-strike,.fx-water-wave,.fx-alien-abduction,.fx-ufo-fly,.fx-skull-rise,.fx-rainbow-arc,.fx-firework-burst,.fx-hammer-slam,.fx-crown-halo,.fx-spidey-new,.fx-web-shoot,.fx-handshake,.fx-admin-crown,.fx-admin-aura,.fx-admin-text,.fx-custom-img-el,.fx-custom-emoji-el').forEach(el=>el.remove());}
   if(activeFxTimeout){clearTimeout(activeFxTimeout);activeFxTimeout=null;}
 }
 function playEntertainmentEffectInContainer(id,durationSec,container){
@@ -4337,6 +4217,22 @@ function playEntertainmentEffect(id,durationSec){
 }
 function playEntertainmentEffectInternal(id,durationSec,container){
   const dur=(durationSec||5)*1000;
+  // custom emoji handler
+  if(id&&id.startsWith('custom_')){
+    const eid=id.slice(7);
+    const e=cachedCustomEmojis[eid];
+    if(!e)return;
+    playCustomEmojiEffect(e,dur,container);
+    return;
+  }
+  // custom emoji effect handler
+  if(id&&id.startsWith('emojieff_')){
+    const effId=id.slice(9);
+    const eff=cachedEmojiEffects[effId];
+    if(!eff)return;
+    playCustomUploadedEffect(eff,dur,container);
+    return;
+  }
   const fx=ENTERTAINMENT_EFFECTS.find(x=>x.id===id);
   if(!fx)return;
   const emoji=fx.emoji;
@@ -4353,7 +4249,7 @@ function playEntertainmentEffectInternal(id,durationSec,container){
     case 'confetti_rain':{const d=document.createElement('div');d.className='fx-confetti-rain';d.style.cssText='position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:5';const cols=['#ff4757','#ffa502','#2ed573','#1e90ff','#a55eea','#ffdd59'];for(let i=0;i<120;i++){const s=document.createElement('div');s.className='fx-particle';s.style.left=Math.random()*W+'px';s.style.top='-30px';s.style.width='8px';s.style.height='14px';s.style.position='absolute';s.style.background=cols[Math.floor(Math.random()*cols.length)];s.style.animation=`fallDown ${2+Math.random()*3}s linear ${Math.random()*1.5}s forwards`;d.appendChild(s);}c.appendChild(d);setTimeout(()=>d.remove(),dur);break;}
     case 'heart_rise':riseUp('❤️',40);break;
     case 'star_shine':rainFall('⭐',40,['#ffd700','#fff8b0','#ffed4e']);break;
-    case 'bat_fly':case 'bat_fly2':rainFall('🦇',30,['#1a1a1a','#333333']);break;
+    case 'bat_fly':rainFall('🦇',30,['#1a1a1a','#333333']);break;
     case 'ghost_float':riseUp('👻',25);break;
     case 'balloon_rise':riseUp('🎈',30);break;
     case 'flower_petals':rainFall('🌺',40,['#ff69b4','#ff4d6d','#ffb3d9']);break;
@@ -4399,7 +4295,7 @@ function playEntertainmentEffectInternal(id,durationSec,container){
       break;}
     case 'admin_special':{
       const aura=document.createElement('div');aura.className='fx-admin-aura play';c.appendChild(aura);setTimeout(()=>aura.remove(),dur);
-      const crown=document.createElement('div');crown.className='fx-admin-crown play';crown.innerText='💎';c.appendChild(crown);setTimeout(()=>crown.remove(),dur);
+      const crown=document.createElement('div');crown.className='fx-admin-crown play';crown.innerText='💠';c.appendChild(crown);setTimeout(()=>crown.remove(),dur);
       const txt=document.createElement('div');txt.className='fx-admin-text play';txt.innerText='ADMIN SEVER';c.appendChild(txt);setTimeout(()=>txt.remove(),dur);
       break;}
     case 'fire_evo':{const s=document.createElement('div');s.className='fx-fire-evolution';c.appendChild(s);setTimeout(()=>s.remove(),dur);break;}
@@ -4413,6 +4309,104 @@ function playEntertainmentEffectInternal(id,durationSec,container){
     case 'bubble_rise':{for(let i=0;i<25;i++){const s=document.createElement('div');s.className='fx-bubble-rise';s.innerText='🫧';s.style.left=Math.random()*W+'px';s.style.animationDelay=(Math.random()*2)+'s';c.appendChild(s);setTimeout(()=>s.remove(),dur);}break;}
     default:rainFall('✨',40);
   }
+}
+function playCustomEmojiEffect(e,dur,container){
+  const c=container;
+  const d=document.createElement('div');
+  d.className='fx-money-rain fx-custom-emoji-el';
+  d.style.cssText='position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:6';
+  const W=innerWidth,H=innerHeight;
+  const eDisplay=e.type==='emoji'?e.value:`<img src="${e.value}" style="width:100%;height:100%;object-fit:contain;display:block">`;
+  const shapeCls=e.shape&&e.shape!=='none'?`shape-${e.shape}`:'';
+  for(let i=0;i<30;i++){
+    const s=document.createElement('div');
+    s.className='fx-particle';
+    s.style.left=Math.random()*W+'px';
+    s.style.top='-60px';
+    s.style.fontSize=(26+Math.random()*24)+'px';
+    s.style.position='absolute';
+    s.style.animation=`fallDown ${2+Math.random()*3}s linear ${Math.random()*1.5}s forwards`;
+    if(e.type==='emoji'){
+      s.innerText=e.value;
+    }else{
+      const img=document.createElement('div');
+      img.style.cssText=`width:${40+Math.random()*30}px;height:${40+Math.random()*30}px;display:flex;align-items:center;justify-content:center;overflow:hidden;`;
+      if(e.shape==='circle')img.style.borderRadius='50%';
+      else if(e.shape==='rounded')img.style.borderRadius='8px';
+      else if(e.shape==='square')img.style.borderRadius='0';
+      else if(e.shape==='star')img.style.clipPath='polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)';
+      else if(e.shape==='hex')img.style.clipPath='polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)';
+      const im=document.createElement('img');
+      im.src=e.value;
+      im.style.cssText='width:100%;height:100%;object-fit:contain';
+      img.appendChild(im);
+      s.appendChild(img);
+    }
+    d.appendChild(s);
+  }
+  c.appendChild(d);
+  setTimeout(()=>d.remove(),dur);
+}
+async function playCustomUploadedEffect(eff,dur,container){
+  // If file has chunks stored
+  if(eff.chunks&&eff.chunks>0){
+    try{
+      const blob=await getEmojiEffectBlobFromChunks(eff.id);
+      if(!blob)return;
+      const url=URL.createObjectURL(blob);
+      const type=eff.fileType||'application/octet-stream';
+      const c=container;
+      const d=document.createElement('div');
+      d.className='fx-custom-img-el';
+      d.style.cssText=`position:absolute;inset:0;pointer-events:none;z-index:6;display:flex;align-items:center;justify-content:center;opacity:${eff.opacity!==undefined?eff.opacity:1};transform:translate(${eff.posX||0}px,${eff.posY||0}px) scale(${eff.scale||1}) rotate(${eff.rotation||0}deg)`;
+      let el;
+      if(type.startsWith('image/')||type==='image/svg+xml'){
+        el=document.createElement('img');el.src=url;
+        el.style.cssText=`max-width:80vw;max-height:80vh;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,255,255,.5))`;
+      }else if(type.startsWith('video/')){
+        el=document.createElement('video');el.src=url;el.autoplay=true;el.muted=true;el.playsInline=true;el.loop=true;
+        el.style.cssText=`max-width:80vw;max-height:80vh;object-fit:contain`;
+      }else{
+        el=document.createElement('div');
+        el.innerHTML=`<div style="background:rgba(0,0,0,.7);color:#fff;padding:20px 30px;border-radius:12px;font-size:14px;text-align:center;border:2px solid #1877f2"><div style="font-size:40px;margin-bottom:8px">${eff.icon||'✨'}</div><div style="font-weight:bold">${escapeHtml(eff.name||'Hiệu ứng')}</div><div style="font-size:11px;opacity:.7;margin-top:4px">${escapeHtml(eff.fileName||'')}</div></div>`;
+      }
+      d.appendChild(el);
+      c.appendChild(d);
+      setTimeout(()=>{d.remove();try{URL.revokeObjectURL(url);}catch(e){}},dur);
+    }catch(e){console.error('Custom effect error:',e);}
+  }
+}
+async function getEmojiEffectBlobFromChunks(effId){
+  if(audioBlobCache['emojieff_'+effId])return audioBlobCache['emojieff_'+effId];
+  try{
+    const meta=await window.dbGet(window.dbChild(window.dbRef,`system/emoji_effects/${effId}`));
+    if(!meta.exists())return null;
+    const m=meta.val();
+    const totalChunks=parseInt(m.chunks)||0;
+    if(!totalChunks)return null;
+    let fullBase64='';
+    for(let i=0;i<totalChunks;i++){
+      const cs=await window.dbGet(window.dbChild(window.dbRef,`system/emoji_effects_chunks/${effId}/${i}`));
+      if(!cs.exists())return null;
+      let chunkBase64=cs.val();
+      if(chunkBase64===null||chunkBase64===undefined)return null;
+      if(typeof chunkBase64!=='string')chunkBase64=String(chunkBase64);
+      fullBase64+=chunkBase64;
+    }
+    const ci=fullBase64.indexOf(',');
+    if(ci>=0&&ci<200)fullBase64=fullBase64.slice(ci+1);
+    fullBase64=fullBase64.replace(/\s+/g,'');
+    let binStr;
+    try{binStr=atob(fullBase64);}catch(e){
+      try{let u=fullBase64.replace(/-/g,'+').replace(/_/g,'/');while(u.length%4!==0)u+='=';binStr=atob(u);}catch(e2){return null;}
+    }
+    const len=binStr.length;
+    const bytes=new Uint8Array(len);
+    for(let j=0;j<len;j++)bytes[j]=binStr.charCodeAt(j);
+    const blob=new Blob([bytes],{type:m.fileType||'application/octet-stream'});
+    audioBlobCache['emojieff_'+effId]=blob;
+    return blob;
+  }catch(e){console.error('Get effect blob:',e);return null;}
 }
 
 /* ============ QR ============ */
@@ -4570,551 +4564,446 @@ function backDeleteHistoryStep(){document.getElementById('deleteHistoryStep1').s
 async function confirmDeleteClone(){const code=document.getElementById('delCloneCode').value.trim().toUpperCase();const user=document.getElementById('delCloneUser').value.trim().toLowerCase();if(!code){showToast('❌ Nhập mã đề!','error');return;}if(!await customConfirm('Xác nhận xóa?',{icon:'🗑️',okClass:'danger'}))return;try{let del=0;for(const path of ['leaderboard','qp_leaderboard']){const s=await window.dbGet(window.dbChild(window.dbRef,`${path}/${code}`));if(!s.exists())continue;const d=s.val();for(const k of Object.keys(d)){const r=d[k];if(user){if(r.username===user){await window.dbRemove(window.ref(window.db,`${path}/${code}/${k}`));del++;}}else{if(!r.username||!cachedUsers[r.username]){await window.dbRemove(window.ref(window.db,`${path}/${code}/${k}`));del++;}}}}showToast(`🗑️ Đã xóa ${del} bản ghi!`,'warn');closeDeleteHistoryModal();}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function confirmDeleteAll(){if(!await customConfirm('XÓA TẤT CẢ? Không thể hoàn tác!',{icon:'💥',okClass:'danger',okText:'XÓA'}))return;try{await window.dbRemove(window.ref(window.db,'leaderboard'));await window.dbRemove(window.ref(window.db,'qp_leaderboard'));showToast('💥 Đã xóa tất cả!','warn');closeDeleteHistoryModal();}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
-/* ==================== EMOJI MANAGEMENT ==================== */
-function switchEffectSubTab(tab,el){
-  currentEffectSubTab=tab;
-  const tabs=document.querySelectorAll('#effectSubTabsContainer .effect-sub-tab');
-  tabs.forEach(t=>t.classList.remove('active'));
+/* ==================== CUSTOM EMOJI SYSTEM (NEW) ==================== */
+function switchEmojiConfigTab(tab,el){
+  document.querySelectorAll('.emoji-config-tabbar .ec-tab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
-  else {
-    // find matching tab if no el passed
-    const found=[...tabs].find(t=>t.getAttribute('onclick')&&t.getAttribute('onclick').includes("'"+tab+"'"));
-    if(found)found.classList.add('active');
+  document.getElementById('emojiCreatePanel').style.display=tab==='create'?'block':'none';
+  document.getElementById('emojiListPanel').style.display=tab==='list'?'block':'none';
+  if(tab==='list')loadCustomEmojis();
+  if(tab==='create')initEcCreatePanel();
+}
+function initEcCreatePanel(){
+  const picker=document.getElementById('ecEmojiPicker');
+  if(picker&&!picker.children.length){
+    picker.innerHTML=ROLE_EMOJIS.map(e=>`<button onclick="pickEcEmoji('${e}',this)">${e}</button>`).join('');
   }
-  document.getElementById('effectSubCreate').style.display=tab==='create'?'block':'none';
-  document.getElementById('effectSubList').style.display=tab==='list'?'block':'none';
-  if(tab==='list')renderEmojiList();
-  if(tab==='create')renderExistingEmojiGrid();
 }
-function listenCustomEmojis(){
-  if(customEmojisListener)return;
-  customEmojisListener=window.onValue(window.ref(window.db,'system/custom_emojis'),snap=>{
-    cachedCustomEmojis=snap.val()||{};
-    renderEmojiList();
-    renderExistingEmojiGrid();
-  });
+function pickEmojiSourceMode(mode){
+  ecSourceMode=mode;
+  document.getElementById('ecModeEmojiBtn').classList.toggle('active',mode==='emoji');
+  document.getElementById('ecModeImageBtn').classList.toggle('active',mode==='image');
+  document.getElementById('ecEmojiSource').style.display=mode==='emoji'?'block':'none';
+  document.getElementById('ecImageSource').style.display=mode==='image'?'block':'none';
 }
-function selectEmojiSource(src,el){
-  document.querySelectorAll('.emoji-source-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  document.getElementById('emojiExistingSource').style.display=src==='existing'?'block':'none';
-  document.getElementById('emojiImageSource').style.display=src==='image'?'block':'none';
+function pickEcEmoji(e,btn){
+  ecSelectedEmoji=e;
+  document.querySelectorAll('#ecEmojiPicker button').forEach(b=>b.classList.remove('selected'));
+  if(btn)btn.classList.add('selected');
 }
-function renderExistingEmojiGrid(){
-  const grid=document.getElementById('emojiExistingGrid');
-  if(!grid)return;
-  grid.innerHTML=ROLE_EMOJIS.map(e=>`<div onclick="pickExistingEmoji('${e}',this)" style="padding:8px 4px;text-align:center;font-size:26px;cursor:pointer;border-radius:8px;border:2px solid ${selectedExistingEmoji===e?'#1877f2':'transparent'};background:${selectedExistingEmoji===e?'#e7f3ff':'transparent'};transition:all .15s">${e}</div>`).join('');
+function pickEcShape(shape,btn){
+  ecSelectedShape=shape;
+  document.querySelectorAll('#ecShapeRow .ec-shape-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
 }
-function pickExistingEmoji(e,el){
-  selectedExistingEmoji=e;
-  renderExistingEmojiGrid();
-  const p=document.getElementById('emojiPreviewDisplay');
-  if(p)p.innerText=e;
-  updateEmojiPreviewName();
-}
-function updateEmojiPreviewName(){
-  const name=document.getElementById('emojiNewName').value.trim()||'Chưa có tên';
-  const el=document.getElementById('emojiPreviewName');
-  if(el)el.innerText=name;
-}
-document.addEventListener('input',e=>{if(e.target.id==='emojiNewName')updateEmojiPreviewName();});
-function handleEmojiImageUpload(input){
+function handleEcImageUpload(input){
   if(!input.files||!input.files[0])return;
-  const file=input.files[0];
-  if(!file.type||!file.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh!','error');input.value='';return;}
-  if(file.size>8*1024*1024){showToast('❌ Ảnh tối đa 8MB!','error');input.value='';return;}
-  const reader=new FileReader();
-  reader.onload=(e)=>{
+  const f=input.files[0];
+  if(!f.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh!','error');input.value='';return;}
+  if(f.size>8*1024*1024){showToast('Ảnh tối đa 8MB!','error');input.value='';return;}
+  fileToBase64(f).then(d=>{
+    ecImageOriginalDataUrl=d;ecImageDataUrl=d;
     const img=new Image();
     img.onload=()=>{
-      const canvas=document.getElementById('emojiTrimCanvas');
-      const maxDim=500;
-      let w=img.width,h=img.height;
-      const r=Math.min(1,maxDim/Math.max(w,h));
-      w=Math.round(w*r);h=Math.round(h*r);
-      canvas.width=w;canvas.height=h;
-      const ctx=canvas.getContext('2d');
-      ctx.clearRect(0,0,w,h);
-      ctx.drawImage(img,0,0,w,h);
-      emojiTrimState.img=img;
-      emojiTrimState.canvas=canvas;
-      emojiTrimState.ctx=ctx;
-      emojiTrimState.originalImageData=ctx.getImageData(0,0,w,h);
-      document.getElementById('emojiTrimSection').style.display='block';
-      canvas.onclick=(ev)=>{
-        const rect=canvas.getBoundingClientRect();
-        const sx=canvas.width/rect.width;
-        const sy=canvas.height/rect.height;
-        const x=Math.round((ev.clientX-rect.left)*sx);
-        const y=Math.round((ev.clientY-rect.top)*sy);
-        if(emojiTrimState.mode==='magic')applyMagicWand(x,y);
+      const cv=document.getElementById('ecImgCanvas');
+      const maxDim=220;
+      const ratio=Math.min(maxDim/img.width,maxDim/img.height,1);
+      cv.width=Math.round(img.width*ratio);
+      cv.height=Math.round(img.height*ratio);
+      const ctx=cv.getContext('2d');
+      ctx.clearRect(0,0,cv.width,cv.height);
+      ctx.drawImage(img,0,0,cv.width,cv.height);
+      cv.style.display='block';
+      document.getElementById('ecImgPreview').querySelector('span').style.display='none';
+      document.getElementById('ecRemoveBgTools').style.display='block';
+      cv.onclick=(ev)=>{
+        if(!ecEyedropperActive)return;
+        const r=cv.getBoundingClientRect();
+        const x=Math.floor((ev.clientX-r.left)*(cv.width/r.width));
+        const y=Math.floor((ev.clientY-r.top)*(cv.height/r.height));
+        const px=ctx.getImageData(x,y,1,1).data;
+        const hex='#'+[px[0],px[1],px[2]].map(v=>v.toString(16).padStart(2,'0')).join('');
+        document.getElementById('ecBgColor').value=hex;
+        ecEyedropperActive=false;
+        cv.style.cursor='default';
+        showToast('💧 Đã chọn màu: '+hex,'success');
       };
-      updateEmojiPreviewFromCanvas();
     };
-    img.onerror=()=>{showToast('❌ Không đọc được ảnh!','error');};
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
-  input.value='';
+    img.src=d;
+  }).catch(e=>showToast('❌ '+(e.message||e),'error'));
 }
-function applyMagicWand(x,y){
-  const canvas=emojiTrimState.canvas;
-  const ctx=emojiTrimState.ctx;
-  if(!canvas||!ctx)return;
-  const tolerance=parseInt(document.getElementById('trimTolerance').value)||30;
-  const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-  const data=imgData.data;
-  const w=canvas.width,h=canvas.height;
-  if(x<0||x>=w||y<0||y>=h)return;
-  const targetIdx=(y*w+x)*4;
-  const tr=data[targetIdx],tg=data[targetIdx+1],tb=data[targetIdx+2];
-  const visited=new Uint8Array(w*h);
-  const stack=[[x,y]];
-  let count=0;
-  const maxPixels=w*h;
-  while(stack.length&&count<maxPixels){
-    const [cx,cy]=stack.pop();
-    if(cx<0||cx>=w||cy<0||cy>=h)continue;
-    const idx1=cy*w+cx;
-    if(visited[idx1])continue;
-    visited[idx1]=1;
-    const i4=idx1*4;
-    const dr=data[i4]-tr,dg=data[i4+1]-tg,db=data[i4+2]-tb;
-    const dist=Math.sqrt(dr*dr+dg*dg+db*db);
-    if(dist<=tolerance){
-      data[i4+3]=0;
-      count++;
-      stack.push([cx+1,cy],[cx-1,cy],[cx,cy+1],[cx,cy-1]);
-    }
-  }
-  ctx.putImageData(imgData,0,0);
-  updateEmojiPreviewFromCanvas();
-  if(count>0)showToast(`✅ Đã xóa ${count} pixel`,'success');
+function ecToggleEyedropper(){
+  ecEyedropperActive=!ecEyedropperActive;
+  const cv=document.getElementById('ecImgCanvas');
+  cv.style.cursor=ecEyedropperActive?'crosshair':'default';
+  showToast(ecEyedropperActive?'💧 Bấm vào ảnh để lấy màu':'Đã tắt','info');
 }
-function autoTrimTransparent(){
-  const canvas=emojiTrimState.canvas;
-  const ctx=emojiTrimState.ctx;
-  if(!canvas||!ctx)return;
-  const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-  const data=imgData.data;
-  const w=canvas.width,h=canvas.height;
-  let top=h,bottom=0,left=w,right=0;
-  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
-    const a=data[(y*w+x)*4+3];
-    if(a>10){
-      if(y<top)top=y;
-      if(y>bottom)bottom=y;
-      if(x<left)left=x;
-      if(x>right)right=x;
-    }
-  }
-  if(top>bottom||left>right){showToast('⚠️ Ảnh đã trim hết','info');return;}
-  const nw=right-left+1,nh=bottom-top+1;
-  const nc=document.createElement('canvas');
-  nc.width=nw;nc.height=nh;
-  nc.getContext('2d').drawImage(canvas,left,top,nw,nh,0,0,nw,nh);
-  canvas.width=nw;canvas.height=nh;
-  ctx.drawImage(nc,0,0);
-  emojiTrimState.originalImageData=ctx.getImageData(0,0,nw,nh);
-  updateEmojiPreviewFromCanvas();
-  showToast('✅ Đã auto-trim!','success');
-}
-function resetTrim(){
-  const canvas=emojiTrimState.canvas;
-  const ctx=emojiTrimState.ctx;
-  if(!canvas||!ctx||!emojiTrimState.originalImageData)return;
-  canvas.width=emojiTrimState.originalImageData.width;
-  canvas.height=emojiTrimState.originalImageData.height;
-  ctx.putImageData(emojiTrimState.originalImageData,0,0);
-  updateEmojiPreviewFromCanvas();
-  showToast('🔄 Đã reset','info');
-}
-function setTrimMode(m){
-  emojiTrimState.mode=m;
-  document.getElementById('trimModeMagic').className='btn '+(m==='magic'?'btn-success':'btn-secondary');
-  const canvas=document.getElementById('emojiTrimCanvas');
-  if(canvas)canvas.style.cursor=m==='magic'?'crosshair':'default';
-}
-function updateEmojiPreviewFromCanvas(){
-  const canvas=emojiTrimState.canvas;
-  const preview=document.getElementById('emojiPreviewDisplay');
-  if(!canvas||!preview)return;
-  const dataUrl=canvas.toDataURL('image/png');
-  preview.innerHTML=`<img src="${dataUrl}" style="max-width:100px;max-height:80px;object-fit:contain">`;
-}
-function saveNewEmoji(){
-  const name=document.getElementById('emojiNewName').value.trim();
-  if(!name){showToast('❌ Nhập tên emoji!','error');return;}
-  const source=document.querySelector('.emoji-source-tab.active');
-  const src=source?source.dataset.src:'existing';
-  let emoji='',isCustomImage=false,imageData='';
-  if(src==='existing'){
-    if(!selectedExistingEmoji){showToast('❌ Chọn 1 emoji!','error');return;}
-    emoji=selectedExistingEmoji;
-  }else{
-    if(!emojiTrimState.canvas){showToast('❌ Chưa có ảnh!','error');return;}
-    imageData=emojiTrimState.canvas.toDataURL('image/png');
-    isCustomImage=true;
-  }
-  const id='emoji_'+Date.now();
-  const data={id,name,emoji,isCustomImage,imageData,effects:{},createdAt:Date.now()};
-  window.dbSet(window.ref(window.db,'system/custom_emojis/'+id),data)
-    .then(()=>{
-      showCenterSquareToast('✅','Đã tạo emoji!',name,'success',3000);
-      resetEmojiCreator();
-      switchEffectSubTab('list');
-    })
-    .catch(e=>showToast('❌ '+(e.message||e),'error'));
-}
-function resetEmojiCreator(){
-  document.getElementById('emojiNewName').value='';
-  selectedExistingEmoji='';
-  document.getElementById('emojiPreviewDisplay').innerHTML='😀';
-  document.getElementById('emojiPreviewName').innerText='Chưa có tên';
-  document.getElementById('emojiTrimSection').style.display='none';
-  document.getElementById('emojiImageInput').value='';
-  emojiTrimState={img:null,canvas:null,ctx:null,originalImageData:null,mode:'magic'};
-  renderExistingEmojiGrid();
-}
-let emojiListExpandedCount=10;
-function onEmojiSearchChange(v){
-  emojiListSearchQuery=(v||'').toLowerCase().trim();
-  emojiListExpandedCount=10;
-  renderEmojiList();
-}
-function renderEmojiList(){
-  const c=document.getElementById('emojiListContainer');
-  const footer=document.getElementById('emojiListFooter');
-  const loadMoreBtn=document.getElementById('emojiLoadMoreBtn');
-  const collapseBtn=document.getElementById('emojiCollapseBtn');
-  if(!c)return;
-  const all=Object.values(cachedCustomEmojis||{});
-  const filtered=emojiListSearchQuery?all.filter(e=>(e.name||'').toLowerCase().includes(emojiListSearchQuery)):all;
-  filtered.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-  if(!filtered.length){
-    c.innerHTML='<div style="text-align:center;padding:30px;color:#888;font-style:italic">'+(emojiListSearchQuery?'Không tìm thấy emoji nào.':'Chưa có emoji nào được tạo.')+'</div>';
-    if(footer)footer.style.display='none';
-    return;
-  }
-  const visible=filtered.slice(0,emojiListExpandedCount);
-  const hasMore=filtered.length>emojiListExpandedCount;
-  c.innerHTML='<div class="emoji-mgmt-grid">'+visible.map(e=>renderEmojiCard(e)).join('')+'</div>';
-  if(footer){
-    if(hasMore||emojiListExpandedCount>10){
-      footer.style.display='block';
-      if(loadMoreBtn)loadMoreBtn.style.display=hasMore?'inline-block':'none';
-      if(collapseBtn)collapseBtn.style.display=emojiListExpandedCount>10?'inline-block':'none';
-    } else {
-      footer.style.display='none';
-    }
-  }
-}
-function renderEmojiCard(e){
-  const thumb=e.isCustomImage&&e.imageData?`<img src="${e.imageData}" alt="">`:e.emoji||'😀';
-  const effCount=Object.keys(e.effects||{}).length;
-  return `<div class="emoji-mgmt-card">
-    <div class="emoji-mgmt-thumb">${thumb}</div>
-    <div class="emoji-mgmt-name">${escapeHtml(e.name||'Không tên')}</div>
-    <div style="font-size:10px;color:#888;margin-bottom:6px">${effCount} hiệu ứng</div>
-    <div class="emoji-mgmt-actions">
-      <button style="background:#198754" onclick="openEmojiEffectUpload('${e.id}')" title="Thêm hiệu ứng">🎬</button>
-      <button style="background:#0d6efd" onclick="openEmojiEffectAdvanced('${e.id}')" title="Nâng cao">⚙️</button>
-      <button style="background:#dc3545" onclick="deleteCustomEmoji('${e.id}')" title="Xóa">🗑️</button>
-    </div>
-  </div>`;
-}
-function loadMoreEmojis(){
-  emojiListExpandedCount+=10;
-  renderEmojiList();
-}
-function collapseEmojiList(){
-  emojiListExpandedCount=10;
-  renderEmojiList();
-}
-async function deleteCustomEmoji(id){
-  if(!await customConfirm('Xóa emoji và tất cả hiệu ứng của nó?',{icon:'🗑️',okClass:'danger'}))return;
-  try{
-    const emoji=cachedCustomEmojis[id];
-    if(emoji&&emoji.effects){
-      const effectIds=Object.keys(emoji.effects);
-      for(const effId of effectIds){
-        const eff=emoji.effects[effId];
-        if(eff.isChunked){
-          for(let i=0;i<(eff.chunks||0);i++){
-            await window.dbRemove(window.ref(window.db,`system/emoji_effects_chunks/${id}/${effId}/${i}`));
-          }
-        }
+function ecApplyRemoveBg(){
+  if(!ecImageOriginalDataUrl){showToast('❌ Chưa có ảnh!','error');return;}
+  const bg=document.getElementById('ecBgColor').value;
+  const tol=parseInt(document.getElementById('ecTolerance').value)||40;
+  const feather=parseInt(document.getElementById('ecFeather').value)||2;
+  const r=parseInt(bg.substr(1,2),16),g=parseInt(bg.substr(3,2),16),b=parseInt(bg.substr(5,2),16);
+  const img=new Image();
+  img.onload=()=>{
+    const cv=document.getElementById('ecImgCanvas');
+    const ctx=cv.getContext('2d');
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.drawImage(img,0,0,cv.width,cv.height);
+    const imageData=ctx.getImageData(0,0,cv.width,cv.height);
+    const data=imageData.data;
+    const maxDist=tol*4.41;
+    const featherRange=feather*4.41;
+    for(let i=0;i<data.length;i+=4){
+      const dr=data[i]-r,dg=data[i+1]-g,db=data[i+2]-b;
+      const dist=Math.sqrt(dr*dr+dg*dg+db*db);
+      if(dist<=maxDist){
+        data[i+3]=0;
+      }else if(feather>0&&dist<maxDist+featherRange){
+        const f=1-(maxDist+featherRange-dist)/featherRange;
+        data[i+3]=Math.round(data[i+3]*f);
       }
-      await window.dbRemove(window.ref(window.db,`system/emoji_effects_chunks/${id}`));
     }
-    await window.dbRemove(window.ref(window.db,'system/custom_emojis/'+id));
-    showToast('🗑️ Đã xóa emoji và hiệu ứng!','warn');
+    ctx.putImageData(imageData,0,0);
+    ecImageDataUrl=cv.toDataURL('image/png');
+    showToast('✨ Đã xóa viền!','success');
+  };
+  img.src=ecImageOriginalDataUrl;
+}
+function ecResetImage(){
+  if(!ecImageOriginalDataUrl){showToast('Chưa có ảnh!','info');return;}
+  ecImageDataUrl=ecImageOriginalDataUrl;
+  const img=new Image();
+  img.onload=()=>{
+    const cv=document.getElementById('ecImgCanvas');
+    cv.width=Math.min(220,img.width);cv.height=Math.round(img.height*(cv.width/img.width));
+    const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.drawImage(img,0,0,cv.width,cv.height);
+  };
+  img.src=ecImageOriginalDataUrl;
+  showToast('↩️ Đã hoàn tác','success');
+}
+function resetEcCreatePanel(){
+  ecSourceMode='emoji';ecSelectedEmoji='';ecSelectedShape='none';ecImageDataUrl='';ecImageOriginalDataUrl='';
+  document.getElementById('ecEmojiName').value='';
+  document.getElementById('ecImageInput').value='';
+  document.getElementById('ecImgCanvas').style.display='none';
+  const span=document.getElementById('ecImgPreview').querySelector('span');
+  if(span){span.style.display='block';span.innerText='Chưa có ảnh';}
+  document.getElementById('ecRemoveBgTools').style.display='none';
+  document.querySelectorAll('#ecEmojiPicker button').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('#ecShapeRow .ec-shape-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#ecShapeRow .ec-shape-btn[data-shape="none"]').classList.add('active');
+  pickEmojiSourceMode('emoji');
+}
+async function saveCustomEmoji(){
+  const name=document.getElementById('ecEmojiName').value.trim();
+  if(!name){showToast('❌ Nhập tên emoji!','error');return;}
+  let value='';
+  if(ecSourceMode==='emoji'){
+    if(!ecSelectedEmoji){showToast('❌ Chọn 1 emoji!','error');return;}
+    value=ecSelectedEmoji;
+  }else{
+    if(!ecImageDataUrl){showToast('❌ Upload ảnh!','error');return;}
+    value=ecImageDataUrl;
+  }
+  const eid='emoji_'+Date.now();
+  const data={id:eid,name,type:ecSourceMode,value,shape:ecSelectedShape,effects:[],createdAt:Date.now()};
+  try{
+    await window.dbSet(window.ref(window.db,`system/custom_emojis/${eid}`),data);
+    cachedCustomEmojis[eid]=data;
+    showCenterSquareToast('✅','Đã tạo emoji!',name,'success',2600);
+    resetEcCreatePanel();
+    renderCustomEmojiList();
+    renderNotifyEffectGrid();renderPrankEffectGrid();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
-/* Effect upload */
-function openEmojiEffectUpload(emojiId){
-  const e=cachedCustomEmojis[emojiId];
-  if(!e){showToast('❌ Không tìm thấy emoji!','error');return;}
-  currentEmojiEffectTarget={emojiId,effectId:null};
-  document.getElementById('emojiEffectUploadInfo').innerHTML=`Thêm hiệu ứng cho emoji <b>${escapeHtml(e.name)}</b>`;
+function loadCustomEmojis(){
+  if(customEmojisListener)customEmojisListener();
+  customEmojisListener=window.onValue(window.ref(window.db,'system/custom_emojis'),snap=>{
+    cachedCustomEmojis=snap.val()||{};
+    renderCustomEmojiList();
+    renderNotifyEffectGrid();renderPrankEffectGrid();
+  });
+  // Also listen to effects
+  window.onValue(window.ref(window.db,'system/emoji_effects'),snap=>{
+    cachedEmojiEffects=snap.val()||{};
+  });
+}
+let emojiListExpanded=false;
+function renderCustomEmojiList(){
+  const c=document.getElementById('ecListContainer');if(!c)return;
+  const q=(document.getElementById('ecSearchInput').value||'').toLowerCase().trim();
+  let ids=Object.keys(cachedCustomEmojis);
+  if(q)ids=ids.filter(id=>((cachedCustomEmojis[id].name||'').toLowerCase().includes(q)));
+  ids.sort((a,b)=>(cachedCustomEmojis[b].createdAt||0)-(cachedCustomEmojis[a].createdAt||0));
+  if(!ids.length){
+    c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">'+(q?'Không tìm thấy emoji nào':'Chưa có emoji nào. Hãy tạo emoji ở tab bên cạnh!')+'</p>';
+    document.getElementById('ecBtnMore').style.display='none';
+    document.getElementById('ecBtnCollapse').style.display='none';
+    return;
+  }
+  const total=ids.length;
+  const shown=emojiListExpanded?total:Math.min(10,total);
+  const visible=ids.slice(0,shown);
+  c.innerHTML=visible.map(id=>{
+    const e=cachedCustomEmojis[id];
+    if(!e)return '';
+    const preview=e.type==='emoji'?e.value:`<img src="${e.value}">`;
+    const hasEffect=(e.effects||[]).length>0;
+    return `<div class="ec-list-item"><div class="ec-list-preview">${preview}</div><div class="ec-list-info"><div class="ec-list-name">${escapeHtml(e.name||'Emoji')}</div><div class="ec-list-meta">${e.type==='emoji'?'😀 Emoji sẵn':'🖼️ Ảnh tùy chỉnh'} • Shape: ${e.shape||'none'}${hasEffect?' • <span style="color:#198754">✨ Có hiệu ứng</span>':''}</div></div><div class="ec-list-actions"><button style="background:#198754" onclick="openEmojiEffectUpload('${id}')">✨ Thêm hiệu ứng</button><button style="background:#6f42c1" onclick="openEmojiAdvanced('${id}')">⚙️ Nâng cao</button><button style="background:#dc3545" onclick="deleteCustomEmoji('${id}')">🗑️ Xóa</button></div></div>`;
+  }).join('');
+  document.getElementById('ecBtnMore').style.display=(!emojiListExpanded&&total>10)?'inline-block':'none';
+  document.getElementById('ecBtnCollapse').style.display=(emojiListExpanded&&total>10)?'inline-block':'none';
+  if(!emojiListExpanded&&total>10){
+    document.getElementById('ecBtnMore').innerText='... Xem thêm ('+(total-10)+')';
+  }
+}
+function expandEmojiList(){emojiListExpanded=true;renderCustomEmojiList();}
+function collapseEmojiList(){emojiListExpanded=false;renderCustomEmojiList();}
+async function deleteCustomEmoji(eid){
+  if(!await customConfirm('Xóa emoji này? Tất cả hiệu ứng của emoji cũng sẽ bị xóa.',{icon:'🗑️',okClass:'danger'}))return;
+  try{
+    const e=cachedCustomEmojis[eid];
+    if(e&&e.effects&&e.effects.length){
+      for(const effId of e.effects){
+        try{await window.dbRemove(window.ref(window.db,`system/emoji_effects/${effId}`));}catch(x){}
+        try{await window.dbRemove(window.ref(window.db,`system/emoji_effects_chunks/${effId}`));}catch(x){}
+      }
+    }
+    await window.dbRemove(window.ref(window.db,`system/custom_emojis/${eid}`));
+    delete cachedCustomEmojis[eid];
+    showToast('🗑️ Đã xóa!','warn');
+    renderCustomEmojiList();
+    renderNotifyEffectGrid();renderPrankEffectGrid();
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+function openEmojiEffectUpload(eid){
+  const e=cachedCustomEmojis[eid];
+  if(!e){showToast('❌ Không tìm thấy emoji','error');return;}
+  currentEmojiEffectOwnerId=eid;
+  document.getElementById('emojiEffectUploadTitle').innerText='✨ Thêm Hiệu Ứng: '+e.name;
   document.getElementById('emojiEffectName').value='';
   document.getElementById('emojiEffectFileInput').value='';
   document.getElementById('emojiEffectUploadProgress').style.display='none';
   document.getElementById('emojiEffectUploadModal').classList.add('show');
 }
-function closeEmojiEffectUpload(){document.getElementById('emojiEffectUploadModal').classList.remove('show');}
-async function confirmEmojiEffectUpload(){
+function closeEmojiEffectUpload(){document.getElementById('emojiEffectUploadModal').classList.remove('show');currentEmojiEffectOwnerId=null;}
+async function handleEmojiEffectUpload(){
+  if(!currentEmojiEffectOwnerId){showToast('❌ Lỗi','error');return;}
   const name=document.getElementById('emojiEffectName').value.trim();
   if(!name){showToast('❌ Nhập tên hiệu ứng!','error');return;}
-  const fileInput=document.getElementById('emojiEffectFileInput');
-  if(!fileInput.files||!fileInput.files[0]){showToast('❌ Chọn file hiệu ứng!','error');return;}
-  const file=fileInput.files[0];
-  const emojiId=currentEmojiEffectTarget.emojiId;
-  const effectId='effect_'+Date.now();
-  const progressBox=document.getElementById('emojiEffectUploadProgress');
-  const progressBar=document.getElementById('emojiEffectProgressBar');
-  const progressPct=document.getElementById('emojiEffectProgressPct');
-  progressBox.style.display='block';
+  const input=document.getElementById('emojiEffectFileInput');
+  if(!input.files||!input.files[0]){showToast('❌ Chọn file!','error');return;}
+  const f=input.files[0];
+  const prog=document.getElementById('emojiEffectUploadProgress');
+  const btn=document.getElementById('emojiEffectUploadBtn');
+  prog.style.display='block';prog.innerText='⏳ Đang xử lý...';
+  btn.disabled=true;
   try{
-    const MAX_INLINE=700*1024;
-    let effData;
-    if(file.size<=MAX_INLINE){
-      const dataUrl=await fileToBase64(file);
-      effData={id:effectId,name,fileName:file.name,fileMime:file.type||'',fileSize:file.size,isChunked:false,dataUrl,createdAt:Date.now(),calibration:{x:0,y:0,scale:1,rotation:0}};
-      progressBar.style.width='60%';progressPct.innerText='60%';
-    }else{
-      const b64=await fileToBase64(file);
-      const parts=b64.split(',');
-      const data=parts[1]||'';
-      const CHUNK=512*1024;
-      const totalChunks=Math.ceil(data.length/CHUNK);
-      const mime=(parts[0].match(/:(.*?);/)||[])[1]||file.type||'application/octet-stream';
-      for(let i=0;i<totalChunks;i++){
-        const chunk=data.slice(i*CHUNK,(i+1)*CHUNK);
-        await window.dbSet(window.ref(window.db,`system/emoji_effects_chunks/${emojiId}/${effectId}/${i}`),chunk);
-        const pct=Math.round(((i+1)/totalChunks)*90);
-        progressBar.style.width=pct+'%';
-        progressPct.innerText=pct+'%';
-      }
-      effData={id:effectId,name,fileName:file.name,fileMime:mime,fileSize:file.size,isChunked:true,chunks:totalChunks,createdAt:Date.now(),calibration:{x:0,y:0,scale:1,rotation:0}};
+    const b64=await fileToBase64(f);
+    const p=b64.split(',');
+    const mime=(p[0].match(/:(.*?);/)||[])[1]||'application/octet-stream';
+    const data=p[1];
+    const chunks=Math.ceil(data.length/EMOJI_EFFECT_CHUNK_SIZE);
+    const effId='eff_'+Date.now();
+    for(let i=0;i<chunks;i++){
+      const chunk=data.slice(i*EMOJI_EFFECT_CHUNK_SIZE,(i+1)*EMOJI_EFFECT_CHUNK_SIZE);
+      prog.innerText=`⏳ Đang tải ${i+1}/${chunks}...`;
+      await window.dbSet(window.ref(window.db,`system/emoji_effects_chunks/${effId}/${i}`),chunk);
     }
-    progressBar.style.width='95%';progressPct.innerText='95%';
-    await window.dbSet(window.ref(window.db,`system/custom_emojis/${emojiId}/effects/${effectId}`),effData);
-    progressBar.style.width='100%';progressPct.innerText='100%';
-    showCenterSquareToast('✅','Đã thêm!',`Hiệu ứng: ${name}`,'success',3000);
+    const effData={
+      id:effId,
+      ownerId:currentEmojiEffectOwnerId,
+      name,
+      fileName:f.name,
+      fileType:mime,
+      fileSize:f.size,
+      chunks,
+      icon:getIconForEffectFile(f.name),
+      posX:0,posY:0,scale:1,rotation:0,opacity:1,
+      createdAt:Date.now()
+    };
+    await window.dbSet(window.ref(window.db,`system/emoji_effects/${effId}`),effData);
+    cachedEmojiEffects[effId]=effData;
+    // Update emoji's effect list
+    const e=cachedCustomEmojis[currentEmojiEffectOwnerId];
+    if(e){
+      const effects=e.effects||[];
+      if(!effects.includes(effId))effects.push(effId);
+      await window.dbUpdate(window.ref(window.db,`system/custom_emojis/${currentEmojiEffectOwnerId}`),{effects});
+      cachedCustomEmojis[currentEmojiEffectOwnerId].effects=effects;
+    }
+    showCenterSquareToast('✅','Đã thêm hiệu ứng!',name,'success',3000);
     closeEmojiEffectUpload();
+    renderCustomEmojiList();
+    renderNotifyEffectGrid();renderPrankEffectGrid();
   }catch(e){
     showToast('❌ '+(e.message||e),'error');
-    progressBox.style.display='none';
   }
+  prog.style.display='none';
+  btn.disabled=false;
 }
-/* Effect advanced */
-function openEmojiEffectAdvanced(emojiId){
-  const e=cachedCustomEmojis[emojiId];
-  if(!e){showToast('❌ Không tìm thấy emoji!','error');return;}
-  document.getElementById('emojiEffectAdvancedModal').classList.add('show');
-  renderEmojiEffectAdvancedBody(emojiId);
+function getIconForEffectFile(name){
+  const n=(name||'').toLowerCase();
+  if(n.endsWith('.gif')||n.endsWith('.apng'))return '🎞️';
+  if(n.endsWith('.png')||n.endsWith('.jpg')||n.endsWith('.jpeg')||n.endsWith('.webp')||n.endsWith('.svg'))return '🖼️';
+  if(n.endsWith('.mp4')||n.endsWith('.mov')||n.endsWith('.webm'))return '🎬';
+  if(n.endsWith('.unitypackage')||n.endsWith('.uasset'))return '🎮';
+  if(n.endsWith('.json')||n.endsWith('.atlas'))return '📋';
+  if(n.endsWith('.fla')||n.endsWith('.xfl'))return '🎨';
+  if(n.endsWith('.aep')||n.endsWith('.mogrt'))return '🎥';
+  return '✨';
 }
-function closeEmojiEffectAdvanced(){document.getElementById('emojiEffectAdvancedModal').classList.remove('show');}
-function renderEmojiEffectAdvancedBody(emojiId){
-  const body=document.getElementById('emojiEffectAdvancedBody');
-  const e=cachedCustomEmojis[emojiId];
-  if(!e){body.innerHTML='<p>Không tìm thấy emoji</p>';return;}
-  const effects=Object.values(e.effects||{});
-  const thumb=e.isCustomImage&&e.imageData?`<img src="${e.imageData}" style="max-width:50px;max-height:50px;border-radius:8px">`:e.emoji;
-  let html=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px"><div style="font-size:32px">${thumb}</div><div><div style="font-weight:bold;color:#1877f2">${escapeHtml(e.name)}</div><div style="font-size:11px;color:#666">${effects.length} hiệu ứng</div></div></div>`;
-  if(!effects.length){html+='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có hiệu ứng nào. Bấm "Thêm hiệu ứng" ở danh sách.</p>';}
-  else{
-    html+='<div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto">';
-    effects.forEach(eff=>{
-      const sizeStr=eff.fileSize?formatBytes(eff.fileSize):'';
-      html+=`<div class="emoji-effect-item"><div style="flex:1;min-width:150px"><div style="font-weight:bold;font-size:13px">${escapeHtml(eff.name)}</div><div style="font-size:11px;color:#888">${escapeHtml(eff.fileName||'')} • ${sizeStr}</div></div><div style="display:flex;gap:5px;flex-wrap:wrap"><button class="btn btn-secondary" style="width:auto;padding:6px 10px;font-size:11px" onclick="previewEmojiEffect('${emojiId}','${eff.id}')">👁️ Xem</button><button class="btn btn-warning" style="width:auto;padding:6px 10px;font-size:11px" onclick="renameEmojiEffect('${emojiId}','${eff.id}')">✏️ Đổi tên</button><button class="btn" style="width:auto;padding:6px 10px;font-size:11px;background:#6f42c1" onclick="openCalibrationScreen('${emojiId}','${eff.id}')">🎯 Căn chỉnh</button><button class="btn btn-danger" style="width:auto;padding:6px 10px;font-size:11px" onclick="deleteEmojiEffect('${emojiId}','${eff.id}')">🗑️</button></div></div>`;
+function openEmojiAdvanced(eid){
+  const e=cachedCustomEmojis[eid];
+  if(!e){showToast('❌ Không tìm thấy','error');return;}
+  currentEmojiAdvancedId=eid;
+  let html=`<div style="background:#f0f8ff;padding:12px;border-radius:10px;margin-bottom:12px"><b>${e.type==='emoji'?e.value:'🖼️'} ${escapeHtml(e.name)}</b></div>`;
+  const effects=e.effects||[];
+  if(!effects.length){
+    html+='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Chưa có hiệu ứng nào. Bấm "✨ Thêm hiệu ứng".</p>';
+  } else {
+    html+='<div style="font-weight:bold;color:#6f42c1;margin-bottom:8px">🎬 Danh sách hiệu ứng</div>';
+    effects.forEach(effId=>{
+      const eff=cachedEmojiEffects[effId];
+      if(!eff)return;
+      html+=`<div class="ec-list-item"><div class="ec-list-preview">${eff.icon||'✨'}</div><div class="ec-list-info"><div class="ec-list-name">${escapeHtml(eff.name)}</div><div class="ec-list-meta">📁 ${escapeHtml(eff.fileName||'')} • ${formatBytes(eff.fileSize||0)}</div></div><div class="ec-list-actions"><button style="background:#ffc107;color:#000" onclick="renameEmojiEffect('${effId}')">✏️ Đổi tên</button><button style="background:#0d6efd" onclick="openSafeAreaCalibration('${effId}','effect')">🎛️ Căn chỉnh</button><button style="background:#dc3545" onclick="deleteEmojiEffect('${effId}')">🗑️ Xóa</button></div></div>`;
     });
-    html+='</div>';
   }
-  html+=`<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-secondary" onclick="closeEmojiEffectAdvanced()">Đóng</button></div>`;
-  body.innerHTML=html;
+  document.getElementById('emojiAdvancedTitle').innerText='⚙️ Cài Đặt Nâng Cao';
+  document.getElementById('emojiAdvancedContent').innerHTML=html;
+  document.getElementById('emojiAdvancedModal').classList.add('show');
 }
-function formatBytes(b){if(!b)return'0 B';const k=1024,s=['B','KB','MB','GB','TB'],i=Math.floor(Math.log(b)/Math.log(k));return (b/Math.pow(k,i)).toFixed(i>0?2:0)+' '+s[i];}
-async function renameEmojiEffect(emojiId,effectId){
-  const e=cachedCustomEmojis[emojiId];
-  if(!e||!e.effects||!e.effects[effectId])return;
-  const cur=e.effects[effectId].name||'';
-  const newName=await customPrompt('Đổi tên hiệu ứng:',{icon:'✏️',title:'Đổi tên',defaultValue:cur});
-  if(!newName||newName===cur)return;
-  try{
-    await window.dbUpdate(window.ref(window.db,`system/custom_emojis/${emojiId}/effects/${effectId}`),{name:newName,updatedAt:Date.now()});
-    showToast('✅ Đã đổi tên!','success');
-    renderEmojiEffectAdvancedBody(emojiId);
-  }catch(err){showToast('❌ '+(err.message||err),'error');}
+function formatBytes(b){
+  if(!b)return '0 B';
+  const k=1024,s=['B','KB','MB','GB'],i=Math.floor(Math.log(b)/Math.log(k));
+  return (b/Math.pow(k,i)).toFixed(i>0?2:0)+' '+s[i];
 }
-async function deleteEmojiEffect(emojiId,effectId){
+function closeEmojiAdvanced(){document.getElementById('emojiAdvancedModal').classList.remove('show');currentEmojiAdvancedId=null;}
+async function deleteEmojiEffect(effId){
   if(!await customConfirm('Xóa hiệu ứng này?',{icon:'🗑️',okClass:'danger'}))return;
   try{
-    const e=cachedCustomEmojis[emojiId];
-    const eff=e&&e.effects?e.effects[effectId]:null;
-    if(eff&&eff.isChunked){
-      for(let i=0;i<(eff.chunks||0);i++){
-        await window.dbRemove(window.ref(window.db,`system/emoji_effects_chunks/${emojiId}/${effectId}/${i}`));
+    const eff=cachedEmojiEffects[effId];
+    await window.dbRemove(window.ref(window.db,`system/emoji_effects/${effId}`));
+    await window.dbRemove(window.ref(window.db,`system/emoji_effects_chunks/${effId}`));
+    delete cachedEmojiEffects[effId];
+    if(eff&&eff.ownerId){
+      const e=cachedCustomEmojis[eff.ownerId];
+      if(e&&e.effects){
+        const newEffects=e.effects.filter(id=>id!==effId);
+        await window.dbUpdate(window.ref(window.db,`system/custom_emojis/${eff.ownerId}`),{effects:newEffects});
+        cachedCustomEmojis[eff.ownerId].effects=newEffects;
       }
     }
-    await window.dbRemove(window.ref(window.db,`system/custom_emojis/${emojiId}/effects/${effectId}`));
     showToast('🗑️ Đã xóa hiệu ứng!','warn');
-    renderEmojiEffectAdvancedBody(emojiId);
-    renderEmojiList();
-  }catch(err){showToast('❌ '+(err.message||err),'error');}
-}
-async function previewEmojiEffect(emojiId,effectId){
-  const e=cachedCustomEmojis[emojiId];
-  if(!e||!e.effects||!e.effects[effectId])return;
-  const eff=e.effects[effectId];
-  try{
-    let url='';
-    if(eff.isChunked){
-      let full='';
-      for(let i=0;i<(eff.chunks||0);i++){
-        const s=await window.dbGet(window.dbChild(window.dbRef,`system/emoji_effects_chunks/${emojiId}/${effectId}/${i}`));
-        if(s.exists())full+=s.val();
-      }
-      if(!full){showToast('❌ Không tải được file!','error');return;}
-      url=`data:${eff.fileMime||'application/octet-stream'};base64,${full}`;
-    } else {
-      url=eff.dataUrl;
-    }
-    if(!url){showToast('❌ File rỗng!','error');return;}
-    showEffectPreviewModal(eff.name,url,eff.fileMime||'');
-  }catch(err){showToast('❌ '+(err.message||err),'error');}
-}
-function showEffectPreviewModal(name,url,mime){
-  let html='<div class="modal-header"><h3>👁️ '+escapeHtml(name)+'</h3><button class="close-btn" onclick="document.getElementById(\'effectPreviewModal\').classList.remove(\'show\')">✖</button></div>';
-  const lower=(url||'').toLowerCase();
-  const mimeLower=(mime||'').toLowerCase();
-  if(mimeLower.startsWith('video/')||lower.includes('.mp4')||lower.includes('.webm')||lower.includes('.mov')){
-    html+='<video src="'+url+'" controls autoplay loop muted style="max-width:100%;max-height:70vh;border-radius:12px;display:block;margin:0 auto"></video>';
-  } else if(mimeLower.startsWith('image/')||lower.match(/\.(png|jpg|jpeg|webp|gif|svg|apng)(;|"|$)/)){
-    html+='<img src="'+url+'" style="max-width:100%;max-height:70vh;border-radius:12px;display:block;margin:0 auto">';
-  } else {
-    html+='<div style="text-align:center;padding:20px;background:#f8f9fa;border-radius:10px"><div style="font-size:60px;margin-bottom:10px">📎</div><p style="font-size:13px;color:#666">File: '+escapeHtml(name)+'</p><a href="'+url+'" download="'+escapeHtml(name)+'" class="btn btn-success" style="display:inline-block;margin-top:10px;width:auto;padding:10px 20px">⬇️ Tải về</a></div>';
-  }
-  let modal=document.getElementById('effectPreviewModal');
-  if(!modal){
-    modal=document.createElement('div');
-    modal.id='effectPreviewModal';
-    modal.className='modal-overlay z-top';
-    modal.innerHTML='<div class="modal-box" style="max-width:700px" id="effectPreviewBox"></div>';
-    document.body.appendChild(modal);
-  }
-  document.getElementById('effectPreviewBox').innerHTML=html;
-  modal.classList.add('show');
-}
-/* Calibration Screen for effects */
-function openCalibrationScreen(emojiId,effectId){
-  currentEmojiEffectTarget={emojiId,effectId};
-  calibrationState={type:'effect',emojiId,effectId,x:0,y:0,scale:1,rotation:0};
-  const e=cachedCustomEmojis[emojiId];
-  const eff=e&&e.effects?e.effects[effectId]:null;
-  if(eff&&eff.calibration){
-    calibrationState.x=eff.calibration.x||0;
-    calibrationState.y=eff.calibration.y||0;
-    calibrationState.scale=eff.calibration.scale||1;
-    calibrationState.rotation=eff.calibration.rotation||0;
-  }
-  // Setup stage
-  const img=document.getElementById('calibrationImage');
-  const emojiEl=document.getElementById('calibrationEmoji');
-  img.style.display='none';
-  emojiEl.style.display='none';
-  if(eff){
-    if(eff.isChunked){
-      // load chunks async
-      (async()=>{
-        try{
-          let full='';
-          for(let i=0;i<(eff.chunks||0);i++){
-            const s=await window.dbGet(window.dbChild(window.dbRef,`system/emoji_effects_chunks/${emojiId}/${effectId}/${i}`));
-            if(s.exists())full+=s.val();
-          }
-          if(full){
-            img.src=`data:${eff.fileMime||'application/octet-stream'};base64,${full}`;
-            img.style.display='block';
-          }
-        }catch(err){console.warn(err);}
-      })();
-    } else if(eff.dataUrl){
-      img.src=eff.dataUrl;
-      img.style.display='block';
-    }
-  }
-  // Update sliders
-  document.getElementById('calScaleRange').value=calibrationState.scale;
-  document.getElementById('calRotationRange').value=calibrationState.rotation;
-  document.getElementById('calXRange').value=calibrationState.x;
-  document.getElementById('calYRange').value=calibrationState.y;
-  document.getElementById('calScaleVal').innerText=calibrationState.scale.toFixed(2)+'x';
-  document.getElementById('calRotationVal').innerText=calibrationState.rotation+'°';
-  document.getElementById('calXVal').innerText=calibrationState.x;
-  document.getElementById('calYVal').innerText=calibrationState.y;
-  applyCalibrationTransform();
-  document.getElementById('calibrationScreenModal').classList.add('show');
-  setupCalibrationDrag();
-}
-function setupCalibrationDrag(){
-  const stage=document.getElementById('calibrationStage');
-  let dragging=false,lastX=0,lastY=0;
-  stage.onpointerdown=(e)=>{dragging=true;lastX=e.clientX;lastY=e.clientY;try{stage.setPointerCapture(e.pointerId);}catch(err){}};
-  stage.onpointermove=(e)=>{
-    if(!dragging)return;
-    const dx=e.clientX-lastX,dy=e.clientY-lastY;
-    calibrationState.x+=dx;calibrationState.y+=dy;
-    lastX=e.clientX;lastY=e.clientY;
-    document.getElementById('calXRange').value=Math.max(-200,Math.min(200,calibrationState.x));
-    document.getElementById('calYRange').value=Math.max(-200,Math.min(200,calibrationState.y));
-    document.getElementById('calXVal').innerText=calibrationState.x;
-    document.getElementById('calYVal').innerText=calibrationState.y;
-    applyCalibrationTransform();
-  };
-  const endDrag=(e)=>{dragging=false;try{stage.releasePointerCapture(e.pointerId);}catch(err){}};
-  stage.onpointerup=endDrag;stage.onpointercancel=endDrag;stage.onpointerleave=endDrag;
-}
-function applyCalibrationTransform(){
-  const img=document.getElementById('calibrationImage');
-  const emojiEl=document.getElementById('calibrationEmoji');
-  const st=calibrationState;
-  const tf=`translate(calc(-50% + ${st.x}px), calc(-50% + ${st.y}px)) scale(${st.scale}) rotate(${st.rotation}deg)`;
-  if(img)img.style.transform=tf;
-  if(emojiEl)emojiEl.style.transform=tf;
-}
-document.getElementById('calScaleRange').oninput=(e)=>{calibrationState.scale=parseFloat(e.target.value);document.getElementById('calScaleVal').innerText=calibrationState.scale.toFixed(2)+'x';applyCalibrationTransform();};
-document.getElementById('calRotationRange').oninput=(e)=>{calibrationState.rotation=parseInt(e.target.value);document.getElementById('calRotationVal').innerText=calibrationState.rotation+'°';applyCalibrationTransform();};
-document.getElementById('calXRange').oninput=(e)=>{calibrationState.x=parseInt(e.target.value);document.getElementById('calXVal').innerText=calibrationState.x;applyCalibrationTransform();};
-document.getElementById('calYRange').oninput=(e)=>{calibrationState.y=parseInt(e.target.value);document.getElementById('calYVal').innerText=calibrationState.y;applyCalibrationTransform();};
-function resetCalibration(){
-  calibrationState.x=0;calibrationState.y=0;calibrationState.scale=1;calibrationState.rotation=0;
-  document.getElementById('calScaleRange').value=1;
-  document.getElementById('calRotationRange').value=0;
-  document.getElementById('calXRange').value=0;
-  document.getElementById('calYRange').value=0;
-  document.getElementById('calScaleVal').innerText='1.00x';
-  document.getElementById('calRotationVal').innerText='0°';
-  document.getElementById('calXVal').innerText='0';
-  document.getElementById('calYVal').innerText='0';
-  applyCalibrationTransform();
-}
-function closeCalibrationScreen(){document.getElementById('calibrationScreenModal').classList.remove('show');}
-async function saveCalibration(){
-  const {emojiId,effectId}=currentEmojiEffectTarget;
-  if(!emojiId||!effectId){closeCalibrationScreen();return;}
-  try{
-    await window.dbUpdate(window.ref(window.db,`system/custom_emojis/${emojiId}/effects/${effectId}/calibration`),{
-      x:calibrationState.x,y:calibrationState.y,scale:calibrationState.scale,rotation:calibrationState.rotation
-    });
-    showToast('✅ Đã lưu căn chỉnh!','success');
-    closeCalibrationScreen();
-    renderEmojiEffectAdvancedBody(emojiId);
+    openEmojiAdvanced(currentEmojiAdvancedId);
+    renderCustomEmojiList();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
-
-/* ============ ROLE FRAME FUNCTIONS (đã có ở trên) ============ */
+async function renameEmojiEffect(effId){
+  const eff=cachedEmojiEffects[effId];
+  if(!eff)return;
+  const newName=await customPrompt('Nhập tên mới cho hiệu ứng:',{icon:'✏️',defaultValue:eff.name||''});
+  if(!newName||newName===eff.name)return;
+  try{
+    await window.dbUpdate(window.ref(window.db,`system/emoji_effects/${effId}`),{name:newName});
+    cachedEmojiEffects[effId].name=newName;
+    showToast('✅ Đã đổi tên!','success');
+    openEmojiAdvanced(currentEmojiAdvancedId);
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+function openSafeAreaCalibration(effId,target){
+  const eff=cachedEmojiEffects[effId];
+  if(!eff){showToast('❌ Không tìm thấy!','error');return;}
+  safeAreaCalibState={
+    ownerId:effId,target:'effect',
+    scale:eff.scale||1,rotation:eff.rotation||0,opacity:eff.opacity!==undefined?eff.opacity:1,
+    xPct:(eff.posX||0)/window.innerWidth*100,yPct:(eff.posY||0)/window.innerHeight*100
+  };
+  document.getElementById('saRangeScale').value=safeAreaCalibState.scale;
+  document.getElementById('saRangeRot').value=safeAreaCalibState.rotation;
+  document.getElementById('saRangeOpacity').value=safeAreaCalibState.opacity;
+  document.getElementById('saRangeX').value=safeAreaCalibState.xPct;
+  document.getElementById('saRangeY').value=safeAreaCalibState.yPct;
+  const el=document.getElementById('safeAreaFxElement');
+  el.innerHTML=(eff.icon||'✨')+'<div style="font-size:11px;text-align:center;color:#666;margin-top:4px">'+escapeHtml(eff.name||'')+'</div>';
+  updateSafeAreaPreview();
+  // drag
+  const stage=document.getElementById('safeAreaStage');
+  stage.onpointerdown=(e)=>{
+    const el=document.getElementById('safeAreaFxElement');
+    if(!el.contains(e.target)&&e.target!==el)return;
+    safeAreaDragState.dragging=true;
+    safeAreaDragState.lastX=e.clientX;
+    safeAreaDragState.lastY=e.clientY;
+    try{stage.setPointerCapture(e.pointerId);}catch(err){}
+  };
+  stage.onpointermove=(e)=>{
+    if(!safeAreaDragState.dragging)return;
+    const dx=e.clientX-safeAreaDragState.lastX;
+    const dy=e.clientY-safeAreaDragState.lastY;
+    const xEl=document.getElementById('saRangeX'),yEl=document.getElementById('saRangeY');
+    const rect=stage.getBoundingClientRect();
+    xEl.value=Math.max(-45,Math.min(45,parseFloat(xEl.value)+dx/rect.width*100));
+    yEl.value=Math.max(-45,Math.min(45,parseFloat(yEl.value)+dy/rect.height*100));
+    safeAreaDragState.lastX=e.clientX;
+    safeAreaDragState.lastY=e.clientY;
+    updateSafeAreaPreview();
+  };
+  const endDrag=(e)=>{safeAreaDragState.dragging=false;try{stage.releasePointerCapture(e.pointerId);}catch(err){}};
+  stage.onpointerup=endDrag;stage.onpointercancel=endDrag;
+  document.getElementById('safeAreaCalibrationModal').classList.add('show');
+}
+function updateSafeAreaPreview(){
+  const sc=parseFloat(document.getElementById('saRangeScale').value)||1;
+  const rot=parseFloat(document.getElementById('saRangeRot').value)||0;
+  const op=parseFloat(document.getElementById('saRangeOpacity').value)||1;
+  const x=parseFloat(document.getElementById('saRangeX').value)||0;
+  const y=parseFloat(document.getElementById('saRangeY').value)||0;
+  document.getElementById('saScaleVal').innerText=sc.toFixed(2);
+  document.getElementById('saRotVal').innerText=rot;
+  document.getElementById('saOpVal').innerText=op.toFixed(2);
+  document.getElementById('saXVal').innerText=x;
+  document.getElementById('saYVal').innerText=y;
+  const el=document.getElementById('safeAreaFxElement');
+  const stage=document.getElementById('safeAreaStage');
+  el.style.transform=`translate(calc(-50% + ${x}% * ${stage.clientWidth/100}px), calc(-50% + ${y}% * ${stage.clientHeight/100}px)) scale(${sc}) rotate(${rot}deg)`;
+  el.style.transform=`translate(calc(-50% + ${(x*stage.clientWidth/100)}px), calc(-50% + ${(y*stage.clientHeight/100)}px)) scale(${sc}) rotate(${rot}deg)`;
+  el.style.opacity=op;
+  el.style.fontSize=Math.round(60*sc)+'px';
+}
+function resetSafeAreaCalibration(){
+  document.getElementById('saRangeScale').value=1;
+  document.getElementById('saRangeRot').value=0;
+  document.getElementById('saRangeOpacity').value=1;
+  document.getElementById('saRangeX').value=0;
+  document.getElementById('saRangeY').value=0;
+  updateSafeAreaPreview();
+}
+function closeSafeAreaCalibration(){document.getElementById('safeAreaCalibrationModal').classList.remove('show');}
+async function saveSafeAreaCalibration(){
+  const effId=safeAreaCalibState.ownerId;
+  if(!effId)return;
+  const sc=parseFloat(document.getElementById('saRangeScale').value)||1;
+  const rot=parseFloat(document.getElementById('saRangeRot').value)||0;
+  const op=parseFloat(document.getElementById('saRangeOpacity').value)||1;
+  const xPct=parseFloat(document.getElementById('saRangeX').value)||0;
+  const yPct=parseFloat(document.getElementById('saRangeY').value)||0;
+  try{
+    await window.dbUpdate(window.ref(window.db,`system/emoji_effects/${effId}`),{
+      scale:sc,rotation:rot,opacity:op,
+      posX:Math.round(xPct*window.innerWidth/100),
+      posY:Math.round(yPct*window.innerHeight/100),
+      updatedAt:Date.now()
+    });
+    if(cachedEmojiEffects[effId]){
+      Object.assign(cachedEmojiEffects[effId],{scale:sc,rotation:rot,opacity:op,posX:Math.round(xPct*window.innerWidth/100),posY:Math.round(yPct*window.innerHeight/100)});
+    }
+    showCenterSquareToast('✅','Đã lưu!','Calibration saved','success',2600);
+    closeSafeAreaCalibration();
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
 
 /* CONTEXTMENU LOCK */
 (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),c=e.ctrlKey||e.metaKey,sh=e.shiftKey;if(k==='f12'||(c&&k==='u')||(c&&sh&&['i','j','c','k'].includes(k))||(c&&k==='s')||(c&&k==='p')){e.preventDefault();e.stopPropagation();return false;}if(c&&k==='a'){const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable){e.preventDefault();return false;}}},true);document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('copy',e=>{const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable)e.preventDefault();});})();
@@ -5127,6 +5016,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   setTimeout(()=>{
     if(!window.db)return;
     loadSecurityPasswords();loadWelcomeConfig();loadWebConfig();loadDocLibrary();loadRolesCache();loadMedalsCache();loadEmailJSConfigFromDB();
+    loadCustomEmojis();
     listenOnlineUsers();listenAllUsersCount();listenHomeConfig();listenBigNotifications();listenQuizSheets();listenPrankEffects();listenGlobalBroadcast();listenGlobalAudio();startThemeListener();
     listenRoomAnnounceConfig();
     window.onValue(window.ref(window.db,'users'),snap=>{if(snap.exists()){cachedUsers=snap.val();renderHomeRoleUsers();}});
@@ -5136,6 +5026,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 /* INIT QUESTIONS */
 addQuestionV2('mc');addQuestionV2('tf');
+initEcCreatePanel();
 </script>
 </body>
 </html>
