@@ -295,6 +295,8 @@ img{-webkit-user-drag:none}
 .nav-user .avatar .avatar-bg-layer{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;border-radius:50%;z-index:0;overflow:hidden;pointer-events:none}
 .nav-user .logout-btn{background:transparent;border:none;color:#fff;cursor:pointer;font-size:15px;padding:2px 4px;border-radius:50%}
 .user-role-badge{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
+.user-role-badge.more-badge{cursor:pointer;transition:transform .2s}
+.user-role-badge.more-badge:hover{transform:scale(1.08);background:#1877f2!important;color:#fff!important}
 #profileModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:99999999;padding:15px;backdrop-filter:blur(8px);overflow-y:auto}
 #profileModal.show{display:flex}
 .profile-box{background:#fff;border-radius:24px;padding:0;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,.6);position:relative}
@@ -1044,6 +1046,10 @@ body[data-theme="galaxy"] input,body[data-theme="galaxy"] select,body[data-theme
 .home-cd-header{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:22px}
 .home-cd-title{font-size:22px;font-weight:900;text-shadow:0 3px 12px rgba(0,0,0,.35);line-height:1.35}
 .home-cd-subtitle{font-size:13px;opacity:.9;margin-top:6px}
+.home-cd-tabs{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+.home-cd-tab{padding:10px 20px;border-radius:12px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-weight:700;font-size:14px;transition:all .25s;backdrop-filter:blur(8px);display:inline-flex;align-items:center;gap:6px}
+.home-cd-tab:hover{background:rgba(255,255,255,.22);transform:translateY(-2px)}
+.home-cd-tab.active{background:#fff;color:#1877f2;border-color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.25);transform:translateY(-3px) scale(1.04)}
 .home-cd-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:640px;margin:0 auto}
 .home-cd-cell{background:rgba(255,255,255,.14);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:14px 8px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.2);transition:transform .25s}
 .home-cd-cell:hover{transform:translateY(-3px)}
@@ -1051,7 +1057,7 @@ body[data-theme="galaxy"] input,body[data-theme="galaxy"] select,body[data-theme
 .home-cd-lbl{font-size:11px;margin-top:6px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;opacity:.9}
 .home-cd-actions{position:relative;z-index:1;text-align:center;margin-top:20px}
 .home-cd-actions button{display:inline-block;width:auto;padding:10px 22px;border-radius:10px;font-weight:700}
-@media(max-width:640px){.home-cd-num{font-size:26px}.home-cd-cell{padding:10px 4px}.home-cd-title{font-size:16px}}
+@media(max-width:640px){.home-cd-num{font-size:26px}.home-cd-cell{padding:10px 4px}.home-cd-title{font-size:16px}.home-cd-tab{padding:8px 14px;font-size:12px}}
 /* ==================== THRONE (BXH NGAI VÀNG) ==================== */
 #throneSection{margin-top:18px;background:linear-gradient(180deg,#1a0000 0%,#4a0000 60%,#1a0000 100%);border-radius:22px;padding:24px 16px;position:relative;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 0 60px rgba(255,60,60,.15)}
 #throneSection::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 20%,rgba(255,215,0,.18) 0%,transparent 55%),radial-gradient(circle at 50% 90%,rgba(165,94,234,.15) 0%,transparent 55%);pointer-events:none}
@@ -1078,11 +1084,24 @@ body[data-theme="galaxy"] input,body[data-theme="galaxy"] select,body[data-theme
 #roleEffectAdjustModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);display:none;justify-content:center;align-items:center;z-index:99999999999;padding:12px;backdrop-filter:blur(8px);overflow-y:auto}
 #roleEffectAdjustModal.show{display:flex}
 .role-fx-adjust-box{background:#fff;border-radius:20px;padding:18px;max-width:860px;width:100%;max-height:96vh;overflow-y:auto;margin:auto}
-.role-fx-stage{position:relative;width:100%;height:420px;background:linear-gradient(135deg,#0a0d13,#1a1d24);border-radius:14px;overflow:hidden;margin:12px 0;touch-action:none;border:2px solid #2a2f3a}
-.role-fx-mock-profile{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#1877f2,#198754);display:flex;align-items:center;justify-content:center;color:#fff;font-size:52px;font-weight:900;z-index:2;pointer-events:none;border:4px solid #fff;box-shadow:0 8px 30px rgba(0,0,0,.5)}
-.role-fx-layer{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.role-fx-stage{position:relative;width:100%;aspect-ratio:600/700;max-height:560px;background:#f0f2f5;border-radius:16px;overflow:hidden;margin:12px 0;touch-action:none;border:2px solid #1877f2;box-shadow:inset 0 0 40px rgba(0,0,0,.08)}
+.role-fx-stage-profile-mock{position:absolute;inset:0;display:flex;flex-direction:column;pointer-events:none;z-index:1}
+.role-fx-stage-header{height:19%;background:linear-gradient(135deg,#1877f2,#198754);border-radius:16px 16px 0 0;position:relative;transition:all .5s}
+.role-fx-stage-avatar{position:absolute;bottom:-45px;left:50%;transform:translateX(-50%);width:90px;height:90px;border-radius:50%;border:4px solid #fff;background:#e7f3ff;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#1877f2;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:5}
+.role-fx-stage-body{flex:1;padding-top:52px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.role-fx-stage-name{font-size:18px;font-weight:900;color:#333}
+.role-fx-stage-username{font-size:11px;color:#888}
+.role-fx-stage-roles{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.role-fx-mock-role{padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;color:#fff}
+.role-fx-safe-zone{position:absolute;inset:4%;border:2px dashed #ffc107;border-radius:12px;pointer-events:none;z-index:9}
+.role-fx-safe-zone::before{content:'SAFE AREA (khớp Profile)';position:absolute;top:6px;left:8px;font-size:10px;color:#b8860b;font-weight:900;letter-spacing:1px;background:rgba(255,255,255,.8);padding:2px 6px;border-radius:4px}
+.role-fx-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(24,119,242,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(24,119,242,.1) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
+.role-fx-layer{position:absolute;inset:0;pointer-events:none;z-index:10;overflow:hidden}
 .role-fx-item{position:absolute;top:50%;left:50%;font-size:40px;line-height:1;transform:translate(-50%,-50%);pointer-events:none}
 .role-fx-item img,.role-fx-item video{max-width:220px;max-height:220px;object-fit:contain;display:block;pointer-events:none}
+.role-fx-draggable{position:absolute;top:50%;left:50%;cursor:grab;touch-action:none;user-select:none;z-index:11;pointer-events:auto;transform-origin:center center}
+.role-fx-draggable:active{cursor:grabbing}
+.role-fx-draggable-canvas{display:block;pointer-events:none}
 .role-device-tabs{display:flex;gap:6px;background:#f0f2f5;padding:5px;border-radius:10px;margin-bottom:12px}
 .role-device-tab{flex:1;padding:10px;background:#fff;border:2px solid transparent;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;color:#555;text-align:center;transition:all .25s}
 .role-device-tab.active{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border-color:#1877f2}
@@ -1091,8 +1110,8 @@ body[data-theme="galaxy"] input,body[data-theme="galaxy"] select,body[data-theme
 .role-fx-controls label{font-size:11px;font-weight:700;color:#444;display:block;margin-bottom:4px}
 .role-fx-controls input[type="range"]{width:100%;padding:0;margin:0}
 @media(max-width:640px){
-  .role-fx-stage{height:260px}
-  .role-fx-mock-profile{width:110px;height:110px;font-size:34px}
+  .role-fx-stage{max-height:400px}
+  .role-fx-stage-avatar{width:70px;height:70px;font-size:28px;bottom:-35px}
   .role-fx-controls{grid-template-columns:1fr}
   .role-fx-adjust-box{padding:14px}
 }
@@ -1175,7 +1194,7 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 <div style="border-top:2px dashed #dc3545;margin-top:14px;padding-top:12px">
   <div style="font-weight:900;color:#dc3545;font-size:13px;margin-bottom:8px">🎬 CĂN CHỈNH HIỆU ỨNG PROFILE (Desktop / Mobile)</div>
-  <div style="font-size:11px;color:#666;margin-bottom:8px;line-height:1.5">Căn chỉnh hiệu ứng vai trò khi bấm vào profile (chỉ áp dụng cho vai trò tùy chỉnh, không phải emoji mặc định).</div>
+  <div style="font-size:11px;color:#666;margin-bottom:8px;line-height:1.5">Căn chỉnh hiệu ứng vai trò khi bấm vào profile (chỉ áp dụng cho vai trò tùy chỉnh, không phải emoji mặc định). Kéo chuột / chạm tay để di chuyển, kéo dãn ngang dọc tùy ý.</div>
   <button class="btn btn-danger" style="width:auto;padding:8px 14px;font-size:12px;color:#fff" onclick="openRoleEffectAdjust()">🎛️ Căn chỉnh hiệu ứng profile</button>
 </div>
 <div style="text-align:center;padding:16px;margin-top:14px;background:#f8f9fa;border-radius:12px"><div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC:</div><span id="rolePreview" class="role-preview" style="font-size:14px"></span></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-secondary" onclick="closeRoleEditor()">Hủy</button><button class="btn btn-success" onclick="saveRole()">💾 Lưu Vai Trò</button></div></div></div>
@@ -1206,21 +1225,34 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="roleEffectAdjustModal"><div class="role-fx-adjust-box">
   <div class="modal-header"><h3>🎬 Căn Chỉnh Hiệu Ứng Profile</h3><button class="close-btn" onclick="closeRoleEffectAdjust()">✖</button></div>
-  <p style="font-size:12px;color:#666;margin-bottom:8px">Căn chỉnh vị trí, kích thước, độ đậm nhạt, xoay của hiệu ứng khi bấm vào profile. Cấu hình riêng cho từng thiết bị.</p>
+  <p style="font-size:12px;color:#666;margin-bottom:8px">Kéo <b>chuột / chạm tay</b> trực tiếp trên khung để di chuyển hiệu ứng. Dùng thanh trượt để scale, kéo dãn ngang/dọc, xoay, đổi độ đậm nhạt. Cấu hình riêng cho từng thiết bị.</p>
   <div class="role-device-tabs" id="roleFxDeviceTabs">
     <div class="role-device-tab active" onclick="switchRoleFxDevice('desktop', this)">🖥️ Desktop</div>
     <div class="role-device-tab" onclick="switchRoleFxDevice('mobile', this)">📱 Mobile</div>
   </div>
   <div class="role-fx-stage" id="roleFxStage">
-    <div class="hud-editor-grid"></div>
-    <div class="hud-editor-safe"></div>
-    <div class="hud-editor-mock-profile" id="roleFxMockAvatar" style="width:160px;height:160px;font-size:52px">?</div>
+    <div class="role-fx-grid"></div>
+    <div class="role-fx-stage-profile-mock">
+      <div class="role-fx-stage-header" id="roleFxStageHeader">
+        <div class="role-fx-stage-avatar" id="roleFxStageAvatar">?</div>
+      </div>
+      <div class="role-fx-stage-body">
+        <div class="role-fx-stage-name" id="roleFxStageName">Profile Preview</div>
+        <div class="role-fx-stage-username">@preview_user</div>
+        <div class="role-fx-stage-roles" id="roleFxStageRoles"></div>
+      </div>
+    </div>
+    <canvas id="roleFxPreviewCanvas" style="position:absolute;inset:0;pointer-events:none;z-index:8"></canvas>
     <div class="role-fx-layer" id="roleFxLayer"></div>
+    <div class="role-fx-draggable" id="roleFxDraggable" style="transform:translate(-50%,-50%)"></div>
+    <div class="role-fx-safe-zone"></div>
   </div>
   <div class="role-fx-controls">
     <div><label>↔️ Vị trí X (px): <span id="rfxXVal">0</span></label><input type="range" id="rfxRangeX" min="-400" max="400" value="0" oninput="updateRoleFxPreview()"></div>
     <div><label>↕️ Vị trí Y (px): <span id="rfxYVal">0</span></label><input type="range" id="rfxRangeY" min="-400" max="400" value="0" oninput="updateRoleFxPreview()"></div>
-    <div><label>🔍 Scale: <span id="rfxScaleVal">1.00</span></label><input type="range" id="rfxRangeScale" min="0.2" max="3" step="0.01" value="1" oninput="updateRoleFxPreview()"></div>
+    <div><label>🔍 Scale tổng: <span id="rfxScaleVal">1.00</span></label><input type="range" id="rfxRangeScale" min="0.2" max="3" step="0.01" value="1" oninput="updateRoleFxPreview()"></div>
+    <div><label>↔️ Kéo dãn ngang (X): <span id="rfxScaleXVal">1.00</span></label><input type="range" id="rfxRangeScaleX" min="0.2" max="3" step="0.01" value="1" oninput="updateRoleFxPreview()"></div>
+    <div><label>↕️ Kéo dãn dọc (Y): <span id="rfxScaleYVal">1.00</span></label><input type="range" id="rfxRangeScaleY" min="0.2" max="3" step="0.01" value="1" oninput="updateRoleFxPreview()"></div>
     <div><label>🔄 Xoay: <span id="rfxRotVal">0</span>°</label><input type="range" id="rfxRangeRot" min="-180" max="180" value="0" oninput="updateRoleFxPreview()"></div>
     <div><label>🌫️ Độ đậm nhạt: <span id="rfxOpVal">1.00</span></label><input type="range" id="rfxRangeOp" min="0" max="1" step="0.05" value="1" oninput="updateRoleFxPreview()"></div>
     <div><label>⏱️ Thời gian hiệu ứng (giây): <span id="rfxDurVal">6</span></label><input type="range" id="rfxRangeDur" min="1" max="30" step="1" value="6" oninput="updateRoleFxPreview()"></div>
@@ -1400,17 +1432,18 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="homeView" class="view-section active">
 
-  <!-- ============ COUNTDOWN ============ -->
+  <!-- ============ COUNTDOWN THPTQG ============ -->
   <div id="homeCountdownSection">
     <div class="home-cd-header">
       <div>
-        <div class="home-cd-title" id="homeCdTitle">Thi Đánh Giá Năng Lực</div>
-        <div class="home-cd-subtitle" id="homeCdSubtitle">⏰ Thời gian đếm ngược đến kỳ thi tiếp theo</div>
+        <div class="home-cd-title" id="homeCdTitle">Đếm Ngược Kỳ Thi THPTQG</div>
+        <div class="home-cd-subtitle" id="homeCdSubtitle">⏰ Thời gian đếm ngược đến kỳ thi tốt nghiệp THPT Quốc gia</div>
       </div>
       <div style="text-align:right;font-size:13px;opacity:.95">
         <div id="homeCdDateLabel">—</div>
       </div>
     </div>
+    <div class="home-cd-tabs" id="homeCdTabs"></div>
     <div class="home-cd-grid">
       <div class="home-cd-cell"><div class="home-cd-num" id="cdDay">00</div><div class="home-cd-lbl">Ngày</div></div>
       <div class="home-cd-cell"><div class="home-cd-num" id="cdHour">00</div><div class="home-cd-lbl">Giờ</div></div>
@@ -1594,7 +1627,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-panel active" id="guide-home">
 <div class="guide-section-title">🏠 Trang Chủ (Home)</div>
 <div class="guide-tip">Đây là trang mặc định khi vào web. Cập nhật <b>thời gian thực</b>.</div>
-<div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Đồng hồ đếm ngược:</b> Hiển thị thời gian đếm ngược đến kỳ thi tiếp theo. Cấu hình trong <b>Tối Cao → Quản Trị Hệ Thống → Thời gian đếm ngược</b>.</div></div>
+<div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Đồng hồ đếm ngược THPTQG:</b> Hiển thị 4 tab môn thi <b>Văn · Toán · Tự chọn một · Tự chọn hai</b>. Bấm tab để xem đếm ngược từng môn.</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Hero Banner:</b> Hiển thị tên web + slogan. Có thể chỉnh trong <b>👑 TỐI CAO → 🔧 Cấu hình → Tùy chỉnh giao diện</b>.</div></div>
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>Thống kê realtime:</b> Số người <b>đang online</b> (chấm xanh nhấp nháy) và <b>người đã tham gia</b> (tổng tài khoản). Có thể tắt hiển thị trong Cấu hình.</div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content"><b>4 ô nội dung:</b> 📖 Giới thiệu Web · 🎯 Hướng đến người dùng · 🔥 Xu hướng người dùng · 📢 Thông báo cập nhật — tất cả chỉnh được trong <b>Tối Cao → Cấu hình</b>.</div></div>
@@ -1638,7 +1671,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-section-title">👤 Hồ Sơ Cá Nhân</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Bấm vào <b>tên trên navbar</b> để mở profile.</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Đổi <b>Avatar</b> (có crop tròn), đổi <b>ảnh nền header</b> (🖼️) và gỡ (🗑️).</div></div>
-<div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Xem <b>vai trò</b>, <b>huy chương</b>, <b>cup</b>, <b>số bài đã làm</b>, <b>điểm TB</b>.</div></div>
+<div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Xem <b>vai trò</b>, <b>huy chương</b>, <b>cup</b>, <b>số bài đã làm</b>, <b>điểm TB</b>. Nếu có >4 vai trò, profile chỉ hiển thị 1 vai trò chính + 3 vai trò phụ, còn lại bấm <b>...</b> để xem tiếp.</div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">Nếu có nhiều vai trò, mở <b>🎯 Chọn vai trò hiển thị hiệu ứng</b> để chọn hiệu ứng avatar.</div></div>
 <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-content">Viết <b>ghi chú</b> và bấm <b>💾 Lưu Profile</b>.</div></div>
 </div>
@@ -1646,7 +1679,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-panel" id="guide-supreme">
 <div class="guide-section-title">👑 Khu Vực Tối Cao</div>
 <div class="guide-warning">🔒 Yêu cầu mật khẩu VUA (full quyền) hoặc PARTNER (giới hạn).</div>
-<div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>👥 Quản Lí Tài Khoản:</b> Tìm/lọc user, xem profile, gán vai trò tùy chỉnh, đổi vai trò chính, sửa ID + biệt danh + màu tên + font + hiệu ứng chữ, <b>🏷️ Name Tag</b>, đổi ảnh nền header, trao huy chương/cup. Quản lý danh sách vai trò, huy chương/cup.</div></div>
+<div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>👥 Quản Lí Tài Khoản:</b> Tìm/lọc user, xem profile, gán vai trò tùy chỉnh (<b>King = không giới hạn</b>, <b>Partner/Devil = 5 vai trò</b>, còn lại = 3), đổi vai trò chính, sửa ID + biệt danh + màu tên + font + hiệu ứng chữ, <b>🏷️ Name Tag</b>, đổi ảnh nền header, trao huy chương/cup, <b>🚫 Hủy hết vai trò</b> (xóa toàn bộ vai trò tùy chỉnh của user).</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>⚙️ Quản Trị Hệ Thống:</b> Tên website, quản lý đề thi/bài luyện, thông báo toàn cầu (banner), mật khẩu bảo mật + partner, cấu hình welcome, <b>Thời gian đếm ngược</b>.</div></div>
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>🔧 Cấu hình:</b> Logo website (navbar + favicon), EmailJS (gửi mail OTP), tên web, <b>Tùy chỉnh giao diện</b> (Trang chủ: hero, 4 ô nội dung, tắt/bật thống kê), <b>📧 Gửi Mail</b>, <b>🎨 Tùy chỉnh nút Button</b>, <b>😀 Cấu hình hiệu ứng Emoji</b>.</div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content"><b>🎮 Trung Tâm Giải Trí:</b> Nhạc đồng bộ (âm lượng, kiểu phát), Thông báo mới (ô vuông giữa màn hình), Trêu ghẹo, Chế độ ngày/đêm + theme, <b>📧 Gửi Email</b>. Chi tiết xem tab <b>🎮 Giải Trí</b>.</div></div>
@@ -1739,11 +1772,25 @@ input,select,textarea{font-size:13px;padding:9px}
 <!-- ============ COUNTDOWN CONFIG ============ -->
 <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>⏰ THỜI GIAN ĐẾM NGƯỢC (TRANG CHỦ)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed"><div style="background:#fff7e6;border:2px dashed #ffc107;padding:14px;border-radius:10px;margin-bottom:20px">
-<p style="font-size:12px;color:#856404;margin-bottom:10px">Cấu hình đồng hồ đếm ngược hiển thị ở đầu Trang Chủ.</p>
-<label>Tiêu đề:</label><input type="text" id="cdTitleInput" placeholder="Thi Đánh Giá Năng Lực">
+<p style="font-size:12px;color:#856404;margin-bottom:10px">Cấu hình đồng hồ đếm ngược hiển thị ở đầu Trang Chủ (4 môn thi THPTQG).</p>
+<label>Tiêu đề:</label><input type="text" id="cdTitleInput" placeholder="Đếm Ngược Kỳ Thi THPTQG">
 <label>Phụ đề:</label><input type="text" id="cdSubtitleInput" placeholder="⏰ Thời gian đếm ngược...">
-<label>Thời gian đích (Ngày &amp; Giờ):</label>
-<div class="form-grid-2" style="grid-template-columns:1fr 1fr;gap:10px"><input type="date" id="cdDateInput" style="margin:0"><input type="time" id="cdTimeInput" style="margin:0"></div>
+<div style="background:#fff;border-radius:8px;padding:10px;margin-top:8px">
+  <div style="font-weight:900;color:#856404;font-size:13px;margin-bottom:8px">📚 Văn</div>
+  <div class="form-grid-2" style="grid-template-columns:1fr 1fr;gap:10px"><input type="date" id="cdDateVan" style="margin:0"><input type="time" id="cdTimeVan" style="margin:0"></div>
+</div>
+<div style="background:#fff;border-radius:8px;padding:10px;margin-top:8px">
+  <div style="font-weight:900;color:#0d6efd;font-size:13px;margin-bottom:8px">🧮 Toán</div>
+  <div class="form-grid-2" style="grid-template-columns:1fr 1fr;gap:10px"><input type="date" id="cdDateToan" style="margin:0"><input type="time" id="cdTimeToan" style="margin:0"></div>
+</div>
+<div style="background:#fff;border-radius:8px;padding:10px;margin-top:8px">
+  <div style="font-weight:900;color:#198754;font-size:13px;margin-bottom:8px">🎯 Tự chọn một</div>
+  <div class="form-grid-2" style="grid-template-columns:1fr 1fr;gap:10px"><input type="date" id="cdDateTc1" style="margin:0"><input type="time" id="cdTimeTc1" style="margin:0"></div>
+</div>
+<div style="background:#fff;border-radius:8px;padding:10px;margin-top:8px">
+  <div style="font-weight:900;color:#6f42c1;font-size:13px;margin-bottom:8px">🎨 Tự chọn hai</div>
+  <div class="form-grid-2" style="grid-template-columns:1fr 1fr;gap:10px"><input type="date" id="cdDateTc2" style="margin:0"><input type="time" id="cdTimeTc2" style="margin:0"></div>
+</div>
 <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="saveCountdownConfig()">💾 Lưu Đếm Ngược</button><button class="btn btn-secondary" style="width:auto;padding:10px 16px" onclick="resetCountdownConfig()">🔄 Reset</button></div>
 </div></div>
 
@@ -2524,14 +2571,35 @@ let roleAvatarAdjustState={frame:'',scale:1,rotation:0,x:0,y:0,opacity:1};
 let roleAvatarFrameDragState={dragging:false,lastX:0,lastY:0};
 let roleAvatarAdjustDevice='desktop';
 
-/* NEW: Countdown state */
-let countdownConfig={title:'Thi Đánh Giá Năng Lực',subtitle:'⏰ Thời gian đếm ngược đến kỳ thi tiếp theo',date:'',time:''};
+/* NEW: Countdown state - 4 môn thi THPTQG */
+const DEFAULT_COUNTDOWN_SUBJECTS=[
+  {key:'van',name:'Văn',emoji:'📚',color:'#dc3545',date:'2027-06-11',time:'07:30'},
+  {key:'toan',name:'Toán',emoji:'🧮',color:'#0d6efd',date:'2027-06-11',time:'14:20'},
+  {key:'tc1',name:'Tự chọn một',emoji:'🎯',color:'#198754',date:'2027-06-12',time:'07:30'},
+  {key:'tc2',name:'Tự chọn hai',emoji:'🎨',color:'#6f42c1',date:'2027-06-12',time:'08:35'}
+];
+let countdownConfig={title:'Đếm Ngược Kỳ Thi THPTQG',subtitle:'⏰ Thời gian đếm ngược đến kỳ thi tốt nghiệp THPT Quốc gia',subjects:JSON.parse(JSON.stringify(DEFAULT_COUNTDOWN_SUBJECTS)),activeKey:'van'};
 let countdownInterval=null;
 let countdownConfigListener=null;
 
-/* NEW: Role Effect Adjust State */
-let roleEffectAdjustState={ desktop:{x:0,y:0,scale:1,rotation:0,opacity:1,duration:6}, mobile:{x:0,y:0,scale:1,rotation:0,opacity:1,duration:6} };
+/* NEW: Role Effect Adjust State - với scaleX/scaleY (kéo dãn ngang dọc) */
+let roleEffectAdjustState={
+  desktop:{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6},
+  mobile:{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6}
+};
 let roleEffectAdjustDevice='desktop';
+let roleFxPreviewRAF=null;
+let roleFxPreviewAutoStop=null;
+let roleFxDragState={dragging:false,lastX:0,lastY:0};
+
+/* NEW: Hàm giới hạn vai trò theo vai trò chính */
+function getMaxRolesForUser(u){
+  if(!u)return 3;
+  const mainRole=u.role||'';
+  if(mainRole==='king')return Number.MAX_SAFE_INTEGER; // King không giới hạn
+  if(mainRole==='partner'||mainRole==='devil')return 5; // Partner/Devil = 5
+  return 3; // Còn lại 3
+}
 
 const ORIGINAL_NAV_TABS_HTML_DEFAULT='<button class="active" onclick="switchView(\'homeView\', this)">🏠 TRANG CHỦ</button><button onclick="switchView(\'studentLoginView\', this)">🧑‍🎓 HỌC SINH</button><button onclick="switchView(\'teacherView\', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="switchView(\'advancedModelView\', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView(\'guideView\', this)">📖 HƯỚNG DẪN</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button>';
 const DEFAULT_CUSTOM_BUTTONS={
@@ -2555,7 +2623,7 @@ const DEFAULT_WEB_NAME='✨ AURORA';
 const DEFAULT_FAVICON="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='78' font-size='80'%3E📚%3C/text%3E%3C/svg%3E";
 const VUA_PASSWORD='thuan281009@';
 const ROLE_EMOJIS=['👑','💠','🌸','⛄','🧧','😈','❤️','🎓','🔨','✏️','👨‍🏫','🌌','⭐','🔥','💎','🎯','🏆','⚡','🌟','🍀','🎨','🎵','🚀','🦁','🐉','🦊','🐼','🎃','🎄','💀','👽','🤖','🌈','💫','🍎','⚔️','🛡️','🤝','👤','💖','🌺'];
-const MAX_USER_ROLES=3,MAX_USER_MEDALS=4;
+const MAX_USER_MEDALS=4;
 const BANNED_WORDS=['dm','dmm','dit','địt','đụ','cặc','lồn','buồi','đéo','đm','đmm','clgt','clm','vcl','vkl','đkm','đcm','dcm','dkm','súc vật','súc sinh','đĩ','điếm','phò','sex','fuck','shit','bitch','dick','pussy','cunt','nigger','faggot','admin','devil','partner','vua','thuan281009','đầu buồi','óc chó','thằng chó','con chó','mẹ mày','bố mày','đồ ngu','thằng ngu','con ngu'];
 const SPECIAL_ROLE_CONFIG={'king':{text:'👑 ADMIN SEVER đã tham gia phòng thi',cls:'king'},'devil':{text:'😈 ÁC QUỶ đã tham gia phòng thi',cls:'devil'},'elite_teacher':{text:'🌟 CHỦ TỌA (GV) đã tham gia phòng thi',cls:'elite_teacher'},'partner':{text:'🤝 PARTNER đã tham gia phòng thi',cls:'partner'}};
 const DEFAULT_ROOM_ANNOUNCE={
@@ -2628,8 +2696,6 @@ let selectedNotifyEffect=null,selectedPrankEffect=null;
 
 const ROLE_EFFECT_MAP={'👑':'crown_drop','💠':'admin_special','🌸':'petals','🌺':'petals_red','⛄':'snowflakes','🧧':'lucky_money','😈':'dark_flames','❤️':'hearts','💖':'hearts_sparkle','🎓':'graduation','🔨':'hammer_slam','✏️':'pencils','👨‍🏫':'teacher_spark','🌟':'sparkle_star','🤝':'handshake_shield','👤':'soft_glow','🌌':'galaxy_bg','⭐':'starfall','🔥':'fire_bg','💎':'diamonds','🎯':'targets','🏆':'crown_drop','⚡':'lightning_bg','🍀':'clovers','🎨':'colors','🎵':'music_notes','🚀':'rockets','🦁':'mane','🐉':'dragon','🦊':'fox','🐼':'pandas','🎃':'halloween_bg','🎄':'christmas_bg','💀':'skull','👽':'alien','🤖':'robots','🌈':'rainbow_bg','💫':'comets','🍎':'apples','⚔️':'swords','🛡️':'shield_bg','default':'sparkles'};
 const AVATAR_EFFECT_COLORS={'coin_rain':['#ffd700','#ffb700','#ffed4e'],'petals':['#ffb3d9','#ff85c0','#ff69b4'],'petals_red':['#ff5555','#ff7777','#ffaaaa'],'snowflakes':['#ffffff','#a8d8ff','#d4f0ff'],'lucky_money':['#dc3545','#ffd700','#ff4d4d'],'dark_flames':['#a55eea','#7a2fbb','#ff2b2b'],'hearts':['#ff4d6d','#ff85a1','#ff1744'],'hearts_sparkle':['#ff69b4','#ffd700','#ff1493'],'graduation':['#333333','#1877f2','#000000'],'hammer_slam':['#8B4513','#A0522D','#ff8c00'],'pencils':['#FFD700','#FFA500','#FF8C00'],'teacher_spark':['#1877f2','#4a9eff','#198754'],'sparkle_star':['#ffd700','#fff8b0','#ffed4e'],'handshake_shield':['#4a9eff','#ffd700','#1877f2'],'soft_glow':['#e7f3ff','#cce4ff','#a8d5ff'],'fire_bg':['#ff9800','#ff5722','#ffc107'],'galaxy_bg':['#4a9eff','#a55eea','#ff6bcb'],'starfall':['#ffd700','#fff8b0','#ffed4e'],'diamonds':['#b9f2ff','#7fd8ff','#4ab5e8'],'targets':['#dc3545','#ffffff','#ff6b6b'],'trophy':['#ffd700','#ffb700','#b8860b'],'crown_drop':['#ffd700','#ffc107','#fff8b0'],'lightning_bg':['#ffeb3b','#fff176','#ffc107'],'clovers':['#198754','#3ec97a','#0d5f38'],'colors':['#ff4d4f','#ffc107','#198754','#1877f2','#a55eea'],'music_notes':['#a55eea','#ff6bcb','#4a9eff'],'rockets':['#ff5722','#ffc107','#1877f2'],'mane':['#ff9800','#d97316','#b85c00'],'dragon':['#dc3545','#ffc107','#198754'],'fox':['#ff8c42','#d97316','#ffa860'],'pandas':['#000000','#ffffff','#333333'],'halloween_bg':['#ff9800','#a55eea','#ffc107'],'christmas_bg':['#dc3545','#198754','#ffd700'],'skull':['#e0e0e0','#a0a0a0','#ffffff'],'alien':['#198754','#7fff00','#3ec97a'],'robots':['#6c757d','#a0a0a0','#4a9eff'],'rainbow_bg':['#ff4d4f','#ffc107','#198754','#1877f2','#a55eea'],'comets':['#ffd700','#fff8b0','#4a9eff'],'apples':['#dc3545','#198754','#ff6b6b'],'swords':['#a0a0a0','#e0e0e0','#6c757d'],'shield_bg':['#1877f2','#4a9eff','#0d5fd6'],'spiderman':['#dc3545','#ff6b6b','#ffffff'],'admin_special':['#ff0000','#ffff00','#00ff00','#0000ff','#a55eea'],'default':['#ffd700','#ffed4e','#fff8b0']};
-
-/* NEW: getAvatarEffect - hỗ trợ custom emoji effect */
 function getAvatarEffect(role){
   if(!role||!role.emoji)return 'sparkles';
   const emoji=role.emoji;
@@ -2646,7 +2712,6 @@ function getAvatarEffect(role){
 function getAvatarEffectColors(name){if(name&&name.startsWith('emojieff_'))return ['#ffd700','#ffed4e','#fff8b0'];return AVATAR_EFFECT_COLORS[name]||AVATAR_EFFECT_COLORS['default'];}
 function isBaseRole(role){if(!role)return false;return BASE_ROLES.includes(role.id);}
 function containsBannedWord(text){if(!text)return false;const t=String(text).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[@]/g,'a').replace(/[1!|]/g,'i').replace(/[3]/g,'e').replace(/[4]/g,'a').replace(/[5$]/g,'s').replace(/[0]/g,'o').replace(/[^a-z0-9]/g,'');return BANNED_WORDS.some(w=>{const ww=String(w).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]/g,'');return ww && t.includes(ww);});}
-
 function getFrameClassForEffect(effect){
   if(!effect)return '';
   if(effect==='crown_drop'||effect==='trophy')return 'frame-crown';
@@ -2656,7 +2721,6 @@ function getFrameClassForEffect(effect){
   if(effect==='spiderman')return 'frame-spidey';
   return '';
 }
-
 function formatCount(n){
   n=Math.max(0,Math.floor(Number(n)||0));
   if(n<10000)return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
@@ -2665,73 +2729,115 @@ function formatCount(n){
   return Math.round(n/1000000000)+'B';
 }
 
-/* ============ COUNTDOWN ============ */
+/* ============ COUNTDOWN - 4 MÔN THI THPTQG ============ */
+function getSubjectTargetTime(subj){
+  if(!subj||!subj.date||!subj.time)return 0;
+  return new Date(`${subj.date}T${subj.time}:00`).getTime();
+}
+function renderCountdownTabs(){
+  const tabs=document.getElementById('homeCdTabs');
+  if(!tabs)return;
+  const subjects=countdownConfig.subjects||DEFAULT_COUNTDOWN_SUBJECTS;
+  tabs.innerHTML=subjects.map(s=>`<div class="home-cd-tab ${s.key===countdownConfig.activeKey?'active':''}" onclick="switchCountdownSubject('${s.key}')"><span>${s.emoji||'📖'}</span><span>${escapeHtml(s.name)}</span></div>`).join('');
+}
+function switchCountdownSubject(key){
+  countdownConfig.activeKey=key;
+  renderCountdownTabs();
+  updateCountdownDisplay();
+}
+function updateCountdownDisplay(){
+  const subjects=countdownConfig.subjects||DEFAULT_COUNTDOWN_SUBJECTS;
+  const active=subjects.find(s=>s.key===countdownConfig.activeKey)||subjects[0];
+  if(!active)return;
+  const target=getSubjectTargetTime(active);
+  const el=document.getElementById('homeCdDateLabel');
+  if(el)el.innerText=new Date(target).toLocaleString('vi-VN',{weekday:'long',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+  const titleEl=document.getElementById('homeCdTitle');
+  if(titleEl)titleEl.innerText=`Đếm Ngược: ${active.name}`;
+  const subEl=document.getElementById('homeCdSubtitle');
+  if(subEl)subEl.innerText=countdownConfig.subtitle||'⏰ Thời gian đếm ngược đến kỳ thi';
+  let diff=target-Date.now();
+  if(diff<0)diff=0;
+  const days=Math.floor(diff/86400000);
+  const hours=Math.floor((diff%86400000)/3600000);
+  const mins=Math.floor((diff%3600000)/60000);
+  const secs=Math.floor((diff%60000)/1000);
+  const pad=n=>String(n).padStart(2,'0');
+  const e1=document.getElementById('cdDay');if(e1)e1.innerText=pad(days);
+  const e2=document.getElementById('cdHour');if(e2)e2.innerText=pad(hours);
+  const e3=document.getElementById('cdMin');if(e3)e3.innerText=pad(mins);
+  const e4=document.getElementById('cdSec');if(e4)e4.innerText=pad(secs);
+}
 function applyCountdownConfigUI(c){
-  const t=document.getElementById('homeCdTitle');if(t)t.innerText=c.title||'Thi Đánh Giá Năng Lực';
-  const s=document.getElementById('homeCdSubtitle');if(s)s.innerText=c.subtitle||'';
+  countdownConfig=Object.assign({
+    title:'Đếm Ngược Kỳ Thi THPTQG',
+    subtitle:'⏰ Thời gian đếm ngược đến kỳ thi tốt nghiệp THPT Quốc gia',
+    subjects:JSON.parse(JSON.stringify(DEFAULT_COUNTDOWN_SUBJECTS)),
+    activeKey:'van'
+  },c||{});
+  if(!Array.isArray(countdownConfig.subjects)||!countdownConfig.subjects.length){
+    countdownConfig.subjects=JSON.parse(JSON.stringify(DEFAULT_COUNTDOWN_SUBJECTS));
+  }
+  renderCountdownTabs();
+  updateCountdownDisplay();
   const $=id=>document.getElementById(id);
-  if($('cdTitleInput')&&document.activeElement!==$('cdTitleInput'))$('cdTitleInput').value=c.title||'';
-  if($('cdSubtitleInput')&&document.activeElement!==$('cdSubtitleInput'))$('cdSubtitleInput').value=c.subtitle||'';
-  if($('cdDateInput')&&document.activeElement!==$('cdDateInput'))$('cdDateInput').value=c.date||'';
-  if($('cdTimeInput')&&document.activeElement!==$('cdTimeInput'))$('cdTimeInput').value=c.time||'';
+  if($('cdTitleInput')&&document.activeElement!==$('cdTitleInput'))$('cdTitleInput').value=countdownConfig.title||'';
+  if($('cdSubtitleInput')&&document.activeElement!==$('cdSubtitleInput'))$('cdSubtitleInput').value=countdownConfig.subtitle||'';
+  const fieldMap={van:['cdDateVan','cdTimeVan'],toan:['cdDateToan','cdTimeToan'],tc1:['cdDateTc1','cdTimeTc1'],tc2:['cdDateTc2','cdTimeTc2']};
+  Object.keys(fieldMap).forEach(key=>{
+    const subj=countdownConfig.subjects.find(s=>s.key===key);
+    if(!subj)return;
+    const [dId,tId]=fieldMap[key];
+    const dEl=$(dId),tEl=$(tId);
+    if(dEl&&document.activeElement!==dEl)dEl.value=subj.date||'';
+    if(tEl&&document.activeElement!==tEl)tEl.value=subj.time||'';
+  });
 }
 function startCountdown(){
   if(countdownInterval)clearInterval(countdownInterval);
-  const update=()=>{
-    if(!countdownConfig.date||!countdownConfig.time){
-      const el=document.getElementById('homeCdDateLabel');if(el)el.innerText='Chưa cấu hình';
-      ['cdDay','cdHour','cdMin','cdSec'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerText='00';});
-      return;
-    }
-    const target=new Date(`${countdownConfig.date}T${countdownConfig.time}:00`).getTime();
-    const now=Date.now();
-    let diff=target-now;
-    const el=document.getElementById('homeCdDateLabel');
-    if(el)el.innerText=new Date(target).toLocaleString('vi-VN');
-    if(diff<0)diff=0;
-    const days=Math.floor(diff/86400000);
-    const hours=Math.floor((diff%86400000)/3600000);
-    const mins=Math.floor((diff%3600000)/60000);
-    const secs=Math.floor((diff%60000)/1000);
-    const pad=n=>String(n).padStart(2,'0');
-    const e1=document.getElementById('cdDay');if(e1)e1.innerText=pad(days);
-    const e2=document.getElementById('cdHour');if(e2)e2.innerText=pad(hours);
-    const e3=document.getElementById('cdMin');if(e3)e3.innerText=pad(mins);
-    const e4=document.getElementById('cdSec');if(e4)e4.innerText=pad(secs);
-  };
-  update();
-  countdownInterval=setInterval(update,1000);
+  updateCountdownDisplay();
+  countdownInterval=setInterval(updateCountdownDisplay,1000);
 }
 function listenCountdownConfig(){
   if(countdownConfigListener)countdownConfigListener();
   countdownConfigListener=window.onValue(window.ref(window.db,'system/countdown_config'),snap=>{
     const c=snap.val()||{};
-    countdownConfig=Object.assign({title:'Thi Đánh Giá Năng Lực',subtitle:'⏰ Thời gian đếm ngược đến kỳ thi tiếp theo',date:'',time:''},c);
-    applyCountdownConfigUI(countdownConfig);
+    applyCountdownConfigUI(c);
     startCountdown();
   });
 }
 async function saveCountdownConfig(){
   const $=id=>document.getElementById(id);
+  const subjects=[];
+  const fieldMap={van:['cdDateVan','cdTimeVan'],toan:['cdDateToan','cdTimeToan'],tc1:['cdDateTc1','cdTimeTc1'],tc2:['cdDateTc2','cdTimeTc2']};
+  const defaultMap={van:{name:'Văn',emoji:'📚',color:'#dc3545'},toan:{name:'Toán',emoji:'🧮',color:'#0d6efd'},tc1:{name:'Tự chọn một',emoji:'🎯',color:'#198754'},tc2:{name:'Tự chọn hai',emoji:'🎨',color:'#6f42c1'}};
+  Object.keys(fieldMap).forEach(key=>{
+    const [dId,tId]=fieldMap[key];
+    const base=defaultMap[key];
+    subjects.push({key,name:base.name,emoji:base.emoji,color:base.color,date:$d(dId),time:$t(tId)});
+  });
+  function $d(id){const e=$(id);return e?e.value:'';}
+  function $t(id){const e=$(id);return e?e.value:'';}
   const cfg={
-    title:$('cdTitleInput').value.trim()||'Thi Đánh Giá Năng Lực',
-    subtitle:$('cdSubtitleInput').value.trim(),
-    date:$('cdDateInput').value,
-    time:$('cdTimeInput').value,
+    title:$('cdTitleInput').value.trim()||'Đếm Ngược Kỳ Thi THPTQG',
+    subtitle:$('cdSubtitleInput').value.trim()||'⏰ Thời gian đếm ngược đến kỳ thi tốt nghiệp THPT Quốc gia',
+    subjects,
+    activeKey:countdownConfig.activeKey||'van',
     updatedAt:Date.now()
   };
   try{
     await window.dbSet(window.ref(window.db,'system/countdown_config'),cfg);
-    countdownConfig=cfg;
     applyCountdownConfigUI(cfg);
     startCountdown();
-    showCenterSquareToast('✅','Đã lưu!','Cấu hình đếm ngược','success');
+    showCenterSquareToast('✅','Đã lưu!','Cấu hình đếm ngược 4 môn thi','success');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function resetCountdownConfig(){
   if(!await customConfirm('Reset cấu hình đếm ngược?',{icon:'🔄'}))return;
   try{
     await window.dbRemove(window.ref(window.db,'system/countdown_config'));
+    applyCountdownConfigUI({});
+    startCountdown();
     showToast('🔄 Đã reset!','warn');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
@@ -2762,7 +2868,6 @@ async function loadThroneData(){
     process(lb.val());
     process(qp.val());
     const arr=Object.values(byUser).sort((a,b)=>b.total-a.total||b.count-a.count).slice(0,3);
-    const slots=document.querySelectorAll('#throneGrid .throne-slot');
     const mapping=[{slot:'rank2',data:arr[1]},{slot:'rank1',data:arr[0]},{slot:'rank3',data:arr[2]}];
     mapping.forEach(m=>{
       const slot=document.querySelector(`#throneGrid .throne-slot.${m.slot}`);
@@ -3110,7 +3215,6 @@ function renderCustomBtnPreview(){
   const btn=wrap.querySelector('.aurora-nav-btn');
   if(btn)btn.style.cursor='default';
 }
-const CUSTOM_BTN_FAKE_HANDLER='void(0);';
 function switchCustomBtnTab(tab,el){
   currentCustomBtnTab=tab;
   document.querySelectorAll('#customBtnTabs .supreme-tab').forEach(t=>t.classList.remove('active'));
@@ -3517,7 +3621,6 @@ function getUserAllRoles(u){const arr=[getBuiltinRole(u)];(u.customRoleIds||[]).
 function getCurrentEffectRole(u){if(!u)return DEFAULT_ROLES.student;if(u.pinnedRoleId){if(DEFAULT_ROLES[u.pinnedRoleId])return {...DEFAULT_ROLES[u.pinnedRoleId],id:u.pinnedRoleId};if(cachedRoles[u.pinnedRoleId])return {...cachedRoles[u.pinnedRoleId],id:u.pinnedRoleId};}return getBuiltinRole(u);}
 function renderUserRoleBadges(u){return getUserAllRoles(u).map(r=>renderRoleBadge(r)).join(' ');}
 function renderRoleBadge(role,cls='user-role-badge'){if(!role)return '';const aura=role.auraEnabled?`box-shadow:0 0 8px ${role.auraColor||'#ffc107'},0 0 16px ${role.auraColor||'#ffc107'};`:'';return `<span class="${cls}" style="background:${role.bgColor};color:${role.textColor};${aura}">${renderRoleEmoji(role)} ${escapeHtml(role.name||'')}</span>`;}
-/* NEW: render emoji (kể cả custom emoji) */
 function renderRoleEmoji(role){
   if(!role||!role.emoji)return '';
   const e=role.emoji;
@@ -3534,7 +3637,6 @@ function renderRoleEmoji(role){
 }
 function getUserOwnedCups(u){if(!u)return[];if(Array.isArray(u.ownedCups)&&u.ownedCups.length)return u.ownedCups.slice();if(u.ownedCup)return [u.ownedCup];return [];}
 function medalIcon(md){if(!md)return '🏅';if(md.type==='cup')return '🏆';return MEDAL_ICONS[md.tier]||'🏅';}
-
 function buildNameTagHtml(u){
   if(!u||!u.nameTag||!u.nameTag.text)return '';
   const nt=u.nameTag;
@@ -3601,8 +3703,9 @@ async function resetWebName(){if(!await customConfirm('Reset tên website?',{ico
 function applyWebName(name){const n=name||DEFAULT_WEB_NAME;const l=document.getElementById('webLogo');if(l)l.innerText=n;document.title=n+' - Hệ Thống Kiểm Tra Trực Tuyến';}
 function loadWebConfig(){if(webConfigListener)webConfigListener();webConfigListener=window.onValue(window.ref(window.db,'system/web_config'),s=>{const c=s.val()||{};applyWebName(c.name||DEFAULT_WEB_NAME);applyLogo(c.logoUrl||'');const i=document.getElementById('supremeWebName');if(i&&document.activeElement!==i)i.value=c.name||DEFAULT_WEB_NAME;const i2=document.getElementById('configWebName');if(i2&&document.activeElement!==i2)i2.value=c.name||DEFAULT_WEB_NAME;});}
 
-/* PROFILE */
+/* PROFILE - HIỂN THỊ VAI TRÒ RÚT GỌN (1 chính + 3 phụ, ... để xem tiếp) */
 let profileEffectCycleTimer=null;
+let profileAllRolesCache=[];
 async function openProfile(_,targetUser){
   if(!currentUser)return;
   await loadRolesCache();await loadMedalsCache();
@@ -3613,7 +3716,8 @@ async function openProfile(_,targetUser){
   document.getElementById('profileUsernameDisplay').innerText='@'+u.username;
   const rolesEl=document.getElementById('profileRolesDisplay');
   const allRoles=getUserAllRoles(u);
-  rolesEl.innerHTML=allRoles.map(r=>renderRoleBadge(r)).join('');
+  profileAllRolesCache=allRoles;
+  renderProfileRoles(allRoles);
   renderPinnedRoleSelector(u,allRoles,isSelf);
   const header=document.getElementById('profileHeaderBg');
   const effRole=getCurrentEffectRole(u);
@@ -3649,7 +3753,6 @@ async function openProfile(_,targetUser){
   const frameEl=document.getElementById('profileAvatarFrame');
   const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));
   frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');
-  applyCustomRoleAvatarFrame(effRole);
   if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}else{stopProfileEffect();stopAvatarEffect();}
   document.getElementById('profileModal').classList.add('show');
   if(profileEffectCycleTimer)clearInterval(profileEffectCycleTimer);
@@ -3662,21 +3765,26 @@ async function openProfile(_,targetUser){
     },10000);
   }
 }
-function applyCustomRoleAvatarFrame(role){
-  const el=document.getElementById('profileCustomRoleFrame');
-  if(!el)return;
-  if(!role||!role.avatarFrame){el.style.display='none';el.style.backgroundImage='';el.style.transform='';return;}
-  const isMobile=window.innerWidth<640;
-  const adj=isMobile?(role.avatarFrameMobile||{}):{};
-  const x=parseFloat(adj.x!==undefined?adj.x:(role.avatarFrameOffsetX||0));
-  const y=parseFloat(adj.y!==undefined?adj.y:(role.avatarFrameOffsetY||0));
-  const sc=parseFloat(adj.scale!==undefined?adj.scale:(role.avatarFrameScale||1));
-  const rot=parseFloat(adj.rotation!==undefined?adj.rotation:(role.avatarFrameRotation||0));
-  const op=parseFloat(adj.opacity!==undefined?adj.opacity:1);
-  el.style.display='block';
-  el.style.backgroundImage=`url('${role.avatarFrame}')`;
-  el.style.transform=`translate(${x}px,${y}px) scale(${sc}) rotate(${rot}deg)`;
-  el.style.opacity=op;
+/* NEW: Render roles rút gọn - 1 chính + 3 phụ, còn lại ... */
+function renderProfileRoles(allRoles){
+  const rolesEl=document.getElementById('profileRolesDisplay');
+  if(!rolesEl)return;
+  const MAX_DISPLAY=4; // 1 chính + 3 phụ
+  if(allRoles.length<=MAX_DISPLAY){
+    rolesEl.innerHTML=allRoles.map(r=>renderRoleBadge(r)).join('');
+    return;
+  }
+  const shown=allRoles.slice(0,MAX_DISPLAY);
+  const hiddenCount=allRoles.length-MAX_DISPLAY;
+  const html=shown.map(r=>renderRoleBadge(r)).join('')+
+    `<span class="user-role-badge more-badge" onclick="showAllProfileRoles()" style="background:#f0f2f5;color:#333;cursor:pointer" title="Xem thêm ${hiddenCount} vai trò">+${hiddenCount} ...</span>`;
+  rolesEl.innerHTML=html;
+}
+function showAllProfileRoles(){
+  const rolesEl=document.getElementById('profileRolesDisplay');
+  if(!rolesEl||!profileAllRolesCache.length)return;
+  rolesEl.innerHTML=profileAllRolesCache.map(r=>renderRoleBadge(r)).join('')+
+    `<span class="user-role-badge more-badge" onclick="renderProfileRoles(profileAllRolesCache)" style="background:#1877f2;color:#fff;cursor:pointer" title="Thu gọn">▲ Thu gọn</span>`;
 }
 function adjustColor(hex,amt){const c=hex.replace('#','');let r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);r=Math.max(0,Math.min(255,r+amt));g=Math.max(0,Math.min(255,g+amt));b=Math.max(0,Math.min(255,b+amt));return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function applyFontAndEffect(el,fontStyle,textEffect,color){const fonts={'normal':"inherit",'hoathinh':"'Comic Sans MS', cursive",'nannhot':"Georgia, serif",'mono':"'Courier New', monospace",'serif':"'Times New Roman', serif"};el.style.fontFamily=fonts[fontStyle]||'inherit';el.style.color=color||'#333';el.style.webkitTextFillColor='';el.style.background='';el.style.webkitBackgroundClip='';el.style.backgroundClip='';if(textEffect==='glow')el.style.textShadow=`0 0 8px ${color||'#fff'},0 0 16px ${color||'#fff'}`;else if(textEffect==='neon')el.style.textShadow=`0 0 4px ${color},0 0 10px ${color},0 0 20px ${color},0 0 40px ${color}`;else if(textEffect==='rainbow'){el.style.background='linear-gradient(90deg,#ff4d4f,#ffc107,#198754,#1877f2,#a55eea,#ff4d4f)';el.style.backgroundSize='300% auto';el.style.webkitBackgroundClip='text';el.style.backgroundClip='text';el.style.webkitTextFillColor='transparent';}else if(textEffect==='shadow')el.style.textShadow='3px 3px 6px rgba(0,0,0,.4)';else el.style.textShadow='none';}
@@ -3719,7 +3827,7 @@ function closeAvatarCrop(){document.getElementById('avatarCropModal').classList.
 /* PIN ROLE */
 function togglePinRoleSelector(){const list=document.getElementById('profilePinnedRoleList');const icon=document.getElementById('pinRoleToggleIcon');const isOpen=list.classList.contains('open');if(isOpen){list.classList.remove('open');icon.innerText='▶';}else{list.classList.add('open');icon.innerText='▼';}}
 function renderPinnedRoleSelector(u,allRoles,isSelf){const box=document.getElementById('profilePinnedRoleBox');const list=document.getElementById('profilePinnedRoleList');const rolesFiltered=allRoles.filter(r=>r.emoji);if(rolesFiltered.length<2){box.style.display='none';return;}box.style.display='block';list.classList.remove('open');document.getElementById('pinRoleToggleIcon').innerText='▶';const pinnedId=u.pinnedRoleId||'';list.innerHTML=rolesFiltered.map(r=>{const realId=r.id||'';const isPinned=pinnedId===realId;const aura=r.auraEnabled?`box-shadow:0 0 8px ${r.auraColor||'#ffc107'},0 0 16px ${r.auraColor||'#ffc107'};`:'';return `<span class="pin-role-item ${isPinned?'pinned':''}" style="background:${r.bgColor};color:${r.textColor};${aura}" onclick="${isSelf?`pinRole('${realId}')`:'void(0)'}">${renderRoleEmoji(r)} ${escapeHtml(r.name)}</span>`;}).join('');}
-async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);const frameEl=document.getElementById('profileAvatarFrame');const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');applyCustomRoleAvatarFrame(effRole);if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;applyAvatarBgToProfile(u.avatarBg||'');renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);const frameEl=document.getElementById('profileAvatarFrame');const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;applyAvatarBgToProfile(u.avatarBg||'');renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
 /* PROFILE FX */
 let profileFxRAF=null,profileFxAutoStop=null;
@@ -3729,13 +3837,23 @@ function stopProfileEffect(){if(profileFxRAF)cancelAnimationFrame(profileFxRAF);
 }
 function getProfileEffectAdjust(role){
   const isMobile=window.innerWidth<640;
-  const def={x:0,y:0,scale:1,rotation:0,opacity:1,duration:6};
+  const def={x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6};
   if(!role)return def;
   const data=role.effectAdjust;
   if(!data)return def;
   const d=data.desktop||def;
   const m=data.mobile||def;
-  return isMobile?Object.assign({},def,m):Object.assign({},def,d);
+  const src=isMobile?m:d;
+  return {
+    x:src.x!==undefined?src.x:def.x,
+    y:src.y!==undefined?src.y:def.y,
+    scale:src.scale!==undefined?src.scale:def.scale,
+    scaleX:src.scaleX!==undefined?src.scaleX:def.scaleX,
+    scaleY:src.scaleY!==undefined?src.scaleY:def.scaleY,
+    rotation:src.rotation!==undefined?src.rotation:def.rotation,
+    opacity:src.opacity!==undefined?src.opacity:def.opacity,
+    duration:src.duration!==undefined?src.duration:def.duration
+  };
 }
 function playProfileEffect(role){
   if(perfMode==='optimized')return;
@@ -3745,7 +3863,6 @@ function playProfileEffect(role){
   const modal=document.getElementById('profileModal');
   if(modal&&!modal.classList.contains('show'))return;
 
-  /* NEW: Custom emoji effect - ưu tiên hơn hệ thống */
   if(effectType.startsWith('emojieff_')){
     const effId=effectType.slice(9);
     const eff=cachedEmojiEffects[effId];
@@ -3771,19 +3888,14 @@ function playRoleSpecialAnimation(effectType,container,adj){
   if(perfMode==='optimized')return;
   if(!container)return;
   container.querySelectorAll('.profile-special-fx').forEach(el=>el.remove());
-  adj=adj||{x:0,y:0,scale:1,rotation:0,opacity:1,duration:6};
+  adj=adj||{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6};
   const layer=document.createElement('div');
   layer.className='profile-special-fx';
   layer.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:15;overflow:hidden;border-radius:24px';
   const dur=adj.duration*1000;
   const applyAdj=(el)=>{
     if(!el)return;
-    el.style.setProperty('--fx-adj-x',adj.x+'px');
-    el.style.setProperty('--fx-adj-y',adj.y+'px');
-    el.style.setProperty('--fx-adj-scale',adj.scale);
-    el.style.setProperty('--fx-adj-rotation',adj.rotation+'deg');
-    el.style.setProperty('--fx-adj-opacity',adj.opacity);
-    el.style.transform=`translate(${adj.x}px,${adj.y}px) scale(${adj.scale}) rotate(${adj.rotation}deg)`;
+    el.style.transform=`translate(${adj.x}px,${adj.y}px) scale(${adj.scale}) scaleX(${adj.scaleX||1}) scaleY(${adj.scaleY||1}) rotate(${adj.rotation}deg)`;
     el.style.opacity=adj.opacity;
   };
   const mk=(cls,text,extra='')=>{const d=document.createElement('div');d.className=cls+' play';if(text)d.innerText=text;if(extra)d.style.cssText+=extra;layer.appendChild(d);applyAdj(d);return d;};
@@ -3807,7 +3919,6 @@ function playRoleSpecialAnimation(effectType,container,adj){
   setTimeout(()=>{layer.remove();},dur);
 }
 
-/* NEW: Play custom uploaded effect in profile modal */
 function playCustomEffectInContainer(eff,container,role){
   if(!container)return;
   const adj=getProfileEffectAdjust(role);
@@ -3817,7 +3928,7 @@ function playCustomEffectInContainer(eff,container,role){
   layer.style.cssText=`position:absolute;inset:0;pointer-events:none;z-index:16;overflow:hidden;border-radius:24px;opacity:${adj.opacity}`;
   container.appendChild(layer);
   const inner=document.createElement('div');
-  inner.style.cssText=`position:absolute;top:50%;left:50%;transform:translate(calc(-50% + ${adj.x}px),calc(-50% + ${adj.y}px)) scale(${adj.scale}) rotate(${adj.rotation}deg);transform-origin:center;display:flex;align-items:center;justify-content:center`;
+  inner.style.cssText=`position:absolute;top:50%;left:50%;transform:translate(calc(-50% + ${adj.x}px),calc(-50% + ${adj.y}px)) scale(${adj.scale}) scaleX(${adj.scaleX||1}) scaleY(${adj.scaleY||1}) rotate(${adj.rotation}deg);transform-origin:center;display:flex;align-items:center;justify-content:center`;
   const type=eff.fileType||'application/octet-stream';
   if(eff.chunks&&eff.chunks>0){
     getEmojiEffectBlobFromChunks(eff.id).then(blob=>{
@@ -3878,12 +3989,38 @@ function switchSupremeTab(tab,el){
 }
 async function unlockAccountManagement(){const username=document.getElementById('accMgmtUsername').value.trim(),pass=document.getElementById('accMgmtVuaPass').value.trim();if(!username){showToast('Nhập tên đăng nhập!','error');return;}if(pass!==VUA_PASSWORD){showToast('❌ Mật khẩu VUA không đúng!','error');return;}accMgmtUnlocked=true;document.getElementById('accMgmtPanel').style.display='block';document.getElementById('accMgmtVuaPass').value='';await loadRolesCache();await loadMedalsCache();loadAllUsers();showToast('🔓 Đã mở khóa!','success');}
 async function loadAllUsers(){if(!accMgmtUnlocked)return;const c=document.getElementById('accUserListContainer');c.innerHTML='<p style="text-align:center;color:#888;padding:20px 0">⏳ Đang tải...</p>';try{await loadRolesCache();await loadMedalsCache();const s=await window.dbGet(window.dbChild(window.dbRef,'users'));cachedUsers=s.val()||{};filterAccList();renderHomeRoleUsers();}catch(e){c.innerHTML='<p style="color:#dc3545">Lỗi: '+(e.message||e)+'</p>';}}
+/* NEW: filterAccList - thêm nút "Hủy hết vai trò" */
 function filterAccList(){
   const search=(document.getElementById('accSearchInput').value||'').toLowerCase().trim(),rf=document.getElementById('accRoleFilter').value;
   const c=document.getElementById('accUserListContainer');
   const list=Object.keys(cachedUsers).filter(u=>{const user=cachedUsers[u];if(search){const hay=(u+' '+(user.email||'')+' '+(user.nickname||'')).toLowerCase();if(!hay.includes(search))return false;}if(rf){if(rf==='custom'){if(!user.customRoleIds||!user.customRoleIds.length)return false;}else if(user.role!==rf)return false;}return true;});
   if(!list.length){c.innerHTML='<p style="text-align:center;color:#888;padding:20px 0">Không có tài khoản nào</p>';return;}
-  c.innerHTML=list.map(u=>{const user=cachedUsers[u];const initial=(user.nickname||u).charAt(0).toUpperCase();const hasBg=!!user.avatarBg;const bgHtml=hasBg?`<div class="avatar-bg-layer" style="background-image:url('${user.avatarBg}')"></div>`:'';const imgSz=hasBg?'74%':'100%';const avatarInner=user.avatar?`<img src="${user.avatar}" style="width:${imgSz};height:${imgSz};object-fit:cover;border-radius:50%;position:relative;z-index:2">`:`<span style="position:relative;z-index:2">${initial}</span>`;const created=user.createdAt?new Date(user.createdAt).toLocaleDateString('vi-VN'):'—';return `<div class="acc-user-row"><div class="acc-avatar" onclick="viewUserProfile('${u}')">${bgHtml}${avatarInner}</div><div class="acc-info"><div class="acc-name">${escapeHtml(u)} ${user.nickname&&user.nickname!==u?`<span style="color:#666;font-weight:normal;font-size:12px">(${escapeHtml(user.nickname)})</span>`:''} ${buildNameTagHtml(user)}</div><div class="acc-email">📧 ${escapeHtml(user.email||'—')}</div><div class="acc-meta"><span>📅 ${created}</span><span>${renderUserRoleBadges(user)}</span></div></div><div class="acc-actions"><button style="background:#0d6efd" onclick="viewUserProfile('${u}')">👁️</button><button style="background:#6f42c1" onclick="manageUserRoles('${u}')">🎭 Vai trò</button><button style="background:#198754" onclick="manageMainRole('${u}')">👑 Vai trò chính</button><button style="background:#ffc107;color:#000" onclick="openEditId('${u}')">✏️ ID</button><button style="background:#a55eea" onclick="openUserAvatarBg('${u}')">🖼️ BG</button><button style="background:#20c997;color:#000" onclick="openNameTagEditor('${u}')">🏷️ Name Tag</button><button style="background:#d63384" onclick="openGrantItemForUser('${u}')">🎁 Trao</button></div></div>`;}).join('');
+  c.innerHTML=list.map(u=>{const user=cachedUsers[u];const initial=(user.nickname||u).charAt(0).toUpperCase();const hasBg=!!user.avatarBg;const bgHtml=hasBg?`<div class="avatar-bg-layer" style="background-image:url('${user.avatarBg}')"></div>`:'';const imgSz=hasBg?'74%':'100%';const avatarInner=user.avatar?`<img src="${user.avatar}" style="width:${imgSz};height:${imgSz};object-fit:cover;border-radius:50%;position:relative;z-index:2">`:`<span style="position:relative;z-index:2">${initial}</span>`;const created=user.createdAt?new Date(user.createdAt).toLocaleDateString('vi-VN'):'—';const customCount=(user.customRoleIds||[]).length;const clearRoleBtn=customCount>0?`<button style="background:#dc3545;color:#fff" onclick="clearAllUserRoles('${u}')" title="Hủy hết ${customCount} vai trò tùy chỉnh">🚫 Hủy hết vai trò</button>`:'';return `<div class="acc-user-row"><div class="acc-avatar" onclick="viewUserProfile('${u}')">${bgHtml}${avatarInner}</div><div class="acc-info"><div class="acc-name">${escapeHtml(u)} ${user.nickname&&user.nickname!==u?`<span style="color:#666;font-weight:normal;font-size:12px">(${escapeHtml(user.nickname)})</span>`:''} ${buildNameTagHtml(user)}</div><div class="acc-email">📧 ${escapeHtml(user.email||'—')}</div><div class="acc-meta"><span>📅 ${created}</span><span>${renderUserRoleBadges(user)}</span></div></div><div class="acc-actions"><button style="background:#0d6efd" onclick="viewUserProfile('${u}')">👁️</button><button style="background:#6f42c1" onclick="manageUserRoles('${u}')">🎭 Vai trò</button>${clearRoleBtn}<button style="background:#198754" onclick="manageMainRole('${u}')">👑 Vai trò chính</button><button style="background:#ffc107;color:#000" onclick="openEditId('${u}')">✏️ ID</button><button style="background:#a55eea" onclick="openUserAvatarBg('${u}')">🖼️ BG</button><button style="background:#20c997;color:#000" onclick="openNameTagEditor('${u}')">🏷️ Name Tag</button><button style="background:#d63384" onclick="openGrantItemForUser('${u}')">🎁 Trao</button></div></div>`;}).join('');
+}
+/* NEW: Hủy hết vai trò tùy chỉnh của user */
+async function clearAllUserRoles(username){
+  const u=cachedUsers[username];
+  if(!u){showToast('❌ Không tìm thấy user!','error');return;}
+  const cnt=(u.customRoleIds||[]).length;
+  if(!cnt){showToast('ℹ️ User không có vai trò tùy chỉnh nào!','info');return;}
+  if(!await customConfirm(`Hủy HẾT ${cnt} vai trò tùy chỉnh của "${username}"?`,{icon:'🚫',title:'Xác nhận',okClass:'danger'}))return;
+  try{
+    await window.dbUpdate(window.ref(window.db,`users/${username}`),{customRoleIds:[],pinnedRoleId:'',updatedAt:Date.now()});
+    if(cachedUsers[username]){
+      cachedUsers[username].customRoleIds=[];
+      cachedUsers[username].pinnedRoleId='';
+    }
+    if(currentUser&&currentUser.username===username){
+      currentUserFullData.customRoleIds=[];
+      currentUserFullData.pinnedRoleId='';
+      currentUser.customRoleIds=[];
+      currentUser.pinnedRoleId='';
+      await applyUserSession(currentUserFullData);
+    }
+    showCenterSquareToast('🚫','Đã hủy hết!',`${username}: -${cnt} vai trò`,'success',3000);
+    filterAccList();
+    renderHomeRoleUsers();
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 function viewUserProfile(username){const u=cachedUsers[username];if(!u){showToast('Không tìm thấy user!','error');return;}openProfile(null,u);}
 
@@ -3966,8 +4103,58 @@ async function deleteNameTag(){
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
-async function manageUserRoles(username){const u=cachedUsers[username];if(!u)return;await loadRolesCache();const currentIds=u.customRoleIds||[];let html=`<p style="font-size:13px;color:#666;margin-bottom:10px">Chọn tối đa ${MAX_USER_ROLES} vai trò cho <b>${escapeHtml(username)}</b>:</p>`;const roleIds=Object.keys(cachedRoles);if(!roleIds.length){html+='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Chưa có vai trò nào.</p>';}else{html+='<div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto">';roleIds.forEach(rid=>{const r=cachedRoles[rid];const sel=currentIds.includes(rid);html+=`<div style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid ${sel?'#198754':'#e0e0e0'};border-radius:10px;background:${sel?'#e7ffee':'#fff'};cursor:pointer" onclick="toggleUserRolePick('${rid}',this)">${renderRoleBadge({...r,id:rid})}<span style="margin-left:auto;font-size:18px">${sel?'✅':'⭕'}</span></div>`;});html+='</div>';}html+=`<div style="margin-top:14px;padding:10px;background:#f0f8ff;border-radius:8px;font-size:12px;color:#666">Đã chọn: <b id="rolePickCount">${currentIds.length}</b>/${MAX_USER_ROLES}</div>`;html+=`<button class="btn btn-success" style="margin-top:12px" onclick="saveUserRolePicks('${username}')">💾 Lưu Lựa Chọn</button>`;document.getElementById('supremeModalTitle').innerText='Quản Lí Vai Trò: '+username;document.getElementById('supremeModalContent').innerHTML=html;document.getElementById('supremeDetailModal').style.display='flex';window._userRolePicks=currentIds.slice();}
-function toggleUserRolePick(rid,el){if(!window._userRolePicks)window._userRolePicks=[];const idx=window._userRolePicks.indexOf(rid);if(idx>=0){window._userRolePicks.splice(idx,1);el.style.borderColor='#e0e0e0';el.style.background='#fff';el.querySelector('span:last-child').innerText='⭕';}else{if(window._userRolePicks.length>=MAX_USER_ROLES){showToast(`Tối đa ${MAX_USER_ROLES} vai trò!`,'warn');return;}window._userRolePicks.push(rid);el.style.borderColor='#198754';el.style.background='#e7ffee';el.querySelector('span:last-child').innerText='✅';}document.getElementById('rolePickCount').innerText=window._userRolePicks.length;}
+/* NEW: manageUserRoles - dùng giới hạn động theo vai trò chính */
+async function manageUserRoles(username){
+  const u=cachedUsers[username];
+  if(!u)return;
+  await loadRolesCache();
+  const currentIds=u.customRoleIds||[];
+  const maxAllowed=getMaxRolesForUser(u);
+  const maxLabel=(maxAllowed===Number.MAX_SAFE_INTEGER)?'∞ (không giới hạn)':maxAllowed;
+  const mainRole=u.role||'student';
+  let roleNote='';
+  if(mainRole==='king')roleNote='👑 KING — Không giới hạn vai trò tùy chỉnh';
+  else if(mainRole==='partner'||mainRole==='devil')roleNote=`${mainRole==='partner'?'🤝 PARTNER':'😈 DEVIL'} — Tối đa 5 vai trò`;
+  else roleNote='Tối đa 3 vai trò (vai trò chính thường)';
+  let html=`<p style="font-size:13px;color:#666;margin-bottom:10px">Chọn vai trò cho <b>${escapeHtml(username)}</b>. Giới hạn: <b style="color:#6f42c1">${maxLabel}</b></p>`;
+  html+=`<div style="background:#f0f8ff;border-left:3px solid #1877f2;padding:8px 10px;border-radius:6px;font-size:12px;color:#004085;margin-bottom:10px">${roleNote}</div>`;
+  const roleIds=Object.keys(cachedRoles);
+  if(!roleIds.length){html+='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Chưa có vai trò nào.</p>';}
+  else{
+    html+='<div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto">';
+    roleIds.forEach(rid=>{const r=cachedRoles[rid];const sel=currentIds.includes(rid);html+=`<div style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid ${sel?'#198754':'#e0e0e0'};border-radius:10px;background:${sel?'#e7ffee':'#fff'};cursor:pointer" onclick="toggleUserRolePick('${rid}',this)">${renderRoleBadge({...r,id:rid})}<span style="margin-left:auto;font-size:18px">${sel?'✅':'⭕'}</span></div>`;});
+    html+='</div>';
+  }
+  html+=`<div style="margin-top:14px;padding:10px;background:#f0f8ff;border-radius:8px;font-size:12px;color:#666">Đã chọn: <b id="rolePickCount">${currentIds.length}</b>/${maxLabel}</div>`;
+  html+=`<button class="btn btn-success" style="margin-top:12px" onclick="saveUserRolePicks('${username}')">💾 Lưu Lựa Chọn</button>`;
+  document.getElementById('supremeModalTitle').innerText='Quản Lí Vai Trò: '+username;
+  document.getElementById('supremeModalContent').innerHTML=html;
+  document.getElementById('supremeDetailModal').style.display='flex';
+  window._userRolePicks=currentIds.slice();
+  window._userRoleMax=maxAllowed;
+}
+function toggleUserRolePick(rid,el){
+  if(!window._userRolePicks)window._userRolePicks=[];
+  const maxAllowed=window._userRoleMax||3;
+  const idx=window._userRolePicks.indexOf(rid);
+  if(idx>=0){
+    window._userRolePicks.splice(idx,1);
+    el.style.borderColor='#e0e0e0';
+    el.style.background='#fff';
+    el.querySelector('span:last-child').innerText='⭕';
+  }else{
+    if(window._userRolePicks.length>=maxAllowed){
+      const label=(maxAllowed===Number.MAX_SAFE_INTEGER)?'∞':'tối đa '+maxAllowed;
+      showToast(`Tối đa ${label} vai trò!`,'warn');
+      return;
+    }
+    window._userRolePicks.push(rid);
+    el.style.borderColor='#198754';
+    el.style.background='#e7ffee';
+    el.querySelector('span:last-child').innerText='✅';
+  }
+  document.getElementById('rolePickCount').innerText=window._userRolePicks.length;
+}
 async function saveUserRolePicks(username){try{await window.dbUpdate(window.ref(window.db,`users/${username}`),{customRoleIds:window._userRolePicks||[]});if(cachedUsers[username])cachedUsers[username].customRoleIds=(window._userRolePicks||[]).slice();if(currentUser&&currentUser.username===username){const s=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));await applyUserSession(s.val());}showToast('✅ Đã cập nhật!','success');document.getElementById('supremeDetailModal').style.display='none';filterAccList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
 async function manageMainRole(username){const u=cachedUsers[username];if(!u)return;const currentRole=u.role||'student';const mainRoles=['student','teacher','other','king','devil','elite_teacher','partner'];let html=`<p style="font-size:13px;color:#666;margin-bottom:10px">Chọn <b>vai trò chính</b> cho <b>${escapeHtml(username)}</b>:</p>`;html+=`<div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto">`;mainRoles.forEach(rid=>{const r=DEFAULT_ROLES[rid];const sel=currentRole===rid;const aura=r.auraEnabled?`box-shadow:0 0 8px ${r.auraColor},0 0 16px ${r.auraColor};`:'';html+=`<div style="display:flex;align-items:center;gap:10px;padding:12px;border:2px solid ${sel?'#198754':'#e0e0e0'};border-radius:10px;background:${sel?'#e7ffee':'#fff'};cursor:pointer" onclick="selectMainRole('${username}','${rid}',this)"><span style="padding:8px 16px;border-radius:18px;font-weight:bold;font-size:13px;background:${r.bgColor};color:${r.textColor};${aura}">${r.emoji} ${r.name}</span><span style="margin-left:auto;font-size:18px">${sel?'✅':'⭕'}</span></div>`;});html+=`</div><button class="btn btn-success" style="margin-top:12px" onclick="confirmMainRole('${username}')">💾 Xác Nhận</button>`;document.getElementById('supremeModalTitle').innerText='👑 Quản Lý Vai Trò Chính';document.getElementById('supremeModalContent').innerHTML=html;document.getElementById('supremeDetailModal').style.display='flex';window._mainRolePick=currentRole;}
 function selectMainRole(username,rid,el){window._mainRolePick=rid;document.querySelectorAll('#supremeModalContent [onclick^="selectMainRole"]').forEach(x=>{x.style.borderColor='#e0e0e0';x.style.background='#fff';x.querySelector('span:last-child').innerText='⭕';});el.style.borderColor='#198754';el.style.background='#e7ffee';el.querySelector('span:last-child').innerText='✅';}
@@ -3986,7 +4173,7 @@ function closeRoleListPanel(){document.getElementById('roleListPanel').style.dis
 async function loadRoleList(){await loadRolesCache();const c=document.getElementById('roleListContainer');const ids=Object.keys(cachedRoles);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có vai trò nào.</p>';return;}c.innerHTML=ids.map(rid=>{const r=cachedRoles[rid];const aura=r.auraEnabled?`box-shadow:0 0 10px ${r.auraColor},0 0 20px ${r.auraColor};`:'';const hasFrame=r.avatarFrame?`<span style="font-size:10px;background:#6f42c1;color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px">🖼️ FRAME</span>`:'';const hasEffect=r.effectAdjust?`<span style="font-size:10px;background:#dc3545;color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px">🎬 FX</span>`:'';return `<div class="role-card"><span class="role-preview" style="background:${r.bgColor};color:${r.textColor};${aura}">${renderRoleEmoji(r)} ${escapeHtml(r.name)}</span><div class="role-info">${r.auraEnabled?'✨ Aura':'Aura tắt'}${hasFrame}${hasEffect}</div><div class="role-actions"><button style="background:#0d6efd" onclick="openRoleEditor('${rid}')">✏️</button><button style="background:#dc3545" onclick="deleteRole('${rid}')">🗑️</button></div></div>`;}).join('');}
 function openRoleEditor(rid){
   currentEditingRoleId=rid||null;
-  const r=rid&&cachedRoles[rid]?cachedRoles[rid]:{name:'',bgColor:'#6f42c1',textColor:'#ffffff',auraEnabled:false,auraColor:'#ffc107',emoji:'👑',medalId:'',avatarFrame:'',avatarFrameOffsetX:0,avatarFrameOffsetY:0,avatarFrameScale:1,avatarFrameRotation:0,effectAdjust:{desktop:{x:0,y:0,scale:1,rotation:0,opacity:1,duration:6},mobile:{x:0,y:0,scale:1,rotation:0,opacity:1,duration:6}}};
+  const r=rid&&cachedRoles[rid]?cachedRoles[rid]:{name:'',bgColor:'#6f42c1',textColor:'#ffffff',auraEnabled:false,auraColor:'#ffc107',emoji:'👑',medalId:'',avatarFrame:'',avatarFrameOffsetX:0,avatarFrameOffsetY:0,avatarFrameScale:1,avatarFrameRotation:0,effectAdjust:{desktop:{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6},mobile:{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6}}};
   document.getElementById('roleEditorTitle').innerText=rid?'✏️ Sửa Vai Trò':'🎭 Tạo Vai Trò Mới';
   document.getElementById('roleName').value=r.name||'';
   document.getElementById('roleBg').value=r.bgColor||'#6f42c1';
@@ -4003,14 +4190,13 @@ function openRoleEditor(rid){
   window._currentRoleAvatarFrameAdj=r.avatarFrameMobile&&r.avatarFrameMobile.scale!==undefined?Object.assign({x:0,y:0,scale:1,rotation:0,opacity:1},r.avatarFrameMobile):{x:r.avatarFrameOffsetX||0,y:r.avatarFrameOffsetY||0,scale:r.avatarFrameScale||1,rotation:r.avatarFrameRotation||0,opacity:1};
   updateRoleAvatarFramePreview();
   roleEffectAdjustState={
-    desktop:Object.assign({x:0,y:0,scale:1,rotation:0,opacity:1,duration:6},(r.effectAdjust||{}).desktop||{}),
-    mobile:Object.assign({x:0,y:0,scale:1,rotation:0,opacity:1,duration:6},(r.effectAdjust||{}).mobile||{})
+    desktop:Object.assign({x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6},(r.effectAdjust||{}).desktop||{}),
+    mobile:Object.assign({x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6},(r.effectAdjust||{}).mobile||{})
   };
   roleEffectAdjustDevice='desktop';
   document.getElementById('roleEditorModal').classList.add('show');
 }
 function closeRoleEditor(){document.getElementById('roleEditorModal').classList.remove('show');}
-/* NEW: renderRoleEmojiGrid - hỗ trợ custom emojis */
 function renderRoleEmojiGrid(){
   const container=document.getElementById('roleEmojiGrid');
   if(!container)return;
@@ -4060,7 +4246,7 @@ async function saveRole(){
 }
 async function deleteRole(rid){if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}const vua=await customPrompt('Nhập mật khẩu VUA để xóa:',{icon:'🔐',title:'Xác thực VUA',inputType:'password'});if(vua!==VUA_PASSWORD){if(vua)showToast('❌ Sai mật khẩu!','error');return;}if(!await customConfirm('Xóa vai trò này?',{icon:'🗑️',title:'Xác nhận',okClass:'danger'}))return;try{await window.dbRemove(window.ref(window.db,`system/roles/${rid}`));delete cachedRoles[rid];showToast('🗑️ Đã xóa!','warn');loadRoleList();}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
-/* ============ ROLE AVATAR FRAME ADJUST (DESKTOP + MOBILE) ============ */
+/* ============ ROLE AVATAR FRAME ADJUST ============ */
 function handleRoleAvatarFrameUpload(input){
   if(!input.files||!input.files[0]){return;}
   const file=input.files[0];
@@ -4154,7 +4340,7 @@ function saveRoleAvatarAdjust(){
   showToast('✅ Đã lưu căn chỉnh khung ('+roleAvatarAdjustDevice+')!','success');
 }
 
-/* ============ ROLE EFFECT ADJUST (PROFILE) ============ */
+/* ============ ROLE EFFECT ADJUST (PROFILE) - VỚI PREVIEW THỰC + SCALEX/SCALEY + SAFE ZONE KHỚP PROFILE ============ */
 function switchRoleFxDevice(device,el){
   roleEffectAdjustDevice=device;
   document.querySelectorAll('#roleFxDeviceTabs .role-device-tab').forEach(t=>t.classList.remove('active'));
@@ -4163,30 +4349,50 @@ function switchRoleFxDevice(device,el){
   document.getElementById('rfxRangeX').value=adj.x||0;
   document.getElementById('rfxRangeY').value=adj.y||0;
   document.getElementById('rfxRangeScale').value=adj.scale||1;
+  document.getElementById('rfxRangeScaleX').value=adj.scaleX||1;
+  document.getElementById('rfxRangeScaleY').value=adj.scaleY||1;
   document.getElementById('rfxRangeRot').value=adj.rotation||0;
   document.getElementById('rfxRangeOp').value=adj.opacity!==undefined?adj.opacity:1;
   document.getElementById('rfxRangeDur').value=adj.duration||6;
   updateRoleFxPreview();
 }
 function openRoleEffectAdjust(){
-  document.getElementById('rfxRangeX').value=roleEffectAdjustState.desktop.x||0;
-  document.getElementById('rfxRangeY').value=roleEffectAdjustState.desktop.y||0;
-  document.getElementById('rfxRangeScale').value=roleEffectAdjustState.desktop.scale||1;
-  document.getElementById('rfxRangeRot').value=roleEffectAdjustState.desktop.rotation||0;
-  document.getElementById('rfxRangeOp').value=roleEffectAdjustState.desktop.opacity!==undefined?roleEffectAdjustState.desktop.opacity:1;
-  document.getElementById('rfxRangeDur').value=roleEffectAdjustState.desktop.duration||6;
+  const d=roleEffectAdjustState.desktop;
+  document.getElementById('rfxRangeX').value=d.x||0;
+  document.getElementById('rfxRangeY').value=d.y||0;
+  document.getElementById('rfxRangeScale').value=d.scale||1;
+  document.getElementById('rfxRangeScaleX').value=d.scaleX||1;
+  document.getElementById('rfxRangeScaleY').value=d.scaleY||1;
+  document.getElementById('rfxRangeRot').value=d.rotation||0;
+  document.getElementById('rfxRangeOp').value=d.opacity!==undefined?d.opacity:1;
+  document.getElementById('rfxRangeDur').value=d.duration||6;
   roleEffectAdjustDevice='desktop';
   document.querySelectorAll('#roleFxDeviceTabs .role-device-tab').forEach(t=>t.classList.remove('active'));
   const firstTab=document.querySelector('#roleFxDeviceTabs .role-device-tab');
   if(firstTab)firstTab.classList.add('active');
-  const mock=document.getElementById('roleFxMockAvatar');
+  // Cập nhật mock profile theo role đang chỉnh
+  const mock=document.getElementById('roleFxStageAvatar');
+  const nameEl=document.getElementById('roleFxStageName');
+  const rolesEl=document.getElementById('roleFxStageRoles');
   const emojiHtml=renderRoleEmoji({emoji:selectedRoleEmoji});
   mock.innerHTML=emojiHtml||'?';
+  const roleName=document.getElementById('roleName').value.trim()||'Preview Role';
+  const bgColor=document.getElementById('roleBg').value||'#6f42c1';
+  const textColor=document.getElementById('roleText').value||'#fff';
+  if(nameEl)nameEl.innerText=roleName;
+  if(rolesEl)rolesEl.innerHTML=`<span class="role-fx-mock-role" style="background:${bgColor};color:${textColor}">${emojiHtml} ${escapeHtml(roleName)}</span>`;
+  const header=document.getElementById('roleFxStageHeader');
+  if(header){
+    const aura=document.getElementById('roleAuraEnabled').checked;
+    const ac=document.getElementById('roleAuraColor').value;
+    header.style.backgroundImage=aura?`linear-gradient(135deg,${ac},${adjustColor(ac,-30)})`:`linear-gradient(135deg,${bgColor},${adjustColor(bgColor,-30)})`;
+  }
   updateRoleFxPreview();
+  // Drag on stage (mouse + touch)
   const stage=document.getElementById('roleFxStage');
-  const layer=document.getElementById('roleFxLayer');
   stage.onpointerdown=(e)=>{
-    if(!layer.contains(e.target)&&e.target!==layer)return;
+    // Không drag khi click vào slider/controls - chỉ drag trong stage
+    const draggable=document.getElementById('roleFxDraggable');
     safeAreaDragState.dragging=true;
     safeAreaDragState.lastX=e.clientX;
     safeAreaDragState.lastY=e.clientY;
@@ -4205,48 +4411,132 @@ function openRoleEffectAdjust(){
   const endDrag=(e)=>{safeAreaDragState.dragging=false;try{stage.releasePointerCapture(e.pointerId);}catch(err){}};
   stage.onpointerup=endDrag;stage.onpointercancel=endDrag;
   document.getElementById('roleEffectAdjustModal').classList.add('show');
+  startRoleFxPreviewLoop();
 }
-function updateRoleFxPreview(){
+function getRoleFxPreviewTransform(){
   const x=parseFloat(document.getElementById('rfxRangeX').value)||0;
   const y=parseFloat(document.getElementById('rfxRangeY').value)||0;
   const sc=parseFloat(document.getElementById('rfxRangeScale').value)||1;
+  const sx=parseFloat(document.getElementById('rfxRangeScaleX').value)||1;
+  const sy=parseFloat(document.getElementById('rfxRangeScaleY').value)||1;
   const rot=parseFloat(document.getElementById('rfxRangeRot').value)||0;
   const op=parseFloat(document.getElementById('rfxRangeOp').value)||1;
+  return {x,y,sc,sx,sy,rot,op};
+}
+function updateRoleFxPreview(){
+  const {x,y,sc,sx,sy,rot,op}=getRoleFxPreviewTransform();
   const dur=parseFloat(document.getElementById('rfxRangeDur').value)||6;
   document.getElementById('rfxXVal').innerText=x;
   document.getElementById('rfxYVal').innerText=y;
   document.getElementById('rfxScaleVal').innerText=sc.toFixed(2);
+  document.getElementById('rfxScaleXVal').innerText=sx.toFixed(2);
+  document.getElementById('rfxScaleYVal').innerText=sy.toFixed(2);
   document.getElementById('rfxRotVal').innerText=rot;
   document.getElementById('rfxOpVal').innerText=op.toFixed(2);
   document.getElementById('rfxDurVal').innerText=dur;
-  const layer=document.getElementById('roleFxLayer');
-  if(!layer)return;
-  // Detect effect: custom or default
-  const emoji=selectedRoleEmoji;
-  let previewHtml='';
-  if(emoji.startsWith('custom_')){
-    const eid=emoji.slice(7);
-    const ce=cachedCustomEmojis[eid];
-    if(ce&&ce.effects&&ce.effects.length){
-      const effId=ce.effects[0];
-      const eff=cachedEmojiEffects[effId];
-      if(eff){
-        previewHtml=`<div style="color:#fff;font-size:60px">${eff.icon||'✨'}</div><div style="color:#fff;font-size:11px;margin-top:6px">${escapeHtml(eff.name||'')}</div>`;
-      }else previewHtml=`<div style="color:#fff;font-size:60px">${ce.type==='emoji'?ce.value:'🖼️'}</div>`;
-    }else{
-      previewHtml=`<div style="color:#fff;font-size:60px">${ce&&ce.type==='emoji'?ce.value:'✨'}</div>`;
-    }
-  }else{
-    const ROLE_EFFECT_EMOJI_PREVIEW={'👑':'👑','💠':'💠','🌸':'🌸','⛄':'❄️','🧧':'🧧','😈':'😈','❤️':'❤️','🎓':'🎓','🔨':'🔨','✏️':'✏️','👨‍🏫':'📚','🌟':'🌟','🤝':'🤝','🔥':'🔥','⚡':'⚡','💎':'💎','🎯':'🎯','🏆':'🏆','🌈':'🌈','⭐':'⭐','🍀':'🍀','🚀':'🚀','🐉':'🐉','🦊':'🦊','🐼':'🐼','🎃':'🎃','🎄':'🎄','💀':'💀','👽':'👽','🤖':'🤖','💫':'💫','🍎':'🍎','⚔️':'⚔️','🛡️':'🛡️','👤':'💠','💖':'💖','🌺':'🌺','🎨':'🎨','🎵':'🎵','🌌':'🌌','🦁':'🦁'};
-    previewHtml=`<div style="color:#fff;font-size:60px">${ROLE_EFFECT_EMOJI_PREVIEW[emoji]||'✨'}</div>`;
+  // Cập nhật draggable DOM element (như "neo" hiệu ứng)
+  const drag=document.getElementById('roleFxDraggable');
+  if(drag){
+    drag.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) scaleX(${sx}) scaleY(${sy}) rotate(${rot}deg)`;
+    drag.style.opacity=op;
   }
-  layer.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) rotate(${rot}deg);opacity:${op};transition:transform .15s,opacity .15s;text-align:center">${previewHtml}</div>`;
+  // Cập nhật layer nếu là special effect DOM
+  const layer=document.getElementById('roleFxLayer');
+  if(layer){
+    layer.querySelectorAll('.role-fx-item').forEach(el=>{
+      el.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) scaleX(${sx}) scaleY(${sy}) rotate(${rot}deg)`;
+      el.style.opacity=op;
+    });
+  }
 }
-function closeRoleEffectAdjust(){document.getElementById('roleEffectAdjustModal').classList.remove('show');}
+function startRoleFxPreviewLoop(){
+  stopRoleFxPreviewLoop();
+  const canvas=document.getElementById('roleFxPreviewCanvas');
+  const stage=document.getElementById('roleFxStage');
+  if(!canvas||!stage)return;
+  canvas.width=stage.clientWidth||600;
+  canvas.height=stage.clientHeight||560;
+  const ctx=canvas.getContext('2d');
+  const W=()=>canvas.width,H=()=>canvas.height;
+  // Chuẩn bị emoji và màu từ role đang chỉnh
+  let previewEmoji='✨';
+  let previewColors=['#ffd700','#ffed4e','#fff8b0'];
+  if(selectedRoleEmoji&&selectedRoleEmoji.startsWith('custom_')){
+    const eid=selectedRoleEmoji.slice(7);
+    const ce=cachedCustomEmojis[eid];
+    if(ce){
+      if(ce.type==='emoji')previewEmoji=ce.value;
+      else previewEmoji='🖼️';
+    }
+  } else if(selectedRoleEmoji){
+    previewEmoji=selectedRoleEmoji;
+  }
+  const effectType=getAvatarEffect({emoji:selectedRoleEmoji});
+  const EFFECT_EMOJI={'petals_red':'🌺','hearts_sparkle':'💖','graduation':'🎓','pencils':'✏️','teacher_spark':'📚','sparkle_star':'🌟','soft_glow':'💠','starfall':'⭐','diamonds':'💎','targets':'🎯','lightning_bg':'⚡','clovers':'🍀','colors':'🎨','music_notes':'🎵','rockets':'🚀','mane':'🦁','dragon':'🐉','fox':'🦊','pandas':'🐼','halloween_bg':'🎃','christmas_bg':'🎄','skull':'💀','alien':'👽','robots':'🤖','rainbow_bg':'🌈','comets':'💫','apples':'🍎','swords':'⚔️','shield_bg':'🛡️','sparkles':'✨','default':'✨','coin_rain':'₫','petals':'🌸','snowflakes':'❄️','lucky_money':'🧧','hearts':'❤️','dark_flames':'🔥','fire_bg':'🔥','galaxy_bg':'✨'};
+  if(EFFECT_EMOJI[effectType])previewEmoji=EFFECT_EMOJI[effectType];
+  previewColors=getAvatarEffectColors(effectType);
+  // Particles loop
+  const particles=[];
+  const spawnParticles=()=>{
+    const {x,y,sc,sx,sy,op}=getRoleFxPreviewTransform();
+    const cx=W()/2+x,cy=H()/2+y;
+    for(let i=0;i<30;i++){
+      particles.push({
+        x:cx+(Math.random()-.5)*W()*0.9,
+        y:cy+(Math.random()-.5)*H()*0.9,
+        vy:(.5+Math.random()*1.5)*sc,
+        vx:(Math.random()-.5)*1*sc,
+        r:(10+Math.random()*14)*sc,
+        phase:Math.random()*Math.PI*2,
+        phaseSp:.02+Math.random()*.04,
+        color:previewColors[Math.floor(Math.random()*previewColors.length)]
+      });
+    }
+  };
+  spawnParticles();
+  const loop=()=>{
+    const {op}=getRoleFxPreviewTransform();
+    ctx.clearRect(0,0,W(),H());
+    particles.forEach(p=>{
+      p.y+=p.vy;p.x+=p.vx;p.phase+=p.phaseSp;
+      if(p.y>H()+30){p.y=-30;p.x=Math.random()*W();}
+      if(p.y<-50){p.y=H()+30;}
+    });
+    particles.forEach(p=>{
+      ctx.save();
+      ctx.globalAlpha=(.5+Math.abs(Math.sin(p.phase))*.5)*op;
+      ctx.font=p.r+'px serif';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.shadowBlur=10;
+      ctx.shadowColor=p.color;
+      ctx.fillText(previewEmoji,p.x,p.y);
+      ctx.restore();
+    });
+    roleFxPreviewRAF=requestAnimationFrame(loop);
+  };
+  loop();
+  // Reset particles periodically
+  roleFxPreviewAutoStop=setInterval(()=>{
+    if(particles.length<40)spawnParticles();
+  },3000);
+}
+function stopRoleFxPreviewLoop(){
+  if(roleFxPreviewRAF){cancelAnimationFrame(roleFxPreviewRAF);roleFxPreviewRAF=null;}
+  if(roleFxPreviewAutoStop){clearInterval(roleFxPreviewAutoStop);roleFxPreviewAutoStop=null;}
+  const canvas=document.getElementById('roleFxPreviewCanvas');
+  if(canvas){const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);}
+}
+function closeRoleEffectAdjust(){
+  stopRoleFxPreviewLoop();
+  document.getElementById('roleEffectAdjustModal').classList.remove('show');
+}
 function resetRoleEffectAdjust(){
   document.getElementById('rfxRangeX').value=0;
   document.getElementById('rfxRangeY').value=0;
   document.getElementById('rfxRangeScale').value=1;
+  document.getElementById('rfxRangeScaleX').value=1;
+  document.getElementById('rfxRangeScaleY').value=1;
   document.getElementById('rfxRangeRot').value=0;
   document.getElementById('rfxRangeOp').value=1;
   document.getElementById('rfxRangeDur').value=6;
@@ -4257,6 +4547,8 @@ function saveRoleEffectAdjust(){
     x:parseFloat(document.getElementById('rfxRangeX').value)||0,
     y:parseFloat(document.getElementById('rfxRangeY').value)||0,
     scale:parseFloat(document.getElementById('rfxRangeScale').value)||1,
+    scaleX:parseFloat(document.getElementById('rfxRangeScaleX').value)||1,
+    scaleY:parseFloat(document.getElementById('rfxRangeScaleY').value)||1,
     rotation:parseFloat(document.getElementById('rfxRangeRot').value)||0,
     opacity:parseFloat(document.getElementById('rfxRangeOp').value)||1,
     duration:parseFloat(document.getElementById('rfxRangeDur').value)||6
@@ -4818,7 +5110,6 @@ function playEntertainmentEffect(id,durationSec){
 }
 function playEntertainmentEffectInternal(id,durationSec,container){
   const dur=(durationSec||5)*1000;
-  // custom emoji handler
   if(id&&id.startsWith('custom_')){
     const eid=id.slice(7);
     const e=cachedCustomEmojis[eid];
@@ -4826,7 +5117,6 @@ function playEntertainmentEffectInternal(id,durationSec,container){
     playCustomEmojiEffect(e,dur,container);
     return;
   }
-  // custom emoji effect handler
   if(id&&id.startsWith('emojieff_')){
     const effId=id.slice(9);
     const eff=cachedEmojiEffects[effId];
