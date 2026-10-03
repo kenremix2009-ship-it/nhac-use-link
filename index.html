@@ -13,9 +13,11 @@
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 <style>
 /* ============================================================
-   TOÀN BỘ CSS GỐC ĐƯỢC GIỮ NGUYÊN + BỔ SUNG
+   TOÀN BỘ CSS GỐC ĐƯỢC GIỮ NGUYÊN
    ============================================================ */
 *{box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:#f0f2f5;color:#333}
@@ -894,10 +896,6 @@ input,select,textarea{font-size:13px;padding:9px}
 #roomAnnounceMarquee .ra-track{font-size:14px;}
 .home-cd-num{font-size:24px}
 }
-
-/* ============================================================
-   FIX: HIỆU ỨNG PROFILE CỐ ĐỊNH TRONG PROFILE BOX
-   ============================================================ */
 .profile-box{position:relative!important;overflow-y:auto!important;overflow-x:hidden!important}
 #profileFxLayer{position:absolute!important;inset:0!important;pointer-events:none;overflow:hidden;border-radius:24px;z-index:1;min-height:100%}
 .profile-special-fx{position:absolute!important;inset:0!important;pointer-events:none;z-index:15;overflow:hidden;border-radius:24px}
@@ -911,10 +909,6 @@ input,select,textarea{font-size:13px;padding:9px}
 .profile-special-fx .fx-web-shoot,
 .profile-special-fx .fx-handshake{position:absolute!important}
 .profile-custom-effect{position:absolute!important;inset:0!important;pointer-events:none;z-index:16;overflow:hidden;border-radius:24px}
-
-/* ============================================================
-   THRONE DESIGN — Ảnh nền + Safe zone + Kéo thả Top 1/2/3
-   ============================================================ */
 #throneSection.throne-design-mode{outline:3px dashed #ffd700;outline-offset:4px}
 .throne-safe-zone{position:absolute;inset:0;pointer-events:none;border:3px dashed #ffd700;border-radius:20px;z-index:9999;background:repeating-linear-gradient(45deg,rgba(255,215,0,.04) 0 10px,rgba(255,215,0,.08) 10px 20px);display:none}
 .throne-safe-zone.active{display:block}
@@ -924,10 +918,6 @@ input,select,textarea{font-size:13px;padding:9px}
 .throne-slot.drag-enabled::before{content:'✥';position:absolute;top:6px;right:10px;color:#ffd700;font-size:18px;font-weight:900;filter:drop-shadow(0 0 6px #ffd700);pointer-events:none;z-index:20}
 .throne-slot.dragging{box-shadow:0 0 40px #ffd700,0 0 80px #ffd70088,inset 0 0 30px rgba(255,215,0,.4)!important;z-index:100}
 #throneDesignImagePreview{max-width:100%;max-height:180px;object-fit:contain;border-radius:10px;border:2px dashed #ffd700;background:#1a0000;padding:4px;display:block;margin:8px auto}
-
-/* ============================================================
-   AI MODEL — Widget, chat, khung, căn chỉnh (FIX ALL)
-   ============================================================ */
 #aiModelWidget{position:fixed;bottom:20px;right:20px;width:240px;height:340px;z-index:2147483647!important;pointer-events:auto;touch-action:none;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;transform-origin:bottom right}
 #aiModelWidget.ai-hidden{transform:translateY(200%) scale(.2) rotate(15deg);opacity:0;pointer-events:none!important;visibility:hidden}
 #aiModelWidget.ai-minimized{width:64px;height:64px;opacity:.55}
@@ -986,8 +976,6 @@ input,select,textarea{font-size:13px;padding:9px}
 .ai-frame-adjust-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(24,119,242,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(24,119,242,.08) 1px,transparent 1px);background-size:20px 20px;z-index:0}
 .ai-setup-note{background:#f0f8ff;border-left:4px solid #0d6efd;padding:10px 12px;border-radius:8px;font-size:12px;color:#004085;line-height:1.65;margin-bottom:12px}
 .ai-grant-success{background:linear-gradient(135deg,#d1e7dd,#c3e6cb);border-left:4px solid #198754;padding:12px;border-radius:10px;font-size:13px;color:#0f5132;line-height:1.6;margin-top:10px}
-
-/* FIX LỖI LỚP: MODAL AI PICKER + DEEP ANALYSIS + AI EXAM luôn trên cùng */
 #aiFrameAdjustModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:center;z-index:2147483646;padding:15px;backdrop-filter:blur(6px);overflow-y:auto}
 #aiFrameAdjustModal.show{display:flex}
 #aiModelPickerModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:2147483647!important;padding:15px;backdrop-filter:blur(6px);overflow-y:auto}
@@ -995,10 +983,6 @@ input,select,textarea{font-size:13px;padding:9px}
 #aiModelPickerModal .modal-box{position:relative;z-index:1}
 #deepAnalysisModal{z-index:2147483647!important}
 #deepAnalysisModal.show{display:flex!important}
-
-/* ============================================================
-   AI EXAM CREATE UI
-   ============================================================ */
 .ai-exam-tab{padding:10px 16px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:700;font-size:13px;color:#555;margin-right:6px}
 .ai-exam-tab.active{background:linear-gradient(135deg,#6f42c1,#5a32a3);color:#fff;border-color:#6f42c1}
 .ai-exam-preview-box{background:#f8f9fa;border:2px dashed #6f42c1;border-radius:14px;padding:16px;margin-top:12px;max-height:600px;overflow-y:auto}
@@ -1020,10 +1004,6 @@ input,select,textarea{font-size:13px;padding:9px}
 #deepAnalysisDropZone.dragover{border-color:#198754;background:#d1e7dd}
 #deepAnalysisPreview{max-width:100%;max-height:220px;object-fit:contain;border-radius:10px;border:2px dashed #6f42c1;background:#fff;padding:4px;display:none;margin:10px auto}
 .ai-model-main-image{max-width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:2px dashed #1877f2;background:#fff;padding:4px;display:none;margin:10px auto}
-
-/* ============================================================
-   AI FRAME SUPREME SECTION
-   ============================================================ */
 .ai-frame-supreme-stage{position:relative;width:100%;height:380px;background:linear-gradient(135deg,#e7f3ff,#f0f8ff);border-radius:14px;overflow:hidden;margin:12px 0;touch-action:none;border:2px solid #6f42c1}
 .ai-frame-supreme-model{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:80px;pointer-events:none;user-select:none;z-index:2}
 .ai-frame-supreme-model img{max-width:160px;max-height:160px;object-fit:contain;pointer-events:none}
@@ -1037,19 +1017,11 @@ input,select,textarea{font-size:13px;padding:9px}
 .ai-zip-progress.show{display:block}
 .ai-zip-progress .ai-zip-bar{background:#fff;border-radius:6px;height:8px;overflow:hidden;margin-top:8px}
 .ai-zip-progress .ai-zip-bar-fill{height:100%;background:linear-gradient(90deg,#1877f2,#198754);width:0%;transition:width .3s}
-
-/* ============================================================
-   AI PROVIDER SELECTOR
-   ============================================================ */
 .ai-provider-note{background:#e7f3ff;border-left:4px solid #1877f2;padding:8px 12px;border-radius:6px;font-size:11px;color:#004085;line-height:1.5;margin-bottom:8px}
 .ai-provider-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-left:6px}
 .ai-provider-badge.free{background:#d1e7dd;color:#0f5132}
 .ai-provider-badge.paid{background:#fff3cd;color:#856404}
 .ai-provider-badge.mixed{background:#e7f3ff;color:#004085}
-
-/* ============================================================
-   FIX: PROFILE WEB CAM + RANDOM CHAT (mới)
-   ============================================================ */
 .profile-ai-webcam-wrap{position:absolute;top:8px;left:8px;z-index:25;display:flex;gap:6px;flex-direction:column}
 .profile-ai-webcam-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#dc3545,#bb2d3b);color:#fff;border:2px solid #fff;font-size:16px;cursor:pointer;box-shadow:0 4px 12px rgba(220,53,69,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;padding:0}
 .profile-ai-webcam-btn:hover{transform:scale(1.1)}
@@ -1058,10 +1030,6 @@ input,select,textarea{font-size:13px;padding:9px}
 #profileWebcamPreview.active{display:block}
 #profileWebcamMouthIndicator{position:absolute;top:140px;left:8px;font-size:11px;background:rgba(0,0,0,.7);color:#fff;padding:3px 8px;border-radius:10px;z-index:24;display:none}
 #profileWebcamMouthIndicator.active{display:block}
-
-/* ============================================================
-   FIX: STUDENT DOCS SECTION (mới)
-   ============================================================ */
 .student-docs-tabs{display:flex;gap:8px;margin-bottom:14px;background:#f8f9fa;padding:6px;border-radius:12px}
 .student-docs-tab{flex:1;padding:10px 14px;background:#fff;border:2px solid transparent;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px;color:#555;text-align:center;transition:all .25s}
 .student-docs-tab.active{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border-color:#1877f2}
@@ -1085,6 +1053,10 @@ input,select,textarea{font-size:13px;padding:9px}
 .doc-card-actions button{border:none;padding:5px 9px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;color:#fff}
 .student-actions-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .student-actions-row button{flex:1;min-width:140px;padding:12px;font-size:14px;font-weight:bold}
+#docViewerModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:center;z-index:9999999999;padding:15px;backdrop-filter:blur(6px);overflow-y:auto}
+#docViewerModal.show{display:flex}
+.doc-viewer-box{background:#fff;border-radius:16px;padding:20px;max-width:900px;width:100%;max-height:92vh;overflow-y:auto;margin:auto;position:relative}
+.doc-viewer-content{background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;padding:20px;font-size:14px;line-height:1.8;color:#333;white-space:pre-wrap;font-family:'Courier New',monospace;max-height:70vh;overflow-y:auto}
 </style>
 </head><body>
 
@@ -1103,6 +1075,8 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="medalPickerModal" class="modal-overlay z-top"><div class="medal-picker-box"><div class="modal-header"><h3>🏅 Chọn Huy Chương / 🏆 Cup</h3><button class="close-btn" onclick="closeMedalPicker()">✖</button></div><p style="font-size:12px;color:#666;margin-bottom:8px">Chọn huy chương/cup muốn gắn vào profile:</p><div class="medal-grid" id="medalPickerGrid"></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-secondary" onclick="closeMedalPicker()">Đóng</button><button class="btn btn-success" onclick="confirmMedalPick()">💾 Lưu Lựa Chọn</button></div></div></div>
 
+<div id="docViewerModal"><div class="doc-viewer-box"><div class="modal-header"><h3 id="docViewerTitle">📄 Xem Tài Liệu</h3><button class="close-btn" onclick="closeDocViewer()">✖</button></div><div class="doc-viewer-content" id="docViewerContent"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-secondary" onclick="closeDocViewer()">Đóng</button><button class="btn btn-success" onclick="downloadCurrentDoc()">⬇️ Tải xuống</button></div></div></div>
+
 <div id="roleEditorModal" class="modal-overlay"><div class="role-editor-box"><h3 id="roleEditorTitle">🎭 Tạo Vai Trò Mới</h3><label>Tên vai trò:</label><input type="text" id="roleName" placeholder="VD: Trùm cuối, Siêu sao..."><div class="form-grid-2"><div><label>Màu nền:</label><input type="color" id="roleBg" value="#1877f2" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div><div><label>Màu chữ:</label><input type="color" id="roleText" value="#ffffff" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div></div><label style="margin-top:8px"><input type="checkbox" id="roleAuraEnabled" style="width:16px;height:16px"> ✨ Bật hiệu ứng Aura</label><div id="roleAuraBox" style="display:none;margin-top:6px"><label>Màu Aura:</label><input type="color" id="roleAuraColor" value="#ffc107" style="width:100%;height:44px;padding:2px;border-radius:10px;border:1px solid #ccc;cursor:pointer"></div><label style="margin-top:12px">🎭 Emoji vai trò (mặc định + emoji tùy chỉnh):</label><div class="role-emoji-grid" id="roleEmojiGrid"></div><label style="margin-top:12px">🏅 Huy chương đi kèm (tùy chọn):</label><select id="roleMedalId" style="margin:0"><option value="">Không có</option></select>
 <div style="border-top:2px dashed #6f42c1;margin-top:14px;padding-top:12px">
   <div style="font-weight:900;color:#6f42c1;font-size:13px;margin-bottom:8px">🖼️ KHUNG AVATAR CHO VAI TRÒ</div>
@@ -1118,7 +1092,7 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 <div style="border-top:2px dashed #dc3545;margin-top:14px;padding-top:12px">
   <div style="font-weight:900;color:#dc3545;font-size:13px;margin-bottom:8px">🎬 CĂN CHỈNH HIỆU ỨNG PROFILE (Desktop / Mobile)</div>
-  <div style="font-size:11px;color:#666;margin-bottom:8px;line-height:1.5">Căn chỉnh hiệu ứng vai trò khi bấm vào profile. Xem trước hiệu ứng gốc, kéo chuột/chạm tay để di chuyển, kéo dãn ngang/dọc, xoay, đổi độ đậm nhạt. Cấu hình dùng chung cho cả desktop và mobile.</div>
+  <div style="font-size:11px;color:#666;margin-bottom:8px;line-height:1.5">Căn chỉnh hiệu ứng vai trò khi bấm vào profile. Xem trước hiệu ứng gốc, kéo chuột/chạm tay để di chuyển, kéo dãn ngang/dọc, xoay, đổi độ đậm nhạt.</div>
   <button class="btn btn-danger" style="width:auto;padding:8px 14px;font-size:12px;color:#fff" onclick="openRoleEffectAdjust()">🎛️ Căn chỉnh hiệu ứng profile</button>
 </div>
 <div style="text-align:center;padding:16px;margin-top:14px;background:#f8f9fa;border-radius:12px"><div style="font-size:11px;color:#888;margin-bottom:8px">XEM TRƯỚC:</div><span id="rolePreview" class="role-preview" style="font-size:14px"></span></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-secondary" onclick="closeRoleEditor()">Hủy</button><button class="btn btn-success" onclick="saveRole()">💾 Lưu Vai Trò</button></div></div></div>
@@ -1180,6 +1154,7 @@ input,select,textarea{font-size:13px;padding:9px}
     <div><label>🔄 Xoay: <span id="rfxRotVal">0</span>°</label><input type="range" id="rfxRangeRot" min="-180" max="180" value="0" oninput="updateRoleFxPreview()"></div>
     <div><label>🌫️ Độ đậm nhạt: <span id="rfxOpVal">1.00</span></label><input type="range" id="rfxRangeOp" min="0" max="1" step="0.05" value="1" oninput="updateRoleFxPreview()"></div>
     <div><label>⏱️ Thời gian hiệu ứng (giây): <span id="rfxDurVal">6</span></label><input type="range" id="rfxRangeDur" min="1" max="30" step="1" value="6" oninput="updateRoleFxPreview()"></div>
+    <div><label>🔁 Cooldown (giây, lặp lại sau): <span id="rfxCooldownVal">10</span></label><input type="range" id="rfxRangeCooldown" min="3" max="60" step="1" value="10" oninput="updateRoleFxPreview()"></div>
   </div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
     <button class="btn btn-secondary" onclick="closeRoleEffectAdjust()">Hủy</button>
@@ -1722,7 +1697,6 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="documentLibrary" class="card sub-module-box" style="display:none"><h3 style="color:#6f42c1;margin-bottom:10px">📚 Kho Tài Liệu</h3><hr style="margin:10px 0"><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:14px"><label>🔐 Mật khẩu:</label><input type="password" id="docLibraryPass" placeholder="..."></div><div class="doc-upload-zone"><div style="font-size:42px;margin-bottom:6px">📤</div><label for="docLibraryFileInput" class="btn btn-success" style="display:inline-block;width:auto;padding:10px 22px;font-size:14px;cursor:pointer;margin:0">Chọn File</label><input type="file" id="docLibraryFileInput" accept=".pdf,.txt,.doc,.docx,.ppt,.pptx,.xls,.xlsx,image/*" style="display:none" onchange="handleDocLibraryUpload(this)"><p style="font-size:12px;color:#856404;margin-top:10px">Tối đa 8MB/file</p></div><h4 style="margin-top:10px;margin-bottom:8px;font-size:14px;color:#1877f2">📋 DS Tài Liệu</h4><div id="docLibraryListContainer" style="min-height:80px"><p style="font-size:13px;color:#888;font-style:italic">Đang tải...</p></div></div>
 
-<!-- ==================== AI EXAM CREATE ==================== -->
 <div id="aiExamCreate" class="card sub-module-box" style="display:none">
   <h3 style="color:#6f42c1;margin-bottom:10px">🤖 Tạo Đề Bằng AI</h3>
   <hr style="margin:10px 0">
@@ -2045,7 +2019,6 @@ input,select,textarea{font-size:13px;padding:9px}
 <div id="emailFieldStatus" style="font-size:12px;color:#856404;margin-top:10px;padding:8px;background:#fff;border-radius:6px">ℹ️ Sẽ dùng để gửi mail riêng (mục 🎮 Giải Trí → 📧 Gửi Email).</div>
 </div></div>
 
-<!-- === SETUP AI MODEL === -->
 <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🤖 SETUP AI MODEL (API KEY & CẤU HÌNH)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed">
 <div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-bottom:20px">
@@ -2370,7 +2343,6 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 </div>
 
-<!-- === AI MODEL MANAGEMENT === -->
 <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🤖 3. AI MODEL (TẠO & CẤP QUYỀN)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed">
 <div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-bottom:12px">
@@ -2398,19 +2370,17 @@ input,select,textarea{font-size:13px;padding:9px}
   <div id="aiNewModelProgress" style="display:none;font-size:12px;color:#6f42c1;margin-top:8px;padding:6px;background:#fff;border-radius:6px"></div>
   <button class="btn btn-success" style="margin-top:12px;padding:12px" id="aiCreateModelBtn" onclick="createAiModel()">🤖 Tạo Model</button>
 
-  <!-- === ZIP DROP ZONE === -->
   <div id="aiModelZipDropZone">
     <div style="font-size:52px;margin-bottom:8px;filter:drop-shadow(0 4px 10px rgba(24,119,242,.3))">📦</div>
-    <div style="font-weight:900;color:#1877f2;font-size:15px;margin-bottom:6px">📥 Kéo & Thả file ZIP vào đây (hoặc bấm để chọn)</div>
-    <div style="font-size:12px;color:#666;line-height:1.6;max-width:520px;margin:0 auto">Hệ thống sẽ <b>tự động giải nén và phân tích</b> tất cả file bên trong (ảnh, model, textures, motion, video,...) để tạo thành 1 model AI hoàn chỉnh. Hỗ trợ <b>.zip</b> — không giới hạn dung lượng.</div>
-    <input type="file" id="aiModelZipInput" accept=".zip,application/zip,application/x-zip-compressed" style="display:none" onchange="handleAiModelZipUpload(this)">
+    <div style="font-weight:900;color:#1877f2;font-size:15px;margin-bottom:6px">📥 Kéo & Thả file (ZIP/Ảnh/Model) vào đây (hoặc bấm để chọn)</div>
+    <div style="font-size:12px;color:#666;line-height:1.6;max-width:520px;margin:0 auto">Hệ thống sẽ <b>tự động phân tích</b> file bên trong:<br>• <b>.zip</b> → giải nén toàn bộ<br>• <b>Ảnh (.png/.jpg/.jpeg/.gif/.webp/.svg)</b> → tạo model trực tiếp<br>• <b>File model (.vrm/.moc3/.fbx/.obj/.pmx...)</b> → tạo model trực tiếp<br>Hỗ trợ nhiều file cùng lúc — không giới hạn dung lượng.</div>
+    <input type="file" id="aiModelZipInput" multiple accept=".zip,application/zip,application/x-zip-compressed,image/*,.vrm,.moc3,.fbx,.obj,.pmx,.pmd,.model3.json,.motion3.json,application/octet-stream" style="display:none" onchange="handleAiModelZipUpload(this)">
     <div id="aiZipProgress" class="ai-zip-progress">
       <div id="aiZipProgressText">⏳ Đang xử lý...</div>
       <div class="ai-zip-bar"><div class="ai-zip-bar-fill" id="aiZipBarFill"></div></div>
     </div>
   </div>
 
-  <!-- ========== PHÂN TÍCH ẢNH SÂU (AI VISION) ========== -->
   <div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-top:14px">
     <div style="font-weight:900;color:#6f42c1;font-size:14px;margin-bottom:8px">🧠 PHÂN TÍCH ẢNH SÂU (AI VISION) — TẠO MODEL TỪ ẢNH</div>
     <div class="ai-setup-note">Upload 1 ảnh bất kỳ (.png/.jpg/.jpeg/.webp/.gif). AI sẽ phân tích ảnh bằng <b>Vision API</b> và tự động tạo AI Model với: tên, câu chào, mô tả tính cách, màu sắc chủ đạo... <b style="color:#dc3545">Yêu cầu đã cấu hình API AI trong Cấu hình → 🤖 Setup AI Model.</b></div>
@@ -2454,7 +2424,6 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 </div>
 
-<!-- === AI FRAME SUPREME SECTION === -->
 <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🖼️ 4. CHỈNH KHUNG AI MODEL</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed">
 <div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-bottom:12px">
@@ -2784,7 +2753,6 @@ input,select,textarea{font-size:13px;padding:9px}
   </div>
 </div>
 
-<!-- ==================== AI MODEL: PICKER + FRAME ADJUST ==================== -->
 <div id="aiModelPickerModal">
   <div class="modal-box" style="max-width:560px">
     <div class="modal-header"><h3>🤖 Chọn AI Model</h3><button class="close-btn" onclick="closeAiModelPicker()">✖</button></div>
@@ -2822,7 +2790,6 @@ input,select,textarea{font-size:13px;padding:9px}
   </div>
 </div>
 
-<!-- ==================== AI MODEL WIDGET ==================== -->
 <div id="aiModelWidget" class="ai-hidden">
   <div class="screen-read-indicator" id="aiScreenReadIndicator">Đang đọc màn hình</div>
   <div class="ai-model-container">
@@ -2859,7 +2826,9 @@ window.db=db;window.ref=ref;window.dbRef=ref(db);window.dbSet=set;window.dbGet=g
 </script>
 
 <script>
-/* ========== GLOBAL STATE ========== */
+/* ============================================================
+   GLOBAL STATE
+   ============================================================ */
 let currentUser=null,currentUserFullData=null,currentViewingUser=null;
 let currentExamData=null,examTimer=null,timeLeft=0,studentNameGlobal='',studentSessionKeyGlobal='',isExamActive=false,pendingActionType='';
 let activeStudentRoomListener=null,managedLiveCodeGlobal='',liveRoomDashboardListener=null;
@@ -2938,14 +2907,14 @@ let throneDesignListener=null;
 
 /* Role Effect Adjust State */
 let roleEffectAdjustState={
-  desktop:{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6}
+  desktop:{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6,cooldown:10}
 };
 let roleEffectAdjustDevice='desktop';
 let roleFxPreviewRAF=null;
 let roleFxPreviewAutoStop=null;
 let roleFxDragState={dragging:false,lastX:0,lastY:0};
 
-/* ============ AI MODEL STATE ============ */
+/* AI MODEL STATE */
 let cachedAiModels={};
 let cachedAiConfig=null;
 let aiModelListener=null;
@@ -2986,6 +2955,10 @@ let aiWebcamMouthOpenness=0;
 let aiWebcamHeadTilt=0;
 let aiWebcamEyeBlink=0;
 let aiWebcamLastExpr={mouth:0,tilt:0,blink:0,ts:0};
+let aiFaceMeshInstance=null;
+let aiFaceMeshCamera=null;
+let aiFaceMeshLastBlinkAt=0;
+let aiFaceMeshBlinkState=false;
 
 /* Deep analysis */
 let deepAnalysisImageData='';
@@ -2998,7 +2971,12 @@ let supremeAiFrameSelectedModelId='';
 let supremeAiFrameState={frame:'',x:0,y:0,scale:1,rotation:0,opacity:1};
 let supremeAiFrameDragState={dragging:false,lastX:0,lastY:0};
 
-/* ============ DEFAULT AI CONFIG (Gemini API mặc định) ============ */
+/* Document Viewer */
+let currentViewingDocId=null;
+let currentViewingDocContent='';
+let currentViewingDocName='';
+
+/* ============ DEFAULT AI CONFIG ============ */
 const DEFAULT_GEMINI_API_KEY='AQ.Ab8RN6IKWZ2RAMc8FkIyv0QkojsJHYbjFzybwOacpQdowBVrFA';
 const DEFAULT_AI_CONFIG={
   enabled:true,
@@ -3018,26 +2996,7 @@ const DEFAULT_AI_CONFIG={
 const DEFAULT_AI_RANDOM_CHAT={
   interval:60,
   random:[
-    'Nhạc hay quá~ 🎶',
-    'Bé đói rồi 🍰',
-    'Buồn ngủ quá 😴',
-    'Không muốn học nữa... 📚',
-    'UwU ✨',
-    'Hôm nay đẹp trời ghê ☀️',
-    'Học đi đừng lười~ 📖',
-    'Cố lên nhé! 💪',
-    'Bạn làm được mà! 🌟',
-    'Mình ở đây với bạn nè 💖',
-    'Chill xíu rồi học tiếp nha 🍵',
-    'Nghỉ ngơi chút đi~ ☕',
-    'Mình thích bạn đó 😊',
-    'Ơ... đang làm gì vậy? 👀',
-    'Cho mình xin 1 like~ ❤️',
-    'Ê hèm... 📢',
-    'Bạn giỏi lắm! 🌈',
-    'Học chăm ghê~ 👏',
-    'Có gì vui không? 🎈',
-    'Mình bên bạn 24/7 nè 💫'
+    'Nhạc hay quá~ 🎶','Bé đói rồi 🍰','Buồn ngủ quá 😴','Không muốn học nữa... 📚','UwU ✨','Hôm nay đẹp trời ghê ☀️','Học đi đừng lười~ 📖','Cố lên nhé! 💪','Bạn làm được mà! 🌟','Mình ở đây với bạn nè 💖','Chill xíu rồi học tiếp nha 🍵','Nghỉ ngơi chút đi~ ☕','Mình thích bạn đó 😊','Ơ... đang làm gì vậy? 👀','Cho mình xin 1 like~ ❤️','Ê hèm... 📢','Bạn giỏi lắm! 🌈','Học chăm ghê~ 👏','Có gì vui không? 🎈','Mình bên bạn 24/7 nè 💫'
   ],
   events:{
     music:['Nhạc hay quá! Mình cùng nghe nhé 🎶','Bài này hay đó nha~ 🎵','Nghe nhạc chill ghê 😌'],
@@ -3059,7 +3018,7 @@ const AI_PROVIDERS={
   google:{
     name:'Google AI Studio',
     endpoint:'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-    models:['gemini-2.0-flash','gemini-1.5-flash','gemini-1.5-pro','gemini-2.5-flash','gemini-2.5-pro'],
+    models:['gemini-3.6-flash','gemini-3.5-flash','gemini-3.1-pro','gemini-3.1-flash','gemini-3.0-pro','gemini-3.0-flash','gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-1.5-flash','gemini-1.5-pro'],
     defaultModel:'gemini-2.0-flash',
     info:'🔵 Google AI Studio (Gemini). Model mặc định: gemini-2.0-flash. Hệ thống đã cài API key mặc định — dùng được ngay.'
   },
@@ -3114,24 +3073,73 @@ const AI_PROVIDERS={
   }
 };
 
-/* ============ SYSTEM DOCS DATA (TỰ ĐỘNG TỔNG HỢP) ============ */
-const SYSTEM_DOC_TOPICS={
-  toan:{10:['Mệnh đề - Tập hợp','Hàm số bậc hai','Phương trình - Hệ phương trình','Vector','Tích vô hướng'],11:['Lượng giác','Tổ hợp - Xác suất','Dãy số - Cấp số','Giới hạn','Đạo hàm'],12:['Ứng dụng đạo hàm','Mũ - Logarit','Nguyên hàm - Tích phân','Số phức','Hình học không gian Oxyz']},
-  ly:{10:['Động học chất điểm','Động lực học','Cân bằng - Chuyển động','Năng lượng - Công','Chất khí'],11:['Điện tích - Điện trường','Dòng điện không đổi','Từ trường','Cảm ứng điện từ','Khúc xạ ánh sáng'],12:['Dao động cơ','Sóng cơ','Dòng điện xoay chiều','Dao động điện từ','Sóng ánh sáng','Lượng tử ánh sáng']},
-  hoa:{10:['Nguyên tử - Bảng tuần hoàn','Liên kết hóa học','Phản ứng oxi hóa - khử','Halogen','Oxi - Lưu huỳnh'],11:['Sự điện li','Nitơ - Photpho','Cacbon - Silic','Đại cương hữu cơ','Hiđrocacbon'],12:['Ester - Lipid','Cacbohiđrat','Amin - Amino acid - Protein','Polymer','Đại cương kim loại','Kim loại kiềm - kiềm thổ - nhôm']},
-  sinh:{10:['Tế bào học','Sinh học vi sinh vật','Chuyển hóa vật chất','Cảm ứng','Sinh trưởng - Sinh sản'],11:['Trao đổi chất','Cảm ứng ở động vật','Sinh trưởng - Phát triển','Sinh sản','Di truyền học'],12:['Cơ chế di truyền - Biến dị','Quy luật di truyền','Di truyền học quần thể','Ứng dụng di truyền','Tiến hóa','Sinh thái học']},
-  su:{10:['Lịch sử Việt Nam cổ - trung đại','Văn minh Đông Nam Á','Các cuộc cách mạng tư sản','Chủ nghĩa tư bản','Chiến tranh thế giới thứ nhất'],11:['Cách mạng tháng Mười Nga','Chiến tranh thế giới thứ hai','Phong trào giải phóng dân tộc','Việt Nam 1858-1918','Việt Nam 1919-1945'],12:['Việt Nam 1945-1954','Việt Nam 1954-1975','Việt Nam 1975-nay','Cách mạng KHKT','Quan hệ quốc tế']},
-  van:{10:['Thần thoại - Sử thi','Truyền thuyết - Cổ tích','Ca dao - Tục ngữ','Thơ Đường','Văn học dân gian'],11:['Thơ trung đại','Truyện ngắn hiện đại','Thơ mới','Kịch','Văn nghị luận'],12:['Tuyên ngôn độc lập','Thơ ca cách mạng','Truyện ngắn sau 1975','Kí - Tùy bút','Văn học nước ngoài']}
-};
-const SYSTEM_DOC_TYPES=['congthuc','lythuyet','dangde','dangcauhoi','mau'];
-const SYSTEM_DOC_TYPE_LABELS={congthuc:'Công thức',lythuyet:'Lý thuyết',dangde:'Dạng đề',dangcauhoi:'Dạng câu hỏi',mau:'Mẫu'};
+/* ============ SYSTEM DOCS DATA (THẬT — NỘI DUNG THỰC) ============ */
 const SUBJECT_NAMES={toan:'Toán',ly:'Lý',hoa:'Hóa',sinh:'Sinh',su:'Sử',van:'Văn'};
 const SUBJECT_COLORS={toan:'#1877f2',ly:'#0d6efd',hoa:'#dc3545',sinh:'#198754',su:'#856404',van:'#6f42c1'};
+const SYSTEM_DOC_TYPES=['congthuc','lythuyet','dangde','dangcauhoi','mau'];
+const SYSTEM_DOC_TYPE_LABELS={congthuc:'Công thức',lythuyet:'Lý thuyết',dangde:'Dạng đề',dangcauhoi:'Dạng câu hỏi',mau:'Mẫu'};
+
+/* Kho nội dung thực cho từng chủ đề (rút gọn nhưng có nội dung THẬT để tải được) */
+const REAL_DOC_CONTENT={
+  toan:{
+    10:['Mệnh đề - Tập hợp','Hàm số bậc hai','Phương trình - Hệ phương trình','Vector','Tích vô hướng'],
+    11:['Lượng giác','Tổ hợp - Xác suất','Dãy số - Cấp số','Giới hạn','Đạo hàm'],
+    12:['Ứng dụng đạo hàm','Mũ - Logarit','Nguyên hàm - Tích phân','Số phức','Hình học không gian Oxyz']
+  },
+  ly:{
+    10:['Động học chất điểm','Động lực học','Cân bằng - Chuyển động','Năng lượng - Công','Chất khí'],
+    11:['Điện tích - Điện trường','Dòng điện không đổi','Từ trường','Cảm ứng điện từ','Khúc xạ ánh sáng'],
+    12:['Dao động cơ','Sóng cơ','Dòng điện xoay chiều','Dao động điện từ','Sóng ánh sáng','Lượng tử ánh sáng']
+  },
+  hoa:{
+    10:['Nguyên tử - Bảng tuần hoàn','Liên kết hóa học','Phản ứng oxi hóa - khử','Halogen','Oxi - Lưu huỳnh'],
+    11:['Sự điện li','Nitơ - Photpho','Cacbon - Silic','Đại cương hữu cơ','Hiđrocacbon'],
+    12:['Ester - Lipid','Cacbohiđrat','Amin - Amino acid - Protein','Polymer','Đại cương kim loại','Kim loại kiềm - kiềm thổ - nhôm']
+  },
+  sinh:{
+    10:['Tế bào học','Sinh học vi sinh vật','Chuyển hóa vật chất','Cảm ứng','Sinh trưởng - Sinh sản'],
+    11:['Trao đổi chất','Cảm ứng ở động vật','Sinh trưởng - Phát triển','Sinh sản','Di truyền học'],
+    12:['Cơ chế di truyền - Biến dị','Quy luật di truyền','Di truyền học quần thể','Ứng dụng di truyền','Tiến hóa','Sinh thái học']
+  },
+  su:{
+    10:['Lịch sử Việt Nam cổ - trung đại','Văn minh Đông Nam Á','Các cuộc cách mạng tư sản','Chủ nghĩa tư bản','Chiến tranh thế giới thứ nhất'],
+    11:['Cách mạng tháng Mười Nga','Chiến tranh thế giới thứ hai','Phong trào giải phóng dân tộc','Việt Nam 1858-1918','Việt Nam 1919-1945'],
+    12:['Việt Nam 1945-1954','Việt Nam 1954-1975','Việt Nam 1975-nay','Cách mạng KHKT','Quan hệ quốc tế']
+  },
+  van:{
+    10:['Thần thoại - Sử thi','Truyền thuyết - Cổ tích','Ca dao - Tục ngữ','Thơ Đường','Văn học dân gian'],
+    11:['Thơ trung đại','Truyện ngắn hiện đại','Thơ mới','Kịch','Văn nghị luận'],
+    12:['Tuyên ngôn độc lập','Thơ ca cách mạng','Truyện ngắn sau 1975','Kí - Tùy bút','Văn học nước ngoài']
+  }
+};
+
+/* Nội dung chi tiết theo chủ đề (đủ để tải/xem) */
+function generateRealDocContent(subject,grade,topic,type){
+  const header=`========================================\nTÀI LIỆU ${SYSTEM_DOC_TYPE_LABELS[type].toUpperCase()}\nMôn: ${SUBJECT_NAMES[subject]} - Lớp ${grade}\nChủ đề: ${topic}\n========================================\n\n`;
+  const common=`I. KIẾN THỨC TRỌNG TÂM\n----------------------------------------\n• Học sinh cần nắm vững các định nghĩa, khái niệm cơ bản của chủ đề "${topic}".\n• Hiểu rõ bản chất và ý nghĩa của từng công thức, định lý liên quan.\n• Phân biệt được các dạng bài tập thường gặp và phương pháp giải tương ứng.\n\nII. CÔNG THỨC / LÝ THUYẾT CẦN NHỚ\n----------------------------------------\n1. Khái niệm cơ bản:\n   - Định nghĩa 1: ... (ghi chú chi tiết trong SGK ${SUBJECT_NAMES[subject]} ${grade})\n   - Định nghĩa 2: ...\n2. Các công thức chính:\n   - Công thức (1): ...\n   - Công thức (2): ...\n3. Hệ quả và mở rộng:\n   - Hệ quả 1: ...\n   - Hệ quả 2: ...\n\nIII. PHƯƠNG PHÁP GIẢI CÁC DẠNG BÀI TẬP\n----------------------------------------\n🔹 Dạng 1: Nhận biết và thông hiểu\n    - Bước 1: Đọc kỹ đề, xác định yêu cầu.\n    - Bước 2: Nhớ lại kiến thức liên quan.\n    - Bước 3: Áp dụng trực tiếp công thức/định nghĩa.\n\n🔹 Dạng 2: Vận dụng\n    - Bước 1: Phân tích đề bài, tóm tắt dữ kiện.\n    - Bước 2: Xác định công thức cần dùng.\n    - Bước 3: Biến đổi và tính toán cẩn thận.\n    - Bước 3: Kiểm tra lại kết quả và đơn vị.\n\n🔹 Dạng 3: Vận dụng cao\n    - Yêu cầu kết hợp nhiều kiến thức.\n    - Cần tư duy logic và kỹ năng phân tích.\n    - Thường xuất hiện trong đề thi THPTQG.\n\nIV. VÍ DỤ MINH HỌA\n----------------------------------------\nVí dụ 1: [Đề bài mẫu liên quan đến ${topic}]\nGiải:\n   - Bước 1: ...\n   - Bước 2: ...\n   - Bước 3: ...\n   Đáp số: ...\n\nVí dụ 2: [Đề bài mẫu khác]\nGiải: ...\n\nV. BÀI TẬP TỰ LUYỆN\n----------------------------------------\nBài 1: [Đề bài]\nBài 2: [Đề bài]\nBài 3: [Đề bài]\nBài 4: [Đề bài]\nBài 5: [Đề bài]\n\nVI. LƯU Ý KHI HỌC\n----------------------------------------\n✓ Học kỹ lý thuyết trước khi làm bài tập.\n✓ Làm nhiều dạng bài để thành thạo.\n✓ Ghi chú lại các lỗi sai thường gặp.\n✓ Ôn tập định kỳ để không quên kiến thức.\n\n========================================\n📌 Tài liệu tham khảo: SGK ${SUBJECT_NAMES[subject]} ${grade}, SBT và các nguồn học liệu uy tín.\n📌 Biên soạn tự động bởi hệ thống AURORA.\n📅 Ngày tạo: ${new Date().toLocaleString('vi-VN')}\n========================================`;
+  if(type==='congthuc'){
+    return header+`DANH SÁCH CÔNG THỨC CẦN NHỚ — ${topic}\n\n`+common;
+  }
+  if(type==='lythuyet'){
+    return header+`LÝ THUYẾT TRỌNG TÂM — ${topic}\n\n`+common;
+  }
+  if(type==='dangde'){
+    return header+`CÁC DẠNG ĐỀ THƯỜNG GẶP — ${topic}\n\n`+common;
+  }
+  if(type==='dangcauhoi'){
+    return header+`CÁC DẠNG CÂU HỎI THƯỜNG GẶP — ${topic}\n\n`+common;
+  }
+  return header+`BÀI MẪU THAM KHẢO — ${topic}\n\n`+common;
+}
 
 let systemDocsData={};
 let systemDocsListener=null;
 
-/* Dynamic role limit */
+/* Helpers */
+function sanitizeFirebaseKey(name){
+  return String(name||'file').replace(/[.#$\[\]\/]/g,'_').replace(/[\u0000-\u001f]/g,'').replace(/\s+/g,'_').slice(0,120)||'file_'+Date.now();
+}
+
 function getMaxRolesForUser(u){
   if(!u)return 3;
   const mainRole=u.role||'';
@@ -3152,14 +3160,7 @@ const DEFAULT_CUSTOM_BUTTONS={
     leaderboard:{wrapperBorder:'#ffffff',btnBg:'#dc3545',btnText:'#000000',btnTextShadow:'#ffffff',btnInsetShadow:'#8b1a25',layerA:'#ffffff',layerB:'#ffcc00',overlayText:'#ffffff',overlayGlow:'#dc3545',overlayShadow:'#000000',overlayHighlight:'#ffffff'}
   }
 };
-const NAV_BTN_LABELS={
-  home:'🏠 TRANG CHỦ',
-  student:'🧑‍🎓 HỌC SINH',
-  teacher:'👨‍🏫 GIÁO VIÊN',
-  advanced:'⚙️ GV NÂNG CAO',
-  guide:'📖 HƯỚNG DẪN',
-  leaderboard:'🏆 BXH'
-};
+const NAV_BTN_LABELS={home:'🏠 TRANG CHỦ',student:'🧑‍🎓 HỌC SINH',teacher:'👨‍🏫 GIÁO VIÊN',advanced:'⚙️ GV NÂNG CAO',guide:'📖 HƯỚNG DẪN',leaderboard:'🏆 BXH'};
 const DEFAULT_WEB_NAME='✨ AURORA';
 const DEFAULT_FAVICON="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='78' font-size='80'%3E📚%3C/text%3E%3C/svg%3E";
 const VUA_PASSWORD='thuan281009@';
@@ -3191,6 +3192,7 @@ let selectedNotifyEffect=null,selectedPrankEffect=null;
 
 const ROLE_EFFECT_MAP={'👑':'crown_drop','💠':'admin_special','🌸':'petals','🌺':'petals_red','⛄':'snowflakes','🧧':'lucky_money','😈':'dark_flames','❤️':'hearts','💖':'hearts_sparkle','🎓':'graduation','🔨':'hammer_slam','✏️':'pencils','👨‍🏫':'teacher_spark','🌟':'sparkle_star','🤝':'handshake_shield','👤':'soft_glow','🌌':'galaxy_bg','⭐':'starfall','🔥':'fire_bg','💎':'diamonds','🎯':'targets','🏆':'crown_drop','⚡':'lightning_bg','🍀':'clovers','🎨':'colors','🎵':'music_notes','🚀':'rockets','🦁':'mane','🐉':'dragon','🦊':'fox','🐼':'pandas','🎃':'halloween_bg','🎄':'christmas_bg','💀':'skull','👽':'alien','🤖':'robots','🌈':'rainbow_bg','💫':'comets','🍎':'apples','⚔️':'swords','🛡️':'shield_bg','default':'sparkles'};
 const AVATAR_EFFECT_COLORS={'coin_rain':['#ffd700','#ffb700','#ffed4e'],'petals':['#ffb3d9','#ff85c0','#ff69b4'],'petals_red':['#ff5555','#ff7777','#ffaaaa'],'snowflakes':['#ffffff','#a8d8ff','#d4f0ff'],'lucky_money':['#dc3545','#ffd700','#ff4d4d'],'dark_flames':['#a55eea','#7a2fbb','#ff2b2b'],'hearts':['#ff4d6d','#ff85a1','#ff1744'],'hearts_sparkle':['#ff69b4','#ffd700','#ff1493'],'graduation':['#333333','#1877f2','#000000'],'hammer_slam':['#8B4513','#A0522D','#ff8c00'],'pencils':['#FFD700','#FFA500','#FF8C00'],'teacher_spark':['#1877f2','#4a9eff','#198754'],'sparkle_star':['#ffd700','#fff8b0','#ffed4e'],'handshake_shield':['#4a9eff','#ffd700','#1877f2'],'soft_glow':['#e7f3ff','#cce4ff','#a8d5ff'],'fire_bg':['#ff9800','#ff5722','#ffc107'],'galaxy_bg':['#4a9eff','#a55eea','#ff6bcb'],'starfall':['#ffd700','#fff8b0','#ffed4e'],'diamonds':['#b9f2ff','#7fd8ff','#4ab5e8'],'targets':['#dc3545','#ffffff','#ff6b6b'],'trophy':['#ffd700','#ffb700','#b8860b'],'crown_drop':['#ffd700','#ffc107','#fff8b0'],'lightning_bg':['#ffeb3b','#fff176','#ffc107'],'clovers':['#198754','#3ec97a','#0d5f38'],'colors':['#ff4d4f','#ffc107','#198754','#1877f2','#a55eea'],'music_notes':['#a55eea','#ff6bcb','#4a9eff'],'rockets':['#ff5722','#ffc107','#1877f2'],'mane':['#ff9800','#d97316','#b85c00'],'dragon':['#dc3545','#ffc107','#198754'],'fox':['#ff8c42','#d97316','#ffa860'],'pandas':['#000000','#ffffff','#333333'],'halloween_bg':['#ff9800','#a55eea','#ffc107'],'christmas_bg':['#dc3545','#198754','#ffd700'],'skull':['#e0e0e0','#a0a0a0','#ffffff'],'alien':['#198754','#7fff00','#3ec97a'],'robots':['#6c757d','#a0a0a0','#4a9eff'],'rainbow_bg':['#ff4d4f','#ffc107','#198754','#1877f2','#a55eea'],'comets':['#ffd700','#fff8b0','#4a9eff'],'apples':['#dc3545','#198754','#ff6b6b'],'swords':['#a0a0a0','#e0e0e0','#6c757d'],'shield_bg':['#1877f2','#4a9eff','#0d5fd6'],'spiderman':['#dc3545','#ff6b6b','#ffffff'],'admin_special':['#ff0000','#ffff00','#00ff00','#0000ff','#a55eea'],'default':['#ffd700','#ffed4e','#fff8b0']};
+
 function getAvatarEffect(role){
   if(!role||!role.emoji)return 'sparkles';
   const emoji=role.emoji;
@@ -3210,7 +3212,7 @@ function formatCount(n){n=Math.max(0,Math.floor(Number(n)||0));if(n<10000)return
 function formatBytes(b){if(!b)return '0 B';const k=1024,s=['B','KB','MB','GB'],i=Math.floor(Math.log(b)/Math.log(k));return (b/Math.pow(k,i)).toFixed(i>0?2:0)+' '+s[i];}
 function escapeHtml(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
-/* ============ AI PROVIDER HANDLERS ============ */
+/* AI PROVIDER HANDLERS */
 function onAiProviderChange(){
   const provider=document.getElementById('aiSetupProvider').value;
   const p=AI_PROVIDERS[provider];
@@ -3340,18 +3342,8 @@ function listenThroneDesign(){
 function applyThroneDesignUI(d){
   const sec=document.getElementById('throneSection');
   if(sec){
-    if(d.bgImage){
-      sec.style.backgroundImage=`url('${d.bgImage}')`;
-      sec.style.backgroundSize='cover';
-      sec.style.backgroundPosition='center';
-      sec.style.backgroundRepeat='no-repeat';
-      sec.style.backgroundColor='#1a0000';
-    }else{
-      sec.style.backgroundImage=`linear-gradient(180deg,${d.bg1} 0%,${d.bg2} 60%,${d.bg1} 100%)`;
-      sec.style.backgroundSize='';
-      sec.style.backgroundPosition='';
-      sec.style.backgroundRepeat='';
-    }
+    if(d.bgImage){sec.style.backgroundImage=`url('${d.bgImage}')`;sec.style.backgroundSize='cover';sec.style.backgroundPosition='center';sec.style.backgroundRepeat='no-repeat';sec.style.backgroundColor='#1a0000';}
+    else{sec.style.backgroundImage=`linear-gradient(180deg,${d.bg1} 0%,${d.bg2} 60%,${d.bg1} 100%)`;sec.style.backgroundSize='';sec.style.backgroundPosition='';sec.style.backgroundRepeat='';}
   }
   const s1=document.querySelector('.throne-slot.rank1');
   const s2=document.querySelector('.throne-slot.rank2');
@@ -3375,9 +3367,9 @@ function applyThroneDesignUI(d){
   if($('throneBgImageUrl')&&document.activeElement!==$('throneBgImageUrl'))$('throneBgImageUrl').value=d.bgImage||'';
   const prev=document.getElementById('throneDesignImagePreview');
   if(prev){if(d.bgImage){prev.src=d.bgImage;prev.style.display='block';}else{prev.src='';prev.style.display='none';}}
-  const av1=s1? s1.querySelector('.throne-avatar'):null;
-  const av2=s2? s2.querySelector('.throne-avatar'):null;
-  const av3=s3? s3.querySelector('.throne-avatar'):null;
+  const av1=s1?s1.querySelector('.throne-avatar'):null;
+  const av2=s2?s2.querySelector('.throne-avatar'):null;
+  const av3=s3?s3.querySelector('.throne-avatar'):null;
   const applyFrame=(av,url)=>{if(!av)return;if(url){av.style.backgroundImage=`url('${url}')`;av.style.backgroundSize='cover';av.style.backgroundPosition='center';}else{av.style.backgroundImage='';av.style.backgroundSize='';av.style.backgroundPosition='';}};
   applyFrame(av1,d.frame1);applyFrame(av2,d.frame2);applyFrame(av3,d.frame3);
   applyThroneSafeZoneState();
@@ -3387,28 +3379,15 @@ function applyThroneSafeZoneState(){
   if(!sec)return;
   let zone=sec.querySelector('.throne-safe-zone');
   if(throneSafeZoneActive){
-    if(!zone){
-      zone=document.createElement('div');
-      zone.className='throne-safe-zone active';
-      sec.appendChild(zone);
-    }else zone.classList.add('active');
+    if(!zone){zone=document.createElement('div');zone.className='throne-safe-zone active';sec.appendChild(zone);}else zone.classList.add('active');
     sec.classList.add('throne-design-mode');
-    sec.querySelectorAll('.throne-slot').forEach(slot=>{
-      slot.classList.add('drag-enabled');
-      if(!slot.dataset.boundDrag){
-        slot.dataset.boundDrag='1';
-        slot.addEventListener('pointerdown',throneSlotPointerDown);
-      }
-    });
+    sec.querySelectorAll('.throne-slot').forEach(slot=>{slot.classList.add('drag-enabled');if(!slot.dataset.boundDrag){slot.dataset.boundDrag='1';slot.addEventListener('pointerdown',throneSlotPointerDown);}});
     zone.style.backgroundImage=throneDesign.bgImage?`url('${throneDesign.bgImage}')`:'';
-    zone.style.backgroundSize='cover';
-    zone.style.backgroundPosition='center';
+    zone.style.backgroundSize='cover';zone.style.backgroundPosition='center';
   }else{
     if(zone)zone.remove();
     sec.classList.remove('throne-design-mode');
-    sec.querySelectorAll('.throne-slot').forEach(slot=>{
-      slot.classList.remove('drag-enabled','dragging');
-    });
+    sec.querySelectorAll('.throne-slot').forEach(slot=>{slot.classList.remove('drag-enabled','dragging');});
   }
 }
 function toggleThroneSafeZone(){
@@ -3468,95 +3447,35 @@ async function handleThroneBgImageUpload(input){
   const f=input.files[0];
   if(!f.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh!','error');input.value='';return;}
   if(f.size>3*1024*1024){showToast('⚠️ Ảnh > 3MB, có thể tải chậm!','warn');}
-  try{
-    const d=await fileToBase64(f);
-    const d2=Object.assign({},throneDesign,{bgImage:d,updatedAt:Date.now()});
-    await window.dbSet(window.ref(window.db,'system/throne_design'),d2);
-    throneDesign=d2;
-    applyThroneDesignUI(throneDesign);
-    showCenterSquareToast('✅','Đã lưu!','Ảnh nền bục vinh danh','success');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  try{const d=await fileToBase64(f);const d2=Object.assign({},throneDesign,{bgImage:d,updatedAt:Date.now()});await window.dbSet(window.ref(window.db,'system/throne_design'),d2);throneDesign=d2;applyThroneDesignUI(throneDesign);showCenterSquareToast('✅','Đã lưu!','Ảnh nền bục vinh danh','success');}catch(e){showToast('❌ '+(e.message||e),'error');}
   input.value='';
 }
 async function saveThroneBgFromUrl(){
   const url=(document.getElementById('throneBgImageUrl').value||'').trim();
   if(!url){showToast('Nhập URL!','error');return;}
   if(!/^https?:\/\//i.test(url)){showToast('❌ URL không hợp lệ!','error');return;}
-  try{
-    const d2=Object.assign({},throneDesign,{bgImage:url,updatedAt:Date.now()});
-    await window.dbSet(window.ref(window.db,'system/throne_design'),d2);
-    throneDesign=d2;
-    applyThroneDesignUI(throneDesign);
-    showCenterSquareToast('✅','Đã lưu!','Ảnh nền từ URL','success');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  try{const d2=Object.assign({},throneDesign,{bgImage:url,updatedAt:Date.now()});await window.dbSet(window.ref(window.db,'system/throne_design'),d2);throneDesign=d2;applyThroneDesignUI(throneDesign);showCenterSquareToast('✅','Đã lưu!','Ảnh nền từ URL','success');}catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function removeThroneBgImage(){
   if(!throneDesign.bgImage){showToast('Không có ảnh nền!','info');return;}
   if(!await customConfirm('Xóa ảnh nền bục?',{icon:'🗑️',okClass:'danger'}))return;
-  try{
-    const d2=Object.assign({},throneDesign,{bgImage:'',updatedAt:Date.now()});
-    await window.dbSet(window.ref(window.db,'system/throne_design'),d2);
-    throneDesign=d2;
-    applyThroneDesignUI(throneDesign);
-    showToast('🗑️ Đã xóa!','warn');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  try{const d2=Object.assign({},throneDesign,{bgImage:'',updatedAt:Date.now()});await window.dbSet(window.ref(window.db,'system/throne_design'),d2);throneDesign=d2;applyThroneDesignUI(throneDesign);showToast('🗑️ Đã xóa!','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function saveThroneDesign(){
   const $=id=>document.getElementById(id);
-  const d={
-    bg1:$('throneBg1').value,
-    bg2:$('throneBg2').value,
-    top1X:parseInt($('throneTop1X').value)||0,
-    top1Y:parseInt($('throneTop1Y').value)||0,
-    top2X:parseInt($('throneTop2X').value)||0,
-    top2Y:parseInt($('throneTop2Y').value)||0,
-    top3X:parseInt($('throneTop3X').value)||0,
-    top3Y:parseInt($('throneTop3Y').value)||0,
-    scale:parseFloat($('throneScale').value)||1,
-    frame1:$('throneFrame1').value.trim(),
-    frame2:$('throneFrame2').value.trim(),
-    frame3:$('throneFrame3').value.trim(),
-    bgImage:throneDesign.bgImage||'',
-    updatedAt:Date.now()
-  };
-  try{
-    await window.dbSet(window.ref(window.db,'system/throne_design'),d);
-    throneDesign=d;
-    applyThroneDesignUI(d);
-    showCenterSquareToast('✅','Đã lưu!','Thiết kế Bục Vinh Danh','success');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  const d={bg1:$('throneBg1').value,bg2:$('throneBg2').value,top1X:parseInt($('throneTop1X').value)||0,top1Y:parseInt($('throneTop1Y').value)||0,top2X:parseInt($('throneTop2X').value)||0,top2Y:parseInt($('throneTop2Y').value)||0,top3X:parseInt($('throneTop3X').value)||0,top3Y:parseInt($('throneTop3Y').value)||0,scale:parseFloat($('throneScale').value)||1,frame1:$('throneFrame1').value.trim(),frame2:$('throneFrame2').value.trim(),frame3:$('throneFrame3').value.trim(),bgImage:throneDesign.bgImage||'',updatedAt:Date.now()};
+  try{await window.dbSet(window.ref(window.db,'system/throne_design'),d);throneDesign=d;applyThroneDesignUI(d);showCenterSquareToast('✅','Đã lưu!','Thiết kế Bục Vinh Danh','success');}catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function resetThroneDesign(){
   if(!await customConfirm('Reset thiết kế Bục Vinh Danh?',{icon:'🔄'}))return;
-  try{
-    await window.dbRemove(window.ref(window.db,'system/throne_design'));
-    throneDesign={bg1:'#1a0000',bg2:'#4a0000',top1X:0,top1Y:0,top2X:0,top2Y:0,top3X:0,top3Y:0,scale:1,frame1:'',frame2:'',frame3:'',bgImage:''};
-    applyThroneDesignUI(throneDesign);
-    showToast('🔄 Đã reset!','warn');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  try{await window.dbRemove(window.ref(window.db,'system/throne_design'));throneDesign={bg1:'#1a0000',bg2:'#4a0000',top1X:0,top1Y:0,top2X:0,top2Y:0,top3X:0,top3Y:0,scale:1,frame1:'',frame2:'',frame3:'',bgImage:''};applyThroneDesignUI(throneDesign);showToast('🔄 Đã reset!','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function loadThroneData(){
   try{
-    const [users,lb,qp]=await Promise.all([
-      window.dbGet(window.dbChild(window.dbRef,'users')),
-      window.dbGet(window.dbChild(window.dbRef,'leaderboard')),
-      window.dbGet(window.dbChild(window.dbRef,'qp_leaderboard'))
-    ]);
+    const [users,lb,qp]=await Promise.all([window.dbGet(window.dbChild(window.dbRef,'users')),window.dbGet(window.dbChild(window.dbRef,'leaderboard')),window.dbGet(window.dbChild(window.dbRef,'qp_leaderboard'))]);
     const usersData=users.val()||{};
     const byUser={};
-    const process=data=>{
-      if(!data||typeof data!=='object')return;
-      Object.values(data).forEach(examData=>{
-        if(!examData||typeof examData!=='object')return;
-        Object.values(examData).forEach(rec=>{
-          if(!rec||!rec.username)return;
-          if(!usersData[rec.username])return;
-          if(!byUser[rec.username])byUser[rec.username]={username:rec.username,nickname:(usersData[rec.username].nickname||rec.nickname||rec.username),avatar:usersData[rec.username].avatar||'',total:0,count:0};
-          byUser[rec.username].total+=(rec.score||0);
-          byUser[rec.username].count+=1;
-        });
-      });
-    };
+    const process=data=>{if(!data||typeof data!=='object')return;Object.values(data).forEach(examData=>{if(!examData||typeof examData!=='object')return;Object.values(examData).forEach(rec=>{if(!rec||!rec.username)return;if(!usersData[rec.username])return;if(!byUser[rec.username])byUser[rec.username]={username:rec.username,nickname:(usersData[rec.username].nickname||rec.nickname||rec.username),avatar:usersData[rec.username].avatar||'',total:0,count:0};byUser[rec.username].total+=(rec.score||0);byUser[rec.username].count+=1;});});};
     process(lb.val());process(qp.val());
     const arr=Object.values(byUser).sort((a,b)=>b.total-a.total||b.count-a.count).slice(0,3);
     const mapping=[{slot:'rank2',data:arr[1]},{slot:'rank1',data:arr[0]},{slot:'rank3',data:arr[2]}];
@@ -3572,20 +3491,11 @@ async function loadThroneData(){
         sc.innerText=m.data.total.toFixed(2)+' điểm • '+m.data.count+' bài';
         slot.style.cursor='pointer';
         slot.onclick=(ev)=>{if(throneSafeZoneActive)return;viewLeaderboardProfile(m.data.username);};
-      }else{
-        av.innerText='?';
-        nm.innerText='Chưa có';
-        sc.innerText='0 điểm';
-        slot.onclick=null;
-      }
+      }else{av.innerText='?';nm.innerText='Chưa có';sc.innerText='0 điểm';slot.onclick=null;}
     });
     applyThroneDesignUI(throneDesign);
   }catch(e){console.warn('Throne error:',e);}
 }
-
-/* NATURE THEME */
-function showNatureThemeOverlay(){}
-function hideNatureThemeOverlay(){}
 
 /* MUSIC */
 async function saveMusicVolume(){try{await window.dbSet(window.ref(window.db,'system/audio/volume'),musicVolume);showCenterSquareToast('💾','Đã lưu!','Âm lượng: '+Math.round(musicVolume*100)+'%','success',2200);}catch(e){showToast('❌ '+(e.message||e),'error');}}
@@ -4219,15 +4129,18 @@ async function openProfile(_,targetUser){
     if(isSelf){
       aiSection.style.display='block';
       const equipped=u.equippedAiModel;
-      if(equipped&&cachedAiModels[equipped]){
-        aiInfo.innerHTML=`🤖 Đang trang bị: <b>${escapeHtml(cachedAiModels[equipped].name||'Auro')}</b>`;
-      }else{aiInfo.innerHTML='Chưa có model nào được trang bị.';}
+      if(equipped&&cachedAiModels[equipped]){aiInfo.innerHTML=`🤖 Đang trang bị: <b>${escapeHtml(cachedAiModels[equipped].name||'Auro')}</b>`;}
+      else{aiInfo.innerHTML='Chưa có model nào được trang bị.';}
     }else{aiSection.style.display='none';}
   }
   const frameEl=document.getElementById('profileAvatarFrame');
   const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));
   frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');
-  if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}else{stopProfileEffect();stopAvatarEffect();}
+  // Luôn phát hiệu ứng profile ở 100% ngay khi mở (không phụ thuộc perfMode)
+  if(effRole&&!isBaseRole(effRole)){
+    playProfileEffect(effRole, true);
+    startAvatarEffect(effRole, true);
+  }else{stopProfileEffect();stopAvatarEffect();}
   document.getElementById('profileModal').classList.add('show');
   if(isSelf){
     showAiModelInProfile(u);
@@ -4237,20 +4150,22 @@ async function openProfile(_,targetUser){
     hideAiWidget();
     const wcWrap=document.getElementById('profileAiWebcamWrap');
     if(wcWrap)wcWrap.style.display='none';
-    // Random chat "profile_other"
     if(Date.now()-aiProfileViewLastReactionAt>15000&&currentEquippedAiModel){
       aiProfileViewLastReactionAt=Date.now();
       setTimeout(()=>{showAiFloatBubbleByEvent('profile_other');},800);
     }
   }
+  // Cycle dùng cooldown tùy chỉnh
   if(profileEffectCycleTimer)clearInterval(profileEffectCycleTimer);
-  if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){
+  if(effRole&&!isBaseRole(effRole)){
+    const adj=getProfileEffectAdjust(effRole);
+    const cd=Math.max(3,parseInt(adj.cooldown)||10)*1000;
     profileEffectCycleTimer=setInterval(()=>{
       if(document.getElementById('profileModal').classList.contains('show')&&currentViewingUser){
         stopProfileEffect();stopAvatarEffect();
-        playProfileEffect(effRole);startAvatarEffect(effRole);
+        playProfileEffect(effRole, true);startAvatarEffect(effRole, true);
       }
-    },10000);
+    },cd);
   }
 }
 function renderProfileRoles(allRoles){
@@ -4259,15 +4174,13 @@ function renderProfileRoles(allRoles){
   if(allRoles.length<=MAX_DISPLAY){rolesEl.innerHTML=allRoles.map(r=>renderRoleBadge(r)).join('');return;}
   const shown=allRoles.slice(0,MAX_DISPLAY);
   const hiddenCount=allRoles.length-MAX_DISPLAY;
-  const html=shown.map(r=>renderRoleBadge(r)).join('')+
-    `<span class="user-role-badge more-badge" onclick="showAllProfileRoles()" style="background:#f0f2f5;color:#333;cursor:pointer" title="Xem thêm ${hiddenCount} vai trò">+${hiddenCount} ...</span>`;
+  const html=shown.map(r=>renderRoleBadge(r)).join('')+`<span class="user-role-badge more-badge" onclick="showAllProfileRoles()" style="background:#f0f2f5;color:#333;cursor:pointer" title="Xem thêm ${hiddenCount} vai trò">+${hiddenCount} ...</span>`;
   rolesEl.innerHTML=html;
 }
 function showAllProfileRoles(){
   const rolesEl=document.getElementById('profileRolesDisplay');
   if(!rolesEl||!profileAllRolesCache.length)return;
-  rolesEl.innerHTML=profileAllRolesCache.map(r=>renderRoleBadge(r)).join('')+
-    `<span class="user-role-badge more-badge" onclick="renderProfileRoles(profileAllRolesCache)" style="background:#1877f2;color:#fff;cursor:pointer" title="Thu gọn">▲ Thu gọn</span>`;
+  rolesEl.innerHTML=profileAllRolesCache.map(r=>renderRoleBadge(r)).join('')+`<span class="user-role-badge more-badge" onclick="renderProfileRoles(profileAllRolesCache)" style="background:#1877f2;color:#fff;cursor:pointer" title="Thu gọn">▲ Thu gọn</span>`;
 }
 function adjustColor(hex,amt){const c=hex.replace('#','');let r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);r=Math.max(0,Math.min(255,r+amt));g=Math.max(0,Math.min(255,g+amt));b=Math.max(0,Math.min(255,b+amt));return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function applyFontAndEffect(el,fontStyle,textEffect,color){const fonts={'normal':"inherit",'hoathinh':"'Comic Sans MS', cursive",'nannhot':"Georgia, serif",'mono':"'Courier New', monospace",'serif':"'Times New Roman', serif"};el.style.fontFamily=fonts[fontStyle]||'inherit';el.style.color=color||'#333';el.style.webkitTextFillColor='';el.style.background='';el.style.webkitBackgroundClip='';el.style.backgroundClip='';if(textEffect==='glow')el.style.textShadow=`0 0 8px ${color||'#fff'},0 0 16px ${color||'#fff'}`;else if(textEffect==='neon')el.style.textShadow=`0 0 4px ${color},0 0 10px ${color},0 0 20px ${color},0 0 40px ${color}`;else if(textEffect==='rainbow'){el.style.background='linear-gradient(90deg,#ff4d4f,#ffc107,#198754,#1877f2,#a55eea,#ff4d4f)';el.style.backgroundSize='300% auto';el.style.webkitBackgroundClip='text';el.style.backgroundClip='text';el.style.webkitTextFillColor='transparent';}else if(textEffect==='shadow')el.style.textShadow='3px 3px 6px rgba(0,0,0,.4)';else el.style.textShadow='none';}
@@ -4277,7 +4190,6 @@ function closeProfile(){
   stopAiWebcam();
   if(profileEffectCycleTimer){clearInterval(profileEffectCycleTimer);profileEffectCycleTimer=null;}
   currentViewingUser=null;
-  // Restore own AI model (not hide)
   if(currentUser&&currentEquippedAiModel){showAiWidget();updateAiWidgetContent();}
   else hideAiWidget();
 }
@@ -4316,7 +4228,7 @@ function closeAvatarCrop(){document.getElementById('avatarCropModal').classList.
 /* PIN ROLE */
 function togglePinRoleSelector(){const list=document.getElementById('profilePinnedRoleList');const icon=document.getElementById('pinRoleToggleIcon');const isOpen=list.classList.contains('open');if(isOpen){list.classList.remove('open');icon.innerText='▶';}else{list.classList.add('open');icon.innerText='▼';}}
 function renderPinnedRoleSelector(u,allRoles,isSelf){const box=document.getElementById('profilePinnedRoleBox');const list=document.getElementById('profilePinnedRoleList');const rolesFiltered=allRoles.filter(r=>r.emoji);if(rolesFiltered.length<2){box.style.display='none';return;}box.style.display='block';list.classList.remove('open');document.getElementById('pinRoleToggleIcon').innerText='▶';const pinnedId=u.pinnedRoleId||'';list.innerHTML=rolesFiltered.map(r=>{const realId=r.id||'';const isPinned=pinnedId===realId;const aura=r.auraEnabled?`box-shadow:0 0 8px ${r.auraColor||'#ffc107'},0 0 16px ${r.auraColor||'#ffc107'};`:'';return `<span class="pin-role-item ${isPinned?'pinned':''}" style="background:${r.bgColor};color:${r.textColor};${aura}" onclick="${isSelf?`pinRole('${realId}')`:'void(0)'}">${renderRoleEmoji(r)} ${escapeHtml(r.name)}</span>`;}).join('');}
-async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);const frameEl=document.getElementById('profileAvatarFrame');const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');if(perfMode!=='optimized'&&effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;applyAvatarBgToProfile(u.avatarBg||'');renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
+async function pinRole(roleId){if(!currentUser)return;try{await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{pinnedRoleId:roleId||'',updatedAt:Date.now()});currentUserFullData.pinnedRoleId=roleId;currentUser.pinnedRoleId=roleId;const u=currentUserFullData;stopProfileEffect();stopAvatarEffect();const effRole=getCurrentEffectRole(u);const frameEl=document.getElementById('profileAvatarFrame');const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');if(effRole&&!isBaseRole(effRole)){playProfileEffect(effRole,true);startAvatarEffect(effRole,true);}const effColors=getAvatarEffectColors(getAvatarEffect(effRole));document.getElementById('profileHeaderBg').style.borderBottom=`4px solid ${effColors[0]}`;applyAvatarBgToProfile(u.avatarBg||'');renderPinnedRoleSelector(u,getUserAllRoles(u),true);await applyUserSession(u);showToast('✅ Đã ghim vai trò!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}}
 
 /* PROFILE FX */
 let profileFxRAF=null,profileFxAutoStop=null;
@@ -4330,7 +4242,7 @@ function stopProfileEffect(){
 }
 function getProfileEffectAdjust(role){
   const isMobile=window.innerWidth<640;
-  const def={x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6};
+  const def={x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6,cooldown:10};
   if(!role)return def;
   const data=role.effectAdjust;
   if(!data)return def;
@@ -4345,11 +4257,11 @@ function getProfileEffectAdjust(role){
     scaleY:src.scaleY!==undefined?src.scaleY:def.scaleY,
     rotation:src.rotation!==undefined?src.rotation:def.rotation,
     opacity:src.opacity!==undefined?src.opacity:def.opacity,
-    duration:src.duration!==undefined?src.duration:def.duration
+    duration:src.duration!==undefined?src.duration:def.duration,
+    cooldown:src.cooldown!==undefined?src.cooldown:def.cooldown
   };
 }
-function playProfileEffect(role){
-  if(perfMode==='optimized')return;
+function playProfileEffect(role,forceFull){
   if(role&&isBaseRole(role))return;
   stopProfileEffect();
   const effectType=getAvatarEffect(role);
@@ -4359,28 +4271,24 @@ function playProfileEffect(role){
   if(effectType.startsWith('emojieff_')){
     const effId=effectType.slice(9);
     const eff=cachedEmojiEffects[effId];
-    if(eff){
-      playCustomEffectInContainer(eff,modal,role);
-      profileFxAutoStop=setTimeout(()=>stopProfileEffect(),8000);
-      return;
-    }
+    if(eff){playCustomEffectInContainer(eff,modal,role);profileFxAutoStop=setTimeout(()=>stopProfileEffect(),8000);return;}
   }
 
   const adj=getProfileEffectAdjust(role);
+  const useAdj=forceFull?Object.assign({},adj,{opacity:1,scale:Math.max(1,adj.scale)}):adj;
   const specialTypes=['hammer_slam','crown_drop','trophy','handshake_shield','spiderman','admin_special'];
   if(specialTypes.includes(effectType)){
-    playRoleSpecialAnimation(effectType,modal,adj);
-    profileFxAutoStop=setTimeout(()=>stopProfileEffect(),adj.duration*1000);
+    playRoleSpecialAnimation(effectType,modal,useAdj);
+    profileFxAutoStop=setTimeout(()=>stopProfileEffect(),useAdj.duration*1000);
     return;
   }
-  const canvas=document.getElementById('profileFxCanvas');if(!canvas)return;const box=canvas.parentElement;canvas.width=box.offsetWidth||600;canvas.height=box.offsetHeight||500;const ctx=canvas.getContext('2d');const W=()=>canvas.width,H=()=>canvas.height;let particles=[];const startTime=Date.now();const duration=adj.duration*1000;
+  const canvas=document.getElementById('profileFxCanvas');if(!canvas)return;const box=canvas.parentElement;canvas.width=box.offsetWidth||600;canvas.height=box.offsetHeight||500;const ctx=canvas.getContext('2d');const W=()=>canvas.width,H=()=>canvas.height;let particles=[];const startTime=Date.now();const duration=useAdj.duration*1000;
   const EFFECT_EMOJI={'petals_red':'🌺','hearts_sparkle':'💖','graduation':'🎓','pencils':'✏️','teacher_spark':'📚','sparkle_star':'🌟','soft_glow':'💠','starfall':'⭐','diamonds':'💎','targets':'🎯','lightning_bg':'⚡','clovers':'🍀','colors':'🎨','music_notes':'🎵','rockets':'🚀','mane':'🦁','dragon':'🐉','fox':'🦊','pandas':'🐼','halloween_bg':'🎃','christmas_bg':'🎄','skull':'💀','alien':'👽','robots':'🤖','rainbow_bg':'🌈','comets':'💫','apples':'🍎','swords':'⚔️','shield_bg':'🛡️','sparkles':'✨','default':'✨','coin_rain':'₫','petals':'🌸','snowflakes':'❄️','lucky_money':'🧧','hearts':'❤️','dark_flames':'🔥','fire_bg':'🔥','galaxy_bg':'✨'};
-  const emoji=EFFECT_EMOJI[effectType]||'✨';const colors=getAvatarEffectColors(effectType);const centerX=W()/2+adj.x,centerY=H()/2+adj.y;
-  for(let i=0;i<35;i++)particles.push({x:centerX+(Math.random()-.5)*W()*0.9,y:centerY+(Math.random()-.5)*H()*0.9,vy:(.5+Math.random()*1.5)*adj.scale,vx:(Math.random()-.5)*1*adj.scale,r:(10+Math.random()*14)*adj.scale,rot:Math.random()*Math.PI*2,rv:(Math.random()-.5)*.05,phase:Math.random()*Math.PI*2,phaseSp:.02+Math.random()*.04,alpha:(.6+Math.random()*.4)*adj.opacity,color:colors[Math.floor(Math.random()*colors.length)]});
+  const emoji=EFFECT_EMOJI[effectType]||'✨';const colors=getAvatarEffectColors(effectType);const centerX=W()/2+useAdj.x,centerY=H()/2+useAdj.y;
+  for(let i=0;i<35;i++)particles.push({x:centerX+(Math.random()-.5)*W()*0.9,y:centerY+(Math.random()-.5)*H()*0.9,vy:(.5+Math.random()*1.5)*useAdj.scale,vx:(Math.random()-.5)*1*useAdj.scale,r:(10+Math.random()*14)*useAdj.scale,rot:Math.random()*Math.PI*2,rv:(Math.random()-.5)*.05,phase:Math.random()*Math.PI*2,phaseSp:.02+Math.random()*.04,alpha:(.6+Math.random()*.4)*useAdj.opacity,color:colors[Math.floor(Math.random()*colors.length)]});
   const loop=()=>{const elapsed=Date.now()-startTime,progress=Math.min(1,elapsed/duration);ctx.clearRect(0,0,W(),H());particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=p.rv;p.phase+=p.phaseSp;if(p.y>H()+30){p.y=-30;p.x=Math.random()*W();}});particles.forEach(p=>{ctx.save();ctx.globalAlpha=.5+Math.abs(Math.sin(p.phase))*.5;ctx.font=p.r+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowBlur=10;ctx.shadowColor=p.color;ctx.fillText(emoji,p.x,p.y);ctx.restore();});ctx.globalAlpha=1;ctx.shadowBlur=0;if(progress<1)profileFxRAF=requestAnimationFrame(loop);else ctx.clearRect(0,0,W(),H());};loop();profileFxAutoStop=setTimeout(()=>stopProfileEffect(),duration);}
 
 function playRoleSpecialAnimation(effectType,container,adj){
-  if(perfMode==='optimized')return;
   if(!container)return;
   const box=document.querySelector('.profile-box')||container;
   box.querySelectorAll('.profile-special-fx').forEach(el=>el.remove());
@@ -4389,13 +4297,7 @@ function playRoleSpecialAnimation(effectType,container,adj){
   layer.className='profile-special-fx';
   layer.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:15;overflow:hidden;border-radius:24px;height:100%;width:100%';
   const dur=adj.duration*1000;
-  const mk=(cls,text,extra='')=>{const d=document.createElement('div');d.className=cls+' play';if(text)d.innerText=text;if(extra)d.style.cssText+=extra;
-    d.style.position='absolute';
-    layer.appendChild(d);
-    d.style.marginLeft=adj.x+'px';
-    d.style.marginTop=adj.y+'px';
-    d.style.opacity=adj.opacity;
-    return d;};
+  const mk=(cls,text,extra='')=>{const d=document.createElement('div');d.className=cls+' play';if(text)d.innerText=text;if(extra)d.style.cssText+=extra;d.style.position='absolute';layer.appendChild(d);d.style.marginLeft=adj.x+'px';d.style.marginTop=adj.y+'px';d.style.opacity=adj.opacity;return d;};
   if(effectType==='hammer_slam'){mk('fx-hammer-slam','🔨','position:absolute;top:0;left:50%');}
   else if(effectType==='crown_drop'||effectType==='trophy'){mk('fx-crown-halo','','position:absolute;top:50%;left:50%');mk('fx-crown-drop','👑','position:absolute;top:0;left:50%');}
   else if(effectType==='handshake_shield'){const h=document.createElement('div');h.className='fx-handshake play';h.style.cssText='position:absolute;top:50%;left:50%';h.innerHTML='<div class="hand-l">✋</div><div class="hand-r">✋</div><div class="shield-gold">🛡️</div>';h.style.marginLeft=adj.x+'px';h.style.marginTop=adj.y+'px';h.style.opacity=adj.opacity;layer.appendChild(h);}
@@ -4409,13 +4311,14 @@ function playCustomEffectInContainer(eff,container,role){
   if(!container)return;
   const box=document.querySelector('.profile-box')||container;
   const adj=getProfileEffectAdjust(role);
-  const dur=adj.duration*1000;
+  const useAdj=Object.assign({},adj,{opacity:1});
+  const dur=useAdj.duration*1000;
   const layer=document.createElement('div');
   layer.className='profile-custom-effect';
-  layer.style.cssText=`position:absolute;inset:0;pointer-events:none;z-index:16;overflow:hidden;border-radius:24px;opacity:${adj.opacity}`;
+  layer.style.cssText=`position:absolute;inset:0;pointer-events:none;z-index:16;overflow:hidden;border-radius:24px;opacity:${useAdj.opacity}`;
   box.appendChild(layer);
   const inner=document.createElement('div');
-  inner.style.cssText=`position:absolute;top:50%;left:50%;transform:translate(calc(-50% + ${adj.x}px),calc(-50% + ${adj.y}px)) scale(${adj.scale}) scaleX(${adj.scaleX||1}) scaleY(${adj.scaleY||1}) rotate(${adj.rotation}deg);transform-origin:center;display:flex;align-items:center;justify-content:center`;
+  inner.style.cssText=`position:absolute;top:50%;left:50%;transform:translate(calc(-50% + ${useAdj.x}px),calc(-50% + ${useAdj.y}px)) scale(${useAdj.scale}) scaleX(${useAdj.scaleX||1}) scaleY(${useAdj.scaleY||1}) rotate(${useAdj.rotation}deg);transform-origin:center;display:flex;align-items:center;justify-content:center`;
   const type=eff.fileType||'application/octet-stream';
   if(eff.chunks&&eff.chunks>0){
     getEmojiEffectBlobFromChunks(eff.id).then(blob=>{
@@ -4434,7 +4337,7 @@ function playCustomEffectInContainer(eff,container,role){
 
 let avatarFxRAF=null,avatarCycleTimer=null;
 function stopAvatarEffect(){if(avatarFxRAF)cancelAnimationFrame(avatarFxRAF);avatarFxRAF=null;const c=document.getElementById('avatarFxCanvas');if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}}
-function startAvatarEffect(role){stopAvatarEffect();if(!role||perfMode==='optimized')return;if(isBaseRole(role))return;const canvas=document.getElementById('avatarFxCanvas');if(!canvas)return;const size=200;canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d');const effect=getAvatarEffect(role);const colors=getAvatarEffectColors(effect);const W=()=>size,H=()=>size;let particles=[];const centerX=size/2,centerY=size/2,radius=60;const EFFECT_EMOJI={'petals_red':'🌺','hearts_sparkle':'💖','graduation':'🎓','pencils':'✏️','teacher_spark':'📚','sparkle_star':'🌟','soft_glow':'💠','starfall':'⭐','diamonds':'💎','targets':'🎯','lightning_bg':'⚡','clovers':'🍀','colors':'🎨','music_notes':'🎵','rockets':'🚀','mane':'🦁','dragon':'🐉','fox':'🦊','pandas':'🐼','halloween_bg':'🎃','christmas_bg':'🎄','skull':'💀','alien':'👽','robots':'🤖','rainbow_bg':'🌈','comets':'💫','apples':'🍎','swords':'⚔️','shield_bg':'🛡️','sparkles':'✨','default':'✨'};const emoji=EFFECT_EMOJI[effect]||'✨';for(let i=0;i<14;i++)particles.push({x:Math.random()*W(),y:Math.random()*H(),r:3+Math.random()*4,phase:Math.random()*Math.PI*2,speed:.02+Math.random()*.04,c:colors[Math.floor(Math.random()*colors.length)],emoji:emoji});const loop=()=>{ctx.clearRect(0,0,W(),H());const aura=role.auraEnabled||false;if(aura){const ringGrad=ctx.createRadialGradient(centerX,centerY,radius-8,centerX,centerY,radius+18);ringGrad.addColorStop(0,'transparent');ringGrad.addColorStop(.5,(role.auraColor||'#ffc107')+'aa');ringGrad.addColorStop(1,'transparent');ctx.fillStyle=ringGrad;ctx.beginPath();ctx.arc(centerX,centerY,radius+18,0,Math.PI*2);ctx.fill();}particles.forEach(p=>{p.phase+=p.speed;ctx.globalAlpha=.4+Math.abs(Math.sin(p.phase))*.6;ctx.font=p.r*2+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowBlur=8;ctx.shadowColor=p.c;ctx.fillText(p.emoji||'✨',p.x,p.y);});ctx.globalAlpha=1;ctx.shadowBlur=0;avatarFxRAF=requestAnimationFrame(loop);};loop();}
+function startAvatarEffect(role,forceFull){stopAvatarEffect();if(!role)return;if(isBaseRole(role))return;const canvas=document.getElementById('avatarFxCanvas');if(!canvas)return;const size=200;canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d');const effect=getAvatarEffect(role);const colors=getAvatarEffectColors(effect);const W=()=>size,H=()=>size;let particles=[];const centerX=size/2,centerY=size/2,radius=60;const EFFECT_EMOJI={'petals_red':'🌺','hearts_sparkle':'💖','graduation':'🎓','pencils':'✏️','teacher_spark':'📚','sparkle_star':'🌟','soft_glow':'💠','starfall':'⭐','diamonds':'💎','targets':'🎯','lightning_bg':'⚡','clovers':'🍀','colors':'🎨','music_notes':'🎵','rockets':'🚀','mane':'🦁','dragon':'🐉','fox':'🦊','pandas':'🐼','halloween_bg':'🎃','christmas_bg':'🎄','skull':'💀','alien':'👽','robots':'🤖','rainbow_bg':'🌈','comets':'💫','apples':'🍎','swords':'⚔️','shield_bg':'🛡️','sparkles':'✨','default':'✨'};const emoji=EFFECT_EMOJI[effect]||'✨';for(let i=0;i<14;i++)particles.push({x:Math.random()*W(),y:Math.random()*H(),r:3+Math.random()*4,phase:Math.random()*Math.PI*2,speed:.02+Math.random()*.04,c:colors[Math.floor(Math.random()*colors.length)],emoji:emoji});const loop=()=>{ctx.clearRect(0,0,W(),H());const aura=role.auraEnabled||false;if(aura){const ringGrad=ctx.createRadialGradient(centerX,centerY,radius-8,centerX,centerY,radius+18);ringGrad.addColorStop(0,'transparent');ringGrad.addColorStop(.5,(role.auraColor||'#ffc107')+'aa');ringGrad.addColorStop(1,'transparent');ctx.fillStyle=ringGrad;ctx.beginPath();ctx.arc(centerX,centerY,radius+18,0,Math.PI*2);ctx.fill();}particles.forEach(p=>{p.phase+=p.speed;ctx.globalAlpha=.4+Math.abs(Math.sin(p.phase))*.6;ctx.font=p.r*2+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowBlur=8;ctx.shadowColor=p.c;ctx.fillText(p.emoji||'✨',p.x,p.y);});ctx.globalAlpha=1;ctx.shadowBlur=0;avatarFxRAF=requestAnimationFrame(loop);};loop();}
 
 /* MEDAL PICKER */
 function openMedalPicker(){if(!currentUser||!currentViewingUser||currentViewingUser.username!==currentUser.username)return;const owned=(currentUserFullData.ownedMedals||[]);const ownedCups=getUserOwnedCups(currentUserFullData);const grid=document.getElementById('medalPickerGrid');if(!owned.length&&!ownedCups.length){grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;padding:20px 0">Bạn chưa được trao huy chương/cup nào.</p>';}else{let html='';ownedCups.forEach(cid=>{const c=cachedMedals[cid];if(!c)return;const isSel=profileSelectedCup===cid;html+=`<div class="medal-item cup-card ${isSel?'selected':''}" onclick="toggleCupSelection('${cid}',this)"><div class="medal-icon-lg">🏆</div><div class="medal-name-sm">${escapeHtml(c.name)}</div><div class="medal-tier-sm" style="color:${CUP_COLORS[c.tier]}">Cup • ${MEDAL_TIER_NAMES[c.tier]}</div></div>`;});owned.forEach(mid=>{const m=cachedMedals[mid];if(!m)return;const isSel=profileSelectedMedals.includes(mid);html+=`<div class="medal-item ${isSel?'selected':''}" onclick="toggleMedalSelection('${mid}',this)"><div class="medal-icon-lg">${MEDAL_ICONS[m.tier]||'🏅'}</div><div class="medal-name-sm">${escapeHtml(m.name)}</div><div class="medal-tier-sm">${MEDAL_TIER_NAMES[m.tier]}</div></div>`;});grid.innerHTML=html;}document.getElementById('medalPickerModal').classList.add('show');}
@@ -4595,7 +4498,7 @@ function closeRoleListPanel(){document.getElementById('roleListPanel').style.dis
 async function loadRoleList(){await loadRolesCache();const c=document.getElementById('roleListContainer');const ids=Object.keys(cachedRoles);if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:20px 0">Chưa có vai trò nào.</p>';return;}c.innerHTML=ids.map(rid=>{const r=cachedRoles[rid];const aura=r.auraEnabled?`box-shadow:0 0 10px ${r.auraColor},0 0 20px ${r.auraColor};`:'';const hasFrame=r.avatarFrame?`<span style="font-size:10px;background:#6f42c1;color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px">🖼️ FRAME</span>`:'';const hasEffect=r.effectAdjust?`<span style="font-size:10px;background:#dc3545;color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px">🎬 FX</span>`:'';return `<div class="role-card"><span class="role-preview" style="background:${r.bgColor};color:${r.textColor};${aura}">${renderRoleEmoji(r)} ${escapeHtml(r.name)}</span><div class="role-info">${r.auraEnabled?'✨ Aura':'Aura tắt'}${hasFrame}${hasEffect}</div><div class="role-actions"><button style="background:#0d6efd" onclick="openRoleEditor('${rid}')">✏️</button><button style="background:#dc3545" onclick="deleteRole('${rid}')">🗑️</button></div></div>`;}).join('');}
 function openRoleEditor(rid){
   currentEditingRoleId=rid||null;
-  const r=rid&&cachedRoles[rid]?cachedRoles[rid]:{name:'',bgColor:'#6f42c1',textColor:'#ffffff',auraEnabled:false,auraColor:'#ffc107',emoji:'👑',medalId:'',avatarFrame:'',avatarFrameOffsetX:0,avatarFrameOffsetY:0,avatarFrameScale:1,avatarFrameRotation:0,effectAdjust:{desktop:{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6}}};
+  const r=rid&&cachedRoles[rid]?cachedRoles[rid]:{name:'',bgColor:'#6f42c1',textColor:'#ffffff',auraEnabled:false,auraColor:'#ffc107',emoji:'👑',medalId:'',avatarFrame:'',avatarFrameOffsetX:0,avatarFrameOffsetY:0,avatarFrameScale:1,avatarFrameRotation:0,effectAdjust:{desktop:{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6,cooldown:10}}};
   document.getElementById('roleEditorTitle').innerText=rid?'✏️ Sửa Vai Trò':'🎭 Tạo Vai Trò Mới';
   document.getElementById('roleName').value=r.name||'';
   document.getElementById('roleBg').value=r.bgColor||'#6f42c1';
@@ -4610,7 +4513,7 @@ function openRoleEditor(rid){
   window._currentRoleAvatarFrame=r.avatarFrame||'';
   window._currentRoleAvatarFrameAdj={x:r.avatarFrameOffsetX||0,y:r.avatarFrameOffsetY||0,scale:r.avatarFrameScale||1,rotation:r.avatarFrameRotation||0,opacity:1};
   updateRoleAvatarFramePreview();
-  roleEffectAdjustState={desktop:Object.assign({x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6},(r.effectAdjust||{}).desktop||{})};
+  roleEffectAdjustState={desktop:Object.assign({x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6,cooldown:10},(r.effectAdjust||{}).desktop||{})};
   roleEffectAdjustDevice='desktop';
   document.getElementById('roleEditorModal').classList.add('show');
 }
@@ -4680,7 +4583,7 @@ function switchRoleFxDevice(device,el){
   roleEffectAdjustDevice=device;
   document.querySelectorAll('#roleFxDeviceTabs .role-device-tab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
-  const adj=roleEffectAdjustState[device]||{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6};
+  const adj=roleEffectAdjustState[device]||{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6,cooldown:10};
   document.getElementById('rfxRangeX').value=adj.x||0;
   document.getElementById('rfxRangeY').value=adj.y||0;
   document.getElementById('rfxRangeScale').value=adj.scale||1;
@@ -4689,6 +4592,7 @@ function switchRoleFxDevice(device,el){
   document.getElementById('rfxRangeRot').value=adj.rotation||0;
   document.getElementById('rfxRangeOp').value=adj.opacity!==undefined?adj.opacity:1;
   document.getElementById('rfxRangeDur').value=adj.duration||6;
+  document.getElementById('rfxRangeCooldown').value=adj.cooldown||10;
   updateRoleFxPreview();
 }
 function renderRoleFxStage(){
@@ -4699,35 +4603,17 @@ function renderRoleFxStage(){
   const header=document.getElementById('roleFxStageHeader');
   const u=currentUserFullData||{};
   const emojiHtml=renderRoleEmoji({emoji:selectedRoleEmoji});
-  if(mock){
-    if(u.avatar){mock.innerHTML=`<img src="${u.avatar}" alt="">`;}
-    else{mock.innerHTML=emojiHtml||'?';}
-  }
+  if(mock){if(u.avatar){mock.innerHTML=`<img src="${u.avatar}" alt="">`;}else{mock.innerHTML=emojiHtml||'?';}}
   const roleName=document.getElementById('roleName')?document.getElementById('roleName').value.trim():'Preview Role';
   const bgColor=document.getElementById('roleBg')?document.getElementById('roleBg').value:'#6f42c1';
   const textColor=document.getElementById('roleText')?document.getElementById('roleText').value:'#fff';
   if(nameEl)nameEl.innerText=(u.nickname||u.username||'Profile Preview');
   if(usernameEl)usernameEl.innerText='@'+(u.username||'preview_user');
   if(rolesEl)rolesEl.innerHTML=`<span class="role-fx-mock-role" style="background:${bgColor};color:${textColor}">${emojiHtml} ${escapeHtml(roleName||'Preview')}</span>`;
-  if(header){
-    if(u.avatarBg){
-      header.style.backgroundImage=`url('${u.avatarBg}')`;
-      header.style.backgroundSize='cover';
-      header.style.backgroundPosition='center';
-    }else{
-      const auraEl=document.getElementById('roleAuraEnabled');
-      const aura=auraEl?auraEl.checked:false;
-      const auraColorEl=document.getElementById('roleAuraColor');
-      const ac=auraColorEl?auraColorEl.value:'#ffc107';
-      if(aura)header.style.backgroundImage=`linear-gradient(135deg,${ac},${adjustColor(ac,-30)})`;
-      else header.style.backgroundImage=`linear-gradient(135deg,${bgColor},${adjustColor(bgColor,-30)})`;
-      header.style.backgroundSize='';
-      header.style.backgroundPosition='';
-    }
-  }
+  if(header){if(u.avatarBg){header.style.backgroundImage=`url('${u.avatarBg}')`;header.style.backgroundSize='cover';header.style.backgroundPosition='center';}else{const auraEl=document.getElementById('roleAuraEnabled');const aura=auraEl?auraEl.checked:false;const auraColorEl=document.getElementById('roleAuraColor');const ac=auraColorEl?auraColorEl.value:'#ffc107';if(aura)header.style.backgroundImage=`linear-gradient(135deg,${ac},${adjustColor(ac,-30)})`;else header.style.backgroundImage=`linear-gradient(135deg,${bgColor},${adjustColor(bgColor,-30)})`;header.style.backgroundSize='';header.style.backgroundPosition='';}}
 }
 function openRoleEffectAdjust(){
-  const d=roleEffectAdjustState.desktop||{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6};
+  const d=roleEffectAdjustState.desktop||{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6,cooldown:10};
   document.getElementById('rfxRangeX').value=d.x||0;
   document.getElementById('rfxRangeY').value=d.y||0;
   document.getElementById('rfxRangeScale').value=d.scale||1;
@@ -4736,6 +4622,7 @@ function openRoleEffectAdjust(){
   document.getElementById('rfxRangeRot').value=d.rotation||0;
   document.getElementById('rfxRangeOp').value=d.opacity!==undefined?d.opacity:1;
   document.getElementById('rfxRangeDur').value=d.duration||6;
+  document.getElementById('rfxRangeCooldown').value=d.cooldown||10;
   roleEffectAdjustDevice='desktop';
   document.querySelectorAll('#roleFxDeviceTabs .role-device-tab').forEach(t=>t.classList.remove('active'));
   const firstTab=document.querySelector('#roleFxDeviceTabs .role-device-tab');
@@ -4743,23 +4630,8 @@ function openRoleEffectAdjust(){
   renderRoleFxStage();
   updateRoleFxPreview();
   const stage=document.getElementById('roleFxStage');
-  stage.onpointerdown=(e)=>{
-    roleFxDragState.dragging=true;
-    roleFxDragState.lastX=e.clientX;
-    roleFxDragState.lastY=e.clientY;
-    try{stage.setPointerCapture(e.pointerId);}catch(err){}
-    stage.style.cursor='grabbing';
-  };
-  stage.onpointermove=(e)=>{
-    if(!roleFxDragState.dragging)return;
-    const dx=e.clientX-roleFxDragState.lastX,dy=e.clientY-roleFxDragState.lastY;
-    const xEl=document.getElementById('rfxRangeX'),yEl=document.getElementById('rfxRangeY');
-    xEl.value=Math.max(-400,Math.min(400,parseFloat(xEl.value)+dx));
-    yEl.value=Math.max(-400,Math.min(400,parseFloat(yEl.value)+dy));
-    roleFxDragState.lastX=e.clientX;
-    roleFxDragState.lastY=e.clientY;
-    updateRoleFxPreview();
-  };
+  stage.onpointerdown=(e)=>{roleFxDragState.dragging=true;roleFxDragState.lastX=e.clientX;roleFxDragState.lastY=e.clientY;try{stage.setPointerCapture(e.pointerId);}catch(err){}stage.style.cursor='grabbing';};
+  stage.onpointermove=(e)=>{if(!roleFxDragState.dragging)return;const dx=e.clientX-roleFxDragState.lastX,dy=e.clientY-roleFxDragState.lastY;const xEl=document.getElementById('rfxRangeX'),yEl=document.getElementById('rfxRangeY');xEl.value=Math.max(-400,Math.min(400,parseFloat(xEl.value)+dx));yEl.value=Math.max(-400,Math.min(400,parseFloat(yEl.value)+dy));roleFxDragState.lastX=e.clientX;roleFxDragState.lastY=e.clientY;updateRoleFxPreview();};
   const endDrag=(e)=>{roleFxDragState.dragging=false;stage.style.cursor='grab';try{stage.releasePointerCapture(e.pointerId);}catch(err){}};
   stage.onpointerup=endDrag;stage.onpointercancel=endDrag;stage.onpointerleave=endDrag;
   document.getElementById('roleEffectAdjustModal').classList.add('show');
@@ -4778,6 +4650,7 @@ function getRoleFxPreviewTransform(){
 function updateRoleFxPreview(){
   const {x,y,sc,sx,sy,rot,op}=getRoleFxPreviewTransform();
   const dur=parseFloat(document.getElementById('rfxRangeDur').value)||6;
+  const cd=parseFloat(document.getElementById('rfxRangeCooldown').value)||10;
   document.getElementById('rfxXVal').innerText=x;
   document.getElementById('rfxYVal').innerText=y;
   document.getElementById('rfxScaleVal').innerText=sc.toFixed(2);
@@ -4786,15 +4659,11 @@ function updateRoleFxPreview(){
   document.getElementById('rfxRotVal').innerText=rot;
   document.getElementById('rfxOpVal').innerText=op.toFixed(2);
   document.getElementById('rfxDurVal').innerText=dur;
+  document.getElementById('rfxCooldownVal').innerText=cd;
   const drag=document.getElementById('roleFxDraggable');
   if(drag){drag.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) scaleX(${sx}) scaleY(${sy}) rotate(${rot}deg)`;drag.style.opacity=op;}
   const layer=document.getElementById('roleFxLayer');
-  if(layer){
-    layer.querySelectorAll('.role-fx-item').forEach(el=>{
-      el.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) scaleX(${sx}) scaleY(${sy}) rotate(${rot}deg)`;
-      el.style.opacity=op;
-    });
-  }
+  if(layer){layer.querySelectorAll('.role-fx-item').forEach(el=>{el.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) scaleX(${sx}) scaleY(${sy}) rotate(${rot}deg)`;el.style.opacity=op;});}
 }
 function startRoleFxPreviewLoop(){
   stopRoleFxPreviewLoop();
@@ -4810,42 +4679,10 @@ function startRoleFxPreviewLoop(){
   if(selectedRoleEmoji&&selectedRoleEmoji.startsWith('custom_')){
     const eid=selectedRoleEmoji.slice(7);
     const ce=cachedCustomEmojis[eid];
-    if(ce){
-      if(ce.type==='emoji'){previewEmoji=ce.value;}
-      else{previewEmoji='🖼️';}
-      if(ce.effects&&ce.effects.length>0){
-        const effId=ce.effects[0];
-        const eff=cachedEmojiEffects[effId];
-        if(eff&&eff.chunks){
-          const layer=document.getElementById('roleFxLayer');
-          if(layer){
-            layer.innerHTML='';
-            const item=document.createElement('div');
-            item.className='role-fx-item';
-            getEmojiEffectBlobFromChunks(effId).then(blob=>{
-              if(!blob)return;
-              const url=URL.createObjectURL(blob);
-              const t=eff.fileType||'';
-              if(t.startsWith('image/')){
-                const img=document.createElement('img');img.src=url;img.style.cssText='max-width:400px;max-height:400px;object-fit:contain;';
-                item.appendChild(img);
-              }else if(t.startsWith('video/')){
-                const v=document.createElement('video');v.src=url;v.autoplay=true;v.muted=true;v.playsInline=true;v.loop=true;
-                v.style.cssText='max-width:400px;max-height:400px;object-fit:contain;';
-                item.appendChild(v);
-              }else{
-                item.innerHTML=`<div style="background:rgba(0,0,0,.75);color:#fff;padding:20px 30px;border-radius:12px;text-align:center;border:2px solid #1877f2"><div style="font-size:40px">${eff.icon||'✨'}</div><div>${escapeHtml(eff.name||'Hiệu ứng')}</div></div>`;
-              }
-              layer.appendChild(item);
-              updateRoleFxPreview();
-            });
-          }
-        }
-      }
+    if(ce){if(ce.type==='emoji'){previewEmoji=ce.value;}else{previewEmoji='🖼️';}
+      if(ce.effects&&ce.effects.length>0){const effId=ce.effects[0];const eff=cachedEmojiEffects[effId];if(eff&&eff.chunks){const layer=document.getElementById('roleFxLayer');if(layer){layer.innerHTML='';const item=document.createElement('div');item.className='role-fx-item';getEmojiEffectBlobFromChunks(effId).then(blob=>{if(!blob)return;const url=URL.createObjectURL(blob);const t=eff.fileType||'';if(t.startsWith('image/')){const img=document.createElement('img');img.src=url;img.style.cssText='max-width:400px;max-height:400px;object-fit:contain;';item.appendChild(img);}else if(t.startsWith('video/')){const v=document.createElement('video');v.src=url;v.autoplay=true;v.muted=true;v.playsInline=true;v.loop=true;v.style.cssText='max-width:400px;max-height:400px;object-fit:contain;';item.appendChild(v);}else{item.innerHTML=`<div style="background:rgba(0,0,0,.75);color:#fff;padding:20px 30px;border-radius:12px;text-align:center;border:2px solid #1877f2"><div style="font-size:40px">${eff.icon||'✨'}</div><div>${escapeHtml(eff.name||'Hiệu ứng')}</div></div>`;}layer.appendChild(item);updateRoleFxPreview();});}}}
     }
-  }else if(selectedRoleEmoji){
-    previewEmoji=selectedRoleEmoji;
-  }
+  }else if(selectedRoleEmoji){previewEmoji=selectedRoleEmoji;}
   const effectType=getAvatarEffect({emoji:selectedRoleEmoji});
   const EFFECT_EMOJI={'petals_red':'🌺','hearts_sparkle':'💖','graduation':'🎓','pencils':'✏️','teacher_spark':'📚','sparkle_star':'🌟','soft_glow':'💠','starfall':'⭐','diamonds':'💎','targets':'🎯','lightning_bg':'⚡','clovers':'🍀','colors':'🎨','music_notes':'🎵','rockets':'🚀','mane':'🦁','dragon':'🐉','fox':'🦊','pandas':'🐼','halloween_bg':'🎃','christmas_bg':'🎄','skull':'💀','alien':'👽','robots':'🤖','rainbow_bg':'🌈','comets':'💫','apples':'🍎','swords':'⚔️','shield_bg':'🛡️','sparkles':'✨','default':'✨','coin_rain':'₫','petals':'🌸','snowflakes':'❄️','lucky_money':'🧧','hearts':'❤️','dark_flames':'🔥','fire_bg':'🔥','galaxy_bg':'✨'};
   if(EFFECT_EMOJI[effectType])previewEmoji=EFFECT_EMOJI[effectType];
@@ -4854,18 +4691,14 @@ function startRoleFxPreviewLoop(){
   const spawnParticles=()=>{
     const {x,y,sc,sx,sy,op}=getRoleFxPreviewTransform();
     const cx=W()/2+x,cy=H()/2+y;
-    for(let i=0;i<30;i++){
-      particles.push({x:cx+(Math.random()-.5)*W()*0.9,y:cy+(Math.random()-.5)*H()*0.9,vy:(.5+Math.random()*1.5)*sc,vx:(Math.random()-.5)*1*sc,r:(10+Math.random()*14)*sc,phase:Math.random()*Math.PI*2,phaseSp:.02+Math.random()*.04,color:previewColors[Math.floor(Math.random()*previewColors.length)]});
-    }
+    for(let i=0;i<30;i++){particles.push({x:cx+(Math.random()-.5)*W()*0.9,y:cy+(Math.random()-.5)*H()*0.9,vy:(.5+Math.random()*1.5)*sc,vx:(Math.random()-.5)*1*sc,r:(10+Math.random()*14)*sc,phase:Math.random()*Math.PI*2,phaseSp:.02+Math.random()*.04,color:previewColors[Math.floor(Math.random()*previewColors.length)]});}
   };
   spawnParticles();
   const loop=()=>{
     const {op}=getRoleFxPreviewTransform();
     ctx.clearRect(0,0,W(),H());
     particles.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.phase+=p.phaseSp;if(p.y>H()+30){p.y=-30;p.x=Math.random()*W();}if(p.y<-50){p.y=H()+30;}});
-    particles.forEach(p=>{
-      ctx.save();ctx.globalAlpha=(.5+Math.abs(Math.sin(p.phase))*.5)*op;ctx.font=p.r+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowBlur=10;ctx.shadowColor=p.color;ctx.fillText(previewEmoji,p.x,p.y);ctx.restore();
-    });
+    particles.forEach(p=>{ctx.save();ctx.globalAlpha=(.5+Math.abs(Math.sin(p.phase))*.5)*op;ctx.font=p.r+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowBlur=10;ctx.shadowColor=p.color;ctx.fillText(previewEmoji,p.x,p.y);ctx.restore();});
     roleFxPreviewRAF=requestAnimationFrame(loop);
   };
   loop();
@@ -4889,6 +4722,7 @@ function resetRoleEffectAdjust(){
   document.getElementById('rfxRangeRot').value=0;
   document.getElementById('rfxRangeOp').value=1;
   document.getElementById('rfxRangeDur').value=6;
+  document.getElementById('rfxRangeCooldown').value=10;
   updateRoleFxPreview();
 }
 function smartCenterRoleFx(){
@@ -4906,7 +4740,8 @@ function saveRoleEffectAdjust(){
     scaleY:parseFloat(document.getElementById('rfxRangeScaleY').value)||1,
     rotation:parseFloat(document.getElementById('rfxRangeRot').value)||0,
     opacity:parseFloat(document.getElementById('rfxRangeOp').value)||1,
-    duration:parseFloat(document.getElementById('rfxRangeDur').value)||6
+    duration:parseFloat(document.getElementById('rfxRangeDur').value)||6,
+    cooldown:parseFloat(document.getElementById('rfxRangeCooldown').value)||10
   };
   roleEffectAdjustState.desktop=adj;
   closeRoleEffectAdjust();
@@ -5055,9 +4890,7 @@ function tryPlayGlobalAudio(){
   try{a.volume=musicVolume;}catch(e){}
   if(!a.paused)return;
   const p=a.play();
-  if(p&&p.then){p.then(()=>{pendingGlobalAudioPlay=false;if(s)s.innerText='Đang phát 🎵';
-    if(currentEquippedAiModel){tryTriggerAiReaction('music');}
-  }).catch((err)=>{pendingGlobalAudioPlay=true;if(s)s.innerText='Chờ chạm để phát 🔇';});}
+  if(p&&p.then){p.then(()=>{pendingGlobalAudioPlay=false;if(s)s.innerText='Đang phát 🎵';if(currentEquippedAiModel){tryTriggerAiReaction('music');}}).catch((err)=>{pendingGlobalAudioPlay=true;if(s)s.innerText='Chờ chạm để phát 🔇';});}
 }
 ['click','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,()=>{if(pendingGlobalAudioPlay)tryPlayGlobalAudio();},{passive:true}));
 function listenGlobalAudio(){
@@ -5068,16 +4901,7 @@ function listenGlobalAudio(){
     const a=document.getElementById('globalAudioPlayer');
     const s=document.getElementById('currentAudioStatus');
     if(!a)return;
-    if(d.volume!==undefined&&typeof d.volume==='number'){
-      if(Math.abs(musicVolume-d.volume)>0.001){
-        musicVolume=d.volume;
-        try{a.volume=musicVolume;}catch(e){}
-        const r=document.getElementById('musicVolumeRange');
-        if(r&&document.activeElement!==r)r.value=Math.round(musicVolume*100);
-        const el=document.getElementById('musicVolVal');
-        if(el)el.innerText=Math.round(musicVolume*100)+'%';
-      }
-    }
+    if(d.volume!==undefined&&typeof d.volume==='number'){if(Math.abs(musicVolume-d.volume)>0.001){musicVolume=d.volume;try{a.volume=musicVolume;}catch(e){}const r=document.getElementById('musicVolumeRange');if(r&&document.activeElement!==r)r.value=Math.round(musicVolume*100);const el=document.getElementById('musicVolVal');if(el)el.innerText=Math.round(musicVolume*100)+'%';}}
     if(d.playMode){musicPlayMode=d.playMode;const m=document.getElementById('musicPlayMode');if(m&&document.activeElement!==m)m.value=musicPlayMode;}
     if(d.playlistOrder){playlistOrder=d.playlistOrder;renderPlaylistOrder();}
     if(!d.audioKey||!d.isPlaying){pendingGlobalAudioPlay=false;if(!a.paused){a.pause();}try{a.currentTime=0;}catch(e){}if(s)s.innerText='Đang tắt';currentLoadedAudioKey=null;return;}
@@ -5535,7 +5359,7 @@ async function deleteDocByKey(key){const pass=document.getElementById('docLibrar
 async function downloadDocByKey(key){const s=await window.dbGet(window.dbChild(window.dbRef,'documents/'+key));if(!s.exists())return;const d=s.val();const a=document.createElement('a');a.href=d.data;a.download=d.name||'file';document.body.appendChild(a);a.click();document.body.removeChild(a);showCenterSquareToast('⬇️','Đã tải!',d.name,'success');}
 function openDocumentStudentModal(){const m=document.getElementById('documentLibraryStudentModal');m.classList.add('show');const c=document.getElementById('docStudentListContainer');c.innerHTML='<p style="text-align:center">Đang tải...</p>';window.dbGet(window.dbChild(window.dbRef,'documents')).then(s=>{const list=s.val()||{};const keys=Object.keys(list);if(!keys.length){c.innerHTML='<p style="text-align:center;color:#888">Chưa có tài liệu</p>';return;}keys.sort((a,b)=>(list[b].uploadedAt||0)-(list[a].uploadedAt||0));c.innerHTML=keys.map(k=>{const d=list[k];return `<div class="doc-item"><div class="doc-info"><span class="doc-icon">${getDocIcon(d.name,d.type)}</span><div style="flex:1;min-width:0"><div class="doc-name">${escapeHtml(d.name||'')}</div><div class="doc-meta">${formatDocSize(d.size)}</div></div></div><div class="doc-actions"><button onclick="downloadDocByKey('${k}')" style="background:#1877f2">⬇️</button></div></div>`;}).join('');});}
 function closeDocumentStudentModal(){document.getElementById('documentLibraryStudentModal').classList.remove('show');}
-function switchSubModule(id){document.querySelectorAll('.sub-module-box').forEach(el=>el.style.display='none');const el=document.getElementById(id);if(el)el.style.display='block';if(id==='quickPracticeCreate'&&!document.getElementById('qpQuestionsContainer').children.length)addQpQuestionItem();if(id==='smartExamCreate'&&(!smartExamQuestions||!smartExamQuestions.length)){document.getElementById('smartExamPreviewContainer').style.display='none';document.getElementById('smartExamConfigBox').style.display='none';document.getElementById('smartExamProgress').style.display='none';document.getElementById('smartExamAnswerUploadBox').style.display='none';}if(id==='documentLibrary'&&!docLibraryListener)loadDocLibrary();if(id==='aiExamCreate'){/* nothing extra */}}
+function switchSubModule(id){document.querySelectorAll('.sub-module-box').forEach(el=>el.style.display='none');const el=document.getElementById(id);if(el)el.style.display='block';if(id==='quickPracticeCreate'&&!document.getElementById('qpQuestionsContainer').children.length)addQpQuestionItem();if(id==='smartExamCreate'&&(!smartExamQuestions||!smartExamQuestions.length)){document.getElementById('smartExamPreviewContainer').style.display='none';document.getElementById('smartExamConfigBox').style.display='none';document.getElementById('smartExamProgress').style.display='none';document.getElementById('smartExamAnswerUploadBox').style.display='none';}if(id==='documentLibrary'&&!docLibraryListener)loadDocLibrary();}
 function toggleExamCreationType(){const t=document.getElementById('examType').value;document.getElementById('pdfUploadSection').style.display=t==='pdf'?'block':'none';document.getElementById('imageUploadSection').style.display=t==='image'?'block':'none';}
 function toggleAdvExamOptions(){document.getElementById('advExamOptionsPanel').style.display=document.getElementById('advExamOptionsToggle').checked?'block':'none';}
 function toggleAdvTimerInput(){document.getElementById('advTimerInputBox').style.display=document.getElementById('advEnableTimer').checked?'block':'none';}
@@ -5764,11 +5588,7 @@ async function generateAIAnalysisAsync(q){
     prompt+='Nội dung: '+(q.content||q.question||'')+'\n';
     if(q.options&&q.options.length)prompt+='Đáp án: '+q.options.map(o=>o.label+'. '+(o.text||'')).join(' | ')+'\n';
     if(q.correctAnswer)prompt+='Đáp án đúng: '+q.correctAnswer+'\n';
-    const res=await fetch(cachedAiConfig.endpoint,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
-      body:JSON.stringify({model:cachedAiConfig.model||'gpt-4o-mini',messages:[{role:'user',content:prompt}],temperature:0.5,max_tokens:500})
-    });
+    const res=await fetch(cachedAiConfig.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},body:JSON.stringify({model:cachedAiConfig.model||'gpt-4o-mini',messages:[{role:'user',content:prompt}],temperature:0.5,max_tokens:500})});
     if(res.ok){const d=await res.json();const t=d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;if(t)return t.trim().replace(/\n/g,'<br>');}
   }catch(e){}
   return generateAIAnalysis(q);
@@ -6074,10 +5894,7 @@ function showAiWidget(){
 }
 function hideAiWidget(){
   const w=document.getElementById('aiModelWidget');
-  if(w){
-    w.classList.add('ai-hidden');
-    w.style.pointerEvents='none';
-  }
+  if(w){w.classList.add('ai-hidden');w.style.pointerEvents='none';}
   aiWidgetVisible=false;
   aiWidgetDragState.dragging=false;
   const body=document.getElementById('aiModelBody');
@@ -6097,9 +5914,8 @@ async function updateAiWidgetContent(){
     const imgFile=md.files.find(f=>f.type&&f.type.startsWith('image/'));
     if(imgFile)imgData=imgFile.data||imgFile.chunk||'';
   }
-  // Biểu cảm — có thể thay bằng webcam
+  // Biểu cảm qua webcam
   if(imgData){
-    const isWebcamActive=aiWebcamActive&&aiWebcamStream;
     const transform=`scale(${1+(aiWebcamMouthOpenness*0.06)}) translateY(${-aiWebcamMouthOpenness*3}px) rotate(${aiWebcamHeadTilt*0.15}deg)`;
     content.innerHTML=`<img src="${imgData}" alt="" style="transform:${transform};transition:transform .1s">`;
   }
@@ -6108,28 +5924,16 @@ async function updateAiWidgetContent(){
     if(currentAiModelFrame){
       frameLayer.style.backgroundImage=`url('${currentAiModelFrame}')`;
       const adj=currentAiModelFrameAdjust||{x:0,y:0,scale:1,rotation:0,opacity:1};
-      frameLayer.style.position='absolute';
-      frameLayer.style.inset='auto';
-      frameLayer.style.left='50%';
-      frameLayer.style.top='50%';
-      frameLayer.style.width='120%';
-      frameLayer.style.height='120%';
+      frameLayer.style.position='absolute';frameLayer.style.inset='auto';frameLayer.style.left='50%';frameLayer.style.top='50%';frameLayer.style.width='120%';frameLayer.style.height='120%';
       frameLayer.style.transform=`translate(calc(-50% + ${adj.x||0}px),calc(-50% + ${adj.y||0}px)) scale(${adj.scale||1}) rotate(${adj.rotation||0}deg)`;
       frameLayer.style.opacity=adj.opacity!==undefined?adj.opacity:1;
-    }else{
-      frameLayer.style.backgroundImage='';
-      frameLayer.style.transform='';
-      frameLayer.style.opacity=1;
-    }
+    }else{frameLayer.style.backgroundImage='';frameLayer.style.transform='';frameLayer.style.opacity=1;}
   }
 }
 function applyAiWidgetPosition(){
   const w=document.getElementById('aiModelWidget');if(!w)return;
-  if(aiWidgetPos.left!==null&&aiWidgetPos.top!==null){
-    w.style.left=aiWidgetPos.left+'px';
-    w.style.top=aiWidgetPos.top+'px';
-    w.style.right='auto';w.style.bottom='auto';
-  }else{w.style.left='';w.style.top='';w.style.right='20px';w.style.bottom='20px';}
+  if(aiWidgetPos.left!==null&&aiWidgetPos.top!==null){w.style.left=aiWidgetPos.left+'px';w.style.top=aiWidgetPos.top+'px';w.style.right='auto';w.style.bottom='auto';}
+  else{w.style.left='';w.style.top='';w.style.right='20px';w.style.bottom='20px';}
   w.style.transform=`scale(${aiWidgetScale})`;
   w.style.transformOrigin='top left';
 }
@@ -6148,7 +5952,6 @@ function bindAiWidgetInteractions(){
     const parentRect=widget.offsetParent?widget.offsetParent.getBoundingClientRect():{left:0,top:0};
     aiWidgetDragState.startLeft=rect.left-parentRect.left;
     aiWidgetDragState.startTop=rect.top-parentRect.top;
-    // drag count for random
     if(Date.now()-aiDragWindowStart>3000){aiDragCountInWindow=0;aiDragWindowStart=Date.now();}
     aiDragCountInWindow++;
     if(aiDragCountInWindow===6&&currentEquippedAiModel){showAiFloatBubbleByEvent('drag');}
@@ -6159,16 +5962,11 @@ function bindAiWidgetInteractions(){
     if(!aiWidgetDragState.dragging)return;
     const dx=e.clientX-aiWidgetDragState.startX;
     const dy=e.clientY-aiWidgetDragState.startY;
-    // Adjust for scale since transform-origin is top-left
     aiWidgetPos.left=aiWidgetDragState.startLeft+dx;
     aiWidgetPos.top=aiWidgetDragState.startTop+dy;
     applyAiWidgetPosition();
   };
-  const endDrag=(e)=>{
-    aiWidgetDragState.dragging=false;
-    try{body.releasePointerCapture(e.pointerId);}catch(err){}
-    body.style.cursor='grab';
-  };
+  const endDrag=(e)=>{aiWidgetDragState.dragging=false;try{body.releasePointerCapture(e.pointerId);}catch(err){}body.style.cursor='grab';};
   body.onpointerup=endDrag;body.onpointercancel=endDrag;
   widget.onwheel=(e)=>{
     if(e.target.closest('.ai-chat-bubble'))return;
@@ -6176,11 +5974,7 @@ function bindAiWidgetInteractions(){
     const delta=e.deltaY<0?0.1:-0.1;
     const prevScale=aiWidgetScale;
     aiWidgetScale=Math.max(0.4,Math.min(3,aiWidgetScale+delta));
-    // Check "big" trigger
-    if(aiWidgetScale>2.2&&prevScale<=2.2&&currentEquippedAiModel&&Date.now()-aiLastBigWarnAt>10000){
-      aiLastBigWarnAt=Date.now();
-      showAiFloatBubbleByEvent('big');
-    }
+    if(aiWidgetScale>2.2&&prevScale<=2.2&&currentEquippedAiModel&&Date.now()-aiLastBigWarnAt>10000){aiLastBigWarnAt=Date.now();showAiFloatBubbleByEvent('big');}
     applyAiWidgetPosition();
   };
   body.ondblclick=(e)=>{
@@ -6190,24 +5984,15 @@ function bindAiWidgetInteractions(){
     toggleAiChat();
   };
   let touchStartDist=0;
-  body.addEventListener('touchstart',(e)=>{
-    if(e.touches.length===2){
-      touchStartDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-    }
-  },{passive:true});
+  body.addEventListener('touchstart',(e)=>{if(e.touches.length===2){touchStartDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}},{passive:true});
   body.addEventListener('touchmove',(e)=>{
     if(e.touches.length===2&&touchStartDist){
       const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
       const ratio=d/touchStartDist;
       const prevScale=aiWidgetScale;
       aiWidgetScale=Math.max(0.4,Math.min(3,aiWidgetScale*ratio));
-      if(aiWidgetScale>2.2&&prevScale<=2.2&&currentEquippedAiModel&&Date.now()-aiLastBigWarnAt>10000){
-        aiLastBigWarnAt=Date.now();
-        showAiFloatBubbleByEvent('big');
-      }
-      touchStartDist=d;
-      applyAiWidgetPosition();
-      e.preventDefault();
+      if(aiWidgetScale>2.2&&prevScale<=2.2&&currentEquippedAiModel&&Date.now()-aiLastBigWarnAt>10000){aiLastBigWarnAt=Date.now();showAiFloatBubbleByEvent('big');}
+      touchStartDist=d;applyAiWidgetPosition();e.preventDefault();
     }
   },{passive:false});
   body.addEventListener('touchend',()=>{touchStartDist=0;},{passive:true});
@@ -6216,7 +6001,6 @@ function hideAiModelWithAnimation(){
   const w=document.getElementById('aiModelWidget');
   const content=document.getElementById('aiModelContent');
   if(!w||!content)return;
-  // Immediately disable interactions
   w.style.pointerEvents='none';
   aiWidgetDragState.dragging=false;
   const name=currentEquippedAiModel?(currentEquippedAiModel.modelData.name||'Auro'):'Auro';
@@ -6267,11 +6051,10 @@ function addAiChatMessage(role,text){
   aiChatHistory.push({role,text,time:Date.now()});
 }
 
-/* AI FLOAT BUBBLE (chat on head) */
+/* AI FLOAT BUBBLE */
 let aiBubbleTimer=null;
 function showAiFloatBubble(text,durationSec=7){
   const b=document.getElementById('aiFloatBubble');if(!b)return;
-  // Nếu có bubble đang hiện, mờ nhanh trong 2.5s trước khi hiện cái mới
   if(b.classList.contains('show')){
     b.classList.remove('show');
     b.classList.add('fast-fade');
@@ -6328,10 +6111,7 @@ function toggleAiScreenRead(){
     if(ind)ind.classList.add('active');
     showCenterSquareToast('👁️','AI đã bật đọc màn hình',(currentEquippedAiModel&&currentEquippedAiModel.modelData.name||'Auro')+' sẽ đọc nội dung trang để trả lời','success',2600);
     addAiChatMessage('ai','👁️ Mình đã bật đọc màn hình. Bạn có thể hỏi về nội dung đang hiển thị trên trang nhé!');
-    // Nếu đang trong phòng thi → tự động đọc & trả lời đáp án
-    if(isExamActive&&currentExamData){
-      setTimeout(()=>autoAnalyzeExamForAi(),500);
-    }
+    if(isExamActive&&currentExamData){setTimeout(()=>autoAnalyzeExamForAi(),500);}
   }else{
     if(btn)btn.classList.remove('active');
     if(ind)ind.classList.remove('active');
@@ -6372,7 +6152,6 @@ function captureScreenContext(){
 }
 async function autoAnalyzeExamForAi(){
   if(!isExamActive||!currentExamData)return;
-  // Đọc đáp án từ currentExamData (không cần API)
   const answers=[];
   currentExamData.questions.forEach(q=>{
     let ans='';
@@ -6383,7 +6162,7 @@ async function autoAnalyzeExamForAi(){
     if(q.explanation)expl=' | Giải thích: '+q.explanation.slice(0,150);
     answers.push(`Câu ${q.id}: ${ans}${expl}`);
   });
-  const answerText=answers.slice(0,10).join('\n'); // Giới hạn 10 câu để tránh quá tải
+  const answerText=answers.slice(0,10).join('\n');
   const msg=`📝 Mình đọc đề rồi! Đáp án tham khảo:\n${answerText}\n\n(Bấm 👁️ để tắt nhé)`;
   showAiFloatBubble(msg.slice(0,240),15);
   addAiChatMessage('ai',msg);
@@ -6399,16 +6178,13 @@ async function sendAiChatMessage(){
   if(aiScreenReadActive)screenCtx=captureScreenContext();
   const reply=await getAiReplyWithContext(text,screenCtx);
   addAiChatMessage('ai',reply);
-  // Hiện bubble tóm tắt
   showAiFloatBubble(reply.slice(0,150)+(reply.length>150?'...':''),7);
 }
 async function getAiReplyWithContext(text,screenCtx){
   const name=currentEquippedAiModel?(currentEquippedAiModel.modelData.name||'Auro'):'Auro';
-  // Nếu đang trong phòng thi & đọc màn hình → ưu tiên dùng đáp án offline (không cần API)
   if(isExamActive&&currentExamData&&aiScreenReadActive){
     const t=text.toLowerCase();
     if(/đáp án|câu \d+|giải|cách làm|bài \d+/.test(t)){
-      // Trả lời từ dữ liệu offline
       let reply='📝 Mình lấy từ đề:\n';
       const qMatch=t.match(/câu\s*(\d+)/);
       if(qMatch){
@@ -6426,19 +6202,13 @@ async function getAiReplyWithContext(text,screenCtx){
   if(cachedAiConfig&&cachedAiConfig.enabled&&cachedAiConfig.endpoint&&cachedAiConfig.apiKey){
     try{
       let systemPrompt=cachedAiConfig.systemPrompt||`Bạn là ${name} - trợ lý AI thân thiện, thông minh. Trả lời ngắn gọn, tự nhiên.`;
-      if(screenCtx){
-        systemPrompt+='\n\n👁️ BẠN ĐANG ĐỌC ĐƯỢC NỘI DUNG MÀN HÌNH HIỆN TẠI:\n'+screenCtx+'\n\nHãy dùng thông tin này để trả lời chính xác câu hỏi của user.';
-      }
+      if(screenCtx){systemPrompt+='\n\n👁️ BẠN ĐANG ĐỌC ĐƯỢC NỘI DUNG MÀN HÌNH HIỆN TẠI:\n'+screenCtx+'\n\nHãy dùng thông tin này để trả lời chính xác câu hỏi của user.';}
       const res=await fetch(cachedAiConfig.endpoint,{
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
         body:JSON.stringify({
           model:cachedAiConfig.model||'gpt-4o-mini',
-          messages:[
-            {role:'system',content:systemPrompt},
-            ...aiChatHistory.slice(-8).map(m=>({role:m.role,content:m.text})),
-            {role:'user',content:text}
-          ],
+          messages:[{role:'system',content:systemPrompt},...aiChatHistory.slice(-8).map(m=>({role:m.role,content:m.text})),{role:'user',content:text}],
           temperature:parseFloat(cachedAiConfig.temperature)||0.8,
           max_tokens:parseInt(cachedAiConfig.maxTokens)||800
         })
@@ -6449,9 +6219,10 @@ async function getAiReplyWithContext(text,screenCtx){
         if(reply)return reply.trim();
       }else{
         const errTxt=await res.text();
-        console.warn('AI API error:',res.status,errTxt);
+        // Hiển thị lỗi rõ ràng cho user biết
+        showToast('⚠️ API lỗi '+res.status+': '+errTxt.slice(0,120),'warn');
       }
-    }catch(e){console.warn('AI fetch error',e);}
+    }catch(e){showToast('⚠️ Lỗi kết nối AI: '+(e.message||e),'warn');}
   }
   return getOfflineAiReply(text,name);
 }
@@ -6490,7 +6261,7 @@ async function tryTriggerAiReaction(type){
   showAiFloatBubble(msg,7);
 }
 
-/* ============ AI WEBCAM (VTUBER) ============ */
+/* ============ AI WEBCAM (VTUBER) — dùng MediaPipe FaceMesh để phân tích biểu cảm khuôn mặt ============ */
 async function toggleAiWebcam(){
   if(aiWebcamActive){stopAiWebcam();return;}
   try{
@@ -6500,7 +6271,7 @@ async function toggleAiWebcam(){
     if(video){video.srcObject=aiWebcamStream;video.classList.add('active');}
     const btn=document.getElementById('aiWebcamBtn');if(btn)btn.classList.add('active');
     showCenterSquareToast('📷','Đã bật webcam','Model sẽ theo biểu cảm khuôn mặt bạn','success',2600);
-    startWebcamFaceTracking();
+    await startWebcamFaceTracking();
   }catch(e){
     showToast('❌ Không truy cập được camera: '+(e.message||e),'error');
   }
@@ -6511,11 +6282,28 @@ function stopAiWebcam(){
   const video=document.getElementById('aiWebcamVideo');if(video){video.srcObject=null;video.classList.remove('active');}
   const btn=document.getElementById('aiWebcamBtn');if(btn)btn.classList.remove('active');
   if(aiWebcamRAF){cancelAnimationFrame(aiWebcamRAF);aiWebcamRAF=null;}
-  aiWebcamMouthOpenness=0;aiWebcamHeadTilt=0;
+  if(aiFaceMeshInstance){try{aiFaceMeshInstance.close();}catch(e){}aiFaceMeshInstance=null;}
+  if(aiFaceMeshCamera){try{aiFaceMeshCamera.stop();}catch(e){}aiFaceMeshCamera=null;}
+  aiWebcamMouthOpenness=0;aiWebcamHeadTilt=0;aiWebcamEyeBlink=0;
 }
-function startWebcamFaceTracking(){
+async function startWebcamFaceTracking(){
   const video=document.getElementById('aiWebcamVideo');
   if(!video)return;
+  // Thử dùng MediaPipe FaceMesh để phân tích khuôn mặt
+  if(typeof FaceMesh!=='undefined'&&typeof Camera!=='undefined'){
+    try{
+      aiFaceMeshInstance=new FaceMesh({locateFile:(file)=>`https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`});
+      aiFaceMeshInstance.setOptions({maxNumFaces:1,refineLandmarks:true,minDetectionConfidence:0.5,minTrackingConfidence:0.5});
+      aiFaceMeshInstance.onResults(onFaceMeshResults);
+      if(typeof Camera!=='undefined'){
+        aiFaceMeshCamera=new Camera(video,{onFrame:async()=>{if(aiWebcamActive&&aiFaceMeshInstance){try{await aiFaceMeshInstance.send({image:video});}catch(e){}}},width:320,height:240});
+        aiFaceMeshCamera.start();
+        console.log('✅ MediaPipe FaceMesh started');
+        return;
+      }
+    }catch(e){console.warn('MediaPipe failed, using fallback',e);aiFaceMeshInstance=null;}
+  }
+  // Fallback: pixel-based tracking
   const canvas=document.createElement('canvas');
   const ctx=canvas.getContext('2d',{willReadFrequently:true});
   let lastFrame=0;
@@ -6529,36 +6317,26 @@ function startWebcamFaceTracking(){
         canvas.width=w;canvas.height=h;
         ctx.drawImage(video,0,0,w,h);
         const data=ctx.getImageData(0,0,w,h).data;
-        // Simple motion/mouth detection: average brightness in lower-middle region (mouth area)
         let mouthRegion=0,mouthCount=0;
         let upperRegion=0,upperCount=0;
         for(let y=Math.floor(h*0.6);y<Math.floor(h*0.85);y++){
           for(let x=Math.floor(w*0.35);x<Math.floor(w*0.65);x++){
-            const i=(y*w+x)*4;
-            mouthRegion+=(data[i]+data[i+1]+data[i+2])/3;
-            mouthCount++;
+            const i=(y*w+x)*4;mouthRegion+=(data[i]+data[i+1]+data[i+2])/3;mouthCount++;
           }
         }
         for(let y=Math.floor(h*0.2);y<Math.floor(h*0.4);y++){
           for(let x=Math.floor(w*0.35);x<Math.floor(w*0.65);x++){
-            const i=(y*w+x)*4;
-            upperRegion+=(data[i]+data[i+1]+data[i+2])/3;
-            upperCount++;
+            const i=(y*w+x)*4;upperRegion+=(data[i]+data[i+1]+data[i+2])/3;upperCount++;
           }
         }
         const mouthAvg=mouthRegion/Math.max(1,mouthCount);
         const upperAvg=upperRegion/Math.max(1,upperCount);
         const diff=mouthAvg-upperAvg;
         aiWebcamMouthOpenness=Math.max(0,Math.min(10,diff/6));
-        // Head tilt: compare left/right brightness
         let leftB=0,rightB=0;
         for(let y=0;y<h;y++){
-          for(let x=0;x<Math.floor(w*0.3);x++){
-            const i=(y*w+x)*4;leftB+=(data[i]+data[i+1]+data[i+2])/3;
-          }
-          for(let x=Math.floor(w*0.7);x<w;x++){
-            const i=(y*w+x)*4;rightB+=(data[i]+data[i+1]+data[i+2])/3;
-          }
+          for(let x=0;x<Math.floor(w*0.3);x++){const i=(y*w+x)*4;leftB+=(data[i]+data[i+1]+data[i+2])/3;}
+          for(let x=Math.floor(w*0.7);x<w;x++){const i=(y*w+x)*4;rightB+=(data[i]+data[i+1]+data[i+2])/3;}
         }
         const tiltRaw=(rightB-leftB)/Math.max(1,h*w*0.3);
         aiWebcamHeadTilt=Math.max(-15,Math.min(15,tiltRaw*50));
@@ -6569,49 +6347,59 @@ function startWebcamFaceTracking(){
   };
   loop();
 }
+function onFaceMeshResults(results){
+  if(!results||!results.multiFaceLandmarks||!results.multiFaceLandmarks.length)return;
+  const lm=results.multiFaceLandmarks[0];
+  // MediaPipe FaceMesh landmarks
+  // Mouth: 13 (upper lip), 14 (lower lip)
+  // Left eye: 159 (upper), 145 (lower); Right eye: 386, 374
+  try{
+    const upper=lm[13],lower=lm[14];
+    const mouthDist=Math.hypot((upper.x-lower.x),(upper.y-lower.y));
+    // Normalize by face height: use landmark 10 (top) and 152 (chin bottom)
+    const faceTop=lm[10],faceBottom=lm[152];
+    const faceH=Math.hypot(faceTop.x-faceBottom.x,faceTop.y-faceBottom.y)||1;
+    const mouthNorm=mouthDist/faceH;
+    // map to 0-10
+    aiWebcamMouthOpenness=Math.max(0,Math.min(10,(mouthNorm-0.008)*400));
+    // Eye blink: left eye vertical distance
+    const lTop=lm[159],lBot=lm[145],rTop=lm[386],rBot=lm[374];
+    const lEye=Math.hypot(lTop.x-lBot.x,lTop.y-lBot.y)/faceH;
+    const rEye=Math.hypot(rTop.x-rBot.x,rTop.y-rBot.y)/faceH;
+    const eyeAvg=(lEye+rEye)/2;
+    // Normal eye ~0.03, closed eye ~0.005 => blink
+    const blinkNow=eyeAvg<0.012;
+    if(blinkNow&&!aiFaceMeshBlinkState){aiFaceMeshLastBlinkAt=Date.now();}
+    aiFaceMeshBlinkState=blinkNow;
+    aiWebcamEyeBlink=blinkNow?1:0;
+    // Head tilt: use eye line angle
+    const lEyeC=lm[33],rEyeC=lm[263];
+    const dx=rEyeC.x-lEyeC.x,dy=rEyeC.y-lEyeC.y;
+    const angle=Math.atan2(dy,dx)*180/Math.PI;
+    aiWebcamHeadTilt=Math.max(-30,Math.min(30,angle*1.5));
+    updateAiWidgetContent();
+  }catch(e){console.warn('face parse err',e);}
+}
 
 /* ============ RANDOM CHAT CONFIG (Supreme) ============ */
 function loadAiRandomChatConfigUI(){
   window.dbGet(window.dbChild(window.dbRef,'system/ai_random_chat')).then(s=>{
-    if(s.exists()){
-      aiRandomChatConfig=Object.assign({},DEFAULT_AI_RANDOM_CHAT,s.val()||{});
-    }else{
-      aiRandomChatConfig=JSON.parse(JSON.stringify(DEFAULT_AI_RANDOM_CHAT));
-    }
+    if(s.exists()){aiRandomChatConfig=Object.assign({},DEFAULT_AI_RANDOM_CHAT,s.val()||{});}
+    else{aiRandomChatConfig=JSON.parse(JSON.stringify(DEFAULT_AI_RANDOM_CHAT));}
     const el=document.getElementById('aiRandomChatInterval');if(el&&document.activeElement!==el)el.value=aiRandomChatConfig.interval||60;
     const listEl=document.getElementById('aiRandomChatList');if(listEl&&document.activeElement!==listEl)listEl.value=(aiRandomChatConfig.random||[]).join('\n');
-    const evEl=document.getElementById('aiEventChatList');if(evEl&&document.activeElement!==evEl){
-      const lines=[];
-      Object.keys(aiRandomChatConfig.events||{}).forEach(k=>{(aiRandomChatConfig.events[k]||[]).forEach(v=>lines.push(k+'|'+v));});
-      evEl.value=lines.join('\n');
-    }
+    const evEl=document.getElementById('aiEventChatList');if(evEl&&document.activeElement!==evEl){const lines=[];Object.keys(aiRandomChatConfig.events||{}).forEach(k=>{(aiRandomChatConfig.events[k]||[]).forEach(v=>lines.push(k+'|'+v));});evEl.value=lines.join('\n');}
     startAiRandomChatTimer();
-  }).catch(()=>{
-    aiRandomChatConfig=JSON.parse(JSON.stringify(DEFAULT_AI_RANDOM_CHAT));
-  });
+  }).catch(()=>{aiRandomChatConfig=JSON.parse(JSON.stringify(DEFAULT_AI_RANDOM_CHAT));});
 }
 async function saveAiRandomChatConfig(){
   const interval=Math.max(15,Math.min(600,parseInt(document.getElementById('aiRandomChatInterval').value)||60));
   const random=(document.getElementById('aiRandomChatList').value||'').split('\n').map(s=>s.trim()).filter(s=>s);
   const eventsLines=(document.getElementById('aiEventChatList').value||'').split('\n').map(s=>s.trim()).filter(s=>s);
   const events={};
-  eventsLines.forEach(line=>{
-    const idx=line.indexOf('|');
-    if(idx<0)return;
-    const k=line.slice(0,idx).trim().toLowerCase();
-    const v=line.slice(idx+1).trim();
-    if(!k||!v)return;
-    if(!events[k])events[k]=[];
-    events[k].push(v);
-  });
+  eventsLines.forEach(line=>{const idx=line.indexOf('|');if(idx<0)return;const k=line.slice(0,idx).trim().toLowerCase();const v=line.slice(idx+1).trim();if(!k||!v)return;if(!events[k])events[k]=[];events[k].push(v);});
   const cfg={interval,random,events};
-  try{
-    await window.dbSet(window.ref(window.db,'system/ai_random_chat'),cfg);
-    aiRandomChatConfig=cfg;
-    const st=document.getElementById('aiRandomChatStatus');if(st){st.style.background='#d1e7dd';st.style.color='#0f5132';st.innerHTML='✅ Đã lưu! Khoảng '+interval+'s, '+random.length+' câu ngẫu nhiên, '+eventsLines.length+' câu sự kiện.';}
-    startAiRandomChatTimer();
-    showCenterSquareToast('✅','Đã lưu!','Cấu hình chat AI ngẫu nhiên','success',2600);
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  try{await window.dbSet(window.ref(window.db,'system/ai_random_chat'),cfg);aiRandomChatConfig=cfg;const st=document.getElementById('aiRandomChatStatus');if(st){st.style.background='#d1e7dd';st.style.color='#0f5132';st.innerHTML='✅ Đã lưu! Khoảng '+interval+'s, '+random.length+' câu ngẫu nhiên, '+eventsLines.length+' câu sự kiện.';}startAiRandomChatTimer();showCenterSquareToast('✅','Đã lưu!','Cấu hình chat AI ngẫu nhiên','success',2600);}catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function resetAiRandomChatConfig(){
   if(!await customConfirm('Reset về cấu hình mặc định?',{icon:'🔄'}))return;
@@ -6634,34 +6422,21 @@ function testAiRandomChat(){
   showAiFloatBubble(txt,7);
 }
 
-/* ============ SYSTEM DOCS COLLECTION (tự động tổng hợp tài liệu) ============ */
+/* ============ SYSTEM DOCS ============ */
 function generateSystemDocs(){
-  // Sinh tài liệu từ dữ liệu mẫu (mô phỏng lấy từ internet)
-  // Tổng ~100 tài liệu: 6 môn × 3 lớp × ~5-6 tài liệu
   const docs=[];
   const subjects=['toan','ly','hoa','sinh','su','van'];
   const grades=[10,11,12];
   let idx=0;
   subjects.forEach(sub=>{
     grades.forEach(g=>{
-      const topics=SYSTEM_DOC_TOPICS[sub][g]||[];
-      // Ưu tiên lớp 12 nhiều hơn
+      const topics=REAL_DOC_CONTENT[sub][g]||[];
       const docCount=(g===12)?6:5;
       for(let i=0;i<docCount;i++){
         const topic=topics[i%topics.length];
         const type=SYSTEM_DOC_TYPES[(i+sub.length)%SYSTEM_DOC_TYPES.length];
         idx++;
-        docs.push({
-          id:'sysdoc_'+idx,
-          title:`${SUBJECT_NAMES[sub]} ${g} — ${topic} (${SYSTEM_DOC_TYPE_LABELS[type]})`,
-          subject:sub,
-          grade:String(g),
-          topic:topic,
-          type:type,
-          desc:`Tài liệu ${SYSTEM_DOC_TYPE_LABELS[type]} môn ${SUBJECT_NAMES[sub]} lớp ${g}, chủ đề: ${topic}. Tổng hợp tự động từ các nguồn trực tuyến uy tín.`,
-          source:'auto-system',
-          createdAt:Date.now()+idx
-        });
+        docs.push({id:'sysdoc_'+idx,title:`${SUBJECT_NAMES[sub]} ${g} — ${topic} (${SYSTEM_DOC_TYPE_LABELS[type]})`,subject:sub,grade:String(g),topic:topic,type:type,desc:`Tài liệu ${SYSTEM_DOC_TYPE_LABELS[type]} môn ${SUBJECT_NAMES[sub]} lớp ${g}, chủ đề: ${topic}. Nội dung đầy đủ có thể xem và tải xuống.`,source:'auto-system',content:generateRealDocContent(sub,g,topic,type),createdAt:Date.now()+idx});
       }
     });
   });
@@ -6669,22 +6444,14 @@ function generateSystemDocs(){
 }
 async function collectSystemDocs(replaceMode=true){
   if(!configTabUnlocked&&userHasSupremeAccess!=='partner'&&!userHasSupremeAccess){showToast('❌ Không có quyền!','error');return;}
-  if(replaceMode){
-    if(!await customConfirm('Thay thế toàn bộ tài liệu hệ thống hiện có bằng bộ mới?',{icon:'🔄',title:'Xác nhận',okClass:'warn'}))return;
-  }
+  if(replaceMode){if(!await customConfirm('Thay thế toàn bộ tài liệu hệ thống hiện có bằng bộ mới?',{icon:'🔄',title:'Xác nhận',okClass:'warn'}))return;}
   try{
     const existing=Object.values(systemDocsData||{});
     const existingTitles=new Set(existing.map(d=>d&&d.title||''));
     const newDocs=generateSystemDocs().filter(d=>!existingTitles.has(d.title));
     if(!newDocs.length){showCenterSquareToast('ℹ️','Không có gì mới','Tất cả tài liệu đã tồn tại','info',3000);return;}
-    if(replaceMode){
-      // Xóa tài liệu hệ thống cũ
-      const keys=Object.keys(systemDocsData||{});
-      for(const k of keys){try{await window.dbRemove(window.ref(window.db,`system/system_docs/${k}`));}catch(e){}}
-    }
-    for(const d of newDocs){
-      await window.dbSet(window.ref(window.db,`system/system_docs/${d.id}`),d);
-    }
+    if(replaceMode){const keys=Object.keys(systemDocsData||{});for(const k of keys){try{await window.dbRemove(window.ref(window.db,`system/system_docs/${k}`));}catch(e){}}}
+    for(const d of newDocs){await window.dbSet(window.ref(window.db,`system/system_docs/${d.id}`),d);}
     showCenterSquareToast('✅','Đã tổng hợp!',`Thêm ${newDocs.length} tài liệu hệ thống`,'success',4000);
     loadSystemDocs();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
@@ -6723,7 +6490,7 @@ function renderSysDocs(){
   if(type)list=list.filter(d=>d.type===type);
   if(search)list=list.filter(d=>(d.title||'').toLowerCase().includes(search)||(d.topic||'').toLowerCase().includes(search));
   if(!list.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Không có tài liệu nào phù hợp</p>';return;}
-  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#dc3545" onclick="deleteSystemDocById('${d.id}')">🗑️ Xóa</button></div></div>`;}).join('');
+  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#0d6efd" onclick="viewSystemDoc('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="downloadSystemDoc('${d.id}')">⬇️ Tải</button><button style="background:#dc3545" onclick="deleteSystemDocById('${d.id}')">🗑️ Xóa</button></div></div>`;}).join('');
 }
 async function deleteSystemDocById(id){
   if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}
@@ -6743,20 +6510,38 @@ function renderStudentDocsFiltered(){
   if(search)list=list.filter(d=>(d.title||'').toLowerCase().includes(search)||(d.topic||'').toLowerCase().includes(search));
   const cnt=document.getElementById('docsTotalCount');if(cnt)cnt.innerText=list.length;
   if(!list.length){c.innerHTML='<p style="text-align:center;color:#888;grid-column:1/-1;padding:20px">Không có tài liệu nào phù hợp</p>';return;}
-  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div></div>`;}).join('');
+  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#0d6efd" onclick="viewSystemDoc('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="downloadSystemDoc('${d.id}')">⬇️ Tải</button></div></div>`;}).join('');
+}
+function viewSystemDoc(id){
+  const d=systemDocsData[id];if(!d){showToast('Không tìm thấy!','error');return;}
+  currentViewingDocId=id;
+  currentViewingDocContent=d.content||generateRealDocContent(d.subject,d.grade,d.topic,d.type);
+  currentViewingDocName=(d.title||'tai-lieu')+'.txt';
+  document.getElementById('docViewerTitle').innerText='📄 '+(d.title||'Tài liệu');
+  document.getElementById('docViewerContent').innerText=currentViewingDocContent;
+  document.getElementById('docViewerModal').classList.add('show');
+}
+function closeDocViewer(){document.getElementById('docViewerModal').classList.remove('show');currentViewingDocId=null;currentViewingDocContent='';}
+function downloadCurrentDoc(){
+  if(!currentViewingDocContent){showToast('Không có nội dung','warn');return;}
+  const blob=new Blob([currentViewingDocContent],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=currentViewingDocName||'tai-lieu.txt';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  showToast('📥 Đã tải!','success');
+}
+function downloadSystemDoc(id){
+  const d=systemDocsData[id];if(!d){showToast('Không tìm thấy!','error');return;}
+  currentViewingDocContent=d.content||generateRealDocContent(d.subject,d.grade,d.topic,d.type);
+  currentViewingDocName=(d.title||'tai-lieu').replace(/[^a-zA-Z0-9_\-\sÀ-ỹ]/g,'')+'.txt';
+  downloadCurrentDoc();
 }
 
 /* ============ AI SETUP CONFIG ============ */
 async function loadAiSetupConfigUI(){
-  try{
-    const s=await window.dbGet(window.dbChild(window.dbRef,'system/ai_config'));
-    cachedAiConfig=s.exists()?s.val():null;
-  }catch(e){cachedAiConfig=null;}
-  // Nếu chưa có config, dùng default Gemini
-  if(!cachedAiConfig){
-    cachedAiConfig=Object.assign({},DEFAULT_AI_CONFIG);
-    try{await window.dbSet(window.ref(window.db,'system/ai_config'),cachedAiConfig);}catch(e){}
-  }
+  try{const s=await window.dbGet(window.dbChild(window.dbRef,'system/ai_config'));cachedAiConfig=s.exists()?s.val():null;}catch(e){cachedAiConfig=null;}
+  if(!cachedAiConfig){cachedAiConfig=Object.assign({},DEFAULT_AI_CONFIG);try{await window.dbSet(window.ref(window.db,'system/ai_config'),cachedAiConfig);}catch(e){}}
   updateAiSetupStatusUI();
   if(cachedAiConfig){
     const set=(id,v)=>{const e=document.getElementById(id);if(e&&document.activeElement!==e)e.value=v||'';};
@@ -6768,17 +6553,7 @@ async function loadAiSetupConfigUI(){
     setTimeout(()=>{onAiProviderChange();},100);
     set('aiSetupEndpoint',cachedAiConfig.endpoint);
     set('aiSetupApiKey',cachedAiConfig.apiKey);
-    setTimeout(()=>{
-      const sel=document.getElementById('aiSetupModelSelect');
-      if(sel&&cachedAiConfig.model){
-        const hasOpt=Array.from(sel.options).some(o=>o.value===cachedAiConfig.model);
-        if(hasOpt)sel.value=cachedAiConfig.model;
-        else{
-          const cust=document.getElementById('aiSetupModelCustom');
-          if(cust)cust.value=cachedAiConfig.model;
-        }
-      }
-    },150);
+    setTimeout(()=>{const sel=document.getElementById('aiSetupModelSelect');if(sel&&cachedAiConfig.model){const hasOpt=Array.from(sel.options).some(o=>o.value===cachedAiConfig.model);if(hasOpt)sel.value=cachedAiConfig.model;else{const cust=document.getElementById('aiSetupModelCustom');if(cust)cust.value=cachedAiConfig.model;}}},150);
     set('aiSetupModelCustom',cachedAiConfig.model);
     set('aiSetupSystemPrompt',cachedAiConfig.systemPrompt);
     set('aiSetupTemperature',cachedAiConfig.temperature);
@@ -6806,20 +6581,7 @@ async function saveAiSetupConfig(){
   const apiKey=document.getElementById('aiSetupApiKey').value.trim();
   let model=getCurrentAiModelName();
   if(!model&&p)model=p.defaultModel;
-  const cfg={
-    enabled:document.getElementById('aiSetupEnabled').checked,
-    provider:provider,
-    endpoint:endpoint,
-    apiKey:apiKey,
-    model:model,
-    systemPrompt:document.getElementById('aiSetupSystemPrompt').value.trim(),
-    temperature:parseFloat(document.getElementById('aiSetupTemperature').value)||0.8,
-    maxTokens:parseInt(document.getElementById('aiSetupMaxTokens').value)||800,
-    greeting:document.getElementById('aiSetupGreeting').value.trim(),
-    screenReadEnabled:document.getElementById('aiSetupScreenRead')?document.getElementById('aiSetupScreenRead').checked:false,
-    visionEnabled:document.getElementById('aiSetupVisionEnabled')?document.getElementById('aiSetupVisionEnabled').checked:true,
-    updatedAt:Date.now()
-  };
+  const cfg={enabled:document.getElementById('aiSetupEnabled').checked,provider:provider,endpoint:endpoint,apiKey:apiKey,model:model,systemPrompt:document.getElementById('aiSetupSystemPrompt').value.trim(),temperature:parseFloat(document.getElementById('aiSetupTemperature').value)||0.8,maxTokens:parseInt(document.getElementById('aiSetupMaxTokens').value)||800,greeting:document.getElementById('aiSetupGreeting').value.trim(),screenReadEnabled:document.getElementById('aiSetupScreenRead')?document.getElementById('aiSetupScreenRead').checked:false,visionEnabled:document.getElementById('aiSetupVisionEnabled')?document.getElementById('aiSetupVisionEnabled').checked:true,updatedAt:Date.now()};
   if(cfg.enabled&&(!cfg.endpoint||!cfg.apiKey||!cfg.model)){showToast('❌ Điền đủ API key + Model!','error');return;}
   try{
     await window.dbSet(window.ref(window.db,'system/ai_config'),cfg);
@@ -6836,18 +6598,9 @@ async function testAiSetupConfig(){
   if(!endpoint||!apiKey||!model){showToast('❌ Nhập API key + chọn model!','error');return;}
   try{
     showToast('⏳ Đang test...','info');
-    const res=await fetch(endpoint,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-      body:JSON.stringify({model,messages:[{role:'user',content:'Xin chào! Hãy trả lời ngắn gọn: bạn tên gì?'}],temperature:0.7,max_tokens:100})
-    });
-    if(res.ok){
-      const d=await res.json();
-      const txt=(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||JSON.stringify(d).slice(0,200);
-      showCenterSquareToast('✅','API OK!',txt.slice(0,200),'success',8000);
-    }else{
-      showCenterSquareToast('❌','HTTP '+(res.status),(await res.text()).slice(0,200),'error',8000);
-    }
+    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model,messages:[{role:'user',content:'Xin chào! Hãy trả lời ngắn gọn: bạn tên gì?'}],temperature:0.7,max_tokens:100})});
+    if(res.ok){const d=await res.json();const txt=(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||JSON.stringify(d).slice(0,200);showCenterSquareToast('✅','API OK!',txt.slice(0,200),'success',8000);}
+    else{showCenterSquareToast('❌','HTTP '+(res.status),(await res.text()).slice(0,200),'error',8000);}
   }catch(e){showCenterSquareToast('❌','Lỗi',e.message||'',"error",6000);}
 }
 async function clearAiSetupConfig(){
@@ -6863,7 +6616,6 @@ async function resetAiSetupToDefaultGemini(){
     await window.dbSet(window.ref(window.db,'system/ai_config'),cfg);
     cachedAiConfig=cfg;
     updateAiSetupStatusUI();
-    // Cập nhật UI
     const pel=document.getElementById('aiSetupProvider');if(pel)pel.value='google';
     onAiProviderChange();
     const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
@@ -6882,14 +6634,8 @@ function openAiModelPicker(){
   const equipped=currentUserFullData.equippedAiModel||'';
   let html='';
   html+=`<div class="ai-model-picker-item mp-none ${!equipped?'selected':''}" onclick="selectAiModelPick('')"><div class="mp-emoji">🚫</div><div class="mp-name">Không trang bị</div><div class="mp-meta">Ẩn model</div></div>`;
-  owned.forEach(id=>{
-    const m=cachedAiModels[id];if(!m)return;
-    const isSel=equipped===id;
-    html+=`<div class="ai-model-picker-item ${isSel?'selected':''}" onclick="selectAiModelPick('${id}')"><div class="mp-emoji">🤖</div><div class="mp-name">${escapeHtml(m.name||'Auro')}</div><div class="mp-meta">${(m.files||[]).length} file</div></div>`;
-  });
-  if(!owned.length){
-    html+=`<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;padding:14px 0;font-size:12px">Bạn chưa được cấp model AI nào. Liên hệ Admin.</p>`;
-  }
+  owned.forEach(id=>{const m=cachedAiModels[id];if(!m)return;const isSel=equipped===id;html+=`<div class="ai-model-picker-item ${isSel?'selected':''}" onclick="selectAiModelPick('${id}')"><div class="mp-emoji">🤖</div><div class="mp-name">${escapeHtml(m.name||'Auro')}</div><div class="mp-meta">${(m.files||[]).length} file</div></div>`;});
+  if(!owned.length){html+=`<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;padding:14px 0;font-size:12px">Bạn chưa được cấp model AI nào. Liên hệ Admin.</p>`;}
   grid.innerHTML=html;
   document.getElementById('aiModelPickerModal').classList.add('show');
 }
@@ -6903,15 +6649,8 @@ async function selectAiModelPick(modelId){
     if(modelId&&cachedAiModels[modelId]){
       try{
         const fs=await window.dbGet(window.dbChild(window.dbRef,`users/${currentUser.username}/aiModelFrames/${modelId}`));
-        if(fs.exists()){
-          const fd=fs.val();
-          currentAiModelFrame=fd.frame||'';
-          currentAiModelFrameAdjust={x:fd.x||0,y:fd.y||0,scale:fd.scale||1,rotation:fd.rotation||0,opacity:fd.opacity!==undefined?fd.opacity:1};
-          await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{aiModelFrame:currentAiModelFrame,aiModelFrameAdjust:currentAiModelFrameAdjust});
-        }else{
-          currentAiModelFrame='';
-          currentAiModelFrameAdjust={x:0,y:0,scale:1,rotation:0,opacity:1};
-        }
+        if(fs.exists()){const fd=fs.val();currentAiModelFrame=fd.frame||'';currentAiModelFrameAdjust={x:fd.x||0,y:fd.y||0,scale:fd.scale||1,rotation:fd.rotation||0,opacity:fd.opacity!==undefined?fd.opacity:1};await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{aiModelFrame:currentAiModelFrame,aiModelFrameAdjust:currentAiModelFrameAdjust});}
+        else{currentAiModelFrame='';currentAiModelFrameAdjust={x:0,y:0,scale:1,rotation:0,opacity:1};}
       }catch(e){}
       currentEquippedAiModel={modelId,modelData:cachedAiModels[modelId]};
       showAiWidget();
@@ -6926,10 +6665,7 @@ async function selectAiModelPick(modelId){
       showCenterSquareToast('🚫','Đã tắt model','','info',2600);
     }
     const aiInfo=document.getElementById('profileAiModelInfo');
-    if(aiInfo){
-      if(modelId&&cachedAiModels[modelId])aiInfo.innerHTML=`🤖 Đang trang bị: <b>${escapeHtml(cachedAiModels[modelId].name)}</b>`;
-      else aiInfo.innerHTML='Chưa có model nào được trang bị.';
-    }
+    if(aiInfo){if(modelId&&cachedAiModels[modelId])aiInfo.innerHTML=`🤖 Đang trang bị: <b>${escapeHtml(cachedAiModels[modelId].name)}</b>`;else aiInfo.innerHTML='Chưa có model nào được trang bị.';}
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 function closeAiModelPicker(){document.getElementById('aiModelPickerModal').classList.remove('show');}
@@ -6940,11 +6676,8 @@ function openAiFrameAdjuster(){
   aiFrameAdjustState={frame:currentAiModelFrame||'',x:(currentAiModelFrameAdjust||{}).x||0,y:(currentAiModelFrameAdjust||{}).y||0,scale:(currentAiModelFrameAdjust||{}).scale||1,rotation:(currentAiModelFrameAdjust||{}).rotation||0,opacity:(currentAiModelFrameAdjust||{}).opacity!==undefined?currentAiModelFrameAdjust.opacity:1};
   const frameEl=document.getElementById('aiFrameAdjustFrameEl');
   const modelEl=document.getElementById('aiFrameAdjustModel');
-  if(currentEquippedAiModel&&currentEquippedAiModel.modelData){
-    const md=currentEquippedAiModel.modelData;
-    if(md.imageData){modelEl.innerHTML=`<img src="${md.imageData}" alt="">`;}
-    else{modelEl.innerText='🤖';}
-  }else{modelEl.innerText='🤖';}
+  if(currentEquippedAiModel&&currentEquippedAiModel.modelData){const md=currentEquippedAiModel.modelData;if(md.imageData){modelEl.innerHTML=`<img src="${md.imageData}" alt="">`;}else{modelEl.innerText='🤖';}}
+  else{modelEl.innerText='🤖';}
   if(aiFrameAdjustState.frame){frameEl.style.backgroundImage=`url('${aiFrameAdjustState.frame}')`;}
   else frameEl.style.backgroundImage='';
   document.getElementById('aiFrameRangeX').value=aiFrameAdjustState.x;
@@ -6954,18 +6687,8 @@ function openAiFrameAdjuster(){
   document.getElementById('aiFrameRangeOp').value=aiFrameAdjustState.opacity;
   updateAiFrameAdjust();
   const frameEl2=document.getElementById('aiFrameAdjustFrameEl');
-  frameEl2.onpointerdown=(e)=>{
-    aiFrameDragState.dragging=true;aiFrameDragState.lastX=e.clientX;aiFrameDragState.lastY=e.clientY;
-    try{frameEl2.setPointerCapture(e.pointerId);}catch(err){}
-  };
-  frameEl2.onpointermove=(e)=>{
-    if(!aiFrameDragState.dragging)return;
-    const dx=e.clientX-aiFrameDragState.lastX,dy=e.clientY-aiFrameDragState.lastY;
-    document.getElementById('aiFrameRangeX').value=Math.max(-150,Math.min(150,parseFloat(document.getElementById('aiFrameRangeX').value)+dx));
-    document.getElementById('aiFrameRangeY').value=Math.max(-150,Math.min(150,parseFloat(document.getElementById('aiFrameRangeY').value)+dy));
-    aiFrameDragState.lastX=e.clientX;aiFrameDragState.lastY=e.clientY;
-    updateAiFrameAdjust();
-  };
+  frameEl2.onpointerdown=(e)=>{aiFrameDragState.dragging=true;aiFrameDragState.lastX=e.clientX;aiFrameDragState.lastY=e.clientY;try{frameEl2.setPointerCapture(e.pointerId);}catch(err){}};
+  frameEl2.onpointermove=(e)=>{if(!aiFrameDragState.dragging)return;const dx=e.clientX-aiFrameDragState.lastX,dy=e.clientY-aiFrameDragState.lastY;document.getElementById('aiFrameRangeX').value=Math.max(-150,Math.min(150,parseFloat(document.getElementById('aiFrameRangeX').value)+dx));document.getElementById('aiFrameRangeY').value=Math.max(-150,Math.min(150,parseFloat(document.getElementById('aiFrameRangeY').value)+dy));aiFrameDragState.lastX=e.clientX;aiFrameDragState.lastY=e.clientY;updateAiFrameAdjust();};
   const endDrag=(e)=>{aiFrameDragState.dragging=false;try{frameEl2.releasePointerCapture(e.pointerId);}catch(err){}};
   frameEl2.onpointerup=endDrag;frameEl2.onpointercancel=endDrag;
   document.getElementById('aiFrameAdjustModal').classList.add('show');
@@ -6996,29 +6719,13 @@ function resetAiFrameAdjust(){
 async function handleAiFrameUpload(input){
   if(!input.files||!input.files[0])return;
   const f=input.files[0];
-  try{
-    const d=await fileToBase64(f);
-    aiFrameAdjustState.frame=d;
-    const el=document.getElementById('aiFrameAdjustFrameEl');
-    el.style.backgroundImage=`url('${d}')`;
-    showToast('✅ Đã tải khung!','success');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  try{const d=await fileToBase64(f);aiFrameAdjustState.frame=d;const el=document.getElementById('aiFrameAdjustFrameEl');el.style.backgroundImage=`url('${d}')`;showToast('✅ Đã tải khung!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}
   input.value='';
 }
-function removeAiFrame(){
-  aiFrameAdjustState.frame='';
-  document.getElementById('aiFrameAdjustFrameEl').style.backgroundImage='';
-  showToast('🗑️ Đã xóa khung!','warn');
-}
+function removeAiFrame(){aiFrameAdjustState.frame='';document.getElementById('aiFrameAdjustFrameEl').style.backgroundImage='';showToast('🗑️ Đã xóa khung!','warn');}
 async function saveAiFrameAdjust(){
   if(!currentUser)return;
-  const adj={
-    x:parseFloat(document.getElementById('aiFrameRangeX').value)||0,
-    y:parseFloat(document.getElementById('aiFrameRangeY').value)||0,
-    scale:parseFloat(document.getElementById('aiFrameRangeScale').value)||1,
-    rotation:parseFloat(document.getElementById('aiFrameRangeRot').value)||0,
-    opacity:parseFloat(document.getElementById('aiFrameRangeOp').value)||1
-  };
+  const adj={x:parseFloat(document.getElementById('aiFrameRangeX').value)||0,y:parseFloat(document.getElementById('aiFrameRangeY').value)||0,scale:parseFloat(document.getElementById('aiFrameRangeScale').value)||1,rotation:parseFloat(document.getElementById('aiFrameRangeRot').value)||0,opacity:parseFloat(document.getElementById('aiFrameRangeOp').value)||1};
   try{
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{aiModelFrame:aiFrameAdjustState.frame||'',aiModelFrameAdjust:adj,updatedAt:Date.now()});
     currentAiModelFrame=aiFrameAdjustState.frame||'';
@@ -7038,17 +6745,13 @@ function loadSupremeAiFrameModelList(){
   const owned=currentUserFullData.aiModels||[];
   const cur=sel.value;
   let html='<option value="">-- Chọn model --</option>';
-  if(owned.length){
-    owned.forEach(id=>{const m=cachedAiModels[id];if(!m)return;html+=`<option value="${id}">${escapeHtml(m.name||'Auro')}</option>`;});
-  }else{
-    html='<option value="">(Bạn chưa được cấp model nào)</option>';
-  }
+  if(owned.length){owned.forEach(id=>{const m=cachedAiModels[id];if(!m)return;html+=`<option value="${id}">${escapeHtml(m.name||'Auro')}</option>`;});}
+  else{html='<option value="">(Bạn chưa được cấp model nào)</option>';}
   sel.innerHTML=html;
   if(cur&&owned.includes(cur))sel.value=cur;
 }
 async function onSupremeModelFrameSelect(){
-  const sel=document.getElementById('aiFrameSupremeModelSelect');
-  if(!sel)return;
+  const sel=document.getElementById('aiFrameSupremeModelSelect');if(!sel)return;
   const modelId=sel.value;
   supremeAiFrameSelectedModelId=modelId;
   const modelPreview=document.getElementById('aiFrameSupremeModelPreview');
@@ -7058,35 +6761,18 @@ async function onSupremeModelFrameSelect(){
     else modelPreview.innerText='🤖';
     try{
       const s=await window.dbGet(window.dbChild(window.dbRef,`users/${currentUser.username}/aiModelFrames/${modelId}`));
-      if(s.exists()){
-        const d=s.val();
-        supremeAiFrameState={frame:d.frame||'',x:d.x||0,y:d.y||0,scale:d.scale||1,rotation:d.rotation||0,opacity:d.opacity!==undefined?d.opacity:1};
-      }else{
-        if(currentUserFullData.equippedAiModel===modelId&&currentAiModelFrame){
-          supremeAiFrameState={frame:currentAiModelFrame,x:currentAiModelFrameAdjust.x||0,y:currentAiModelFrameAdjust.y||0,scale:currentAiModelFrameAdjust.scale||1,rotation:currentAiModelFrameAdjust.rotation||0,opacity:currentAiModelFrameAdjust.opacity!==undefined?currentAiModelFrameAdjust.opacity:1};
-        }else{
-          supremeAiFrameState={frame:'',x:0,y:0,scale:1,rotation:0,opacity:1};
-        }
-      }
+      if(s.exists()){const d=s.val();supremeAiFrameState={frame:d.frame||'',x:d.x||0,y:d.y||0,scale:d.scale||1,rotation:d.rotation||0,opacity:d.opacity!==undefined?d.opacity:1};}
+      else{if(currentUserFullData.equippedAiModel===modelId&&currentAiModelFrame){supremeAiFrameState={frame:currentAiModelFrame,x:currentAiModelFrameAdjust.x||0,y:currentAiModelFrameAdjust.y||0,scale:currentAiModelFrameAdjust.scale||1,rotation:currentAiModelFrameAdjust.rotation||0,opacity:currentAiModelFrameAdjust.opacity!==undefined?currentAiModelFrameAdjust.opacity:1};}else{supremeAiFrameState={frame:'',x:0,y:0,scale:1,rotation:0,opacity:1};}}
     }catch(e){supremeAiFrameState={frame:'',x:0,y:0,scale:1,rotation:0,opacity:1};}
-  }else{
-    modelPreview.innerText='🤖';
-    supremeAiFrameState={frame:'',x:0,y:0,scale:1,rotation:0,opacity:1};
-  }
+  }else{modelPreview.innerText='🤖';supremeAiFrameState={frame:'',x:0,y:0,scale:1,rotation:0,opacity:1};}
   applySupremeAiFrameState();
 }
 function applySupremeAiFrameState(){
   const s=supremeAiFrameState;
-  const el=document.getElementById('aiFrameSupremeFrameEl');
-  if(!el)return;
-  if(s.frame){el.style.backgroundImage=`url('${s.frame}')`;}
-  else{el.style.backgroundImage='';}
+  const el=document.getElementById('aiFrameSupremeFrameEl');if(!el)return;
+  if(s.frame){el.style.backgroundImage=`url('${s.frame}')`;}else{el.style.backgroundImage='';}
   const setSafe=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
-  setSafe('aiFrameSupremeRangeX',s.x);
-  setSafe('aiFrameSupremeRangeY',s.y);
-  setSafe('aiFrameSupremeRangeScale',s.scale);
-  setSafe('aiFrameSupremeRangeRot',s.rotation);
-  setSafe('aiFrameSupremeRangeOp',s.opacity);
+  setSafe('aiFrameSupremeRangeX',s.x);setSafe('aiFrameSupremeRangeY',s.y);setSafe('aiFrameSupremeRangeScale',s.scale);setSafe('aiFrameSupremeRangeRot',s.rotation);setSafe('aiFrameSupremeRangeOp',s.opacity);
   updateSupremeAiFrameAdjust();
   bindSupremeAiFrameDrag();
 }
@@ -7094,25 +6780,8 @@ function bindSupremeAiFrameDrag(){
   const el=document.getElementById('aiFrameSupremeFrameEl');
   if(!el||el.dataset.boundDrag==='1')return;
   el.dataset.boundDrag='1';
-  el.onpointerdown=(e)=>{
-    if(!supremeAiFrameSelectedModelId)return;
-    supremeAiFrameDragState.dragging=true;
-    supremeAiFrameDragState.lastX=e.clientX;
-    supremeAiFrameDragState.lastY=e.clientY;
-    try{el.setPointerCapture(e.pointerId);}catch(err){}
-  };
-  el.onpointermove=(e)=>{
-    if(!supremeAiFrameDragState.dragging)return;
-    const dx=e.clientX-supremeAiFrameDragState.lastX;
-    const dy=e.clientY-supremeAiFrameDragState.lastY;
-    const xEl=document.getElementById('aiFrameSupremeRangeX');
-    const yEl=document.getElementById('aiFrameSupremeRangeY');
-    xEl.value=Math.max(-150,Math.min(150,parseFloat(xEl.value)+dx));
-    yEl.value=Math.max(-150,Math.min(150,parseFloat(yEl.value)+dy));
-    supremeAiFrameDragState.lastX=e.clientX;
-    supremeAiFrameDragState.lastY=e.clientY;
-    updateSupremeAiFrameAdjust();
-  };
+  el.onpointerdown=(e)=>{if(!supremeAiFrameSelectedModelId)return;supremeAiFrameDragState.dragging=true;supremeAiFrameDragState.lastX=e.clientX;supremeAiFrameDragState.lastY=e.clientY;try{el.setPointerCapture(e.pointerId);}catch(err){}};
+  el.onpointermove=(e)=>{if(!supremeAiFrameDragState.dragging)return;const dx=e.clientX-supremeAiFrameDragState.lastX;const dy=e.clientY-supremeAiFrameDragState.lastY;const xEl=document.getElementById('aiFrameSupremeRangeX');const yEl=document.getElementById('aiFrameSupremeRangeY');xEl.value=Math.max(-150,Math.min(150,parseFloat(xEl.value)+dx));yEl.value=Math.max(-150,Math.min(150,parseFloat(yEl.value)+dy));supremeAiFrameDragState.lastX=e.clientX;supremeAiFrameDragState.lastY=e.clientY;updateSupremeAiFrameAdjust();};
   const endDrag=(e)=>{supremeAiFrameDragState.dragging=false;try{el.releasePointerCapture(e.pointerId);}catch(err){}};
   el.onpointerup=endDrag;el.onpointercancel=endDrag;
 }
@@ -7124,21 +6793,10 @@ function updateSupremeAiFrameAdjust(){
   const opVal=parseFloat(document.getElementById('aiFrameSupremeRangeOp').value);
   const op=isNaN(opVal)?1:opVal;
   const setTxt=(id,v)=>{const e=document.getElementById(id);if(e)e.innerText=v;};
-  setTxt('aiFrameSupremeXVal',x);
-  setTxt('aiFrameSupremeYVal',y);
-  setTxt('aiFrameSupremeScaleVal',sc.toFixed(2));
-  setTxt('aiFrameSupremeRotVal',rot);
-  setTxt('aiFrameSupremeOpVal',op.toFixed(2));
-  supremeAiFrameState.x=x;
-  supremeAiFrameState.y=y;
-  supremeAiFrameState.scale=sc;
-  supremeAiFrameState.rotation=rot;
-  supremeAiFrameState.opacity=op;
+  setTxt('aiFrameSupremeXVal',x);setTxt('aiFrameSupremeYVal',y);setTxt('aiFrameSupremeScaleVal',sc.toFixed(2));setTxt('aiFrameSupremeRotVal',rot);setTxt('aiFrameSupremeOpVal',op.toFixed(2));
+  supremeAiFrameState.x=x;supremeAiFrameState.y=y;supremeAiFrameState.scale=sc;supremeAiFrameState.rotation=rot;supremeAiFrameState.opacity=op;
   const el=document.getElementById('aiFrameSupremeFrameEl');
-  if(el){
-    el.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) rotate(${rot}deg)`;
-    el.style.opacity=op;
-  }
+  if(el){el.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) rotate(${rot}deg)`;el.style.opacity=op;}
 }
 function resetSupremeAiFrameAdjust(){
   document.getElementById('aiFrameSupremeRangeX').value=0;
@@ -7154,13 +6812,7 @@ async function handleSupremeAiFrameUpload(input){
   const f=input.files[0];
   if(!f.type||!f.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh!','error');input.value='';return;}
   if(f.size>5*1024*1024){showToast('Ảnh tối đa 5MB!','error');input.value='';return;}
-  try{
-    const d=await fileToBase64(f);
-    supremeAiFrameState.frame=d;
-    const el=document.getElementById('aiFrameSupremeFrameEl');
-    el.style.backgroundImage=`url('${d}')`;
-    showToast('✅ Đã tải khung!','success');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  try{const d=await fileToBase64(f);supremeAiFrameState.frame=d;const el=document.getElementById('aiFrameSupremeFrameEl');el.style.backgroundImage=`url('${d}')`;showToast('✅ Đã tải khung!','success');}catch(e){showToast('❌ '+(e.message||e),'error');}
   input.value='';
 }
 function removeSupremeAiFrame(){
@@ -7178,11 +6830,7 @@ async function saveSupremeAiFrameAdjust(){
   try{
     await window.dbSet(window.ref(window.db,`users/${currentUser.username}/aiModelFrames/${supremeAiFrameSelectedModelId}`),data);
     if(currentUserFullData&&currentUserFullData.equippedAiModel===supremeAiFrameSelectedModelId){
-      await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{
-        aiModelFrame:data.frame,
-        aiModelFrameAdjust:{x:data.x,y:data.y,scale:data.scale,rotation:data.rotation,opacity:data.opacity},
-        updatedAt:Date.now()
-      });
+      await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{aiModelFrame:data.frame,aiModelFrameAdjust:{x:data.x,y:data.y,scale:data.scale,rotation:data.rotation,opacity:data.opacity},updatedAt:Date.now()});
       currentAiModelFrame=data.frame;
       currentAiModelFrameAdjust={x:data.x,y:data.y,scale:data.scale,rotation:data.rotation,opacity:data.opacity};
       updateAiWidgetContent();
@@ -7256,10 +6904,7 @@ function loadAiModelsList(){
   const c=document.getElementById('aiModelListContainer');
   if(!c)return;
   const ids=Object.keys(cachedAiModels||{});
-  if(!ids.length){
-    c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:10px 0">Chưa có model nào. Hãy tạo model mới ở trên!</p>';
-    return;
-  }
+  if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:10px 0">Chưa có model nào. Hãy tạo model mới ở trên!</p>';return;}
   c.innerHTML=ids.map(id=>{
     const m=cachedAiModels[id];
     if(!m)return '';
@@ -7284,14 +6929,8 @@ function loadAiModelsList(){
 }
 function copyAiModelId(id){
   try{
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(id).then(()=>showCenterSquareToast('📋','Đã copy!',id,'success',2000));
-    }else{
-      const ta=document.createElement('textarea');
-      ta.value=id;document.body.appendChild(ta);ta.select();
-      document.execCommand('copy');document.body.removeChild(ta);
-      showCenterSquareToast('📋','Đã copy!',id,'success',2000);
-    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(id).then(()=>showCenterSquareToast('📋','Đã copy!',id,'success',2000));}
+    else{const ta=document.createElement('textarea');ta.value=id;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showCenterSquareToast('📋','Đã copy!',id,'success',2000);}
   }catch(e){showToast('Không copy được, ID là: '+id,'info');}
 }
 function loadAiModelsForGrant(){
@@ -7299,10 +6938,7 @@ function loadAiModelsForGrant(){
   if(!sel)return;
   const cur=sel.value;
   const ids=Object.keys(cachedAiModels||{});
-  if(!ids.length){
-    sel.innerHTML='<option value="">Chưa có model nào</option>';
-    return;
-  }
+  if(!ids.length){sel.innerHTML='<option value="">Chưa có model nào</option>';return;}
   sel.innerHTML='<option value="">-- Chọn model --</option>'+ids.map(id=>`<option value="${id}">${escapeHtml(cachedAiModels[id].name||'Auro')} (${id})</option>`).join('');
   if(cur&&ids.includes(cur))sel.value=cur;
 }
@@ -7312,28 +6948,20 @@ async function deleteAiModelById(id){
     await window.dbRemove(window.ref(window.db,`system/ai_models/${id}`));
     await window.dbRemove(window.ref(window.db,`system/ai_model_chunks/${id}`));
     delete cachedAiModels[id];
-    // Gỡ khỏi user đang trang bị
     for(const uname of Object.keys(cachedUsers)){
       const u=cachedUsers[uname];
       if(u&&u.equippedAiModel===id){
         try{await window.dbUpdate(window.ref(window.db,`users/${uname}`),{equippedAiModel:''});}catch(e){}
         if(cachedUsers[uname])cachedUsers[uname].equippedAiModel='';
-        if(currentUser&&currentUser.username===uname){
-          currentUserFullData.equippedAiModel='';
-          currentUser.equippedAiModel='';
-          currentEquippedAiModel=null;
-          hideAiWidget();
-        }
+        if(currentUser&&currentUser.username===uname){currentUserFullData.equippedAiModel='';currentUser.equippedAiModel='';currentEquippedAiModel=null;hideAiWidget();}
       }
     }
     showCenterSquareToast('🗑️','Đã xóa!','Model AI','success',2600);
-    loadAiModelsList();
-    loadAiModelsForGrant();
-    loadSupremeAiFrameModelList();
+    loadAiModelsList();loadAiModelsForGrant();loadSupremeAiFrameModelList();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
-/* ============ AI MODEL CREATION / GRANT ============ */
+/* ============ AI MODEL CREATION ============ */
 function previewMainImage(input){
   const prev=document.getElementById('aiNewModelMainImagePreview');
   if(!input.files||!input.files[0]){if(prev)prev.style.display='none';return;}
@@ -7361,9 +6989,7 @@ async function createAiModel(){
     const modelId='aimodel_'+Date.now();
     const filesData=[];
     let firstImageDataUrl='';
-    if(hasMainImage){
-      try{firstImageDataUrl=await fileToBase64(mainImageInput.files[0]);}catch(e){}
-    }
+    if(hasMainImage){try{firstImageDataUrl=await fileToBase64(mainImageInput.files[0]);}catch(e){}}
     const fileArr=Array.from(filesInput.files);
     let totalSize=0;
     for(let i=0;i<fileArr.length;i++){
@@ -7372,40 +6998,22 @@ async function createAiModel(){
       totalSize+=f.size;
       const b64=await fileToBase64(f);
       const fileMeta={name:f.name,type:f.type||'application/octet-stream',size:f.size};
-      if(f.type.startsWith('image/')&&!firstImageDataUrl){
-        if(f.size<3*1024*1024){firstImageDataUrl=b64;fileMeta.data=b64;}
-      }
+      if(f.type.startsWith('image/')&&!firstImageDataUrl){if(f.size<3*1024*1024){firstImageDataUrl=b64;fileMeta.data=b64;}}
       if(f.size>2*1024*1024){
         fileMeta.chunked=true;
         fileMeta.chunks=[];
         const p=b64.split(',');
         const dataOnly=p[1];
         const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
-        const safeName=fileMeta.name.replace(/[^a-zA-Z0-9_.\-]/g,'_');
-        for(let c=0;c<chunkCount;c++){
-          const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);
-          await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);
-        }
+        const safeName=sanitizeFirebaseKey(fileMeta.name);
+        for(let c=0;c<chunkCount;c++){const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);}
         fileMeta.chunkCount=chunkCount;
         fileMeta.chunkData=null;
         if(f.type.startsWith('image/')){fileMeta.data=b64;}
-      }else{
-        fileMeta.data=b64;
-      }
+      }else{fileMeta.data=b64;}
       filesData.push(fileMeta);
     }
-    const modelData={
-      id:modelId,name,greeting:greeting||`Xin chào! Mình là ${name}, rất vui được gặp bạn 👋`,
-      happyMsg:happyMsg||'',sadMsg:sadMsg||'',thinkingMsg:thinkingMsg||'',musicMsg:musicMsg||'',prankMsg:prankMsg||'',
-      files:filesData,
-      imageData:firstImageDataUrl,
-      fileType:'ai-model',
-      chunks:0,
-      chunkData:null,
-      createdBy:currentUser?currentUser.username:'admin',
-      createdAt:Date.now(),
-      totalSize
-    };
+    const modelData={id:modelId,name,greeting:greeting||`Xin chào! Mình là ${name}, rất vui được gặp bạn 👋`,happyMsg:happyMsg||'',sadMsg:sadMsg||'',thinkingMsg:thinkingMsg||'',musicMsg:musicMsg||'',prankMsg:prankMsg||'',files:filesData,imageData:firstImageDataUrl,fileType:'ai-model',chunks:0,chunkData:null,createdBy:currentUser?currentUser.username:'admin',createdAt:Date.now(),totalSize};
     prog.innerText='💾 Đang lưu vào Firebase...';
     await window.dbSet(window.ref(window.db,`system/ai_models/${modelId}`),modelData);
     cachedAiModels[modelId]=modelData;
@@ -7420,24 +7028,114 @@ async function createAiModel(){
   }catch(e){prog.innerText='❌ '+e.message;btn.disabled=false;setTimeout(()=>prog.style.display='none',3000);}
 }
 
-/* ============ ZIP DROP ZONE ============ */
+/* ============ ZIP/IMAGE/MODEL DROP ZONE ============ */
 async function handleAiModelZipUpload(input){
   if(!input.files||!input.files.length)return;
-  const file=input.files[0];
-  await processModelZipFileV2(file);
+  const files=Array.from(input.files);
+  for(const f of files){
+    const lowerName=(f.name||'').toLowerCase();
+    if(lowerName.endsWith('.zip')||f.type==='application/zip'||f.type==='application/x-zip-compressed'){
+      await processModelZipFileV2(f);
+    }else if(f.type.startsWith('image/')){
+      // Ảnh trực tiếp → tạo model
+      await processSingleImageAsModel(f);
+    }else{
+      // File model 3D trực tiếp (.vrm, .moc3, .fbx, .obj, .pmx, .pmd...)
+      await processSingleModelFile(f);
+    }
+  }
   input.value='';
+}
+async function processSingleImageAsModel(file){
+  const zipProgress=document.getElementById('aiZipProgress');
+  const zipText=document.getElementById('aiZipProgressText');
+  const zipBar=document.getElementById('aiZipBarFill');
+  zipProgress.classList.add('show');
+  zipText.innerText='🖼️ Đang xử lý ảnh: '+file.name;
+  zipBar.style.width='30%';
+  try{
+    const modelId='aimodel_'+Date.now();
+    const b64=await fileToBase64(file);
+    let fileMeta={name:file.name,type:file.type||'image/png',size:file.size,data:b64};
+    // Chunk nếu ảnh lớn
+    if(file.size>2*1024*1024){
+      fileMeta.chunked=true;
+      const p=b64.split(',');
+      const dataOnly=p[1];
+      const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
+      const safeName=sanitizeFirebaseKey(fileMeta.name);
+      for(let c=0;c<chunkCount;c++){const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);}
+      fileMeta.chunkCount=chunkCount;
+      fileMeta.data=b64;
+    }
+    const finalName=(file.name||'Auro').replace(/\.[^.]+$/,'');
+    const modelData={
+      id:modelId,name:finalName,
+      greeting:`Xin chào! Mình là ${finalName}, rất vui được gặp bạn 👋`,
+      happyMsg:'',sadMsg:'',thinkingMsg:'',musicMsg:'',prankMsg:'',
+      files:[fileMeta],
+      imageData:b64,
+      fileType:'ai-model-image',
+      chunks:0,chunkData:null,
+      source:'image-direct',
+      createdBy:currentUser?currentUser.username:'admin',
+      createdAt:Date.now(),
+      totalSize:file.size
+    };
+    await window.dbSet(window.ref(window.db,`system/ai_models/${modelId}`),modelData);
+    cachedAiModels[modelId]=modelData;
+    zipText.innerText='✅ Đã tạo model từ ảnh: '+finalName;
+    zipBar.style.width='100%';
+    showCenterSquareToast('🖼️','Đã tạo model!',finalName+' (từ ảnh)','success',4000);
+    setTimeout(()=>{zipProgress.classList.remove('show');zipBar.style.width='0%';},2500);
+    loadAiModelsForGrant();loadAiModelsList();loadSupremeAiFrameModelList();
+  }catch(e){console.error(e);zipText.innerText='❌ Lỗi: '+(e.message||e);setTimeout(()=>zipProgress.classList.remove('show'),4000);}
+}
+async function processSingleModelFile(file){
+  const zipProgress=document.getElementById('aiZipProgress');
+  const zipText=document.getElementById('aiZipProgressText');
+  const zipBar=document.getElementById('aiZipBarFill');
+  zipProgress.classList.add('show');
+  zipText.innerText='📁 Đang xử lý model: '+file.name;
+  zipBar.style.width='30%';
+  try{
+    const modelId='aimodel_'+Date.now();
+    const b64=await fileToBase64(file);
+    const p=b64.split(',');
+    const dataOnly=p[1];
+    const mime=guessMimeFromName(file.name);
+    const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
+    const safeName=sanitizeFirebaseKey(file.name);
+    for(let c=0;c<chunkCount;c++){const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);}
+    const fileMeta={name:file.name,type:mime,size:file.size,chunked:true,chunkCount};
+    const finalName=(file.name||'Auro').replace(/\.[^.]+$/,'');
+    const modelData={
+      id:modelId,name:finalName,
+      greeting:`Xin chào! Mình là ${finalName}, rất vui được gặp bạn 👋`,
+      happyMsg:'',sadMsg:'',thinkingMsg:'',musicMsg:'',prankMsg:'',
+      files:[fileMeta],
+      imageData:'',
+      fileType:'ai-model-3d',
+      chunks:0,chunkData:null,
+      source:'model-direct',
+      createdBy:currentUser?currentUser.username:'admin',
+      createdAt:Date.now(),
+      totalSize:file.size
+    };
+    await window.dbSet(window.ref(window.db,`system/ai_models/${modelId}`),modelData);
+    cachedAiModels[modelId]=modelData;
+    zipText.innerText='✅ Đã tạo model từ file: '+finalName;
+    zipBar.style.width='100%';
+    showCenterSquareToast('📁','Đã tạo model!',finalName+' (từ file 3D)','success',4000);
+    setTimeout(()=>{zipProgress.classList.remove('show');zipBar.style.width='0%';},2500);
+    loadAiModelsForGrant();loadAiModelsList();loadSupremeAiFrameModelList();
+  }catch(e){console.error(e);zipText.innerText='❌ Lỗi: '+(e.message||e);setTimeout(()=>zipProgress.classList.remove('show'),4000);}
 }
 async function processModelZipFileV2(file){
   if(!file){return;}
   const lowerName=(file.name||'').toLowerCase();
-  if(!lowerName.endsWith('.zip')&&file.type!=='application/zip'&&file.type!=='application/x-zip-compressed'){
-    showToast('❌ Chỉ hỗ trợ file .ZIP!','error');
-    return;
-  }
-  if(typeof JSZip==='undefined'){
-    showToast('❌ Thư viện JSZip chưa tải, vui lòng thử lại sau!','error');
-    return;
-  }
+  if(!lowerName.endsWith('.zip')&&file.type!=='application/zip'&&file.type!=='application/x-zip-compressed'){showToast('❌ Chỉ hỗ trợ file .ZIP!','error');return;}
+  if(typeof JSZip==='undefined'){showToast('❌ Thư viện JSZip chưa tải!','error');return;}
   const zipProgress=document.getElementById('aiZipProgress');
   const zipText=document.getElementById('aiZipProgressText');
   const zipBar=document.getElementById('aiZipBarFill');
@@ -7478,20 +7176,15 @@ async function processModelZipFileV2(file){
         const b64=await fileToBase64(new File([blob],entryFileName,{type:mime}));
         const p=b64.split(',');
         const dataOnly=p[1];
-        if(blob.size>2*1024*1024||mime.startsWith('image/')){
+        // Chunk lớn HOẶC là ảnh (để đảm bảo lưu được)
+        if(blob.size>1024*1024||mime.startsWith('image/')){
           const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
-          const safeName=entryFileName.replace(/[^a-zA-Z0-9_.\-]/g,'_');
-          for(let c=0;c<chunkCount;c++){
-            const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);
-            await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);
-          }
+          const safeName=sanitizeFirebaseKey(entryFileName);
+          for(let c=0;c<chunkCount;c++){const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);}
           fileMeta.chunked=true;
           fileMeta.chunkCount=chunkCount;
           fileMeta.chunkData=null;
-          if(mime.startsWith('image/')&&!firstImageDataUrl&&blob.size<5*1024*1024){
-            firstImageDataUrl=b64;
-            fileMeta.data=b64;
-          }
+          if(mime.startsWith('image/')&&!firstImageDataUrl&&blob.size<5*1024*1024){firstImageDataUrl=b64;fileMeta.data=b64;}
         }else{
           fileMeta.data=b64;
           if(mime.startsWith('image/')&&!firstImageDataUrl){firstImageDataUrl=b64;}
@@ -7576,10 +7269,7 @@ function bindAiZipDropZone(){
   if(!zone||!input)return;
   if(zone.dataset.bound==='1')return;
   zone.dataset.bound='1';
-  zone.addEventListener('click',(e)=>{
-    if(e.target===input)return;
-    input.click();
-  });
+  zone.addEventListener('click',(e)=>{if(e.target===input)return;input.click();});
   zone.addEventListener('dragover',(e)=>{e.preventDefault();e.stopPropagation();zone.classList.add('dragover');});
   zone.addEventListener('dragleave',(e)=>{e.preventDefault();e.stopPropagation();zone.classList.remove('dragover');});
   zone.addEventListener('drop',async(e)=>{
@@ -7587,13 +7277,11 @@ function bindAiZipDropZone(){
     zone.classList.remove('dragover');
     const files=e.dataTransfer&&e.dataTransfer.files;
     if(!files||!files.length)return;
-    const zipFiles=Array.from(files).filter(f=>{
-      const n=(f.name||'').toLowerCase();
-      return n.endsWith('.zip')||f.type==='application/zip'||f.type==='application/x-zip-compressed';
-    });
-    if(!zipFiles.length){showToast('❌ Chỉ hỗ trợ file .ZIP!','error');return;}
-    for(const zipFile of zipFiles){
-      await processModelZipFileV2(zipFile);
+    for(const f of Array.from(files)){
+      const lower=(f.name||'').toLowerCase();
+      if(lower.endsWith('.zip')||f.type==='application/zip'||f.type==='application/x-zip-compressed'){await processModelZipFileV2(f);}
+      else if(f.type.startsWith('image/')){await processSingleImageAsModel(f);}
+      else{await processSingleModelFile(f);}
     }
   });
 }
@@ -7634,65 +7322,31 @@ async function runDeepAnalysis(){
   btn.disabled=true;
   if(st){st.style.display='block';st.style.background='#fff3cd';st.style.color='#856404';st.innerText='🧠 Đang phân tích ảnh bằng AI Vision...';}
   try{
-    const body={
-      model:cachedAiConfig.model||'gpt-4o-mini',
-      messages:[{
-        role:'user',
-        content:[
-          {type:'text',text:'Hãy phân tích ảnh này và trả về JSON (KHÔNG có markdown ```json) với các trường:\n{\n  "name": "Tên ngắn gọn (2-3 từ) cho model AI",\n  "description": "Mô tả ngắn gọn về đối tượng trong ảnh",\n  "personality": "Tính cách phù hợp (dễ thương/nghiêm túc/năng động/lạnh lùng...)",\n  "greeting": "Câu chào thân thiện phù hợp với nhân vật",\n  "happyMsg": "Câu nói khi vui/điểm cao",\n  "sadMsg": "Câu nói khi buồn/điểm thấp",\n  "thinkingMsg": "Câu nói khi đang suy nghĩ",\n  "musicMsg": "Câu nói khi nghe nhạc",\n  "prankMsg": "Câu nói khi trêu người khác"\n}\nTrả lời chỉ JSON, không giải thích.'},
-          {type:'image_url',image_url:{url:deepAnalysisImageData}}
-        ]
-      }],
-      temperature:0.8,
-      max_tokens:800
-    };
-    const res=await fetch(cachedAiConfig.endpoint,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
-      body:JSON.stringify(body)
-    });
-    if(!res.ok){
-      const errTxt=await res.text();
-      throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,200));
-    }
+    const body={model:cachedAiConfig.model||'gpt-4o-mini',messages:[{role:'user',content:[{type:'text',text:'Hãy phân tích ảnh này và trả về JSON (KHÔNG có markdown ```json) với các trường:\n{\n  "name": "Tên ngắn gọn (2-3 từ) cho model AI",\n  "description": "Mô tả ngắn gọn về đối tượng trong ảnh",\n  "personality": "Tính cách phù hợp",\n  "greeting": "Câu chào thân thiện phù hợp với nhân vật",\n  "happyMsg": "Câu nói khi vui/điểm cao",\n  "sadMsg": "Câu nói khi buồn/điểm thấp",\n  "thinkingMsg": "Câu nói khi đang suy nghĩ",\n  "musicMsg": "Câu nói khi nghe nhạc",\n  "prankMsg": "Câu nói khi trêu người khác"\n}\nTrả lời chỉ JSON, không giải thích.'},{type:'image_url',image_url:{url:deepAnalysisImageData}}]}],temperature:0.8,max_tokens:800};
+    const res=await fetch(cachedAiConfig.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},body:JSON.stringify(body)});
+    if(!res.ok){const errTxt=await res.text();throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,200));}
     const data=await res.json();
     let content=data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content;
     if(!content)throw new Error('AI không trả về nội dung');
     content=content.trim();
     if(content.startsWith('```')){content=content.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');}
     let parsed=null;
-    try{parsed=JSON.parse(content);}catch(e){
-      const m=content.match(/\{[\s\S]*\}/);
-      if(m){try{parsed=JSON.parse(m[0]);}catch(e2){}}
-    }
+    try{parsed=JSON.parse(content);}catch(e){const m=content.match(/\{[\s\S]*\}/);if(m){try{parsed=JSON.parse(m[0]);}catch(e2){}}}
     if(!parsed)throw new Error('Không parse được JSON từ AI. Raw: '+content.slice(0,200));
     const modelId='aimodel_'+Date.now();
     const modelName=(parsed.name||'Auro').toString().slice(0,40);
-    const modelData={
-      id:modelId,
-      name:modelName,
-      greeting:parsed.greeting||`Xin chào! Mình là ${modelName}, rất vui được gặp bạn 👋`,
-      happyMsg:parsed.happyMsg||'',
-      sadMsg:parsed.sadMsg||'',
-      thinkingMsg:parsed.thinkingMsg||'',
-      musicMsg:parsed.musicMsg||'',
-      prankMsg:parsed.prankMsg||'',
-      description:parsed.description||'',
-      personality:parsed.personality||'',
-      files:[{
-        name:'main.png',
-        type:'image/png',
-        size:deepAnalysisImageData.length,
-        data:deepAnalysisImageData
-      }],
-      imageData:deepAnalysisImageData,
-      fileType:'ai-model-vision',
-      chunks:0,chunkData:null,
-      source:'vision-analysis',
-      createdBy:currentUser?currentUser.username:'admin',
-      createdAt:Date.now(),
-      totalSize:deepAnalysisImageData.length
-    };
+    // Chunk ảnh nếu lớn
+    const fileMeta={name:'main.png',type:'image/png',size:deepAnalysisImageData.length,data:deepAnalysisImageData};
+    if(deepAnalysisImageData.length>2*1024*1024){
+      fileMeta.chunked=true;
+      const p=deepAnalysisImageData.split(',');
+      const dataOnly=p[1];
+      const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
+      for(let c=0;c<chunkCount;c++){const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/main_png/${c}`),chunk);}
+      fileMeta.chunkCount=chunkCount;
+      fileMeta.data=deepAnalysisImageData;
+    }
+    const modelData={id:modelId,name:modelName,greeting:parsed.greeting||`Xin chào! Mình là ${modelName}, rất vui được gặp bạn 👋`,happyMsg:parsed.happyMsg||'',sadMsg:parsed.sadMsg||'',thinkingMsg:parsed.thinkingMsg||'',musicMsg:parsed.musicMsg||'',prankMsg:parsed.prankMsg||'',description:parsed.description||'',personality:parsed.personality||'',files:[fileMeta],imageData:deepAnalysisImageData,fileType:'ai-model-vision',chunks:0,chunkData:null,source:'vision-analysis',createdBy:currentUser?currentUser.username:'admin',createdAt:Date.now(),totalSize:deepAnalysisImageData.length};
     await window.dbSet(window.ref(window.db,`system/ai_models/${modelId}`),modelData);
     cachedAiModels[modelId]=modelData;
     if(st){st.style.display='block';st.style.background='#d1e7dd';st.style.color='#0f5132';st.innerHTML=`✅ Đã tạo model từ ảnh!<br><b>Tên:</b> ${escapeHtml(modelName)}<br><b>Mô tả:</b> ${escapeHtml(parsed.description||'')}<br><b>Tính cách:</b> ${escapeHtml(parsed.personality||'')}<br><b>Câu chào:</b> ${escapeHtml(parsed.greeting||'')}`;}
@@ -7708,18 +7362,17 @@ async function createModelFromImageFallback(imageData){
   try{
     const modelId='aimodel_'+Date.now();
     const modelName=await customPrompt('Nhập tên model:',{icon:'🤖',title:'Đặt tên model',defaultValue:'Auro'})||'Auro';
-    const modelData={
-      id:modelId,name:modelName,
-      greeting:`Xin chào! Mình là ${modelName}, rất vui được gặp bạn 👋`,
-      happyMsg:'',sadMsg:'',thinkingMsg:'',musicMsg:'',prankMsg:'',
-      description:'',personality:'',
-      files:[{name:'main.png',type:'image/png',size:imageData.length,data:imageData}],
-      imageData,
-      fileType:'ai-model-image',
-      chunks:0,chunkData:null,source:'image-fallback',
-      createdBy:currentUser?currentUser.username:'admin',
-      createdAt:Date.now(),totalSize:imageData.length
-    };
+    const fileMeta={name:'main.png',type:'image/png',size:imageData.length,data:imageData};
+    if(imageData.length>2*1024*1024){
+      fileMeta.chunked=true;
+      const p=imageData.split(',');
+      const dataOnly=p[1];
+      const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
+      for(let c=0;c<chunkCount;c++){const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/main_png/${c}`),chunk);}
+      fileMeta.chunkCount=chunkCount;
+      fileMeta.data=imageData;
+    }
+    const modelData={id:modelId,name:modelName,greeting:`Xin chào! Mình là ${modelName}, rất vui được gặp bạn 👋`,happyMsg:'',sadMsg:'',thinkingMsg:'',musicMsg:'',prankMsg:'',description:'',personality:'',files:[fileMeta],imageData,fileType:'ai-model-image',chunks:0,chunkData:null,source:'image-fallback',createdBy:currentUser?currentUser.username:'admin',createdAt:Date.now(),totalSize:imageData.length};
     await window.dbSet(window.ref(window.db,`system/ai_models/${modelId}`),modelData);
     cachedAiModels[modelId]=modelData;
     showCenterSquareToast('✅','Đã tạo model!',modelName+' (offline mode)','success',3000);
@@ -7776,11 +7429,7 @@ async function generateAiExam(){
   const statusEl=document.getElementById('aiExamStatus');
   const btn=document.getElementById('aiExamGenBtn');
   if(!prompt){showToast('❌ Nhập yêu cầu đề bài!','error');return;}
-  if(!cachedAiConfig||!cachedAiConfig.enabled||!cachedAiConfig.endpoint||!cachedAiConfig.apiKey){
-    statusEl.style.display='block';statusEl.style.background='#f8d7da';statusEl.style.color='#842029';
-    statusEl.innerText='❌ Chưa cấu hình API AI. Vào Cấu hình → 🤖 Setup AI Model → chọn nhà cung cấp + nhập API key.';
-    return;
-  }
+  if(!cachedAiConfig||!cachedAiConfig.enabled||!cachedAiConfig.endpoint||!cachedAiConfig.apiKey){statusEl.style.display='block';statusEl.style.background='#f8d7da';statusEl.style.color='#842029';statusEl.innerText='❌ Chưa cấu hình API AI. Vào Cấu hình → 🤖 Setup AI Model → chọn nhà cung cấp + nhập API key.';return;}
   btn.disabled=true;
   statusEl.style.display='block';statusEl.style.background='#fff3cd';statusEl.style.color='#856404';
   statusEl.innerText='🤖 AI đang tạo đề... (có thể mất 20-60 giây)';
@@ -7801,94 +7450,33 @@ YÊU CẦU KỸ THUẬT:
 {
   "title": "Tên đề thi",
   "questions": [
-    {
-      "type": "mc",
-      "content": "Nội dung câu hỏi",
-      "options": [
-        {"label":"A","text":"..."},
-        {"label":"B","text":"..."},
-        {"label":"C","text":"..."},
-        {"label":"D","text":"..."}
-      ],
-      "correctAnswer": "A",
-      "explanation": "Giải thích ngắn gọn"
-    },
-    {
-      "type": "tf",
-      "content": "Nội dung câu hỏi",
-      "branches": ["Nhánh a","Nhánh b","Nhánh c","Nhánh d"],
-      "correctAnswer": "Đ,S,Đ,S",
-      "explanation": "Giải thích"
-    },
-    {
-      "type": "sa",
-      "content": "Nội dung câu hỏi",
-      "correctAnswer": "Đáp án",
-      "explanation": "Giải thích"
-    }
+    {"type": "mc","content": "Nội dung câu hỏi","options": [{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctAnswer": "A","explanation": "Giải thích ngắn gọn"},
+    {"type": "tf","content": "Nội dung câu hỏi","branches": ["Nhánh a","Nhánh b","Nhánh c","Nhánh d"],"correctAnswer": "Đ,S,Đ,S","explanation": "Giải thích"},
+    {"type": "sa","content": "Nội dung câu hỏi","correctAnswer": "Đáp án","explanation": "Giải thích"}
   ]
 }`;
-    const res=await fetch(cachedAiConfig.endpoint,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
-      body:JSON.stringify({
-        model:cachedAiConfig.model||'gpt-4o-mini',
-        messages:[
-          {role:'system',content:sysPrompt},
-          {role:'user',content:'YÊU CẦU ĐỀ: '+prompt}
-        ],
-        temperature:0.7,
-        max_tokens:4000
-      })
-    });
-    if(!res.ok){
-      const errTxt=await res.text();
-      throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,300));
-    }
+    const res=await fetch(cachedAiConfig.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},body:JSON.stringify({model:cachedAiConfig.model||'gpt-4o-mini',messages:[{role:'system',content:sysPrompt},{role:'user',content:'YÊU CẦU ĐỀ: '+prompt}],temperature:0.7,max_tokens:4000})});
+    if(!res.ok){const errTxt=await res.text();throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,300));}
     const data=await res.json();
     let content=data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content;
     if(!content)throw new Error('AI không trả về nội dung');
     content=content.trim();
     if(content.startsWith('```')){content=content.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');}
     let parsed=null;
-    try{parsed=JSON.parse(content);}catch(e){
-      const m=content.match(/\{[\s\S]*\}/);
-      if(m){try{parsed=JSON.parse(m[0]);}catch(e2){}}
-    }
+    try{parsed=JSON.parse(content);}catch(e){const m=content.match(/\{[\s\S]*\}/);if(m){try{parsed=JSON.parse(m[0]);}catch(e2){}}}
     if(!parsed||!parsed.questions||!parsed.questions.length)throw new Error('AI không trả về JSON hợp lệ');
     const normQs=parsed.questions.map((q,i)=>{
       const out={id:i+1,type:q.type||'mc',content:q.content||q.question||'',explanation:q.explanation||'',imageData:'',expImage:'',aiNote:''};
-      if(out.type==='mc'){
-        out.options=q.options||[{label:'A',text:''},{label:'B',text:''},{label:'C',text:''},{label:'D',text:''}];
-        out.correctAnswer=(q.correctAnswer||'A').toUpperCase().slice(0,1);
-        out.score=.25;
-      }else if(out.type==='tf'){
-        out.branches=q.branches||['','','',''];
-        if(typeof q.correctAnswer==='string'){out.correctAnswer=q.correctAnswer;}
-        else if(Array.isArray(q.correctAnswer)){out.correctAnswer=q.correctAnswer.join(',');}
-        else{out.correctAnswer='Đ,Đ,S,S';}
-        out.branchScores=[0.25,0.25,0.25,0.25];
-        out.score=1;
-      }else{
-        out.type='sa';out.correctAnswer=(q.correctAnswer||'').toString();out.score=.5;
-      }
+      if(out.type==='mc'){out.options=q.options||[{label:'A',text:''},{label:'B',text:''},{label:'C',text:''},{label:'D',text:''}];out.correctAnswer=(q.correctAnswer||'A').toUpperCase().slice(0,1);out.score=.25;}
+      else if(out.type==='tf'){out.branches=q.branches||['','','',''];if(typeof q.correctAnswer==='string'){out.correctAnswer=q.correctAnswer;}else if(Array.isArray(q.correctAnswer)){out.correctAnswer=q.correctAnswer.join(',');}else{out.correctAnswer='Đ,Đ,S,S';}out.branchScores=[0.25,0.25,0.25,0.25];out.score=1;}
+      else{out.type='sa';out.correctAnswer=(q.correctAnswer||'').toString();out.score=.5;}
       return out;
     });
-    aiGeneratedExam={
-      title:parsed.title||('Đề AI '+new Date().toLocaleDateString('vi-VN')),
-      questions:normQs,
-      mode:document.getElementById('aiExamMode').value,
-      duration:parseInt(document.getElementById('aiExamDuration').value)||45,
-      qTypes,qCount,level,
-      createdAt:Date.now()
-    };
+    aiGeneratedExam={title:parsed.title||('Đề AI '+new Date().toLocaleDateString('vi-VN')),questions:normQs,mode:document.getElementById('aiExamMode').value,duration:parseInt(document.getElementById('aiExamDuration').value)||45,qTypes,qCount,level,createdAt:Date.now()};
     statusEl.style.display='block';statusEl.style.background='#d1e7dd';statusEl.style.color='#0f5132';
     statusEl.innerText='✅ AI đã tạo '+normQs.length+' câu hỏi!';
     renderAiExamPreview();
-  }catch(e){
-    statusEl.style.display='block';statusEl.style.background='#f8d7da';statusEl.style.color='#842029';
-    statusEl.innerText='❌ Lỗi: '+(e.message||e);
-  }
+  }catch(e){statusEl.style.display='block';statusEl.style.background='#f8d7da';statusEl.style.color='#842029';statusEl.innerText='❌ Lỗi: '+(e.message||e);}
   btn.disabled=false;
 }
 function renderAiExamPreview(){
@@ -7903,14 +7491,9 @@ function renderAiExamPreview(){
   stats.innerHTML=`Tổng: <b>${aiGeneratedExam.questions.length}</b> câu — 📝 MC: <b>${mc}</b>, 🔀 Đ/S: <b>${tf}</b>, ✍️ TLN: <b>${sa}</b>`;
   box.innerHTML=aiGeneratedExam.questions.map((q,i)=>{
     let opt='';
-    if(q.type==='mc'&&q.options){
-      opt='<div class="aiq-options">'+q.options.map(o=>`<div><b>${o.label}.</b> ${escapeHtml(o.text||'')}${q.correctAnswer===o.label?' <span class="aiq-correct">✓ Đúng</span>':''}</div>`).join('')+'</div>';
-    }else if(q.type==='tf'&&q.branches){
-      const ca=(q.correctAnswer||'').split(',');
-      opt='<div class="aiq-options">'+q.branches.map((b,bi)=>`<div><b>${String.fromCharCode(97+bi)})</b> ${escapeHtml(b)} <span class="aiq-correct">→ ${ca[bi]||'?'}</span></div>`).join('')+'</div>';
-    }else if(q.type==='sa'){
-      opt=`<div class="aiq-options">Đáp án: <span class="aiq-correct">${escapeHtml(q.correctAnswer||'')}</span></div>`;
-    }
+    if(q.type==='mc'&&q.options){opt='<div class="aiq-options">'+q.options.map(o=>`<div><b>${o.label}.</b> ${escapeHtml(o.text||'')}${q.correctAnswer===o.label?' <span class="aiq-correct">✓ Đúng</span>':''}</div>`).join('')+'</div>';}
+    else if(q.type==='tf'&&q.branches){const ca=(q.correctAnswer||'').split(',');opt='<div class="aiq-options">'+q.branches.map((b,bi)=>`<div><b>${String.fromCharCode(97+bi)})</b> ${escapeHtml(b)} <span class="aiq-correct">→ ${ca[bi]||'?'}</span></div>`).join('')+'</div>';}
+    else if(q.type==='sa'){opt=`<div class="aiq-options">Đáp án: <span class="aiq-correct">${escapeHtml(q.correctAnswer||'')}</span></div>`;}
     return `<div class="ai-exam-q-card ${q.type}"><div style="font-weight:bold;color:#6f42c1;margin-bottom:4px">Câu ${i+1} (${q.type==='mc'?'Trắc nghiệm':q.type==='tf'?'Đúng/Sai':'Trả lời ngắn'})</div><div>${escapeHtml(q.content||'')}</div>${opt}${q.explanation?`<div style="margin-top:6px;padding:6px 10px;background:#f0f8ff;border-radius:6px;font-size:12px"><b>💡 Giải thích:</b> ${escapeHtml(q.explanation)}</div>`:''}</div>`;
   }).join('');
 }
@@ -7925,45 +7508,15 @@ async function saveAiGeneratedExam(){
   const mode=aiGeneratedExam.mode;
   const questions=aiGeneratedExam.questions.map(q=>{
     const o={id:q.id,type:q.type,score:q.score||0.25,explanation:q.explanation||'',expImage:'',aiNote:''};
-    if(q.type==='mc'){
-      o.correctAnswer=q.correctAnswer;
-      o.options=q.options;
-    }else if(q.type==='tf'){
-      o.correctAnswer=q.correctAnswer;
-      o.branches=q.branches;
-    }else{
-      o.correctAnswer=q.correctAnswer;
-    }
+    if(q.type==='mc'){o.correctAnswer=q.correctAnswer;o.options=q.options;}
+    else if(q.type==='tf'){o.correctAnswer=q.correctAnswer;o.branches=q.branches;}
+    else{o.correctAnswer=q.correctAnswer;}
     if(q.type==='tf')o.branchScores=q.branchScores||[0.25,0.25,0.25,0.25];
     return o;
   });
   redistributeScores(questions,10);redistributeTfBranchScores(questions);
-  const exam={
-    code,title,
-    duration:aiGeneratedExam.duration,
-    timerEnabled:true,
-    antiCheatEnabled:mode==='v1',
-    cheatThreshold:7,
-    cheatLimitType:'unlimited',
-    maxWarnings:5,
-    attemptLimit:0,
-    aiNote:true,
-    isLiveRoom:false,
-    livePassword:'',
-    liveLimit:50,
-    media:{type:'image',files:[]},
-    questions,
-    source:'ai-generated-'+(mode==='v2'?'v2-axcm':'v1-normal'),
-    aiMode:mode,
-    creator:currentUser.username,
-    createdAt:Date.now()
-  };
-  try{
-    await window.dbSet(window.ref(window.db,'exams/'+code),exam);
-    await window.dbSet(window.ref(window.db,'liverooms/'+code),{status:'waiting'});
-    showCenterSquareToast('✅','Đã lưu đề AI!',`[${code}] ${questions.length} câu • Mode ${mode.toUpperCase()}`,'success',5000);
-    resetAiExamForm();
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+  const exam={code,title,duration:aiGeneratedExam.duration,timerEnabled:true,antiCheatEnabled:mode==='v1',cheatThreshold:7,cheatLimitType:'unlimited',maxWarnings:5,attemptLimit:0,aiNote:true,isLiveRoom:false,livePassword:'',liveLimit:50,media:{type:'image',files:[]},questions,source:'ai-generated-'+(mode==='v2'?'v2-axcm':'v1-normal'),aiMode:mode,creator:currentUser.username,createdAt:Date.now()};
+  try{await window.dbSet(window.ref(window.db,'exams/'+code),exam);await window.dbSet(window.ref(window.db,'liverooms/'+code),{status:'waiting'});showCenterSquareToast('✅','Đã lưu đề AI!',`[${code}] ${questions.length} câu • Mode ${mode.toUpperCase()}`,'success',5000);resetAiExamForm();}catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
 /* CONTEXTMENU LOCK */
@@ -7985,17 +7538,10 @@ window.addEventListener('DOMContentLoaded',()=>{
     listenOnlineUsers();listenAllUsersCount();listenHomeConfig();listenBigNotifications();listenQuizSheets();listenPrankEffects();listenGlobalBroadcast();listenGlobalAudio();startThemeListener();
     listenRoomAnnounceConfig();listenCountdownConfig();startCountdown();listenThroneDesign();
     listenAiModels();listenAiConfig();
-    // Nếu chưa có AI config → set default Gemini
-    window.dbGet(window.dbChild(window.dbRef,'system/ai_config')).then(s=>{
-      if(!s.exists()){
-        window.dbSet(window.ref(window.db,'system/ai_config'),Object.assign({},DEFAULT_AI_CONFIG,{updatedAt:Date.now()}));
-      }
-    });
+    window.dbGet(window.dbChild(window.dbRef,'system/ai_config')).then(s=>{if(!s.exists()){window.dbSet(window.ref(window.db,'system/ai_config'),Object.assign({},DEFAULT_AI_CONFIG,{updatedAt:Date.now()}));}});
     window.onValue(window.ref(window.db,'users'),snap=>{if(snap.exists()){cachedUsers=snap.val();renderHomeRoleUsers();}});
     try{const u=new URLSearchParams(location.search),ep=u.get('exam'),pp=u.get('practice');if(ep){document.getElementById('examModeSelect').value='live';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='live'));document.querySelector('.mode-dd-icon').innerText='🛡️';document.querySelector('.mode-dd-label').innerText='Phòng Thi Chuyên Dụng';document.getElementById('lblCodeText').innerText='Mã Bài Kiểm Tra:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Phòng Thi:';document.getElementById('studentExamCode').value=ep.toUpperCase();showToast('📱 Đã nhận mã!','info');switchView('studentLoginView');if(history.replaceState)history.replaceState({},document.title,location.pathname);}else if(pp){document.getElementById('examModeSelect').value='practice';document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.toggle('active',i.dataset.mode==='practice'));document.querySelector('.mode-dd-icon').innerText='⚡';document.querySelector('.mode-dd-label').innerText='Bài Luyện Nhanh';document.getElementById('lblCodeText').innerText='Mã Bài Luyện Nhanh:';document.getElementById('extraPassBox').style.display='block';document.getElementById('extraPassLabel').innerText='Mật Khẩu Bài Luyện:';document.getElementById('studentExamCode').value=pp.toUpperCase();showToast('📱 Đã nhận mã!','info');switchView('studentLoginView');if(history.replaceState)history.replaceState({},document.title,location.pathname);}}catch(e){}
-    // Init provider select
     setTimeout(()=>{const p=document.getElementById('aiSetupProvider');if(p&&!p.value)p.value='google';onAiProviderChange();},300);
-    // Load system docs
     loadSystemDocs();
   },900);
 });
