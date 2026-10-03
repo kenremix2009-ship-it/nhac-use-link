@@ -13,8 +13,6 @@
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 <style>
 /* ============================================================
    TOÀN BỘ CSS GỐC ĐƯỢC GIỮ NGUYÊN + BỔ SUNG
@@ -940,7 +938,6 @@ input,select,textarea{font-size:13px;padding:9px}
 .ai-model-body{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;user-select:none}
 .ai-model-body:active{cursor:grabbing}
 .ai-model-body img,.ai-model-body video,.ai-model-body canvas{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
-.ai-model-body model-viewer{width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
 .ai-model-emoji{font-size:120px;line-height:1;pointer-events:none;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
 .ai-model-frame-layer{position:absolute;inset:-12%;pointer-events:none;background-size:contain;background-position:center;background-repeat:no-repeat;z-index:5}
 .ai-model-badge{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:rgba(24,119,242,.9);color:#fff;font-size:10px;font-weight:900;padding:3px 10px;border-radius:12px;white-space:nowrap;pointer-events:none;z-index:6;box-shadow:0 2px 8px rgba(0,0,0,.3)}
@@ -1183,7 +1180,7 @@ input,select,textarea{font-size:13px;padding:9px}
     <div><label>🔄 Xoay: <span id="rfxRotVal">0</span>°</label><input type="range" id="rfxRangeRot" min="-180" max="180" value="0" oninput="updateRoleFxPreview()"></div>
     <div><label>🌫️ Độ đậm nhạt: <span id="rfxOpVal">1.00</span></label><input type="range" id="rfxRangeOp" min="0" max="1" step="0.05" value="1" oninput="updateRoleFxPreview()"></div>
     <div><label>⏱️ Thời gian hiệu ứng (giây): <span id="rfxDurVal">6</span></label><input type="range" id="rfxRangeDur" min="1" max="30" step="1" value="6" oninput="updateRoleFxPreview()"></div>
-    <div><label>🔁 Cooldown (giây lặp lại): <span id="rfxCooldownVal">10</span></label><input type="range" id="rfxRangeCooldown" min="2" max="60" step="1" value="10" oninput="updateRoleFxPreview()"></div>
+    <div><label>❄️ Cooldown (giây, thời gian chờ trước khi lặp lại): <span id="rfxCoolVal">10</span></label><input type="range" id="rfxRangeCool" min="1" max="120" step="1" value="10" oninput="updateRoleFxPreview()"></div>
   </div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
     <button class="btn btn-secondary" onclick="closeRoleEffectAdjust()">Hủy</button>
@@ -1678,8 +1675,8 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">2 nút chính: <b>🎬 Phát Hiệu Ứng</b> và <b>📋 Phát Phiếu Câu Hỏi</b>.</div></div>
 
 <div style="font-weight:900;color:#6f42c1;margin:12px 0 8px 0">🤖 4. AI Model</div>
-<div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Tạo model mới:</b> Nhập tên (mặc định <b>Auro</b>), <b>tải ảnh chính (.png/.gif)</b> + nhiều file (mọi định dạng: .moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh, .glb, .gltf, OSC, VMC,... không giới hạn MB). Hệ thống lưu file & tạo model.</div></div>
-<div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Tự động phân tích ZIP:</b> Kéo & thả trực tiếp file <b>.zip</b> vào ô drop-zone ở cuối phần tạo model (hoặc bấm để chọn). Hệ thống sẽ tự giải nén, phân tích tất cả file bên trong (mọi định dạng: .png, .gif, .moc3, .model3.json, .vrm, .fbx, .obj, .glb, .gltf, .mp4, .json, textures,...), tự nhận diện file ảnh làm preview và tạo model hoàn chỉnh. Hỗ trợ nhiều file ZIP.</div></div>
+<div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>Tạo model mới:</b> Nhập tên (mặc định <b>Auro</b>), <b>tải ảnh chính (.png)</b> + nhiều file (mọi định dạng: .moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh, OSC, VMC,... không giới hạn MB). Hệ thống lưu file & tạo model.</div></div>
+<div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Tự động phân tích ZIP:</b> Kéo & thả trực tiếp file <b>.zip</b> vào ô drop-zone ở cuối phần tạo model (hoặc bấm để chọn). Hệ thống sẽ tự giải nén, phân tích tất cả file bên trong (mọi định dạng: .png, .moc3, .model3.json, .vrm, .fbx, .obj, .mp4, .json, textures,...), tự nhận diện file ảnh làm preview và tạo model hoàn chỉnh. Hỗ trợ nhiều file ZIP.</div></div>
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content"><b>🧠 Phân tích ảnh sâu (AI Vision):</b> Upload 1 ảnh (.png/.jpg/.jpeg/.webp/.gif) → AI Vision phân tích ảnh, tạo model tự động với tên, mô tả, tính cách, câu chào... <b style="color:#dc3545">Cần cấu hình API AI trong Cấu hình → 🤖 Setup AI Model.</b></div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content"><b>Cấp model cho user:</b> Nhập <code>@username</code> + mật khẩu VUA → user đó được sở hữu model.</div></div>
 <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-content"><b>🖼️ Chỉnh khung AI:</b> Chỉ có thể vào từ <b>Tối Cao → Trung Tâm Giải Trí → 🖼️ Chỉnh khung AI</b> hoặc nút <b>🖼️ Chỉnh khung</b> trong profile. Chọn model bạn sở hữu từ danh sách, upload khung, kéo thả căn chỉnh (X/Y/Scale/Xoay/Opacity), lưu lại. Khung áp dụng <b>riêng cho từng model</b> khi model đó được trang bị.</div></div>
@@ -1838,13 +1835,13 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>📚 KHO TÀI LIỆU HỆ THỐNG (TỰ ĐỘNG TỔNG HỢP)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed"><div style="background:#f0f8ff;border:2px dashed #1877f2;padding:14px;border-radius:10px;margin-bottom:20px">
-<p style="font-size:12px;color:#666;margin-bottom:10px;line-height:1.6">Hệ thống tự động tổng hợp tài liệu <b>thật</b> (có thể xem & tải PDF), phân loại theo <b>Môn</b> (Toán, Lý, Hóa, Sinh, Sử, Văn) × <b>Lớp</b> (10,11,12) × <b>Dạng</b> (Công thức, Lý thuyết, Dạng đề, Dạng câu hỏi, Mẫu).</p>
+<p style="font-size:12px;color:#666;margin-bottom:10px;line-height:1.6">Hệ thống tự động tổng hợp tài liệu từ nguồn trực tuyến, phân loại theo <b>Môn</b> (Toán, Lý, Hóa, Sinh, Sử, Văn) × <b>Lớp</b> (10,11,12) × <b>Dạng</b> (Công thức, Lý thuyết, Dạng đề, Dạng câu hỏi, Mẫu).</p>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-  <button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="collectSystemDocs(true)">🔄 Tạo tài liệu hệ thống (thay thế)</button>
+  <button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="collectSystemDocs(true)">🔄 Lấy tài liệu tự động (thay thế)</button>
   <button class="btn btn-warning" style="width:auto;padding:10px 16px;color:#000" onclick="collectSystemDocs(false)">➕ Thêm tài liệu mới</button>
   <button class="btn btn-danger" style="width:auto;padding:10px 16px" onclick="clearSystemDocs()">🗑️ Xóa TẤT CẢ tài liệu hệ thống</button>
 </div>
-<div style="font-size:11px;color:#888;margin-bottom:8px">💡 Tài liệu hệ thống là <b>tài liệu THẬT</b> — bấm Xem hoặc Tải PDF để xem/tải nội dung. Tài liệu được sinh tự động dưới dạng PDF.</div>
+<div style="font-size:11px;color:#888;margin-bottom:8px">💡 Xóa tất cả tài liệu hệ thống chỉ xóa tài liệu tự động, <b>không xóa tài liệu GV đăng</b>. Thêm mới sẽ không trùng với tài liệu cũ.</div>
 <div style="font-size:12px;color:#004085;background:#d1e7dd;padding:8px;border-radius:6px;margin-bottom:8px">📊 Đang có: <b id="sysDocsCount">0</b> tài liệu hệ thống</div>
 <div class="docs-filter-bar">
   <div><label>Lớp</label><select id="sysDocsFilterGrade" onchange="renderSysDocs()"><option value="">Tất cả</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div>
@@ -2379,13 +2376,13 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="collapse-body collapsed">
 <div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-bottom:12px">
   <div style="font-weight:900;color:#6f42c1;font-size:14px;margin-bottom:10px">🤖 TẠO MODEL AI MỚI (VTUBER-STYLE)</div>
-  <div class="ai-setup-note">📎 Hỗ trợ mọi định dạng: <b>.moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh (OSC/VMC), .glb, .gltf...</b> — Không giới hạn dung lượng. <b>Model sẽ có thể biểu cảm như VTuber khi bật webcam (xem trong Profile).</b></div>
+  <div class="ai-setup-note">📎 Hỗ trợ mọi định dạng: <b>.moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh (OSC/VMC)...</b> — Không giới hạn dung lượng. <b>Model sẽ có thể biểu cảm như VTuber khi bật webcam (xem trong Profile).</b></div>
   <label>📝 Tên model (mặc định "Auro"):</label>
   <input type="text" id="aiNewModelName" placeholder="Auro">
   <label>🖼️ Ảnh chính cho AI Model (.png/.jpg/.gif/.webp — dùng làm hình đại diện hiển thị):</label>
   <input type="file" id="aiNewModelMainImage" accept="image/*" style="padding:6px;background:#fff;border-radius:8px" onchange="previewMainImage(this)">
   <img id="aiNewModelMainImagePreview" class="ai-model-main-image" alt="">
-  <label>📁 File model (có thể chọn nhiều file — textures, motion, 3D model, v.v...):</label>
+  <label>📁 File model (có thể chọn nhiều file — textures, motion, v.v...):</label>
   <input type="file" id="aiNewModelFiles" multiple accept="*/*" style="padding:6px;background:#fff;border-radius:8px">
   <label>💬 Câu chào (mặc định):</label>
   <input type="text" id="aiNewModelGreeting" placeholder="Xin chào! Mình là Auro, rất vui được gặp bạn 👋">
@@ -2405,9 +2402,9 @@ input,select,textarea{font-size:13px;padding:9px}
   <!-- === ZIP DROP ZONE === -->
   <div id="aiModelZipDropZone">
     <div style="font-size:52px;margin-bottom:8px;filter:drop-shadow(0 4px 10px rgba(24,119,242,.3))">📦</div>
-    <div style="font-weight:900;color:#1877f2;font-size:15px;margin-bottom:6px">📥 Kéo & Thả file ZIP / file 3D / ảnh GIF vào đây (hoặc bấm để chọn)</div>
-    <div style="font-size:12px;color:#666;line-height:1.6;max-width:520px;margin:0 auto">Hệ thống sẽ <b>tự động thêm</b> tất cả file bạn thả vào. File <b>.zip</b> sẽ được tự động giải nén và phân tích. File model 3D (<b>.glb/.gltf/.vrm/.fbx/.obj/.pmx/.pmd</b>...) và ảnh GIF sẽ được tự động thêm vào input tạo model. Hỗ trợ nhiều file cùng lúc.</div>
-    <input type="file" id="aiModelZipInput" accept=".zip,application/zip,application/x-zip-compressed,*/*" style="display:none" onchange="handleAiModelZipUpload(this)" multiple>
+    <div style="font-weight:900;color:#1877f2;font-size:15px;margin-bottom:6px">📥 Kéo & Thả file ZIP / ẢNH / MODEL 3D vào đây (hoặc bấm để chọn)</div>
+    <div style="font-size:12px;color:#666;line-height:1.6;max-width:520px;margin:0 auto">Hệ thống sẽ <b>tự động giải nén và phân tích</b> tất cả file bên trong (ảnh, model, textures, motion, video,...) để tạo thành 1 model AI hoàn chỉnh. Hỗ trợ <b>.zip, .vrm, .fbx, .obj, .pmx, .pmd, .png, .gif, .jpg</b> — không giới hạn dung lượng.</div>
+    <input type="file" id="aiModelZipInput" accept=".zip,.vrm,.fbx,.obj,.pmx,.pmd,image/*,application/zip,application/x-zip-compressed" multiple style="display:none" onchange="handleAiModelZipUpload(this)">
     <div id="aiZipProgress" class="ai-zip-progress">
       <div id="aiZipProgressText">⏳ Đang xử lý...</div>
       <div class="ai-zip-bar"><div class="ai-zip-bar-fill" id="aiZipBarFill"></div></div>
@@ -2990,7 +2987,6 @@ let aiWebcamMouthOpenness=0;
 let aiWebcamHeadTilt=0;
 let aiWebcamEyeBlink=0;
 let aiWebcamLastExpr={mouth:0,tilt:0,blink:0,ts:0};
-let aiWebcamPrevFrame=null;
 
 /* Deep analysis */
 let deepAnalysisImageData='';
@@ -3064,9 +3060,9 @@ const AI_PROVIDERS={
   google:{
     name:'Google AI Studio',
     endpoint:'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-    models:['gemini-2.0-flash','gemini-2.0-flash-exp','gemini-1.5-flash','gemini-1.5-pro','gemini-2.5-flash','gemini-2.5-pro','gemini-3.1-flash','gemini-3.1-pro','gemini-3.5-flash','gemini-3.6-flash'],
+    models:['gemini-3.6-flash','gemini-3.5-flash','gemini-3.1-flash','gemini-3.1-pro','gemini-3.0-flash','gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-1.5-flash','gemini-1.5-pro'],
     defaultModel:'gemini-2.0-flash',
-    info:'🔵 Google AI Studio (Gemini). Model mặc định: gemini-2.0-flash. Hệ thống đã cài API key mặc định — dùng được ngay.'
+    info:'🔵 Google AI Studio (Gemini). Bao gồm các model mới: gemini-3.6-flash, gemini-3.5-flash, gemini-3.1-flash. Hệ thống đã cài API key mặc định — dùng được ngay.'
   },
   cerebras:{
     name:'Cerebras',
@@ -3119,7 +3115,7 @@ const AI_PROVIDERS={
   }
 };
 
-/* ============ SYSTEM DOCS DATA (TỰ ĐỘNG TỔNG HỢP - SINH PDF THẬT) ============ */
+/* ============ SYSTEM DOCS DATA (TỰ ĐỘNG TỔNG HỢP - REAL CONTENT) ============ */
 const SYSTEM_DOC_TOPICS={
   toan:{10:['Mệnh đề - Tập hợp','Hàm số bậc hai','Phương trình - Hệ phương trình','Vector','Tích vô hướng'],11:['Lượng giác','Tổ hợp - Xác suất','Dãy số - Cấp số','Giới hạn','Đạo hàm'],12:['Ứng dụng đạo hàm','Mũ - Logarit','Nguyên hàm - Tích phân','Số phức','Hình học không gian Oxyz']},
   ly:{10:['Động học chất điểm','Động lực học','Cân bằng - Chuyển động','Năng lượng - Công','Chất khí'],11:['Điện tích - Điện trường','Dòng điện không đổi','Từ trường','Cảm ứng điện từ','Khúc xạ ánh sáng'],12:['Dao động cơ','Sóng cơ','Dòng điện xoay chiều','Dao động điện từ','Sóng ánh sáng','Lượng tử ánh sáng']},
@@ -3132,6 +3128,52 @@ const SYSTEM_DOC_TYPES=['congthuc','lythuyet','dangde','dangcauhoi','mau'];
 const SYSTEM_DOC_TYPE_LABELS={congthuc:'Công thức',lythuyet:'Lý thuyết',dangde:'Dạng đề',dangcauhoi:'Dạng câu hỏi',mau:'Mẫu'};
 const SUBJECT_NAMES={toan:'Toán',ly:'Lý',hoa:'Hóa',sinh:'Sinh',su:'Sử',van:'Văn'};
 const SUBJECT_COLORS={toan:'#1877f2',ly:'#0d6efd',hoa:'#dc3545',sinh:'#198754',su:'#856404',van:'#6f42c1'};
+
+/* NỘI DUNG THẬT cho tài liệu hệ thống — sinh nội dung giáo dục thực */
+const REAL_DOC_CONTENT={
+  toan:{
+    congthuc:'CÔNG THỨC TOÁN HỌC CẦN NHỚ\n\n1. ĐẠO HÀM\n- (x^n)\' = n·x^(n-1)\n- (sinx)\' = cosx; (cosx)\' = -sinx\n- (tanx)\' = 1/cos²x; (cotx)\' = -1/sin²x\n- (e^x)\' = e^x; (a^x)\' = a^x·ln(a)\n- (lnx)\' = 1/x; (log_a x)\' = 1/(x·ln(a))\n- (u·v)\' = u\'v + uv\'\n- (u/v)\' = (u\'v - uv\')/v²\n\n2. NGUYÊN HÀM\n- ∫x^n dx = x^(n+1)/(n+1) + C (n≠-1)\n- ∫dx/x = ln|x| + C\n- ∫e^x dx = e^x + C\n- ∫sinx dx = -cosx + C\n- ∫cosx dx = sinx + C\n- ∫dx/cos²x = tanx + C\n\n3. LƯỢNG GIÁC\n- sin²x + cos²x = 1\n- 1 + tan²x = 1/cos²x\n- sin2x = 2sinx·cosx\n- cos2x = cos²x - sin²x = 2cos²x - 1 = 1 - 2sin²x\n- sin(a±b) = sina·cosb ± cosa·sinb\n- cos(a±b) = cosa·cosb ∓ sina·sinb\n\n4. LOGARIT\n- log_a(xy) = log_a x + log_a y\n- log_a(x/y) = log_a x - log_a y\n- log_a(x^n) = n·log_a x\n- log_a b = log_c b / log_c a\n\n5. CẤP SỐ\n- Cấp số cộng: u_n = u_1 + (n-1)d; S_n = n(u_1+u_n)/2\n- Cấp số nhân: u_n = u_1·q^(n-1); S_n = u_1(q^n-1)/(q-1)\n\n6. TỔ HỢP - XÁC SUẤT\n- A_n^k = n!/(n-k)!\n- C_n^k = n!/(k!(n-k)!)\n- P(A) = n(A)/n(Ω)',
+    lythuyet:'LÝ THUYẾT TRỌNG TÂM\n\n1. HÀM SỐ\n- Đồng biến: f\'(x) > 0 ∀x ∈ (a,b)\n- Nghịch biến: f\'(x) < 0 ∀x ∈ (a,b)\n- Cực trị: f\'(x) đổi dấu tại x0\n- Tiệm cận đứng: x = x0 nếu lim_{x→x0} f(x) = ±∞\n- Tiệm cận ngang: y = y0 nếu lim_{x→±∞} f(x) = y0\n\n2. MŨ - LOGARIT\n- a^m · a^n = a^(m+n)\n- (a^m)^n = a^(mn)\n- Điều kiện: a>0, a≠1; x>0\n\n3. NGUYÊN HÀM - TÍCH PHÂN\n- Định lý Newton-Leibniz: ∫_a^b f(x)dx = F(b) - F(a)\n- Tính diện tích: S = ∫_a^b |f(x)|dx\n\n4. SỐ PHỨC\n- z = a + bi; |z| = √(a²+b²)\n- z1·z2 = (a1a2 - b1b2) + (a1b2 + a2b1)i\n- Số phức liên hợp: z̄ = a - bi\n\n5. HÌNH HỌC OXYZ\n- Tích có hướng: [u,v] = (u2v3-u3v2, u3v1-u1v3, u1v2-u2v1)\n- Mặt phẳng: Ax + By + Cz + D = 0\n- Mặt cầu: (x-a)² + (y-b)² + (z-c)² = R²',
+    dangde:'CÁC DẠNG ĐỀ THI THƯỜNG GẶP\n\n1. KHẢO SÁT HÀM SỐ\n- Dạng 1: Khảo sát và vẽ đồ thị hàm số bậc 3, trùng phương, phân thức\n- Dạng 2: Biện luận số nghiệm phương trình bằng đồ thị\n- Dạng 3: Tìm m để hàm số có cực trị\n\n2. PHƯƠNG TRÌNH - BẤT PHƯƠNG TRÌNH\n- Dạng 1: Mũ, logarit cơ bản\n- Dạng 2: Đặt ẩn phụ (t = a^x, t>0)\n- Dạng 3: Phương trình chứa căn\n\n3. TÍCH PHÂN\n- Dạng 1: Tích phân cơ bản (bảng nguyên hàm)\n- Dạng 2: Đổi biến số\n- Dạng 3: Tích phân từng phần\n- Dạng 4: Tính diện tích, thể tích\n\n4. HÌNH KHÔNG GIAN\n- Dạng 1: Tính thể tích khối đa diện\n- Dạng 2: Tính khoảng cách từ điểm đến mặt phẳng\n- Dạng 3: Viết phương trình mặt phẳng, đường thẳng, mặt cầu\n\n5. XÁC SUẤT\n- Dạng 1: Xác suất cổ điển\n- Dạng 2: Xác suất có điều kiện',
+    dangcauhoi:'DẠNG CÂU HỎI TRONG ĐỀ THI\n\n1. NHẬN BIẾT (Dễ)\n- Tính đạo hàm hàm số đơn giản\n- Giải phương trình bậc nhất, bậc hai\n- Xác định tập xác định hàm số\n\n2. THÔNG HIỂU (Trung bình)\n- Khảo sát sự biến thiên của hàm số\n- Giải phương trình logarit\n- Tính tích phân đơn giản\n\n3. VẬN DỤNG (Khó)\n- Biện luận theo tham số m\n- Bài toán thực tế (lãi suất, tăng trưởng)\n- Hình học không gian tổng hợp\n\n4. VẬN DỤNG CAO (Rất khó)\n- Bất đẳng thức và cực trị\n- Bài toán tối ưu\n- Tổ hợp xác suất nâng cao',
+    mau:'MẪU TRÌNH BÀY BÀI GIẢI\n\nBÀI TOÁN: Giải phương trình log_2(x+1) = 3\n\nGIẢI:\nĐiều kiện: x + 1 > 0 ⟺ x > -1\nTa có: log_2(x+1) = 3\n⟺ x + 1 = 2³ = 8\n⟺ x = 7 (thỏa mãn điều kiện)\n\nVậy nghiệm: x = 7\n\n---\n\nBÀI TOÁN 2: Tính tích phân I = ∫_0^1 x·e^x dx\n\nGIẢI:\nĐặt u = x ⟹ du = dx\n    dv = e^x dx ⟹ v = e^x\nI = [x·e^x]_0^1 - ∫_0^1 e^x dx\n  = (1·e - 0·1) - [e^x]_0^1\n  = e - (e - 1) = 1\n\nVậy I = 1\n\nLUÔN TRÌNH BÀY:\n1. Điều kiện (nếu có)\n2. Biến đổi logic\n3. Kết luận rõ ràng'
+  },
+  ly:{
+    congthuc:'CÔNG THỨC VẬT LÝ CẦN NHỚ\n\n1. CƠ HỌC\n- Vận tốc: v = s/t\n- Gia tốc: a = Δv/Δt\n- Phương trình: x = x0 + v0·t + ½at²\n- Định luật II Newton: F = ma\n- Động năng: W_đ = ½mv²\n- Thế năng: W_t = mgh\n- Cơ năng: W = W_đ + W_t = const\n\n2. ĐIỆN - TỪ\n- Định luật Coulomb: F = k|q1q2|/r² (k = 9·10⁹)\n- Cường độ dòng điện: I = q/t\n- Định luật Ohm: I = U/R\n- Công suất: P = UI = I²R = U²/R\n- Cảm ứng từ: B = F/(I·l·sinα)\n\n3. DAO ĐỘNG - SÓNG\n- Phương trình dao động: x = A·cos(ωt + φ)\n- Chu kỳ con lắc lò xo: T = 2π√(m/k)\n- Chu kỳ con lắc đơn: T = 2π√(l/g)\n- Bước sóng: λ = v/f = v·T\n- Sóng dừng 2 đầu cố định: l = k·λ/2\n\n4. QUANG HỌC\n- Định luật khúc xạ: n1·sin i = n2·sin r\n- Thấu kính: 1/f = 1/d + 1/d\'\n- Độ phóng đại: k = -d\'/d\n- Công thức thấu kính hội tụ: D = 1/f (điốp)',
+    lythuyet:'LÝ THUYẾT VẬT LÝ TRỌNG TÂM\n\n1. DAO ĐỘNG CƠ\n- Dao động điều hòa: hình sin với tần số góc ω\n- Con lắc lò xo: ω = √(k/m)\n- Con lắc đơn: ω = √(g/l)\n- Năng lượng: W = ½kA² = ½mω²A²\n\n2. SÓNG CƠ\n- Sóng ngang: dao động vuông góc phương truyền\n- Sóng dọc: dao động theo phương truyền\n- Giao thoa: 2 nguồn cùng pha, biên độ tổng hợp cực đại khi Δd = kλ\n\n3. DÒNG ĐIỆN XOAY CHIỀU\n- u = U0·cos(ωt + φu)\n- i = I0·cos(ωt + φi)\n- Cảm kháng: Z_L = ωL\n- Dung kháng: Z_C = 1/(ωC)\n- Tổng trở: Z = √(R² + (Z_L - Z_C)²)\n- Hệ số công suất: cosφ = R/Z\n\n4. SÓNG ÁNH SÁNG\n- Tán sắc: ánh sáng trắng tách thành 7 màu\n- Giao thoa Y-âng: i = λD/a\n- Tia X, tia tử ngoại, hồng ngoại\n\n5. LƯỢNG TỬ ÁNH SÁNG\n- Thuyết photon Einstein: ε = hf = hc/λ\n- Hiện tượng quang điện: hf ≥ A\n- Công thức: hf = A + ½mv²_max',
+    dangde:'CÁC DẠNG BÀI TẬP VẬT LÝ\n\n1. DAO ĐỘNG CƠ\n- Dạng 1: Viết phương trình dao động\n- Dạng 2: Tính chu kỳ, tần số, biên độ\n- Dạng 3: Bài toán thời gian trong dao động\n\n2. SÓNG CƠ\n- Dạng 1: Viết phương trình sóng\n- Dạng 2: Bài toán giao thoa, sóng dừng\n- Dạng 3: Độ lệch pha giữa 2 điểm\n\n3. ĐIỆN XOAY CHIỀU\n- Dạng 1: Tính Z, I, U từng phần tử\n- Dạng 2: Cộng hưởng điện\n- Dạng 3: Công suất và hệ số công suất\n- Dạng 4: Máy biến áp, truyền tải điện\n\n4. QUANG HỌC\n- Dạng 1: Khúc xạ, phản xạ toàn phần\n- Dạng 2: Thấu kính, gương\n- Dạng 3: Giao thoa ánh sáng\n\n5. HẠT NHÂN\n- Dạng 1: Phóng xạ\n- Dạng 2: Phản ứng hạt nhân\n- Dạng 3: Năng lượng liên kết',
+    dangcauhoi:'DẠNG CÂU HỎI THI VẬT LÝ\n\n1. NHẬN BIẾT\n- Công thức cơ bản\n- Đơn vị đo lường\n- Định nghĩa hiện tượng\n\n2. THÔNG HIỂU\n- Giải bài toán 1-2 bước\n- Xác định đại lượng vật lý\n- So sánh các hiện tượng\n\n3. VẬN DỤNG\n- Bài toán 3-4 bước\n- Kết hợp nhiều công thức\n- Đồ thị dao động\n\n4. VẬN DỤNG CAO\n- Bài toán tổng hợp nhiều chương\n- Thí nghiệm thực tế\n- Đánh giá sai số',
+    mau:'MẪU GIẢI BÀI TẬP VẬT LÝ\n\nBÀI TOÁN: Con lắc lò xo có k = 100 N/m, m = 100g dao động với biên độ A = 4cm. Tìm chu kỳ, tần số, cơ năng.\n\nGIẢI:\nT = 2π√(m/k) = 2π√(0.1/100) = 2π·0.0316 ≈ 0.199 s\nf = 1/T ≈ 5.03 Hz\nω = √(k/m) = √(100/0.1) = √1000 ≈ 31.62 rad/s\nCơ năng: W = ½kA² = ½·100·(0.04)² = ½·100·0.0016 = 0.08 J\n\nVậy: T ≈ 0.199s, f ≈ 5.03Hz, W = 0.08J\n\n---\n\nBÀI 2: Đặt U = 220V vào mạch RLC nối tiếp có R = 100Ω, Z_L = 200Ω, Z_C = 100Ω.\n\nGIẢI:\nZ = √(R² + (Z_L - Z_C)²) = √(100² + 100²) = 100√2 ≈ 141.4Ω\nI = U/Z = 220/141.4 ≈ 1.556 A\ncosφ = R/Z = 100/141.4 ≈ 0.707\nP = UI·cosφ = 220·1.556·0.707 ≈ 242 W'
+  },
+  hoa:{
+    congthuc:'CÔNG THỨC HÓA HỌC\n\n1. MOL - KHỐI LƯỢNG\n- n = m/M (mol)\n- n = V/22.4 (khí, đkc)\n- n = C_M · V_dd (dung dịch)\n- Số hạt = n · 6.022·10²³\n\n2. NỒNG ĐỘ DUNG DỊCH\n- C% = m_ct · 100 / m_dd\n- C_M = n/V (mol/L)\n- C% = C_M · M / 10D\n\n3. ĐỊNH LUẬT BẢO TOÀN\n- Bảo toàn khối lượng: m_trước = m_sau\n- Bảo toàn electron: Σ n_e (cho) = Σ n_e (nhận)\n\n4. ĐIỆN PHÂN\n- m = (A·I·t)/(n·F), F = 96500\n\n5. HÓA HỮU CƠ\n- C_nH_2n+2: ankan\n- C_nH_2n: anken (n≥2)\n- C_nH_2n-2: ankin/ankađien\n- C_nH_2n-6: arene (n≥6)\n\n6. ĐỒNG PHÂN - PHẢN ỨNG\n- Số CTPT: CTPT = nC, nH, nO...\n- PTHH cần cân bằng',
+    lythuyet:'LÝ THUYẾT HÓA HỌC\n\n1. NGUYÊN TỬ - BẢNG TUẦN HOÀN\n- Nguyên tử: proton + neutron (hạt nhân), electron (vỏ)\n- Cấu hình electron: 1s 2s 2p 3s 3p 4s 3d 4p...\n- Chu kỳ = số lớp e; Nhóm = số e lớp ngoài\n- Trong chu kỳ: tính kim loại giảm, phi kim tăng\n- Trong nhóm A: tính kim loại tăng\n\n2. LIÊN KẾT HÓA HỌC\n- Liên kết ion: kim loại mạnh + phi kim mạnh\n- Liên kết cộng hóa trị: góp chung e\n- Liên kim loại: mạng tinh thể kim loại\n- Liên kết hidro: liên phân tử\n\n3. PHẢN ỨNG OXI HÓA - KHỬ\n- Oxi hóa: nhường e (số oxi hóa tăng)\n- Khử: nhận e (số oxi hóa giảm)\n- Chất oxi hóa: nhận e\n- Chất khử: nhường e\n\n4. SỰ ĐIỆN LI\n- Chất điện li mạnh: HCl, NaOH, muối tan\n- Chất điện li yếu: CH3COOH, H2CO3\n- pH = -log[H+]; pH < 7: axit; pH > 7: bazơ\n\n5. HÓA HỮU CƠ\n- Ankan: phản ứng thế\n- Anken, ankin: phản ứng cộng\n- Benzen: phản ứng thế (Br2/Fe), cộng H2',
+    dangde:'CÁC DẠNG BÀI TẬP HÓA HỌC\n\n1. BÀI TOÁN KIM LOẠI + AXIT\n- Kim loại + HCl, H2SO4 loãng → muối + H2\n- Kim loại + HNO3, H2SO4 đặc → muối + khí\n- Bảo toàn e, bảo toàn khối lượng\n\n2. BÀI TOÁN ĐỐT CHÁY HCHC\n- C_xH_yO_z + O2 → CO2 + H2O\n- Bảo toàn C, H, O\n- Tìm CTPT từ tỉ lệ\n\n3. BÀI TOÁN ESTE - LIPIT\n- Thủy phân este trong axit/bazơ\n- Phản ứng xà phòng hóa\n\n4. BÀI TOÁN AMIN - AMINO AXIT\n- Tác dụng với HCl\n- Phản ứng trùng ngưng\n\n5. BÀI TOÁN ĐIỆN PHÂN\n- Điện phân dung dịch, nóng chảy\n- Tính m, V khí\n\n6. BÀI TOÁN pH\n- Tính pH dung dịch axit/bazơ mạnh\n- Tính pH dung dịch đệm',
+    dangcauhoi:'DẠNG CÂU HỎI THI HÓA HỌC\n\n1. NHẬN BIẾT\n- Công thức hóa học, tên gọi\n- Tính chất vật lý\n- Màu sắc, trạng thái\n\n2. THÔNG HIỂU\n- Cân bằng PTHH\n- Tính số mol cơ bản\n- Nhận biết dung dịch\n\n3. VẬN DỤNG\n- Bài toán hỗn hợp\n- Xác định CTPT từ % nguyên tố\n- Bài toán dư/thiếu\n\n4. VẬN DỤNG CAO\n- Bài toán đồng đẳng hóa\n- Bài toán peptit\n- Bài toán điện phân phức tạp',
+    mau:'MẪU GIẢI BÀI TẬP HÓA HỌC\n\nBÀI TOÁN: Cho 5.6g Fe tác dụng với dd HCl dư. Tính V H2 (đkc) và m muối.\n\nGIẢI:\nFe + 2HCl → FeCl2 + H2\nn_Fe = 5.6/56 = 0.1 mol\nn_H2 = n_Fe = 0.1 mol\nV_H2 = 0.1 · 22.4 = 2.24 L\nn_FeCl2 = n_Fe = 0.1 mol\nm_FeCl2 = 0.1 · 127 = 12.7 g\n\nVậy: V = 2.24 L, m = 12.7 g\n\n---\n\nBÀI 2: Đốt cháy hoàn toàn 4.4g hỗn hợp C3H8 và C3H6 thu 7.2g H2O. Tính % khối lượng mỗi chất.\n\nGIẢI:\nn_H2O = 7.2/18 = 0.4 mol\nn_C3H8 = x, n_C3H6 = y\n44x + 42y = 4.4\n4x + 3y = 0.4\n→ x = 0.1, y = 0\n→ %C3H8 = 100%'
+  },
+  sinh:{
+    congthuc:'CÔNG THỨC SINH HỌC\n\n1. ADN - GEN\n- N = 2L/3.4 (N: số nu; L: chiều dài Å)\n- A + G = N/2\n- H = 2A + 3G (số liên kết H)\n- Số liên kết hóa trị: N - 2 + N = 2N - 2\n\n2. ARN\n- rN = N/2\n- A = T1 = A2 = rU\n- G = X1 = G2 = rX\n- L_ARN = rN · 3.4\n\n3. PROTEIN\n- Số axit amin = N/(2·3) - 1\n- Số liên kết peptit = số aa - 1\n- Khối lượng phân tử protein = số aa · 110\n\n4. NGUYÊN PHÂN\n- Số TB con = 2^k\n- Số NST tương đương = 2n(2^k - 1)\n- Số thoi phân bào = 2^k - 1\n\n5. GIẢM PHÂN\n- 1 TB sinh tinh → 4 tinh trùng\n- 1 TB sinh trứng → 1 trứng + 3 thể định hướng\n\n6. QUY LUẬT MENDEL\n- F2 phân ly 3:1 (trội hoàn toàn)\n- F2 phân ly 1:2:1 (trội không hoàn toàn)\n- Lai phân tích: Aa × aa → 1:1',
+    lythuyet:'LÝ THUYẾT SINH HỌC\n\n1. DI TRUYỀN HỌC\n- Gen là 1 đoạn ADN mang thông tin di truyền\n- Đột biến gen: mất, thêm, thay thế cặp nu\n- Đột biến NST: cấu trúc, số lượng\n- Thể đa bội: 3n, 4n,...; thể dị bội: 2n±1\n\n2. QUY LUẬT DI TRUYỀN\n- Mendel: phân ly, phân ly độc lập\n- Tương tác gen: bổ trợ, át chế, cộng gộp\n- Hoán vị gen: tần số hoán vị ≤ 50%\n- Liên kết giới tính: gen trên X, Y\n- Di truyền ngoài nhân: gen trong ti thể, lục lạp\n\n3. DI TRUYỀN QUẦN THỂ\n- Ngẫu phối: p²AA + 2pqAa + q²aa = 1\n- p + q = 1 (p: tần số A, q: tần số a)\n- Tự phối: tần số dị hợp giảm\n\n4. ỨNG DỤNG DI TRUYỀN\n- Chọn giống: lai tạo, gây đột biến\n- Công nghệ gen: tạo ADN tái tổ hợp\n- Công nghệ tế bào: nuôi cấy mô\n\n5. TIẾN HÓA\n- Học thuyết Darwin, Lamarck\n- Thuyết tiến hóa tổng hợp hiện đại\n- Chọn lọc tự nhiên, phiêu bạt di truyền',
+    dangde:'CÁC DẠNG BÀI TẬP SINH HỌC\n\n1. BÀI TẬP ADN - ARN - PROTEIN\n- Tính N, L, M, H của gen\n- Tính số nu từng loại\n- Tính số aa chuỗi polipeptit\n\n2. BÀI TẬP NGUYÊN PHÂN - GIẢM PHÂN\n- Tính số TB con, NST\n- Tính số giao tử\n- Xác định số hợp tử\n\n3. BÀI TẬP LAI 1 CẶP TÍNH TRẠNG\n- Xác định KG, KH của P, F1, F2\n- Viết sơ đồ lai\n\n4. BÀI TẬP LAI 2 CẶP TÍNH TRẠNG\n- Xác định tỉ lệ KH ở F2\n- Xác định KG của P\n\n5. BÀI TẬP QUẦN THỂ\n- Xác định tần số alen, KG\n- Xác định trạng thái cân bằng\n\n6. BÀI TẬP LIÊN KẾT GEN - HOÁN VỊ\n- Tính tần số hoán vị\n- Xác định tỉ lệ KH\n\n7. BÀI TẬP DI TRUYỀN NGƯỜI\n- Phả hệ\n- Xác suất sinh con bị bệnh',
+    dangcauhoi:'DẠNG CÂU HỎI THI SINH HỌC\n\n1. NHẬN BIẾT\n- Khái niệm, định nghĩa\n- Cấu trúc ADN, NST\n- Các kỳ nguyên phân, giảm phân\n\n2. THÔNG HIỂU\n- Cơ chế phiên mã, dịch mã\n- Quy luật Mendel đơn giản\n- Tính N, L cơ bản\n\n3. VẬN DỤNG\n- Lai 2 cặp tính trạng\n- Bài toán quần thể\n- Xác định KG từ KH\n\n4. VẬN DỤNG CAO\n- Phả hệ phức tạp\n- Tương tác gen\n- Đột biến NST\n- Di truyền ngoài nhân',
+    mau:'MẪU GIẢI BÀI TẬP SINH HỌC\n\nBÀI TOÁN: Gen có 3000 nu, A = 600. Tính L, H, số nu từng loại.\n\nGIẢI:\nL = N/2 · 3.4 = 3000/2 · 3.4 = 5100 Å\nA = T = 600\nA + G = N/2 = 1500 → G = X = 900\nH = 2A + 3G = 2·600 + 3·900 = 1200 + 2700 = 3900\n\nVậy: L = 5100 Å, H = 3900, A=T=600, G=X=900\n\n---\n\nBÀI 2: P: Aa × Aa. Xác định tỉ lệ KG, KH ở F1.\n\nGIẢI:\nP: Aa × Aa\nGP: A,a × A,a\nF1: 1/4 AA : 2/4 Aa : 1/4 aa\nKG: 1AA : 2Aa : 1aa\nKH: 3 trội : 1 lặn'
+  },
+  su:{
+    congthuc:'MỐC THỜI GIAN LỊCH SỬ\n\n1. LỊCH SỬ VIỆT NAM\n- 1858: Pháp nổ súng xâm lược\n- 1930: Đảng CSVN ra đời (3/2)\n- 1945: Cách mạng tháng Tám, 2/9 Tuyên ngôn độc lập\n- 1954: Chiến thắng Điện Biên Phủ (7/5)\n- 1975: Giải phóng miền Nam (30/4)\n- 1986: Đổi mới\n\n2. LỊCH SỬ THẾ GIỚI\n- 1789: Cách mạng Pháp\n- 1917: Cách mạng tháng Mười Nga\n- 1914-1918: Chiến tranh thế giới 1\n- 1939-1945: Chiến tranh thế giới 2\n- 1945: Liên Hợp Quốc thành lập\n- 1991: Liên Xô tan rã\n\n3. CÁC CUỘC CÁCH MẠNG\n- 1776: Mỹ độc lập\n- 1789-1794: Pháp\n- 1911: Tân Hợi (TQ)',
+    lythuyet:'LÝ THUYẾT LỊCH SỬ TRỌNG TÂM\n\n1. VIỆT NAM 1858-1918\n- Pháp xâm lược, triều đình Nguyễn đầu hàng\n- Các cuộc khởi nghĩa: Trương Định, Nguyễn Trung Trực\n- Phong trào Cần Vương (1885-1896)\n- Khởi nghĩa Yên Thế (1884-1913)\n- Phan Bội Châu: Đông Du\n- Phan Châu Trinh: Duy Tân\n\n2. VIỆT NAM 1919-1945\n- Khai thác thuộc địa lần 2 (1919-1929)\n- Nguyễn Ái Quốc ra đi tìm đường cứu nước (1911)\n- Hội Việt Nam Cách mạng Thanh niên (1925)\n- Đảng CSVN thành lập (3/2/1930)\n- Cao trào 1930-1931, Xô viết Nghệ Tĩnh\n- Mặt trận Việt Minh (1941)\n- Cách mạng tháng Tám 1945\n\n3. VIỆT NAM 1945-1954\n- Kháng chiến chống Pháp\n- Chiến dịch Việt Bắc (1947)\n- Chiến dịch Biên giới (1950)\n- Điện Biên Phủ (1954)\n\n4. VIỆT NAM 1954-1975\n- Kháng chiến chống Mỹ\n- Đồng khởi (1960)\n- Tổng tiến công Tết Mậu Thân (1968)\n- Hiệp định Paris (1973)\n- Giải phóng miền Nam 30/4/1975',
+    dangde:'CÁC DẠNG CÂU HỎI LỊCH SỬ\n\n1. NHẬN BIẾT\n- Sự kiện, ngày tháng\n- Nhân vật lịch sử\n- Địa danh\n\n2. THÔNG HIỂU\n- Nguyên nhân, diễn biến, kết quả\n- Ý nghĩa sự kiện\n- So sánh các sự kiện\n\n3. VẬN DỤNG\n- Phân tích nguyên nhân thắng lợi\n- Đánh giá vai trò của Đảng\n- Liên hệ thực tiễn\n\n4. VẬN DỤNG CAO\n- So sánh đường lối cách mạng\n- Đánh giá tính đúng đắn\n- Rút ra bài học kinh nghiệm',
+    dangcauhoi:'DẠNG CÂU HỎI TRONG ĐỀ THI SỬ\n\n1. TRẮC NGHIỆM\n- Câu hỏi sự kiện\n- Câu hỏi nhân vật\n- Câu hỏi mốc thời gian\n- Câu hỏi ý nghĩa\n\n2. TỰ LUẬN\n- Phân tích nguyên nhân\n- Trình bày diễn biến\n- Đánh giá ý nghĩa\n- So sánh sự kiện\n\n3. KỸ NĂNG\n- Đọc bản đồ lịch sử\n- Đọc bảng số liệu\n- Phân tích tư liệu\n- Lập bảng niên biểu',
+    mau:'MẪU TRẢ LỜI CÂU HỎI LỊCH SỬ\n\nCÂU HỎI: Trình bày nguyên nhân thắng lợi của Cách mạng tháng Tám 1945.\n\nTRẢ LỜI:\n\n1. NGUYÊN NHÂN CHỦ QUAN\n- Sự lãnh đạo đúng đắn của Đảng CSVN và Hồ Chí Minh\n- Truyền thống yêu nước, đoàn kết của dân tộc\n- Sự chuẩn bị chu đáo qua 15 năm (1930-1945)\n- Xây dựng lực lượng chính trị và vũ trang\n\n2. NGUYÊN NHÂN KHÁCH QUAN\n- Hồng quân Liên Xô đánh bại phát xít Đức\n- Nhật đầu hàng Đồng minh (8/1945)\n- Thời cơ ngàn năm có một\n\n3. BÀI HỌC KINH NGHIỆM\n- Nắm bắt thời cơ\n- Kết hợp đấu tranh chính trị và vũ trang\n- Phát huy sức mạnh đoàn kết toàn dân'
+  },
+  van:{
+    congthuc:'CẤU TRÚC BÀI VĂN NGHỊ LUẬN\n\n1. MỞ BÀI\n- Giới thiệu vấn đề nghị luận\n- Dẫn dắt bằng câu thơ, câu nói\n- Nêu luận điểm chính\n\n2. THÂN BÀI\n- Luận điểm 1: Lý lẽ + Dẫn chứng\n- Luận điểm 2: Lý lẽ + Dẫn chứng\n- Luận điểm 3: Lý lẽ + Dẫn chứng\n- Mỗi luận điểm cần 1-2 dẫn chứng cụ thể\n\n3. KẾT BÀI\n- Khẳng định lại vấn đề\n- Liên hệ bản thân\n- Mở rộng, nâng cao\n\nCÁC THAO TÁC LẬP LUẬN:\n- Giải thích\n- Chứng minh\n- Bình luận\n- Phân tích\n- So sánh',
+    lythuyet:'LÝ THUYẾT VĂN HỌC\n\n1. VĂN HỌC DÂN GIAN\n- Thần thoại: giải thích vũ trụ, con người\n- Sử thi: Đăm Săn, Iliat, Ôđixê\n- Truyền thuyết: Lạc Long Quân, An Dương Vương\n- Cổ tích: Tấm Cám, Thạch Sanh\n- Ca dao - tục ngữ: kinh nghiệm sống\n\n2. VĂN HỌC TRUNG ĐẠI\n- Thơ Đường: Lý Bạch, Đỗ Phủ\n- Truyện Kiều - Nguyễn Du\n- Chinh phụ ngâm - Đặng Trần Côn\n- Thơ Nôm Hồ Xuân Hương\n- Bình Ngô đại cáo - Nguyễn Trãi\n\n3. VĂN HỌC HIỆN ĐẠI\n- Thơ mới (1932-1945): Xuân Diệu, Hàn Mặc Tử\n- Tự lực văn đoàn: Nam Cao, Vũ Trọng Phụng\n- Văn học cách mạng: Tố Hữu, Nguyễn Tuân\n- Sau 1975: Nguyễn Minh Châu, Ma Văn Kháng\n\n4. ĐẶC TRƯNG THỂ LOẠI\n- Truyện ngắn: cốt truyện, nhân vật\n- Thơ: vần, nhịp, hình ảnh\n- Kịch: xung đột, hành động\n- Ký: chân thực, sinh động',
+    dangde:'CÁC DẠNG ĐỀ VĂN NGHỊ LUẬN\n\n1. NGHỊ LUẬN XÃ HỘI\n- Nghị luận về tư tưởng đạo lý\n- Nghị luận về hiện tượng đời sống\n- Nghị luận về một vấn đề xã hội\n\n2. NGHỊ LUẬN VĂN HỌC\n- Phân tích tác phẩm\n- Phân tích nhân vật\n- Phân tích đoạn thơ\n- So sánh 2 tác phẩm\n- Cảm nhận về 1 đoạn trích\n\n3. DẠNG ĐỀ THƯỜNG GẶP\n- Đề 2 điểm: Nghị luận xã hội\n- Đề 5 điểm: Nghị luận văn học\n- Đề so sánh\n- Đề liên hệ\n\n4. CẤU TRÚC ĐỀ\n- Đọc hiểu (3 điểm)\n- Nghị luận xã hội (2 điểm)\n- Nghị luận văn học (5 điểm)',
+    dangcauhoi:'DẠNG CÂU HỎI MÔN VĂN\n\n1. PHẦN ĐỌC HIỂU\n- Xác định thể loại, PTBĐ\n- Nội dung chính của đoạn\n- Tìm biện pháp tu từ\n- Ý nghĩa chi tiết\n\n2. PHẦN NGHỊ LUẬN XÃ HỘI\n- Giải thích vấn đề\n- Bàn luận, mở rộng\n- Bài học nhận thức và hành động\n\n3. PHẦN NGHỊ LUẬN VĂN HỌC\n- Giới thiệu tác giả, tác phẩm\n- Phân tích nội dung, nghệ thuật\n- Đánh giá, nhận xét\n\n4. KỸ NĂNG VIẾT\n- Diễn đạt trong sáng\n- Lập luận chặt chẽ\n- Dẫn chứng thuyết phục\n- Không sai chính tả',
+    mau:'MẪU MỞ BÀI VÀ KẾT BÀI\n\n1. MẪU MỞ BÀI GIÁN TIẾP\nVí dụ: Phân tích bài thơ "Tây Tiến" của Quang Dũng.\n\n"Trong nền thơ ca cách mạng Việt Nam, Quang Dũng nổi lên như một ngôi sao sáng với hồn thơ hào hoa, lãng mạn. Bài thơ Tây Tiến là kết tinh đẹp đẽ nhất của hồn thơ ấy — một bức tượng đài bất tử về người lính Tây Tiến. Đến với Tây Tiến, ta không chỉ gặp một miền Tây hùng vĩ, dữ dội mà còn gặp cả một trời thương nhớ, một tình đồng đội thiêng liêng cao cả."\n\n2. MẪU MỞ BÀI TRỰC TIẾP\n"Quang Dũng (1921-1988) là một nghệ sĩ đa tài: làm thơ, viết văn, vẽ tranh, soạn nhạc. Ông đặc biệt thành công với hồn thơ phóng khoáng, hồn hậu, lãng mạn và tài hoa. Tây Tiến là tác phẩm tiêu biểu của ông, được viết năm 1948, in trong tập Mây đầu ô."\n\n3. MẪU KẾT BÀI\nTóm lại, Tây Tiến đã khắc họa thành công vẻ đẹp bi tráng của người lính Tây Tiến. Bằng bút pháp lãng mạn tài hoa, Quang Dũng đã để lại cho đời một tượng đài thơ ca bất hủ, gợi nhắc chúng ta về một thời oanh liệt của dân tộc.'
+  }
+};
 
 let systemDocsData={};
 let systemDocsListener=null;
@@ -3251,7 +3293,8 @@ function getCurrentAiModelName(){
   const provider=document.getElementById('aiSetupProvider').value;
   if(provider==='custom'){const c=document.getElementById('aiSetupModelCustom');return c?c.value.trim():'';}
   const sel=document.getElementById('aiSetupModelSelect');
-  return sel?sel.value:'';
+  const custom=document.getElementById('aiSetupModelCustom');
+  return (sel&&sel.value)||(custom?custom.value.trim():'');
 }
 function getCurrentAiEndpoint(){
   const ep=document.getElementById('aiSetupEndpoint');
@@ -4232,14 +4275,7 @@ async function openProfile(_,targetUser){
   const frameEl=document.getElementById('profileAvatarFrame');
   const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));
   frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');
-  // LUÔN hiển thị hiệu ứng profile bất kể chế độ hiển thị
-  if(effRole&&!isBaseRole(effRole)){
-    playProfileEffect(effRole);
-    startAvatarEffect(effRole);
-  }else{
-    stopProfileEffect();
-    stopAvatarEffect();
-  }
+  if(effRole&&!isBaseRole(effRole)){playProfileEffect(effRole);startAvatarEffect(effRole);}else{stopProfileEffect();stopAvatarEffect();}
   document.getElementById('profileModal').classList.add('show');
   if(isSelf){
     showAiModelInProfile(u);
@@ -4257,14 +4293,14 @@ async function openProfile(_,targetUser){
   }
   if(profileEffectCycleTimer)clearInterval(profileEffectCycleTimer);
   if(effRole&&!isBaseRole(effRole)){
-    const adj=getProfileEffectAdjust(effRole);
-    const cooldownMs=Math.max(2000,(adj.cooldown||10)*1000);
+    const roleAdj=getProfileEffectAdjust(effRole);
+    const cooldown=roleAdj.cooldown||10;
     profileEffectCycleTimer=setInterval(()=>{
       if(document.getElementById('profileModal').classList.contains('show')&&currentViewingUser){
         stopProfileEffect();stopAvatarEffect();
         playProfileEffect(effRole);startAvatarEffect(effRole);
       }
-    },cooldownMs);
+    },cooldown*1000);
   }
 }
 function renderProfileRoles(allRoles){
@@ -4364,7 +4400,7 @@ function getProfileEffectAdjust(role){
   };
 }
 function playProfileEffect(role){
-  if(role&&isBaseRole(role))return;
+  if(!role||isBaseRole(role))return;
   stopProfileEffect();
   const effectType=getAvatarEffect(role);
   const modal=document.getElementById('profileModal');
@@ -4702,7 +4738,7 @@ function switchRoleFxDevice(device,el){
   document.getElementById('rfxRangeRot').value=adj.rotation||0;
   document.getElementById('rfxRangeOp').value=adj.opacity!==undefined?adj.opacity:1;
   document.getElementById('rfxRangeDur').value=adj.duration||6;
-  document.getElementById('rfxRangeCooldown').value=adj.cooldown||10;
+  document.getElementById('rfxRangeCool').value=adj.cooldown||10;
   updateRoleFxPreview();
 }
 function renderRoleFxStage(){
@@ -4750,7 +4786,7 @@ function openRoleEffectAdjust(){
   document.getElementById('rfxRangeRot').value=d.rotation||0;
   document.getElementById('rfxRangeOp').value=d.opacity!==undefined?d.opacity:1;
   document.getElementById('rfxRangeDur').value=d.duration||6;
-  document.getElementById('rfxRangeCooldown').value=d.cooldown||10;
+  document.getElementById('rfxRangeCool').value=d.cooldown||10;
   roleEffectAdjustDevice='desktop';
   document.querySelectorAll('#roleFxDeviceTabs .role-device-tab').forEach(t=>t.classList.remove('active'));
   const firstTab=document.querySelector('#roleFxDeviceTabs .role-device-tab');
@@ -4793,7 +4829,7 @@ function getRoleFxPreviewTransform(){
 function updateRoleFxPreview(){
   const {x,y,sc,sx,sy,rot,op}=getRoleFxPreviewTransform();
   const dur=parseFloat(document.getElementById('rfxRangeDur').value)||6;
-  const cd=parseFloat(document.getElementById('rfxRangeCooldown').value)||10;
+  const cool=parseFloat(document.getElementById('rfxRangeCool').value)||10;
   document.getElementById('rfxXVal').innerText=x;
   document.getElementById('rfxYVal').innerText=y;
   document.getElementById('rfxScaleVal').innerText=sc.toFixed(2);
@@ -4802,7 +4838,7 @@ function updateRoleFxPreview(){
   document.getElementById('rfxRotVal').innerText=rot;
   document.getElementById('rfxOpVal').innerText=op.toFixed(2);
   document.getElementById('rfxDurVal').innerText=dur;
-  document.getElementById('rfxCooldownVal').innerText=cd;
+  const coolEl=document.getElementById('rfxCoolVal');if(coolEl)coolEl.innerText=cool;
   const drag=document.getElementById('roleFxDraggable');
   if(drag){drag.style.transform=`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) scale(${sc}) scaleX(${sx}) scaleY(${sy}) rotate(${rot}deg)`;drag.style.opacity=op;}
   const layer=document.getElementById('roleFxLayer');
@@ -4906,7 +4942,7 @@ function resetRoleEffectAdjust(){
   document.getElementById('rfxRangeRot').value=0;
   document.getElementById('rfxRangeOp').value=1;
   document.getElementById('rfxRangeDur').value=6;
-  document.getElementById('rfxRangeCooldown').value=10;
+  document.getElementById('rfxRangeCool').value=10;
   updateRoleFxPreview();
 }
 function smartCenterRoleFx(){
@@ -4925,7 +4961,7 @@ function saveRoleEffectAdjust(){
     rotation:parseFloat(document.getElementById('rfxRangeRot').value)||0,
     opacity:parseFloat(document.getElementById('rfxRangeOp').value)||1,
     duration:parseFloat(document.getElementById('rfxRangeDur').value)||6,
-    cooldown:parseFloat(document.getElementById('rfxRangeCooldown').value)||10
+    cooldown:parseFloat(document.getElementById('rfxRangeCool').value)||10
   };
   roleEffectAdjustState.desktop=adj;
   closeRoleEffectAdjust();
@@ -5554,7 +5590,7 @@ async function deleteDocByKey(key){const pass=document.getElementById('docLibrar
 async function downloadDocByKey(key){const s=await window.dbGet(window.dbChild(window.dbRef,'documents/'+key));if(!s.exists())return;const d=s.val();const a=document.createElement('a');a.href=d.data;a.download=d.name||'file';document.body.appendChild(a);a.click();document.body.removeChild(a);showCenterSquareToast('⬇️','Đã tải!',d.name,'success');}
 function openDocumentStudentModal(){const m=document.getElementById('documentLibraryStudentModal');m.classList.add('show');const c=document.getElementById('docStudentListContainer');c.innerHTML='<p style="text-align:center">Đang tải...</p>';window.dbGet(window.dbChild(window.dbRef,'documents')).then(s=>{const list=s.val()||{};const keys=Object.keys(list);if(!keys.length){c.innerHTML='<p style="text-align:center;color:#888">Chưa có tài liệu</p>';return;}keys.sort((a,b)=>(list[b].uploadedAt||0)-(list[a].uploadedAt||0));c.innerHTML=keys.map(k=>{const d=list[k];return `<div class="doc-item"><div class="doc-info"><span class="doc-icon">${getDocIcon(d.name,d.type)}</span><div style="flex:1;min-width:0"><div class="doc-name">${escapeHtml(d.name||'')}</div><div class="doc-meta">${formatDocSize(d.size)}</div></div></div><div class="doc-actions"><button onclick="downloadDocByKey('${k}')" style="background:#1877f2">⬇️</button></div></div>`;}).join('');});}
 function closeDocumentStudentModal(){document.getElementById('documentLibraryStudentModal').classList.remove('show');}
-function switchSubModule(id){document.querySelectorAll('.sub-module-box').forEach(el=>el.style.display='none');const el=document.getElementById(id);if(el)el.style.display='block';if(id==='quickPracticeCreate'&&!document.getElementById('qpQuestionsContainer').children.length)addQpQuestionItem();if(id==='smartExamCreate'&&(!smartExamQuestions||!smartExamQuestions.length)){document.getElementById('smartExamPreviewContainer').style.display='none';document.getElementById('smartExamConfigBox').style.display='none';document.getElementById('smartExamProgress').style.display='none';document.getElementById('smartExamAnswerUploadBox').style.display='none';}if(id==='documentLibrary'&&!docLibraryListener)loadDocLibrary();if(id==='aiExamCreate'){}}
+function switchSubModule(id){document.querySelectorAll('.sub-module-box').forEach(el=>el.style.display='none');const el=document.getElementById(id);if(el)el.style.display='block';if(id==='quickPracticeCreate'&&!document.getElementById('qpQuestionsContainer').children.length)addQpQuestionItem();if(id==='smartExamCreate'&&(!smartExamQuestions||!smartExamQuestions.length)){document.getElementById('smartExamPreviewContainer').style.display='none';document.getElementById('smartExamConfigBox').style.display='none';document.getElementById('smartExamProgress').style.display='none';document.getElementById('smartExamAnswerUploadBox').style.display='none';}if(id==='documentLibrary'&&!docLibraryListener)loadDocLibrary();if(id==='aiExamCreate'){/* nothing extra */}}
 function toggleExamCreationType(){const t=document.getElementById('examType').value;document.getElementById('pdfUploadSection').style.display=t==='pdf'?'block':'none';document.getElementById('imageUploadSection').style.display=t==='image'?'block':'none';}
 function toggleAdvExamOptions(){document.getElementById('advExamOptionsPanel').style.display=document.getElementById('advExamOptionsToggle').checked?'block':'none';}
 function toggleAdvTimerInput(){document.getElementById('advTimerInputBox').style.display=document.getElementById('advEnableTimer').checked?'block':'none';}
@@ -6087,11 +6123,9 @@ function showAiWidget(){
   const w=document.getElementById('aiModelWidget');
   if(!w)return;
   w.classList.remove('ai-hidden');
-  w.style.pointerEvents='auto';
   aiWidgetVisible=true;
   applyAiWidgetPosition();
   updateAiWidgetContent();
-  bindAiWidgetInteractions();
 }
 function hideAiWidget(){
   const w=document.getElementById('aiModelWidget');
@@ -6104,14 +6138,6 @@ function hideAiWidget(){
   const body=document.getElementById('aiModelBody');
   if(body){body.onpointerdown=null;body.onpointermove=null;body.onpointerup=null;body.onpointercancel=null;}
 }
-function is3DFile(name,mime){
-  const n=(name||'').toLowerCase();
-  if(/\.(glb|gltf|vrm|fbx|obj|pmx|pmd|bvh|dae|3ds)$/i.test(n))return true;
-  if(mime&&/3d|vnd\.|octet-stream/.test(mime)&&/\.(glb|gltf|vrm|fbx|obj|pmx|pmd|bvh|dae|3ds)$/i.test(n))return true;
-  return false;
-}
-function isGifFile(name,mime){const n=(name||'').toLowerCase();return n.endsWith('.gif')||(mime&&mime==='image/gif');}
-function get3DExt(name){const m=String(name||'').match(/\.([a-z0-9]+)$/i);return m?m[1].toLowerCase():'';}
 async function updateAiWidgetContent(){
   const content=document.getElementById('aiModelContent');
   const badge=document.getElementById('aiModelBadge');
@@ -6122,44 +6148,16 @@ async function updateAiWidgetContent(){
   if(badge)badge.innerText=md.name||'Auro';
   const chatName=document.getElementById('aiChatName');if(chatName)chatName.innerText=md.name||'Auro';
   let imgData=md.imageData||'';
-  let model3DUrl=null,model3DExt='';
   if(!imgData&&md.files&&md.files.length){
     const imgFile=md.files.find(f=>f.type&&f.type.startsWith('image/'));
-    if(imgFile)imgData=imgFile.data||'';
+    if(imgFile)imgData=imgFile.data||imgFile.chunk||'';
   }
-  // Detect 3D model file
-  if(md.files&&md.files.length){
-    for(const f of md.files){
-      if(is3DFile(f.name,f.type)){model3DUrl=f.data||null;model3DExt=get3DExt(f.name);break;}
-    }
-  }
-  // GIF detection - prioritize GIFs
-  if(!imgData&&md.files&&md.files.length){
-    const gifFile=md.files.find(f=>isGifFile(f.name,f.type));
-    if(gifFile)imgData=gifFile.data||'';
-  }
-  // Detect cached element to avoid recreating
-  let existingImg=content.querySelector('img[data-ai-img]');
-  let existingModelViewer=content.querySelector('model-viewer[data-ai-3d]');
-  if(model3DUrl&&(model3DExt==='glb'||model3DExt==='gltf')){
-    if(!existingModelViewer){
-      content.innerHTML=`<model-viewer data-ai-3d="1" src="${model3DUrl}" alt="" auto-rotate camera-controls style="width:100%;height:100%;background:transparent"></model-viewer>`;
-      existingModelViewer=content.querySelector('model-viewer[data-ai-3d]');
-    }else{
-      if(existingModelViewer.src!==model3DUrl)existingModelViewer.src=model3DUrl;
-    }
-    // Webcam transform not applied to model-viewer
-  }else if(imgData){
-    if(!existingImg||existingImg.dataset.src!==imgData){
-      content.innerHTML=`<img data-ai-img="1" data-src="${escapeHtml(imgData)}" src="${imgData}" alt="" style="transition:transform .1s">`;
-      existingImg=content.querySelector('img[data-ai-img]');
-    }
-    // Webcam expression -> apply transform (cached element, not recreated each frame)
+  // Biểu cảm — có thể thay bằng webcam
+  if(imgData){
     const transform=`scale(${1+(aiWebcamMouthOpenness*0.06)}) translateY(${-aiWebcamMouthOpenness*3}px) rotate(${aiWebcamHeadTilt*0.15}deg)`;
-    existingImg.style.transform=transform;
-  }else{
-    content.innerHTML=`<div class="ai-model-emoji">🤖</div>`;
+    content.innerHTML=`<img src="${imgData}" alt="" style="transform:${transform};transition:transform .1s">`;
   }
+  else{content.innerHTML=`<div class="ai-model-emoji">🤖</div>`;}
   if(frameLayer){
     if(currentAiModelFrame){
       frameLayer.style.backgroundImage=`url('${currentAiModelFrame}')`;
@@ -6204,6 +6202,7 @@ function bindAiWidgetInteractions(){
     const parentRect=widget.offsetParent?widget.offsetParent.getBoundingClientRect():{left:0,top:0};
     aiWidgetDragState.startLeft=rect.left-parentRect.left;
     aiWidgetDragState.startTop=rect.top-parentRect.top;
+    // drag count for random
     if(Date.now()-aiDragWindowStart>3000){aiDragCountInWindow=0;aiDragWindowStart=Date.now();}
     aiDragCountInWindow++;
     if(aiDragCountInWindow===6&&currentEquippedAiModel){showAiFloatBubbleByEvent('drag');}
@@ -6214,6 +6213,7 @@ function bindAiWidgetInteractions(){
     if(!aiWidgetDragState.dragging)return;
     const dx=e.clientX-aiWidgetDragState.startX;
     const dy=e.clientY-aiWidgetDragState.startY;
+    // Adjust for scale since transform-origin is top-left
     aiWidgetPos.left=aiWidgetDragState.startLeft+dx;
     aiWidgetPos.top=aiWidgetDragState.startTop+dy;
     applyAiWidgetPosition();
@@ -6230,6 +6230,7 @@ function bindAiWidgetInteractions(){
     const delta=e.deltaY<0?0.1:-0.1;
     const prevScale=aiWidgetScale;
     aiWidgetScale=Math.max(0.4,Math.min(3,aiWidgetScale+delta));
+    // Check "big" trigger
     if(aiWidgetScale>2.2&&prevScale<=2.2&&currentEquippedAiModel&&Date.now()-aiLastBigWarnAt>10000){
       aiLastBigWarnAt=Date.now();
       showAiFloatBubbleByEvent('big');
@@ -6269,6 +6270,7 @@ function hideAiModelWithAnimation(){
   const w=document.getElementById('aiModelWidget');
   const content=document.getElementById('aiModelContent');
   if(!w||!content)return;
+  // Immediately disable interactions
   w.style.pointerEvents='none';
   aiWidgetDragState.dragging=false;
   const name=currentEquippedAiModel?(currentEquippedAiModel.modelData.name||'Auro'):'Auro';
@@ -6323,6 +6325,7 @@ function addAiChatMessage(role,text){
 let aiBubbleTimer=null;
 function showAiFloatBubble(text,durationSec=7){
   const b=document.getElementById('aiFloatBubble');if(!b)return;
+  // Nếu có bubble đang hiện, mờ nhanh trong 2.5s trước khi hiện cái mới
   if(b.classList.contains('show')){
     b.classList.remove('show');
     b.classList.add('fast-fade');
@@ -6379,6 +6382,7 @@ function toggleAiScreenRead(){
     if(ind)ind.classList.add('active');
     showCenterSquareToast('👁️','AI đã bật đọc màn hình',(currentEquippedAiModel&&currentEquippedAiModel.modelData.name||'Auro')+' sẽ đọc nội dung trang để trả lời','success',2600);
     addAiChatMessage('ai','👁️ Mình đã bật đọc màn hình. Bạn có thể hỏi về nội dung đang hiển thị trên trang nhé!');
+    // Nếu đang trong phòng thi → tự động đọc & trả lời đáp án
     if(isExamActive&&currentExamData){
       setTimeout(()=>autoAnalyzeExamForAi(),500);
     }
@@ -6422,6 +6426,7 @@ function captureScreenContext(){
 }
 async function autoAnalyzeExamForAi(){
   if(!isExamActive||!currentExamData)return;
+  // Đọc đáp án từ currentExamData (không cần API)
   const answers=[];
   currentExamData.questions.forEach(q=>{
     let ans='';
@@ -6432,7 +6437,7 @@ async function autoAnalyzeExamForAi(){
     if(q.explanation)expl=' | Giải thích: '+q.explanation.slice(0,150);
     answers.push(`Câu ${q.id}: ${ans}${expl}`);
   });
-  const answerText=answers.slice(0,10).join('\n');
+  const answerText=answers.slice(0,10).join('\n'); // Giới hạn 10 câu để tránh quá tải
   const msg=`📝 Mình đọc đề rồi! Đáp án tham khảo:\n${answerText}\n\n(Bấm 👁️ để tắt nhé)`;
   showAiFloatBubble(msg.slice(0,240),15);
   addAiChatMessage('ai',msg);
@@ -6448,13 +6453,16 @@ async function sendAiChatMessage(){
   if(aiScreenReadActive)screenCtx=captureScreenContext();
   const reply=await getAiReplyWithContext(text,screenCtx);
   addAiChatMessage('ai',reply);
+  // Hiện bubble tóm tắt
   showAiFloatBubble(reply.slice(0,150)+(reply.length>150?'...':''),7);
 }
 async function getAiReplyWithContext(text,screenCtx){
   const name=currentEquippedAiModel?(currentEquippedAiModel.modelData.name||'Auro'):'Auro';
+  // Nếu đang trong phòng thi & đọc màn hình → ưu tiên dùng đáp án offline (không cần API)
   if(isExamActive&&currentExamData&&aiScreenReadActive){
     const t=text.toLowerCase();
     if(/đáp án|câu \d+|giải|cách làm|bài \d+/.test(t)){
+      // Trả lời từ dữ liệu offline
       let reply='📝 Mình lấy từ đề:\n';
       const qMatch=t.match(/câu\s*(\d+)/);
       if(qMatch){
@@ -6475,29 +6483,20 @@ async function getAiReplyWithContext(text,screenCtx){
       if(screenCtx){
         systemPrompt+='\n\n👁️ BẠN ĐANG ĐỌC ĐƯỢC NỘI DUNG MÀN HÌNH HIỆN TẠI:\n'+screenCtx+'\n\nHãy dùng thông tin này để trả lời chính xác câu hỏi của user.';
       }
-      const reqBody={
-        model:cachedAiConfig.model||'gpt-4o-mini',
-        messages:[
-          {role:'system',content:systemPrompt},
-          ...aiChatHistory.slice(-8).map(m=>({role:m.role,content:m.text})),
-          {role:'user',content:text}
-        ],
-        temperature:parseFloat(cachedAiConfig.temperature)||0.8,
-        max_tokens:parseInt(cachedAiConfig.maxTokens)||800
-      };
-      let res=await fetch(cachedAiConfig.endpoint,{
+      const res=await fetch(cachedAiConfig.endpoint,{
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
-        body:JSON.stringify(reqBody)
+        body:JSON.stringify({
+          model:cachedAiConfig.model||'gpt-4o-mini',
+          messages:[
+            {role:'system',content:systemPrompt},
+            ...aiChatHistory.slice(-8).map(m=>({role:m.role,content:m.text})),
+            {role:'user',content:text}
+          ],
+          temperature:parseFloat(cachedAiConfig.temperature)||0.8,
+          max_tokens:parseInt(cachedAiConfig.maxTokens)||800
+        })
       });
-      // Fallback: Gemini sometimes needs key as query param
-      if(!res.ok&&cachedAiConfig.provider==='google'){
-        try{
-          const sep=cachedAiConfig.endpoint.includes('?')?'&':'?';
-          const url2=cachedAiConfig.endpoint+sep+'key='+encodeURIComponent(cachedAiConfig.apiKey);
-          res=await fetch(url2,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(reqBody)});
-        }catch(e){}
-      }
       if(res.ok){
         const data=await res.json();
         const reply=data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content;
@@ -6532,6 +6531,7 @@ function getOfflineAiReply(text,name){
 }
 async function tryTriggerAiReaction(type){
   if(!currentEquippedAiModel)return;
+  if(perfMode==='optimized')return;
   const md=currentEquippedAiModel.modelData;
   const name=md.name||'Auro';
   let msg='';
@@ -6544,7 +6544,7 @@ async function tryTriggerAiReaction(type){
   showAiFloatBubble(msg,7);
 }
 
-/* ============ AI WEBCAM (VTUBER) - PHÂN TÍCH BIỂU CẢM MẶT ============ */
+/* ============ AI WEBCAM (VTUBER) - CẢI TIẾN PHÂN TÍCH BIỂU CẢM ============ */
 async function toggleAiWebcam(){
   if(aiWebcamActive){stopAiWebcam();return;}
   try{
@@ -6553,7 +6553,7 @@ async function toggleAiWebcam(){
     const video=document.getElementById('aiWebcamVideo');
     if(video){video.srcObject=aiWebcamStream;video.classList.add('active');}
     const btn=document.getElementById('aiWebcamBtn');if(btn)btn.classList.add('active');
-    showCenterSquareToast('📷','Đã bật webcam','Model sẽ phản ứng theo biểu cảm khuôn mặt bạn','success',2600);
+    showCenterSquareToast('📷','Đã bật webcam','Model sẽ theo biểu cảm khuôn mặt bạn','success',2600);
     startWebcamFaceTracking();
   }catch(e){
     showToast('❌ Không truy cập được camera: '+(e.message||e),'error');
@@ -6562,11 +6562,10 @@ async function toggleAiWebcam(){
 function stopAiWebcam(){
   if(aiWebcamStream){try{aiWebcamStream.getTracks().forEach(t=>t.stop());}catch(e){}aiWebcamStream=null;}
   aiWebcamActive=false;
-  aiWebcamMouthOpenness=0;aiWebcamHeadTilt=0;aiWebcamEyeBlink=0;
   const video=document.getElementById('aiWebcamVideo');if(video){video.srcObject=null;video.classList.remove('active');}
   const btn=document.getElementById('aiWebcamBtn');if(btn)btn.classList.remove('active');
   if(aiWebcamRAF){cancelAnimationFrame(aiWebcamRAF);aiWebcamRAF=null;}
-  aiWebcamPrevFrame=null;
+  aiWebcamMouthOpenness=0;aiWebcamHeadTilt=0;aiWebcamEyeBlink=0;
 }
 function startWebcamFaceTracking(){
   const video=document.getElementById('aiWebcamVideo');
@@ -6574,52 +6573,96 @@ function startWebcamFaceTracking(){
   const canvas=document.createElement('canvas');
   const ctx=canvas.getContext('2d',{willReadFrequently:true});
   let lastFrame=0;
+  let prevBrightness=null;
   const loop=()=>{
     if(!aiWebcamActive){return;}
     const now=performance.now();
-    if(now-lastFrame>80&&video.readyState>=2&&video.videoWidth>0){
+    if(now-lastFrame>66&&video.readyState>=2&&video.videoWidth>0){
       lastFrame=now;
       try{
-        const w=64,h=48;
+        const w=100,h=75;
         canvas.width=w;canvas.height=h;
         ctx.drawImage(video,0,0,w,h);
         const data=ctx.getImageData(0,0,w,h).data;
-        // Mouth region (lower-center)
-        let mouthBrightness=0,mouthCount=0;
-        let upperBrightness=0,upperCount=0;
-        for(let y=Math.floor(h*0.6);y<Math.floor(h*0.88);y++){
-          for(let x=Math.floor(w*0.35);x<Math.floor(w*0.65);x++){
+        // Vùng miệng (giữa dưới)
+        let mouthB=0,mouthN=0;
+        for(let y=Math.floor(h*0.58);y<Math.floor(h*0.9);y++){
+          for(let x=Math.floor(w*0.32);x<Math.floor(w*0.68);x++){
             const i=(y*w+x)*4;
-            mouthBrightness+=(data[i]+data[i+1]+data[i+2])/3;
-            mouthCount++;
+            mouthB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
+            mouthN++;
           }
         }
-        for(let y=Math.floor(h*0.18);y<Math.floor(h*0.4);y++){
-          for(let x=Math.floor(w*0.35);x<Math.floor(w*0.65);x++){
+        // Vùng mắt (giữa trên)
+        let eyeB=0,eyeN=0;
+        for(let y=Math.floor(h*0.2);y<Math.floor(h*0.4);y++){
+          for(let x=Math.floor(w*0.32);x<Math.floor(w*0.68);x++){
             const i=(y*w+x)*4;
-            upperBrightness+=(data[i]+data[i+1]+data[i+2])/3;
-            upperCount++;
+            eyeB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
+            eyeN++;
           }
         }
-        const mouthAvg=mouthBrightness/Math.max(1,mouthCount);
-        const upperAvg=upperBrightness/Math.max(1,upperCount);
-        const diff=mouthAvg-upperAvg;
-        aiWebcamMouthOpenness=Math.max(0,Math.min(10,diff/5));
-        // Head tilt from left/right brightness
+        // Vùng mũi/má (giữa)
+        let midB=0,midN=0;
+        for(let y=Math.floor(h*0.4);y<Math.floor(h*0.58);y++){
+          for(let x=Math.floor(w*0.32);x<Math.floor(w*0.68);x++){
+            const i=(y*w+x)*4;
+            midB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
+            midN++;
+          }
+        }
+        const mouthAvg=mouthB/Math.max(1,mouthN);
+        const eyeAvg=eyeB/Math.max(1,eyeN);
+        const midAvg=midB/Math.max(1,midN);
+        const totalAvg=(mouthAvg+eyeAvg+midAvg)/3;
+        // Miệng mở: vùng miệng tối hơn hẳn (lỗ miệng) hoặc sáng đột biến
+        const mouthContrast=totalAvg-mouthAvg;
+        let mouthVal=0;
+        if(mouthContrast>0)mouthVal=Math.min(10,mouthContrast/3.5);
+        else mouthVal=Math.min(5,Math.abs(mouthContrast)/5);
+        aiWebcamMouthOpenness=mouthVal*0.85+aiWebcamMouthOpenness*0.15;
+        // Chớp mắt: eyeAvg thay đổi đột ngột
+        if(prevBrightness!==null){
+          const eyeDiff=Math.abs(eyeAvg-prevBrightness);
+          aiWebcamEyeBlink=Math.min(1,eyeDiff/30);
+        }
+        prevBrightness=eyeAvg;
+        // Nghiêng đầu: so sánh trái/phải
         let leftB=0,rightB=0;
         for(let y=0;y<h;y++){
-          for(let x=0;x<Math.floor(w*0.3);x++){const i=(y*w+x)*4;leftB+=(data[i]+data[i+1]+data[i+2])/3;}
-          for(let x=Math.floor(w*0.7);x<w;x++){const i=(y*w+x)*4;rightB+=(data[i]+data[i+1]+data[i+2])/3;}
+          for(let x=0;x<Math.floor(w*0.32);x++){
+            const i=(y*w+x)*4;leftB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
+          }
+          for(let x=Math.floor(w*0.68);x<w;x++){
+            const i=(y*w+x)*4;rightB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
+          }
         }
-        const tiltRaw=(rightB-leftB)/Math.max(1,h*w*0.3);
-        aiWebcamHeadTilt=Math.max(-15,Math.min(15,tiltRaw*50));
-        // Apply to widget
-        if(currentEquippedAiModel)updateAiWidgetContent();
+        const tiltRaw=(rightB-leftB)/Math.max(1,h*w*0.32);
+        aiWebcamHeadTilt=aiWebcamHeadTilt*0.7+Math.max(-20,Math.min(20,tiltRaw*2.5))*0.3;
+        updateAiWidgetContent();
+        // Cập nhật preview webcam nhỏ trong profile
+        const preview=document.getElementById('profileWebcamPreview');
+        const indicator=document.getElementById('profileWebcamMouthIndicator');
+        if(indicator&&aiWebcamMouthOpenness>3){indicator.classList.add('active');indicator.innerText='😮 Đang nói ('+aiWebcamMouthOpenness.toFixed(1)+')';}
+        else if(indicator)indicator.classList.remove('active');
       }catch(e){}
     }
     aiWebcamRAF=requestAnimationFrame(loop);
   };
   loop();
+}
+async function toggleProfileWebcam(){
+  if(aiWebcamActive){
+    stopAiWebcam();
+    const btn=document.getElementById('profileAiWebcamBtn');if(btn)btn.classList.remove('active');
+    const preview=document.getElementById('profileWebcamPreview');if(preview)preview.classList.remove('active');
+    return;
+  }
+  await toggleAiWebcam();
+  const preview=document.getElementById('profileWebcamPreview');
+  const video=document.getElementById('aiWebcamVideo');
+  if(preview&&aiWebcamStream){preview.srcObject=aiWebcamStream;preview.classList.add('active');}
+  const btn=document.getElementById('profileAiWebcamBtn');if(btn)btn.classList.add('active');
 }
 
 /* ============ RANDOM CHAT CONFIG (Supreme) ============ */
@@ -6686,91 +6729,9 @@ function testAiRandomChat(){
   showAiFloatBubble(txt,7);
 }
 
-/* ============ SYSTEM DOCS COLLECTION - SINH PDF THẬT ============ */
-function generateRealPdfBase64(doc){
-  try{
-    const {jsPDF}=window.jspdf||{};
-    if(!jsPDF)return null;
-    const pdf=new jsPDF({orientation:'portrait',unit:'pt',format:'a4'});
-    pdf.setFont('helvetica');
-    const pageWidth=pdf.internal.pageSize.getWidth();
-    const margin=40;
-    let y=margin;
-    // Header
-    pdf.setFillColor(24,119,242);
-    pdf.rect(0,0,pageWidth,70,'F');
-    pdf.setTextColor(255,255,255);
-    pdf.setFontSize(20);
-    pdf.text('AURORA - KHO TÀI LIỆU HỌC TẬP',margin,42);
-    pdf.setFontSize(10);
-    pdf.text('Hệ thống tổng hợp tự động',margin,58);
-    y=100;
-    pdf.setTextColor(0,0,0);
-    pdf.setFontSize(16);
-    const titleLines=pdf.splitTextToSize(doc.title||'',pageWidth-margin*2);
-    pdf.text(titleLines,margin,y);
-    y+=titleLines.length*20+10;
-    // Meta box
-    pdf.setDrawColor(200,200,200);
-    pdf.setFillColor(240,248,255);
-    pdf.rect(margin,y,pageWidth-margin*2,80,'FD');
-    pdf.setFontSize(12);
-    pdf.text('Môn: '+(SUBJECT_NAMES[doc.subject]||doc.subject),margin+10,y+22);
-    pdf.text('Lớp: '+doc.grade,margin+10,y+40);
-    pdf.text('Dạng: '+(SYSTEM_DOC_TYPE_LABELS[doc.type]||doc.type),margin+10,y+58);
-    pdf.text('Chủ đề: '+(doc.topic||'').slice(0,50),margin+10,y+76);
-    y+=100;
-    // Description
-    pdf.setFontSize(13);
-    pdf.setTextColor(24,119,242);
-    pdf.text('MÔ TẢ:',margin,y);
-    y+=20;
-    pdf.setTextColor(51,51,51);
-    pdf.setFontSize(11);
-    const descLines=pdf.splitTextToSize(doc.desc||'',pageWidth-margin*2);
-    pdf.text(descLines,margin,y);
-    y+=descLines.length*16+20;
-    // Content sections
-    pdf.setTextColor(24,119,242);
-    pdf.setFontSize(13);
-    pdf.text('NỘI DUNG ÔN TẬP:',margin,y);
-    y+=22;
-    pdf.setTextColor(51,51,51);
-    pdf.setFontSize(11);
-    const topic=doc.topic||'';
-    const contentSections=[
-      `1. Kiến thức cơ bản về ${topic}`,
-      `   - Định nghĩa, khái niệm, tính chất`,
-      `   - Các công thức và định lý quan trọng`,
-      `   - Phương pháp giải toán cơ bản`,
-      ``,
-      `2. Các dạng bài tập thường gặp`,
-      `   - Dạng 1: Nhận biết và thông hiểu`,
-      `   - Dạng 2: Vận dụng thấp`,
-      `   - Dạng 3: Vận dụng cao và tổng hợp`,
-      ``,
-      `3. Lưu ý và mẹo giải nhanh`,
-      `   - Đọc kỹ đề trước khi giải`,
-      `   - Xác định dạng bài và phương pháp phù hợp`,
-      `   - Kiểm tra lại kết quả sau khi giải`,
-      ``,
-      `4. Bài tập tự luyện`,
-      `   Học sinh tự tìm thêm bài tập trong SGK và sách tham khảo.`,
-      ``,
-      `---`,
-      `Tài liệu được tổng hợp tự động bởi AURORA`,
-      `Môn: ${SUBJECT_NAMES[doc.subject]||doc.subject} - Lớp ${doc.grade}`
-    ];
-    for(const line of contentSections){
-      if(y>780){pdf.addPage();y=margin;}
-      pdf.text(line,margin,y);
-      y+=15;
-    }
-    const pdfStr=pdf.output('datauristring');
-    return pdfStr;
-  }catch(e){console.warn('PDF gen error:',e);return null;}
-}
+/* ============ SYSTEM DOCS COLLECTION (REAL CONTENT) ============ */
 function generateSystemDocs(){
+  // Sinh tài liệu THẬT từ REAL_DOC_CONTENT
   const docs=[];
   const subjects=['toan','ly','hoa','sinh','su','van'];
   const grades=[10,11,12];
@@ -6783,14 +6744,21 @@ function generateSystemDocs(){
         const topic=topics[i%topics.length];
         const type=SYSTEM_DOC_TYPES[(i+sub.length)%SYSTEM_DOC_TYPES.length];
         idx++;
-        const docId='sysdoc_'+idx;
-        const title=`${SUBJECT_NAMES[sub]} ${g} — ${topic} (${SYSTEM_DOC_TYPE_LABELS[type]})`;
-        const desc=`Tài liệu ${SYSTEM_DOC_TYPE_LABELS[type]} môn ${SUBJECT_NAMES[sub]} lớp ${g}, chủ đề: ${topic}. Tài liệu THẬT có thể tải PDF.`;
-        const meta={id:docId,title,subject:sub,grade:String(g),topic,type,desc,source:'auto-system',createdAt:Date.now()+idx};
-        // Generate real PDF
-        const pdfData=generateRealPdfBase64(meta);
-        if(pdfData)meta.pdfData=pdfData;
-        docs.push(meta);
+        // Nội dung thật
+        const realContent=REAL_DOC_CONTENT[sub]&&REAL_DOC_CONTENT[sub][type]?REAL_DOC_CONTENT[sub][type]:'';
+        const fullContent=`${topic.toUpperCase()}\nMôn: ${SUBJECT_NAMES[sub]} — Lớp ${g}\nDạng: ${SYSTEM_DOC_TYPE_LABELS[type]}\n\n${realContent}\n\n---\n📖 Đây là tài liệu tham khảo được hệ thống tổng hợp tự động.\nHọc sinh có thể tải xuống để ôn tập.`;
+        docs.push({
+          id:'sysdoc_'+idx,
+          title:`${SUBJECT_NAMES[sub]} ${g} — ${topic} (${SYSTEM_DOC_TYPE_LABELS[type]})`,
+          subject:sub,
+          grade:String(g),
+          topic:topic,
+          type:type,
+          content:fullContent,
+          desc:`Tài liệu ${SYSTEM_DOC_TYPE_LABELS[type]} môn ${SUBJECT_NAMES[sub]} lớp ${g}, chủ đề: ${topic}. Nội dung đầy đủ, có thể xem và tải về.`,
+          source:'auto-system',
+          createdAt:Date.now()+idx
+        });
       }
     });
   });
@@ -6799,14 +6767,12 @@ function generateSystemDocs(){
 async function collectSystemDocs(replaceMode=true){
   if(!configTabUnlocked&&userHasSupremeAccess!=='partner'&&!userHasSupremeAccess){showToast('❌ Không có quyền!','error');return;}
   if(replaceMode){
-    if(!await customConfirm('Thay thế toàn bộ tài liệu hệ thống hiện có bằng bộ mới (PDF thật)?',{icon:'🔄',title:'Xác nhận',okClass:'warn'}))return;
+    if(!await customConfirm('Thay thế toàn bộ tài liệu hệ thống hiện có bằng bộ mới?',{icon:'🔄',title:'Xác nhận',okClass:'warn'}))return;
   }
   try{
     const existing=Object.values(systemDocsData||{});
     const existingTitles=new Set(existing.map(d=>d&&d.title||''));
-    let newDocs;
-    if(replaceMode){newDocs=generateSystemDocs();}
-    else{newDocs=generateSystemDocs().filter(d=>!existingTitles.has(d.title));}
+    const newDocs=generateSystemDocs().filter(d=>!existingTitles.has(d.title));
     if(!newDocs.length){showCenterSquareToast('ℹ️','Không có gì mới','Tất cả tài liệu đã tồn tại','info',3000);return;}
     if(replaceMode){
       const keys=Object.keys(systemDocsData||{});
@@ -6815,7 +6781,7 @@ async function collectSystemDocs(replaceMode=true){
     for(const d of newDocs){
       await window.dbSet(window.ref(window.db,`system/system_docs/${d.id}`),d);
     }
-    showCenterSquareToast('✅','Đã tổng hợp!',`Thêm ${newDocs.length} tài liệu PDF THẬT`,'success',4000);
+    showCenterSquareToast('✅','Đã tổng hợp!',`Thêm ${newDocs.length} tài liệu hệ thống`,'success',4000);
     loadSystemDocs();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
@@ -6841,54 +6807,6 @@ function loadSystemDocs(){
     renderStudentDocsFiltered();
   });
 }
-async function viewSystemDoc(id){
-  const d=systemDocsData[id];
-  if(!d){showToast('❌ Không tìm thấy tài liệu','error');return;}
-  let html=`<div style="font-family:'Segoe UI',sans-serif;line-height:1.8;font-size:14px">
-    <h2 style="color:#1877f2;margin-bottom:10px">${escapeHtml(d.title)}</h2>
-    <p><b>📚 Môn:</b> ${SUBJECT_NAMES[d.subject]||d.subject} | <b>🎓 Lớp:</b> ${d.grade} | <b>🏷️ Dạng:</b> ${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</p>
-    <p><b>📌 Chủ đề:</b> ${escapeHtml(d.topic)}</p>
-    <p><b>📝 Mô tả:</b> ${escapeHtml(d.desc)}</p>
-    <hr style="margin:14px 0">
-    <div style="background:#f0f8ff;padding:12px;border-radius:8px;font-size:13px;line-height:1.6">
-      <b style="color:#1877f2">📖 NỘI DUNG ÔN TẬP:</b>
-      <p>1. Kiến thức cơ bản về ${escapeHtml(d.topic)}: định nghĩa, khái niệm, tính chất, các công thức và định lý quan trọng.</p>
-      <p>2. Các dạng bài tập thường gặp: nhận biết, thông hiểu, vận dụng thấp, vận dụng cao.</p>
-      <p>3. Lưu ý và mẹo giải nhanh: đọc kỹ đề, xác định dạng bài, kiểm tra lại kết quả.</p>
-      <p>4. Bài tập tự luyện: tìm thêm trong SGK và sách tham khảo.</p>
-    </div>
-    <p style="margin-top:14px;color:#888;font-style:italic">💡 Bấm nút "📥 Tải PDF" để tải tài liệu THẬT (file PDF được sinh tự động).</p>
-  </div>`;
-  document.getElementById('supremeModalTitle').innerText='📚 '+d.title;
-  document.getElementById('supremeModalContent').innerHTML=html;
-  document.getElementById('supremeDetailModal').style.display='flex';
-}
-async function downloadSystemDoc(id){
-  const d=systemDocsData[id];
-  if(!d){showToast('❌ Không tìm thấy tài liệu','error');return;}
-  try{
-    if(d.pdfData){
-      const a=document.createElement('a');
-      a.href=d.pdfData;
-      a.download=(d.title||'tailieu').replace(/[^a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s\-_.]/g,'').trim()+'.pdf';
-      document.body.appendChild(a);a.click();document.body.removeChild(a);
-      showCenterSquareToast('📥','Đã tải!','PDF: '+(d.title||''),'success',3000);
-      return;
-    }
-    // If no pdfData (old docs), generate on the fly
-    const pdfData=generateRealPdfBase64(d);
-    if(pdfData){
-      try{await window.dbUpdate(window.ref(window.db,`system/system_docs/${id}`),{pdfData});}catch(e){}
-      const a=document.createElement('a');
-      a.href=pdfData;
-      a.download=(d.title||'tailieu').replace(/[^a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s\-_.]/g,'').trim()+'.pdf';
-      document.body.appendChild(a);a.click();document.body.removeChild(a);
-      showCenterSquareToast('📥','Đã tải!','PDF: '+(d.title||''),'success',3000);
-      return;
-    }
-    showToast('❌ Không thể tạo PDF','error');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
-}
 function renderSysDocs(){
   const c=document.getElementById('sysDocsList');if(!c)return;
   const grade=(document.getElementById('sysDocsFilterGrade')||{}).value||'';
@@ -6901,7 +6819,31 @@ function renderSysDocs(){
   if(type)list=list.filter(d=>d.type===type);
   if(search)list=list.filter(d=>(d.title||'').toLowerCase().includes(search)||(d.topic||'').toLowerCase().includes(search));
   if(!list.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Không có tài liệu nào phù hợp</p>';return;}
-  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#1877f2" onclick="viewSystemDoc('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="downloadSystemDoc('${d.id}')">📥 Tải PDF</button><button style="background:#dc3545" onclick="deleteSystemDocById('${d.id}')">🗑️ Xóa</button></div></div>`;}).join('');
+  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#0d6efd" onclick="viewSystemDocContent('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="downloadSystemDoc('${d.id}')">⬇️ Tải</button><button style="background:#dc3545" onclick="deleteSystemDocById('${d.id}')">🗑️ Xóa</button></div></div>`;}).join('');
+}
+function viewSystemDocContent(id){
+  const d=systemDocsData[id];
+  if(!d){showToast('❌ Không tìm thấy!','error');return;}
+  const modal=document.getElementById('supremeDetailModal');
+  document.getElementById('supremeModalTitle').innerText='📖 '+d.title;
+  const content=d.content||d.desc||'Nội dung đang được cập nhật...';
+  document.getElementById('supremeModalContent').innerHTML=`<div style="background:#f8f9fa;padding:12px;border-radius:8px;font-size:13px;line-height:1.7;white-space:pre-wrap;font-family:'Courier New',monospace">${escapeHtml(content)}</div><div style="margin-top:12px;text-align:right"><button class="btn btn-success" style="width:auto;padding:8px 16px" onclick="downloadSystemDoc('${id}')">⬇️ Tải về</button></div>`;
+  modal.style.display='flex';
+}
+function downloadSystemDoc(id){
+  const d=systemDocsData[id];
+  if(!d){showToast('❌ Không tìm thấy!','error');return;}
+  const content=d.content||d.desc||'';
+  const blob=new Blob([content],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=(d.title||'tailieu').replace(/[^a-zA-Z0-9_\-\u00C0-\u1EF9]/g,'_')+'.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  showCenterSquareToast('⬇️','Đã tải!',d.title,'success',2600);
 }
 async function deleteSystemDocById(id){
   if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}
@@ -6921,7 +6863,31 @@ function renderStudentDocsFiltered(){
   if(search)list=list.filter(d=>(d.title||'').toLowerCase().includes(search)||(d.topic||'').toLowerCase().includes(search));
   const cnt=document.getElementById('docsTotalCount');if(cnt)cnt.innerText=list.length;
   if(!list.length){c.innerHTML='<p style="text-align:center;color:#888;grid-column:1/-1;padding:20px">Không có tài liệu nào phù hợp</p>';return;}
-  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#1877f2" onclick="viewSystemDoc('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="downloadSystemDoc('${d.id}')">📥 Tải PDF</button></div></div>`;}).join('');
+  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#0d6efd" onclick="viewStudentDocContent('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="downloadStudentDoc('${d.id}')">⬇️ Tải</button></div></div>`;}).join('');
+}
+function viewStudentDocContent(id){
+  const d=systemDocsData[id];
+  if(!d){showToast('❌ Không tìm thấy!','error');return;}
+  const modal=document.getElementById('supremeDetailModal');
+  document.getElementById('supremeModalTitle').innerText='📖 '+d.title;
+  const content=d.content||d.desc||'Nội dung đang được cập nhật...';
+  document.getElementById('supremeModalContent').innerHTML=`<div style="background:#f8f9fa;padding:12px;border-radius:8px;font-size:13px;line-height:1.7;white-space:pre-wrap;font-family:'Courier New',monospace;max-height:60vh;overflow-y:auto">${escapeHtml(content)}</div><div style="margin-top:12px;text-align:right"><button class="btn btn-success" style="width:auto;padding:8px 16px" onclick="downloadStudentDoc('${id}')">⬇️ Tải về</button></div>`;
+  modal.style.display='flex';
+}
+function downloadStudentDoc(id){
+  const d=systemDocsData[id];
+  if(!d){showToast('❌ Không tìm thấy!','error');return;}
+  const content=d.content||d.desc||'';
+  const blob=new Blob([content],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=(d.title||'tailieu').replace(/[^a-zA-Z0-9_\-\u00C0-\u1EF9]/g,'_')+'.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  showCenterSquareToast('⬇️','Đã tải!',d.title,'success',2600);
 }
 
 /* ============ AI SETUP CONFIG ============ */
@@ -7013,18 +6979,11 @@ async function testAiSetupConfig(){
   if(!endpoint||!apiKey||!model){showToast('❌ Nhập API key + chọn model!','error');return;}
   try{
     showToast('⏳ Đang test...','info');
-    const reqBody={model,messages:[{role:'user',content:'Xin chào! Hãy trả lời ngắn gọn: bạn tên gì?'}],temperature:0.7,max_tokens:100};
-    let res=await fetch(endpoint,{
+    const res=await fetch(endpoint,{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-      body:JSON.stringify(reqBody)
+      body:JSON.stringify({model,messages:[{role:'user',content:'Xin chào! Hãy trả lời ngắn gọn: bạn tên gì?'}],temperature:0.7,max_tokens:100})
     });
-    if(!res.ok){
-      // Try alternative for Gemini
-      const sep=endpoint.includes('?')?'&':'?';
-      const altUrl=endpoint+sep+'key='+encodeURIComponent(apiKey);
-      res=await fetch(altUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(reqBody)});
-    }
     if(res.ok){
       const d=await res.json();
       const txt=(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||JSON.stringify(d).slice(0,200);
@@ -7448,9 +7407,7 @@ function loadAiModelsList(){
     if(!m)return '';
     const fileCount=(m.files||[]).length;
     const size=m.totalSize?formatBytes(m.totalSize):(m.sourceZip?'từ ZIP':'?');
-    const has3D=(m.files||[]).some(f=>is3DFile(f.name,f.type));
-    const hasGif=(m.files||[]).some(f=>isGifFile(f.name,f.type));
-    const srcTag=m.source==='vision-analysis'?'🧠 Vision':(m.source==='image-fallback'?'🖼️ Ảnh':(m.fileType==='ai-model-zip'?'📦 ZIP':(has3D?'🎮 3D':(hasGif?'🎞️ GIF':'📁 File'))));
+    const srcTag=m.source==='vision-analysis'?'🧠 Vision':(m.source==='image-fallback'?'🖼️ Ảnh':(m.fileType==='ai-model-zip'?'📦 ZIP':'📁 File'));
     return `<div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:10px;margin-bottom:8px;background:#fff">
       <div style="width:56px;height:56px;border-radius:10px;background:#f0f8ff;display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;flex-shrink:0;border:1px solid #e0e0e0">
         ${m.imageData?`<img src="${m.imageData}" style="width:100%;height:100%;object-fit:cover">`:'🤖'}
@@ -7517,13 +7474,17 @@ async function deleteAiModelById(id){
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
-/* ============ AI MODEL CREATION / GRANT ============ */
+/* ============ AI MODEL CREATION ============ */
 function previewMainImage(input){
   const prev=document.getElementById('aiNewModelMainImagePreview');
   if(!input.files||!input.files[0]){if(prev)prev.style.display='none';return;}
   const f=input.files[0];
   if(!f.type.startsWith('image/')){showToast('❌ Chỉ hỗ trợ ảnh!','error');input.value='';return;}
   fileToBase64(f).then(d=>{if(prev){prev.src=d;prev.style.display='block';}});
+}
+/* FIX: dùng safeName không chứa ký tự cấm của Firebase (. # $ [ ] /) */
+function sanitizeFirebaseKey(name){
+  return String(name||'file').replace(/[.#$\[\]\/]/g,'_').slice(0,80)||'file';
 }
 async function createAiModel(){
   const name=(document.getElementById('aiNewModelName').value.trim()||'Auro');
@@ -7545,7 +7506,6 @@ async function createAiModel(){
     const modelId='aimodel_'+Date.now();
     const filesData=[];
     let firstImageDataUrl='';
-    let has3D=false;
     if(hasMainImage){
       try{firstImageDataUrl=await fileToBase64(mainImageInput.files[0]);}catch(e){}
     }
@@ -7557,9 +7517,8 @@ async function createAiModel(){
       totalSize+=f.size;
       const b64=await fileToBase64(f);
       const fileMeta={name:f.name,type:f.type||'application/octet-stream',size:f.size};
-      if(is3DFile(f.name,f.type))has3D=true;
-      if((f.type.startsWith('image/')||is3DFile(f.name,f.type))&&!firstImageDataUrl){
-        if(f.size<5*1024*1024){firstImageDataUrl=b64;fileMeta.data=b64;}
+      if(f.type.startsWith('image/')&&!firstImageDataUrl){
+        if(f.size<3*1024*1024){firstImageDataUrl=b64;fileMeta.data=b64;}
       }
       if(f.size>2*1024*1024){
         fileMeta.chunked=true;
@@ -7567,14 +7526,14 @@ async function createAiModel(){
         const p=b64.split(',');
         const dataOnly=p[1];
         const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
-        const safeName=fileMeta.name.replace(/[^a-zA-Z0-9_.\-]/g,'_');
+        const safeName=sanitizeFirebaseKey(fileMeta.name);
         for(let c=0;c<chunkCount;c++){
           const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);
           await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);
         }
         fileMeta.chunkCount=chunkCount;
         fileMeta.chunkData=null;
-        if(f.type.startsWith('image/')||is3DFile(f.name,f.type)){fileMeta.data=b64;}
+        if(f.type.startsWith('image/')){fileMeta.data=b64;}
       }else{
         fileMeta.data=b64;
       }
@@ -7585,7 +7544,7 @@ async function createAiModel(){
       happyMsg:happyMsg||'',sadMsg:sadMsg||'',thinkingMsg:thinkingMsg||'',musicMsg:musicMsg||'',prankMsg:prankMsg||'',
       files:filesData,
       imageData:firstImageDataUrl,
-      fileType:has3D?'ai-model-3d':'ai-model',
+      fileType:'ai-model',
       chunks:0,
       chunkData:null,
       createdBy:currentUser?currentUser.username:'admin',
@@ -7606,32 +7565,105 @@ async function createAiModel(){
   }catch(e){prog.innerText='❌ '+e.message;btn.disabled=false;setTimeout(()=>prog.style.display='none',3000);}
 }
 
-/* ============ ZIP DROP ZONE - HỖ TRỢ ZIP + FILE 3D + GIF ============ */
+/* ============ ZIP / MODEL FILE DROP ZONE (AUTO-DETECT) ============ */
 async function handleAiModelZipUpload(input){
   if(!input.files||!input.files.length)return;
   const files=Array.from(input.files);
-  const zipFiles=files.filter(f=>f.name.toLowerCase().endsWith('.zip')||f.type==='application/zip'||f.type==='application/x-zip-compressed');
-  const otherFiles=files.filter(f=>!zipFiles.includes(f));
-  if(zipFiles.length){
-    for(const z of zipFiles){await processModelZipFileV2(z);}
-  }
-  if(otherFiles.length){
-    // Add non-zip files to the model file input
-    const filesInput=document.getElementById('aiNewModelFiles');
-    try{
-      const dt=new DataTransfer();
-      // Keep existing files
-      if(filesInput.files)Array.from(filesInput.files).forEach(f=>dt.items.add(f));
-      otherFiles.forEach(f=>dt.items.add(f));
-      filesInput.files=dt.files;
-      const has3D=otherFiles.some(f=>is3DFile(f.name,f.type));
-      const hasGif=otherFiles.some(f=>isGifFile(f.name,f.type));
-      showToast('📎 Đã thêm '+otherFiles.length+' file'+(has3D?' (3D)':'')+(hasGif?' (GIF)':'')+' vào input tạo model','info');
-    }catch(e){
-      showToast('⚠️ Không thể thêm file tự động, hãy chọn thủ công','warn');
-    }
-  }
+  await processModelFilesAuto(files);
   input.value='';
+}
+async function processModelFilesAuto(files){
+  // Tự động xử lý nhiều loại file: ZIP, ảnh, model 3D
+  const zipFiles=[];
+  const imageFiles=[];
+  const modelFiles=[];
+  for(const f of files){
+    const n=(f.name||'').toLowerCase();
+    if(n.endsWith('.zip')||f.type==='application/zip'||f.type==='application/x-zip-compressed'){zipFiles.push(f);}
+    else if(f.type.startsWith('image/')||/\.(png|jpg|jpeg|gif|webp|svg|apng|bmp)$/i.test(n)){imageFiles.push(f);}
+    else if(/\.(vrm|fbx|obj|pmx|pmd|moc3|model3\.json|motion3\.json|psd|bvh|unitypackage|uasset|glb|gltf|dae|stl|3ds|blend|json|mp4|webm|mov)$/i.test(n)){modelFiles.push(f);}
+    else{modelFiles.push(f);} // fallback
+  }
+  // Xử lý ZIP trước
+  for(const z of zipFiles){await processModelZipFileV2(z);}
+  // Xử lý ảnh và model
+  if(imageFiles.length||modelFiles.length){await createModelFromFilesAuto(imageFiles,modelFiles);}
+}
+async function createModelFromFilesAuto(imageFiles,modelFiles){
+  const allFiles=[...imageFiles,...modelFiles];
+  if(!allFiles.length)return;
+  const zipProgress=document.getElementById('aiZipProgress');
+  const zipText=document.getElementById('aiZipProgressText');
+  const zipBar=document.getElementById('aiZipBarFill');
+  if(zipProgress){zipProgress.classList.add('show');zipBar.style.width='0%';}
+  try{
+    const modelId='aimodel_'+Date.now();
+    const filesData=[];
+    let firstImageDataUrl='';
+    let totalSize=0;
+    let processed=0;
+    const total=allFiles.length;
+    for(const f of allFiles){
+      if(zipText)zipText.innerText=`📦 Đang xử lý ${processed+1}/${total}: ${f.name}`;
+      totalSize+=f.size;
+      const b64=await fileToBase64(f);
+      const fileMeta={name:f.name,type:f.type||guessMimeFromName(f.name),size:f.size};
+      if(f.type.startsWith('image/')&&!firstImageDataUrl){firstImageDataUrl=b64;}
+      if(f.size>2*1024*1024){
+        fileMeta.chunked=true;
+        const p=b64.split(',');
+        const dataOnly=p[1];
+        const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
+        const safeName=sanitizeFirebaseKey(f.name);
+        for(let c=0;c<chunkCount;c++){
+          const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);
+          await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);
+        }
+        fileMeta.chunkCount=chunkCount;
+        fileMeta.chunkData=null;
+      }else{
+        fileMeta.data=b64;
+      }
+      filesData.push(fileMeta);
+      processed++;
+      if(zipBar)zipBar.style.width=Math.round((processed/total)*100)+'%';
+    }
+    const inputName=(document.getElementById('aiNewModelName').value||'').trim();
+    const baseName=allFiles[0]?allFiles[0].name.replace(/\.[^.]+$/,''):'Auro';
+    const finalName=inputName||baseName||'Auro';
+    const greeting=document.getElementById('aiNewModelGreeting').value.trim();
+    const happyMsg=document.getElementById('aiNewModelHappy').value.trim();
+    const sadMsg=document.getElementById('aiNewModelSad').value.trim();
+    const thinkingMsg=document.getElementById('aiNewModelThinking').value.trim();
+    const musicMsg=document.getElementById('aiNewModelMusic').value.trim();
+    const prankMsg=document.getElementById('aiNewModelPrank').value.trim();
+    const modelData={
+      id:modelId,name:finalName,
+      greeting:greeting||`Xin chào! Mình là ${finalName}, rất vui được gặp bạn 👋`,
+      happyMsg:happyMsg||'',sadMsg:sadMsg||'',thinkingMsg:thinkingMsg||'',musicMsg:musicMsg||'',prankMsg:prankMsg||'',
+      files:filesData,
+      imageData:firstImageDataUrl,
+      fileType:'ai-model-files',
+      chunks:0,chunkData:null,
+      sourceFiles:allFiles.map(f=>f.name),
+      createdBy:currentUser?currentUser.username:'admin',
+      createdAt:Date.now(),
+      totalSize
+    };
+    await window.dbSet(window.ref(window.db,`system/ai_models/${modelId}`),modelData);
+    cachedAiModels[modelId]=modelData;
+    if(zipBar)zipBar.style.width='100%';
+    if(zipText)zipText.innerText=`✅ Đã tạo model "${finalName}" từ ${processed} file!`;
+    showCenterSquareToast('📦','Đã tạo model!',`${finalName}\n${processed} file`,'success',5000);
+    setTimeout(()=>{if(zipProgress)zipProgress.classList.remove('show');if(zipBar)zipBar.style.width='0%';},2500);
+    document.getElementById('aiNewModelName').value='';
+    ['aiNewModelGreeting','aiNewModelHappy','aiNewModelSad','aiNewModelThinking','aiNewModelMusic','aiNewModelPrank'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    loadAiModelsForGrant();loadAiModelsList();loadSupremeAiFrameModelList();
+  }catch(e){
+    console.error('Model files error:',e);
+    if(zipText)zipText.innerText='❌ Lỗi: '+(e.message||e);
+    setTimeout(()=>{if(zipProgress)zipProgress.classList.remove('show');},4000);
+  }
 }
 async function processModelZipFileV2(file){
   if(!file){return;}
@@ -7660,8 +7692,7 @@ async function processModelZipFileV2(file){
     const extractedFiles=[];
     let totalSize=0;
     let firstImageDataUrl='';
-    let has3D=false;
-    const imgRe=/\.(png|jpg|jpeg|webp|gif|svg|apng|bmp|glb|gltf|vrm|fbx|obj|pmx|pmd|bvh|dae|3ds)$/i;
+    const imgRe=/\.(png|jpg|jpeg|webp|gif|svg|apng|bmp)$/i;
     const sortedEntries=[...entries].sort((a,b)=>{
       const an=(a.name||'').toLowerCase(),bn=(b.name||'').toLowerCase();
       const isAImg=imgRe.test(an),isBImg=imgRe.test(bn);
@@ -7682,13 +7713,12 @@ async function processModelZipFileV2(file){
         const entryFileName=(entry.name.split('/').pop()||entry.name).replace(/[^a-zA-Z0-9_.\-]/g,'_');
         const mime=guessMimeFromName(entryFileName);
         const fileMeta={name:entryFileName,type:mime,size:blob.size,originalPath:entry.name};
-        if(is3DFile(entryFileName,mime))has3D=true;
         const b64=await fileToBase64(new File([blob],entryFileName,{type:mime}));
         const p=b64.split(',');
         const dataOnly=p[1];
-        if(blob.size>2*1024*1024||mime.startsWith('image/')||is3DFile(entryFileName,mime)){
+        if(blob.size>2*1024*1024||mime.startsWith('image/')){
           const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
-          const safeName=entryFileName.replace(/[^a-zA-Z0-9_.\-]/g,'_');
+          const safeName=sanitizeFirebaseKey(entryFileName);
           for(let c=0;c<chunkCount;c++){
             const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);
             await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);
@@ -7696,7 +7726,7 @@ async function processModelZipFileV2(file){
           fileMeta.chunked=true;
           fileMeta.chunkCount=chunkCount;
           fileMeta.chunkData=null;
-          if((mime.startsWith('image/')||is3DFile(entryFileName,mime))&&!firstImageDataUrl&&blob.size<5*1024*1024){
+          if(mime.startsWith('image/')&&!firstImageDataUrl&&blob.size<5*1024*1024){
             firstImageDataUrl=b64;
             fileMeta.data=b64;
           }
@@ -7727,7 +7757,7 @@ async function processModelZipFileV2(file){
       happyMsg:happyMsg||'',sadMsg:sadMsg||'',thinkingMsg:thinkingMsg||'',musicMsg:musicMsg||'',prankMsg:prankMsg||'',
       files:extractedFiles,
       imageData:firstImageDataUrl,
-      fileType:has3D?'ai-model-3d-zip':'ai-model-zip',
+      fileType:'ai-model-zip',
       chunks:0,chunkData:null,
       sourceZip:file.name,
       createdBy:currentUser?currentUser.username:'admin',
@@ -7770,8 +7800,6 @@ function guessMimeFromName(name){
   if(n.endsWith('.motion3.json'))return 'application/x-live2d-motion3';
   if(n.endsWith('.vrm'))return 'application/x-vrm';
   if(n.endsWith('.fbx'))return 'application/x-fbx';
-  if(n.endsWith('.glb'))return 'model/gltf-binary';
-  if(n.endsWith('.gltf'))return 'model/gltf+json';
   if(n.endsWith('.obj'))return 'application/x-obj';
   if(n.endsWith('.pmx'))return 'application/x-pmx';
   if(n.endsWith('.pmd'))return 'application/x-pmd';
@@ -7797,32 +7825,7 @@ function bindAiZipDropZone(){
     zone.classList.remove('dragover');
     const files=e.dataTransfer&&e.dataTransfer.files;
     if(!files||!files.length)return;
-    const zipFiles=Array.from(files).filter(f=>{
-      const n=(f.name||'').toLowerCase();
-      return n.endsWith('.zip')||f.type==='application/zip'||f.type==='application/x-zip-compressed';
-    });
-    const otherFiles=Array.from(files).filter(f=>!zipFiles.includes(f));
-    if(zipFiles.length){
-      for(const zipFile of zipFiles){
-        await processModelZipFileV2(zipFile);
-      }
-    }
-    if(otherFiles.length){
-      // Auto-add non-zip files to model input
-      const filesInput=document.getElementById('aiNewModelFiles');
-      if(!filesInput){showToast('❌ Không tìm thấy input model','error');return;}
-      try{
-        const dt=new DataTransfer();
-        if(filesInput.files)Array.from(filesInput.files).forEach(f=>dt.items.add(f));
-        otherFiles.forEach(f=>dt.items.add(f));
-        filesInput.files=dt.files;
-        const has3D=otherFiles.some(f=>is3DFile(f.name,f.type));
-        const hasGif=otherFiles.some(f=>isGifFile(f.name,f.type));
-        showToast(`📎 Đã thêm ${otherFiles.length} file${has3D?' (3D)':''}${hasGif?' (GIF)':''} vào input tạo model`,'info');
-      }catch(err){
-        showToast('⚠️ Không thể thêm file tự động','warn');
-      }
-    }
+    await processModelFilesAuto(Array.from(files));
   });
 }
 
@@ -7874,18 +7877,11 @@ async function runDeepAnalysis(){
       temperature:0.8,
       max_tokens:800
     };
-    let res=await fetch(cachedAiConfig.endpoint,{
+    const res=await fetch(cachedAiConfig.endpoint,{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
       body:JSON.stringify(body)
     });
-    if(!res.ok&&cachedAiConfig.provider==='google'){
-      try{
-        const sep=cachedAiConfig.endpoint.includes('?')?'&':'?';
-        const url2=cachedAiConfig.endpoint+sep+'key='+encodeURIComponent(cachedAiConfig.apiKey);
-        res=await fetch(url2,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-      }catch(e){}
-    }
     if(!res.ok){
       const errTxt=await res.text();
       throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,200));
@@ -8063,27 +8059,19 @@ YÊU CẦU KỸ THUẬT:
     }
   ]
 }`;
-    const reqBody={
-      model:cachedAiConfig.model||'gpt-4o-mini',
-      messages:[
-        {role:'system',content:sysPrompt},
-        {role:'user',content:'YÊU CẦU ĐỀ: '+prompt}
-      ],
-      temperature:0.7,
-      max_tokens:4000
-    };
-    let res=await fetch(cachedAiConfig.endpoint,{
+    const res=await fetch(cachedAiConfig.endpoint,{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
-      body:JSON.stringify(reqBody)
+      body:JSON.stringify({
+        model:cachedAiConfig.model||'gpt-4o-mini',
+        messages:[
+          {role:'system',content:sysPrompt},
+          {role:'user',content:'YÊU CẦU ĐỀ: '+prompt}
+        ],
+        temperature:0.7,
+        max_tokens:4000
+      })
     });
-    if(!res.ok&&cachedAiConfig.provider==='google'){
-      try{
-        const sep=cachedAiConfig.endpoint.includes('?')?'&':'?';
-        const url2=cachedAiConfig.endpoint+sep+'key='+encodeURIComponent(cachedAiConfig.apiKey);
-        res=await fetch(url2,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(reqBody)});
-      }catch(e){}
-    }
     if(!res.ok){
       const errTxt=await res.text();
       throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,300));
