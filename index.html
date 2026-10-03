@@ -299,7 +299,7 @@ img{-webkit-user-drag:none}
 .user-role-badge.more-badge:hover{transform:scale(1.08);background:#1877f2!important;color:#fff!important}
 #profileModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:99999999;padding:15px;backdrop-filter:blur(8px);overflow-y:auto}
 #profileModal.show{display:flex}
-.profile-box{background:#fff;border-radius:24px;padding:0;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,.6);position:relative}
+.profile-box{background:#fff;border-radius:24px;padding:0;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,.6);position:relative;isolation:isolate}
 .profile-header-bg{background:linear-gradient(135deg,#1877f2,#198754);height:130px;border-radius:24px 24px 0 0;position:relative;transition:all .5s;overflow:visible;background-size:cover;background-position:center;background-repeat:no-repeat}
 .profile-avatar-outer{position:absolute;bottom:-55px;left:50%;transform:translateX(-50%);width:120px;height:120px;z-index:10}
 #avatarFxCanvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:200px;height:200px;pointer-events:none;z-index:0;border-radius:50%}
@@ -594,6 +594,8 @@ img{-webkit-user-drag:none}
 .avatar-frame-overlay.frame-spidey::before{content:'🕷️';position:absolute;top:-34px;left:50%;transform:translateX(-50%);font-size:32px;filter:drop-shadow(0 0 10px #dc3545);animation:spideyFrameSway 2s ease-in-out infinite}
 @keyframes spideyFrameSway{0%,100%{transform:translateX(-50%) rotate(-8deg)}50%{transform:translateX(-50%) rotate(8deg)}}
 .avatar-frame-overlay.frame-default{box-shadow:inset 0 0 0 3px rgba(255,255,255,.6),0 0 15px rgba(24,119,242,.5);border:3px solid rgba(255,255,255,.7)}
+.profile-special-fx{position:absolute!important;inset:0!important;pointer-events:none!important;z-index:16!important;overflow:hidden!important;border-radius:24px!important}
+.profile-special-fx .fx-hammer-slam,.profile-special-fx .fx-crown-drop,.profile-special-fx .fx-crown-halo,.profile-special-fx .fx-spidey-new,.profile-special-fx .fx-admin-crown,.profile-special-fx .fx-admin-aura,.profile-special-fx .fx-admin-text,.profile-special-fx .fx-handshake,.profile-special-fx .fx-web-shoot,.profile-special-fx .fx-crown-halo{position:absolute!important}
 .profile-special-fx .fx-hammer-slam{font-size:110px !important}
 .profile-special-fx .fx-crown-drop{font-size:90px !important;top:-100px !important}
 .profile-special-fx .fx-crown-halo{width:220px !important;height:220px !important}
@@ -607,6 +609,9 @@ img{-webkit-user-drag:none}
 .profile-special-fx .fx-handshake .hand-r{right:-100px !important}
 .profile-special-fx .fx-handshake .shield-gold{font-size:90px !important;top:-45px !important;left:-45px !important}
 .profile-special-fx .fx-web-shoot{height:6px !important}
+.profile-box{position:relative!important}
+#profileFxLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;border-radius:24px}
+.profile-custom-effect{position:absolute!important;inset:0!important;pointer-events:none!important;z-index:16!important;overflow:hidden!important;border-radius:24px!important}
 .name-tag{display:inline-block;padding:3px 12px;border-radius:14px;font-size:12px;font-weight:700;margin-left:6px;position:relative;vertical-align:middle;line-height:1.35;white-space:nowrap;border:1.5px solid rgba(255,255,255,.5);box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .name-tag.aura-rainbow{background:linear-gradient(90deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000);background-size:300% auto;animation:rainbowSlide 2s linear infinite;box-shadow:0 0 12px rgba(255,255,255,.8),0 2px 8px rgba(0,0,0,.15)}
 .name-tag.aura-galaxy{background:linear-gradient(90deg,#4a9eff,#a55eea,#ff6bcb,#4a9eff);background-size:300% auto;animation:rainbowSlide 3s linear infinite;box-shadow:0 0 12px rgba(165,94,234,.8),0 2px 8px rgba(0,0,0,.15)}
@@ -890,52 +895,6 @@ input,select,textarea{font-size:13px;padding:9px}
 #roomAnnounceMarquee .ra-track{font-size:14px;}
 .home-cd-num{font-size:24px}
 }
-
-/* ===== AURORA MODEL AI / SAFE ZONE EXTENSION ===== */
-#profileModal .profile-box{position:relative;overflow-y:auto;overflow-x:hidden}
-#profileFxLayer{position:absolute!important;inset:0!important;pointer-events:none!important;overflow:hidden!important;z-index:20!important;border-radius:24px!important}
-#profileFxLayer>*{pointer-events:none}
-#profileModal .profile-header-bg,#profileModal .profile-body{position:relative;z-index:2}
-#profileModal .profile-avatar-outer{z-index:25}
-#auroModelLayer{position:fixed;inset:0;pointer-events:none;z-index:2147483000}
-#auroModelCanvasWrap{position:absolute;right:24px;bottom:18px;width:min(34vw,360px);height:min(52vh,520px);min-width:180px;min-height:240px;pointer-events:auto;touch-action:none;cursor:grab}
-#auroModelCanvasWrap:active{cursor:grabbing}
-#auroModelCanvas{width:100%;height:100%;display:block}
-#auroModelFallback{position:absolute;inset:15%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:100px;text-shadow:0 0 30px rgba(24,119,242,.7);pointer-events:none}
-#auroModelFallbackText{font-size:16px;font-weight:900}
-#auroModelHideBtn{position:absolute;right:10px;bottom:10px;width:38px;height:38px;border:0;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;font-size:18px;pointer-events:auto;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,.3)}
-#auroModelNameBadge{position:absolute;right:30px;bottom:min(52vh,520px);transform:translateY(100%);padding:4px 10px;border-radius:12px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:800;pointer-events:none}
-#auroModelChat{position:absolute;right:24px;bottom:calc(min(52vh,520px) + 28px);width:min(330px,calc(100vw - 35px));max-height:360px;background:rgba(255,255,255,.97);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;display:none;pointer-events:auto;border:2px solid #6f42c1}
-#auroModelChat.show{display:block}
-#auroModelChatHead{padding:10px 12px;background:linear-gradient(135deg,#6f42c1,#1877f2);color:#fff;display:flex;justify-content:space-between;align-items:center}
-#auroModelChatHead button{border:0;background:transparent;color:#fff;cursor:pointer;font-size:16px}
-#auroModelChatMessages{height:250px;overflow-y:auto;padding:10px;background:#f8f9fa}
-.auro-chat-msg{padding:7px 9px;border-radius:10px;margin-bottom:7px;font-size:12px;line-height:1.5;max-width:88%;white-space:pre-wrap;word-break:break-word}
-.auro-chat-msg.bot{background:#ece6ff;color:#3e236f}
-.auro-chat-msg.user{background:#dbeafe;color:#17406b;margin-left:auto}
-#auroModelChatInputRow{display:flex;gap:5px;padding:8px;border-top:1px solid #ddd}
-#auroModelChatInputRow input{margin:0;flex:1;padding:8px;border-radius:9px}
-#auroModelChatInputRow button{width:40px;border:0;border-radius:9px;background:#1877f2;color:#fff;cursor:pointer}
-#auroModelPickerModal .auro-model-card{display:flex;gap:10px;align-items:center;padding:10px;border:2px solid #e0e0e0;border-radius:12px;margin-bottom:8px}
-.auro-model-card.active{border-color:#6f42c1;background:#f4efff}
-.auro-model-card .model-info{flex:1;min-width:0}
-.auro-model-card .model-actions{display:flex;gap:5px;flex-wrap:wrap}
-#auroModelFrameStage{position:relative;height:440px;border:2px solid #1877f2;border-radius:14px;overflow:hidden;background:repeating-linear-gradient(45deg,#f4f6f8 0 10px,#e9edf2 10px 20px);touch-action:none}
-#auroModelFrameSafe,#throneSafeStage .throne-safe-grid{position:absolute;inset:12%;border:2px dashed rgba(24,119,242,.65);pointer-events:none}
-#auroModelFramePreview{position:absolute;left:50%;top:50%;width:180px;height:180px;transform:translate(-50%,-50%);border:3px dashed #6f42c1;border-radius:16px;background:rgba(111,66,193,.12);display:flex;align-items:center;justify-content:center;font-size:70px;pointer-events:none}
-#throneSafeStage{position:relative;width:100%;height:520px;border-radius:16px;overflow:hidden;background:#1a0000;touch-action:none;border:2px solid #ffd700}
-#throneSafeStage .throne-safe-bg{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat}
-.throne-safe-slot{position:absolute;width:130px;height:150px;border:3px dashed #fff;border-radius:16px;background:rgba(0,0,0,.48);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:58px;font-weight:900;cursor:grab;touch-action:none;user-select:none}
-.throne-safe-slot span{font-size:13px;margin-top:6px}
-#throneSafe1{left:50%;top:44%;transform:translate(-50%,-50%) scale(1.08);border-color:#ffd700}
-#throneSafe2{left:28%;top:48%;transform:translate(-50%,-50%);border-color:#a55eea}
-#throneSafe3{left:72%;top:48%;transform:translate(-50%,-50%);border-color:#4a9eff}
-@media(max-width:640px){
-  #auroModelCanvasWrap{right:8px;bottom:8px;width:190px;height:280px}
-  #auroModelNameBadge{right:14px;bottom:265px}
-  #auroModelChat{right:8px;bottom:290px}
-  #throneSafeStage{height:430px}
-}
 </style>
 </head><body>
 
@@ -1022,8 +981,7 @@ input,select,textarea{font-size:13px;padding:9px}
     <div class="role-fx-draggable" id="roleFxDraggable"></div>
     <div class="role-fx-safe-zone"></div>
   </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-warning" style="width:auto;color:#000;padding:8px 12px" onclick="smartCenterRoleEffect()">🎯 Căn giữa thông minh</button></div>
-<div class="role-fx-controls">
+  <div class="role-fx-controls">
     <div><label>↔️ Vị trí X (px): <span id="rfxXVal">0</span></label><input type="range" id="rfxRangeX" min="-400" max="400" value="0" oninput="updateRoleFxPreview()"></div>
     <div><label>↕️ Vị trí Y (px): <span id="rfxYVal">0</span></label><input type="range" id="rfxRangeY" min="-400" max="400" value="0" oninput="updateRoleFxPreview()"></div>
     <div><label>🔍 Scale tổng: <span id="rfxScaleVal">1.00</span></label><input type="range" id="rfxRangeScale" min="0.2" max="3" step="0.01" value="1" oninput="updateRoleFxPreview()"></div>
@@ -1141,8 +1099,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="profile-stats"><div class="profile-stat-card"><div class="profile-stat-num" id="profileTestCount">0</div><div class="profile-stat-label">Bài đã làm</div></div><div class="profile-stat-card"><div class="profile-stat-num" id="profileAvgScore">0</div><div class="profile-stat-label">Điểm TB</div></div></div>
 <div class="profile-section" id="profileNoteSection"><label>📝 Ghi chú</label><textarea id="profileNote" rows="2" placeholder="Ghi chú cá nhân..."></textarea></div>
 <div class="profile-section"><label style="display:flex;justify-content:space-between;align-items:center"><span>🏅 Huy chương &amp; 🏆 Cup</span><button class="btn btn-warning" id="profileAddMedalBtn" style="width:auto;padding:4px 10px;font-size:11px" onclick="openMedalPicker()">➕ Thêm</button></label><div class="profile-medals" id="profileMedalsContainer"></div></div>
-<div class="profile-actions" id="profileActionsSelf"><button class="btn btn-secondary" onclick="closeProfile()">Đóng</button><button class="btn btn-success" onclick="saveProfile()">💾 Lưu Profile</button><button class="btn btn-danger" onclick="handleLogoutFromProfile()">🚪 Đăng Xuất</button></div>
-<div class="profile-actions" id="profileModelAction"><button class="btn btn-warning" style="color:#000" onclick="openProfileModelPicker()">🤖 Model</button><button class="btn btn-secondary" onclick="openAuroModelFrameEditor()">🖼️ Khung Model</button></div>
+<div class="profile-actions" id="profileActionsSelf"><button class="btn btn-secondary" onclick="closeProfile()">Đóng</button><button class="btn btn-success" onclick="saveProfile()">💾 Lưu Profile</button><button class="btn" style="background:linear-gradient(135deg,#6f42c1,#5a32a3);color:#fff" onclick="openProfileAIModelPicker()">🤖 Model</button><button class="btn btn-danger" onclick="handleLogoutFromProfile()">🚪 Đăng Xuất</button></div>
 <div class="profile-actions" id="profileActionsOther" style="display:none"><button class="btn btn-secondary" onclick="closeProfile()">Đóng</button></div>
 </div>
 </div></div>
@@ -1702,21 +1659,23 @@ input,select,textarea{font-size:13px;padding:9px}
   </div>
   <div><label style="color:#ffd700;font-size:11px">🔍 Scale</label><input type="number" id="throneScale" value="1" step="0.1" min="0.5" max="2" style="padding:4px;margin:0"></div>
 </div>
-<label style="color:#ffd700;font-weight:bold;margin-top:8px">🖼️ Nền ảnh Bục Vinh Danh:</label>
-<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#120000;padding:8px;border:1px solid #5b3300;border-radius:8px">
-  <input type="file" id="throneBgImageInput" accept="image/*" style="flex:1;min-width:180px;padding:6px;background:#fff" onchange="handleThroneBgImageUpload(this)">
-  <button class="btn btn-secondary" style="width:auto;padding:7px 12px" onclick="clearThroneBgImage()">🗑️ Bỏ nền ảnh</button>
-</div>
-<input type="hidden" id="throneBgImage">
-<label style="color:#ffd700;font-weight:bold;margin-top:10px">🎛️ Safe Zone / Căn chỉnh Top 1-2-3:</label>
-<div style="font-size:11px;color:#ffe8a1;line-height:1.5;background:#220d00;padding:8px;border-radius:8px">Bấm nút bên dưới để mở bục ảo. Nền bục ảo dùng chính nền bục thật; kéo từng Top bằng chuột/chạm tay và dùng con lăn để đổi kích thước.</div>
-<button class="btn btn-warning" style="width:auto;padding:9px 14px;color:#000;margin-top:7px" onclick="openThroneSafeZone()">🎛️ Mở Safe Zone căn chỉnh Top 1 / 2 / 3</button>
-<div style="height:8px"></div>
 <label style="color:#ffd700;font-weight:bold;margin-top:8px">🖼️ Khung viền Avatar Top 1 / 2 / 3 (URL ảnh):</label>
 <input type="text" id="throneFrame1" placeholder="URL khung Top 1..." style="margin:4px 0;padding:6px">
 <input type="text" id="throneFrame2" placeholder="URL khung Top 2..." style="margin:4px 0;padding:6px">
 <input type="text" id="throneFrame3" placeholder="URL khung Top 3..." style="margin:4px 0;padding:6px">
 <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+
+<label style="color:#ffd700;font-size:12px;margin-top:12px;display:block">🖼️ Ảnh nền bục vinh danh (thay gradient)</label>
+<input type="file" id="throneBgImageInput" accept="image/*" onchange="handleThroneBgImage(this)" style="margin:6px 0">
+<div id="throneBgImagePreview" style="text-align:center;margin:8px 0"></div>
+<button class="btn btn-secondary" style="width:auto;padding:8px 12px;margin-bottom:8px" onclick="clearThroneBgImage()">🗑️ Xóa ảnh nền</button>
+<label style="display:flex;align-items:center;gap:8px;color:#ffd700;font-size:12px;cursor:pointer;margin:10px 0">
+  <input type="checkbox" id="throneDragToggle" onchange="toggleThroneDragMode(this.checked)" style="width:16px;height:16px">
+  🖐️ Bật kéo thả vị trí Top 1/2/3 (hiện Safe Zone)
+</label>
+<div id="throneSafeZoneHint" style="display:none;background:rgba(255,215,0,.15);border:2px dashed #ffd700;padding:10px;border-radius:10px;font-size:12px;color:#ffd700;margin-bottom:10px">
+  ✨ <b>Safe Zone</b> đang bật — kéo thả các bục Top 1/2/3 bằng chuột hoặc ngón tay. Nền ảo = nền thật.
+</div>
   <button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="saveThroneDesign()">💾 Lưu Thiết Kế</button>
   <button class="btn btn-warning" style="width:auto;padding:10px 16px;color:#000" onclick="resetThroneDesign()">🔄 Reset</button>
 </div>
@@ -1897,58 +1856,49 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 
 <div id="supremeTabEntertainment" style="display:none">
-<div class="collapse-header" onclick="toggleCollapseSection(this)" data-collapsed="false"><span>🤖 0. MODEL AI — Auro</span><span class="collapse-arrow">▼</span></div>
+
+<div class="collapse-header" onclick="toggleCollapseSection(this)" data-collapsed="false"><span>🤖 MODEL AI (Auro)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body">
-  <div style="background:linear-gradient(135deg,#eef7ff,#f7efff);border:2px solid #b9a7ff;padding:12px;border-radius:12px;margin-bottom:12px">
-    <div style="font-weight:900;color:#6f42c1;font-size:15px;margin-bottom:6px">🤖 Model AI của hệ thống</div>
-    <div style="font-size:12px;color:#555;line-height:1.6">Model mặc định là <b>Auro</b>. Người dùng chỉ thấy và trang bị model sau khi được VUA cấp quyền. Không giới hạn dung lượng ở giao diện ứng dụng; giới hạn thực tế còn phụ thuộc Firebase Storage/quyền dự án.</div>
-  </div>
+<div style="background:linear-gradient(135deg,#e7f3ff,#f0ebff);border:2px solid #6f42c1;padding:16px;border-radius:14px;margin-bottom:14px">
+  <h3 style="color:#6f42c1;margin-bottom:8px;font-weight:900">🤖 Hệ thống Model AI</h3>
+  <p style="font-size:12px;color:#555;line-height:1.6;margin-bottom:12px">Model mặc định: <b>Robot hệ thống</b>. Admin cấp model cho user bằng mật khẩu VUA. Hỗ trợ nhiều định dạng (.moc3, .model3.json, textures, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh, ảnh, video, GIF...). Không giới hạn dung lượng tải lên (lưu chunk).</p>
 
-  <div style="background:#fff;padding:12px;border:1px solid #ddd;border-radius:10px;margin-bottom:12px">
-    <div style="font-weight:900;color:#dc3545;margin-bottom:8px">👑 Cấp quyền sở hữu Model AI</div>
-    <div style="font-size:11px;color:#666;margin-bottom:7px">Nhập @ID tài khoản rồi bấm Cấp. Chỉ phiên Tối Cao đã xác thực bằng mật khẩu VUA mới được thực hiện.</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <input type="text" id="auroGrantUserId" placeholder="@id_tài_khoản" style="margin:0;flex:1;min-width:180px">
-      <button class="btn btn-danger" style="width:auto" onclick="grantAuroModelAccess()">👑 Cấp quyền</button>
-      <button class="btn btn-secondary" style="width:auto" onclick="revokeAuroModelAccess()">🚫 Thu hồi</button>
-    </div>
-    <div id="auroGrantStatus" style="font-size:11px;color:#666;margin-top:8px"></div>
+  <div class="section-title" style="margin-top:8px">👑 Cấp Model cho User</div>
+  <div class="form-grid-2">
+    <div><label>@ID tài khoản</label><input type="text" id="aiGrantUserId" placeholder="username cần cấp"></div>
+    <div><label>Mật khẩu VUA</label><input type="password" id="aiGrantVuaPass" placeholder="••••••••"></div>
   </div>
+  <button class="btn" style="background:linear-gradient(135deg,#6f42c1,#5a32a3);color:#fff;margin-bottom:12px" onclick="grantAIModelToUser()">🎁 Cấp quyền sở hữu Model AI</button>
+  <button class="btn btn-danger" style="margin-bottom:12px" onclick="revokeAIModelFromUser()">🚫 Thu hồi quyền</button>
 
-  <div style="background:#fff;padding:12px;border:1px solid #ddd;border-radius:10px">
-    <div style="font-weight:900;color:#1877f2;margin-bottom:8px">📦 Thêm Model AI</div>
-    <label>Tên Model:</label>
-    <input type="text" id="auroModelName" value="Auro" maxlength="80" placeholder="Tên model..." style="margin-bottom:8px">
-    <label>📁 Chọn file model / textures:</label>
-    <input type="file" id="auroModelFilesInput" multiple webkitdirectory directory accept=".moc3,.model3.json,.json,.png,.jpg,.jpeg,.webp,.gif,.motion3.json,.psd,.vrm,.fbx,.obj,.pmx,.pmd,.bvh,.vmd,.vpd,.moc,.atlas,.mtn,.txt" style="padding:7px;background:#f8f9fa">
-    <label style="margin-top:8px">File chính (tùy chọn):</label>
-    <select id="auroModelMainFile" style="margin-bottom:8px"><option value="">Tự phát hiện</option></select>
-    <label>Câu chào / tương tác (mỗi dòng một câu):</label>
-    <textarea id="auroModelGreetings" rows="4" placeholder="Xin chào!&#10;Mình là Auro.&#10;Chúc bạn làm bài thật tốt!"></textarea>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-      <button class="btn btn-success" style="width:auto" onclick="uploadAuroModelPackage()">⬆️ Tải Model lên</button>
-      <button class="btn btn-secondary" style="width:auto" onclick="loadAuroModelAdminList()">🔄 Tải danh sách</button>
-    </div>
-    <div id="auroModelUploadProgress" style="font-size:12px;color:#1877f2;margin-top:8px"></div>
-  </div>
-  <div id="auroModelAdminList" style="margin-top:12px"></div>
+  <div class="section-title">📦 Upload Model mới (Admin)</div>
+  <label>Tên model (mặc định Auro)</label>
+  <input type="text" id="aiModelNameInput" placeholder="Auro" value="Auro">
+  <label>File model (nhiều định dạng)</label>
+  <input type="file" id="aiModelFileInput" multiple accept="*/*" onchange="handleAIModelUpload(this)">
+  <div id="aiModelUploadProgress" style="display:none;font-size:12px;color:#6f42c1;margin:6px 0"></div>
+  <label>Câu chào tương tác (mỗi dòng 1 câu)</label>
+  <textarea id="aiModelGreetings" rows="3" placeholder="Xin chào! Mình là Auro~&#10;Chúc bạn làm bài tốt nhé!&#10;Hmm... để mình nghĩ đã..."></textarea>
+  <button class="btn btn-success" onclick="saveAIModelAsset()">💾 Lưu Model vào hệ thống</button>
+
+  <div class="section-title" style="margin-top:14px">⚙️ Setup AI Model (API / Cấu hình)</div>
+  <label>API Key (OpenAI / tương thích)</label>
+  <input type="password" id="aiSetupApiKey" placeholder="sk-...">
+  <label>API Base URL (tuỳ chọn)</label>
+  <input type="text" id="aiSetupApiBase" placeholder="https://api.openai.com/v1">
+  <label>Model name (vd: gpt-4o-mini)</label>
+  <input type="text" id="aiSetupModelName" placeholder="gpt-4o-mini" value="gpt-4o-mini">
+  <label>System prompt</label>
+  <textarea id="aiSetupSystemPrompt" rows="3" placeholder="Bạn là Auro, trợ lý AI thân thiện của Aurora Exam System..."></textarea>
+  <label>Mật khẩu VUA để lưu</label>
+  <input type="password" id="aiSetupVuaPass" placeholder="••••••••">
+  <button class="btn btn-success" onclick="saveAISetupConfig()">💾 Lưu cấu hình AI</button>
+  <p id="aiSetupStatus" style="font-size:12px;color:#666;margin-top:8px"></p>
+
+  <div class="section-title" style="margin-top:14px">📋 Danh sách Model hệ thống</div>
+  <div id="aiModelSystemList"><p style="color:#888;font-size:12px">Đang tải...</p></div>
 </div>
-
-<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>⚙️ SETUP AI MODEL — API / Cấu hình</span><span class="collapse-arrow">▼</span></div>
-<div class="collapse-body collapsed">
-  <div style="background:#fffbe6;border-left:4px solid #ffc107;padding:10px;border-radius:8px;font-size:12px;color:#856404;line-height:1.6;margin-bottom:10px">API key được nhập tại đây để Model AI có thể gọi dịch vụ hội thoại. Không nên công khai file HTML có API key thật; tốt nhất dùng backend/proxy bảo mật.</div>
-  <label>API Endpoint:</label><input type="url" id="auroAIEndpoint" placeholder="https://api.openai.com/v1/chat/completions">
-  <label>API Key:</label><input type="password" id="auroAIKey" placeholder="sk-...">
-  <label>Model chat:</label><input type="text" id="auroAIChatModel" value="gpt-4o-mini" placeholder="Tên model API">
-  <label>System prompt:</label><textarea id="auroAISystemPrompt" rows="4">Bạn là Auro, một trợ lý AI thân thiện trong hệ thống Aurora. Hãy trả lời ngắn gọn, tự nhiên, hữu ích.</textarea>
-  <label style="display:flex;align-items:center;gap:6px;margin:8px 0"><input type="checkbox" id="auroAIEnabled" style="width:16px;height:16px"> Bật hội thoại AI</label>
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button class="btn btn-success" style="width:auto" onclick="saveAuroAIConfig()">💾 Lưu cấu hình</button>
-    <button class="btn btn-secondary" style="width:auto" onclick="loadAuroAIConfig()">🔄 Tải cấu hình</button>
-  </div>
-  <div id="auroAIConfigStatus" style="font-size:11px;color:#666;margin-top:8px"></div>
 </div>
-
 
 
 <div class="collapse-header" onclick="toggleCollapseSection(this)" data-collapsed="false"><span>🎵 1. HỆ THỐNG NHẠC ĐỒNG BỘ</span><span class="collapse-arrow">▼</span></div>
@@ -2273,13 +2223,18 @@ input,select,textarea{font-size:13px;padding:9px}
       <h3>🎛️ Safe Area / Calibration Screen</h3>
       <button class="close-btn" onclick="closeSafeAreaCalibration()">✖</button>
     </div>
-    <p style="font-size:12px;color:#666;margin-bottom:8px">Kéo thả để di chuyển. Dùng thanh trượt để scale / xoay / chỉnh opacity. Layout sẽ được lưu theo emoji/hiệu ứng.</p>
-    <div class="safearea-stage" id="safeAreaStage">
-      <div class="safearea-grid"></div>
-      <div class="safearea-safe-zone"></div>
-      <div class="safearea-center-line"></div>
-      <div class="safearea-center-line vertical"></div>
-      <div class="safearea-fx-el" id="safeAreaFxElement">✨</div>
+    <p style="font-size:12px;color:#666;margin-bottom:8px">Kéo thả / chạm để di chuyển, phóng to thu nhỏ. Hiệu ứng hiển thị trên <b>profile ảo</b> của tài khoản đang đăng nhập. Layout sẽ được lưu theo emoji/hiệu ứng.</p>
+    <div class="safearea-stage" id="safeAreaStage" style="background-size:cover;background-position:center;position:relative;border-radius:16px;overflow:hidden;min-height:280px">
+      <div id="saVirtualProfileBg" style="position:absolute;inset:0;background-size:cover;background-position:center;opacity:.9;pointer-events:none;border-radius:16px"></div>
+      <div class="safearea-grid" style="position:relative;z-index:1"></div>
+      <div class="safearea-safe-zone" style="position:relative;z-index:1"></div>
+      <div class="safearea-center-line" style="position:relative;z-index:1"></div>
+      <div class="safearea-center-line vertical" style="position:relative;z-index:1"></div>
+      <div class="safearea-fx-el" id="safeAreaFxElement" style="z-index:5;touch-action:none">✨</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+      <button class="btn btn-success" style="width:auto;padding:8px 12px;font-size:12px" onclick="smartCenterSafeAreaEffect()">🎯 Căn giữa thông minh</button>
+      <button class="btn btn-warning" style="width:auto;padding:8px 12px;font-size:12px;color:#000" onclick="resetSafeAreaCalibration()">🔄 Reset</button>
     </div>
     <div class="safearea-controls">
       <div>
@@ -2338,22 +2293,12 @@ input,select,textarea{font-size:13px;padding:9px}
   </div>
 </div>
 
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-    "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.0/lib/three-vrm.module.js"
-  }
-}
-</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getDatabase, ref, set, get, child, remove, push, onValue, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
-import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js";
 const firebaseConfig={apiKey:"AIzaSyC33ENu7xxo8Z9YXz_t3J8NZkfsShuuzKM",authDomain:"kho-du-lieu-de.firebaseapp.com",databaseURL:"https://kho-du-lieu-de-default-rtdb.firebaseio.com",projectId:"kho-du-lieu-de",storageBucket:"kho-du-lieu-de.firebasestorage.app",messagingSenderId:"420574558880",appId:"1:420574558880:web:f9c5037be3e34a6674a7c5"};
-const app=initializeApp(firebaseConfig);const db=getDatabase(app);const storage=getStorage(app);
-window.db=db;window.ref=ref;window.dbRef=ref(db);window.dbSet=set;window.dbGet=get;window.dbChild=child;window.dbRemove=remove;window.dbPush=push;window.onValue=onValue;window.dbUpdate=update;window.storage=storage;window.storageRef=storageRef;window.uploadBytesResumable=uploadBytesResumable;window.getDownloadURL=getDownloadURL;
+const app=initializeApp(firebaseConfig);const db=getDatabase(app);
+window.db=db;window.ref=ref;window.dbRef=ref(db);window.dbSet=set;window.dbGet=get;window.dbChild=child;window.dbRemove=remove;window.dbPush=push;window.onValue=onValue;window.dbUpdate=update;
 </script>
 
 <script>
@@ -2431,7 +2376,7 @@ let countdownInterval=null;
 let countdownConfigListener=null;
 
 /* Throne Design State */
-let throneDesign={bg1:'#1a0000',bg2:'#4a0000',bgImage:'',bgImageFit:'cover',top1X:0,top1Y:0,top2X:0,top2Y:0,top3X:0,top3Y:0,scale:1,frame1:'',frame2:'',frame3:''};
+let throneDesign={bg1:'#1a0000',bg2:'#4a0000',bgImage:'',top1X:0,top1Y:0,top2X:0,top2Y:0,top3X:0,top3Y:0,scale:1,frame1:'',frame2:'',frame3:''};let throneDragEnabled=false;
 let throneDesignListener=null;
 
 /* Role Effect Adjust State */
@@ -2649,54 +2594,126 @@ function listenThroneDesign(){
   if(throneDesignListener)throneDesignListener();
   throneDesignListener=window.onValue(window.ref(window.db,'system/throne_design'),snap=>{
     const d=snap.val()||{};
-    throneDesign=Object.assign({bg1:'#1a0000',bg2:'#4a0000',bgImage:'',bgImageFit:'cover',top1X:0,top1Y:0,top2X:0,top2Y:0,top3X:0,top3Y:0,scale:1,frame1:'',frame2:'',frame3:''},d);
+    throneDesign=Object.assign({bg1:'#1a0000',bg2:'#4a0000',bgImage:'',top1X:0,top1Y:0,top2X:0,top2Y:0,top3X:0,top3Y:0,scale:1,frame1:'',frame2:'',frame3:''},d);
     applyThroneDesignUI(throneDesign);
   });
 }
 function applyThroneDesignUI(d){
+  if(!d)d=throneDesign||{};
   const sec=document.getElementById('throneSection');
   if(sec){
-    sec.style.backgroundImage=d.bgImage
-      ? `linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.35)),url("${d.bgImage}")`
-      : `linear-gradient(180deg,${d.bg1} 0%,${d.bg2} 60%,${d.bg1} 100%)`;
-    sec.style.backgroundSize=d.bgImage?'cover':'auto';
-    sec.style.backgroundPosition='center';
-    sec.style.backgroundRepeat='no-repeat';
+    if(d.bgImage){
+      sec.style.background=`url(${d.bgImage}) center/cover no-repeat, linear-gradient(180deg,${d.bg1||'#1a0000'} 0%,${d.bg2||'#4a0000'} 60%,${d.bg1||'#1a0000'} 100%)`;
+    }else{
+      sec.style.background=`linear-gradient(180deg,${d.bg1||'#1a0000'} 0%,${d.bg2||'#4a0000'} 60%,${d.bg1||'#1a0000'} 100%)`;
+    }
   }
-  const s1=document.querySelector('.throne-slot.rank1');
-  const s2=document.querySelector('.throne-slot.rank2');
-  const s3=document.querySelector('.throne-slot.rank3');
+  // Safe zone virtual bg mirror
+  const sz=document.getElementById('throneSafeZoneOverlay');
+  if(sz){
+    if(d.bgImage)sz.style.background=`url(${d.bgImage}) center/cover no-repeat`;
+    else sz.style.background=`linear-gradient(180deg,${d.bg1||'#1a0000'} 0%,${d.bg2||'#4a0000'} 60%,${d.bg1||'#1a0000'} 100%)`;
+  }
+  const s1=document.querySelector('#throneGrid .throne-slot.rank1');
+  const s2=document.querySelector('#throneGrid .throne-slot.rank2');
+  const s3=document.querySelector('#throneGrid .throne-slot.rank3');
   if(s1)s1.style.transform=`scale(${(1.08*(d.scale||1)).toFixed(2)}) translate(${d.top1X||0}px,${d.top1Y||0}px)`;
   if(s2)s2.style.transform=`scale(${(d.scale||1).toFixed(2)}) translate(${d.top2X||0}px,${d.top2Y||0}px)`;
   if(s3)s3.style.transform=`scale(${(d.scale||1).toFixed(2)}) translate(${d.top3X||0}px,${d.top3Y||0}px)`;
-  // Fill form
   const $=id=>document.getElementById(id);
   if($('throneBg1')&&document.activeElement!==$('throneBg1'))$('throneBg1').value=d.bg1||'#1a0000';
   if($('throneBg2')&&document.activeElement!==$('throneBg2'))$('throneBg2').value=d.bg2||'#4a0000';
-  if($('throneBgImage'))$('throneBgImage').value=d.bgImage||'';
-  if($('throneTop1X')&&document.activeElement!==$('throneTop1X'))$('throneTop1X').value=d.top1X||0;
-  if($('throneTop1Y')&&document.activeElement!==$('throneTop1Y'))$('throneTop1Y').value=d.top1Y||0;
-  if($('throneTop2X')&&document.activeElement!==$('throneTop2X'))$('throneTop2X').value=d.top2X||0;
-  if($('throneTop2Y')&&document.activeElement!==$('throneTop2Y'))$('throneTop2Y').value=d.top2Y||0;
-  if($('throneTop3X')&&document.activeElement!==$('throneTop3X'))$('throneTop3X').value=d.top3X||0;
-  if($('throneTop3Y')&&document.activeElement!==$('throneTop3Y'))$('throneTop3Y').value=d.top3Y||0;
-  if($('throneScale')&&document.activeElement!==$('throneScale'))$('throneScale').value=d.scale||1;
-  if($('throneFrame1')&&document.activeElement!==$('throneFrame1'))$('throneFrame1').value=d.frame1||'';
-  if($('throneFrame2')&&document.activeElement!==$('throneFrame2'))$('throneFrame2').value=d.frame2||'';
-  if($('throneFrame3')&&document.activeElement!==$('throneFrame3'))$('throneFrame3').value=d.frame3||'';
-  // Apply frames to avatars
-  const av1=s1? s1.querySelector('.throne-avatar'):null;
-  const av2=s2? s2.querySelector('.throne-avatar'):null;
-  const av3=s3? s3.querySelector('.throne-avatar'):null;
-  const applyFrame=(av,url)=>{if(!av)return;if(url){av.style.backgroundImage=`url('${url}')`;av.style.backgroundSize='cover';av.style.backgroundPosition='center';}else{av.style.backgroundImage='';av.style.backgroundSize='';av.style.backgroundPosition='';}};
-  applyFrame(av1,d.frame1);applyFrame(av2,d.frame2);applyFrame(av3,d.frame3);
+  if($('throneTop1X'))$('throneTop1X').value=d.top1X||0;
+  if($('throneTop1Y'))$('throneTop1Y').value=d.top1Y||0;
+  if($('throneTop2X'))$('throneTop2X').value=d.top2X||0;
+  if($('throneTop2Y'))$('throneTop2Y').value=d.top2Y||0;
+  if($('throneTop3X'))$('throneTop3X').value=d.top3X||0;
+  if($('throneTop3Y'))$('throneTop3Y').value=d.top3Y||0;
+  if($('throneScale'))$('throneScale').value=d.scale||1;
+  if($('throneFrame1'))$('throneFrame1').value=d.frame1||'';
+  if($('throneFrame2'))$('throneFrame2').value=d.frame2||'';
+  if($('throneFrame3'))$('throneFrame3').value=d.frame3||'';
+  const prev=document.getElementById('throneBgImagePreview');
+  if(prev){
+    if(d.bgImage)prev.innerHTML=`<img src="${d.bgImage}" style="max-width:100%;max-height:100px;border-radius:8px;border:2px solid #ffd700">`;
+    else prev.innerHTML='';
+  }
 }
+function handleThroneBgImage(input){
+  if(!input.files||!input.files[0])return;
+  const f=input.files[0];
+  if(!f.type.startsWith('image/')){showToast('❌ Chỉ ảnh!','error');input.value='';return;}
+  fileToBase64(f).then(d=>{
+    throneDesign.bgImage=d;
+    applyThroneDesignUI(throneDesign);
+    showToast('✅ Đã chọn ảnh nền bục','success');
+  }).catch(e=>showToast('❌ '+(e.message||e),'error'));
+}
+function clearThroneBgImage(){
+  throneDesign.bgImage='';
+  const inp=document.getElementById('throneBgImageInput');if(inp)inp.value='';
+  applyThroneDesignUI(throneDesign);
+  showToast('🗑️ Đã xóa ảnh nền','warn');
+}
+function toggleThroneDragMode(on){
+  throneDragEnabled=!!on;
+  const hint=document.getElementById('throneSafeZoneHint');
+  if(hint)hint.style.display=on?'block':'none';
+  const grid=document.getElementById('throneGrid');
+  if(!grid)return;
+  let overlay=document.getElementById('throneSafeZoneOverlay');
+  if(on){
+    if(!overlay){
+      overlay=document.createElement('div');
+      overlay.id='throneSafeZoneOverlay';
+      overlay.style.cssText='position:absolute;inset:8px;border:3px dashed #ffd700;border-radius:16px;pointer-events:none;z-index:0;opacity:.45;box-shadow:inset 0 0 40px rgba(255,215,0,.25)';
+      const sec=document.getElementById('throneSection');
+      if(sec){sec.style.position='relative';sec.appendChild(overlay);}
+    }
+    overlay.style.display='block';
+    applyThroneDesignUI(throneDesign);
+    ['rank1','rank2','rank3'].forEach(r=>{
+      const slot=document.querySelector('#throneGrid .throne-slot.'+r);
+      if(!slot)return;
+      slot.style.cursor='grab';
+      slot.style.touchAction='none';
+      slot.onpointerdown=function(e){
+        if(!throneDragEnabled)return;
+        e.preventDefault();
+        const key=r==='rank1'?'top1':(r==='rank2'?'top2':'top3');
+        const startX=e.clientX,startY=e.clientY;
+        const ox=throneDesign[key+'X']||0,oy=throneDesign[key+'Y']||0;
+        slot.setPointerCapture(e.pointerId);
+        slot.style.cursor='grabbing';
+        const move=ev=>{
+          const dx=ev.clientX-startX,dy=ev.clientY-startY;
+          throneDesign[key+'X']=Math.round(ox+dx);
+          throneDesign[key+'Y']=Math.round(oy+dy);
+          applyThroneDesignUI(throneDesign);
+        };
+        const up=ev=>{
+          slot.releasePointerCapture(e.pointerId);
+          slot.style.cursor='grab';
+          slot.onpointermove=null;slot.onpointerup=null;slot.onpointercancel=null;
+        };
+        slot.onpointermove=move;slot.onpointerup=up;slot.onpointercancel=up;
+      };
+    });
+  }else{
+    if(overlay)overlay.style.display='none';
+    ['rank1','rank2','rank3'].forEach(r=>{
+      const slot=document.querySelector('#throneGrid .throne-slot.'+r);
+      if(slot){slot.style.cursor='';slot.onpointerdown=null;}
+    });
+  }
+}
+
 async function saveThroneDesign(){
   const $=id=>document.getElementById(id);
   const d={
     bg1:$('throneBg1').value,
     bg2:$('throneBg2').value,
-    bgImage:$('throneBgImage').value.trim(),
+    bgImage:throneDesign.bgImage||'',
     top1X:parseInt($('throneTop1X').value)||0,
     top1Y:parseInt($('throneTop1Y').value)||0,
     top2X:parseInt($('throneTop2X').value)||0,
@@ -2720,7 +2737,7 @@ async function resetThroneDesign(){
   if(!await customConfirm('Reset thiết kế Bục Vinh Danh?',{icon:'🔄'}))return;
   try{
     await window.dbRemove(window.ref(window.db,'system/throne_design'));
-    throneDesign={bg1:'#1a0000',bg2:'#4a0000',bgImage:'',bgImageFit:'cover',top1X:0,top1Y:0,top2X:0,top2Y:0,top3X:0,top3Y:0,scale:1,frame1:'',frame2:'',frame3:''};
+    throneDesign={bg1:'#1a0000',bg2:'#4a0000',bgImage:'',top1X:0,top1Y:0,top2X:0,top2Y:0,top3X:0,top3Y:0,scale:1,frame1:'',frame2:'',frame3:''};
     applyThroneDesignUI(throneDesign);
     showToast('🔄 Đã reset!','warn');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
@@ -3312,7 +3329,6 @@ function buildNameTagHtml(u){
 async function applyUserSession(u){
   currentUser=u;currentUserFullData=u;
   await loadRolesCache();await loadMedalsCache();
-  setTimeout(()=>{if(typeof initAuroModelSystem==='function')initAuroModelSystem();if(typeof loadAuroEquippedForUser==='function')loadAuroEquippedForUser(u);},0);
   const nav=document.getElementById('navUserInfo');
   if(nav){
     const builtin=getBuiltinRole(u);const initial=(u.nickname||u.username).charAt(0).toUpperCase();
@@ -3481,7 +3497,11 @@ function stopProfileEffect(){
   const c=document.getElementById('profileFxCanvas');
   if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}
   const modal=document.getElementById('profileModal');
-  if(modal)modal.querySelectorAll('.profile-special-fx,.profile-custom-effect').forEach(el=>el.remove());
+  if(modal){
+    modal.querySelectorAll('.profile-special-fx,.profile-custom-effect').forEach(el=>el.remove());
+    const box=modal.querySelector('.profile-box');
+    if(box)box.querySelectorAll('.profile-special-fx,.profile-custom-effect').forEach(el=>el.remove());
+  }
 }
 function getProfileEffectAdjust(role){
   const isMobile=window.innerWidth<640;
@@ -3515,7 +3535,8 @@ function playProfileEffect(role){
     const effId=effectType.slice(9);
     const eff=cachedEmojiEffects[effId];
     if(eff){
-      playCustomEffectInContainer(eff,document.getElementById('profileFxLayer')||modal,role);
+      const box=modal.querySelector('.profile-box')||modal;
+      playCustomEffectInContainer(eff,box,role);
       profileFxAutoStop=setTimeout(()=>stopProfileEffect(),8000);
       return;
     }
@@ -3524,7 +3545,8 @@ function playProfileEffect(role){
   const adj=getProfileEffectAdjust(role);
   const specialTypes=['hammer_slam','crown_drop','trophy','handshake_shield','spiderman','admin_special'];
   if(specialTypes.includes(effectType)){
-    playRoleSpecialAnimation(effectType,document.getElementById('profileFxLayer')||modal,adj);
+    const box=modal.querySelector('.profile-box')||modal;
+    playRoleSpecialAnimation(effectType,box,adj);
     profileFxAutoStop=setTimeout(()=>stopProfileEffect(),adj.duration*1000);
     return;
   }
@@ -3541,7 +3563,7 @@ function playRoleSpecialAnimation(effectType,container,adj){
   adj=adj||{x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6};
   const layer=document.createElement('div');
   layer.className='profile-special-fx';
-  layer.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:15;overflow:hidden;border-radius:24px;width:100%;height:100%';
+  layer.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:15;overflow:hidden;border-radius:24px';
   const dur=adj.duration*1000;
   const applyAdj=(el)=>{if(!el)return;el.style.transform=`translate(${adj.x}px,${adj.y}px) scale(${adj.scale}) scaleX(${adj.scaleX||1}) scaleY(${adj.scaleY||1}) rotate(${adj.rotation}deg)`;el.style.opacity=adj.opacity;};
   const mk=(cls,text,extra='')=>{const d=document.createElement('div');d.className=cls+' play';if(text)d.innerText=text;if(extra)d.style.cssText+=extra;layer.appendChild(d);applyAdj(d);return d;};
@@ -4779,7 +4801,7 @@ async function launchAXCMInterface(){
   const td=document.getElementById('timerDisplay');
   if(currentTimerEnabled){timeLeft=currentExamData.duration*60;clearInterval(examTimer);examTimer=setInterval(()=>{timeLeft--;const m=Math.floor(timeLeft/60),s=timeLeft%60;td.innerText=`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;if(timeLeft<=0){clearInterval(examTimer);showForcedSubmitModal('timeout','Hết thời gian');}},1000);}else{td.innerText='∞';clearInterval(examTimer);timeLeft=0;}
   cheatWarnings=0;totalTabLeaveTime=0;document.getElementById('cheatWarningBadge').innerText='Cảnh báo: 0';
-  isExamActive=true;setExamActiveClass(true);switchView('studentExamView');
+  isExamActive=true;setExamActiveClass(true);switchView('studentExamView');try{aiReactExamStart();}catch(e){}
   showToast('🎓 Đã vào AXCM!','success');
 }
 async function launchOfficialExamInterface(){
@@ -4814,12 +4836,12 @@ async function launchOfficialExamInterface(){
   if(currentExamData.isLiveRoom){activeStudentRoomListener=window.onValue(window.ref(window.db,`liverooms/${currentExamData.code}`),snap=>{const d=snap.val()||{},st=d.students||{};if(!st[studentSessionKeyGlobal]){if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}showForcedSubmitModal('kick','Bị kick');return;}if(d.status==='ended'&&isExamActive){if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}showForcedSubmitModal('teacher','GV kết thúc');}});}
 }
 async function handleTabLeaveEvent(away){if(!currentAntiCheatEnabled)return;if(away>currentCheatThreshold){cheatWarnings++;totalTabLeaveTime+=away;document.getElementById('cheatModalCount').innerText=cheatWarnings;document.getElementById('cheatModalTime').innerText=(totalTabLeaveTime/1000).toFixed(1)+'s';document.getElementById('cheatAlertModal').style.display='flex';document.getElementById('cheatWarningBadge').innerText='Cảnh báo: '+cheatWarnings;const qb=document.getElementById('qpCheatWarningBadge');if(qb)qb.innerText='Cảnh báo: '+cheatWarnings;if(currentExamData&&currentExamData.isLiveRoom&&studentSessionKeyGlobal){await window.dbUpdate(window.ref(window.db,`liverooms/${currentExamData.code}/students/${studentSessionKeyGlobal}`),{cheatWarnings,totalLeaveTime:totalTabLeaveTime});}if(currentExamData&&currentCheatLimitType==='limited'&&cheatWarnings>=currentMaxWarnings){dismissCheatAlert();showForcedSubmitModal('violation',`Vượt ${currentMaxWarnings} lần`);return;}if(currentQpData&&currentQpData.enableAntiCheat&&currentQpData.antiCheatType==='limited'){const mw=currentQpData.maxWarnings||5;if(cheatWarnings>=mw){dismissCheatAlert();showForcedSubmitModal('violation',`Vượt ${mw} lần`);}}}}
-document.addEventListener('visibilitychange',()=>{if(!isExamActive&&!isQpActive)return;if(document.hidden)tabLeaveStartTime=Date.now();else if(tabLeaveStartTime){handleTabLeaveEvent(Date.now()-tabLeaveStartTime);tabLeaveStartTime=null;}});
-window.addEventListener('blur',()=>{if(!isExamActive&&!isQpActive)return;tabLeaveStartTime=Date.now();});
+document.addEventListener('visibilitychange',()=>{if(!isExamActive&&!isQpActive)return;const chatOpen=document.getElementById('aiModelChatBox')&&document.getElementById('aiModelChatBox').style.display==='block';const chatFocus=document.activeElement&&(document.activeElement.id==='aiChatInput');if(chatOpen||chatFocus){tabLeaveStartTime=null;return;}if(document.hidden)tabLeaveStartTime=Date.now();else if(tabLeaveStartTime){handleTabLeaveEvent(Date.now()-tabLeaveStartTime);tabLeaveStartTime=null;}});
+window.addEventListener('blur',()=>{if(!isExamActive&&!isQpActive)return;const chatOpen=document.getElementById('aiModelChatBox')&&document.getElementById('aiModelChatBox').style.display==='block';const chatFocus=document.activeElement&&(document.activeElement.id==='aiChatInput');if(chatOpen||chatFocus)return;tabLeaveStartTime=Date.now();});
 window.addEventListener('focus',()=>{if((!isExamActive&&!isQpActive)||!tabLeaveStartTime)return;handleTabLeaveEvent(Date.now()-tabLeaveStartTime);tabLeaveStartTime=null;});
 function selectOpt(btn,val){const p=btn.parentElement;p.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');p.dataset.val=val;}
 function selectTfSub(btn,val){const p=btn.parentElement;p.querySelectorAll('.tf-sub-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');p.dataset.val=val;}
-async function submitStudentExam(forced=false){if(!forced&&!await customConfirm('Xác nhận nộp bài?',{icon:'📤',title:'Nộp bài'}))return;if(!isExamActive&&forced!=='already')return;clearInterval(examTimer);isExamActive=false;setExamActiveClass(false);stopLiveWaitingPoll();stopAllAnnouncementListeners();const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}let total=0,rev='';currentExamData.questions.forEach(q=>{let ans='',ok=false,earned=0;if(q.type==='mc'){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);ans=g?g.dataset.val||'':'';ok=ans.toLowerCase()===q.correctAnswer.toLowerCase();if(ok)earned=q.score;}else if(q.type==='tf'){const ca=q.correctAnswer.split(',');const sa=[];let se=0;let bs=q.branchScores;if(!bs||bs.length!==ca.length){const e=q.score/ca.length;bs=new Array(ca.length).fill(e);}ca.forEach((c,i)=>{const r=document.querySelector(`.tf-branch-opts[data-qid="${q.id}"][data-index="${i}"]`);const v=(r&&r.dataset.val)?r.dataset.val:'_';sa.push(v);if(v===c)se+=bs[i];});ans=sa.join(',');earned=se;ok=se>0;}else{const inp=document.querySelector(`.student-sa-input[data-qid="${q.id}"]`);ans=inp?inp.value.trim():'';ok=compareShortAnswer(ans,q.correctAnswer);if(ok)earned=q.score;}total+=earned;let exp='';if(q.explanation)exp+=`<p>${q.explanation}</p>`;if(q.expImage)exp+=`<img src="${q.expImage}" class="img-preview" style="margin-top:5px">`;if(!q.explanation&&!q.expImage&&currentEnableAINote)exp=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;margin-top:5px;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 Phân tích AI:</b><br>${generateAIAnalysis(q)}</div>`;const hasExp=exp;const imgHtml=q.imageData?`<img src="${q.imageData}" class="img-preview" style="margin-bottom:5px;border:1px solid #e0e0e0;border-radius:4px">`:'';rev+=`<div style="border:1px solid #ddd;padding:10px;border-radius:6px;margin-bottom:8px;background:${ok?'#e7f3ff':'#fff2f0'};font-size:13px">${imgHtml}<strong>Câu ${q.id}:</strong> <span style="color:${ok?'#1877f2':'#ff4d4f'};font-weight:bold">${ok?'✓ Đúng':'✗ Sai'} (+${earned.toFixed(2)}đ)</span><div>- Bạn chọn: <b>${ans||'Chưa làm'}</b></div>${!ok?`<div>- ĐA đúng: <b style="color:#1877f2">${q.correctAnswer}</b></div>`:''}${hasExp?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleResultExp(this)">></button><div class="explanation-box">${exp}</div></div>`:''}</div>`;});let max=0;currentExamData.questions.forEach(q=>max+=q.score||0);if(max<=0)max=10;const final=Math.round((total/max)*10*100)/100,spent=currentTimerEnabled?((currentExamData.duration*60)-timeLeft):0;document.getElementById('resultScore').innerText=`${final} / 10`;document.getElementById('resultDetailText').innerText=currentTimerEnabled?`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`:'Không giới hạn';document.getElementById('resultReviewContainer').innerHTML=rev;const submitName=currentUser?`${currentUser.username} (${studentNameGlobal})`:studentNameGlobal;try{await window.dbPush(window.ref(window.db,'leaderboard/'+currentExamData.code),{name:submitName,username:currentUser?currentUser.username:'',nickname:studentNameGlobal,score:final,timeSpent:spent,cheatWarnings,totalLeaveTime:Math.round(totalTabLeaveTime/1000),timestamp:Date.now()});}catch(e){}showToast('📤 Đã nộp!','success');showResultPopup(final,10,()=>switchView('studentResultView'));}
+async function submitStudentExam(forced=false){if(!forced&&!await customConfirm('Xác nhận nộp bài?',{icon:'📤',title:'Nộp bài'}))return;if(!isExamActive&&forced!=='already')return;clearInterval(examTimer);isExamActive=false;setExamActiveClass(false);stopLiveWaitingPoll();stopAllAnnouncementListeners();const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}let total=0,rev='';currentExamData.questions.forEach(q=>{let ans='',ok=false,earned=0;if(q.type==='mc'){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);ans=g?g.dataset.val||'':'';ok=ans.toLowerCase()===q.correctAnswer.toLowerCase();if(ok)earned=q.score;}else if(q.type==='tf'){const ca=q.correctAnswer.split(',');const sa=[];let se=0;let bs=q.branchScores;if(!bs||bs.length!==ca.length){const e=q.score/ca.length;bs=new Array(ca.length).fill(e);}ca.forEach((c,i)=>{const r=document.querySelector(`.tf-branch-opts[data-qid="${q.id}"][data-index="${i}"]`);const v=(r&&r.dataset.val)?r.dataset.val:'_';sa.push(v);if(v===c)se+=bs[i];});ans=sa.join(',');earned=se;ok=se>0;}else{const inp=document.querySelector(`.student-sa-input[data-qid="${q.id}"]`);ans=inp?inp.value.trim():'';ok=compareShortAnswer(ans,q.correctAnswer);if(ok)earned=q.score;}total+=earned;let exp='';if(q.explanation)exp+=`<p>${q.explanation}</p>`;if(q.expImage)exp+=`<img src="${q.expImage}" class="img-preview" style="margin-top:5px">`;if(!q.explanation&&!q.expImage&&currentEnableAINote)exp=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;margin-top:5px;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 Phân tích AI:</b><br>${generateAIAnalysis(q)}</div>`;const hasExp=exp;const imgHtml=q.imageData?`<img src="${q.imageData}" class="img-preview" style="margin-bottom:5px;border:1px solid #e0e0e0;border-radius:4px">`:'';rev+=`<div style="border:1px solid #ddd;padding:10px;border-radius:6px;margin-bottom:8px;background:${ok?'#e7f3ff':'#fff2f0'};font-size:13px">${imgHtml}<strong>Câu ${q.id}:</strong> <span style="color:${ok?'#1877f2':'#ff4d4f'};font-weight:bold">${ok?'✓ Đúng':'✗ Sai'} (+${earned.toFixed(2)}đ)</span><div>- Bạn chọn: <b>${ans||'Chưa làm'}</b></div>${!ok?`<div>- ĐA đúng: <b style="color:#1877f2">${q.correctAnswer}</b></div>`:''}${hasExp?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleResultExp(this)">></button><div class="explanation-box">${exp}</div></div>`:''}</div>`;});let max=0;currentExamData.questions.forEach(q=>max+=q.score||0);if(max<=0)max=10;const final=Math.round((total/max)*10*100)/100,spent=currentTimerEnabled?((currentExamData.duration*60)-timeLeft):0;document.getElementById('resultScore').innerText=`${final} / 10`;document.getElementById('resultDetailText').innerText=currentTimerEnabled?`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`:'Không giới hạn';document.getElementById('resultReviewContainer').innerHTML=rev;const submitName=currentUser?`${currentUser.username} (${studentNameGlobal})`:studentNameGlobal;try{await window.dbPush(window.ref(window.db,'leaderboard/'+currentExamData.code),{name:submitName,username:currentUser?currentUser.username:'',nickname:studentNameGlobal,score:final,timeSpent:spent,cheatWarnings,totalLeaveTime:Math.round(totalTabLeaveTime/1000),timestamp:Date.now()});}catch(e){}showToast('📤 Đã nộp!','success');try{aiReactExamSubmit(final);}catch(e){}showResultPopup(final,10,()=>switchView('studentResultView'));}
 async function cancelStudentExam(){if(!await customConfirm('Thoát?',{icon:'🚪',okClass:'danger'}))return;clearInterval(examTimer);isExamActive=false;setExamActiveClass(false);stopLiveWaitingPoll();stopAllAnnouncementListeners();const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}if(currentExamData&&currentExamData.isLiveRoom&&studentSessionKeyGlobal){try{await window.dbRemove(window.ref(window.db,`liverooms/${currentExamData.code}/students/${studentSessionKeyGlobal}`));}catch(e){}}currentExamData=null;studentNameGlobal='';studentSessionKeyGlobal='';cheatWarnings=0;totalTabLeaveTime=0;tabLeaveStartTime=null;document.getElementById('examMediaContainer').innerHTML='';document.getElementById('studentAnswerSheet').innerHTML='';showToast('🚪 Đã thoát','warn');switchView('studentLoginView');}
 async function cancelStudentExamSilently(){clearInterval(examTimer);isExamActive=false;setExamActiveClass(false);stopLiveWaitingPoll();stopAllAnnouncementListeners();const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}if(currentExamData&&currentExamData.isLiveRoom&&studentSessionKeyGlobal){try{await window.dbRemove(window.ref(window.db,`liverooms/${currentExamData.code}/students/${studentSessionKeyGlobal}`));}catch(e){}}currentExamData=null;studentNameGlobal='';studentSessionKeyGlobal='';cheatWarnings=0;totalTabLeaveTime=0;tabLeaveStartTime=null;document.getElementById('examMediaContainer').innerHTML='';document.getElementById('studentAnswerSheet').innerHTML='';switchView('studentLoginView');}
 function toggleResultExp(btn){const b=btn.nextElementSibling;if(b.style.display==='block'){b.style.display='none';btn.innerText='>';}else{b.style.display='block';btn.innerText='v';}}
@@ -4833,7 +4855,7 @@ function nextQpQuestionV2(){const q=currentQpData.questions[currentQpV2Index];co
 function prevQpQuestionV2(){const q=currentQpData.questions[currentQpV2Index];const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);const vFromDom=g?(g.dataset.val||''):'';if(vFromDom)qpStudentAnswers[q.id]=vFromDom;if(currentQpV2Index>0){currentQpV2Index--;renderQpQuestionV2Item();}}
 function selectQpOpt(btn,qid,label){if(!isQpActive)return;const g=btn.parentElement;g.querySelectorAll('.opt-btn').forEach(b=>{b.classList.remove('selected');b.style.background='white';b.style.color='#333';});btn.classList.add('selected');btn.style.background='#1877f2';btn.style.color='white';g.dataset.val=label;qpStudentAnswers[qid]=label;}
 function toggleQpExp(qid){const b=document.getElementById(`qp-exp-${qid}`);const btn=b.previousElementSibling;if(b.style.display==='block'){b.style.display='none';btn.innerText='>';}else{b.style.display='block';btn.innerText='v';}}
-async function submitQpPractice(forced=false){if(!forced&&!await customConfirm('Nộp bài?',{icon:'📤'}))return;if(!isQpActive&&forced!=='already')return;isQpActive=false;clearInterval(qpTimer);if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();stopAllAnnouncementListeners();let total=0,max=0,rev='';currentQpData.questions.forEach(q=>{const qs=q.score||.25;max+=qs;let v='';if(currentQpData.useLayoutV2){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);if(g&&g.dataset.val&&!qpStudentAnswers.hasOwnProperty(q.id))qpStudentAnswers[q.id]=g.dataset.val;v=qpStudentAnswers[q.id]||'';}else{const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);v=g?(g.dataset.val||''):'';}const ok=v&&v===q.correct,una=!v;if(ok)total+=qs;const sc=una?'#1877f2':(ok?'#1877f2':'#ff4d4f'),stt=una?'Chưa làm':(ok?'✓ Đúng':'✗ Sai');let exp='';if(q.explanation)exp+=`<p>${q.explanation}</p>`;if(q.expImage)exp+=`<img src="${q.expImage}" class="img-preview">`;if(!q.explanation&&!q.expImage&&currentQpData.aiNote)exp=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 AI:</b><br>${generateAIAnalysis({type:'mc',question:q.question,options:q.options,imageData:q.image})}</div>`;const hasExp=exp;rev+=`<div style="border:1px solid #ddd;padding:10px;border-radius:6px;margin-bottom:8px;background:${una?'#e7f3ff':(ok?'#e7f3ff':'#fff2f0')};font-size:13px"><strong>Câu ${q.id}:</strong> <span style="color:${sc};font-weight:bold">${stt} (+${qs}đ)</span><div style="margin-top:4px">- Bạn chọn: <b>${v||'Không'}</b><br>${!ok?`- ĐA đúng: <b style="color:#1877f2">${q.correct}</b>`:''}</div>${hasExp?`<div style="margin-top:5px"><button class="toggle-exp-btn" onclick="toggleResultExp(this)">></button><div class="explanation-box">${exp}</div></div>`:''}</div>`;});const final=Math.round((total/max)*10*100)/100,spent=currentQpData.enableTimer?((currentQpData.durationMinutes||15)*60)-qpTimeLeft:qpTimeLeft;document.getElementById('qpResultScore').innerText=`${final} / 10`;document.getElementById('qpResultDetailText').innerText=`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`;document.getElementById('qpResultReviewContainer').innerHTML=rev;const submitName=currentUser?`${currentUser.username} (${studentNameGlobal})`:studentNameGlobal;try{await window.dbPush(window.ref(window.db,`qp_leaderboard/${currentQpData.code}`),{name:submitName,username:currentUser?currentUser.username:'',nickname:studentNameGlobal,score:final,timeSpent:spent,timestamp:Date.now()});}catch(e){}showToast('📤 Đã nộp!','success');showResultPopup(final,10,()=>switchView('qpResultView'));}
+async function submitQpPractice(forced=false){if(!forced&&!await customConfirm('Nộp bài?',{icon:'📤'}))return;if(!isQpActive&&forced!=='already')return;isQpActive=false;clearInterval(qpTimer);if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();stopAllAnnouncementListeners();let total=0,max=0,rev='';currentQpData.questions.forEach(q=>{const qs=q.score||.25;max+=qs;let v='';if(currentQpData.useLayoutV2){const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);if(g&&g.dataset.val&&!qpStudentAnswers.hasOwnProperty(q.id))qpStudentAnswers[q.id]=g.dataset.val;v=qpStudentAnswers[q.id]||'';}else{const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);v=g?(g.dataset.val||''):'';}const ok=v&&v===q.correct,una=!v;if(ok)total+=qs;const sc=una?'#1877f2':(ok?'#1877f2':'#ff4d4f'),stt=una?'Chưa làm':(ok?'✓ Đúng':'✗ Sai');let exp='';if(q.explanation)exp+=`<p>${q.explanation}</p>`;if(q.expImage)exp+=`<img src="${q.expImage}" class="img-preview">`;if(!q.explanation&&!q.expImage&&currentQpData.aiNote)exp=`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 AI:</b><br>${generateAIAnalysis({type:'mc',question:q.question,options:q.options,imageData:q.image})}</div>`;const hasExp=exp;rev+=`<div style="border:1px solid #ddd;padding:10px;border-radius:6px;margin-bottom:8px;background:${una?'#e7f3ff':(ok?'#e7f3ff':'#fff2f0')};font-size:13px"><strong>Câu ${q.id}:</strong> <span style="color:${sc};font-weight:bold">${stt} (+${qs}đ)</span><div style="margin-top:4px">- Bạn chọn: <b>${v||'Không'}</b><br>${!ok?`- ĐA đúng: <b style="color:#1877f2">${q.correct}</b>`:''}</div>${hasExp?`<div style="margin-top:5px"><button class="toggle-exp-btn" onclick="toggleResultExp(this)">></button><div class="explanation-box">${exp}</div></div>`:''}</div>`;});const final=Math.round((total/max)*10*100)/100,spent=currentQpData.enableTimer?((currentQpData.durationMinutes||15)*60)-qpTimeLeft:qpTimeLeft;document.getElementById('qpResultScore').innerText=`${final} / 10`;document.getElementById('qpResultDetailText').innerText=`Thời gian: ${Math.floor(spent/60)}p ${spent%60}s`;document.getElementById('qpResultReviewContainer').innerHTML=rev;const submitName=currentUser?`${currentUser.username} (${studentNameGlobal})`:studentNameGlobal;try{await window.dbPush(window.ref(window.db,`qp_leaderboard/${currentQpData.code}`),{name:submitName,username:currentUser?currentUser.username:'',nickname:studentNameGlobal,score:final,timeSpent:spent,timestamp:Date.now()});}catch(e){}showToast('📤 Đã nộp!','success');try{aiReactExamSubmit(final);}catch(e){}showResultPopup(final,10,()=>switchView('qpResultView'));}
 
 /* LEADERBOARD */
 async function loadLeaderboard(){const code=document.getElementById('searchLbCode').value.trim().toUpperCase(),tb=document.getElementById('lbTableBody');tb.innerHTML='<tr><td colspan="6">⏳ Đang tải...</td></tr>';if(!code){showToast('Nhập mã!','error');return;}let s=await window.dbGet(window.dbChild(window.dbRef,`leaderboard/${code}`));if(!s.exists())s=await window.dbGet(window.dbChild(window.dbRef,`qp_leaderboard/${code}`));if(!s.exists()){tb.innerHTML='<tr><td colspan="6">Chưa có dữ liệu</td></tr>';return;}const h=Object.values(s.val());h.sort((a,b)=>(b.score!==a.score)?b.score-a.score:a.timeSpent-b.timeSpent);tb.innerHTML=h.map((r,i)=>{const m=Math.floor(r.timeSpent/60),sx=r.timeSpent%60;const w=r.cheatWarnings||0,ls=r.totalLeaveTime||0;const rid='lb_detail_'+i;const profileBtn=r.username?`<button class="btn btn-success" style="padding:2px 8px;font-size:11px;width:auto" onclick="viewLeaderboardProfile('${r.username}')">👤</button>`:'—';return `<tr><td><b>#${i+1}</b></td><td>${escapeHtml(r.name||'')}</td><td><b style="color:#1877f2">${r.score}</b></td><td>${m}p${sx}s</td><td>${profileBtn}</td><td><button class="toggle-exp-btn" onclick="toggleLbDetail('${rid}')">&gt;</button><div id="${rid}" style="display:none;text-align:left;font-size:12px;margin-top:5px;background:#f8f9fa;padding:6px;border-radius:4px">- Cảnh cáo: <b style="color:red">${w} lần</b><br>- Rời phòng: <b>${ls} giây</b></div></td></tr>`;}).join('');showToast('📊 Đã tải!','success');}
@@ -5084,6 +5106,28 @@ function openSafeAreaCalibration(effId,target){
   stage.onpointermove=(e)=>{if(!safeAreaDragState.dragging)return;const dx=e.clientX-safeAreaDragState.lastX;const dy=e.clientY-safeAreaDragState.lastY;const xEl=document.getElementById('saRangeX'),yEl=document.getElementById('saRangeY');const rect=stage.getBoundingClientRect();xEl.value=Math.max(-45,Math.min(45,parseFloat(xEl.value)+dx/rect.width*100));yEl.value=Math.max(-45,Math.min(45,parseFloat(yEl.value)+dy/rect.height*100));safeAreaDragState.lastX=e.clientX;safeAreaDragState.lastY=e.clientY;updateSafeAreaPreview();};
   const endDrag=(e)=>{safeAreaDragState.dragging=false;try{stage.releasePointerCapture(e.pointerId);}catch(err){}};
   stage.onpointerup=endDrag;stage.onpointercancel=endDrag;
+
+  // Virtual profile background from current user
+  try{
+    const vbg=document.getElementById('saVirtualProfileBg');
+    if(vbg){
+      const u=currentUserFullData||currentUser||{};
+      const headerBg=document.getElementById('profileHeaderBg');
+      let bg='';
+      if(u.profileBg)bg=u.profileBg;
+      else if(u.avatarBg)bg=u.avatarBg;
+      else if(headerBg&&headerBg.style.backgroundImage)bg=headerBg.style.backgroundImage.replace(/url\(['"]?/g,'').replace(/['"]?\)/g,'');
+      if(bg&&!bg.startsWith('url')&&!bg.startsWith('data:')&&!bg.startsWith('http')&&!bg.startsWith('linear'))bg='';
+      if(bg){
+        if(bg.startsWith('data:')||bg.startsWith('http'))vbg.style.backgroundImage=`url(${bg})`;
+        else if(bg.startsWith('url'))vbg.style.backgroundImage=bg;
+        else vbg.style.background=bg||'linear-gradient(135deg,#1877f2,#198754)';
+      }else{
+        vbg.style.background='linear-gradient(135deg,#1877f2,#198754)';
+        vbg.style.backgroundImage='';
+      }
+    }
+  }catch(e){}
   document.getElementById('safeAreaCalibrationModal').classList.add('show');
 }
 function updateSafeAreaPreview(){
@@ -5107,6 +5151,12 @@ function resetSafeAreaCalibration(){
   document.getElementById('saRangeOpacity').value=1;document.getElementById('saRangeX').value=0;
   document.getElementById('saRangeY').value=0;updateSafeAreaPreview();
 }
+function smartCenterSafeAreaEffect(){
+  document.getElementById('saRangeX').value=0;
+  document.getElementById('saRangeY').value=0;
+  updateSafeAreaPreview();
+  showToast('🎯 Đã căn giữa profile','success');
+}
 function closeSafeAreaCalibration(){document.getElementById('safeAreaCalibrationModal').classList.remove('show');}
 async function saveSafeAreaCalibration(){
   const effId=safeAreaCalibState.ownerId;if(!effId)return;
@@ -5125,9 +5175,403 @@ async function saveSafeAreaCalibration(){
 /* CONTEXTMENU LOCK */
 (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),c=e.ctrlKey||e.metaKey,sh=e.shiftKey;if(k==='f12'||(c&&k==='u')||(c&&sh&&['i','j','c','k'].includes(k))||(c&&k==='s')||(c&&k==='p')){e.preventDefault();e.stopPropagation();return false;}if(c&&k==='a'){const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable){e.preventDefault();return false;}}},true);document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('copy',e=>{const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable)e.preventDefault();});})();
 
+
+/* ========== AI MODEL SYSTEM ========== */
+let cachedAIModels={};
+let cachedAISetup={apiKey:'',apiBase:'',modelName:'gpt-4o-mini',systemPrompt:'Bạn là Auro, trợ lý AI thân thiện của hệ thống Aurora. Trả lời ngắn gọn, vui vẻ, hỗ trợ học tập.'};
+let equippedAIModelId=null;
+let aiModelVisible=false;
+let aiModelPos={x:null,y:null,scale:1};
+let aiModelDrag=null;
+let aiGreetingsCache=['Xin chào! Mình là Auro~','Chúc bạn làm bài tốt nhé!','Hmm... để mình nghĩ đã...'];
+const AI_CHUNK_SIZE=400000;
+
+function initAIModelSystem(){
+  try{
+    const saved=localStorage.getItem('aurora_equipped_ai');
+    if(saved)equippedAIModelId=saved;
+    const pos=localStorage.getItem('aurora_ai_pos');
+    if(pos)aiModelPos=JSON.parse(pos);
+  }catch(e){}
+  if(window.db){
+    window.onValue(window.ref(window.db,'system/ai_models'),snap=>{cachedAIModels=snap.val()||{};renderAIModelSystemList();});
+    window.onValue(window.ref(window.db,'system/ai_setup'),snap=>{if(snap.exists())cachedAISetup=Object.assign(cachedAISetup,snap.val()||{});updateAISetupForm();});
+  }
+  setupAIModelInteractions();
+  setTimeout(()=>{if(currentUser)refreshEquippedAIModelDisplay();},1200);
+}
+
+function updateAISetupForm(){
+  const $=id=>document.getElementById(id);
+  if($('aiSetupApiKey'))$('aiSetupApiKey').value=cachedAISetup.apiKey||'';
+  if($('aiSetupApiBase'))$('aiSetupApiBase').value=cachedAISetup.apiBase||'';
+  if($('aiSetupModelName'))$('aiSetupModelName').value=cachedAISetup.modelName||'gpt-4o-mini';
+  if($('aiSetupSystemPrompt'))$('aiSetupSystemPrompt').value=cachedAISetup.systemPrompt||'';
+}
+
+async function saveAISetupConfig(){
+  const vua=(document.getElementById('aiSetupVuaPass').value||'').trim();
+  if(vua!==VUA_PASSWORD){showToast('❌ Sai mật khẩu VUA!','error');return;}
+  const cfg={
+    apiKey:(document.getElementById('aiSetupApiKey').value||'').trim(),
+    apiBase:(document.getElementById('aiSetupApiBase').value||'').trim(),
+    modelName:(document.getElementById('aiSetupModelName').value||'gpt-4o-mini').trim(),
+    systemPrompt:(document.getElementById('aiSetupSystemPrompt').value||'').trim(),
+    updatedAt:Date.now()
+  };
+  try{
+    await window.dbSet(window.ref(window.db,'system/ai_setup'),cfg);
+    cachedAISetup=cfg;
+    document.getElementById('aiSetupStatus').innerText='✅ Đã lưu cấu hình AI';
+    showCenterSquareToast('✅','Đã lưu AI Setup','','success',2400);
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+
+async function grantAIModelToUser(){
+  const uid=(document.getElementById('aiGrantUserId').value||'').trim().replace(/^@/,'').toLowerCase();
+  const vua=(document.getElementById('aiGrantVuaPass').value||'').trim();
+  if(!uid){showToast('❌ Nhập @ID','error');return;}
+  if(vua!==VUA_PASSWORD){showToast('❌ Sai mật khẩu VUA!','error');return;}
+  try{
+    const s=await window.dbGet(window.dbChild(window.dbRef,'users/'+uid));
+    if(!s.exists()){showToast('❌ Không tìm thấy user','error');return;}
+    await window.dbUpdate(window.ref(window.db,'users/'+uid),{aiModelAccess:true,aiModelGrantedAt:Date.now()});
+    showCenterSquareToast('🎁','Đã cấp Model AI',uid,'success',2800);
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+
+async function revokeAIModelFromUser(){
+  const uid=(document.getElementById('aiGrantUserId').value||'').trim().replace(/^@/,'').toLowerCase();
+  const vua=(document.getElementById('aiGrantVuaPass').value||'').trim();
+  if(!uid){showToast('❌ Nhập @ID','error');return;}
+  if(vua!==VUA_PASSWORD){showToast('❌ Sai mật khẩu VUA!','error');return;}
+  try{
+    await window.dbUpdate(window.ref(window.db,'users/'+uid),{aiModelAccess:false,equippedAIModelId:null});
+    showToast('🚫 Đã thu hồi','warn');
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+
+let _aiUploadFiles=[];
+function handleAIModelUpload(input){
+  if(!input.files||!input.files.length)return;
+  _aiUploadFiles=Array.from(input.files);
+  const prog=document.getElementById('aiModelUploadProgress');
+  if(prog){prog.style.display='block';prog.innerText='Đã chọn '+_aiUploadFiles.length+' file: '+_aiUploadFiles.map(f=>f.name).join(', ');}
+}
+
+async function saveAIModelAsset(){
+  if(!_aiUploadFiles.length){showToast('❌ Chọn file model','error');return;}
+  const name=(document.getElementById('aiModelNameInput').value||'Auro').trim()||'Auro';
+  const greetRaw=(document.getElementById('aiModelGreetings').value||'').trim();
+  const greetings=greetRaw?greetRaw.split('\n').map(s=>s.trim()).filter(Boolean):aiGreetingsCache.slice();
+  const mid='aimodel_'+Date.now();
+  const prog=document.getElementById('aiModelUploadProgress');
+  try{
+    if(prog){prog.style.display='block';prog.innerText='⏳ Đang tải lên...';}
+    const filesMeta=[];
+    for(let fi=0;fi<_aiUploadFiles.length;fi++){
+      const f=_aiUploadFiles[fi];
+      const b64=await fileToBase64(f);
+      const p=b64.split(',');
+      const mime=(p[0].match(/:(.*?);/)||[])[1]||'application/octet-stream';
+      const data=p[1];
+      const chunks=Math.ceil(data.length/AI_CHUNK_SIZE);
+      const fid=mid+'_f'+fi;
+      for(let i=0;i<chunks;i++){
+        if(prog)prog.innerText=`⏳ File ${fi+1}/${_aiUploadFiles.length} chunk ${i+1}/${chunks}`;
+        await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${fid}/${i}`),data.slice(i*AI_CHUNK_SIZE,(i+1)*AI_CHUNK_SIZE));
+      }
+      filesMeta.push({id:fid,name:f.name,type:mime,size:f.size,chunks});
+    }
+    const meta={id:mid,name,greetings,files:filesMeta,createdAt:Date.now(),creator:currentUser?currentUser.username:'admin'};
+    await window.dbSet(window.ref(window.db,'system/ai_models/'+mid),meta);
+    cachedAIModels[mid]=meta;
+    if(prog)prog.innerText='✅ Đã lưu model '+name;
+    showCenterSquareToast('✅','Đã lưu Model AI',name,'success',2800);
+    _aiUploadFiles=[];
+    const inp=document.getElementById('aiModelFileInput');if(inp)inp.value='';
+    renderAIModelSystemList();
+  }catch(e){showToast('❌ '+(e.message||e),'error');if(prog)prog.innerText='❌ Lỗi';}
+}
+
+function renderAIModelSystemList(){
+  const c=document.getElementById('aiModelSystemList');if(!c)return;
+  const ids=Object.keys(cachedAIModels||{});
+  if(!ids.length){c.innerHTML='<p style="color:#888;font-size:12px">Chưa có model. Upload ở trên.</p>';return;}
+  c.innerHTML=ids.map(id=>{
+    const m=cachedAIModels[id];
+    return `<div class="doc-item"><div class="doc-info"><span class="doc-icon">🤖</span><div><div class="doc-name">${escapeHtml(m.name||'Auro')}</div><div class="doc-meta">${(m.files||[]).length} file • ${new Date(m.createdAt||0).toLocaleString('vi-VN')}</div></div></div><div class="doc-actions"><button style="background:#dc3545" onclick="deleteAIModelAsset('${id}')">🗑️</button></div></div>`;
+  }).join('');
+}
+
+async function deleteAIModelAsset(mid){
+  if(!await customConfirm('Xóa model này?',{icon:'🗑️',okClass:'danger'}))return;
+  try{
+    const m=cachedAIModels[mid];
+    if(m&&m.files){for(const f of m.files){try{await window.dbRemove(window.ref(window.db,'system/ai_model_chunks/'+f.id));}catch(x){}}}
+    await window.dbRemove(window.ref(window.db,'system/ai_models/'+mid));
+    delete cachedAIModels[mid];
+    renderAIModelSystemList();
+    showToast('🗑️ Đã xóa','warn');
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+
+async function userHasAIModelAccess(u){
+  u=u||currentUserFullData||currentUser;
+  if(!u)return false;
+  if(u.aiModelAccess)return true;
+  if(userHasSupremeAccess===true)return true;
+  return false;
+}
+
+function refreshEquippedAIModelDisplay(){
+  const root=document.getElementById('aiModelFloatRoot');
+  if(!root)return;
+  const u=currentUserFullData||currentUser;
+  if(!u||!u.aiModelAccess){
+    // still allow system robot if equipped default
+  }
+  const eq=u&&u.equippedAIModelId?u.equippedAIModelId:equippedAIModelId;
+  if(!eq&&!(u&&u.aiModelAccess)){
+    root.style.display='none';aiModelVisible=false;return;
+  }
+  // show model
+  showAIModelFloat(eq||'system_robot');
+}
+
+function showAIModelFloat(modelId){
+  const root=document.getElementById('aiModelFloatRoot');
+  if(!root)return;
+  root.style.display='block';
+  root.classList.remove('hiding');
+  aiModelVisible=true;
+  equippedAIModelId=modelId;
+  const robot=document.getElementById('aiModelDefaultRobot');
+  const img=document.getElementById('aiModelImg');
+  const vid=document.getElementById('aiModelVideo');
+  robot.style.display='block';img.style.display='none';vid.style.display='none';
+  const m=cachedAIModels[modelId];
+  if(m){
+    document.getElementById('aiChatTitle').innerText='🤖 '+(m.name||'Auro');
+    if(m.greetings&&m.greetings.length)aiGreetingsCache=m.greetings;
+    // try first image/video file
+    const files=m.files||[];
+    const media=files.find(f=>(f.type||'').startsWith('image/')||(f.type||'').startsWith('video/')||/\.(png|jpg|jpeg|gif|webp|mp4|webm)$/i.test(f.name||''));
+    if(media){
+      loadAIModelMedia(media).then(url=>{
+        if(!url)return;
+        if((media.type||'').startsWith('video/')||/\.(mp4|webm)$/i.test(media.name||'')){
+          vid.src=url;vid.style.display='block';robot.style.display='none';vid.play().catch(()=>{});
+        }else{
+          img.src=url;img.style.display='block';robot.style.display='none';
+        }
+      });
+    }
+  }else{
+    document.getElementById('aiChatTitle').innerText='🤖 Auro';
+  }
+  applyAIModelTransform();
+}
+
+async function loadAIModelMedia(meta){
+  try{
+    const parts=[];
+    for(let i=0;i<meta.chunks;i++){
+      const s=await window.dbGet(window.dbChild(window.dbRef,`system/ai_model_chunks/${meta.id}/${i}`));
+      if(s.exists())parts.push(s.val());
+    }
+    const b64=parts.join('');
+    return `data:${meta.type};base64,${b64}`;
+  }catch(e){return null;}
+}
+
+function applyAIModelTransform(){
+  const inner=document.getElementById('aiModelFloatInner');
+  if(!inner)return;
+  const sc=aiModelPos.scale||1;
+  inner.style.transform=`scale(${sc})`;
+  const root=document.getElementById('aiModelFloatRoot');
+  if(aiModelPos.x!=null)root.style.right='auto',root.style.left=aiModelPos.x+'px';
+  if(aiModelPos.y!=null)root.style.bottom='auto',root.style.top=aiModelPos.y+'px';
+}
+
+function setupAIModelInteractions(){
+  const visual=document.getElementById('aiModelVisual');
+  const root=document.getElementById('aiModelFloatRoot');
+  if(!visual||!root)return;
+  let lastTap=0;
+  visual.ondblclick=()=>toggleAIModelChat();
+  visual.addEventListener('click',()=>{
+    const now=Date.now();
+    if(now-lastTap<320)toggleAIModelChat();
+    lastTap=now;
+  });
+  visual.onpointerdown=(e)=>{
+    if(e.button===2)return;
+    e.preventDefault();
+    aiModelDrag={startX:e.clientX,startY:e.clientY,ox:root.offsetLeft,oy:root.offsetTop,pointers:new Map()};
+    aiModelDrag.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    visual.setPointerCapture(e.pointerId);
+    visual.style.cursor='grabbing';
+  };
+  visual.onpointermove=(e)=>{
+    if(!aiModelDrag)return;
+    aiModelDrag.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(aiModelDrag.pointers.size===2){
+      const pts=[...aiModelDrag.pointers.values()];
+      const dist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+      if(!aiModelDrag.pinchDist)aiModelDrag.pinchDist=dist;
+      const ratio=dist/aiModelDrag.pinchDist;
+      aiModelPos.scale=Math.max(0.4,Math.min(3,(aiModelPos.scale||1)*ratio));
+      aiModelDrag.pinchDist=dist;
+      applyAIModelTransform();
+      return;
+    }
+    const dx=e.clientX-aiModelDrag.startX,dy=e.clientY-aiModelDrag.startY;
+    root.style.right='auto';root.style.bottom='auto';
+    root.style.left=(aiModelDrag.ox+dx)+'px';
+    root.style.top=(aiModelDrag.oy+dy)+'px';
+    aiModelPos.x=aiModelDrag.ox+dx;aiModelPos.y=aiModelDrag.oy+dy;
+  };
+  const endP=(e)=>{
+    if(!aiModelDrag)return;
+    try{visual.releasePointerCapture(e.pointerId);}catch(err){}
+    aiModelDrag.pointers.delete(e.pointerId);
+    if(!aiModelDrag.pointers.size){
+      aiModelDrag=null;visual.style.cursor='grab';
+      try{localStorage.setItem('aurora_ai_pos',JSON.stringify(aiModelPos));}catch(err){}
+    }
+  };
+  visual.onpointerup=endP;visual.onpointercancel=endP;
+  visual.onwheel=(e)=>{
+    e.preventDefault();
+    const d=e.deltaY>0?-0.08:0.08;
+    aiModelPos.scale=Math.max(0.4,Math.min(3,(aiModelPos.scale||1)+d));
+    applyAIModelTransform();
+    try{localStorage.setItem('aurora_ai_pos',JSON.stringify(aiModelPos));}catch(err){}
+  };
+}
+
+function hideAIModelWithAnim(){
+  const root=document.getElementById('aiModelFloatRoot');
+  if(!root)return;
+  root.classList.add('hiding');
+  setTimeout(()=>{root.style.display='none';root.classList.remove('hiding');aiModelVisible=false;},700);
+}
+
+function toggleAIModelChat(force){
+  const box=document.getElementById('aiModelChatBox');
+  if(!box)return;
+  const show=force===undefined?box.style.display==='none':!!force;
+  box.style.display=show?'block':'none';
+  if(show){
+    const msgs=document.getElementById('aiChatMessages');
+    if(msgs&&!msgs.children.length){
+      const g=aiGreetingsCache[Math.floor(Math.random()*aiGreetingsCache.length)]||'Xin chào!';
+      appendAIChat('bot',g);
+    }
+  }
+}
+
+function appendAIChat(who,text){
+  const msgs=document.getElementById('aiChatMessages');
+  if(!msgs)return;
+  const div=document.createElement('div');
+  div.style.cssText='margin-bottom:8px;padding:8px 10px;border-radius:10px;max-width:90%;font-size:12px;line-height:1.5;'+(who==='bot'?'background:#e7f3ff;color:#004085;margin-right:auto':'background:#6f42c1;color:#fff;margin-left:auto');
+  div.innerText=text;
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function sendAIChatMessage(){
+  const inp=document.getElementById('aiChatInput');
+  const text=(inp.value||'').trim();
+  if(!text)return;
+  inp.value='';
+  appendAIChat('user',text);
+  // Local reactions
+  let reply=null;
+  const low=text.toLowerCase();
+  if(/điểm|score|kết quả/.test(low))reply='Chúc bạn đạt điểm cao nhé! 💪';
+  else if(/buồn|sad|thấp/.test(low))reply='Đừng buồn, lần sau sẽ tốt hơn mà! 🌟';
+  else if(/vui|happy|cao/.test(low))reply='Yayyy! Giỏi quá đi! 🎉';
+  else if(/nhạc|music|nghe/.test(low))reply='Mình cũng thích nghe nhạc cùng bạn~ 🎵';
+  else if(/chào|hello|hi\b/.test(low))reply=aiGreetingsCache[0]||'Xin chào!';
+  // Try API if configured
+  if(cachedAISetup.apiKey){
+    try{
+      const base=(cachedAISetup.apiBase||'https://api.openai.com/v1').replace(/\/$/,'');
+      const resp=await fetch(base+'/chat/completions',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAISetup.apiKey},
+        body:JSON.stringify({
+          model:cachedAISetup.modelName||'gpt-4o-mini',
+          messages:[
+            {role:'system',content:cachedAISetup.systemPrompt||'Bạn là Auro.'},
+            {role:'user',content:text}
+          ],
+          max_tokens:300
+        })
+      });
+      if(resp.ok){
+        const data=await resp.json();
+        reply=(data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||reply;
+      }
+    }catch(e){}
+  }
+  if(!reply)reply=aiGreetingsCache[Math.floor(Math.random()*aiGreetingsCache.length)]||'Mình đang suy nghĩ... 🤔';
+  setTimeout(()=>appendAIChat('bot',reply),400);
+}
+
+// Exam interaction hooks
+function aiReactExamStart(){
+  if(!aiModelVisible)return;
+  appendAIChat('bot','Bạn đang làm bài rồi! Cố lên, mình sẽ yên lặng suy nghĩ cùng bạn 🧠');
+}
+function aiReactExamSubmit(score){
+  if(!aiModelVisible)return;
+  if(score>=8)appendAIChat('bot','Woa điểm cao quá! Giỏi lắm! 🎉🥳');
+  else if(score>=5)appendAIChat('bot','Ổn đấy! Cố thêm chút nữa nhé 💪');
+  else appendAIChat('bot','Hơi tiếc... nhưng không sao, lần sau sẽ tốt hơn! 🌧️➡️☀️');
+}
+
+// Profile model picker
+function openProfileAIModelPicker(){
+  if(!currentUser){showToast('🔐 Đăng nhập!','error');return;}
+  const u=currentUserFullData||currentUser;
+  if(!u.aiModelAccess&&userHasSupremeAccess!==true){showToast('❌ Bạn chưa được cấp Model AI','error');return;}
+  const ids=Object.keys(cachedAIModels||{});
+  let html='<div style="padding:8px 0"><div class="smart-q-card" style="cursor:pointer;margin-bottom:8px" onclick="equipAIModel(\'system_robot\')"><b>🤖 Robot hệ thống (mặc định)</b></div>';
+  ids.forEach(id=>{
+    const m=cachedAIModels[id];
+    const eq=(u.equippedAIModelId||equippedAIModelId)===id;
+    html+=`<div class="smart-q-card" style="cursor:pointer;margin-bottom:8px;border-color:${eq?'#198754':'#e0e0e0'}" onclick="equipAIModel('${id}')"><b>🤖 ${escapeHtml(m.name||'Auro')}</b> ${eq?'✅ Đang trang bị':''}</div>`;
+  });
+  html+='<div class="smart-q-card" style="cursor:pointer;border-color:#dc3545" onclick="equipAIModel(null)"><b>🚫 Không dùng model</b></div></div>';
+  document.getElementById('supremeModalTitle').innerText='🤖 Chọn Model AI';
+  document.getElementById('supremeModalContent').innerHTML=html;
+  document.getElementById('supremeDetailModal').style.display='flex';
+}
+
+async function equipAIModel(mid){
+  if(!currentUser)return;
+  try{
+    await window.dbUpdate(window.ref(window.db,'users/'+currentUser.username),{equippedAIModelId:mid||null});
+    if(currentUserFullData)currentUserFullData.equippedAIModelId=mid||null;
+    equippedAIModelId=mid;
+    try{localStorage.setItem('aurora_equipped_ai',mid||'');}catch(e){}
+    if(mid)showAIModelFloat(mid);
+    else{const root=document.getElementById('aiModelFloatRoot');if(root)root.style.display='none';aiModelVisible=false;}
+    showToast(mid?'✅ Đã trang bị model':'🚫 Đã gỡ model','success');
+    document.getElementById('supremeDetailModal').style.display='none';
+  }catch(e){showToast('❌ '+(e.message||e),'error');}
+}
+
+/* END AI MODEL SYSTEM */
+
 /* DOMContentLoaded */
 window.addEventListener('DOMContentLoaded',()=>{
-  checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();
+  checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();initAIModelSystem();
   const savedTheme=localStorage.getItem('aurora_theme')||'light';applyTheme(savedTheme,false);
   listenCustomButtons();
   setTimeout(()=>{
@@ -5146,575 +5590,33 @@ addQuestionV2('mc');addQuestionV2('tf');
 initEcCreatePanel();
 </script>
 
-<!-- Auro AI Model Layer -->
-<div id="auroModelLayer" aria-live="polite">
-  <div id="auroModelSafeFrame"></div>
-  <div id="auroModelCanvasWrap">
-    <canvas id="auroModelCanvas"></canvas>
-    <div id="auroModelFallback">🤖<div id="auroModelFallbackText">Auro</div></div>
-  </div>
-  <button id="auroModelHideBtn" title="Ẩn Model" onclick="hideAuroModel()">🚪</button>
-  <div id="auroModelNameBadge">Auro</div>
-  <div id="auroModelChat">
-    <div id="auroModelChatHead"><span>🤖 <b id="auroModelChatTitle">Auro</b></span><button onclick="toggleAuroModelChat()">✖</button></div>
-    <div id="auroModelChatMessages"></div>
-    <div id="auroModelChatInputRow"><input id="auroModelChatInput" placeholder="Nói chuyện với model..."><button onclick="sendAuroModelChat()">➤</button></div>
-  </div>
-</div>
-
-<div id="auroModelPickerModal" class="modal-overlay">
-  <div class="modal-box" style="max-width:620px">
-    <div class="modal-header"><h3>🤖 Model AI của bạn</h3><button class="close-btn" onclick="closeAuroModelPicker()">✖</button></div>
-    <div id="auroModelPickerList"></div>
-    <div style="font-size:11px;color:#777;margin-top:10px">Có thể trang bị tối đa 1 model. Không chọn = không hiển thị.</div>
-  </div>
-</div>
-
-<div id="auroModelFrameModal" class="modal-overlay">
-  <div class="modal-box" style="max-width:900px">
-    <div class="modal-header"><h3>🖼️ Căn chỉnh khung Model AI</h3><button class="close-btn" onclick="closeAuroModelFrameEditor()">✖</button></div>
-    <div style="font-size:12px;color:#666;margin-bottom:8px">Khung ảo hiển thị ngay trên model. Kéo bằng chuột/tay, con lăn để phóng to/thu nhỏ. Có thể chọn ảnh/ảnh động/model làm khung.</div>
-    <div id="auroModelFrameStage"><div id="auroModelFrameSafe"></div><div id="auroModelFramePreview"></div></div>
-    <label>📦 File khung:</label><input type="file" id="auroModelFrameInput" accept="image/*,.vrm,.fbx,.obj,.pmx,.pmd,.glb,.gltf,.gif,.webm,.mp4">
-    <div class="form-grid-2">
-      <div><label>X</label><input type="range" id="auroFrameX" min="-500" max="500" value="0" oninput="updateAuroFramePreview()"></div>
-      <div><label>Y</label><input type="range" id="auroFrameY" min="-500" max="500" value="0" oninput="updateAuroFramePreview()"></div>
-      <div><label>Scale</label><input type="range" id="auroFrameScale" min=".1" max="4" step=".01" value="1" oninput="updateAuroFramePreview()"></div>
-      <div><label>Xoay</label><input type="range" id="auroFrameRot" min="-180" max="180" value="0" oninput="updateAuroFramePreview()"></div>
+<!-- AI MODEL FLOATING -->
+<div id="aiModelFloatRoot" style="display:none;position:fixed;bottom:20px;right:16px;z-index:99999999990;pointer-events:none">
+  <div id="aiModelFloatInner" style="pointer-events:auto;position:relative;touch-action:none;user-select:none">
+    <div id="aiModelVisual" style="width:140px;height:180px;display:flex;align-items:flex-end;justify-content:center;cursor:grab;filter:drop-shadow(0 8px 20px rgba(0,0,0,.35))">
+      <div id="aiModelDefaultRobot" style="font-size:100px;line-height:1;animation:aiBob 2.5s ease-in-out infinite">🤖</div>
+      <img id="aiModelImg" style="display:none;max-width:140px;max-height:180px;object-fit:contain;pointer-events:none" alt="AI">
+      <video id="aiModelVideo" style="display:none;max-width:140px;max-height:180px;object-fit:contain" muted loop playsinline></video>
     </div>
-    <div style="display:flex;gap:8px;margin-top:10px">
-      <button class="btn btn-warning" style="width:auto;color:#000" onclick="smartCenterAuroFrame()">🎯 Căn giữa thông minh</button>
-      <button class="btn btn-secondary" style="width:auto" onclick="closeAuroModelFrameEditor()">Hủy</button>
-      <button class="btn btn-success" style="width:auto" onclick="saveAuroModelFrame()">💾 Lưu khung</button>
+    <button id="aiModelHideDoor" title="Ẩn model" onclick="hideAIModelWithAnim()" style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:32px;height:28px;border-radius:8px;border:none;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer;font-size:16px;line-height:1;z-index:2">🚪</button>
+    <div id="aiModelChatBox" style="display:none;position:absolute;bottom:190px;right:0;width:280px;max-width:86vw;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.35);border:2px solid #6f42c1;overflow:hidden">
+      <div style="background:linear-gradient(135deg,#6f42c1,#5a32a3);color:#fff;padding:10px 12px;font-weight:900;font-size:13px;display:flex;justify-content:space-between;align-items:center">
+        <span id="aiChatTitle">🤖 Auro</span>
+        <button onclick="toggleAIModelChat(false)" style="background:transparent;border:none;color:#fff;font-size:16px;cursor:pointer">✖</button>
+      </div>
+      <div id="aiChatMessages" style="height:200px;overflow-y:auto;padding:10px;font-size:13px;background:#f8f9fa"></div>
+      <div style="display:flex;gap:6px;padding:8px;border-top:1px solid #eee">
+        <input type="text" id="aiChatInput" placeholder="Nhắn với Auro..." style="flex:1;margin:0;padding:8px;border-radius:8px;border:1px solid #ddd;font-size:13px" onkeydown="if(event.key==='Enter')sendAIChatMessage()">
+        <button class="btn btn-success" style="width:auto;padding:8px 12px;font-size:12px" onclick="sendAIChatMessage()">➤</button>
+      </div>
     </div>
   </div>
 </div>
+<style>
+@keyframes aiBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes aiBye{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(80px) scale(.6)}}
+#aiModelFloatRoot.hiding #aiModelFloatInner{animation:aiBye .7s ease-in forwards}
+</style>
 
-<div id="auroThroneSafeModal" class="modal-overlay">
-  <div class="modal-box" style="max-width:980px">
-    <div class="modal-header"><h3>👑 Safe Zone — Căn chỉnh Bục Vinh Danh</h3><button class="close-btn" onclick="closeThroneSafeZone()">✖</button></div>
-    <div style="font-size:12px;color:#666;margin-bottom:8px">Nền ảo dùng đúng nền Bục Vinh Danh thật. Kéo Top 1/2/3 bằng chuột hoặc tay; con lăn đổi kích thước. Các thay đổi chỉ lưu khi bấm Lưu.</div>
-    <div id="throneSafeStage">
-      <div class="throne-safe-bg"></div>
-      <div class="throne-safe-grid"></div>
-      <div class="throne-safe-slot" data-rank="1" id="throneSafe1">🥇<span>TOP 1</span></div>
-      <div class="throne-safe-slot" data-rank="2" id="throneSafe2">🥈<span>TOP 2</span></div>
-      <div class="throne-safe-slot" data-rank="3" id="throneSafe3">🥉<span>TOP 3</span></div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-      <button class="btn btn-warning" style="width:auto;color:#000" onclick="smartCenterThroneSlots()">🎯 Căn giữa thông minh</button>
-      <button class="btn btn-secondary" style="width:auto" onclick="closeThroneSafeZone()">Hủy</button>
-      <button class="btn btn-success" style="width:auto" onclick="saveThroneSafeZone()">💾 Lưu vị trí</button>
-    </div>
-  </div>
-</div>
-
-<script>
-/* ============================================================
-   AURORA EXTENSION — PROFILE FIX / THRONE SAFE ZONE / AURO AI
-   ============================================================ */
-(function(){
-'use strict';
-
-const AURO_MODEL_ALLOWED_EXT=['.model3.json','.motion3.json','.moc3','.json','.png','.jpg','.jpeg','.webp','.gif','.motion3.json','.psd','.vrm','.fbx','.obj','.pmx','.pmd','.bvh','.vmd','.vpd','.moc','.atlas','.mtn','.glb','.gltf'];
-let auroModelCache={};
-let auroCurrentModel=null;
-let auroRendererState=null;
-let auroModelDrag={active:false,lastX:0,lastY:0};
-let auroModelPinch={distance:0,scale:1};
-let auroFrameState={x:0,y:0,scale:1,rotation:0,url:'',name:''};
-let throneSafeState={1:{x:0,y:0,scale:1},2:{x:0,y:0,scale:1},3:{x:0,y:0,scale:1}};
-let auroAIConfigCache=null;
-let auroChatHistory=[];
-
-/* ---------- helpers ---------- */
-function auroEsc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-function auroExt(name){const n=(name||'').toLowerCase();return AURO_MODEL_ALLOWED_EXT.find(x=>n.endsWith(x))||'';}
-function auroFileKey(f){return f.webkitRelativePath||f.name;}
-function auroIsVua(){return window.userHasSupremeAccess===true;}
-function auroCanOwn(){return !!(window.currentUserFullData&&window.currentUserFullData.aiModelAccess===true);}
-function auroDefaultModel(){
-  return {id:'auro_system_default',name:'Auro',owner:'system',default:true,
-    greetings:['Xin chào!','Mình là Auro 🤖','Chúc bạn một ngày thật vui!'],
-    format:'robot',files:[]};
-}
-function auroToast(msg,type='info'){if(typeof showToast==='function')showToast(msg,type);else alert(msg);}
-
-/* ---------- throne background upload ---------- */
-window.handleThroneBgImageUpload=async function(input){
-  if(!input.files||!input.files[0])return;
-  const f=input.files[0];
-  if(!f.type.startsWith('image/')){auroToast('Chỉ nhận ảnh nền Bục Vinh Danh.','error');return;}
-  const reader=new FileReader();
-  reader.onload=()=>{
-    const url=reader.result;
-    const h=document.getElementById('throneBgImage');if(h)h.value=url;
-    throneDesign.bgImage=url;
-    applyThroneDesignUI(throneDesign);
-  };
-  reader.readAsDataURL(f);
-};
-window.clearThroneBgImage=function(){
-  const h=document.getElementById('throneBgImage');if(h)h.value='';
-  throneDesign.bgImage='';
-  applyThroneDesignUI(throneDesign);
-};
-window.openThroneSafeZone=function(){
-  const modal=document.getElementById('auroThroneSafeModal');if(!modal)return;
-  const bg=document.querySelector('#throneSafeStage .throne-safe-bg');
-  if(bg)bg.style.backgroundImage=throneDesign.bgImage?`url("${throneDesign.bgImage}")`:`linear-gradient(180deg,${throneDesign.bg1},${throneDesign.bg2})`;
-  throneSafeState={
-    1:{x:throneDesign.top1X||0,y:throneDesign.top1Y||0,scale:1.08*(throneDesign.scale||1)},
-    2:{x:throneDesign.top2X||0,y:throneDesign.top2Y||0,scale:throneDesign.scale||1},
-    3:{x:throneDesign.top3X||0,y:throneDesign.top3Y||0,scale:throneDesign.scale||1}
-  };
-  [1,2,3].forEach(r=>auroRenderThroneSafeSlot(r));
-  modal.classList.add('show');
-  auroBindThroneSafePointer();
-};
-window.closeThroneSafeZone=function(){const m=document.getElementById('auroThroneSafeModal');if(m)m.classList.remove('show');};
-function auroRenderThroneSafeSlot(rank){
-  const el=document.getElementById('throneSafe'+rank);if(!el)return;
-  const d=throneSafeState[rank];
-  const base={1:{x:50,y:44},2:{x:28,y:48},3:{x:72,y:48}}[rank];
-  el.style.left=`calc(${base.x}% + ${d.x||0}px)`;
-  el.style.top=`calc(${base.y}% + ${d.y||0}px)`;
-  el.style.transform=`translate(-50%,-50%) scale(${d.scale||1})`;
-}
-function auroBindThroneSafePointer(){
-  [1,2,3].forEach(rank=>{
-    const el=document.getElementById('throneSafe'+rank);if(!el||el.dataset.bound)return;
-    el.dataset.bound='1';
-    let state={drag:false,lastX:0,lastY:0};
-    el.addEventListener('pointerdown',e=>{
-      state.drag=true;state.lastX=e.clientX;state.lastY=e.clientY;el.setPointerCapture?.(e.pointerId);
-      e.stopPropagation();
-    });
-    el.addEventListener('pointermove',e=>{
-      if(!state.drag)return;
-      throneSafeState[rank].x+=e.clientX-state.lastX;
-      throneSafeState[rank].y+=e.clientY-state.lastY;
-      state.lastX=e.clientX;state.lastY=e.clientY;auroRenderThroneSafeSlot(rank);
-    });
-    el.addEventListener('pointerup',e=>{state.drag=false;try{el.releasePointerCapture(e.pointerId);}catch(_){}});
-    el.addEventListener('pointercancel',()=>state.drag=false);
-    el.addEventListener('wheel',e=>{
-      e.preventDefault();throneSafeState[rank].scale=Math.max(.35,Math.min(3,throneSafeState[rank].scale*(e.deltaY<0?1.06:.94)));auroRenderThroneSafeSlot(rank);
-    },{passive:false});
-  });
-}
-window.smartCenterThroneSlots=function(){
-  throneSafeState[1].x=0;throneSafeState[1].y=0;
-  throneSafeState[2].x=0;throneSafeState[2].y=0;
-  throneSafeState[3].x=0;throneSafeState[3].y=0;
-  [1,2,3].forEach(auroRenderThroneSafeSlot);
-};
-window.saveThroneSafeZone=async function(){
-  const d=Object.assign({},throneDesign,{
-    top1X:Math.round(throneSafeState[1].x),top1Y:Math.round(throneSafeState[1].y),
-    top2X:Math.round(throneSafeState[2].x),top2Y:Math.round(throneSafeState[2].y),
-    top3X:Math.round(throneSafeState[3].x),top3Y:Math.round(throneSafeState[3].y),
-    scale:Math.max(.5,Math.min(3,throneDesign.scale||1)),updatedAt:Date.now()
-  });
-  try{
-    await window.dbSet(window.ref(window.db,'system/throne_design'),d);
-    throneDesign=d;applyThroneDesignUI(d);closeThroneSafeZone();auroToast('✅ Đã lưu Safe Zone Bục Vinh Danh!','success');
-  }catch(e){auroToast('❌ '+(e.message||e),'error');}
-};
-
-/* ---------- smart profile effect adjustment ---------- */
-window.smartCenterRoleEffect=function(){
-  const x=document.getElementById('rfxRangeX'),y=document.getElementById('rfxRangeY');
-  if(x)x.value=0;if(y)y.value=0;
-  if(typeof updateRoleFxPreview==='function')updateRoleFxPreview();
-  auroToast('🎯 Đã đưa hiệu ứng về giữa Profile ảo.','success');
-};
-function auroEnhanceRoleFxStage(){
-  const stage=document.getElementById('roleFxStage');if(!stage||stage.dataset.auroEnhanced)return;
-  stage.dataset.auroEnhanced='1';
-  let pinchStart=0,baseScale=1,rotStart=0,baseRot=0;
-  stage.addEventListener('wheel',e=>{
-    if(!document.getElementById('roleEffectAdjustModal')?.classList.contains('show'))return;
-    e.preventDefault();
-    const el=document.getElementById('rfxRangeScale');if(!el)return;
-    let v=parseFloat(el.value)||1;v*=e.deltaY<0?1.05:.95;el.value=Math.max(.2,Math.min(3,v));updateRoleFxPreview();
-  },{passive:false});
-  stage.addEventListener('pointerdown',e=>{
-    if(e.pointerType==='mouse'&&e.button!==0)return;
-    stage.dataset.auroPointer=String(e.pointerId);
-  });
-  stage.addEventListener('touchstart',e=>{
-    if(e.touches.length===2){
-      const a=e.touches[0],b=e.touches[1];pinchStart=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
-      const el=document.getElementById('rfxRangeScale');baseScale=parseFloat(el?.value)||1;
-      rotStart=Math.atan2(b.clientY-a.clientY,b.clientX-a.clientX);
-      const r=document.getElementById('rfxRangeRot');baseRot=parseFloat(r?.value)||0;
-    }
-  },{passive:true});
-  stage.addEventListener('touchmove',e=>{
-    if(e.touches.length!==2||!pinchStart)return;
-    const a=e.touches[0],b=e.touches[1],dist=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
-    const angle=Math.atan2(b.clientY-a.clientY,b.clientX-a.clientX);
-    const se=document.getElementById('rfxRangeScale'),re=document.getElementById('rfxRangeRot');
-    if(se)se.value=Math.max(.2,Math.min(3,baseScale*(dist/pinchStart)));
-    if(re)re.value=Math.max(-180,Math.min(180,baseRot+(angle-rotStart)*180/Math.PI));
-    updateRoleFxPreview();
-    e.preventDefault();
-  },{passive:false});
-  stage.addEventListener('touchend',()=>{pinchStart=0;});
-}
-const _openRoleEffectAdjust=window.openRoleEffectAdjust;
-window.openRoleEffectAdjust=function(){
-  if(typeof _openRoleEffectAdjust==='function')_openRoleEffectAdjust();
-  setTimeout(()=>{
-    auroEnhanceRoleFxStage();
-    const mock=document.querySelector('#roleFxStage .role-fx-stage-profile-mock');
-    if(window.currentUserFullData&&mock){
-      const u=window.currentUserFullData;
-      const av=document.getElementById('roleFxStageAvatar');
-      if(av&&u.avatar)av.innerHTML=`<img src="${auroEsc(u.avatar)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-      const nm=document.getElementById('roleFxStageName');if(nm)nm.innerText=u.nickname||u.username||'Profile';
-      const hdr=document.getElementById('roleFxStageHeader');
-      if(hdr&&u.avatarBg)hdr.style.backgroundImage=`url("${u.avatarBg}")`;
-    }
-  },80);
-};
-
-/* ---------- AI model database ---------- */
-async function auroLoadModels(){
-  try{
-    const snap=await window.dbGet(window.dbChild(window.dbRef,'system/ai_models'));
-    auroModelCache=snap.val()||{};
-  }catch(e){auroModelCache={};}
-  return auroModelCache;
-}
-async function auroLoadAIConfig(){
-  try{
-    const snap=await window.dbGet(window.dbChild(window.dbRef,'system/ai_model_config'));
-    auroAIConfigCache=snap.val()||null;
-  }catch(e){auroAIConfigCache=null;}
-  return auroAIConfigCache;
-}
-window.loadAuroAIConfig=async function(){
-  const c=await auroLoadAIConfig();const $=id=>document.getElementById(id);if(!c)return;
-  if($('auroAIEndpoint'))$('auroAIEndpoint').value=c.endpoint||'';
-  if($('auroAIKey'))$('auroAIKey').value=c.apiKey||'';
-  if($('auroAIChatModel'))$('auroAIChatModel').value=c.model||'gpt-4o-mini';
-  if($('auroAISystemPrompt'))$('auroAISystemPrompt').value=c.systemPrompt||'';
-  if($('auroAIEnabled'))$('auroAIEnabled').checked=c.enabled!==false;
-  if($('auroAIConfigStatus'))$('auroAIConfigStatus').innerText='Đã tải cấu hình.';
-};
-window.saveAuroAIConfig=async function(){
-  if(!auroIsVua()){auroToast('❌ Chỉ VUA mới được cấu hình AI hệ thống.','error');return;}
-  const $=id=>document.getElementById(id);
-  const d={endpoint:$('auroAIEndpoint').value.trim(),apiKey:$('auroAIKey').value.trim(),model:$('auroAIChatModel').value.trim()||'gpt-4o-mini',systemPrompt:$('auroAISystemPrompt').value.trim(),enabled:$('auroAIEnabled').checked,updatedAt:Date.now()};
-  try{await window.dbSet(window.ref(window.db,'system/ai_model_config'),d);auroAIConfigCache=d;if($('auroAIConfigStatus'))$('auroAIConfigStatus').innerText='✅ Đã lưu cấu hình AI.';auroToast('✅ Đã lưu Setup AI Model.','success');}
-  catch(e){auroToast('❌ '+(e.message||e),'error');}
-};
-
-/* grant/revoke */
-window.grantAuroModelAccess=async function(){
-  if(!auroIsVua()){auroToast('❌ Cần xác thực VUA để cấp Model AI.','error');return;}
-  const id=(document.getElementById('auroGrantUserId')?.value||'').trim().replace(/^@/,'');
-  if(!id){auroToast('Nhập @ID tài khoản.','error');return;}
-  try{
-    const snap=await window.dbGet(window.dbChild(window.dbRef,'users/'+id));
-    if(!snap.exists()){auroToast('❌ Không tìm thấy tài khoản: @'+id,'error');return;}
-    await window.dbUpdate(window.ref(window.db,'users/'+id),{aiModelAccess:true,aiModelGrantedAt:Date.now(),aiModelGrantedBy:window.currentUser?.username||'VUA'});
-    if(document.getElementById('auroGrantStatus'))document.getElementById('auroGrantStatus').innerText='✅ Đã cấp quyền cho @'+id;
-    auroToast('👑 Đã cấp quyền Model AI cho @'+id,'success');
-  }catch(e){auroToast('❌ '+(e.message||e),'error');}
-};
-window.revokeAuroModelAccess=async function(){
-  if(!auroIsVua()){auroToast('❌ Cần xác thực VUA để thu hồi.','error');return;}
-  const id=(document.getElementById('auroGrantUserId')?.value||'').trim().replace(/^@/,'');
-  if(!id)return;
-  try{await window.dbUpdate(window.ref(window.db,'users/'+id),{aiModelAccess:false});auroToast('🚫 Đã thu hồi quyền Model AI.','warn');}
-  catch(e){auroToast('❌ '+(e.message||e),'error');}
-};
-
-/* model upload */
-window.uploadAuroModelPackage=async function(){
-  if(!window.currentUserFullData){auroToast('❌ Chưa đăng nhập.','error');return;}
-  if(!auroCanOwn()&&!auroIsVua()){auroToast('🔒 Tài khoản chưa được VUA cấp quyền Model AI.','error');return;}
-  const input=document.getElementById('auroModelFilesInput');const files=[...(input?.files||[])];
-  if(!files.length){auroToast('Chọn ít nhất một file model.','error');return;}
-  const name=(document.getElementById('auroModelName')?.value||'Auro').trim()||'Auro';
-  const id='model_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
-  const greetings=(document.getElementById('auroModelGreetings')?.value||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-  const meta={id,name,owner:window.currentUser.username,createdAt:Date.now(),greetings:greetings.length?greetings:['Xin chào!','Mình là '+name+' 🤖'],files:[],mainFile:''};
-  const mainSel=document.getElementById('auroModelMainFile')?.value||'';
-  let done=0;
-  const progress=document.getElementById('auroModelUploadProgress');
-  try{
-    for(const f of files){
-      const ext=auroExt(f.name);
-      if(!ext)continue;
-      const rel=auroFileKey(f).replace(/\\/g,'/');
-      const sr=window.storageRef(window.storage,`ai_models/${window.currentUser.username}/${id}/${rel}`);
-      const task=window.uploadBytesResumable(sr,f,{contentType:f.type||'application/octet-stream'});
-      const url=await new Promise((resolve,reject)=>{
-        task.on('state_changed',snap=>{
-          const pct=snap.totalBytes?Math.round(snap.bytesTransferred/snap.totalBytes*100):0;
-          if(progress)progress.innerText=`⬆️ ${rel} — ${pct}% (${done+1}/${files.length})`;
-        },reject,async()=>resolve(await window.getDownloadURL(task.snapshot.ref)));
-      });
-      meta.files.push({name:f.name,path:rel,url,type:f.type||'',size:f.size});
-      done++;
-    }
-    meta.mainFile=mainSel||auroPickMain(meta.files);
-    await window.dbSet(window.ref(window.db,'system/ai_models/'+id),meta);
-    auroModelCache[id]=meta;
-    if(progress)progress.innerText=`✅ Đã tải ${done} file.`;
-    auroToast('🤖 Đã thêm Model AI: '+name,'success');
-    loadAuroModelAdminList();
-  }catch(e){if(progress)progress.innerText='❌ '+(e.message||e);auroToast('❌ Upload Model thất bại: '+(e.message||e),'error');}
-};
-function auroPickMain(files){
-  const priority=['.vrm','.glb','.gltf','.fbx','.obj','.pmx','.pmd','.model3.json','.bvh'];
-  for(const p of priority){const f=files.find(x=>x.name.toLowerCase().endsWith(p));if(f)return f.name;}
-  return files[0]?.name||'';
-}
-function auroModelOwnedByCurrent(m){return m&&(m.owner==='system'||m.owner===window.currentUser?.username||window.currentUserFullData?.aiModelAccess===true);}
-window.loadAuroModelAdminList=async function(){
-  await auroLoadModels();const c=document.getElementById('auroModelAdminList');if(!c)return;
-  const arr=Object.values(auroModelCache);
-  c.innerHTML=arr.length?arr.map(m=>`<div class="auro-model-card"><div style="font-size:34px">🤖</div><div class="model-info"><b>${auroEsc(m.name||'Auro')}</b><div style="font-size:10px;color:#888">ID: ${auroEsc(m.id)} · Chủ: @${auroEsc(m.owner||'system')}</div><div style="font-size:10px;color:#888">${(m.files||[]).length} file</div></div><div class="model-actions">${auroIsVua()&&m.owner!=='system'?`<button class="btn btn-danger" style="width:auto;padding:5px 8px;font-size:10px" onclick="deleteAuroModel('${auroEsc(m.id)}')">🗑️</button>`:''}</div></div>`).join(''):'<div style="text-align:center;color:#888;padding:15px">Chưa có model.</div>';
-};
-window.deleteAuroModel=async function(id){
-  if(!auroIsVua()){auroToast('❌ Chỉ VUA mới được xóa model hệ thống.','error');return;}
-  try{await window.dbRemove(window.ref(window.db,'system/ai_models/'+id));delete auroModelCache[id];auroToast('🗑️ Đã xóa metadata model. File Storage cũ có thể cần dọn trong Firebase Console.','warn');loadAuroModelAdminList();}
-  catch(e){auroToast('❌ '+(e.message||e),'error');}
-};
-
-/* ---------- model picker / equip ---------- */
-window.openProfileModelPicker=async function(){
-  const m=document.getElementById('auroModelPickerModal');if(!m)return;
-  if(!window.currentViewingUser)return;
-  await auroLoadModels();
-  const can=window.currentViewingUser.username===window.currentUser?.username && (auroCanOwn()||auroIsVua());
-  const list=document.getElementById('auroModelPickerList');
-  const models=[auroDefaultModel(),...Object.values(auroModelCache).filter(x=>x.owner===window.currentViewingUser.username)];
-  if(!can){
-    list.innerHTML='<div style="padding:15px;background:#fffbe6;border-radius:10px;color:#856404;font-size:12px">🔒 Chỉ tài khoản được VUA cấp quyền mới có thể trang bị Model AI.</div>';
-  }else{
-    const equipped=window.currentUserFullData?.equippedAIModel||'';
-    list.innerHTML=`<div class="auro-model-card ${!equipped?'active':''}" onclick="equipAuroModel('')"><div style="font-size:32px">🚫</div><div class="model-info"><b>Không hiển thị</b></div></div>`+
-      models.map(x=>`<div class="auro-model-card ${equipped===x.id?'active':''}" onclick="equipAuroModel('${auroEsc(x.id)}')"><div style="font-size:32px">🤖</div><div class="model-info"><b>${auroEsc(x.name)}</b><div style="font-size:10px;color:#888">${x.default?'Model robot hệ thống':'Model của bạn'}</div></div><div>${equipped===x.id?'✅':''}</div></div>`).join('');
-  }
-  m.classList.add('show');
-};
-window.closeAuroModelPicker=function(){document.getElementById('auroModelPickerModal')?.classList.remove('show');};
-window.equipAuroModel=async function(id){
-  if(!window.currentUserFullData)return;
-  if(id && !auroCanOwn()&&!auroIsVua()){auroToast('🔒 Bạn chưa được VUA cấp quyền.','error');return;}
-  try{
-    await window.dbUpdate(window.ref(window.db,'users/'+window.currentUser.username),{equippedAIModel:id||'',updatedAt:Date.now()});
-    window.currentUserFullData.equippedAIModel=id||'';
-    window.currentUser.equippedAIModel=id||'';
-    if(id)await showAuroModelForUser(window.currentUserFullData);else hideAuroModel();
-    closeAuroModelPicker();auroToast(id?'🤖 Đã trang bị Model AI!':'🚫 Đã ẩn Model AI.','success');
-  }catch(e){auroToast('❌ '+(e.message||e),'error');}
-};
-window.loadAuroEquippedForUser=async function(u){
-  if(!u)return;
-  await auroLoadModels();
-  if(u.equippedAIModel)showAuroModelForUser(u);else hideAuroModel();
-};
-window.showAuroModelForUser=async function(u){
-  if(!u)return;
-  const layer=document.getElementById('auroModelLayer');if(!layer)return;
-  await auroLoadModels();
-  let m=u.equippedAIModel==='auro_system_default'?auroDefaultModel():auroModelCache[u.equippedAIModel];
-  if(!m){hideAuroModel();return;}
-  if(m.owner!=='system'&&m.owner!==u.username){hideAuroModel();return;}
-  auroCurrentModel=m;
-  layer.style.display='block';
-  document.getElementById('auroModelNameBadge').innerText=m.name||'Auro';
-  document.getElementById('auroModelChatTitle').innerText=m.name||'Auro';
-  const fb=document.getElementById('auroModelFallback');if(fb)fb.style.display=m.format==='robot'?'flex':'none';
-  await auroRenderModel(m);
-};
-window.hideAuroModel=function(){
-  const layer=document.getElementById('auroModelLayer');if(layer)layer.style.display='none';
-  if(auroRendererState){try{auroRendererState.renderer.dispose();}catch(_){}}
-  auroRendererState=null;
-  document.getElementById('auroModelChat')?.classList.remove('show');
-};
-window.toggleAuroModelChat=function(){document.getElementById('auroModelChat')?.classList.toggle('show');};
-window.sendAuroModelChat=async function(){
-  const inp=document.getElementById('auroModelChatInput');if(!inp)return;const msg=inp.value.trim();if(!msg)return;
-  if(window.isExamActive||window.isQpActive){
-    auroAddChat('bot','Trong lúc đang làm bài, khung trò chuyện AI đang khóa để giữ nguyên quy định chống gian lận của hệ thống.');
-    inp.value='';return;
-  }
-  inp.value='';auroAddChat('user',msg);
-  const replies=auroCurrentModel?.greetings||['Mình đang nghe đây!'];
-  try{
-    const c=auroAIConfigCache||await auroLoadAIConfig();
-    if(c?.enabled&&c.endpoint){
-      const history=[{role:'system',content:c.systemPrompt||'Bạn là Auro.'},...auroChatHistory.slice(-10).map(x=>({role:x.role==='bot'?'assistant':'user',content:x.text})),{role:'user',content:msg}];
-      const headers={'Content-Type':'application/json'};if(c.apiKey)headers.Authorization='Bearer '+c.apiKey;
-      const res=await fetch(c.endpoint,{method:'POST',headers,body:JSON.stringify({model:c.model||'gpt-4o-mini',messages:history,temperature:.7})});
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      const data=await res.json();const text=data?.choices?.[0]?.message?.content||'Mình chưa nghĩ ra câu trả lời.';
-      auroAddChat('bot',text);return;
-    }
-  }catch(e){console.warn('Auro AI:',e);}
-  auroAddChat('bot',replies[Math.floor(Math.random()*replies.length)]);
-};
-function auroAddChat(role,text){
-  auroChatHistory.push({role,text});const c=document.getElementById('auroModelChatMessages');if(!c)return;
-  const d=document.createElement('div');d.className='auro-chat-msg '+role;d.textContent=text;c.appendChild(d);c.scrollTop=c.scrollHeight;
-}
-function auroRandomGreeting(){const g=auroCurrentModel?.greetings||['Xin chào!'];return g[Math.floor(Math.random()*g.length)];}
-
-/* ---------- Three.js model renderer ---------- */
-async function auroRenderModel(m){
-  const wrap=document.getElementById('auroModelCanvasWrap'),canvas=document.getElementById('auroModelCanvas'),fallback=document.getElementById('auroModelFallback');
-  if(!wrap||!canvas)return;
-  if(auroRendererState){try{auroRendererState.renderer.dispose();}catch(_){}auroRendererState=null;}
-  const main=(m.files||[]).find(f=>f.name===m.mainFile)||m.files?.[0];
-  if(!main){if(fallback)fallback.style.display='flex';return;}
-  const ext=auroExt(main.name);
-  if(ext==='.model3.json'||ext==='.moc3'||ext==='.motion3.json'||ext==='.psd'||ext==='.atlas'){
-    if(fallback){fallback.style.display='flex';document.getElementById('auroModelFallbackText').innerText=(m.name||'Auro')+' · Live2D';}
-    return;
-  }
-  try{
-    const THREE=await import('three');
-    const scene=new THREE.Scene();
-    scene.background=null;
-    const camera=new THREE.PerspectiveCamera(35,wrap.clientWidth/Math.max(1,wrap.clientHeight),.01,1000);
-    camera.position.set(0,1.2,4);
-    const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-    renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(wrap.clientWidth,wrap.clientHeight,false);
-    renderer.outputColorSpace=THREE.SRGBColorSpace;
-    const hemi=new THREE.HemisphereLight(0xffffff,0x334466,2);scene.add(hemi);
-    const dir=new THREE.DirectionalLight(0xffffff,2);dir.position.set(2,4,3);scene.add(dir);
-    const group=new THREE.Group();scene.add(group);
-    let loaded=null;
-    const fit=obj=>{
-      const box=new THREE.Box3().setFromObject(obj),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
-      const max=Math.max(size.x,size.y,size.z)||1;obj.position.sub(center);obj.scale.multiplyScalar(2.4/max);
-      camera.position.set(0,0,4.2);camera.lookAt(0,0,0);
-    };
-    if(ext==='.vrm'){
-      const {GLTFLoader}=await import('three/addons/loaders/GLTFLoader.js');
-      const {VRMLoaderPlugin}=await import('@pixiv/three-vrm');
-      const loader=new GLTFLoader();loader.register(parser=>new VRMLoaderPlugin(parser));
-      const gltf=await loader.loadAsync(main.url);loaded=gltf.userData.vrm?.scene||gltf.scene;group.add(loaded);fit(loaded);
-    }else if(ext==='.fbx'){
-      const {FBXLoader}=await import('three/addons/loaders/FBXLoader.js');loaded=await new FBXLoader().loadAsync(main.url);group.add(loaded);fit(loaded);
-    }else if(ext==='.obj'){
-      const {OBJLoader}=await import('three/addons/loaders/OBJLoader.js');loaded=await new OBJLoader().loadAsync(main.url);group.add(loaded);fit(loaded);
-    }else if(ext==='.pmx'||ext==='.pmd'){
-      const {MMDLoader}=await import('three/addons/loaders/MMDLoader.js');loaded=await new MMDLoader().loadAsync(main.url);group.add(loaded);fit(loaded);
-    }else if(ext==='.gltf'||ext==='.glb'){
-      const {GLTFLoader}=await import('three/addons/loaders/GLTFLoader.js');const gltf=await new GLTFLoader().loadAsync(main.url);loaded=gltf.scene;group.add(loaded);fit(loaded);
-    }else if(ext==='.bvh'){
-      const {BVHLoader}=await import('three/addons/loaders/BVHLoader.js');const bvh=await new BVHLoader().loadAsync(main.url);const sk=bvh.skeletonHelper;group.add(sk);fit(sk);
-    }else{
-      throw new Error('Định dạng này cần runtime riêng: '+ext);
-    }
-    if(fallback)fallback.style.display='none';
-    auroRendererState={renderer,scene,camera,group,loaded};
-    const clock=new THREE.Clock();
-    const loop=()=>{
-      if(!auroRendererState||auroRendererState.renderer!==renderer)return;
-      const dt=clock.getDelta();
-      if(loaded?.userData?.vrm)loaded.userData.vrm.update(dt);
-      renderer.render(scene,camera);requestAnimationFrame(loop);
-    };loop();
-  }catch(e){
-    console.warn('Auro model renderer:',e);
-    if(fallback){fallback.style.display='flex';document.getElementById('auroModelFallbackText').innerText=(m.name||'Auro')+' · '+(ext||'model')+' (preview unavailable)';}
-  }
-}
-function auroBindModelGestures(){
-  const wrap=document.getElementById('auroModelCanvasWrap');if(!wrap||wrap.dataset.bound)return;wrap.dataset.bound='1';
-  wrap.addEventListener('pointerdown',e=>{
-    if(e.target.id==='auroModelHideBtn')return;
-    auroModelDrag.active=true;auroModelDrag.lastX=e.clientX;auroModelDrag.lastY=e.clientY;wrap.setPointerCapture?.(e.pointerId);
-  });
-  wrap.addEventListener('pointermove',e=>{
-    if(!auroModelDrag.active)return;
-    const dx=e.clientX-auroModelDrag.lastX,dy=e.clientY-auroModelDrag.lastY;auroModelDrag.lastX=e.clientX;auroModelDrag.lastY=e.clientY;
-    const r=auroRendererState?.group;if(r){r.position.x+=dx/180;r.position.y-=dy/180;}
-  });
-  wrap.addEventListener('pointerup',()=>auroModelDrag.active=false);
-  wrap.addEventListener('pointercancel',()=>auroModelDrag.active=false);
-  wrap.addEventListener('wheel',e=>{
-    e.preventDefault();const r=auroRendererState?.group;if(r){const f=e.deltaY<0?1.08:.925;r.scale.multiplyScalar(f);}
-  },{passive:false});
-  wrap.addEventListener('dblclick',e=>{if(e.target===wrap||e.target===document.getElementById('auroModelCanvas'))toggleAuroModelChat();});
-  wrap.addEventListener('touchstart',e=>{
-    if(e.touches.length===2){const a=e.touches[0],b=e.touches[1];auroModelPinch.distance=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);auroModelPinch.scale=auroRendererState?.group?.scale.x||1;}
-  },{passive:true});
-  wrap.addEventListener('touchmove',e=>{
-    if(e.touches.length===2&&auroModelPinch.distance){
-      const a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),f=d/auroModelPinch.distance;
-      const r=auroRendererState?.group;if(r){const v=Math.max(.1,Math.min(8,auroModelPinch.scale*f));r.scale.setScalar(v);}e.preventDefault();
-    }
-  },{passive:false});
-  wrap.addEventListener('touchend',()=>auroModelPinch.distance=0);
-}
-window.initAuroModelSystem=function(){
-  auroBindModelGestures();
-  const layer=document.getElementById('auroModelLayer');if(layer&&!layer.dataset.initialized){layer.dataset.initialized='1';layer.style.display='none';}
-};
-window.initAuroModelSystem();
-
-/* ---------- model frame ---------- */
-window.openAuroModelFrameEditor=function(){
-  if(!auroCanOwn()&&!auroIsVua()){auroToast('🔒 Chưa được cấp quyền Model AI.','error');return;}
-  const m=document.getElementById('auroModelFrameModal');if(!m)return;m.classList.add('show');updateAuroFramePreview();
-};
-window.closeAuroModelFrameEditor=function(){document.getElementById('auroModelFrameModal')?.classList.remove('show');};
-window.updateAuroFramePreview=function(){
-  const p=document.getElementById('auroModelFramePreview');if(!p)return;
-  auroFrameState.x=parseFloat(document.getElementById('auroFrameX')?.value)||0;
-  auroFrameState.y=parseFloat(document.getElementById('auroFrameY')?.value)||0;
-  auroFrameState.scale=parseFloat(document.getElementById('auroFrameScale')?.value)||1;
-  auroFrameState.rotation=parseFloat(document.getElementById('auroFrameRot')?.value)||0;
-  p.style.transform=`translate(calc(-50% + ${auroFrameState.x}px),calc(-50% + ${auroFrameState.y}px)) scale(${auroFrameState.scale}) rotate(${auroFrameState.rotation}deg)`;
-  p.innerText=auroFrameState.url?'🖼️':'🤖';
-  if(auroFrameState.url){p.style.backgroundImage=`url("${auroFrameState.url}")`;p.style.backgroundSize='contain';p.style.backgroundPosition='center';p.style.backgroundRepeat='no-repeat';p.innerText='';}
-};
-window.smartCenterAuroFrame=function(){['auroFrameX','auroFrameY'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=0;});updateAuroFramePreview();};
-window.saveAuroModelFrame=async function(){
-  if(!window.currentUser)return;
-  try{
-    await window.dbUpdate(window.ref(window.db,'users/'+window.currentUser.username),{aiModelFrame:auroFrameState,updatedAt:Date.now()});
-    window.currentUserFullData.aiModelFrame=auroFrameState;
-    closeAuroModelFrameEditor();auroToast('✅ Đã lưu khung Model AI.','success');
-  }catch(e){auroToast('❌ '+(e.message||e),'error');}
-};
-document.getElementById('auroModelFrameInput')?.addEventListener('change',e=>{
-  const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{auroFrameState.url=r.result;updateAuroFramePreview();};r.readAsDataURL(f);
-});
-
-/* ---------- safe model chat behaviour / hooks ---------- */
-window.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.activeElement?.id==='auroModelChatInput'){e.preventDefault();sendAuroModelChat();}});
-setInterval(()=>{if(auroCurrentModel&&document.getElementById('auroModelLayer')?.style.display!=='none'&&!document.getElementById('auroModelChat')?.classList.contains('show')){ /* passive heartbeat only */ }},15000);
-
-/* Make current globals available to this extension without changing existing declarations. */
-try{
-  Object.defineProperty(window,'currentUser',{get:()=>currentUser,set:v=>{currentUser=v;}});
-  Object.defineProperty(window,'currentUserFullData',{get:()=>currentUserFullData,set:v=>{currentUserFullData=v;}});
-  Object.defineProperty(window,'currentViewingUser',{get:()=>currentViewingUser,set:v=>{currentViewingUser=v;}});
-  Object.defineProperty(window,'isExamActive',{get:()=>isExamActive});
-  Object.defineProperty(window,'isQpActive',{get:()=>isQpActive});
-  Object.defineProperty(window,'userHasSupremeAccess',{get:()=>userHasSupremeAccess});
-}catch(_){}
-
-/* after DOM / Firebase initialization */
-window.addEventListener('load',async()=>{
-  initAuroModelSystem();
-  try{await auroLoadModels();}catch(_){}
-  if(window.currentUserFullData)loadAuroEquippedForUser(window.currentUserFullData);
-});
-})();
-</script>
 </body>
 </html>
