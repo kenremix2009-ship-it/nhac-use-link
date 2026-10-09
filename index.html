@@ -1721,7 +1721,7 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="smartExamCreate" class="card sub-module-box" style="display:none"><h3 style="color:#1877f2;margin-bottom:10px">🎓 Tạo Đề Thông Minh (V4)</h3><hr style="margin:10px 0"><div style="background:#f0f8ff;border:2px dashed #1877f2;padding:20px;border-radius:12px;text-align:center;margin-bottom:15px"><div style="font-size:48px">📄</div><label for="smartExamPdfInput" class="btn btn-success" style="display:inline-block;width:auto;padding:12px 24px;font-size:14px;cursor:pointer;margin:10px 0">📤 Chọn PDF</label><input type="file" id="smartExamPdfInput" accept="application/pdf" style="display:none" onchange="handleSmartExamUpload(this)"></div><div id="smartExamProgress" style="display:none;background:#fff3cd;padding:12px;border-radius:8px;margin-bottom:15px"><div style="display:flex;align-items:center;gap:10px"><div class="spinner" style="width:24px;height:24px;border-width:3px;margin:0"></div><span id="smartExamProgressText" style="font-weight:bold;color:#856404;font-size:13px">Đang xử lý...</span></div><div style="background:#fff;border-radius:6px;height:8px;margin-top:8px;overflow:hidden"><div id="smartExamProgressBar" style="height:100%;background:linear-gradient(90deg,#1877f2,#198754);width:0%;transition:width .3s"></div></div></div><div id="smartExamConfigBox" style="display:none;background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:15px"><h4 style="font-size:14px;color:#1877f2;margin-bottom:8px">⚙️ Cấu hình</h4><div class="form-grid-2"><div><label style="font-size:12px">Mã:</label><input type="text" id="smartExamCode" placeholder="VD: TOAN12" style="padding:6px;margin:0"></div><div><label style="font-size:12px">Tên:</label><input type="text" id="smartExamTitle" style="padding:6px;margin:0"></div></div><div class="form-grid-2" style="margin-top:8px"><div><label style="font-size:12px">Thời gian (phút):</label><input type="number" id="smartExamDuration" value="45" style="padding:6px;margin:0"></div><div><label style="font-size:12px">Chế độ:</label><select id="smartExamParseMode" style="padding:6px;margin:0"><option value="auto">Tự động</option><option value="image">Cắt ảnh</option><option value="text">Chỉ Text</option></select></div></div><div style="margin-top:10px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="smartEnableAttemptLimit" style="width:16px;height:16px"> 🔁 Giới hạn lần làm</label><input type="number" id="smartMaxAttempts" value="1" min="1" style="width:80px;padding:5px;margin:0"></div><div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;font-size:13px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;margin:0;flex:1"><input type="checkbox" id="smartEnableAINote" style="width:16px;height:16px"> 🤖 Phân tích AI (đang thử nghiệm)</label></div></div></div><div id="smartExamAnswerUploadBox" style="display:none;background:linear-gradient(135deg,#fff7e6,#fffbe6);border:2px dashed #ffc107;padding:14px;border-radius:10px;margin-bottom:12px"><h4 style="font-size:14px;color:#856404;margin-bottom:8px">🔑 Upload Đáp Án</h4><div style="display:flex;gap:8px;flex-wrap:wrap"><label for="smartAnswerFileInput" class="btn btn-warning" style="display:inline-block;width:auto;padding:8px 14px;font-size:13px;cursor:pointer;margin:0">📁 File</label><input type="file" id="smartAnswerFileInput" accept=".txt,.pdf" style="display:none" onchange="handleSmartAnswerFile(this)"><label for="smartAnswerImageInput" class="btn btn-warning" style="display:inline-block;width:auto;padding:8px 14px;font-size:13px;cursor:pointer;margin:0">🖼️ Ảnh</label><input type="file" id="smartAnswerImageInput" accept="image/*" style="display:none" onchange="handleSmartAnswerImage(this)"></div><div id="smartAnswerPreview" style="margin-top:10px;font-size:12px;color:#0f5132;background:#d1e7dd;padding:8px;border-radius:6px;display:none"></div></div><div id="smartExamPreviewContainer" style="display:none"><div style="background:#d1e7dd;border-left:4px solid #198754;padding:10px;border-radius:8px;margin-bottom:12px;font-size:13px;color:#0f5132">✅ Đã phân tích! <span id="smartExamStats"></span></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><button class="btn" style="width:auto;background:#0d6efd;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('mc')">➕ MC</button><button class="btn" style="width:auto;background:#198754;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('tf')">➕ Đ/S</button><button class="btn" style="width:auto;background:#6f42c1;padding:8px 14px;font-size:13px" onclick="addSmartQuestion('sa')">➕ TLN</button><button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:13px" onclick="reparseSmartExam()">🔄 Lại</button></div><div id="smartQuestionsList" style="max-height:650px;overflow-y:auto;padding-right:6px"></div><button class="btn btn-success" style="margin-top:15px;padding:14px" onclick="promptSaveSmartExam()">💾 Lưu Đề</button><button class="btn btn-secondary" style="margin-top:8px;padding:10px" onclick="cancelSmartExam()">❌ Hủy</button></div></div>
 
-<div id="documentLibrary" class="card sub-module-box" style="display:none"><h3 style="color:#6f42c1;margin-bottom:10px">📚 Kho Tài Liệu</h3><hr style="margin:10px 0"><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:14px"><label>🔐 Mật khẩu:</label><input type="password" id="docLibraryPass" placeholder="..."></div><div class="doc-upload-zone"><div style="font-size:42px;margin-bottom:6px">📤</div><label for="docLibraryFileInput" class="btn btn-success" style="display:inline-block;width:auto;padding:10px 22px;font-size:14px;cursor:pointer;margin:0">Chọn File</label><input type="file" id="docLibraryFileInput" accept=".pdf,.txt,.doc,.docx,.ppt,.pptx,.xls,.xlsx,image/*" style="display:none" onchange="handleDocLibraryUpload(this)"><p style="font-size:12px;color:#856404;margin-top:10px">Tối đa 8MB/file</p></div><h4 style="margin-top:10px;margin-bottom:8px;font-size:14px;color:#1877f2">📋 DS Tài Liệu</h4><div id="docLibraryListContainer" style="min-height:80px"><p style="font-size:13px;color:#888;font-style:italic">Đang tải...</p></div></div>
+<div id="documentLibrary" class="card sub-module-box" style="display:none"><h3 style="color:#6f42c1;margin-bottom:10px">📚 Kho Tài Liệu <small style="font-size:11px;color:#a55eea">(beta test)</small></h3><hr style="margin:10px 0"><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:14px"><label>🔐 Mật khẩu:</label><input type="password" id="docLibraryPass" placeholder="..."></div><div class="doc-upload-zone"><div style="font-size:42px;margin-bottom:6px">📤</div><label for="docLibraryFileInput" class="btn btn-success" style="display:inline-block;width:auto;padding:10px 22px;font-size:14px;cursor:pointer;margin:0">Chọn File</label><input type="file" id="docLibraryFileInput" accept=".pdf,.txt,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.glb,.gltf,.obj,.fbx,.vrm,.gif,image/*" style="display:none" onchange="handleDocLibraryUpload(this)"><p style="font-size:12px;color:#856404;margin-top:10px">Tối đa 8MB/file</p></div><h4 style="margin-top:10px;margin-bottom:8px;font-size:14px;color:#1877f2">📋 DS Tài Liệu</h4><div id="docLibraryListContainer" style="min-height:80px"><p style="font-size:13px;color:#888;font-style:italic">Đang tải...</p></div></div>
 
 <!-- ==================== AI EXAM CREATE ==================== -->
 <div id="aiExamCreate" class="card sub-module-box" style="display:none">
@@ -3060,7 +3060,7 @@ const AI_PROVIDERS={
   google:{
     name:'Google AI Studio',
     endpoint:'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-    models:['gemini-3.6-flash','gemini-3.5-flash','gemini-3.1-flash','gemini-3.1-pro','gemini-3.0-flash','gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-1.5-flash','gemini-1.5-pro'],
+    models:['gemini-3.6-flash','gemini-3.5-flash','gemini-3.1-','gemini-3.1-flash','gemini-3.1-pro','gemini-3.0-flash','gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-1.5-flash','gemini-1.5-pro'],
     defaultModel:'gemini-2.0-flash',
     info:'🔵 Google AI Studio (Gemini). Bao gồm các model mới: gemini-3.6-flash, gemini-3.5-flash, gemini-3.1-flash. Hệ thống đã cài API key mặc định — dùng được ngay.'
   },
@@ -8231,6 +8231,170 @@ window.addEventListener('DOMContentLoaded',()=>{
 /* INIT QUESTIONS */
 addQuestionV2('mc');addQuestionV2('tf');
 initEcCreatePanel();
+
+
+/* AURORA PATCH PACK 2026-10 — additive compatibility and reliability fixes */
+(function(){
+  'use strict';
+  const AURORA_RESOURCE_LINKS = [
+    {name:'VietJack',url:'https://vietjack.com/',desc:'Bài học, lời giải và đề tham khảo'},
+    {name:'HocMai',url:'https://hocmai.vn/',desc:'Khóa học và tài liệu ôn tập'},
+    {name:'Lời Giải Hay',url:'https://loigiaihay.com/',desc:'Lời giải tham khảo theo môn/lớp'},
+    {name:'VnDoc',url:'https://vndoc.com/',desc:'Tài liệu học tập và đề ôn luyện'},
+    {name:'Thư viện học liệu số',url:'https://igiaoduc.vn/',desc:'Học liệu giáo dục số'}
+  ];
+  window.AURORA_RESOURCE_LINKS=AURORA_RESOURCE_LINKS;
+  function safeToast(msg,type){try{if(typeof showToast==='function')showToast(msg,type||'info');else console.info(msg);}catch(e){console.info(msg);}}
+
+  // The landing page is public; protected activities still ask for an account.
+  function showAuthGate(message){
+    const overlay=document.getElementById('authOverlay');
+    if(overlay){overlay.style.display='flex';overlay.dataset.gateMessage=message||'Đăng nhập để sử dụng chức năng này.';}
+    safeToast(message||'Vui lòng đăng nhập hoặc đăng ký để tiếp tục.','warn');
+    return false;
+  }
+  function isLoggedIn(){return !!(window.currentUser || (typeof currentUser!=='undefined'&&currentUser));}
+  function isProtectedView(id){return /^(studentLoginView|teacherView|advancedModelView|studentExamView|studentResultView|qpWaitingRoomView|studentWaitingRoomView|qpPracticingView|qpResultView|supremeView)$/.test(id||'');}
+  const _switchView=window.switchView;
+  if(typeof _switchView==='function'){
+    window.switchView=function(viewId,btn){
+      if(isProtectedView(viewId)&&!isLoggedIn())return showAuthGate('Đăng nhập hoặc đăng ký để làm bài, tạo đề và sử dụng chức năng này.');
+      return _switchView.apply(this,arguments);
+    };
+  }
+  // Any write/action control is gated when unauthenticated; browsing the landing page remains public.
+  document.addEventListener('click',function(ev){
+    if(isLoggedIn())return;
+    const el=ev.target&&ev.target.closest('button,a,[role="button"],input[type="file"]');if(!el)return;
+    const action=((el.getAttribute('onclick')||'')+' '+(el.id||'')+' '+(el.textContent||'')).toLowerCase();
+    const requiresAuth=/(createai|generateai|saveai|handle.*upload|upload|download|delete.*doc|switchsubmodule|studentloginview|teacherView|advancedmodelview|openprofile|saveprofile|createexam|createexam|generateexam|documentlibrary|select.*model|equip.*model|webcam|chat)/i.test(action);
+    if(requiresAuth){ev.preventDefault();ev.stopPropagation();if(typeof ev.stopImmediatePropagation==='function')ev.stopImmediatePropagation();showAuthGate('Đăng nhập hoặc đăng ký để thực hiện thao tác này.');}
+  },true);
+  document.addEventListener('DOMContentLoaded',function(){
+    const overlay=document.getElementById('authOverlay');
+    if(overlay&&!isLoggedIn())overlay.style.display='none';
+    const docTitle=document.querySelector('#documentLibrary h3');
+    if(docTitle&&!docTitle.textContent.includes('beta test'))docTitle.innerHTML='📚 Kho Tài Liệu <small style="font-size:11px;color:#a55eea;font-weight:700">(beta test)</small>';
+    const fileInput=document.getElementById('docLibraryFileInput');
+    if(fileInput)fileInput.accept='.pdf,.txt,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.glb,.gltf,.obj,.fbx,.vrm,.gif,image/gif,image/*,model/gltf-binary,model/gltf+json';
+    const docContainer=document.getElementById('docLibraryListContainer');
+    if(docContainer){
+      const links=document.createElement('section');links.id='auroraExternalLearningSources';
+      links.style.cssText='margin-top:16px;padding:12px;border:1px solid #e4d7ff;border-radius:12px;background:rgba(165,94,234,.06)';
+      links.innerHTML='<h4 style="margin-bottom:8px;color:#6f42c1">🌐 Nguồn tài liệu tham khảo (có ghi nguồn/cre)</h4><p style="font-size:12px;color:#777;margin-bottom:10px">Mở nguồn gốc để xem hoặc tải tài liệu theo điều kiện của từng trang. Aurora không sao chép/tái phân phối tài liệu có bản quyền.</p>'+AURORA_RESOURCE_LINKS.map(x=>'<div style="padding:7px 0;border-top:1px solid rgba(165,94,234,.15)"><a href="'+x.url+'" target="_blank" rel="noopener noreferrer" style="font-weight:700;color:#6f42c1">'+x.name+'</a><div style="font-size:12px;color:#777">'+x.desc+' · <b>cre: '+x.name+'</b></div></div>').join('');
+      docContainer.appendChild(links);
+    }
+    // Default 3D model entry, served from the Model Viewer public sample asset.
+    addAruModelCard();
+  });
+  function addAruModelCard(){
+    if(document.getElementById('aruDefaultModelCard'))return;
+    const target=document.getElementById('advancedModelView')||document.getElementById('modelView');
+    if(!target)return;
+    if(!document.querySelector('script[data-aurora-model-viewer]')){const sc=document.createElement('script');sc.type='module';sc.dataset.auroraModelViewer='1';sc.src='https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';document.head.appendChild(sc);}
+    const card=document.createElement('div');card.id='aruDefaultModelCard';card.className='card';card.innerHTML='<h3>🪐 Model gốc mặc định — Aru</h3><p style="font-size:12px;color:#777;margin:6px 0 10px">Mô hình 3D mẫu để kiểm tra tải GLB/glTF. Tệp mẫu do Google Model Viewer cung cấp; cần kết nối mạng để tải.</p><model-viewer src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" alt="Aru - mô hình 3D mặc định" auto-rotate camera-controls shadow-intensity="1" style="width:100%;height:320px;background:linear-gradient(135deg,#10172a,#293b5f);border-radius:14px" loading="lazy"></model-viewer><div style="font-weight:800;margin-top:8px">Aru <small style="font-weight:400;color:#888">· model 3D</small></div><a href="https://modelviewer.dev/shared-assets/models/Astronaut.glb" target="_blank" rel="noopener noreferrer">Mở/tải tệp GLB mẫu</a>';
+    target.prepend(card);
+  }
+
+  // Reliable Gemini REST fallback. A key must be supplied by the owner; never expose a fake key.
+  async function callGeminiRest(cfg,messages){
+    const key=(cfg.apiKey||'').trim();if(!key)throw new Error('Chưa có Gemini API key. Hãy tạo key miễn phí tại Google AI Studio rồi dán vào cấu hình.');
+    const model=(cfg.model||'gemini-2.5-flash').trim();
+    const system=messages.find(m=>m.role==='system')?.content||'';
+    const contents=messages.filter(m=>m.role!=='system').map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:String(m.content||'')}]}));
+    const endpoint='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent?key='+encodeURIComponent(key);
+    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:system?{parts:[{text:system}]}:undefined,contents,generationConfig:{temperature:Number(cfg.temperature)||0.8,maxOutputTokens:Number(cfg.maxTokens)||800}})});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok)throw new Error((data.error&&data.error.message)||('Gemini HTTP '+res.status));
+    const text=(data.candidates||[]).flatMap(c=>c.content?.parts||[]).map(p=>p.text||'').join('\n').trim();
+    if(!text)throw new Error('Gemini không trả về nội dung. Kiểm tra tên model/API key/quota.');return text;
+  }
+  window.auroraCallGeminiRest=callGeminiRest;
+  const _getAiReplyWithContext=window.getAiReplyWithContext;
+  window.getAiReplyWithContext=async function(text,screenCtx){
+    const cfg=(typeof cachedAiConfig!=='undefined'&&cachedAiConfig)||null;
+    if(cfg&&cfg.enabled&&cfg.apiKey&&((cfg.provider||'').toLowerCase()==='google'||/generativelanguage\.googleapis\.com/i.test(cfg.endpoint||''))){
+      const name=(typeof currentEquippedAiModel!=='undefined'&&currentEquippedAiModel?.modelData?.name)||'Aru';
+      let system=cfg.systemPrompt||('Bạn là '+name+', trợ lý AI thân thiện. Trả lời bằng tiếng Việt khi phù hợp.');
+      if(screenCtx)system+='\nNội dung màn hình tham khảo:\n'+screenCtx;
+      const messages=[{role:'system',content:system},...((typeof aiChatHistory!=='undefined'?aiChatHistory:[]).slice(-8).map(m=>({role:m.role==='ai'?'assistant':m.role,content:m.text}))),{role:'user',content:text}];
+      try{return await callGeminiRest(cfg,messages);}catch(err){console.error('Gemini REST error:',err);safeToast('Gemini chưa hoạt động: '+(err.message||err),'error');return 'Mình chưa gọi được Gemini. '+(err.message||'Hãy kiểm tra API key, tên model và hạn mức miễn phí.')+'\nBạn vẫn có thể dùng câu trả lời dự phòng khi offline.';}
+    }
+    return typeof _getAiReplyWithContext==='function'?_getAiReplyWithContext.apply(this,arguments):'AI chưa được cấu hình.';
+  };
+  const _testAiSetupConfig=window.testAiSetupConfig;
+  window.testAiSetupConfig=async function(){
+    const provider=document.getElementById('aiSetupProvider')?.value||'';
+    if(provider==='google'){
+      const cfg={provider:'google',apiKey:document.getElementById('aiSetupApiKey')?.value.trim(),model:(typeof getCurrentAiModelName==='function'&&getCurrentAiModelName())||'gemini-2.5-flash',temperature:.4,maxTokens:100};
+      try{safeToast('Đang kiểm tra Gemini API...','info');const result=await callGeminiRest(cfg,[{role:'user',content:'Trả lời đúng một câu ngắn: Gemini API đang hoạt động.'}]);safeToast('✅ Gemini API hoạt động: '+result.slice(0,140),'success');}catch(e){safeToast('❌ Gemini: '+(e.message||e),'error');}return;
+    }
+    if(typeof _testAiSetupConfig==='function')return _testAiSetupConfig.apply(this,arguments);
+  };
+
+  // Keep the full animation visible immediately on opening a profile; cycle only after cooldown.
+  const _openProfile=window.openProfile;
+  if(typeof _openProfile==='function')window.openProfile=async function(){
+    const result=await _openProfile.apply(this,arguments);
+    try{
+      const modal=document.getElementById('profileModal');
+      if(modal&&modal.classList.contains('show')&&typeof currentViewingUser!=='undefined'&&currentViewingUser){
+        const role=typeof getCurrentEffectRole==='function'?getCurrentEffectRole(currentViewingUser):null;
+        if(role&&typeof isBaseRole==='function'&&!isBaseRole(role)){
+          if(typeof stopProfileEffect==='function')stopProfileEffect();if(typeof stopAvatarEffect==='function')stopAvatarEffect();
+          requestAnimationFrame(()=>{try{playProfileEffect(role);startAvatarEffect(role);}catch(e){console.warn('Profile role effect:',e);}});
+        }
+        addProfileBotPreview(currentViewingUser);
+      }
+    }catch(e){console.warn(e)}
+    return result;
+  };
+  function addProfileBotPreview(user){
+    const modal=document.querySelector('#profileModal .profile-body');if(!modal||!user)return;
+    let box=document.getElementById('profileVisitorBotPreview');if(!box){box=document.createElement('div');box.id='profileVisitorBotPreview';box.style.cssText='display:none;margin:12px 0 0 auto;width:160px;max-width:45%;padding:8px;border:1px solid rgba(24,119,242,.25);border-radius:12px;background:rgba(24,119,242,.06);text-align:center;font-size:11px;position:relative;z-index:20';modal.appendChild(box);}
+    const modelId=user.equippedAiModel,model=(typeof cachedAiModels!=='undefined'&&modelId&&cachedAiModels[modelId])||null;
+    if(model){const owner=escapeHtml(user.nickname||user.username||'chủ nhân');const modelName=escapeHtml(model.name||'Aru');const lines=['Chủ nhân tôi '+owner+' đỉnh lắm đó! ✨','Tôi được '+owner+' trang bị nè 🤖','Bạn thấy tôi có ngầu không? 😎','Đừng quên ghé thăm '+owner+' nhé!'];box.innerHTML='<div style="font-size:28px;line-height:1.1">🤖</div><b>'+modelName+'</b><div style="color:#777;margin-top:3px">'+owner+'</div><div style="margin-top:5px;font-size:10px">'+lines[(String(user.username||'').length+new Date().getDate())%lines.length]+'</div>';box.style.display='block';box.title='Model chỉ hiển thị, không hỗ trợ chat trong profile';}
+    else box.style.display='none';
+  }
+
+  // Add cooldown field to profile role effect editor when available.
+  document.addEventListener('DOMContentLoaded',function(){
+    const modal=document.getElementById('roleEffectAdjustModal');if(!modal||document.getElementById('auroraFxCooldown'))return;
+    const form=modal.querySelector('.modal-box')||modal;const row=document.createElement('div');row.style.cssText='margin:10px 0;padding:10px;background:#f3f6ff;border-radius:8px';row.innerHTML='<label for="auroraFxCooldown">⏱️ Thời gian lặp hiệu ứng (cooldown, giây)</label><input id="auroraFxCooldown" type="number" min="1" max="600" value="10" style="width:100%;margin-top:6px"><small style="color:#777">Hiệu ứng xuất hiện ngay khi mở profile; cooldown chỉ điều khiển lần lặp tiếp theo.</small>';form.appendChild(row);
+  });
+
+  // GIF preview and 3D asset importer utility for model-creation forms.
+  window.auroraPreviewAssetFile=async function(input){
+    const file=input?.files?.[0];if(!file)return;const ext=(file.name.split('.').pop()||'').toLowerCase();
+    if(ext==='gif'||file.type==='image/gif'){const url=URL.createObjectURL(file);let box=document.getElementById('auroraAssetPreview');if(!box){box=document.createElement('div');box.id='auroraAssetPreview';box.style.cssText='position:fixed;right:16px;bottom:16px;z-index:999999;background:#fff;padding:10px;border-radius:12px;box-shadow:0 8px 30px #0004;max-width:260px';document.body.appendChild(box);}box.innerHTML='<b>GIF preview</b><br><img alt="GIF preview" style="max-width:230px;max-height:230px;display:block;margin-top:6px" src="'+url+'"><small>'+String(file.name).replace(/[<>]/g,'')+'</small>';return;}
+    if(['glb','gltf','obj','fbx','vrm'].includes(ext)){safeToast('Đã nhận dạng tệp model 3D .'+ext+'. GLB/glTF có thể xem trực tiếp; OBJ/FBX/VRM có thể cần chuyển đổi hoặc loader tương ứng.','info');return;}
+    safeToast('Định dạng: '+(file.type||ext),'info');
+  };
+  document.addEventListener('change',function(e){if(e.target&&e.target.matches('input[type=file]')){const f=e.target.files?.[0];if(f&&(/\.(gif|glb|gltf|obj|fbx|vrm)$/i).test(f.name))window.auroraPreviewAssetFile(e.target);}});
+
+  // Improve uploaded document display by safely previewing supported real files and preserving original bytes.
+  const _handleDocLibraryUpload=window.handleDocLibraryUpload;
+  window.handleDocLibraryUpload=async function(input){
+    const file=input?.files?.[0];if(!file)return;
+    if(/\.(glb|gltf|obj|fbx|vrm)$/i.test(file.name)){safeToast('Tệp model 3D được nhận diện. Kho tài liệu hiện lưu file đính kèm; xem 3D trực tiếp tối ưu nhất với GLB/glTF.','info');}
+    if(typeof _handleDocLibraryUpload==='function')return _handleDocLibraryUpload.apply(this,arguments);
+  };
+  window.viewDocByKey=async function(key){
+    try{const snap=await window.dbGet(window.dbChild(window.dbRef,'documents/'+key));if(!snap.exists()){safeToast('Không tìm thấy tài liệu.','error');return;}const d=snap.val()||{};const data=d.data||'';if(!data){safeToast('Tệp không có dữ liệu đính kèm.','error');return;}const ext=(d.name||'').split('.').pop().toLowerCase();
+      if(ext==='gif'||String(d.type).includes('image/')){const w=window.open('','_blank');if(w){w.document.write('<title>'+String(d.name||'Tài liệu').replace(/[<>]/g,'')+'</title><img style="max-width:100%;height:auto" src="'+data+'">');w.document.close();}else{const a=document.createElement('a');a.href=data;a.download=d.name||'image';a.click();}}
+      else if(ext==='pdf'||String(d.type).includes('pdf')){const w=window.open(data,'_blank','noopener');if(!w)safeToast('Trình duyệt chặn cửa sổ xem trước; hãy dùng nút tải.','warn');}
+      else if(['glb','gltf','obj','fbx','vrm'].includes(ext)){const w=window.open('','_blank');if(w){w.document.write('<!doctype html><meta charset="utf-8"><title>Model 3D</title><script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"><\/script><style>body{margin:0;background:#111;color:#fff;font:14px sans-serif}model-viewer{width:100vw;height:90vh}</style><p>'+String(d.name||'Model').replace(/[<>]/g,'')+'</p><model-viewer src="'+data+'" camera-controls auto-rotate></model-viewer>');w.document.close();}else safeToast('Trình duyệt chặn cửa sổ xem trước; hãy dùng nút tải.','warn');}
+      else {const w=window.open('','_blank');if(w){w.document.write('<pre style="white-space:pre-wrap;font:14px sans-serif">'+String(atob((data.split(',')[1]||''))).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</pre>');w.document.close();}else safeToast('Không mở được bản xem trước.','warn');}
+    }catch(e){safeToast('Lỗi xem tài liệu: '+(e.message||e),'error');}
+  };
+  const _renderDocLibraryList=window.renderDocLibraryList;
+  function ensureDocSourceLinks(){const c=document.getElementById('docLibraryListContainer');if(!c||document.getElementById('auroraExternalLearningSources'))return;const links=document.createElement('section');links.id='auroraExternalLearningSources';links.style.cssText='margin-top:16px;padding:12px;border:1px solid #e4d7ff;border-radius:12px;background:rgba(165,94,234,.06)';links.innerHTML='<h4 style="margin-bottom:8px;color:#6f42c1">🌐 Nguồn tài liệu tham khảo (có ghi nguồn/cre)</h4><p style="font-size:12px;color:#777;margin-bottom:10px">Mở nguồn gốc để xem hoặc tải tài liệu theo điều kiện của từng trang. Aurora không sao chép/tái phân phối tài liệu có bản quyền.</p>'+AURORA_RESOURCE_LINKS.map(x=>'<div style="padding:7px 0;border-top:1px solid rgba(165,94,234,.15)"><a href="'+x.url+'" target="_blank" rel="noopener noreferrer" style="font-weight:700;color:#6f42c1">'+x.name+'</a><div style="font-size:12px;color:#777">'+x.desc+' · <b>cre: '+x.name+'</b></div></div>').join('');c.appendChild(links);}
+  window.renderDocLibraryList=function(list){if(typeof _renderDocLibraryList==='function')_renderDocLibraryList(list);const c=document.getElementById('docLibraryListContainer');if(c){c.querySelectorAll('.doc-item').forEach(row=>{const btn=row.querySelector('.doc-actions button');if(!btn||row.querySelector('.aurora-doc-view'))return;const match=(btn.getAttribute('onclick')||'').match(/downloadDocByKey\('([^']+)'\)/);if(!match)return;const v=document.createElement('button');v.className='aurora-doc-view';v.textContent='👁️';v.title='Xem tài liệu';v.style.background='#1877f2';v.onclick=()=>window.viewDocByKey(match[1]);row.querySelector('.doc-actions').prepend(v);});ensureDocSourceLinks();}};
+
+  // Preserve the rest of the app and do not claim to provide copyrighted files; links open source websites.
+})();
+
 </script>
 </body>
 </html>
+
