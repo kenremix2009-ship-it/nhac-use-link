@@ -1094,7 +1094,28 @@ input,select,textarea{font-size:13px;padding:9px}
 .doc-card-actions button{border:none;padding:5px 9px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;color:#fff}
 .student-actions-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .student-actions-row button{flex:1;min-width:140px;padding:12px;font-size:14px;font-weight:bold}
+
+/* Aurora generic 3D model support: VRM / GLB preview and display */
+.aurora-model-format-note{margin:8px 0 12px;padding:10px 12px;border:1px solid #b6d7f5;border-radius:9px;background:#f3f9ff;color:#234b70;font-size:12px;line-height:1.6}
+.aurora-vrm-preview{display:none;position:relative;width:100%;height:280px;min-height:180px;margin:10px 0;border:1px solid #dbe5f0;border-radius:12px;overflow:hidden;background:radial-gradient(circle at 50% 25%,#eef6ff,#e7ecf5 75%)}
+.aurora-vrm-preview.active{display:block}
+.aurora-vrm-preview canvas,.aurora-vrm-canvas{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain}
+.aurora-vrm-status{position:absolute;left:8px;right:8px;bottom:8px;padding:6px 9px;background:#ffffffdc;color:#344054;border-radius:8px;font-size:11px;line-height:1.4;pointer-events:none}
+#aiModelContent .aurora-vrm-preview{height:100%;min-height:230px;margin:0;border:0;border-radius:0;background:transparent}
+#aiModelContent .aurora-vrm-status{bottom:4px;font-size:10px}
+.profile-mini-bot .mini-bot-vrm{width:56px;height:56px;overflow:hidden;border-radius:14px;background:linear-gradient(135deg,#e7f3ff,#d0e8ff);border:2px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none}
+.profile-mini-bot .mini-bot-vrm canvas{width:100%;height:100%;display:block;pointer-events:none}
+
 </style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+    "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3.5.5/lib/three-vrm.module.min.js"
+  }
+}
+</script>
 </head><body>
 
 <div id="customAlertOverlay"><div class="custom-alert-box" id="customAlertBox"><span class="ca-icon" id="caIcon">ℹ️</span><div class="ca-title" id="caTitle">Thông báo</div><div class="ca-msg" id="caMsg"></div><input type="text" class="ca-input" id="caInput" style="display:none"><div class="ca-actions" id="caActions"><button class="ca-btn-cancel" id="caCancelBtn" onclick="closeCustomAlert(false)">Hủy</button><button class="ca-btn-ok" id="caOkBtn" onclick="closeCustomAlert(true)">OK</button></div></div></div>
@@ -2392,7 +2413,9 @@ input,select,textarea{font-size:13px;padding:9px}
   <input type="file" id="aiNewModelMainImage" accept="image/*" style="padding:6px;background:#fff;border-radius:8px" onchange="previewMainImage(this)">
   <img id="aiNewModelMainImagePreview" class="ai-model-main-image" alt="">
   <label>📁 File model (có thể chọn nhiều file — textures, motion, v.v...):</label>
-  <input type="file" id="aiNewModelFiles" multiple accept="*/*" style="padding:6px;background:#fff;border-radius:8px">
+  <input type="file" id="aiNewModelFiles" multiple accept=".vrm,.glb,.gltf,.blend,.zip,.fbx,.obj,.pmx,.pmd,.moc3,.json,.psd,*/*" style="padding:6px;background:#fff;border-radius:8px" onchange="previewAiModelFileSelection(this)">
+  <div class="aurora-model-format-note">Hỗ trợ tải lên <b>.vrm</b> và <b>.glb</b> để dựng model 3D trong khung AI; tự động nháy mắt và mô phỏng miệng khi webcam cung cấp dữ liệu. Có thể tải <b>.zip</b> chứa file <b>.blend</b> cùng texture như gói model Blender đã gửi. Lưu ý: trình duyệt không dựng trực tiếp file <b>.blend</b>; cần xuất sang GLB/VRM trong Blender để xem 3D.</div>
+  <div id="aiNewModelVrmPreview" class="aurora-vrm-preview"><div id="aiNewModelVrmPreviewCanvas" style="width:100%;height:100%"></div><div id="aiNewModelVrmPreviewStatus" class="aurora-vrm-status">Chọn file VRM/GLB để xem trước.</div></div>
   <label>💬 Câu chào (mặc định):</label>
   <input type="text" id="aiNewModelGreeting" placeholder="Xin chào! Mình là Auro, rất vui được gặp bạn 👋">
   <label>😊 Câu khi điểm cao (≥8):</label>
@@ -2412,8 +2435,8 @@ input,select,textarea{font-size:13px;padding:9px}
   <div id="aiModelZipDropZone">
     <div style="font-size:52px;margin-bottom:8px;filter:drop-shadow(0 4px 10px rgba(24,119,242,.3))">📦</div>
     <div style="font-weight:900;color:#1877f2;font-size:15px;margin-bottom:6px">📥 Kéo & Thả file ZIP / ẢNH / MODEL 3D vào đây (hoặc bấm để chọn)</div>
-    <div style="font-size:12px;color:#666;line-height:1.6;max-width:520px;margin:0 auto">Hệ thống sẽ <b>tự động giải nén và phân tích</b> tất cả file bên trong (ảnh, model, textures, motion, video,...) để tạo thành 1 model AI hoàn chỉnh. Hỗ trợ <b>.zip, .vrm, .fbx, .obj, .pmx, .pmd, .png, .gif, .jpg</b> — không giới hạn dung lượng.</div>
-    <input type="file" id="aiModelZipInput" accept=".zip,.vrm,.fbx,.obj,.pmx,.pmd,image/*,application/zip,application/x-zip-compressed" multiple style="display:none" onchange="handleAiModelZipUpload(this)">
+    <div style="font-size:12px;color:#666;line-height:1.6;max-width:520px;margin:0 auto">Hệ thống sẽ <b>tự động giải nén và phân tích</b> tất cả file bên trong (ảnh, model, textures, motion, video,...) để tạo thành 1 model AI hoàn chỉnh. Hỗ trợ <b>.zip, .vrm, .glb, .gltf, .blend, .fbx, .obj, .pmx, .pmd, .png, .gif, .jpg</b>. ZIP có thể chứa model Blender và texture; file .blend cần xuất GLB/VRM để dựng trực tiếp trong trình duyệt. Dung lượng thực tế phụ thuộc Firebase/storage.</div>
+    <input type="file" id="aiModelZipInput" accept=".zip,.vrm,.glb,.gltf,.blend,.fbx,.obj,.pmx,.pmd,image/*,application/zip,application/x-zip-compressed" multiple style="display:none" onchange="handleAiModelZipUpload(this)">
     <div id="aiZipProgress" class="ai-zip-progress">
       <div id="aiZipProgressText">⏳ Đang xử lý...</div>
       <div class="ai-zip-bar"><div class="ai-zip-bar-fill" id="aiZipBarFill"></div></div>
@@ -4360,15 +4383,32 @@ function showOtherUserMiniBot(u){
   const el=document.createElement('div');
   el.className='profile-mini-bot';
   el.id='profileOtherMiniBot';
-  const imgSrc=md.imageData||(md.files&&md.files.find(f=>f.type&&f.type.startsWith('image/')&&f.data)||{}).data||'';
+  const modelFiles=Array.isArray(md.files)?md.files:[];
+  const profile3DFile=modelFiles.find(f=>/\.(vrm|glb)$/i.test((f.name||f.originalPath||''))||['vrm','glb'].includes((f.modelFormat||'').toLowerCase()));
+  const imgSrc=md.imageData||(modelFiles.find(f=>f.type&&f.type.startsWith('image/')&&f.data)||{}).data||'';
   const name=md.name||'AI';
   const ownerName=u.nickname||u.username||'bạn ấy';
-  if(imgSrc){
+  const profileSlot='profile-mini-vrm-'+String(u.username||equipped).replace(/[^a-zA-Z0-9_-]/g,'_');
+  el.dataset.vrmSlot=profileSlot;
+  if(profile3DFile){
+    el.innerHTML=`<div class="mini-bot-vrm" id="profileMiniVrmCanvas" aria-label="Model 3D ${escapeHtml(name)}"></div><div class="mini-bot-name">${escapeHtml(name)}</div><div class="mini-bot-bubble" id="miniBotBubble"></div>`;
+  }else if(imgSrc){
     el.innerHTML=`<img src="${imgSrc}" alt="${escapeHtml(name)}" class="mini-bot-avatar"/><div class="mini-bot-name">${escapeHtml(name)}</div><div class="mini-bot-bubble" id="miniBotBubble"></div>`;
   }else{
     el.innerHTML=`<div class="mini-bot-avatar" style="display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(135deg,#a8d8ff,#6eb6ff)">🤖</div><div class="mini-bot-name">${escapeHtml(name)}</div><div class="mini-bot-bubble" id="miniBotBubble"></div>`;
   }
   box.appendChild(el);
+  if(profile3DFile){
+    (async()=>{
+      try{
+        const buffer=await readAiModelFileArrayBuffer(equipped,profile3DFile);
+        if(!document.getElementById('profileOtherMiniBot'))return;
+        let viewer=window.AuroraVRMViewer;if(!viewer&&window.AuroraVRMViewerReady)viewer=await window.AuroraVRMViewerReady;
+        if(!viewer)throw new Error('VRM viewer chưa sẵn sàng');
+        const host=document.getElementById('profileMiniVrmCanvas');if(host)await viewer.mount(host,buffer,{slot:profileSlot,fullBody:false});
+      }catch(error){const host=document.getElementById('profileMiniVrmCanvas');if(host)host.textContent='3D';console.warn('Không thể dựng VRM trong profile:',error);}
+    })();
+  }
   // Câu thú vị xoay quanh chủ nhân — không chat
   const lines=[
     `Chủ nhân ${ownerName} học giỏi lắm đó~ ✨`,
@@ -4398,6 +4438,7 @@ function removeOtherUserMiniBot(){
   const el=document.getElementById('profileOtherMiniBot');
   if(el){
     if(el._miniBotTimer)clearInterval(el._miniBotTimer);
+    if(el.dataset&&el.dataset.vrmSlot&&window.AuroraVRMViewer&&window.AuroraVRMViewer.stop)window.AuroraVRMViewer.stop(el.dataset.vrmSlot);
     el.remove();
   }
 }
@@ -6232,26 +6273,51 @@ function hideAiWidget(){
   const body=document.getElementById('aiModelBody');
   if(body){body.onpointerdown=null;body.onpointermove=null;body.onpointerup=null;body.onpointercancel=null;}
 }
+let auroraAiWidgetVrmRequest=0;
 async function updateAiWidgetContent(){
   const content=document.getElementById('aiModelContent');
   const badge=document.getElementById('aiModelBadge');
   const frameLayer=document.getElementById('aiModelFrameLayer');
   if(!content)return;
   if(!currentEquippedAiModel||!currentEquippedAiModel.modelData){content.innerHTML='<div class="ai-model-emoji">🤖</div>';if(badge)badge.innerText='Auro';return;}
+  const equippedId=currentEquippedAiModel.modelId;
   const md=currentEquippedAiModel.modelData;
-  if(badge)badge.innerText=md.name||'Auro';
-  const chatName=document.getElementById('aiChatName');if(chatName)chatName.innerText=md.name||'Auro';
+  const request=++auroraAiWidgetVrmRequest;
+  if(badge)badge.innerText=md.name||'AI';
+  const chatName=document.getElementById('aiChatName');if(chatName)chatName.innerText=md.name||'AI';
   let imgData=md.imageData||'';
   if(!imgData&&md.files&&md.files.length){
-    const imgFile=md.files.find(f=>f.type&&f.type.startsWith('image/'));
-    if(imgFile)imgData=imgFile.data||imgFile.chunk||'';
+    const imgFile=md.files.find(f=>f.type&&f.type.startsWith('image/')&&f.data);
+    if(imgFile)imgData=imgFile.data||'';
   }
-  // Biểu cảm — có thể thay bằng webcam
-  if(imgData){
+  const modelFiles=Array.isArray(md.files)?md.files:[];
+  const native3d=modelFiles.find(f=>/\.(vrm|glb)$/i.test((f.name||f.originalPath||'')) || ['vrm','glb'].includes((f.modelFormat||'').toLowerCase()));
+  const blenderSource=modelFiles.some(f=>/\.blend$/i.test((f.name||f.originalPath||'')) || (f.modelFormat||'').toLowerCase()==='blend');
+  if(native3d){
+    content.innerHTML='<div id="aiWidgetVrmViewport" class="aurora-vrm-preview active"><div id="aiWidgetVrmCanvas" style="width:100%;height:100%"></div><div id="aiWidgetVrmStatus" class="aurora-vrm-status">⏳ Đang tải model 3D...</div></div>';
+    try{
+      const buffer=await readAiModelFileArrayBuffer(equippedId,native3d);
+      if(request!==auroraAiWidgetVrmRequest||!currentEquippedAiModel||currentEquippedAiModel.modelId!==equippedId)return;
+      let viewer=window.AuroraVRMViewer;if(!viewer&&window.AuroraVRMViewerReady)viewer=await window.AuroraVRMViewerReady;
+      if(!viewer)throw new Error('VRM viewer chưa tải được. Hãy kiểm tra mạng/CDN.');
+      const canvasHost=document.getElementById('aiWidgetVrmCanvas');
+      if(!canvasHost)return;
+      await viewer.mount(canvasHost,buffer,{slot:'ai-widget',fullBody:true});
+      const st=document.getElementById('aiWidgetVrmStatus');if(st)st.textContent='3D · '+(native3d.name||'model.vrm');
+    }catch(error){
+      if(request===auroraAiWidgetVrmRequest){const el=document.getElementById('aiModelContent');if(el)el.innerHTML='<div style="padding:12px;text-align:center;font-size:12px;color:#9a3412;background:#fff7ed;border-radius:10px">Không render được model 3D: '+(typeof escapeHtml==='function'?escapeHtml(error.message||String(error)):(error.message||String(error)))+'</div>';}
+    }
+  }else if(imgData){
     const transform=`scale(${1+(aiWebcamMouthOpenness*0.06)}) translateY(${-aiWebcamMouthOpenness*3}px) rotate(${aiWebcamHeadTilt*0.15}deg)`;
     content.innerHTML=`<img src="${imgData}" alt="" style="transform:${transform};transition:transform .1s">`;
+    if(window.AuroraVRMViewer&&window.AuroraVRMViewer.stop)window.AuroraVRMViewer.stop('ai-widget');
+  }else if(blenderSource){
+    content.innerHTML='<div style="padding:12px;text-align:center;font-size:12px;line-height:1.55;color:#475467;background:#f8fafc;border-radius:10px">📦 Đã lưu model nguồn Blender (.blend). Để dựng nhân vật 3D tại đây, hãy xuất model sang .glb hoặc .vrm rồi tải lại.</div>';
+    if(window.AuroraVRMViewer&&window.AuroraVRMViewer.stop)window.AuroraVRMViewer.stop('ai-widget');
+  }else{
+    content.innerHTML='<div class="ai-model-emoji">🤖</div>';
+    if(window.AuroraVRMViewer&&window.AuroraVRMViewer.stop)window.AuroraVRMViewer.stop('ai-widget');
   }
-  else{content.innerHTML=`<div class="ai-model-emoji">🤖</div>`;}
   if(frameLayer){
     if(currentAiModelFrame){
       frameLayer.style.backgroundImage=`url('${currentAiModelFrame}')`;
@@ -7673,6 +7739,11 @@ async function createAiModel(){
   const hasFiles=filesInput.files&&filesInput.files.length;
   const hasMainImage=mainImageInput.files&&mainImageInput.files.length;
   if(!hasFiles&&!hasMainImage){showToast('❌ Chọn ít nhất 1 file (hoặc ảnh chính)!','error');return;}
+  const selectedForCreate=Array.from(filesInput.files||[]);
+  if(selectedForCreate.length===1 && /\.zip$/i.test(selectedForCreate[0].name||'') && !hasMainImage){
+    try{await processModelZipFileV2(selectedForCreate[0]);filesInput.value='';}catch(e){showToast('Không thể nhập ZIP: '+(e.message||e),'error');}
+    return;
+  }
   const greeting=document.getElementById('aiNewModelGreeting').value.trim();
   const happyMsg=document.getElementById('aiNewModelHappy').value.trim();
   const sadMsg=document.getElementById('aiNewModelSad').value.trim();
@@ -7696,7 +7767,7 @@ async function createAiModel(){
       prog.innerText=`⏳ Đang xử lý file ${i+1}/${fileArr.length}: ${f.name} (${formatBytes(f.size)})...`;
       totalSize+=f.size;
       const b64=await fileToBase64(f);
-      const fileMeta={name:f.name,type:f.type||'application/octet-stream',size:f.size};
+      const fileMeta={name:f.name,type:f.type||guessMimeFromName(f.name),size:f.size,modelFormat:inferModelFormat(f.name)};
       if(f.type.startsWith('image/')&&!firstImageDataUrl){
         if(f.size<3*1024*1024){firstImageDataUrl=b64;fileMeta.data=b64;}
       }
@@ -7707,6 +7778,7 @@ async function createAiModel(){
         const dataOnly=p[1];
         const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
         const safeName=sanitizeFirebaseKey(fileMeta.name);
+        fileMeta.storageKey=safeName;
         for(let c=0;c<chunkCount;c++){
           const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);
           await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);
@@ -7787,7 +7859,7 @@ async function createModelFromFilesAuto(imageFiles,modelFiles){
       if(zipText)zipText.innerText=`📦 Đang xử lý ${processed+1}/${total}: ${f.name}`;
       totalSize+=f.size;
       const b64=await fileToBase64(f);
-      const fileMeta={name:f.name,type:f.type||guessMimeFromName(f.name),size:f.size};
+      const fileMeta={name:f.name,type:f.type||guessMimeFromName(f.name),size:f.size,modelFormat:inferModelFormat(f.name)};
       if(f.type.startsWith('image/')&&!firstImageDataUrl){firstImageDataUrl=b64;}
       if(f.size>2*1024*1024){
         fileMeta.chunked=true;
@@ -7795,6 +7867,7 @@ async function createModelFromFilesAuto(imageFiles,modelFiles){
         const dataOnly=p[1];
         const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
         const safeName=sanitizeFirebaseKey(f.name);
+        fileMeta.storageKey=safeName;
         for(let c=0;c<chunkCount;c++){
           const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);
           await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);
@@ -7826,6 +7899,7 @@ async function createModelFromFilesAuto(imageFiles,modelFiles){
       fileType:'ai-model-files',
       chunks:0,chunkData:null,
       sourceFiles:allFiles.map(f=>f.name),
+      modelFormats:[...new Set(allFiles.map(f=>inferModelFormat(f.name)).filter(Boolean))],
       createdBy:currentUser?currentUser.username:'admin',
       createdAt:Date.now(),
       totalSize
@@ -7890,15 +7964,17 @@ async function processModelZipFileV2(file){
       try{
         const blob=await entry.async('blob');
         totalSize+=blob.size;
-        const entryFileName=(entry.name.split('/').pop()||entry.name).replace(/[^a-zA-Z0-9_.\-]/g,'_');
+        const originalPath=String(entry.name||'').replace(/\\/g,'/').replace(/^\/+/, '');
+        const entryFileName=(originalPath.split('/').pop()||originalPath).replace(/[^a-zA-Z0-9_.\-]/g,'_');
         const mime=guessMimeFromName(entryFileName);
-        const fileMeta={name:entryFileName,type:mime,size:blob.size,originalPath:entry.name};
+        const storageKey=sanitizeFirebaseKey(originalPath||entryFileName);
+        const fileMeta={name:entryFileName,type:mime,size:blob.size,originalPath,storageKey,modelFormat:inferModelFormat(entryFileName)};
         const b64=await fileToBase64(new File([blob],entryFileName,{type:mime}));
         const p=b64.split(',');
         const dataOnly=p[1];
         if(blob.size>2*1024*1024||mime.startsWith('image/')){
           const chunkCount=Math.ceil(dataOnly.length/AI_MODEL_CHUNK_SIZE);
-          const safeName=sanitizeFirebaseKey(entryFileName);
+          const safeName=storageKey;
           for(let c=0;c<chunkCount;c++){
             const chunk=dataOnly.slice(c*AI_MODEL_CHUNK_SIZE,(c+1)*AI_MODEL_CHUNK_SIZE);
             await window.dbSet(window.ref(window.db,`system/ai_model_chunks/${modelId}/${safeName}/${c}`),chunk);
@@ -7959,6 +8035,66 @@ async function processModelZipFileV2(file){
     setTimeout(()=>zipProgress.classList.remove('show'),4000);
   }
 }
+function inferModelFormat(name){
+  const n=String(name||'').toLowerCase().split('/').pop();
+  if(n.endsWith('.vrm'))return 'vrm';
+  if(n.endsWith('.glb'))return 'glb';
+  if(n.endsWith('.gltf'))return 'gltf';
+  if(n.endsWith('.blend'))return 'blend';
+  if(n.endsWith('.zip'))return 'zip';
+  if(n.endsWith('.fbx'))return 'fbx';
+  if(n.endsWith('.obj'))return 'obj';
+  if(n.endsWith('.pmx'))return 'pmx';
+  if(n.endsWith('.pmd'))return 'pmd';
+  if(n.endsWith('.moc3')||n.endsWith('.model3.json'))return 'live2d';
+  return '';
+}
+async function readAiModelFileArrayBuffer(modelId,fileMeta){
+  if(!fileMeta)throw new Error('Không có metadata file model.');
+  const data=typeof fileMeta.data==='string'?fileMeta.data:'';
+  if(data){
+    if(/^data:/i.test(data)){const response=await fetch(data);if(!response.ok)throw new Error('Không đọc được dữ liệu model.');return await response.arrayBuffer();}
+    const raw=atob(data);const bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);return bytes.buffer;
+  }
+  if(!fileMeta.chunked)throw new Error('File model không có dữ liệu hoặc chunk.');
+  if(!window.dbGet||!window.dbChild||!window.dbRef)throw new Error('Firebase chưa sẵn sàng để đọc file model.');
+  const key=fileMeta.storageKey||sanitizeFirebaseKey(fileMeta.name||'file');
+  const snap=await window.dbGet(window.dbChild(window.dbRef,`system/ai_model_chunks/${modelId}/${key}`));
+  if(!snap||!snap.exists())throw new Error('Không tìm thấy dữ liệu chunk của '+(fileMeta.name||'model'));
+  const val=snap.val()||{};
+  const joined=Array.isArray(val)?val.join(''):Object.keys(val).sort((a,b)=>Number(a)-Number(b)).map(k=>val[k]).join('');
+  if(!joined)throw new Error('Dữ liệu chunk của model đang rỗng.');
+  const raw=atob(joined);const bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);return bytes.buffer;
+}
+function previewAiModelFileSelection(input){
+  const host=document.getElementById('aiNewModelVrmPreview');
+  const canvasHost=document.getElementById('aiNewModelVrmPreviewCanvas');
+  const status=document.getElementById('aiNewModelVrmPreviewStatus');
+  if(!host||!canvasHost||!status)return;
+  const files=Array.from(input&&input.files||[]);
+  const modelFile=files.find(f=>/\.(vrm|glb)$/i.test(f.name||''));
+  const blenderFile=files.find(f=>/\.(blend|zip)$/i.test(f.name||''));
+  const previous=window.__auroraModelPreviewURL;if(previous){try{URL.revokeObjectURL(previous)}catch(e){};window.__auroraModelPreviewURL='';}
+  if(window.AuroraVRMViewer&&window.AuroraVRMViewer.stop)window.AuroraVRMViewer.stop('create-model-preview');
+  canvasHost.innerHTML='';
+  if(!modelFile){
+    if(blenderFile){host.classList.add('active');status.textContent=/\.blend$/i.test(blenderFile.name)?'Đã chọn file Blender nguồn. Hãy xuất sang GLB/VRM để xem 3D trực tiếp.':'Đã chọn ZIP. Nếu bên trong có .blend, model sẽ được lưu kèm tài nguyên; muốn xem 3D cần xuất GLB/VRM.';}
+    else if(files.length){host.classList.add('active');status.textContent='Đã chọn tài nguyên. Viewer trực tiếp hỗ trợ VRM và GLB; các định dạng khác được lưu kèm model.';}
+    else{host.classList.remove('active');status.textContent='Chọn file VRM/GLB để xem trước.';}
+    return;
+  }
+  host.classList.add('active');status.textContent='⏳ Đang tải preview '+modelFile.name+'...';
+  const req=Date.now()+Math.random();window.__auroraModelPreviewRequest=req;
+  modelFile.arrayBuffer().then(async buffer=>{
+    if(window.__auroraModelPreviewRequest!==req)return;
+    let viewer=window.AuroraVRMViewer;if(!viewer&&window.AuroraVRMViewerReady)viewer=await window.AuroraVRMViewerReady;
+    if(window.__auroraModelPreviewRequest!==req)return;
+    if(!viewer)throw new Error('Không tải được Three.js/VRM viewer. Kiểm tra kết nối CDN.');
+    await viewer.mount(canvasHost,buffer,{slot:'create-model-preview',fullBody:true});
+    if(window.__auroraModelPreviewRequest===req)status.textContent='✅ Preview 3D. Có nháy mắt tự động nếu model có biểu cảm VRM tương ứng.';
+  }).catch(err=>{if(window.__auroraModelPreviewRequest===req){status.textContent='Không thể preview: '+(err.message||err);}});
+}
+
 function guessMimeFromName(name){
   const n=(name||'').toLowerCase();
   if(n.endsWith('.png'))return 'image/png';
@@ -7978,7 +8114,11 @@ function guessMimeFromName(name){
   if(n.endsWith('.moc3'))return 'application/x-moc3';
   if(n.endsWith('.model3.json'))return 'application/x-live2d-model3';
   if(n.endsWith('.motion3.json'))return 'application/x-live2d-motion3';
-  if(n.endsWith('.vrm'))return 'application/x-vrm';
+  if(n.endsWith('.vrm'))return 'model/vrm';
+  if(n.endsWith('.glb'))return 'model/gltf-binary';
+  if(n.endsWith('.gltf'))return 'model/gltf+json';
+  if(n.endsWith('.blend'))return 'application/x-blender';
+  if(n.endsWith('.zip'))return 'application/zip';
   if(n.endsWith('.fbx'))return 'application/x-fbx';
   if(n.endsWith('.obj'))return 'application/x-obj';
   if(n.endsWith('.pmx'))return 'application/x-pmx';
@@ -8428,6 +8568,7 @@ initEcCreatePanel();
   };
   let extConfig = clone(EXT_DEFAULTS);
   let extConfigLoaded = false;
+  let extLanguageChangeSerial = 0;
   let teacherDocsCache = null;
   let teacherDocsListener = null;
   let frameObjectURLs = Object.create(null);
@@ -8511,13 +8652,30 @@ initEcCreatePanel();
     return merged;
   }
   async function loadConfig() {
-    let local = {};
-    try { local = JSON.parse(localStorage.getItem('aurora_extensions_config') || '{}'); } catch (e) {}
-    extConfig = mergeConfig(local);
+    let localRaw = {};
+    try { localRaw = JSON.parse(localStorage.getItem('aurora_extensions_config') || '{}'); } catch (e) {}
+    const localConfig = mergeConfig(localRaw);
+    extConfig = localConfig;
+    const languageSerialAtStart = extLanguageChangeSerial;
     try {
       if (dbReady()) {
         const snap = await window.dbGet(window.dbChild(window.dbRef, `${EXT_PATH}/config`));
-        if (snap && snap.exists()) extConfig = mergeConfig(snap.val());
+        if (snap && snap.exists()) {
+          // Prefer the newer local snapshot when an earlier save failed or the user changed
+          // language while this asynchronous server read was pending.
+          const remoteRaw = snap.val() || {};
+          const currentLocalLanguage = extConfig.language || localConfig.language || 'vi';
+          const localUpdatedAt = Number(localRaw.updatedAt || 0);
+          const remoteUpdatedAt = Number(remoteRaw.updatedAt || 0);
+          if (extLanguageChangeSerial !== languageSerialAtStart) {
+            extConfig = mergeConfig(remoteRaw);
+            extConfig.language = currentLocalLanguage;
+          } else if (localUpdatedAt > remoteUpdatedAt) {
+            extConfig = localConfig;
+          } else {
+            extConfig = mergeConfig(remoteRaw);
+          }
+        }
       }
     } catch (e) { console.warn('Aurora extension config loaded from local cache', e); }
     extConfigLoaded = true;
@@ -8581,7 +8739,7 @@ initEcCreatePanel();
     const langWrap = createElement('div', { id: 'auroraLanguageWrap' });
     langWrap.innerHTML = '<span>🌐</span><select id="auroraLanguage" aria-label="Ngôn ngữ"><option value="vi">Tiếng Việt</option><option value="en">ENG</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option></select>';
     nav.insertAdjacentElement('beforebegin', langWrap);
-    byId('auroraLanguage').addEventListener('change', async e => { extConfig.language = e.target.value || 'vi'; await persistConfig(false); applyLanguage(); applyMenuConfig(); refreshAllExtensionPages(); });
+    byId('auroraLanguage').addEventListener('change', async e => { extLanguageChangeSerial++; extConfig.language = e.target.value || 'vi'; applyLanguage(); applyMenuConfig(); syncLanguageControls(); refreshAllExtensionPages(); const ok = await persistConfig(false); if(!ok) toast('Ngôn ngữ đã đổi và lưu trên trình duyệt này; đồng bộ máy chủ chưa thành công.', 'warn'); });
     const drawer = createElement('div', { id: 'auroraMenuDrawer' });
     drawer.innerHTML = '<div id="auroraMenuDrawerPanel"><div style="display:flex;align-items:center;justify-content:space-between"><div class="aurora-drawer-title">✨ Aurora</div><button type="button" id="auroraDrawerClose" style="width:auto;margin:0 0 10px;padding:6px 12px">✕</button></div><div id="auroraDrawerItems"></div></div>';
     drawer.addEventListener('click', e => { if (e.target === drawer) closeMenuDrawer(); });
@@ -8610,7 +8768,7 @@ initEcCreatePanel();
         const id = original.dataset.menuId;
         const entry = effectiveEntries().find(x => x.id === id);
         if (entry && entry.auth && !requireUser('vào mục ' + entry.label)) { closeMenuDrawer(); return; }
-        if (entry && entry.kind === 'custom') { if (entry.url) { closeMenuDrawer(); window.open(entry.url, '_blank', 'noopener,noreferrer'); } else { toast('Mục tùy chỉnh chưa có đường dẫn.', 'info'); } }
+        if (entry && entry.kind === 'custom') { closeMenuDrawer(); openCustomMenuDestination(entry, original); }
         else original.click();
         closeMenuDrawer();
       });
@@ -8633,8 +8791,7 @@ initEcCreatePanel();
         b.addEventListener('click', () => {
           const current = effectiveEntries().find(x => x.id === item.id);
           if (!current || current.visible === false) return;
-          if (current.url && /^https?:\/\//i.test(current.url)) window.open(current.url, '_blank', 'noopener,noreferrer');
-          else toast('Mục menu tùy chỉnh chưa có đường dẫn URL hợp lệ.', 'info');
+          openCustomMenuDestination(current,b);
         });
         nav.appendChild(b);
       }
@@ -8660,21 +8817,92 @@ initEcCreatePanel();
     const language = byId('auroraLanguage'); if (language) language.value = extConfig.language || 'vi';
     renderDrawerButtons();
   }
+  const UI_TEXT_TRANSLATIONS = {
+    en: {
+      'Đăng nhập':'Log in','Đăng ký':'Create account','Đăng xuất':'Log out','Mật khẩu':'Password','Tên tài khoản':'Username','Email':'Email',
+      'TRANG CHỦ':'HOME','HỌC SINH':'STUDENT','GIÁO VIÊN':'TEACHER','GV NÂNG CAO':'ADVANCED TEACHER','HƯỚNG DẪN':'GUIDE','BXH':'LEADERBOARD','TỐI CAO':'SUPREME',
+      '💾 Lưu menu':'💾 Save menu','↩️ Reset mặc định':'↩️ Reset defaults','➕ Thêm mục':'➕ Add item','Thêm mục':'Add item','Xóa':'Delete','Hiện':'Show','Ẩn':'Hide','Hủy':'Cancel','Lưu':'Save','Lưu ngôn ngữ':'Save language',
+      'Kiểu menu':'Menu layout','Hiển thị emoji trong menu':'Show menu emoji','Tên mục':'Menu item name','Emoji (có thể để trống)':'Emoji (optional)','URL (tùy chọn)':'URL (optional)','Ngôn ngữ mặc định cho giao diện menu':'Default menu language',
+      'Ủng hộ là tự nguyện. QR và lời cảm ơn do quản trị viên cài đặt.':'Donations are voluntary. QR code and thank-you note are configured by an administrator.',
+      'Thông tin nhà tài trợ do quản trị viên cấu hình; tối đa 4 quảng cáo.':'Sponsors are configured by an administrator; up to 4 ads.',
+      'Mọi tài khoản mới ở cấp Basic. Tính năng mua gói hiện chưa mở bán.':'New accounts use Basic. Paid upgrades are not on sale yet.',
+      'Đã lưu trên trình duyệt này; đồng bộ máy chủ chưa thành công.':'Saved in this browser; server sync failed.',
+      'Chưa có quảng cáo nào được cấu hình.':'No ads have been configured.','Chưa có người ủng hộ hiển thị.':'No supporters to display yet.',
+      'Mục tùy chỉnh chưa có đường dẫn.':'This custom item has no URL yet.','Hãy mở khóa khu vực Cấu hình trước khi chỉnh sửa.':'Unlock Settings before editing.'
+    },
+    ru: {
+      'Đăng nhập':'Войти','Đăng ký':'Создать аккаунт','Đăng xuất':'Выйти','Mật khẩu':'Пароль','Tên tài khoản':'Имя пользователя',
+      'TRANG CHỦ':'ГЛАВНАЯ','HỌC SINH':'УЧЕНИК','GIÁO VIÊN':'УЧИТЕЛЬ','GV NÂNG CAO':'ПРЕПОДАВАТЕЛЬ+','HƯỚNG DẪN':'СПРАВКА','BXH':'РЕЙТИНГ','TỐI CAO':'АДМИН',
+      '💾 Lưu menu':'💾 Сохранить меню','↩️ Reset mặc định':'↩️ Сбросить','➕ Thêm mục':'➕ Добавить пункт','Thêm mục':'Добавить пункт','Xóa':'Удалить','Hiện':'Показать','Ẩn':'Скрыть','Hủy':'Отмена','Lưu':'Сохранить','Lưu ngôn ngữ':'Сохранить язык',
+      'Kiểu menu':'Вид меню','Hiển thị emoji trong menu':'Показывать emoji','Tên mục':'Название пункта','Emoji (có thể để trống)':'Emoji (необязательно)','URL (tùy chọn)':'URL (необязательно)',
+      'Ủng hộ là tự nguyện. QR và lời cảm ơn do quản trị viên cài đặt.':'Пожертвования добровольны. QR и благодарность настраивает администратор.',
+      'Thông tin nhà tài trợ do quản trị viên cấu hình; tối đa 4 quảng cáo.':'Спонсоров настраивает администратор; максимум 4 объявления.',
+      'Mọi tài khoản mới ở cấp Basic. Tính năng mua gói hiện chưa mở bán.':'Новые аккаунты получают Basic. Платные тарифы пока недоступны.'
+    },
+    zh: {
+      'Đăng nhập':'登录','Đăng ký':'创建账户','Đăng xuất':'退出登录','Mật khẩu':'密码','Tên tài khoản':'用户名',
+      'TRANG CHỦ':'首页','HỌC SINH':'学生','GIÁO VIÊN':'教师','GV NÂNG CAO':'高级教师','HƯỚNG DẪN':'指南','BXH':'排行榜','TỐI CAO':'管理',
+      '💾 Lưu menu':'💾 保存菜单','↩️ Reset mặc định':'↩️ 恢复默认','➕ Thêm mục':'➕ 添加项目','Thêm mục':'添加项目','Xóa':'删除','Hiện':'显示','Ẩn':'隐藏','Hủy':'取消','Lưu':'保存','Lưu ngôn ngữ':'保存语言',
+      'Kiểu menu':'菜单样式','Hiển thị emoji trong menu':'显示菜单表情','Tên mục':'项目名称','Emoji (có thể để trống)':'表情（可选）','URL (tùy chọn)':'URL（可选）',
+      'Ủng hộ là tự nguyện. QR và lời cảm ơn do quản trị viên cài đặt.':'捐赠完全自愿。二维码和感谢语由管理员设置。',
+      'Thông tin nhà tài trợ do quản trị viên cấu hình; tối đa 4 quảng cáo.':'赞助信息由管理员配置，最多 4 个广告。',
+      'Mọi tài khoản mới ở cấp Basic. Tính năng mua gói hiện chưa mở bán.':'新账户默认为 Basic。付费套餐暂未开放。'
+    },
+    ja: {
+      'Đăng nhập':'ログイン','Đăng ký':'アカウント作成','Đăng xuất':'ログアウト','Mật khẩu':'パスワード','Tên tài khoản':'ユーザー名',
+      'TRANG CHỦ':'ホーム','HỌC SINH':'学生','GIÁO VIÊN':'教師','GV NÂNG CAO':'上級教師','HƯỚNG DẪN':'ガイド','BXH':'ランキング','TỐI CAO':'管理',
+      '💾 Lưu menu':'💾 メニューを保存','↩️ Reset mặc định':'↩️ 初期設定に戻す','➕ Thêm mục':'➕ 項目を追加','Thêm mục':'項目を追加','Xóa':'削除','Hiện':'表示','Ẩn':'非表示','Hủy':'キャンセル','Lưu':'保存','Lưu ngôn ngữ':'言語を保存',
+      'Kiểu menu':'メニュー形式','Hiển thị emoji trong menu':'メニューの絵文字を表示','Tên mục':'項目名','Emoji (có thể để trống)':'絵文字（任意）','URL (tùy chọn)':'URL（任意）',
+      'Ủng hộ là tự nguyện. QR và lời cảm ơn do quản trị viên cài đặt.':'寄付は任意です。QRコードとお礼文は管理者が設定します。',
+      'Thông tin nhà tài trợ do quản trị viên cấu hình; tối đa 4 quảng cáo.':'スポンサー情報は管理者が設定します。広告は最大4件です。',
+      'Mọi tài khoản mới ở cấp Basic. Tính năng mua gói hiện chưa mở bán.':'新規アカウントはBasicです。有料プランはまだ販売していません。'
+    }
+  };
+  const auroraOriginalTextNodes = new WeakMap();
+  const auroraOriginalAttributes = new WeakMap();
+  function syncLanguageControls(){
+    const lang=extConfig.language||'vi';
+    const top=byId('auroraLanguage');if(top&&top.value!==lang)top.value=lang;
+    const def=byId('auroraDefaultLanguage');if(def&&def.value!==lang)def.value=lang;
+  }
+  function translateKnownTextNodes(){
+    const lang=extConfig.language||'vi';
+    const dict=UI_TEXT_TRANSLATIONS[lang]||{};
+    const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+    let node;
+    while((node=walker.nextNode())){
+      const parent=node.parentElement;if(!parent||parent.closest('script,style,textarea,[contenteditable="true"]'))continue;
+      if(!auroraOriginalTextNodes.has(node))auroraOriginalTextNodes.set(node,node.nodeValue);
+      const original=auroraOriginalTextNodes.get(node);const trimmed=String(original||'').trim();
+      if(!trimmed)continue;
+      const translated=lang==='vi'?original:(Object.prototype.hasOwnProperty.call(dict,trimmed)?String(original).replace(trimmed,dict[trimmed]):original);
+      if(node.nodeValue!==translated)node.nodeValue=translated;
+    }
+    const attrNames=['placeholder','title','aria-label'];
+    document.querySelectorAll('input,button,select,textarea,[title],[aria-label]').forEach(el=>{
+      let originals=auroraOriginalAttributes.get(el);if(!originals){originals={};auroraOriginalAttributes.set(el,originals);}
+      attrNames.forEach(attr=>{
+        if(!el.hasAttribute(attr))return;
+        if(!(attr in originals))originals[attr]=el.getAttribute(attr);
+        const origin=originals[attr];const trans=lang==='vi'?origin:(dict[String(origin||'').trim()]||origin);
+        if(el.getAttribute(attr)!==trans)el.setAttribute(attr,trans);
+      });
+    });
+  }
   function applyLanguage() {
-    const language = byId('auroraLanguage'); if (language) language.value = extConfig.language || 'vi';
-    // This is a safe first-pass UI localization of menu entries and the new pages;
-    // the legacy 8k-line application text remains Vietnamese unless separately translated.
+    syncLanguageControls();
     applyMenuConfig();
     const labels = {
-      en: { donate:'Support Aurora', ads:'Sponsors & promotions', presentations:'Create a presentation', upgrades:'Upgrade plans' },
-      ru: { donate:'Поддержать Aurora', ads:'Реклама и партнёры', presentations:'Создать презентацию', upgrades:'Тарифы' },
-      zh: { donate:'支持 Aurora', ads:'赞助与广告', presentations:'创建演示文稿', upgrades:'升级套餐' },
-      ja: { donate:'Auroraを応援', ads:'広告・スポンサー', presentations:'プレゼンを作成', upgrades:'プランをアップグレード' }
+      en: { donate:'💙 SUPPORT AURORA', ads:'📣 SPONSORS & ADS', presentations:'🎞️ CREATE PRESENTATION', upgrades:'💎 UPGRADE PLANS' },
+      ru: { donate:'💙 ПОДДЕРЖАТЬ AURORA', ads:'📣 СПОНСОРЫ И РЕКЛАМА', presentations:'🎞️ СОЗДАТЬ ПРЕЗЕНТАЦИЮ', upgrades:'💎 ТАРИФЫ' },
+      zh: { donate:'💙 支持 AURORA', ads:'📣 赞助与广告', presentations:'🎞️ 创建演示文稿', upgrades:'💎 升级套餐' },
+      ja: { donate:'💙 AURORAを応援', ads:'📣 広告・スポンサー', presentations:'🎞️ プレゼンを作成', upgrades:'💎 プランをアップグレード' }
     };
     const t = labels[extConfig.language] || {};
-    Object.entries({ donate:'ỦNG HỘ AURORA', ads:'NHÀ TÀI TRỢ & QUẢNG CÁO', presentations:'TẠO BÀI THUYẾT TRÌNH', upgrades:'CÁC GÓI NÂNG CẤP' }).forEach(([id, vi]) => {
+    Object.entries({ donate:'💙 ỦNG HỘ AURORA', ads:'📣 NHÀ TÀI TRỢ & QUẢNG CÁO', presentations:'🎞️ TẠO BÀI THUYẾT TRÌNH', upgrades:'💎 CÁC GÓI NÂNG CẤP' }).forEach(([id, vi]) => {
       const h = byId('auroraTitle_' + id); if (h) h.textContent = t[id] || vi;
     });
+    translateKnownTextNodes();
   }
   function addExtensionPage(id, title, desc, content) {
     if (byId(id)) return byId(id);
@@ -8709,7 +8937,7 @@ initEcCreatePanel();
         <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>📣 QUẢNG CÁO & NHÀ TÀI TRỢ (TỐI ĐA 4)</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><p class="aurora-ext-muted">Mỗi thẻ gồm tên, URL đích và ảnh. Chỉ liên kết http/https hợp lệ mới được mở.</p><div id="auroraAdEditor"></div><div class="aurora-ext-row"><button class="btn btn-success aurora-ext-small-btn" onclick="auroraAddAdSlot()">➕ Thêm nhà tài trợ</button><button class="btn btn-secondary aurora-ext-small-btn" onclick="auroraSaveAdFields()">💾 Lưu tên / đường dẫn quảng cáo</button></div></div></div>
         <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>💎 GÓI NÂNG CẤP & TẶNG GÓI</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label><input type="checkbox" id="auroraSaleEnabled" style="width:auto;margin-right:6px"> Mở bán gói (mặc định tắt)</label><p class="aurora-ext-muted">Thanh toán trực tuyến chưa được kết nối. Khi tắt, mọi nút mua vẫn khóa và tài khoản mới là Basic.</p><div id="auroraPackageAdminList"></div><hr style="margin:12px 0"><b>🎁 Công cụ tặng gói (quản trị viên)</b><div class="aurora-ext-row"><div><label>@ID người nhận</label><input id="auroraGiftUsername" placeholder="@username"></div><div><label>Gói tặng</label><select id="auroraGiftTier"></select></div></div><label>Mật khẩu VUA</label><input id="auroraGiftPassword" type="password" placeholder="Nhập mật khẩu VUA"><button class="btn btn-warning aurora-ext-small-btn" onclick="auroraGiftPackage()">🎁 Tặng gói</button></div></div>
       </div>
-      <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🎛️ CẤU HÌNH ĐỊNH DẠNG MENU</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label>Kiểu menu</label><select id="auroraMenuMode"><option value="default">1. Kiểu menu mặc định (hiện tại)</option><option value="hamburger">2. Ba gạch — menu trượt từ trái</option><option value="modern">3. Tối ưu hiện đại (gọn, cuộn ngang)</option></select><label><input id="auroraMenuEmojiEnabled" type="checkbox" checked style="width:auto;margin-right:6px"> Hiển thị emoji trong menu</label><div id="auroraMenuEntryEditor"></div><hr style="margin:12px 0"><b>➕ Thêm mục menu</b><div class="aurora-ext-row"><div><label>Tên mục</label><input id="auroraCustomMenuName" placeholder="Ví dụ: Cộng đồng"></div><div><label>Emoji (có thể để trống)</label><input id="auroraCustomMenuEmoji" placeholder="🌐"></div></div><label>URL (tùy chọn)</label><input id="auroraCustomMenuURL" type="url" placeholder="https://example.com"><button class="btn btn-secondary aurora-ext-small-btn" onclick="auroraAddCustomMenu()">➕ Thêm mục</button><div id="auroraCustomMenuList" style="margin-top:8px"></div><div class="aurora-ext-row" style="margin-top:12px"><button class="btn btn-success" onclick="auroraSaveMenuSettings()">💾 Lưu menu</button><button class="btn btn-warning" onclick="auroraResetMenuSettings()">↩️ Reset mặc định</button></div></div></div>
+      <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🎛️ CẤU HÌNH ĐỊNH DẠNG MENU</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label>Kiểu menu</label><select id="auroraMenuMode"><option value="default">1. Kiểu menu mặc định (hiện tại)</option><option value="hamburger">2. Ba gạch — menu trượt từ trái</option><option value="modern">3. Tối ưu hiện đại (gọn, cuộn ngang)</option></select><label><input id="auroraMenuEmojiEnabled" type="checkbox" checked style="width:auto;margin-right:6px"> Hiển thị emoji trong menu</label><div id="auroraMenuEntryEditor"></div><hr style="margin:12px 0"><b>➕ Thêm mục menu</b><div class="aurora-ext-row"><div><label>Tên mục</label><input id="auroraCustomMenuName" placeholder="Ví dụ: Cộng đồng"></div><div><label>Emoji (có thể để trống)</label><input id="auroraCustomMenuEmoji" placeholder="🌐"></div></div><label>URL (tùy chọn)</label><input id="auroraCustomMenuURL" type="url" placeholder="https://example.com"><button type="button" class="btn btn-secondary aurora-ext-small-btn" onclick="auroraAddCustomMenu()">➕ Thêm mục</button><div id="auroraCustomMenuList" style="margin-top:8px"></div><div class="aurora-ext-row" style="margin-top:12px"><button type="button" class="btn btn-success" onclick="auroraSaveMenuSettings()">💾 Lưu menu</button><button type="button" class="btn btn-warning" onclick="auroraResetMenuSettings()">↩️ Reset mặc định</button></div></div></div>
       <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🔊 CẤU HÌNH ÂM THANH THEO SỰ KIỆN</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label><input id="auroraAudioEnabled" type="checkbox" checked style="width:auto;margin-right:6px"> Bật âm thanh sự kiện</label><div id="auroraAudioSettingsList"></div><p class="aurora-ext-note">Âm thanh được chia thành các phần nhỏ khi lưu. Việc tự phát âm thanh khi người dùng vừa vào web còn phụ thuộc quyền autoplay của trình duyệt; nếu bị chặn, âm thanh sẽ phát sau tương tác đầu tiên.</p></div></div>
       <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🌐 NGÔN NGỮ HỆ THỐNG</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label>Ngôn ngữ mặc định cho giao diện menu</label><select id="auroraDefaultLanguage"><option value="vi">Tiếng Việt (mặc định)</option><option value="en">English (ENG)</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option></select><p class="aurora-ext-muted">Bộ chuyển ngôn ngữ này dịch thanh menu và các trang mới. Các chuỗi giao diện cũ chưa được dịch toàn bộ vẫn giữ tiếng Việt.</p><button class="btn btn-success aurora-ext-small-btn" onclick="auroraSaveLanguageSetting()">💾 Lưu ngôn ngữ</button></div></div>
       <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>ℹ️ LƯU Ý TRIỂN KHAI / GIỚI HẠN BACKEND</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><p class="aurora-ext-muted">HTML này dùng Firebase Realtime Database hiện hữu. Tệp lớn được chia chunk để tránh một lần ghi quá lớn, nhưng tổng dung lượng vẫn bị giới hạn bởi quota, quyền truy cập và chính sách của Firebase. Muốn triển khai sản phẩm thực tế nên chuyển tệp lớn sang Firebase Storage hoặc object storage; giới hạn upload phía giao diện không đồng nghĩa lưu trữ vô hạn.</p></div></div>`;
@@ -8875,23 +9103,38 @@ initEcCreatePanel();
     if (!requireConfig()) return;
     extConfig.menu = clone(EXT_DEFAULTS.menu); await persistConfig(false); mountSettingsValues(); applyMenuConfig(); toast('Đã reset menu về mặc định.', 'success');
   }
+  function openCustomMenuDestination(item, button) {
+    if (!item) return;
+    if (item.url && /^https?:\/\//i.test(item.url)) { window.open(item.url, '_blank', 'noopener,noreferrer'); return; }
+    // A menu item without an external URL remains useful: open an internal landing page instead of doing nothing.
+    const safeId=String(item.id||'custom').replace(/[^a-zA-Z0-9_-]/g,'_');
+    const viewId='auroraCustomMenuView_'+safeId;
+    let page=byId(viewId);
+    if(!page){
+      page=addExtensionPage(viewId,((item.emoji||'')+' '+(item.label||'Mục tùy chỉnh')).trim(),'Trang tùy chỉnh của Aurora.',`<div class="aurora-ext-card"><h3>${escape(item.label||'Mục tùy chỉnh')}</h3><p class="aurora-ext-note">Mục này đã được thêm vào menu. Bạn có thể mở Cấu hình → Định dạng menu để gắn URL hoặc đổi tên/emoji.</p></div>`);
+    }
+    if(typeof window.switchView==='function')window.switchView(viewId,button);else{document.querySelectorAll('.view-section').forEach(v=>v.classList.remove('active'));page.classList.add('active');}
+  }
   async function addCustomMenu() {
     if (!requireConfig()) return;
     const label = (byId('auroraCustomMenuName')?.value || '').trim(); const emoji = (byId('auroraCustomMenuEmoji')?.value || '').trim(); const url = (byId('auroraCustomMenuURL')?.value || '').trim();
-    if (!label) { toast('Nhập tên mục menu.', 'error'); return; }
+    if (!label) { toast('Nhập tên mục menu.', 'error'); byId('auroraCustomMenuName')?.focus(); return; }
     if (url && !/^https?:\/\//i.test(url)) { toast('URL phải bắt đầu bằng http:// hoặc https://', 'error'); return; }
-    extConfig.menu.customItems = extConfig.menu.customItems || [];
-    extConfig.menu.customItems.push({ id: 'custom_' + Date.now(), label, emoji, url, visible: true, kind: 'custom' });
+    extConfig.menu.customItems = Array.isArray(extConfig.menu.customItems) ? extConfig.menu.customItems : [];
+    const id='custom_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);
+    extConfig.menu.customItems.push({ id, label:label.slice(0,60), emoji:emoji.slice(0,12), url, visible:true, kind:'custom' });
+    const saved=await persistConfig(false);
+    mountDynamicMenuItems(); applyMenuConfig(); renderMenuEditor(); renderDrawerButtons();
     setValSafe('auroraCustomMenuName', ''); setValSafe('auroraCustomMenuEmoji', ''); setValSafe('auroraCustomMenuURL', '');
-    await persistConfig(false); mountDynamicMenuItems(); applyMenuConfig(); renderMenuEditor();
+    toast(saved?'Đã thêm mục menu và lưu cấu hình.':'Đã thêm mục menu trên trình duyệt này; Firebase chưa đồng bộ, mục có thể chưa xuất hiện trên thiết bị khác.',saved?'success':'warn');
   }
-  async function removeCustomMenu(id) { if (!requireConfig()) return; extConfig.menu.customItems = (extConfig.menu.customItems || []).filter(x => x.id !== id); await persistConfig(false); mountDynamicMenuItems(); applyMenuConfig(); renderMenuEditor(); }
+  async function removeCustomMenu(id) { if (!requireConfig()) return; extConfig.menu.customItems = (extConfig.menu.customItems || []).filter(x => x.id !== id); const saved=await persistConfig(false); mountDynamicMenuItems(); applyMenuConfig(); renderMenuEditor(); renderDrawerButtons(); if(!saved)toast('Đã xóa mục cục bộ nhưng Firebase chưa đồng bộ.','warn'); }
   function mountDynamicMenuItems() {
     const nav = byId('navTabsContainer'); if (!nav) return;
-    [...nav.querySelectorAll('[data-menu-id^="custom_"]')].forEach(b => b.remove());
+    [...nav.querySelectorAll(':scope > button[data-menu-id^="custom_"]')].forEach(b => b.remove());
     (extConfig.menu.customItems || []).forEach(item => {
-      const b = createElement('button', { type: 'button', 'data-menu-id': item.id, text: ((extConfig.menu.emojiEnabled !== false && item.emoji) ? item.emoji + ' ' : '') + item.label });
-      b.addEventListener('click', () => { if (item.url) window.open(item.url, '_blank', 'noopener,noreferrer'); else toast('Mục tùy chỉnh chưa có đường dẫn.', 'info'); }); nav.appendChild(b);
+      const b = createElement('button', { type: 'button', 'data-menu-id': item.id });
+      b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); const live=(extConfig.menu.customItems||[]).find(x=>x.id===item.id); if(!live||live.visible===false)return; openCustomMenuDestination(live,b); }); nav.appendChild(b);
     });
   }
   function renderAudioSettings() {
@@ -9311,7 +9554,7 @@ initEcCreatePanel();
   function prevSlide() { extSlideIndex = (extSlideIndex - 1 + extSlides.length) % extSlides.length; renderSlides(); renderPresentFrame(); }
   function nextSlide() { extSlideIndex = (extSlideIndex + 1) % extSlides.length; renderSlides(); renderPresentFrame(); }
   function stopPresentation() { const overlay = byId('auroraPresentationOverlay'); if (overlay) overlay.classList.remove('open'); const controls = document.querySelector('.aurora-present-controls'); if (controls) controls.style.display = 'flex'; const frame = byId('auroraPresentationFrame'); if (frame) frame.style.padding = '5vw'; renderPresentFrame(); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
-  async function saveLanguageSetting() { if (!requireConfig()) return; extConfig.language = byId('auroraDefaultLanguage')?.value || 'vi'; await persistConfig(false); applyLanguage(); toast('Đã lưu ngôn ngữ mặc định.', 'success'); }
+  async function saveLanguageSetting() { if (!requireConfig()) return; extLanguageChangeSerial++; extConfig.language = byId('auroraDefaultLanguage')?.value || 'vi'; applyLanguage(); applyMenuConfig(); refreshAllExtensionPages(); const ok=await persistConfig(false); syncLanguageControls(); if(ok) toast('Đã lưu ngôn ngữ mặc định.', 'success'); else toast('Đã lưu ngôn ngữ trên trình duyệt này; đồng bộ máy chủ chưa thành công.', 'warn'); }
   function mountAll() {
     addStyle(); mountMainMenu(); mountPages(); ensureSettingsPanel(); ensureEntertainmentBorderPanel(); ensureProfileBorderUI(); mountDynamicMenuItems(); patchAuthOverlay(); overrideShowView(); patchDocumentLibrary(); patchExamAudio(); patchUserPlans();
     purgeLegacyAruSystemModel();
@@ -9333,7 +9576,7 @@ initEcCreatePanel();
     auroraUploadProfileFrame: uploadProfileFrame, auroraRemoveProfileFrame: removeProfileFrame,
     auroraEquipProfileFrame: equipProfileFrame, auroraGiftPackage: giftPackage,
     auroraSaveMenuSettings: saveMenuSettings, auroraResetMenuSettings: resetMenuSettings,
-    auroraAddCustomMenu: addCustomMenu, auroraRemoveCustomMenu: removeCustomMenu,
+    auroraAddCustomMenu: addCustomMenu, auroraRemoveCustomMenu: removeCustomMenu, auroraPreviewModelFileSelection: previewAiModelFileSelection,
     auroraSaveLanguageSetting: saveLanguageSetting,
     auroraAddSlide: addSlide, auroraDuplicateSlide: duplicateSlide, auroraDeleteSlide: deleteSlide,
     auroraSelectSlide: selectSlide, auroraUpdateCurrentSlide: updateSlideFromFields, auroraSetSlideImage: setSlideImage,
@@ -9347,6 +9590,111 @@ initEcCreatePanel();
 </script>
 
 
+<script>
+window.AuroraVRMViewerReady = new Promise(resolve => {
+  let settled = false;
+  window.__auroraResolveVRMViewer = value => { if (settled) return; settled = true; resolve(value || null); };
+  setTimeout(() => { if (!settled) window.__auroraResolveVRMViewer(null); }, 15000);
+});
+</script>
+<script type="module">
+(async function installAurora3DViewer(){
+  const slots = new Map();
+  const slotVersions = new Map();
+  function stop(slot){
+    const entry=slots.get(slot); if(!entry)return;
+    entry.dead=true;
+    if(entry.raf)cancelAnimationFrame(entry.raf);
+    if(entry.resizeObserver)entry.resizeObserver.disconnect();
+    try{entry.renderer.dispose();}catch(e){}
+    try{entry.renderer.forceContextLoss();}catch(e){}
+    if(entry.renderer.domElement&&entry.renderer.domElement.parentNode)entry.renderer.domElement.parentNode.removeChild(entry.renderer.domElement);
+    if(entry.vrm&&entry.vrm.scene&&entry.scene)try{entry.scene.remove(entry.vrm.scene);}catch(e){}
+    slots.delete(slot);
+  }
+  async function mount(container, arrayBuffer, options={}){
+    if(typeof container==='string')container=document.getElementById(container);
+    if(!container)throw new Error('Không tìm thấy vùng hiển thị model 3D.');
+    if(!(arrayBuffer instanceof ArrayBuffer))throw new Error('Dữ liệu model phải là ArrayBuffer.');
+    const slot=options.slot||container.id||'default';
+    const version=(slotVersions.get(slot)||0)+1;slotVersions.set(slot,version);stop(slot);
+    const W=window;let renderer,scene,camera,vrm=null,root=null;
+    container.innerHTML='';
+    const w=Math.max(56,container.clientWidth||container.parentElement?.clientWidth||240);
+    const h=Math.max(56,container.clientHeight||container.parentElement?.clientHeight||280);
+    renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});
+    renderer.setPixelRatio(Math.min(W.devicePixelRatio||1,2));
+    renderer.setSize(w,h,false);
+    renderer.setClearColor(0x000000,0);
+    renderer.outputColorSpace=THREE.SRGBColorSpace;
+    renderer.domElement.className='aurora-vrm-canvas';
+    renderer.domElement.setAttribute('aria-label','3D model');
+    container.appendChild(renderer.domElement);
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(30,w/h,0.01,200);
+    scene.add(new THREE.HemisphereLight(0xffffff,0x7d8aa0,2.0));
+    const keyLight=new THREE.DirectionalLight(0xffffff,2.2);keyLight.position.set(2,4,3);scene.add(keyLight);
+    const fillLight=new THREE.DirectionalLight(0xa8d5ff,0.7);fillLight.position.set(-3,2,-2);scene.add(fillLight);
+    const loader=new GLTFLoader();
+    loader.register(parser=>new VRMLoaderPlugin(parser));
+    const gltf=await new Promise((resolve,reject)=>loader.parse(arrayBuffer,'',resolve,reject));
+    if(slotVersions.get(slot)!==version){try{renderer.dispose();renderer.forceContextLoss();}catch(e){}return null;}
+    vrm=gltf.userData&&gltf.userData.vrm?gltf.userData.vrm:null;
+    root=vrm?vrm.scene:gltf.scene;
+    if(!root)throw new Error('Tệp không chứa model glTF/VRM có thể dựng.');
+    scene.add(root);
+    root.rotation.y=Math.PI;
+    root.updateMatrixWorld(true);
+    const box=new THREE.Box3().setFromObject(root);
+    const size=box.getSize(new THREE.Vector3());
+    const center=box.getCenter(new THREE.Vector3());
+    const height=Math.max(size.y,0.2);
+    root.position.x-=center.x;
+    root.position.y-=box.min.y;
+    root.position.z-=center.z;
+    const fullBody=options.fullBody!==false;
+    const dist=height*(fullBody?1.85:1.05);
+    camera.position.set(0,height*(fullBody?0.54:0.72),Math.max(dist,0.65));
+    camera.lookAt(0,height*(fullBody?0.48:0.7),0);
+    camera.updateProjectionMatrix();
+    const entry={renderer,scene,camera,vrm,raf:0,resizeObserver:null,dead:false};
+    slots.set(slot,entry);
+    let last=performance.now(),nextBlink=last+1800+Math.random()*2600,blinkEnds=0;
+    function resize(){if(entry.dead||!container.isConnected)return;const nw=Math.max(1,container.clientWidth||w),nh=Math.max(1,container.clientHeight||h);renderer.setSize(nw,nh,false);camera.aspect=nw/nh;camera.updateProjectionMatrix();}
+    if(typeof ResizeObserver!=='undefined'){entry.resizeObserver=new ResizeObserver(resize);entry.resizeObserver.observe(container);}
+    else W.addEventListener('resize',resize,{passive:true});
+    function frame(now){
+      if(entry.dead||slotVersions.get(slot)!==version)return;
+      entry.raf=requestAnimationFrame(frame);
+      const delta=Math.min(0.05,Math.max(0,(now-last)/1000));last=now;
+      if(vrm&&typeof vrm.update==='function')try{vrm.update(delta);}catch(e){}
+      const em=vrm&&vrm.expressionManager;
+      if(em&&typeof em.setValue==='function'){
+        if(now>=nextBlink){blinkEnds=now+115;nextBlink=now+2400+Math.random()*3400;}
+        let blinkValue=0;
+        if(now<blinkEnds){const p=(blinkEnds-now)/115;blinkValue=Math.max(0,Math.sin((1-p)*Math.PI));}
+        try{em.setValue('blink',blinkValue);}catch(e){}
+        const mouthRaw=Number(W.aiWebcamMouthOpenness||W.auroraAiMouthOpen||0);
+        const mouth=Math.max(0,Math.min(1,Number.isFinite(mouthRaw)?mouthRaw:0));
+        try{em.setValue('aa',mouth);}catch(e){}
+        try{em.setValue('oh',Math.max(0,mouth*0.28));}catch(e){}
+      }
+      renderer.render(scene,camera);
+    }
+    entry.raf=requestAnimationFrame(frame);
+    return {vrm,scene,camera,renderer,stop:()=>stop(slot)};
+  }
+  const viewer={mount,stop};
+  window.AuroraVRMViewer=viewer;
+  if(typeof window.__auroraResolveVRMViewer==='function')window.__auroraResolveVRMViewer(viewer);
+  return viewer;
+})().catch(error=>{
+  console.error('Aurora VRM/3D viewer could not initialize:',error);
+  window.AuroraVRMViewerError=error;
+  window.AuroraVRMViewer=null;
+  if(typeof window.__auroraResolveVRMViewer==='function')window.__auroraResolveVRMViewer(null);
+}).finally(()=>{});
+</script>
+
 </body>
 </html>
-
