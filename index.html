@@ -976,6 +976,16 @@ input,select,textarea{font-size:13px;padding:9px}
 .ai-chat-input-row input:focus{border-color:#1877f2;box-shadow:0 0 0 3px rgba(24,119,242,.15)}
 .ai-chat-input-row button{background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border:none;padding:8px 14px;border-radius:10px;font-size:12px;font-weight:bold;cursor:pointer;flex-shrink:0}
 .ai-chat-input-row button:hover{background:linear-gradient(135deg,#198754,#157347)}
+.ai-chat-header-actions{display:flex;align-items:center;gap:5px}
+.ai-chat-speech-toggle{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;border-radius:8px;padding:4px 7px;font-size:12px;cursor:pointer;font-weight:800}
+.ai-chat-speech-toggle.active{background:#dcfce7;color:#166534;border-color:#86efac}
+.ai-chat-input-row button.ai-chat-mic{padding:7px 9px;min-width:36px;background:#f3f4f6;color:#374151;border:1px solid #d1d5db}
+.ai-chat-input-row button.ai-chat-mic.active{background:#fee2e2;color:#b91c1c;border-color:#fca5a5;animation:aiMicPulse 1.2s infinite}
+.ai-chat-status{font-size:10px;line-height:1.35;color:#667085;margin-top:6px;min-height:12px;white-space:pre-wrap}
+.ai-chat-status.error{color:#b42318}
+.ai-chat-status.ok{color:#067647}
+.ai-chat-msg{white-space:pre-wrap}
+@keyframes aiMicPulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.2)}50%{box-shadow:0 0 0 5px rgba(220,38,38,.12)}}
 .ai-model-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#a55eea,#6f42c1);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:bold;font-size:13px;cursor:pointer;box-shadow:0 4px 12px rgba(111,66,193,.3);transition:all .25s}
 .ai-model-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(111,66,193,.45)}
 .ai-model-picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:10px}
@@ -1105,6 +1115,47 @@ input,select,textarea{font-size:13px;padding:9px}
 #aiModelContent .aurora-vrm-status{bottom:4px;font-size:10px}
 .profile-mini-bot .mini-bot-vrm{width:56px;height:56px;overflow:hidden;border-radius:14px;background:linear-gradient(135deg,#e7f3ff,#d0e8ff);border:2px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none}
 .profile-mini-bot .mini-bot-vrm canvas{width:100%;height:100%;display:block;pointer-events:none}
+
+
+/* ============================================================
+   AURORA EXTRA THEME — liquid glass, subtle 3D & gyro effects
+   ============================================================ */
+.auth-inline-error{display:none;margin:0 0 12px;padding:9px 11px;border:1px solid #ef9a9a;border-left:4px solid #dc3545;border-radius:8px;background:#fff0f0;color:#c62828;font-size:13px;font-weight:800;line-height:1.45;animation:extraErrorIn .18s ease-out}
+@keyframes extraErrorIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.nav-login-cta{display:flex!important;align-items:center;gap:8px;padding:5px 12px 5px 5px!important;border:1px solid rgba(255,255,255,.42);background:rgba(255,255,255,.17)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);cursor:pointer;user-select:none}
+.nav-login-cta .avatar{font-size:16px!important;background:rgba(255,255,255,.94)!important;flex:0 0 auto}
+.nav-login-cta>span{font-weight:800;white-space:nowrap}
+body[data-theme="extra"]{--extra-tilt-x:0deg;--extra-tilt-y:0deg;background-color:#eaf3ff;background-image:radial-gradient(ellipse at 12% 15%,rgba(93,214,255,.43),transparent 36%),radial-gradient(ellipse at 88% 18%,rgba(192,140,255,.32),transparent 34%),radial-gradient(ellipse at 70% 86%,rgba(102,235,203,.30),transparent 38%),linear-gradient(135deg,#eef7ff 0%,#edf2ff 48%,#f7f3ff 100%);background-attachment:fixed;color:#172a45;isolation:isolate}
+body[data-theme="extra"]::before{content:"";position:fixed;z-index:-1;inset:-18%;pointer-events:none;background:conic-gradient(from 0deg at 50% 50%,rgba(76,205,255,.08),rgba(174,125,255,.12),rgba(110,248,212,.10),rgba(76,205,255,.08));filter:blur(45px);animation:extraLiquidDrift 26s ease-in-out infinite alternate;transform:translate3d(var(--extra-bg-x,0px),var(--extra-bg-y,0px),0)}
+@keyframes extraLiquidDrift{0%{transform:translate3d(-2%,1%,0) rotate(0deg) scale(1)}50%{transform:translate3d(2%,-1%,0) rotate(9deg) scale(1.06)}100%{transform:translate3d(-1%,-2%,0) rotate(-8deg) scale(1.02)}}
+body[data-theme="extra"] .navbar{position:relative;background:linear-gradient(120deg,rgba(23,42,74,.88),rgba(39,69,110,.82),rgba(44,61,105,.88));backdrop-filter:blur(22px) saturate(155%);-webkit-backdrop-filter:blur(22px) saturate(155%);border-bottom:1px solid rgba(255,255,255,.36);box-shadow:0 12px 36px rgba(33,56,99,.20);color:#fff}
+body[data-theme="extra"] .navbar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;pointer-events:none;background:linear-gradient(90deg,transparent,#78f1ff,#c09aff,#7affe0,transparent);background-size:220% 100%;animation:extraGlassShine 7s linear infinite}
+@keyframes extraGlassShine{to{background-position:220% 0}}
+body[data-theme="extra"] .card,body[data-theme="extra"] .home-card,body[data-theme="extra"] .profile-stat-card,body[data-theme="extra"] .doc-item,body[data-theme="extra"] .role-card,body[data-theme="extra"] .smart-q-card{background:linear-gradient(135deg,rgba(255,255,255,.83),rgba(248,252,255,.61));color:#172a45;border:1px solid rgba(255,255,255,.88);box-shadow:0 12px 32px rgba(57,87,135,.12),inset 0 1px 0 rgba(255,255,255,.9);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}
+body[data-theme="extra"] .home-card{transform-style:preserve-3d;transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
+body[data-theme="extra"] .home-card:hover{box-shadow:0 22px 46px rgba(57,87,135,.20),inset 0 1px 0 rgba(255,255,255,.96);border-color:rgba(101,178,255,.68)}
+body[data-theme="extra"] .section-title,body[data-theme="extra"] .collapse-header{background:linear-gradient(110deg,rgba(220,240,255,.88),rgba(239,226,255,.78));color:#254c83;border:1px solid rgba(255,255,255,.92);box-shadow:0 6px 20px rgba(75,112,165,.10);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+body[data-theme="extra"] input[type="text"],body[data-theme="extra"] input[type="number"],body[data-theme="extra"] input[type="password"],body[data-theme="extra"] input[type="email"],body[data-theme="extra"] input[type="datetime-local"],body[data-theme="extra"] input[type="url"],body[data-theme="extra"] input[type="date"],body[data-theme="extra"] input[type="time"],body[data-theme="extra"] select,body[data-theme="extra"] textarea{background:rgba(255,255,255,.76);color:#172a45;border-color:rgba(106,145,198,.35);box-shadow:inset 0 1px 3px rgba(43,75,120,.05)}
+body[data-theme="extra"] input:focus,body[data-theme="extra"] select:focus,body[data-theme="extra"] textarea:focus{outline:none;border-color:#6a9dff;box-shadow:0 0 0 4px rgba(106,157,255,.15)}
+body[data-theme="extra"] .btn{background:linear-gradient(135deg,#3478ea,#6b62df);box-shadow:0 7px 18px rgba(68,94,199,.20);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+body[data-theme="extra"] .btn:hover{filter:saturate(1.1) brightness(1.04);transform:translateY(-1px);box-shadow:0 10px 24px rgba(68,94,199,.24)}
+body[data-theme="extra"] .btn-secondary{background:linear-gradient(135deg,#71829d,#556982)}
+body[data-theme="extra"] .btn-danger{background:linear-gradient(135deg,#ec5975,#c9365e)}
+body[data-theme="extra"] .btn-success{background:linear-gradient(135deg,#16aa9b,#2588c8)}
+body[data-theme="extra"] .nav-tabs button{border:1px solid transparent;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+body[data-theme="extra"] .nav-tabs button:hover,body[data-theme="extra"] .nav-tabs button.active{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.25);transform:translateY(-1px)}
+body[data-theme="extra"] .modal-box,body[data-theme="extra"] .profile-box,body[data-theme="extra"] .auth-box{background:rgba(248,252,255,.89);color:#172a45;border:1px solid rgba(255,255,255,.88);box-shadow:0 28px 80px rgba(26,48,88,.24);backdrop-filter:blur(24px) saturate(145%);-webkit-backdrop-filter:blur(24px) saturate(145%)}
+body[data-theme="extra"] .modal-header{border-color:rgba(110,145,190,.25)}
+body[data-theme="extra"] .modal-header h3,body[data-theme="extra"] .profile-name,body[data-theme="extra"] .home-card h3{color:#285994}
+body[data-theme="extra"] .table-responsive table,body[data-theme="extra"] table{border-color:rgba(94,130,178,.20)}
+body[data-theme="extra"] th{background:rgba(219,236,255,.80);color:#244d7f}
+body[data-theme="extra"] td{background:rgba(255,255,255,.46);color:#243955}
+body[data-theme="extra"] .explanation-box{background:rgba(222,240,255,.88);color:#24415f}
+body[data-theme="extra"] .theme-switch__container{box-shadow:0 7px 22px rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.6)}
+body[data-theme="extra"] .nav-user:not(.nav-login-cta){background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+body[data-theme="extra"] .extra-tilt-active{transform:perspective(1100px) rotateX(var(--extra-rot-x,0deg)) rotateY(var(--extra-rot-y,0deg)) translateZ(0);transition:transform .12s ease-out;transform-style:preserve-3d}
+body[data-theme="extra"] .extra-theme-tile{border:1px solid rgba(255,255,255,.78);box-shadow:0 8px 24px rgba(57,87,135,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+@media (prefers-reduced-motion:reduce){body[data-theme="extra"]::before,body[data-theme="extra"] .navbar::after{animation:none!important}body[data-theme="extra"] *,body[data-theme="extra"] *::before,body[data-theme="extra"] *::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
 
 </style>
 <script type="importmap">
@@ -1332,7 +1383,7 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 </div></div>
 
-<div id="authOverlay"><div class="auth-box"><h2>✨ AURORA</h2><p class="auth-sub">🔐 Hệ thống kiểm tra trực tuyến</p><div class="auth-tabs"><button class="active" id="authTabLogin" onclick="switchAuthTab('login')">🔓 Đăng Nhập</button><button id="authTabRegister" onclick="switchAuthTab('register')">📝 Đăng Ký</button></div><div id="authViewLogin" class="auth-view active"><label>Tên đăng nhập hoặc Email:</label><input type="text" id="loginIdentifier" placeholder="Username hoặc email..." autocomplete="username"><label>Mật khẩu:</label><input type="password" id="loginPassword" placeholder="Mật khẩu..." autocomplete="current-password"><a class="link" onclick="switchAuthTab('forgot')">🤔 Quên mật khẩu?</a><button class="btn btn-success" onclick="handleLogin()">🔓 Đăng Nhập</button></div><div id="authViewRegister" class="auth-view"><label>Vai trò:</label><select id="regRole" style="margin-bottom:12px"><option value="student">🧑‍🎓 Học sinh</option><option value="teacher">👨‍🏫 Giáo viên</option><option value="other">👤 Khác</option></select><label>Tên đăng nhập (tên thật):</label><input type="text" id="regUsername" placeholder="3-20 ký tự a-z, 0-9, _ . (không dùng từ ngữ không phù hợp)"><label>Email:</label><input type="email" id="regEmail" placeholder="user@gmail.com"><label>Mật khẩu:</label><input type="password" id="regPassword" placeholder="Ít nhất 6 ký tự..."><label>Xác nhận mật khẩu:</label><input type="password" id="regPassword2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleRegister()">✅ Đăng Ký</button></div><div id="authViewForgot" class="auth-view"><div id="forgotStep1"><label>📧 Email đã đăng ký:</label><input type="email" id="forgotEmail" placeholder="user@gmail.com"><div id="forgotEmailStatus" class="email-status-badge demo">⏳ Đang kiểm tra trạng thái email...</div><button class="btn btn-warning" id="forgotSendBtn" onclick="handleSendResetCode(this)">📨 Gửi Mã</button><a class="link center" onclick="switchAuthTab('login')">← Quay lại</a></div><div id="forgotStep2" style="display:none"><div class="email-locked-info" id="forgotEmailLockedInfo" style="display:none">✅ Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (kể cả thư mục Spam/Quảng cáo).</div><div class="code-display" id="forgotCodeDisplay">------</div><p id="forgotCodeLabel" style="font-size:12px;color:#856404;text-align:center;margin-bottom:12px">Mã đã gửi:</p><label>Mã xác nhận:</label><input type="text" id="forgotCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:bold"><button class="btn btn-success" onclick="handleVerifyResetCode()">✓ Xác Nhận</button><a class="link center" onclick="switchAuthTab('forgot')">← Gửi lại</a></div><div id="forgotStep3" style="display:none"><label>🔐 Mật khẩu mới:</label><input type="password" id="forgotNewPass" placeholder="Ít nhất 6 ký tự..."><label>🔐 Xác nhận:</label><input type="password" id="forgotNewPass2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleResetPassword()">🔐 Đặt Lại</button></div></div></div></div>
+<div id="authOverlay"><div class="auth-box"><h2>✨ AURORA</h2><p class="auth-sub">🔐 Hệ thống kiểm tra trực tuyến</p><div class="auth-tabs"><button class="active" id="authTabLogin" onclick="switchAuthTab('login')">🔓 Đăng Nhập</button><button id="authTabRegister" onclick="switchAuthTab('register')">📝 Đăng Ký</button></div><div id="authViewLogin" class="auth-view active"><label>Tên đăng nhập hoặc Email:</label><input type="text" id="loginIdentifier" placeholder="Username hoặc email..." autocomplete="username"><label>Mật khẩu:</label><input type="password" id="loginPassword" placeholder="Mật khẩu..." autocomplete="current-password"><a class="link" onclick="switchAuthTab('forgot')">🤔 Quên mật khẩu?</a><div id="loginErrorMessage" class="auth-inline-error" role="alert" aria-live="polite" style="display:none"></div><button class="btn btn-success" id="loginSubmitBtn" onclick="handleLogin()">🔓 Đăng Nhập</button></div><div id="authViewRegister" class="auth-view"><label>Vai trò:</label><select id="regRole" style="margin-bottom:12px"><option value="student">🧑‍🎓 Học sinh</option><option value="teacher">👨‍🏫 Giáo viên</option><option value="other">👤 Khác</option></select><label>Tên đăng nhập (tên thật):</label><input type="text" id="regUsername" placeholder="3-20 ký tự a-z, 0-9, _ . (không dùng từ ngữ không phù hợp)"><label>Email:</label><input type="email" id="regEmail" placeholder="user@gmail.com"><label>Mật khẩu:</label><input type="password" id="regPassword" placeholder="Ít nhất 6 ký tự..."><label>Xác nhận mật khẩu:</label><input type="password" id="regPassword2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleRegister()">✅ Đăng Ký</button></div><div id="authViewForgot" class="auth-view"><div id="forgotStep1"><label>📧 Email đã đăng ký:</label><input type="email" id="forgotEmail" placeholder="user@gmail.com"><div id="forgotEmailStatus" class="email-status-badge demo">⏳ Đang kiểm tra trạng thái email...</div><button class="btn btn-warning" id="forgotSendBtn" onclick="handleSendResetCode(this)">📨 Gửi Mã</button><a class="link center" onclick="switchAuthTab('login')">← Quay lại</a></div><div id="forgotStep2" style="display:none"><div class="email-locked-info" id="forgotEmailLockedInfo" style="display:none">✅ Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (kể cả thư mục Spam/Quảng cáo).</div><div class="code-display" id="forgotCodeDisplay">------</div><p id="forgotCodeLabel" style="font-size:12px;color:#856404;text-align:center;margin-bottom:12px">Mã đã gửi:</p><label>Mã xác nhận:</label><input type="text" id="forgotCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:bold"><button class="btn btn-success" onclick="handleVerifyResetCode()">✓ Xác Nhận</button><a class="link center" onclick="switchAuthTab('forgot')">← Gửi lại</a></div><div id="forgotStep3" style="display:none"><label>🔐 Mật khẩu mới:</label><input type="password" id="forgotNewPass" placeholder="Ít nhất 6 ký tự..."><label>🔐 Xác nhận:</label><input type="password" id="forgotNewPass2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleResetPassword()">🔐 Đặt Lại</button></div></div></div></div>
 
 <div id="perfModeModal" style="display:none"><div class="perf-box"><div style="font-size:56px;line-height:1;margin-bottom:10px">⚙️</div><h3>CHỌN CHẾ ĐỘ HIỂN THỊ</h3><p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Chọn chế độ phù hợp thiết bị.</p><div class="perf-option" onclick="choosePerfMode('full')"><span class="perf-icon">✨</span><div class="perf-text"><div class="perf-title">1. Đầy đủ</div><div class="perf-sub">Bật tất cả hiệu ứng.</div></div></div><div class="perf-option" onclick="choosePerfMode('optimized')"><span class="perf-icon">⚡</span><div class="perf-text"><div class="perf-title">2. Tối ưu <span class="perf-badge" id="perfRecommendBadge">💡</span></div><div class="perf-sub">Tắt hiệu ứng nặng.</div></div></div></div></div>
 
@@ -1388,7 +1439,7 @@ input,select,textarea{font-size:13px;padding:9px}
       </div>
     </div>
   </label>
-  <div class="nav-tabs" id="navTabsContainer"><button class="active" onclick="switchView('homeView', this)">🏠 TRANG CHỦ</button><button onclick="switchView('studentLoginView', this)">🧑‍🎓 HỌC SINH</button><button onclick="if(!requireLogin('vào khu Giáo viên'))return;switchView('teacherView', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="if(!requireLogin('vào GV Nâng cao'))return;switchView('advancedModelView', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView('guideView', this)">📖 HƯỚNG DẪN</button><button onclick="switchView('leaderboardView', this)">🏆 BXH</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button></div><div id="navUserInfo" class="nav-user" style="display:none"></div></div></div>
+  <div class="nav-tabs" id="navTabsContainer"><button class="active" onclick="switchView('homeView', this)">🏠 TRANG CHỦ</button><button onclick="switchView('studentLoginView', this)">🧑‍🎓 HỌC SINH</button><button onclick="if(!requireLogin('vào khu Giáo viên'))return;switchView('teacherView', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="if(!requireLogin('vào GV Nâng cao'))return;switchView('advancedModelView', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView('guideView', this)">📖 HƯỚNG DẪN</button><button onclick="switchView('leaderboardView', this)">🏆 BXH</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button></div><div id="navUserInfo" class="nav-user nav-login-cta" style="display:flex" role="button" tabindex="0" aria-label="Đăng nhập" onclick="openAuthModal('login')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAuthModal('login')}"><div class="avatar" aria-hidden="true">👤</div><span>Đăng nhập</span></div></div></div>
 
 <div class="container">
 
@@ -1727,7 +1778,7 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div style="font-weight:900;color:#6f42c1;margin:12px 0 8px 0">🌓 6. Chế độ Ngày/Đêm + Theme</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Nút chuyển đổi <b>Sáng/Tối</b> nổi ở góc trên phải màn hình.</div></div>
-<div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Theme mở rộng:</b> Sáng · Tối · Glow · Hoàng hôn · Sky · Galaxy.</div></div>
+<div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>Theme mở rộng:</b> Sáng · Tối · Glow · Hoàng hôn · Sky · Galaxy · Extra.</div></div>
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Áp dụng <b>cá nhân</b> hoặc <b>tất cả</b> mọi người.</div></div>
 </div>
 
@@ -1736,7 +1787,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div class="guide-tip">Nút công tắc ở trên thanh menu → chuyển Sáng/Tối cho thiết bị cá nhân.</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content"><b>☀️ Sáng:</b> Giao diện sáng mặc định.</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content"><b>🌙 Tối:</b> Nền đen, chữ sáng, dịu mắt.</div></div>
-<div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Vào <b>👑 TỐI CAO → 🎮 Trung Tâm Giải Trí → 🌓 Chế độ Ngày/Đêm</b> để mở khóa các theme <b>Glow · Hoàng hôn · Sky · Galaxy</b> và chọn áp dụng cho <b>cá nhân</b> hoặc <b>tất cả</b>.</div></div>
+<div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Vào <b>👑 TỐI CAO → 🎮 Trung Tâm Giải Trí → 🌓 Chế độ Ngày/Đêm</b> để mở khóa các theme <b>Glow · Hoàng hôn · Sky · Galaxy · Extra</b> và chọn áp dụng cho <b>cá nhân</b> hoặc <b>tất cả</b>.</div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">Vào <b>👑 TỐI CAO → 🔧 Cấu hình → 🎨 Tùy chỉnh nút Button</b> để đổi màu/kiểu nút navbar: Trang Chủ, Học Sinh, Giáo Viên, GV Nâng Cao, Hướng Dẫn.</div></div>
 </div>
 
@@ -2280,6 +2331,25 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="supremeTabEntertainment" style="display:none">
 
+<div id="auroraPrivateVoiceSection" class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🔒 VOICE KÍN — ÂM THANH RIÊNG THEO @ID</span><span class="collapse-arrow">▼</span></div>
+<div class="collapse-body collapsed" id="auroraPrivateVoiceBody">
+  <div style="background:linear-gradient(135deg,#eef6ff,#f4edff);border:1px solid #cfe2ff;border-radius:12px;padding:14px;margin-bottom:14px">
+    <p style="font-size:13px;line-height:1.6;color:#334155;margin-bottom:10px">Tải âm thanh, nhập <b>@ID</b> người nhận rồi bấm <b>Phát voice kín</b>. Hệ thống chỉ gửi tín hiệu tới hộp thư riêng của tài khoản đích khi tài khoản đó đang online.</p>
+    <label for="auroraPrivateVoiceTarget">👤 ID người nhận (ví dụ @username)</label>
+    <input id="auroraPrivateVoiceTarget" type="text" autocomplete="off" maxlength="60" placeholder="@username" style="width:100%">
+    <label for="auroraPrivateVoiceFile">🎵 File âm thanh (tối đa 20 MB)</label>
+    <input id="auroraPrivateVoiceFile" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.webm" style="width:100%;padding:8px;background:#fff;border:1px solid #d0d5dd;border-radius:8px">
+    <div id="auroraPrivateVoiceProgress" style="display:none;margin:8px 0;background:#dbeafe;border-radius:8px;padding:8px;font-size:12px;color:#1d4ed8"></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px">
+      <button type="button" class="btn btn-success aurora-ext-small-btn" id="auroraPrivateVoiceSendBtn" onclick="auroraSendPrivateVoice()">▶ Phát voice kín</button>
+      <span id="auroraPrivateVoiceStatus" style="font-size:12px;color:#475467">Sẵn sàng. Chỉ gửi tới người đang online.</span>
+    </div>
+    <p style="font-size:11px;color:#667085;line-height:1.5;margin-top:10px">Lưu ý: trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó người nhận sẽ thấy nút bấm để nghe. Tính riêng tư dữ liệu cũng phụ thuộc Firebase Security Rules của dự án.</p>
+  </div>
+</div>
+
+
+
 <div class="collapse-header" onclick="toggleCollapseSection(this)" data-collapsed="false"><span>🎵 1. HỆ THỐNG NHẠC ĐỒNG BỘ</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body">
 <div style="background:#f0f8ff;border:2px dashed #1877f2;padding:12px;border-radius:10px;margin-bottom:12px">
@@ -2670,6 +2740,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div onclick="applyThemeFromSupreme('sunset')" style="cursor:pointer;padding:14px;border-radius:10px;text-align:center;background:linear-gradient(180deg,#ffb88c,#6a1b9a);border:2px solid #e57373;font-weight:bold;color:#fff">🌅 Hoàng hôn</div>
 <div onclick="applyThemeFromSupreme('sky')" style="cursor:pointer;padding:14px;border-radius:10px;text-align:center;background:linear-gradient(180deg,#87ceeb,#fff);border:2px solid #4a9eff;font-weight:bold;color:#333">☁️ Sky</div>
 <div onclick="applyThemeFromSupreme('galaxy')" style="cursor:pointer;padding:14px;border-radius:10px;text-align:center;background:linear-gradient(135deg,#050510,#330066);border:2px solid #a55eea;font-weight:bold;color:#e6e6ff;box-shadow:0 0 15px rgba(165,94,234,.5)">🌌 Galaxy</div>
+<div class="extra-theme-tile" onclick="applyThemeFromSupreme('extra')" style="cursor:pointer;padding:14px;border-radius:12px;text-align:center;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(160,218,255,.72),rgba(202,170,255,.7));border:2px solid #86bcff;font-weight:900;color:#244e83;box-shadow:0 0 18px rgba(112,170,255,.28)">💎 Extra<br><span style="font-size:10px;font-weight:600">Liquid Glass · 3D · Gyro</span></div>
 </div>
 </div>
 </div>
@@ -2871,14 +2942,19 @@ input,select,textarea{font-size:13px;padding:9px}
     <div class="ai-float-bubble" id="aiFloatBubble"></div>
     <div class="ai-chat-bubble" id="aiChatBubble">
       <div class="ai-chat-header">
-        <span id="aiChatName">Auro</span>
-        <button class="close-btn" style="font-size:14px" onclick="closeAiChat()">✖</button>
+        <span id="aiChatName">AI</span>
+        <div class="ai-chat-header-actions">
+          <button type="button" class="ai-chat-speech-toggle active" id="aiChatSpeakToggle" onclick="toggleAiChatSpeech()" title="Bật/tắt đọc câu trả lời thành tiếng" aria-pressed="true">🔊 Đọc</button>
+          <button type="button" class="close-btn" style="font-size:14px" onclick="closeAiChat()" aria-label="Đóng chat">✖</button>
+        </div>
       </div>
-      <div class="ai-chat-messages" id="aiChatMessages"></div>
+      <div class="ai-chat-messages" id="aiChatMessages" aria-live="polite"></div>
       <div class="ai-chat-input-row">
-        <input type="text" id="aiChatInput" placeholder="Nhập tin nhắn..." onkeydown="if(event.key==='Enter')sendAiChatMessage()">
-        <button onclick="sendAiChatMessage()">Gửi</button>
+        <button type="button" class="ai-chat-mic" id="aiChatMicBtn" onclick="toggleAiVoiceInput()" title="Nói để nhập tin nhắn" aria-label="Bắt đầu nói">🎤</button>
+        <input type="text" id="aiChatInput" placeholder="Nói chuyện với AI..." autocomplete="off" aria-label="Tin nhắn" onkeydown="if(event.key==='Enter'){event.preventDefault();sendAiChatMessage()}">
+        <button type="button" id="aiChatSendBtn" onclick="sendAiChatMessage()">Gửi</button>
       </div>
+      <div class="ai-chat-status" id="aiChatStatus" role="status">Chat tự nhiên · có thể bật 👁️ để AI đọc nội dung trang đang mở.</div>
     </div>
   </div>
 </div>
@@ -3007,8 +3083,14 @@ let aiLastBigWarnAt=0;
 let aiLastMusicReactionAt=0;
 let aiProfileViewLastReactionAt=0;
 
-/* Screen reading */
+/* Screen reading + conversational voice */
 let aiScreenReadActive=false;
+let aiChatSpeakReplies=true;
+let aiSpeechRecognition=null;
+let aiSpeechFinalTranscript='';
+let aiChatRequestPending=false;
+let aiChatLastApiError='';
+let aiScreenOcrCache=new WeakMap();
 
 /* AI Webcam */
 let aiWebcamStream=null;
@@ -4079,8 +4161,70 @@ async function resetRaConfig(){
   try{await window.dbRemove(window.ref(window.db,`system/room_announcement_config/${currentRaRole}`));if(cachedRoomAnnounceConfig)cachedRoomAnnounceConfig[currentRaRole]=JSON.parse(JSON.stringify(DEFAULT_ROOM_ANNOUNCE[currentRaRole]));renderRaRoleConfig();showToast('🔄 Đã reset!','warn');}catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 
+/* Inline login validation — use one neutral error for unknown username/email or bad password. */
+function setLoginInlineError(message){
+  const box=document.getElementById('loginErrorMessage');
+  if(!box)return;
+  box.textContent=message||'';
+  box.style.display=message?'block':'none';
+  const id=document.getElementById('loginIdentifier'),pw=document.getElementById('loginPassword');
+  if(id)id.setAttribute('aria-invalid',message?'true':'false');
+  if(pw)pw.setAttribute('aria-invalid',message?'true':'false');
+}
+function clearLoginInlineError(){setLoginInlineError('');}
+function renderLoggedOutNav(){
+  const nav=document.getElementById('navUserInfo');
+  if(!nav)return;
+  nav.classList.add('nav-login-cta');
+  nav.innerHTML='<div class="avatar" aria-hidden="true">👤</div><span>Đăng nhập</span>';
+  nav.style.display='flex';nav.onclick=()=>openAuthModal('login');
+  nav.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openAuthModal('login');}};
+  nav.setAttribute('role','button');nav.setAttribute('tabindex','0');nav.setAttribute('aria-label','Đăng nhập');
+}
+function enableExtraGyroMotion(){
+  if(window.__auroraExtraOrientationBound)return;
+  const bind=()=>{
+    const handler=e=>{
+      if(document.body.getAttribute('data-theme')!=='extra')return;
+      const beta=Number(e.beta)||0,gamma=Number(e.gamma)||0;
+      const bx=Math.max(-1,Math.min(1,beta/45)),gx=Math.max(-1,Math.min(1,gamma/45));
+      document.body.style.setProperty('--extra-bg-x',(gx*14).toFixed(1)+'px');
+      document.body.style.setProperty('--extra-bg-y',(bx*12).toFixed(1)+'px');
+      document.body.style.setProperty('--extra-gyro-x',(bx*2.5).toFixed(2)+'deg');
+      document.body.style.setProperty('--extra-gyro-y',(gx*2.5).toFixed(2)+'deg');
+    };
+    window.addEventListener('deviceorientation',handler,{passive:true});
+    window.__auroraExtraOrientationBound=true;
+    window.__auroraExtraOrientationHandler=handler;
+  };
+  try{
+    if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+      DeviceOrientationEvent.requestPermission().then(state=>{if(state==='granted')bind();}).catch(()=>{});
+    }else if(typeof DeviceOrientationEvent!=='undefined')bind();
+  }catch(e){}
+}
+function installExtraThemePointerMotion(){
+  if(window.__auroraExtraPointerMotionInstalled)return;
+  window.__auroraExtraPointerMotionInstalled=true;
+  const selector='.home-card,.card,.doc-item,.profile-stat-card,.role-card,.smart-q-card';
+  document.addEventListener('pointermove',e=>{
+    if(document.body.getAttribute('data-theme')!=='extra'||e.pointerType==='touch')return;
+    const el=e.target&&e.target.closest?e.target.closest(selector):null;
+    if(!el)return;
+    const r=el.getBoundingClientRect();if(!r.width||!r.height)return;
+    const nx=(e.clientX-r.left)/r.width-.5,ny=(e.clientY-r.top)/r.height-.5;
+    el.classList.add('extra-tilt-active');
+    el.style.setProperty('--extra-rot-x',(-ny*3.6).toFixed(2)+'deg');
+    el.style.setProperty('--extra-rot-y',(nx*4.5).toFixed(2)+'deg');
+  },{passive:true});
+  document.addEventListener('pointerout',e=>{
+    const el=e.target&&e.target.closest?e.target.closest(selector):null;
+    if(!el||el.contains(e.relatedTarget))return;
+    el.classList.remove('extra-tilt-active');el.style.removeProperty('--extra-rot-x');el.style.removeProperty('--extra-rot-y');
+  },{passive:true});
+}
 /* AUTH */
-function switchAuthTab(tab){document.querySelectorAll('.auth-view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.auth-tabs button').forEach(b=>b.classList.remove('active'));if(tab==='login'){document.getElementById('authViewLogin').classList.add('active');document.getElementById('authTabLogin').classList.add('active');}else if(tab==='register'){document.getElementById('authViewRegister').classList.add('active');document.getElementById('authTabRegister').classList.add('active');}else{document.getElementById('authViewForgot').classList.add('active');document.getElementById('forgotStep1').style.display='block';document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='none';const cd=document.getElementById('forgotCodeDisplay');if(cd){cd.style.fontSize='22px';cd.style.letterSpacing='6px';cd.innerText='------';}const cl=document.getElementById('forgotCodeLabel');if(cl){cl.style.display='block';cl.innerText='Mã đã gửi:';}const li=document.getElementById('forgotEmailLockedInfo');if(li)li.style.display='none';const fr=document.getElementById('forgotCode');if(fr)fr.value='';updateEmailJSStatusUI();}}
+function switchAuthTab(tab){if(tab==='login')clearLoginInlineError();document.querySelectorAll('.auth-view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.auth-tabs button').forEach(b=>b.classList.remove('active'));if(tab==='login'){document.getElementById('authViewLogin').classList.add('active');document.getElementById('authTabLogin').classList.add('active');}else if(tab==='register'){document.getElementById('authViewRegister').classList.add('active');document.getElementById('authTabRegister').classList.add('active');}else{document.getElementById('authViewForgot').classList.add('active');document.getElementById('forgotStep1').style.display='block';document.getElementById('forgotStep2').style.display='none';document.getElementById('forgotStep3').style.display='none';const cd=document.getElementById('forgotCodeDisplay');if(cd){cd.style.fontSize='22px';cd.style.letterSpacing='6px';cd.innerText='------';}const cl=document.getElementById('forgotCodeLabel');if(cl){cl.style.display='block';cl.innerText='Mã đã gửi:';}const li=document.getElementById('forgotEmailLockedInfo');if(li)li.style.display='none';const fr=document.getElementById('forgotCode');if(fr)fr.value='';updateEmailJSStatusUI();}}
 async function hashPassword(pw){const salt='aurora_salt_2024_v1';const data=pw+salt;try{if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(data));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}}catch(e){}let h=5381;for(let i=0;i<data.length;i++)h=((h<<5)+h)+data.charCodeAt(i);return 'fb_'+Math.abs(h).toString(36);}
 function emailKey(email){return email.trim().toLowerCase().replace(/[.@]/g,'_');}
 async function handleRegister(){
@@ -4107,22 +4251,43 @@ async function handleRegister(){
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
 async function handleLogin(){
-  const identifier=document.getElementById('loginIdentifier').value.trim().toLowerCase(),password=document.getElementById('loginPassword').value;
-  if(!identifier||!password){showToast('Điền đầy đủ!','error');return;}
+  const idEl=document.getElementById('loginIdentifier');
+  const pwEl=document.getElementById('loginPassword');
+  const identifier=(idEl?.value||'').trim().toLowerCase();
+  const password=pwEl?.value||'';
+  clearLoginInlineError();
+  if(!identifier||!password){setLoginInlineError('Vui lòng nhập tên đăng nhập/email và mật khẩu.');showToast('Điền đầy đủ!','error');return;}
   try{
     showToast('⏳ Đang đăng nhập...','info');
     let username=identifier;
-    if(identifier.includes('@')){const s=await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(identifier)}`));if(!s.exists()){showToast('❌ Email chưa đăng ký!','error');return;}username=s.val();}
-    const us=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));
-    if(!us.exists()){showToast('❌ Tài khoản không tồn tại!','error');return;}
-    const u=us.val();
-    if(await hashPassword(password)!==u.passwordHash){showToast('❌ Sai mật khẩu!','error');return;}
-    localStorage.setItem('aurora_user',JSON.stringify({username:u.username}));
-    await applyUserSession(u);
+    if(identifier.includes('@')){
+      const emailSnap=await window.dbGet(window.dbChild(window.dbRef,`email_index/${emailKey(identifier)}`));
+      if(!emailSnap.exists()){
+        setLoginInlineError('Sai tên đăng nhập hoặc mật khẩu.');
+        showToast('❌ Sai tên đăng nhập hoặc mật khẩu.','error');return;
+      }
+      username=emailSnap.val();
+    }
+    const userSnap=await window.dbGet(window.dbChild(window.dbRef,`users/${username}`));
+    if(!userSnap.exists()){
+      setLoginInlineError('Sai tên đăng nhập hoặc mật khẩu.');
+      showToast('❌ Sai tên đăng nhập hoặc mật khẩu.','error');return;
+    }
+    const userData=userSnap.val();
+    if(await hashPassword(password)!==userData.passwordHash){
+      setLoginInlineError('Sai tên đăng nhập hoặc mật khẩu.');
+      showToast('❌ Sai tên đăng nhập hoặc mật khẩu.','error');return;
+    }
+    localStorage.setItem('aurora_user',JSON.stringify({username:userData.username}));
+    await applyUserSession(userData);
     document.getElementById('authOverlay').style.display='none';
-    document.getElementById('loginPassword').value='';
-    showToast(`👋 Chào mừng ${u.nickname||u.username}!`,'success');
-  }catch(e){showToast('❌ '+(e.message||e),'error');}
+    if(pwEl)pwEl.value='';
+    clearLoginInlineError();
+    showToast(`👋 Chào mừng ${userData.nickname||userData.username}!`,'success');
+  }catch(e){
+    setLoginInlineError('Không thể đăng nhập lúc này. Hãy kiểm tra kết nối và thử lại.');
+    showToast('❌ Không thể đăng nhập. Hãy kiểm tra kết nối.','error');
+  }
 }
 async function handleSendResetCode(btn){
   const email=document.getElementById('forgotEmail').value.trim().toLowerCase();
@@ -4205,6 +4370,7 @@ async function applyUserSession(u){
   await loadRolesCache();await loadMedalsCache();
   const nav=document.getElementById('navUserInfo');
   if(nav){
+    nav.classList.remove('nav-login-cta');nav.removeAttribute('role');nav.removeAttribute('tabindex');nav.removeAttribute('aria-label');nav.onkeydown=null;
     const builtin=getBuiltinRole(u);const initial=(u.nickname||u.username).charAt(0).toUpperCase();
     const hasBg=!!u.avatarBg;const bgHtml=hasBg?`<div class="avatar-bg-layer" style="background-image:url('${u.avatarBg}')"></div>`:'';
     const imgSz=hasBg?'72%':'100%';
@@ -4225,9 +4391,9 @@ async function applyUserSession(u){
   await loadEquippedAiModel();
   startAiRandomChatTimer();
 }
-function handleLogout(){customConfirm('Bạn có chắc muốn đăng xuất?',{icon:'🚪',title:'Đăng xuất',okClass:'danger'}).then(ok=>{if(!ok)return;stopOnlineTracking();stopAiWebcam();stopAiRandomChatTimer();localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;userHasSupremeAccess=false;accMgmtUnlocked=false;configTabUnlocked=false;stopAllAnnouncementListeners();document.getElementById('navUserInfo').style.display='none';document.getElementById('authOverlay').style.display='none';['loginPassword','studentName'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});hideAiWidget();switchView('homeView');showToast('👋 Đã đăng xuất','info');});}
+function handleLogout(){customConfirm('Bạn có chắc muốn đăng xuất?',{icon:'🚪',title:'Đăng xuất',okClass:'danger'}).then(ok=>{if(!ok)return;stopOnlineTracking();stopAiWebcam();stopAiRandomChatTimer();localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;userHasSupremeAccess=false;accMgmtUnlocked=false;configTabUnlocked=false;stopAllAnnouncementListeners();renderLoggedOutNav();document.getElementById('authOverlay').style.display='none';['loginPassword','studentName'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});clearLoginInlineError();hideAiWidget();switchView('homeView');showToast('👋 Đã đăng xuất','info');});}
 function handleLogoutFromProfile(){closeProfile();setTimeout(handleLogout,200);}
-async function checkAuthOnLoad(){const s=localStorage.getItem('aurora_user');if(!s){document.getElementById('authOverlay').style.display='none';switchView('homeView');return;}try{const user=JSON.parse(s);const snap=await window.dbGet(window.dbChild(window.dbRef,`users/${user.username}`));if(snap.exists()){await applyUserSession(snap.val());document.getElementById('authOverlay').style.display='none';}else{localStorage.removeItem('aurora_user');document.getElementById('authOverlay').style.display='none';switchView('homeView');}}catch(e){document.getElementById('authOverlay').style.display='none';switchView('homeView');}}
+async function checkAuthOnLoad(){const s=localStorage.getItem('aurora_user');if(!s){document.getElementById('authOverlay').style.display='none';renderLoggedOutNav();switchView('homeView');return;}try{const user=JSON.parse(s);const snap=await window.dbGet(window.dbChild(window.dbRef,`users/${user.username}`));if(snap.exists()){await applyUserSession(snap.val());document.getElementById('authOverlay').style.display='none';}else{localStorage.removeItem('aurora_user');document.getElementById('authOverlay').style.display='none';renderLoggedOutNav();switchView('homeView');}}catch(e){document.getElementById('authOverlay').style.display='none';if(!currentUser)renderLoggedOutNav();switchView('homeView');}}
 function requireLogin(actionName){if(currentUser)return true;showToast('🔐 Vui lòng đăng nhập để '+ (actionName||'tiếp tục') +'!','warn');document.getElementById('authOverlay').style.display='flex';switchAuthTab('login');return false;}
 function openAuthModal(tab){document.getElementById('authOverlay').style.display='flex';switchAuthTab(tab||'login');}
 
@@ -5397,13 +5563,18 @@ function startThemeListener(){if(themeListener)themeListener();themeListener=win
 function applyThemeUserChoice(theme){localStorage.setItem('aurora_theme',theme);localStorage.setItem('aurora_theme_user_override','1');applyTheme(theme,false);showToast('🎨 Theme cá nhân: '+theme,'info');}
 function clearThemeUserOverride(){localStorage.removeItem('aurora_theme_user_override');if(currentGlobalTheme)applyTheme(currentGlobalTheme,false);}
 function applyThemeFromSupreme(theme){
-  const target=document.querySelector('input[name="themeTarget"]:checked').value;
+  if(theme==='extra')enableExtraGyroMotion();
+  const targetNode=document.querySelector('input[name="themeTarget"]:checked');
+  const target=targetNode?targetNode.value:'personal';
   if(target==='global'){applyTheme(theme,false);try{window.dbSet(window.ref(window.db,'system/global_theme'),{theme,setBy:currentUser?currentUser.username:'admin',updatedAt:Date.now()});showCenterSquareToast('🎨','Đã áp dụng!','Theme toàn hệ thống: '+theme,'success');}catch(e){}}
   else{applyTheme(theme,true);showCenterSquareToast('🎨','Đã áp dụng!','Theme cá nhân: '+theme,'success');}
 }
 function applyTheme(theme,saveLocal){
   if(!theme)theme='light';
+  const supportedThemes=['light','dark','glow','sunset','sky','galaxy','extra'];
+  if(!supportedThemes.includes(theme))theme='light';
   document.body.setAttribute('data-theme',theme);
+  if(theme==='extra')installExtraThemePointerMotion();
   const sw=document.getElementById('themeSwitchCheckbox');
   if(sw)sw.checked=(theme==='dark');
   if(saveLocal!==false){try{localStorage.setItem('aurora_theme',theme);}catch(e){}}
@@ -6467,10 +6638,12 @@ function toggleAiChat(){
     const name=currentEquippedAiModel?(currentEquippedAiModel.modelData.name||'Auro'):'Auro';
     const greeting=(currentEquippedAiModel&&currentEquippedAiModel.modelData.greeting)||(cachedAiConfig&&cachedAiConfig.greeting)||`Xin chào! Mình là ${name}, rất vui được gặp bạn 👋`;
     addAiChatMessage('ai',greeting);
+    updateAiChatVoiceControls();
+    setAiChatStatus(aiChatSpeakReplies?'Mình đang sẵn sàng trò chuyện. Câu trả lời sẽ được đọc thành tiếng.':'Mình đang sẵn sàng trò chuyện.',false);
   }
   setTimeout(()=>{const inp=document.getElementById('aiChatInput');if(inp)inp.focus();},200);
 }
-function closeAiChat(){const bubble=document.getElementById('aiChatBubble');if(bubble)bubble.classList.remove('show');aiChatOpen=false;}
+function closeAiChat(){const bubble=document.getElementById('aiChatBubble');if(bubble)bubble.classList.remove('show');aiChatOpen=false;if(window.speechSynthesis)window.speechSynthesis.cancel();}
 function addAiChatMessage(role,text){
   const c=document.getElementById('aiChatMessages');if(!c)return;
   const d=document.createElement('div');
@@ -6479,6 +6652,77 @@ function addAiChatMessage(role,text){
   c.appendChild(d);
   c.scrollTop=c.scrollHeight;
   aiChatHistory.push({role,text,time:Date.now()});
+  if(aiChatHistory.length>40)aiChatHistory.splice(0,aiChatHistory.length-40);
+}
+function setAiChatStatus(message, isError){
+  const el=document.getElementById('aiChatStatus');if(!el)return;
+  el.textContent=message||'';
+  el.classList.toggle('error',!!isError);
+  el.classList.toggle('ok',!!message&&!isError);
+}
+function getAiSpeechLanguage(){
+  const selected=document.getElementById('auroraLanguage')?.value||'vi';
+  return ({vi:'vi-VN',en:'en-US',ru:'ru-RU',zh:'zh-CN',ja:'ja-JP'})[selected]||'vi-VN';
+}
+function updateAiChatVoiceControls(){
+  const toggle=document.getElementById('aiChatSpeakToggle');
+  if(toggle){toggle.classList.toggle('active',!!aiChatSpeakReplies);toggle.setAttribute('aria-pressed',String(!!aiChatSpeakReplies));toggle.textContent=aiChatSpeakReplies?'🔊 Đọc':'🔇 Đọc';toggle.title=aiChatSpeakReplies?'Tắt đọc câu trả lời thành tiếng':'Bật đọc câu trả lời thành tiếng';}
+  const mic=document.getElementById('aiChatMicBtn');
+  if(mic){mic.classList.toggle('active',!!aiSpeechRecognition);mic.textContent=aiSpeechRecognition?'⏹️':'🎤';mic.setAttribute('aria-label',aiSpeechRecognition?'Dừng nhận giọng nói':'Bắt đầu nói');}
+}
+function toggleAiChatSpeech(){
+  aiChatSpeakReplies=!aiChatSpeakReplies;
+  updateAiChatVoiceControls();
+  if(!aiChatSpeakReplies&&window.speechSynthesis){window.speechSynthesis.cancel();setAiChatStatus('Đã tắt đọc thành tiếng. Bạn vẫn có thể nhắn tin hoặc dùng nút micro.',false);}
+  else {setAiChatStatus('Đã bật đọc thành tiếng cho câu trả lời tiếp theo.',false);const lastAi=[...aiChatHistory].reverse().find(m=>m&&m.role==='ai'&&m.text);if(lastAi)speakAiChatText(lastAi.text);}
+}
+function speakAiChatText(text){
+  if(!aiChatSpeakReplies||!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window))return;
+  const plain=String(text||'').replace(/```[\s\S]*?```/g,'Đoạn mã.').replace(/`([^`]+)`/g,'$1').replace(/https?:\/\/\S+/g,'đường liên kết').replace(/[*_>#~]/g,'').replace(/\n{3,}/g,'\n\n').trim();
+  if(!plain)return;
+  try{
+    window.speechSynthesis.cancel();
+    const utterance=new SpeechSynthesisUtterance(plain.slice(0,5000));
+    const lang=getAiSpeechLanguage();utterance.lang=lang;utterance.rate=1;utterance.pitch=1;
+    const voices=window.speechSynthesis.getVoices?window.speechSynthesis.getVoices():[];
+    const primary=lang.split('-')[0];
+    const voice=voices.find(v=>(v.lang||'').toLowerCase()===lang.toLowerCase())||voices.find(v=>(v.lang||'').toLowerCase().startsWith(primary));
+    if(voice)utterance.voice=voice;
+    utterance.onstart=()=>setAiChatStatus('Đang đọc câu trả lời thành tiếng…',false);
+    utterance.onend=()=>setAiChatStatus('Bạn có thể hỏi tiếp hoặc bật 👁️ để hỏi về nội dung trang.',false);
+    utterance.onerror=()=>setAiChatStatus('Trình duyệt không phát được giọng nói. Bạn vẫn có thể đọc câu trả lời trên khung chat.',true);
+    window.speechSynthesis.speak(utterance);
+  }catch(e){console.warn('Speech synthesis error',e);}
+}
+function toggleAiVoiceInput(){
+  if(aiSpeechRecognition){try{aiSpeechRecognition.stop();}catch(e){}return;}
+  const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!Recognition){setAiChatStatus('Trình duyệt này chưa hỗ trợ nhập bằng giọng nói. Hãy thử Chrome/Edge mới nhất hoặc nhập bằng bàn phím.',true);return;}
+  const recognition=new Recognition();
+  recognition.lang=getAiSpeechLanguage();recognition.continuous=false;recognition.interimResults=true;recognition.maxAlternatives=1;
+  aiSpeechFinalTranscript='';aiSpeechRecognition=recognition;updateAiChatVoiceControls();
+  recognition.onstart=()=>setAiChatStatus('Đang nghe… hãy nói câu hỏi của bạn.',false);
+  recognition.onresult=(event)=>{
+    let finalText='';let interimText='';
+    for(let i=0;i<event.results.length;i++){
+      const result=event.results[i];const phrase=(result[0]&&result[0].transcript||'').trim();
+      if(result.isFinal)finalText+=(finalText?' ':'')+phrase;else interimText+=(interimText?' ':'')+phrase;
+    }
+    if(finalText)aiSpeechFinalTranscript=finalText;
+    const input=document.getElementById('aiChatInput');if(input)input.value=aiSpeechFinalTranscript||interimText;
+    setAiChatStatus(interimText&&!aiSpeechFinalTranscript?'Đang nhận dạng: '+interimText:'Đã nhận giọng nói…',false);
+  };
+  recognition.onerror=(event)=>{
+    const message=event.error==='not-allowed'?'Bạn chưa cấp quyền micro cho website.':event.error==='no-speech'?'Chưa nghe thấy tiếng nói, thử lại nhé.':'Không nhận dạng được giọng nói ('+(event.error||'unknown')+').';
+    setAiChatStatus(message,true);
+  };
+  recognition.onend=()=>{
+    const finalText=aiSpeechFinalTranscript.trim();
+    aiSpeechRecognition=null;updateAiChatVoiceControls();
+    if(finalText){const input=document.getElementById('aiChatInput');if(input)input.value=finalText;sendAiChatMessage();}
+    else if(!document.getElementById('aiChatStatus')?.classList.contains('error'))setAiChatStatus('Đã dừng nghe. Bấm 🎤 để nói lại hoặc nhập tin nhắn.',false);
+  };
+  try{recognition.start();}catch(e){aiSpeechRecognition=null;updateAiChatVoiceControls();setAiChatStatus('Không bật được micro: '+(e.message||e),true);}
 }
 
 /* AI FLOAT BUBBLE (chat on head) */
@@ -6540,8 +6784,11 @@ function toggleAiScreenRead(){
   if(aiScreenReadActive){
     if(btn)btn.classList.add('active');
     if(ind)ind.classList.add('active');
-    showCenterSquareToast('👁️','AI đã bật đọc màn hình',(currentEquippedAiModel&&currentEquippedAiModel.modelData.name||'Auro')+' sẽ đọc nội dung trang để trả lời','success',2600);
-    addAiChatMessage('ai','👁️ Mình đã bật đọc màn hình. Bạn có thể hỏi về nội dung đang hiển thị trên trang nhé!');
+    showCenterSquareToast('👁️','AI đã bật đọc màn hình',(currentEquippedAiModel&&currentEquippedAiModel.modelData.name||'AI')+' sẽ đọc chữ đang hiển thị; ảnh/PDF có thể được OCR cục bộ để hỗ trợ trả lời.','success',3200);
+    addAiChatMessage('ai','👁️ Mình đã bật đọc màn hình. Bạn cứ hỏi bình thường về nội dung trang, câu hỏi, tài liệu hoặc hình/PDF đang mở nhé. Mình sẽ dùng phần chữ đọc được để trả lời và báo lại nếu có phần không đọc rõ.');
+    const chatBubble=document.getElementById('aiChatBubble');if(chatBubble){chatBubble.classList.add('show');aiChatOpen=true;}
+    setAiChatStatus('Đọc màn hình đang bật. Nội dung chữ và kết quả OCR sẽ được gửi kèm câu hỏi tới nhà cung cấp AI đã cấu hình.',false);
+    if(aiChatSpeakReplies)speakAiChatText('Đã bật đọc màn hình. Bạn có thể hỏi mình về nội dung đang mở trên trang.');
     // Nếu đang trong phòng thi → tự động đọc & trả lời đáp án
     if(isExamActive&&currentExamData){
       setTimeout(()=>autoAnalyzeExamForAi(),500);
@@ -6550,38 +6797,83 @@ function toggleAiScreenRead(){
     if(btn)btn.classList.remove('active');
     if(ind)ind.classList.remove('active');
     showCenterSquareToast('👁️','Đã tắt đọc màn hình','','info',2000);
+    setAiChatStatus('Đã tắt đọc màn hình. Chat vẫn hoạt động bình thường.',false);
   }
 }
-function captureScreenContext(){
+async function captureScreenContext(){
   if(!aiScreenReadActive)return '';
   try{
     const parts=[];
-    parts.push('📄 TIÊU ĐỀ TRANG: '+document.title);
+    parts.push('TIÊU ĐỀ TRANG: '+(document.title||''));
     const activeView=document.querySelector('.view-section.active');
-    if(activeView){parts.push('📌 VIEW ĐANG MỞ: '+activeView.id);}
+    if(activeView){
+      parts.push('VIEW ĐANG MỞ: '+(activeView.id||'trang hiện tại'));
+      const visibleText=(activeView.innerText||activeView.textContent||'').replace(/\n{3,}/g,'\n\n').trim();
+      if(visibleText)parts.push('NỘI DUNG ĐANG HIỂN THỊ:\n'+visibleText.slice(0,7000));
+    }
+    const visibleOverlays=[...document.querySelectorAll('.modal-overlay.show,#profileModal.show,#bigNotifyOverlay.show,#documentLibraryStudentModal.show,#itemDetailModal.show')];
+    for(const overlay of visibleOverlays.slice(0,3)){
+      const tx=(overlay.innerText||overlay.textContent||'').replace(/\n{3,}/g,'\n\n').trim();
+      if(tx)parts.push('HỘP THOẠI ĐANG MỞ:\n'+tx.slice(0,1800));
+    }
     if(isExamActive&&currentExamData){
-      parts.push('📝 ĐANG LÀM BÀI THI: '+currentExamData.title);
+      parts.push('ĐANG LÀM BÀI: '+(currentExamData.title||'Bài thi'));
       const media=document.getElementById('examMediaContainer');
-      if(media){const txt=media.innerText.slice(0,1500);if(txt)parts.push('NỘI DUNG ĐỀ: '+txt);}
+      const mediaText=(media?.innerText||media?.textContent||'').trim();
+      if(mediaText)parts.push('NỘI DUNG ĐỀ ĐANG HIỂN THỊ:\n'+mediaText.slice(0,3000));
       const sheet=document.getElementById('studentAnswerSheet');
-      if(sheet){parts.push('CÂU HỎI: '+sheet.innerText.slice(0,2000));}
+      const sheetText=(sheet?.innerText||sheet?.textContent||'').trim();
+      if(sheetText)parts.push('CÂU HỎI VÀ LỰA CHỌN ĐANG HIỂN THỊ:\n'+sheetText.slice(0,3000));
     }
     if(isQpActive&&currentQpData){
-      parts.push('📝 ĐANG LUYỆN TẬP: '+currentQpData.title);
-      const c=document.getElementById('qpPlayQuestionsContainer');
-      if(c)parts.push('NỘI DUNG: '+c.innerText.slice(0,2000));
+      parts.push('ĐANG LUYỆN TẬP: '+(currentQpData.title||''));
+      const qbox=document.getElementById('qpPlayQuestionsContainer');
+      const qtext=(qbox?.innerText||qbox?.textContent||'').trim();
+      if(qtext)parts.push('NỘI DUNG LUYỆN TẬP:\n'+qtext.slice(0,3000));
     }
-    if(document.getElementById('profileModal').classList.contains('show')){
-      const p=document.querySelector('.profile-box');
-      if(p)parts.push('HỒ SƠ ĐANG XEM: '+p.innerText.slice(0,1500));
+    const profile=document.getElementById('profileModal');
+    if(profile?.classList.contains('show')){
+      const tx=(profile.querySelector('.profile-box')?.innerText||'').trim();
+      if(tx)parts.push('HỒ SƠ ĐANG XEM:\n'+tx.slice(0,1800));
     }
-    if(document.getElementById('bigNotifyOverlay').classList.contains('show')){
-      const t=document.getElementById('bigNotifyTitle').innerText;
-      const m=document.getElementById('bigNotifyMsg').innerText;
-      parts.push('THÔNG BÁO: '+t+' - '+m);
+    const notify=document.getElementById('bigNotifyOverlay');
+    if(notify?.classList.contains('show')){
+      const title=document.getElementById('bigNotifyTitle')?.innerText||'';
+      const message=document.getElementById('bigNotifyMsg')?.innerText||'';
+      if(title||message)parts.push('THÔNG BÁO ĐANG MỞ: '+title+' — '+message);
     }
-    if(activeView){const txt=activeView.innerText.slice(0,3000);if(txt)parts.push('NỘI DUNG VIEW: '+txt);}
-    return parts.join('\n');
+
+    // OCR chạy cục bộ cho trang có câu hỏi chỉ được vẽ thành canvas/ảnh (ví dụ PDF).
+    // Chỉ lấy tối đa hai vùng hình ảnh lớn đang nhìn thấy để tránh quét cả website.
+    const root=activeView||document.body;
+    const candidates=[...root.querySelectorAll('canvas,img')].filter(el=>{
+      if(el.closest('#aiModelWidget,.ai-chat-bubble,.ai-float-bubble'))return false;
+      const rect=el.getBoundingClientRect();const style=window.getComputedStyle(el);
+      const w=el.tagName==='IMG'?(el.naturalWidth||0):(el.width||rect.width);
+      const h=el.tagName==='IMG'?(el.naturalHeight||0):(el.height||rect.height);
+      return style.display!=='none'&&style.visibility!=='hidden'&&rect.width>100&&rect.height>60&&w>180&&h>80&&rect.bottom>0&&rect.right>0&&rect.top<window.innerHeight&&rect.left<window.innerWidth;
+    }).sort((a,b)=>{const rank=el=>el.matches('.pdf-canvas,#examMediaContainer canvas,[id*=pdf i]')?0:(el.tagName==='CANVAS'?1:2);return rank(a)-rank(b);}).slice(0,2);
+    const ocrTexts=[];
+    if(candidates.length&&window.Tesseract&&typeof window.Tesseract.recognize==='function'){
+      for(const el of candidates){
+        const sig=[el.tagName,el.id||'',el.tagName==='IMG'?(el.currentSrc||el.src||''):'',el.width||'',el.height||'',el.tagName==='CANVAS'?'canvas':'img'].join('|');
+        const cached=aiScreenOcrCache.get(el);
+        if(cached&&cached.signature===sig&&Date.now()-cached.at<20000){if(cached.text)ocrTexts.push(cached.text);continue;}
+        try{
+          setAiChatStatus('Đang đọc nội dung chữ trong ảnh/PDF hiển thị…',false);
+          let result;
+          try{result=await window.Tesseract.recognize(el,'vie+eng');}
+          catch(langError){result=await window.Tesseract.recognize(el,'eng');}
+          const text=(result?.data?.text||'').replace(/\n{3,}/g,'\n\n').trim().slice(0,2400);
+          aiScreenOcrCache.set(el,{signature:sig,text,at:Date.now()});
+          if(text)ocrTexts.push(text);
+        }catch(ocrError){console.warn('Screen OCR skipped',ocrError);}
+      }
+    }
+    if(ocrTexts.length)parts.push('CHỮ ĐỌC ĐƯỢC TỪ ẢNH/CANVAS TRÊN MÀN HÌNH (OCR):\n'+ocrTexts.join('\n---\n').slice(0,4500));
+    // Tránh gửi chính đoạn chat của AI như một phần của trang nguồn.
+    const result=parts.join('\n\n').replace(/\n{3,}/g,'\n\n');
+    return result.slice(0,14000);
   }catch(e){console.error('captureScreenContext error',e);return '';}
 }
 async function autoAnalyzeExamForAi(){
@@ -6606,15 +6898,37 @@ async function autoAnalyzeExamForAi(){
 /* AI CHAT */
 async function sendAiChatMessage(){
   const inp=document.getElementById('aiChatInput');if(!inp)return;
-  const text=inp.value.trim();if(!text)return;
+  const text=inp.value.trim();if(!text||aiChatRequestPending)return;
   inp.value='';
+  aiChatRequestPending=true;
+  const sendBtn=document.getElementById('aiChatSendBtn');if(sendBtn)sendBtn.disabled=true;
+  setAiChatStatus(aiScreenReadActive?'Đang đọc nội dung trang và suy nghĩ…':'Đang suy nghĩ câu trả lời…',false);
   addAiChatMessage('user',text);
-  let screenCtx='';
-  if(aiScreenReadActive)screenCtx=captureScreenContext();
-  const reply=await getAiReplyWithContext(text,screenCtx);
-  addAiChatMessage('ai',reply);
-  // Hiện bubble tóm tắt
-  showAiFloatBubble(reply.slice(0,150)+(reply.length>150?'...':''),7);
+  try{
+    aiChatLastApiError='';
+    let screenCtx='';
+    if(aiScreenReadActive)screenCtx=await captureScreenContext();
+    const reply=await getAiReplyWithContext(text,screenCtx);
+    addAiChatMessage('ai',reply);
+    showAiFloatBubble(reply.slice(0,150)+(reply.length>150?'...':''),7);
+    speakAiChatText(reply);
+    if(aiChatLastApiError){
+      setAiChatStatus('AI API gặp lỗi: '+aiChatLastApiError.slice(0,180)+'. Hãy kiểm tra API key/model/endpoint trong Cấu hình.',true);
+    }else if(!cachedAiConfig||!cachedAiConfig.enabled||!cachedAiConfig.endpoint||!cachedAiConfig.apiKey){
+      setAiChatStatus('Đang dùng phản hồi cơ bản vì chưa có cấu hình API AI. Mở Cấu hình → Setup AI Model để trò chuyện thông minh hơn.',true);
+    }else if(screenCtx){
+      setAiChatStatus('Đã trả lời dựa trên nội dung trang đang mở.',false);
+    }else{
+      setAiChatStatus('Bạn có thể hỏi tiếp, dùng 🎤 để nói hoặc bật 👁️ để đọc nội dung trang.',false);
+    }
+  }catch(error){
+    console.error('sendAiChatMessage error',error);
+    const msg='Mình gặp lỗi khi xử lý câu hỏi. Hãy kiểm tra kết nối mạng và cấu hình API AI rồi thử lại.';
+    addAiChatMessage('ai',msg);speakAiChatText(msg);setAiChatStatus(msg,true);
+  }finally{
+    aiChatRequestPending=false;if(sendBtn)sendBtn.disabled=false;
+    if(aiChatOpen&&document.activeElement!==inp)inp.focus();
+  }
 }
 
 /* ============ UNIVERSAL AI API CALLER (fix Gemini + OpenAI) ============ */
@@ -6653,7 +6967,7 @@ async function callAiApi(messages, opts){
           });
         }
         if(!parts.length)parts.push({text:''});
-        contents.push({role:m.role==='assistant'?'model':'user',parts});
+        contents.push({role:(m.role==='assistant'||m.role==='ai')?'model':'user',parts});
       }
     });
     const body={contents,generationConfig:{temperature,maxOutputTokens:maxTokens}};
@@ -6711,25 +7025,40 @@ async function getAiReplyWithContext(text,screenCtx){
   }
   if(cachedAiConfig&&cachedAiConfig.enabled&&cachedAiConfig.endpoint&&cachedAiConfig.apiKey){
     try{
-      let systemPrompt=cachedAiConfig.systemPrompt||`Bạn là ${name} - trợ lý AI thân thiện, thông minh. Trả lời ngắn gọn, tự nhiên.`;
+      let systemPrompt=cachedAiConfig.systemPrompt||`Bạn là ${name}, một người bạn đồng hành AI thân thiện, biết lắng nghe và trò chuyện tự nhiên bằng ngôn ngữ người dùng đang sử dụng. Hãy phản hồi như một cuộc trò chuyện thật: hiểu ý, đồng cảm khi người dùng chia sẻ, trả lời trực tiếp, giải thích rõ khi được hỏi, nhớ ngữ cảnh các lượt trước, hỏi lại nhẹ nhàng khi thiếu thông tin, không lặp đi lặp lại một mẫu câu. Không bịa thông tin khi không biết. Nếu người dùng hỏi về nội dung trang, hãy dựa vào ngữ cảnh màn hình được cung cấp và nói rõ nếu không đủ dữ liệu.`;
+      systemPrompt+='\n\nHãy dùng tên model '+name+' nếu phù hợp, nhưng đừng tự giới thiệu lại ở mỗi câu trả lời. Trả lời tự nhiên, hữu ích, không quá ngắn cụt ngủn và không quá dài nếu người dùng chỉ đang trò chuyện.';
       if(screenCtx){
-        systemPrompt+='\n\n👁️ BẠN ĐANG ĐỌC ĐƯỢC NỘI DUNG MÀN HÌNH HIỆN TẠI:\n'+screenCtx+'\n\nHãy dùng thông tin này để trả lời chính xác câu hỏi của user.';
+        systemPrompt+='\n\nNgười dùng đã chủ động bật chức năng đọc màn hình. Bên dưới là văn bản lấy từ nội dung đang hiển thị và/hoặc OCR cục bộ từ ảnh/canvas. Hãy lấy đó làm ngữ cảnh chính nếu câu hỏi liên quan; trích đúng nội dung khi cần, phân biệt dữ kiện có trong trang với suy luận, và nói rõ khi không đọc được một phần.';
       }
-      const messages=[
-        {role:'system',content:systemPrompt},
-        ...aiChatHistory.slice(-8).map(m=>({role:m.role,content:m.text})),
-        {role:'user',content:text}
-      ];
+      // addAiChatMessage lưu role 'ai' và 'user'; chuyển 'ai' thành 'assistant'.
+      // Bỏ tin nhắn hiện tại ra khỏi history (nó đã được thêm vào UI), bỏ lời chào AI đứng đầu và chuẩn hóa các lượt liên tiếp để Gemini/OpenAI cùng nhận đúng lịch sử.
+      const historySource=aiChatHistory.slice(0,-1).filter(m=>m&&['ai','assistant','user'].includes(m.role)).slice(-14);
+      const previousTurns=[];
+      for(const item of historySource){
+        const role=item.role==='ai'?'assistant':item.role;
+        const content=String(item.text||'').trim();if(!content)continue;
+        if(previousTurns.length&&previousTurns[previousTurns.length-1].role===role)previousTurns[previousTurns.length-1].content+='\n'+content;
+        else previousTurns.push({role,content});
+      }
+      while(previousTurns.length&&previousTurns[0].role!=='user')previousTurns.shift();
+      const currentUserContent=screenCtx?`NỘI DUNG MÀN HÌNH ĐANG MỞ:
+${screenCtx}
+
+CÂU HỎI / LỜI NHẮN CỦA NGƯỜI DÙNG:
+${text}`:text;
+      if(previousTurns.length&&previousTurns[previousTurns.length-1].role==='user')previousTurns[previousTurns.length-1].content+='\n\n'+currentUserContent;
+      else previousTurns.push({role:'user',content:currentUserContent});
+      const messages=[{role:'system',content:systemPrompt},...previousTurns];
       const reply=await callAiApi(messages);
       if(reply)return reply;
-    }catch(e){console.warn('AI fetch error',e);}
+    }catch(e){aiChatLastApiError=String(e&&e.message||e||'Kết nối thất bại');console.warn('AI fetch error',e);setAiChatStatus('API AI đang lỗi hoặc không kết nối được. Đang dùng câu trả lời cơ bản; hãy kiểm tra API key, model và endpoint trong Cấu hình.',true);}
   }
   return getOfflineAiReply(text,name);
 }
 async function getAiReply(text){
   const name=currentEquippedAiModel?(currentEquippedAiModel.modelData.name||'Auro'):'Auro';
   let screenCtx='';
-  if(aiScreenReadActive)screenCtx=captureScreenContext();
+  if(aiScreenReadActive)screenCtx=await captureScreenContext();
   return getAiReplyWithContext(text,screenCtx);
 }
 function getOfflineAiReply(text,name){
@@ -8492,6 +8821,8 @@ async function saveAiGeneratedExam(){
 
 /* DOMContentLoaded */
 window.addEventListener('DOMContentLoaded',()=>{
+  renderLoggedOutNav();installExtraThemePointerMotion();
+  ['loginIdentifier','loginPassword'].forEach(id=>{const field=document.getElementById(id);if(field)field.addEventListener('input',clearLoginInlineError,{passive:true});});
   checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();
   const savedTheme=localStorage.getItem('aurora_theme')||'light';applyTheme(savedTheme,false);
   listenCustomButtons();
@@ -8739,7 +9070,7 @@ initEcCreatePanel();
     const langWrap = createElement('div', { id: 'auroraLanguageWrap' });
     langWrap.innerHTML = '<span>🌐</span><select id="auroraLanguage" aria-label="Ngôn ngữ"><option value="vi">Tiếng Việt</option><option value="en">ENG</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option></select>';
     nav.insertAdjacentElement('beforebegin', langWrap);
-    byId('auroraLanguage').addEventListener('change', async e => { extLanguageChangeSerial++; extConfig.language = e.target.value || 'vi'; applyLanguage(); applyMenuConfig(); syncLanguageControls(); refreshAllExtensionPages(); const ok = await persistConfig(false); if(!ok) toast('Ngôn ngữ đã đổi và lưu trên trình duyệt này; đồng bộ máy chủ chưa thành công.', 'warn'); });
+    byId('auroraLanguage').addEventListener('change', async e => { const selected=(e.target.value||'vi'); extLanguageChangeSerial++; extConfig.language=selected; document.documentElement.lang=selected==='zh'?'zh-CN':selected; refreshAllExtensionPages(); mountSettingsValues(); applyLanguage(); applyMenuConfig(); syncLanguageControls(); const ok=await persistConfig(false); if(!ok) toast('Ngôn ngữ đã đổi và lưu trên trình duyệt này; đồng bộ máy chủ chưa thành công.', 'warn'); });
     const drawer = createElement('div', { id: 'auroraMenuDrawer' });
     drawer.innerHTML = '<div id="auroraMenuDrawerPanel"><div style="display:flex;align-items:center;justify-content:space-between"><div class="aurora-drawer-title">✨ Aurora</div><button type="button" id="auroraDrawerClose" style="width:auto;margin:0 0 10px;padding:6px 12px">✕</button></div><div id="auroraDrawerItems"></div></div>';
     drawer.addEventListener('click', e => { if (e.target === drawer) closeMenuDrawer(); });
@@ -8858,6 +9189,28 @@ initEcCreatePanel();
       'Mọi tài khoản mới ở cấp Basic. Tính năng mua gói hiện chưa mở bán.':'新規アカウントはBasicです。有料プランはまだ販売していません。'
     }
   };
+  // Broader local UI translations for the legacy pages. User-generated text, document contents
+  // and exam material are intentionally not translated as if they were interface labels.
+  const AURORA_EXTRA_TRANSLATION_ROWS = [
+    ['Thông báo','Notification','Уведомление','通知','通知'],['Hủy','Cancel','Отмена','取消','キャンセル'],['Vàng','Gold','Золотой','金色','ゴールド'],['Đóng','Close','Закрыть','关闭','閉じる'],['Không có','None','Нет','无','なし'],
+    ['Lưu Lựa Chọn','Save selection','Сохранить выбор','保存选择','選択を保存'],['Tạo Vai Trò Mới','Create new role','Создать роль','创建新角色','新しいロールを作成'],['Tên vai trò:','Role name:','Название роли:','角色名称：','ロール名：'],['Màu nền:','Background color:','Цвет фона:','背景颜色：','背景色：'],['Màu chữ:','Text color:','Цвет текста:','文字颜色：','文字色：'],['Bật hiệu ứng Aura','Enable Aura effect','Включить эффект Aura','启用 Aura 特效','Aura エフェクトを有効化'],
+    ['Tên huy chương','Medal name','Название медали','勋章名称','メダル名'],['Tên:','Name:','Название:','名称：','名前：'],['Bậc:','Tier:','Уровень:','等级：','ランク：'],['Giới thiệu:','Description:','Описание:','介绍：','説明：'],['Lưu Vai Trò','Save role','Сохранить роль','保存角色','ロールを保存'],['Lưu căn chỉnh','Save alignment','Сохранить положение','保存对齐设置','位置を保存'],['XEM TRƯỚC:','PREVIEW:','ПРЕДПРОСМОТР:','预览：','プレビュー：'],['Áp dụng','Apply','Применить','应用','適用'],['Đã rõ','Understood','Понятно','明白','了解'],['Xác Nhận','Confirm','Подтвердить','确认','確認'],
+    ['Đăng nhập','Log in','Войти','登录','ログイン'],['Đăng ký','Sign up','Регистрация','注册','新規登録'],['Đăng xuất','Log out','Выйти','退出登录','ログアウト'],['Tên đăng nhập hoặc Email:','Username or email:','Имя пользователя или email:','用户名或邮箱：','ユーザー名またはメール：'],['Mật khẩu:','Password:','Пароль:','密码：','パスワード：'],['Quên mật khẩu?','Forgot password?','Забыли пароль?','忘记密码？','パスワードをお忘れですか？'],['Vai trò:','Role:','Роль:','角色：','役割：'],['Học sinh','Student','Ученик','学生','生徒'],['Giáo viên','Teacher','Учитель','教师','教師'],['Khác','Other','Другое','其他','その他'],['Tên đăng nhập (tên thật):','Username (real name):','Имя пользователя (настоящее имя):','用户名（真实姓名）：','ユーザー名（本名）：'],['Xác nhận mật khẩu:','Confirm password:','Подтвердите пароль:','确认密码：','パスワードを確認：'],['Đăng Ký','Sign up','Зарегистрироваться','注册','登録'],['Email đã đăng ký:','Registered email:','Зарегистрированный email:','已注册邮箱：','登録済みメール：'],['Đang tải...','Loading...','Загрузка...','正在加载…','読み込み中…'],['Gửi Mã','Send code','Отправить код','发送验证码','コードを送信'],['Mã xác nhận:','Verification code:','Код подтверждения:','验证码：','確認コード：'],['Gửi lại','Resend','Отправить повторно','重新发送','再送信'],['Mật khẩu mới:','New password:','Новый пароль:','新密码：','新しいパスワード：'],['Đặt Lại','Reset','Сбросить','重置','リセット'],
+    ['CHỌN CHẾ ĐỘ HIỂN THỊ','CHOOSE DISPLAY MODE','ВЫБЕРИТЕ РЕЖИМ ОТОБРАЖЕНИЯ','选择显示模式','表示モードを選択'],['Chọn chế độ phù hợp thiết bị.','Choose the mode that fits your device.','Выберите режим для вашего устройства.','选择适合设备的模式。','端末に合ったモードを選択してください。'],['1. Đầy đủ','1. Full','1. Полный','1. 完整模式','1. フル'],['Bật tất cả hiệu ứng.','Enable all effects.','Включить все эффекты.','启用所有特效。','すべてのエフェクトを有効にする。'],['2. Tối ưu','2. Optimized','2. Оптимизированный','2. 优化模式','2. 最適化'],['Tắt hiệu ứng nặng.','Disable heavy effects.','Отключить тяжёлые эффекты.','关闭较耗资源的特效。','重いエフェクトを無効にする。'],
+    ['Tải QR','Download QR','Скачать QR','下载二维码','QR をダウンロード'],['QUÉT MÃ QR','SCAN QR CODE','СКАНИРОВАТЬ QR-КОД','扫描二维码','QR コードをスキャン'],['TÀI LIỆU','DOCUMENTS','ДОКУМЕНТЫ','资料','資料'],['XÁC THỰC TỐI CAO','SUPREME VERIFICATION','ПОДТВЕРЖДЕНИЕ АДМИНИСТРАТОРА','高级验证','管理者認証'],['Nhập mật khẩu VUA hoặc PARTNER:','Enter KING or PARTNER password:','Введите пароль KING или PARTNER:','输入 KING 或 PARTNER 密码：','KING または PARTNER のパスワードを入力：'],['Chi Tiết','Details','Подробности','详情','詳細'],['XÁC THỰC BẢO MẬT','SECURITY VERIFICATION','ПРОВЕРКА БЕЗОПАСНОСТИ','安全验证','セキュリティ認証'],['Mã Đề:','Exam code:','Код теста:','试卷代码：','試験コード：'],['Phòng Live','Live room','Онлайн-комната','实时考场','ライブ教室'],['Phòng Quản Lý','Management room','Комната управления','管理室','管理ルーム'],['Tải PDF','Download PDF','Скачать PDF','下载 PDF','PDF をダウンロード'],['Xóa Đề','Delete test','Удалить тест','删除试卷','テストを削除'],['ĐANG CHỜ','WAITING','ОЖИДАНИЕ','等待中','待機中'],['Học Sinh:','Students:','Ученики:','学生：','生徒：'],['Cảnh cáo','Warnings','Предупреждения','警告','警告'],['Rời tab','Tab switching','Переключение вкладки','离开标签页','タブ移動'],['Chưa có','None yet','Пока нет','暂无','まだありません'],['CHÀO MỪNG','WELCOME','ДОБРО ПОЖАЛОВАТЬ','欢迎','ようこそ'],['Cảnh Báo Gian Lận','Cheating warning','Предупреждение о списывании','作弊警告','不正行為の警告'],['Số lần:','Count:','Количество:','次数：','回数：'],['Tổng thời gian:','Total time:','Общее время:','总时长：','合計時間：'],['BÀI ĐÃ BỊ CƯỠNG CHẾ NỘP','EXAM FORCE-SUBMITTED','РАБОТА ОТПРАВЛЕНА ПРИНУДИТЕЛЬНО','试卷已被强制提交','試験が強制提出されました'],['Lý do:','Reason:','Причина:','原因：','理由：'],['Bài làm đã được ghi nhận.','Your submission has been recorded.','Ваша работа записана.','已记录你的答卷。','解答を記録しました。'],
+    ['Đếm Ngược Kỳ Thi THPTQG','National Graduation Exam Countdown','Обратный отсчёт до выпускного экзамена','高中毕业考试倒计时','高校卒業試験カウントダウン'],['Ngày','Days','Дни','天','日'],['Giờ','Hours','Часы','小时','時間'],['Phút','Minutes','Минуты','分钟','分'],['Giây','Seconds','Секунды','秒','秒'],['Vào thi ngay','Start exam now','Начать экзамен','立即考试','今すぐ試験開始'],['Đang online','Online now','Сейчас онлайн','当前在线','オンライン中'],['Người đã tham gia','Registered users','Зарегистрированные пользователи','注册用户','登録ユーザー'],['Giới thiệu Web','About the website','О сайте','网站介绍','サイトについて'],['Hướng đến người dùng','For users','Для пользователей','面向用户','ユーザー向け'],['Xu hướng người dùng','User trends','Тенденции пользователей','用户趋势','ユーザーの傾向'],['Thông báo cập nhật','Update announcements','Объявления об обновлениях','更新公告','更新のお知らせ'],['Người thành lập Web','Website founder','Основатель сайта','网站创建者','サイト創設者'],['Đối tác','Partners','Партнёры','合作伙伴','パートナー'],['Top Ưu Tú','Top achievers','Лучшие участники','优秀榜','優秀ユーザー'],
+    ['Làm Bài Thi','Take an exam','Сдать тест','参加考试','試験を受ける'],['Tài Liệu','Documents','Документы','资料','資料'],['Học Sinh Vào Thi','Student exam entry','Вход ученика на экзамен','学生进入考试','生徒の試験参加'],['Hình thức:','Mode:','Формат:','形式：','形式：'],['Thi Tự Do','Free exam','Свободный тест','自由考试','自由試験'],['Phòng Thi Chuyên Dụng','Dedicated exam room','Специальная экзаменационная комната','专用考场','専用試験室'],['Cần mật khẩu','Password required','Требуется пароль','需要密码','パスワードが必要'],['Bài Luyện Nhanh','Quick practice','Быстрая практика','快速练习','クイック練習'],['Luyện tập','Practice','Практика','练习','練習'],['Đề cắt ảnh','Image-based test','Тест по изображениям','图片试卷','画像テスト'],['Biệt danh:','Nickname:','Псевдоним:','昵称：','ニックネーム：'],['Bấm tên trên navbar để đổi.','Click your name in the navbar to change it.','Нажмите на имя в панели навигации, чтобы изменить его.','点击导航栏中的名字即可更改。','ナビゲーションバーの名前をクリックして変更します。'],['Bắt Đầu','Start','Начать','开始','開始'],['Quét QR','Scan QR','Сканировать QR','扫描二维码','QR をスキャン'],['KHO TÀI LIỆU HỌC TẬP','STUDY DOCUMENT LIBRARY','БИБЛИОТЕКА УЧЕБНЫХ МАТЕРИАЛОВ','学习资料库','学習資料ライブラリ'],['Lớp','Grade','Класс','年级','学年'],['Tất cả','All','Все','全部','すべて'],['Môn','Subject','Предмет','科目','科目'],['Dạng','Type','Тип','类型','種類'],['Công thức','Formula','Формулы','公式','公式'],['Lý thuyết','Theory','Теория','理论','理論'],['Dạng đề','Test format','Тип задания','试卷类型','問題形式'],['Dạng câu hỏi','Question type','Тип вопроса','题型','設問形式'],['Mẫu','Template','Шаблон','模板','テンプレート'],['Tìm','Search','Поиск','搜索','検索'],['Tổng:','Total:','Всего:','总计：','合計：'],['tài liệu','documents','документов','份资料','件の資料'],['Tài liệu GV đăng','Teacher-uploaded documents','Материалы учителей','教师上传的资料','教師がアップロードした資料'],
+    ['Tạo Đề Kiểm Tra V2','Create Test V2','Создать тест V2','创建试卷 V2','テスト作成 V2'],['Đặt Lại','Reset','Сбросить','重置','リセット'],['Nâng Cao','Advanced','Дополнительно','高级','詳細'],['Tên bài:','Test name:','Название теста:','试卷名称：','テスト名：'],['Hình thức tải:','Upload format:','Формат загрузки:','上传格式：','アップロード形式：'],['PDF đề thi','Exam PDF','PDF теста','试卷 PDF','試験 PDF'],['Ảnh đề thi','Exam images','Изображения теста','试卷图片','試験画像'],['Cài đặt nâng cao','Advanced settings','Расширенные настройки','高级设置','詳細設定'],['Đếm ngược','Countdown','Обратный отсчёт','倒计时','カウントダウン'],['Chống gian lận','Anti-cheating','Защита от списывания','防作弊','不正防止'],['Giới hạn:','Limit:','Лимит:','限制：','制限：'],['Không','No','Нет','否','なし'],['Có','Yes','Да','是','あり'],['Tối đa:','Maximum:','Максимум:','最多：','最大：'],['Giới hạn lần làm','Attempt limit','Ограничение попыток','答题次数限制','受験回数制限'],['Phân tích AI (đang thử nghiệm)','AI analysis (experimental)','Анализ ИИ (экспериментально)','AI 分析（实验功能）','AI 分析（試験中）'],['Giới hạn HS:','Student limit:','Лимит учеников:','学生限制：','生徒数の上限：'],['Tự Động Nhập Đáp Án','Automatic answer entry','Автоматический ввод ответов','自动录入答案','解答の自動入力'],['Câu Hỏi','Questions','Вопросы','问题','質問'],['Lưu & Phát Hành','Save & Publish','Сохранить и опубликовать','保存并发布','保存して公開'],['PHÒNG CHỜ BÀI LUYỆN','PRACTICE WAITING ROOM','КОМНАТА ОЖИДАНИЯ ПРАКТИКИ','练习等待室','練習待機室'],['Thí sinh:','Candidates:','Участники:','考生：','受験者：'],['Số câu:','Questions:','Количество вопросов:','题数：','問題数：'],['Đang trong phòng:','In room:','В комнате:','房间内：','ルーム内：'],['Rời Phòng','Leave room','Покинуть комнату','离开房间','ルームを退出'],['PHÒNG CHỜ THI','EXAM WAITING ROOM','КОМНАТА ОЖИДАНИЯ ЭКЗАМЕНА','考试等待室','試験待機室'],['Thời gian:','Time:','Время:','时间：','時間：'],['phút','minutes','минут','分钟','分'],['CHỜ GIÁO VIÊN...','WAITING FOR TEACHER...','ОЖИДАНИЕ УЧИТЕЛЯ...','等待老师…','先生を待っています…'],['Đề Thi','Exam','Экзамен','试卷','試験'],['Thoát','Exit','Выход','退出','終了'],['Nộp Bài','Submit','Сдать работу','提交答卷','提出'],['Kết Quả Bài Kiểm Tra','Test Results','Результаты теста','考试结果','試験結果'],['Chi Tiết','Details','Подробности','详情','詳細'],['Về Trang Chủ','Back to Home','На главную','返回首页','ホームへ戻る'],['Kết Quả Bài Luyện','Practice Results','Результаты практики','练习结果','練習結果'],['BẢNG XẾP HẠNG','LEADERBOARD','ТАБЛИЦА РЕЙТИНГА','排行榜','ランキング'],['BXH TOÀN SEVER','GLOBAL SERVER RANKING','ОБЩИЙ РЕЙТИНГ СЕРВЕРА','全服排行榜','全サーバーランキング'],['BXH BÀI THI','EXAM RANKING','РЕЙТИНГ ЭКЗАМЕНОВ','考试排行榜','試験ランキング'],['BỤC VINH DANH','HALL OF FAME','ДОСКА ПОЧЁТА','荣誉榜','殿堂入り'],['Làm mới','Refresh','Обновить','刷新','更新'],['Hạng','Rank','Место','排名','順位'],['Tổng Điểm','Total points','Всего баллов','总分','合計点'],['Số Bài','Submissions','Количество работ','答题数','提出数'],['ĐTB','Average score','Средний балл','平均分','平均点'],['Hồ sơ','Profile','Профиль','个人资料','プロフィール'],['Xóa Lịch Sử','Clear history','Очистить историю','清除记录','履歴を削除'],['Tài khoản (Biệt danh)','Account (nickname)','Аккаунт (псевдоним)','账户（昵称）','アカウント（ニックネーム）'],['Điểm','Score','Баллы','分数','点数'],['Cẩm nang','Guidebook','Справочник','指南','ガイドブック'],['Trang Chủ','Home','Главная','首页','ホーム'],['Xếp Hạng','Ranking','Рейтинг','排名','ランキング'],['Hồ Sơ','Profile','Профиль','个人资料','プロフィール'],['Tối Cao','Supreme','Администратор','高级管理','管理者'],['Giải Trí','Entertainment','Развлечения','娱乐','エンタメ'],['Giao Diện','Appearance','Внешний вид','外观','外観'],['Chế độ hiển thị','Display mode','Режим отображения','显示模式','表示モード'],['Hiện tại:','Current:','Текущий:','当前：','現在：'],['Đổi chế độ','Change mode','Изменить режим','切换模式','モードを変更'],
+    ['Kiểu phát:','Playback mode:','Режим воспроизведения:','播放模式：','再生モード：'],['Âm lượng','Volume','Громкость','音量','音量'],['Lưu thứ tự','Save order','Сохранить порядок','保存顺序','順序を保存'],['Tìm tên hoặc email...','Search name or email...','Поиск по имени или email...','搜索姓名或邮箱…','名前またはメールを検索…'],['Đối tượng nhận','Recipients','Получатели','接收对象','受信者'],['Tất cả người đang online','Everyone online','Все онлайн','所有在线用户','オンラインの全員'],['Chọn người cụ thể','Choose specific users','Выбрать конкретных пользователей','选择指定用户','特定ユーザーを選択'],['Tiêu đề:','Title:','Заголовок:','标题：','タイトル：'],['Nội dung chữ:','Text content:','Текст сообщения:','文本内容：','本文：'],['Nhập nội dung...','Enter content...','Введите текст...','输入内容…','内容を入力…'],['Gửi Thông Báo','Send announcement','Отправить объявление','发送通知','お知らせを送信'],['Xóa Tất Cả Thông Báo','Clear all announcements','Удалить все объявления','清除所有通知','すべてのお知らせを削除'],
+    ['🔒 VOICE KÍN — ÂM THANH RIÊNG THEO @ID','🔒 PRIVATE VOICE — AUDIO FOR @ID ONLY','🔒 ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','🔒 私密语音 — 仅发送给 @ID','🔒 プライベート音声 — @ID のみ'],['VOICE KÍN — ÂM THANH RIÊNG THEO @ID','PRIVATE VOICE — AUDIO FOR @ID ONLY','ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','私密语音 — 仅发送给 @ID','プライベート音声 — @ID のみ'],['👤 ID người nhận (ví dụ @username)','👤 Recipient ID (e.g. @username)','👤 ID получателя (например, @username)','👤 接收者 ID（例如 @username）','👤 受信者 ID（例：@username）'],['🎵 File âm thanh (tối đa 20 MB)','🎵 Audio file (up to 20 MB)','🎵 Аудиофайл (до 20 МБ)','🎵 音频文件（最大 20 MB）','🎵 音声ファイル（最大 20 MB）'],['Tải âm thanh, nhập @ID người nhận rồi bấm Phát voice kín. Hệ thống chỉ gửi tín hiệu tới hộp thư riêng của tài khoản đích khi tài khoản đó đang online.','Upload audio, enter the recipient @ID, then click Play private voice. The system sends the notification only to the recipient inbox while that account is online.','Загрузите аудио, введите @ID получателя и нажмите «Отправить личное аудио». Уведомление отправляется только в личный входящий ящик получателя, когда он в сети.','上传音频，输入接收者 @ID，然后点击“发送私密语音”。仅当目标账户在线时，系统才向其私人收件箱发送通知。','音声をアップロードし、受信者の @ID を入力して「プライベート音声を送信」をクリックします。対象アカウントがオンラインの場合のみ、個人受信箱へ通知されます。'],['Lưu ý: trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó người nhận sẽ thấy nút bấm để nghe. Tính riêng tư dữ liệu cũng phụ thuộc Firebase Security Rules của dự án.','Note: the recipient browser may block autoplay; if so, the recipient will see a button to play. Data privacy also depends on this project’s Firebase Security Rules.','Примечание: браузер получателя может блокировать автовоспроизведение; в таком случае появится кнопка воспроизведения. Конфиденциальность данных также зависит от правил безопасности Firebase.','注意：接收者的浏览器可能会阻止自动播放；此时接收者会看到播放按钮。数据隐私还取决于项目的 Firebase 安全规则。','注意：受信者のブラウザーが自動再生をブロックする場合、再生ボタンが表示されます。データのプライバシーは Firebase セキュリティルールにも依存します。'],['Phát voice kín','Play private voice','Отправить личное аудио','发送私密语音','プライベート音声を送信'],['Sẵn sàng. Chỉ gửi tới người đang online.','Ready. Only online users can receive.','Готово. Получать могут только пользователи онлайн.','就绪。仅在线用户可以接收。','準備完了。オンラインのユーザーのみ受信できます。'],['CHUNG — ỦNG HỘ, QUẢNG CÁO, GÓI NÂNG CẤP','GENERAL — DONATIONS, ADS, UPGRADE PLANS','ОБЩЕЕ — ПОЖЕРТВОВАНИЯ, РЕКЛАМА, ТАРИФЫ','常规 — 捐赠、广告、升级套餐','全般 — 寄付、広告、アップグレード'],['ỦNG HỘ & BXH HIỂN THỊ','DONATIONS & DISPLAY RANKING','ПОЖЕРТВОВАНИЯ И РЕЙТИНГ','捐赠与展示排行榜','寄付と表示ランキング'],['QUẢNG CÁO & NHÀ TÀI TRỢ (TỐI ĐA 4)','ADS & SPONSORS (MAX 4)','РЕКЛАМА И СПОНСОРЫ (МАКС. 4)','广告与赞助商（最多 4 个）','広告とスポンサー（最大 4 件）'],['GÓI NÂNG CẤP & TẶNG GÓI','UPGRADE PLANS & GIFTING','ТАРИФЫ И ПОДАРКИ','升级套餐与赠送套餐','アップグレードとギフト'],['CẤU HÌNH ĐỊNH DẠNG MENU','MENU LAYOUT SETTINGS','НАСТРОЙКИ МЕНЮ','菜单布局设置','メニュー表示設定'],['CẤU HÌNH ÂM THANH THEO SỰ KIỆN','EVENT SOUND SETTINGS','НАСТРОЙКИ ЗВУКОВ СОБЫТИЙ','事件音效设置','イベント音声設定'],['NGÔN NGỮ HỆ THỐNG','SYSTEM LANGUAGE','ЯЗЫК СИСТЕМЫ','系统语言','システム言語']
+  ];
+  function auroraLanguageDictionary(lang){
+    const dict={...(UI_TEXT_TRANSLATIONS[lang]||{})};
+    const index=({en:1,ru:2,zh:3,ja:4})[lang];
+    if(index) AURORA_EXTRA_TRANSLATION_ROWS.forEach(row=>{if(row[index])dict[row[0]]=row[index];});
+    return dict;
+  }
+
   const auroraOriginalTextNodes = new WeakMap();
   const auroraOriginalAttributes = new WeakMap();
   function syncLanguageControls(){
@@ -8865,9 +9218,21 @@ initEcCreatePanel();
     const top=byId('auroraLanguage');if(top&&top.value!==lang)top.value=lang;
     const def=byId('auroraDefaultLanguage');if(def&&def.value!==lang)def.value=lang;
   }
+  let auroraLanguageMutationObserver=null;
+  let auroraLanguageMutationScheduled=false;
+  function installLanguageMutationObserver(){
+    if(auroraLanguageMutationObserver||!document.body||typeof MutationObserver==='undefined')return;
+    auroraLanguageMutationObserver=new MutationObserver(records=>{
+      if(auroraLanguageMutationScheduled||!records.some(r=>r.addedNodes&&r.addedNodes.length))return;
+      auroraLanguageMutationScheduled=true;
+      requestAnimationFrame(()=>{auroraLanguageMutationScheduled=false;try{translateKnownTextNodes();}catch(e){console.warn('Aurora language refresh failed',e);}});
+    });
+    auroraLanguageMutationObserver.observe(document.body,{subtree:true,childList:true});
+  }
+
   function translateKnownTextNodes(){
     const lang=extConfig.language||'vi';
-    const dict=UI_TEXT_TRANSLATIONS[lang]||{};
+    const dict=auroraLanguageDictionary(lang);
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
     let node;
     while((node=walker.nextNode())){
@@ -8890,6 +9255,7 @@ initEcCreatePanel();
     });
   }
   function applyLanguage() {
+    const activeLang=extConfig.language||'vi'; document.documentElement.lang=activeLang==='zh'?'zh-CN':activeLang;
     syncLanguageControls();
     applyMenuConfig();
     const labels = {
@@ -8903,6 +9269,7 @@ initEcCreatePanel();
       const h = byId('auroraTitle_' + id); if (h) h.textContent = t[id] || vi;
     });
     translateKnownTextNodes();
+    installLanguageMutationObserver();
   }
   function addExtensionPage(id, title, desc, content) {
     if (byId(id)) return byId(id);
@@ -9305,7 +9672,7 @@ initEcCreatePanel();
     if (!extConfig.general.saleEnabled) { toast('Gói nâng cấp hiện chưa mở bán.', 'info'); return; }
     toast('Chưa thể thanh toán: Aurora chưa tích hợp cổng thanh toán an toàn.', 'warn');
   }
-  function refreshAllExtensionPages() { renderDonatePage(); renderAdsPage(); renderPlansPage(); renderDonationQRPreview(); renderDonorAdminList(); renderAdEditor(); renderPackageAdminList(); renderMenuEditor(); renderAudioSettings(); }
+  function refreshAllExtensionPages() { renderDonatePage(); renderAdsPage(); renderPlansPage(); renderDonationQRPreview(); renderDonorAdminList(); renderAdEditor(); renderPackageAdminList(); renderMenuEditor(); renderAudioSettings(); if(typeof applyLanguage==='function') applyLanguage(); }
   async function purgeLegacyAruSystemModel() {
     // Best-effort migration: remove the old built-in model record. Firebase rules still
     // decide whether this browser session has permission to perform the deletion.
@@ -9321,6 +9688,12 @@ initEcCreatePanel();
   }
 
   function patchUserPlans() {
+    if(typeof window.stopOnlineTracking==='function'&&!window.stopOnlineTracking.__auroraPrivateVoiceStop){
+      const baseStopOnline=window.stopOnlineTracking;
+      const wrappedStopOnline=function(){stopPrivateVoiceListener();return baseStopOnline.apply(this,arguments);};
+      wrappedStopOnline.__auroraPrivateVoiceStop=true;window.stopOnlineTracking=wrappedStopOnline;
+    }
+
     // Retain membership behavior, but do not seed any AI model. Existing accounts are
     // cleaned lazily when their session loads; all unrelated model IDs remain unchanged.
     if (typeof window.applyUserSession === 'function' && !window.applyUserSession.__auroraNoDefaultBot) {
@@ -9353,6 +9726,7 @@ initEcCreatePanel();
           }
         }
         const out = await old.call(this, user);
+        startPrivateVoiceListener();
         if (currentUserFullData) currentUserFullData = { ...currentUserFullData, membershipTier: ensurePlan(currentUserFullData) };
         if (currentUser) currentUser.membershipTier = ensurePlan(currentUser);
         if (typeof window.loadAiModelsList === 'function') window.loadAiModelsList();
@@ -9554,10 +9928,141 @@ initEcCreatePanel();
   function prevSlide() { extSlideIndex = (extSlideIndex - 1 + extSlides.length) % extSlides.length; renderSlides(); renderPresentFrame(); }
   function nextSlide() { extSlideIndex = (extSlideIndex + 1) % extSlides.length; renderSlides(); renderPresentFrame(); }
   function stopPresentation() { const overlay = byId('auroraPresentationOverlay'); if (overlay) overlay.classList.remove('open'); const controls = document.querySelector('.aurora-present-controls'); if (controls) controls.style.display = 'flex'; const frame = byId('auroraPresentationFrame'); if (frame) frame.style.padding = '5vw'; renderPresentFrame(); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
-  async function saveLanguageSetting() { if (!requireConfig()) return; extLanguageChangeSerial++; extConfig.language = byId('auroraDefaultLanguage')?.value || 'vi'; applyLanguage(); applyMenuConfig(); refreshAllExtensionPages(); const ok=await persistConfig(false); syncLanguageControls(); if(ok) toast('Đã lưu ngôn ngữ mặc định.', 'success'); else toast('Đã lưu ngôn ngữ trên trình duyệt này; đồng bộ máy chủ chưa thành công.', 'warn'); }
+  async function saveLanguageSetting() { if (!requireConfig()) return; const selected=byId('auroraDefaultLanguage')?.value||'vi'; extLanguageChangeSerial++; extConfig.language=selected; document.documentElement.lang=selected==='zh'?'zh-CN':selected; refreshAllExtensionPages(); mountSettingsValues(); applyLanguage(); applyMenuConfig(); syncLanguageControls(); const ok=await persistConfig(false); if(ok) toast('Đã lưu ngôn ngữ mặc định.', 'success'); else toast('Đã lưu ngôn ngữ trên trình duyệt này; đồng bộ máy chủ chưa thành công.', 'warn'); }
+
+  // ===================== PRIVATE VOICE (VOICE KÍN) =====================
+  const PRIVATE_VOICE_MAX_BYTES=20*1024*1024;
+  let privateVoiceUnsubscribe=null;
+  let privateVoiceListenerUsername='';
+  let privateVoicePrimed=false;
+  let privateVoiceSeenIds=new Set();
+  let privateVoiceQueue=Promise.resolve();
+  let privateVoicePending=null;
+  let privateVoiceActiveAudio=null;
+  function privateVoiceSafeKey(value){return String(value||'').trim().replace(/[.#$\[\]\/]/g,'_').slice(0,90);}
+  function privateVoiceSetStatus(message,isError){const el=byId('auroraPrivateVoiceStatus');if(el){el.textContent=message||'';el.style.color=isError?'#b42318':'#475467';}}
+  function privateVoiceSetProgress(message,visible=true){const el=byId('auroraPrivateVoiceProgress');if(!el)return;el.textContent=message||'';el.style.display=visible?'block':'none';}
+  function ensurePrivateVoiceBanner(){
+    if(byId('auroraIncomingPrivateVoice'))return;
+    const box=document.createElement('div');box.id='auroraIncomingPrivateVoice';
+    box.style.cssText='position:fixed;right:16px;bottom:16px;z-index:2147483601;max-width:min(380px,calc(100vw - 32px));background:#fff;border:2px solid #6f42c1;border-radius:14px;padding:14px;box-shadow:0 14px 42px #0003;display:none;color:#222;font:14px Segoe UI,Tahoma,sans-serif';
+    box.innerHTML='<div style="font-weight:900;color:#6f42c1;margin-bottom:5px">🔒 Có voice kín mới</div><div id="auroraIncomingPrivateVoiceText" style="font-size:12px;line-height:1.5;margin-bottom:10px"></div><div style="display:flex;gap:8px"><button type="button" id="auroraIncomingPrivateVoicePlay" style="flex:1;background:#198754;color:#fff;border:0;border-radius:8px;padding:9px;font-weight:800;cursor:pointer">▶ Nghe ngay</button><button type="button" id="auroraIncomingPrivateVoiceDismiss" style="background:#eef2f6;color:#334155;border:0;border-radius:8px;padding:9px;cursor:pointer">Đóng</button></div>';
+    document.body.appendChild(box);
+    byId('auroraIncomingPrivateVoicePlay').addEventListener('click',()=>window.auroraPlayPendingPrivateVoice&&window.auroraPlayPendingPrivateVoice());
+    byId('auroraIncomingPrivateVoiceDismiss').addEventListener('click',()=>window.auroraDismissPendingPrivateVoice&&window.auroraDismissPendingPrivateVoice());
+  }
+  async function privateVoiceCleanup(messageId, targetKey, audioPath){
+    try{if(dbReady())await window.dbRemove(dbRef(`${EXT_PATH}/private_voice/inbox/${targetKey}/${messageId}`));}catch(e){}
+    try{if(dbReady()&&audioPath)await window.dbRemove(dbRef(audioPath));}catch(e){}
+  }
+  function privateVoiceHideBanner(){const box=byId('auroraIncomingPrivateVoice');if(box)box.style.display='none';}
+  async function privateVoicePlayLoaded(entry){
+    if(!entry||!entry.url)return false;
+    try{
+      if(privateVoiceActiveAudio&&privateVoiceActiveAudio!==entry.audio){try{privateVoiceActiveAudio.pause();}catch(e){}}
+      const audio=entry.audio||new Audio(entry.url); entry.audio=audio; privateVoiceActiveAudio=audio;
+      audio.onended=async()=>{if(privateVoiceActiveAudio===audio)privateVoiceActiveAudio=null;privateVoicePending=null;privateVoiceHideBanner();await privateVoiceCleanup(entry.messageId,entry.targetKey,entry.audioPath);try{URL.revokeObjectURL(entry.url);}catch(e){} if(entry.cacheId&&soundObjectURLs[entry.cacheId]===entry.url)delete soundObjectURLs[entry.cacheId];};
+      audio.onerror=()=>{privateVoiceSetStatus('Không phát được file âm thanh trên thiết bị nhận.',true);};
+      await audio.play(); privateVoiceHideBanner(); privateVoicePending=null;
+      privateVoiceSetStatus('Đang phát voice kín từ @'+(entry.from||'người dùng')+'.');
+      return true;
+    }catch(error){
+      privateVoicePending=entry;ensurePrivateVoiceBanner();
+      const txt=byId('auroraIncomingPrivateVoiceText');if(txt)txt.textContent='Từ @'+(entry.from||'người dùng')+' · '+(entry.name||'âm thanh')+'. Trình duyệt đang chặn tự phát; bấm “Nghe ngay” để phát.';
+      const box=byId('auroraIncomingPrivateVoice');if(box)box.style.display='block';
+      privateVoiceSetStatus('Voice đã tới; người nhận cần bấm “Nghe ngay” nếu trình duyệt chặn tự phát.');
+      return false;
+    }
+  }
+  async function playPendingPrivateVoice(){if(!privateVoicePending)return;await privateVoicePlayLoaded(privateVoicePending);}
+  async function dismissPendingPrivateVoice(){if(privateVoicePending){const e=privateVoicePending;privateVoicePending=null;privateVoiceHideBanner();await privateVoiceCleanup(e.messageId,e.targetKey,e.audioPath);try{URL.revokeObjectURL(e.url);}catch(_){} if(e.cacheId&&soundObjectURLs[e.cacheId]===e.url)delete soundObjectURLs[e.cacheId];}}
+  async function handlePrivateVoiceMessage(messageId,message,recipientKey){
+    if(!message||!currentUser||currentUser.username!==message.to||message.to!==privateVoiceListenerUsername)return;
+    const sentAt=Number(message.sentAt||0);if(!sentAt||Date.now()-sentAt>5*60*1000){await privateVoiceCleanup(messageId,recipientKey,message.audioPath);return;}
+    if(!dbReady()||!message.audioPath||!message.audioMeta||!message.audioMeta.chunkCount)return;
+    try{
+      const cacheId='pv_'+messageId;
+      const url=await readChunksToObjectURL(message.audioPath,{...message.audioMeta,id:cacheId,kind:'sound'});
+      if(!url)throw new Error('Không đọc được dữ liệu âm thanh.');
+      const entry={messageId,targetKey:recipientKey,audioPath:message.audioPath,url,cacheId,from:message.from,name:message.audioMeta.name,audio:new Audio(url)};
+      await privateVoicePlayLoaded(entry);
+    }catch(error){
+      console.warn('Private voice receive failed:',error);
+      privateVoiceSetStatus('Có voice kín nhưng không tải được âm thanh: '+(error.message||error),true);
+    }
+  }
+  function startPrivateVoiceListener(){
+    if(!currentUser||!currentUser.username||!dbReady()||typeof window.onValue!=='function')return;
+    const username=currentUser.username;const userKey=privateVoiceSafeKey(username);
+    if(privateVoiceUnsubscribe&&privateVoiceListenerUsername===username)return;
+    stopPrivateVoiceListener();privateVoiceListenerUsername=username;privateVoicePrimed=false;privateVoiceSeenIds=new Set();
+    const path=`${EXT_PATH}/private_voice/inbox/${userKey}`;
+    try{
+      privateVoiceUnsubscribe=window.onValue(dbRef(path),snap=>{
+        // Prime existing entries on login; old messages must never play unexpectedly after a reload.
+        const records=snap.val()||{};
+        if(!privateVoicePrimed){Object.entries(records).forEach(([id,msg])=>{privateVoiceSeenIds.add(id);if(msg&&Number(msg.expiresAt||0)<Date.now())privateVoiceCleanup(id,userKey,msg.audioPath);});privateVoicePrimed=true;return;}
+        Object.entries(records).forEach(([id,msg])=>{
+          if(privateVoiceSeenIds.has(id))return;privateVoiceSeenIds.add(id);
+          if(!msg||msg.to!==username)return;
+          privateVoiceQueue=privateVoiceQueue.then(()=>handlePrivateVoiceMessage(id,msg,userKey)).catch(e=>console.warn('Voice kín queue error:',e));
+        });
+      },error=>{console.warn('Voice kín listener error:',error);});
+    }catch(error){console.warn('Cannot start voice kín listener:',error);}
+  }
+  function stopPrivateVoiceListener(){
+    if(privateVoiceUnsubscribe){try{privateVoiceUnsubscribe();}catch(e){}}
+    privateVoiceUnsubscribe=null;privateVoiceListenerUsername='';privateVoicePrimed=false;privateVoiceSeenIds=new Set();
+    if(privateVoiceActiveAudio){try{privateVoiceActiveAudio.pause();}catch(e){}privateVoiceActiveAudio=null;}
+  }
+  async function checkPrivateVoiceRecipient(target){
+    const onlineSnap=await window.dbGet(dbRef(`online_users/${target}`));
+    if(!onlineSnap||!onlineSnap.exists())return {online:false};
+    const online=onlineSnap.val()||{};const age=Date.now()-Number(online.lastSeen||0);
+    return {online:age>=0&&age<90000,data:online};
+  }
+  async function sendPrivateVoice(){
+    if(!requireUser('gửi voice kín'))return;
+    if(!dbReady()){toast('Firebase chưa sẵn sàng; không thể gửi voice kín.','error');return;}
+    const input=byId('auroraPrivateVoiceFile');const targetInput=byId('auroraPrivateVoiceTarget');const file=input&&input.files&&input.files[0];
+    const target=String(targetInput&&targetInput.value||'').trim().replace(/^@+/,'');
+    if(!target){toast('Nhập @ID người nhận.','error');targetInput&&targetInput.focus();return;}
+    if(!/^[\p{L}\p{N}_-]{1,50}$/u.test(target)){toast('ID chỉ được chứa chữ, số, gạch dưới hoặc gạch ngang.','error');return;}
+    if(!file){toast('Chọn file âm thanh trước khi phát.','error');return;}
+    if(!(file.type||'').startsWith('audio/')&&!/\.(mp3|wav|ogg|m4a|aac|webm|opus|flac)$/i.test(file.name)){toast('File được chọn không phải định dạng âm thanh.','error');return;}
+    if(file.size>PRIVATE_VOICE_MAX_BYTES){toast('Voice kín giới hạn 20 MB cho mỗi lần gửi.','error');return;}
+    if(!file.size){toast('File âm thanh trống.','error');return;}
+    const btn=byId('auroraPrivateVoiceSendBtn');if(btn)btn.disabled=true;
+    const recipientKey=privateVoiceSafeKey(target);let audioPath='';let messageId='';
+    privateVoiceSetProgress('Đang kiểm tra người nhận online…',true);
+    try{
+      const userSnap=await window.dbGet(dbRef(`users/${target}`));
+      if(!userSnap||!userSnap.exists())throw new Error('Không tìm thấy tài khoản @'+target+'. Hãy nhập đúng ID.');
+      const presence=await checkPrivateVoiceRecipient(target);
+      if(!presence.online)throw new Error('@'+target+' hiện không online. Voice kín chỉ gửi khi người nhận đang online.');
+      messageId='pv_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8);
+      audioPath=`${EXT_PATH}/private_voice/audio/${recipientKey}/${messageId}`;
+      privateVoiceSetProgress('Đang tải âm thanh lên… 0%',true);
+      const audioMeta=await uploadFileInChunks(audioPath,file,p=>privateVoiceSetProgress('Đang tải âm thanh lên… '+Math.round(p*100)+'%',true));
+      const verifyOnline=await checkPrivateVoiceRecipient(target);
+      if(!verifyOnline.online){try{await window.dbRemove(dbRef(audioPath));}catch(_){}throw new Error('@'+target+' vừa offline; chưa gửi voice.');}
+      const msg={id:messageId,from:currentUser.username,to:target,sentAt:Date.now(),expiresAt:Date.now()+5*60*1000,audioPath,audioMeta};
+      await window.dbSet(dbRef(`${EXT_PATH}/private_voice/inbox/${recipientKey}/${messageId}`),msg);
+      privateVoiceSetProgress('Đã gửi tín hiệu tới @'+target+'.',true);privateVoiceSetStatus('Đã gửi voice kín tới @'+target+'.');
+      toast('🔒 Đã gửi voice kín tới @'+target+'.', 'success');
+      if(input)input.value='';
+      setTimeout(()=>privateVoiceSetProgress('',false),4500);
+    }catch(error){
+      privateVoiceSetProgress('Gửi thất bại: '+(error.message||error),true);privateVoiceSetStatus(error.message||'Gửi voice kín thất bại.',true);toast('Không gửi được voice kín: '+(error.message||error),'error');
+      if(audioPath&&messageId){try{await window.dbRemove(dbRef(audioPath));}catch(_){}}
+    }finally{if(btn)btn.disabled=false;}
+  }
+  
+
   function mountAll() {
     addStyle(); mountMainMenu(); mountPages(); ensureSettingsPanel(); ensureEntertainmentBorderPanel(); ensureProfileBorderUI(); mountDynamicMenuItems(); patchAuthOverlay(); overrideShowView(); patchDocumentLibrary(); patchExamAudio(); patchUserPlans();
     purgeLegacyAruSystemModel();
+    ensurePrivateVoiceBanner(); if(currentUser) startPrivateVoiceListener();
     loadConfig().then(() => { mountSettingsValues(); applyMenuConfig(); if (!extPendingSound) playEventSound('enter_web'); });
     const cfgPanel = byId('configPanel'); if (cfgPanel && typeof MutationObserver !== 'undefined') {
       const observer = new MutationObserver(() => { if (cfgPanel.style.display !== 'none') mountSettingsValues(); }); observer.observe(cfgPanel, { attributes: true, attributeFilter: ['style'] });
@@ -9568,6 +10073,7 @@ initEcCreatePanel();
 
   // Public functions referenced by inline HTML handlers.
   Object.assign(window, {
+    auroraSendPrivateVoice: sendPrivateVoice, auroraPlayPendingPrivateVoice: playPendingPrivateVoice, auroraDismissPendingPrivateVoice: dismissPendingPrivateVoice,
     auroraUploadConfigImage: uploadConfigImage,
     auroraAddDonor: addDonor, auroraRemoveDonor: removeDonor,
     auroraUploadAdImage: uploadAdImage, auroraAddAdSlot: addAdSlot, auroraRemoveAdSlot: removeAdSlot, auroraSaveAdFields: saveAdFields, auroraSaveGeneralSettings: saveGeneralSettings,
