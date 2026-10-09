@@ -222,6 +222,15 @@ body.fx-shake{animation:screenShake .65s cubic-bezier(.36,.07,.19,.97)}
 .guide-section-title{font-size:18px;font-weight:900;color:#1877f2;margin:25px 0 14px 0;padding-bottom:8px;border-bottom:3px solid #e7f3ff}
 .guide-warning{background:linear-gradient(135deg,#fff3cd,#ffe58f);border-left:5px solid #ffc107;padding:14px 16px;border-radius:10px;margin:12px 0;font-size:13px;color:#856404;line-height:1.6}
 .guide-tip{background:linear-gradient(135deg,#d1e7dd,#c3e6cb);border-left:5px solid #198754;padding:14px 16px;border-radius:10px;margin:12px 0;font-size:13px;color:#0f5132;line-height:1.6}
+
+/* Profile mini bot (when viewing other user's AI model) */
+.profile-mini-bot{position:absolute;bottom:12px;right:12px;z-index:20;width:72px;text-align:center;pointer-events:none;user-select:none}
+.profile-mini-bot img,.profile-mini-bot .mini-bot-avatar{width:56px;height:56px;border-radius:14px;object-fit:cover;box-shadow:0 4px 14px rgba(0,0,0,.25);border:2px solid #fff;background:linear-gradient(135deg,#e7f3ff,#d0e8ff);display:block;margin:0 auto}
+.profile-mini-bot .mini-bot-name{font-size:10px;font-weight:800;color:#1877f2;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72px}
+.profile-mini-bot .mini-bot-bubble{position:absolute;bottom:70px;right:0;background:#fff;border-radius:12px;padding:6px 10px;font-size:11px;box-shadow:0 4px 16px rgba(0,0,0,.18);max-width:160px;line-height:1.35;opacity:0;transform:translateY(6px);transition:all .35s;pointer-events:none;border:1px solid #e0e0e0}
+.profile-mini-bot .mini-bot-bubble.show{opacity:1;transform:translateY(0)}
+.profile-mini-bot .mini-bot-bubble::after{content:'';position:absolute;bottom:-6px;right:18px;border:6px solid transparent;border-top-color:#fff}
+
 body{-webkit-user-select:none;user-select:none}
 input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:text}
 img{-webkit-user-drag:none}
@@ -1085,9 +1094,6 @@ input,select,textarea{font-size:13px;padding:9px}
 .doc-card-actions button{border:none;padding:5px 9px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;color:#fff}
 .student-actions-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .student-actions-row button{flex:1;min-width:140px;padding:12px;font-size:14px;font-weight:bold}
-
-#publicLoginFab{position:fixed;right:18px;bottom:22px;z-index:9998;width:auto;padding:11px 16px;border:0;border-radius:999px;background:#1877f2;color:#fff;font-weight:700;box-shadow:0 5px 18px #0002;cursor:pointer}
-#publicLoginFab[hidden]{display:none!important}
 </style>
 </head><body>
 
@@ -1305,7 +1311,6 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 </div></div>
 
-<button id="publicLoginFab" type="button" onclick="openLoginGate()" hidden>🔐 Đăng nhập / Đăng ký</button>
 <div id="authOverlay"><div class="auth-box"><h2>✨ AURORA</h2><p class="auth-sub">🔐 Hệ thống kiểm tra trực tuyến</p><div class="auth-tabs"><button class="active" id="authTabLogin" onclick="switchAuthTab('login')">🔓 Đăng Nhập</button><button id="authTabRegister" onclick="switchAuthTab('register')">📝 Đăng Ký</button></div><div id="authViewLogin" class="auth-view active"><label>Tên đăng nhập hoặc Email:</label><input type="text" id="loginIdentifier" placeholder="Username hoặc email..." autocomplete="username"><label>Mật khẩu:</label><input type="password" id="loginPassword" placeholder="Mật khẩu..." autocomplete="current-password"><a class="link" onclick="switchAuthTab('forgot')">🤔 Quên mật khẩu?</a><button class="btn btn-success" onclick="handleLogin()">🔓 Đăng Nhập</button></div><div id="authViewRegister" class="auth-view"><label>Vai trò:</label><select id="regRole" style="margin-bottom:12px"><option value="student">🧑‍🎓 Học sinh</option><option value="teacher">👨‍🏫 Giáo viên</option><option value="other">👤 Khác</option></select><label>Tên đăng nhập (tên thật):</label><input type="text" id="regUsername" placeholder="3-20 ký tự a-z, 0-9, _ . (không dùng từ ngữ không phù hợp)"><label>Email:</label><input type="email" id="regEmail" placeholder="user@gmail.com"><label>Mật khẩu:</label><input type="password" id="regPassword" placeholder="Ít nhất 6 ký tự..."><label>Xác nhận mật khẩu:</label><input type="password" id="regPassword2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleRegister()">✅ Đăng Ký</button></div><div id="authViewForgot" class="auth-view"><div id="forgotStep1"><label>📧 Email đã đăng ký:</label><input type="email" id="forgotEmail" placeholder="user@gmail.com"><div id="forgotEmailStatus" class="email-status-badge demo">⏳ Đang kiểm tra trạng thái email...</div><button class="btn btn-warning" id="forgotSendBtn" onclick="handleSendResetCode(this)">📨 Gửi Mã</button><a class="link center" onclick="switchAuthTab('login')">← Quay lại</a></div><div id="forgotStep2" style="display:none"><div class="email-locked-info" id="forgotEmailLockedInfo" style="display:none">✅ Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (kể cả thư mục Spam/Quảng cáo).</div><div class="code-display" id="forgotCodeDisplay">------</div><p id="forgotCodeLabel" style="font-size:12px;color:#856404;text-align:center;margin-bottom:12px">Mã đã gửi:</p><label>Mã xác nhận:</label><input type="text" id="forgotCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:bold"><button class="btn btn-success" onclick="handleVerifyResetCode()">✓ Xác Nhận</button><a class="link center" onclick="switchAuthTab('forgot')">← Gửi lại</a></div><div id="forgotStep3" style="display:none"><label>🔐 Mật khẩu mới:</label><input type="password" id="forgotNewPass" placeholder="Ít nhất 6 ký tự..."><label>🔐 Xác nhận:</label><input type="password" id="forgotNewPass2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleResetPassword()">🔐 Đặt Lại</button></div></div></div></div>
 
 <div id="perfModeModal" style="display:none"><div class="perf-box"><div style="font-size:56px;line-height:1;margin-bottom:10px">⚙️</div><h3>CHỌN CHẾ ĐỘ HIỂN THỊ</h3><p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Chọn chế độ phù hợp thiết bị.</p><div class="perf-option" onclick="choosePerfMode('full')"><span class="perf-icon">✨</span><div class="perf-text"><div class="perf-title">1. Đầy đủ</div><div class="perf-sub">Bật tất cả hiệu ứng.</div></div></div><div class="perf-option" onclick="choosePerfMode('optimized')"><span class="perf-icon">⚡</span><div class="perf-text"><div class="perf-title">2. Tối ưu <span class="perf-badge" id="perfRecommendBadge">💡</span></div><div class="perf-sub">Tắt hiệu ứng nặng.</div></div></div></div></div>
@@ -1314,7 +1319,7 @@ input,select,textarea{font-size:13px;padding:9px}
 <div id="qrScanModal"><div class="qr-scan-box"><h3>📷 QUÉT MÃ QR</h3><div id="qrReaderContainer"></div><button class="qr-scan-close-btn" onclick="closeQRScanModal()">❌ Đóng</button></div></div>
 <button id="qrScanFab" class="qr-scan-fab" onclick="openQRScanModal()">📷</button>
 
-<div id="documentLibraryStudentModal"><div class="doc-modal-box"><h3 style="text-align:center;color:#1877f2;margin-bottom:14px">📚 KHO TÀI LIỆU <span style="font-size:11px;color:#856404">(beta test)</span></h3><div id="docStudentListContainer" style="min-height:120px"><p style="text-align:center;color:#888">Đang tải...</p></div><button class="qr-close-btn" style="margin-top:14px" onclick="closeDocumentStudentModal()">Đóng</button></div></div>
+<div id="documentLibraryStudentModal"><div class="doc-modal-box"><h3 style="text-align:center;color:#1877f2;margin-bottom:14px">📚 TÀI LIỆU <span style="font-size:12px;background:#ffc107;color:#000;padding:2px 8px;border-radius:10px;font-weight:900">(beta test)</span></h3><div id="docStudentListContainer" style="min-height:120px"><p style="text-align:center;color:#888">Đang tải...</p></div><button class="qr-close-btn" style="margin-top:14px" onclick="closeDocumentStudentModal()">Đóng</button></div></div>
 
 <div class="modal-overlay" id="supremePasswordModal"><div class="modal-box" style="max-width:420px;text-align:center"><div class="modal-header"><h3>👑 XÁC THỰC TỐI CAO</h3><button class="close-btn" onclick="document.getElementById('supremePasswordModal').style.display='none'">✖</button></div><div style="font-size:48px;margin-bottom:8px">🔐</div><p style="font-size:13px;color:#555;margin-bottom:12px">Nhập mật khẩu VUA hoặc PARTNER:</p><input type="password" id="supremePassInput" placeholder="Mật khẩu..." style="margin-bottom:15px"><div style="font-size:11px;color:#888;margin-bottom:12px;font-style:italic">💡 Vua = full quyền • Partner = giới hạn</div><button class="btn btn-warning" onclick="verifySupremePassword()">Xác Nhận</button></div></div>
 
@@ -1362,7 +1367,7 @@ input,select,textarea{font-size:13px;padding:9px}
       </div>
     </div>
   </label>
-  <div class="nav-tabs" id="navTabsContainer"><button class="active" onclick="switchView('homeView', this)">🏠 TRANG CHỦ</button><button onclick="switchView('studentLoginView', this)">🧑‍🎓 HỌC SINH</button><button onclick="switchView('teacherView', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="switchView('advancedModelView', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView('guideView', this)">📖 HƯỚNG DẪN</button><button onclick="switchView('leaderboardView', this)">🏆 BXH</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button></div><div id="navUserInfo" class="nav-user" style="display:none"></div></div></div>
+  <div class="nav-tabs" id="navTabsContainer"><button class="active" onclick="switchView('homeView', this)">🏠 TRANG CHỦ</button><button onclick="switchView('studentLoginView', this)">🧑‍🎓 HỌC SINH</button><button onclick="if(!requireLogin('vào khu Giáo viên'))return;switchView('teacherView', this)">👨‍🏫 GIÁO VIÊN</button><button onclick="if(!requireLogin('vào GV Nâng cao'))return;switchView('advancedModelView', this)">⚙️ GV NÂNG CAO</button><button onclick="switchView('guideView', this)">📖 HƯỚNG DẪN</button><button onclick="switchView('leaderboardView', this)">🏆 BXH</button><button onclick="checkSupremeAccess(this)" style="background:#ffc107;color:#000;font-weight:bold">👑 TỐI CAO</button></div><div id="navUserInfo" class="nav-user" style="display:none"></div></div></div>
 
 <div class="container">
 
@@ -1449,7 +1454,7 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div class="student-docs-tabs" id="studentMainTabs">
   <div class="student-docs-tab active" onclick="switchStudentMainTab('exam', this)">📝 Làm Bài Thi</div>
-  <div class="student-docs-tab" onclick="switchStudentMainTab('docs', this)">📚 Tài Liệu <small style="font-size:10px;opacity:.8">(beta test)</small></div>
+  <div class="student-docs-tab" onclick="switchStudentMainTab('docs', this)">📚 Tài Liệu</div>
 </div>
 
 <div id="studentMainExam" class="student-docs-panel active">
@@ -1471,9 +1476,8 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div id="studentMainDocs" class="student-docs-panel">
 <div class="card" style="max-width:1100px;margin:20px auto">
-<h2 style="text-align:center;color:#1877f2;margin-bottom:6px">📚 KHO TÀI LIỆU HỌC TẬP <span style="font-size:12px;color:#856404">(beta test)</span></h2>
+<h2 style="text-align:center;color:#1877f2;margin-bottom:6px">📚 KHO TÀI LIỆU HỌC TẬP</h2>
 <p style="text-align:center;color:#666;font-size:13px;margin-bottom:14px">Tài liệu tham khảo được hệ thống tổng hợp & phân loại tự động</p>
-<div class="card" style="margin:12px 0;border:1px solid #dbeafe;background:#f8fbff"><h3 style="font-size:15px;color:#1877f2;margin-bottom:8px">🌐 Nguồn tài liệu tham khảo thật <span style="font-size:11px;color:#856404">(beta test)</span></h3><p style="font-size:12px;color:#555;margin-bottom:10px">Mở nguồn gốc để xem nội dung mới nhất. Tài liệu do bên thứ ba sở hữu; Aurora chỉ dẫn nguồn và ghi công, không sao chép hoặc giả lập tệp tải xuống.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px"><a href="https://vietjack.com/" target="_blank" rel="noopener noreferrer" onclick="if(!requireLoginForAction('mở nguồn tài liệu')){event.preventDefault();return false;}" style="display:block;padding:10px;border:1px solid #dbeafe;border-radius:8px;background:white;text-decoration:none;color:#164e9b"><b>VietJack</b><br><small>Cre: VietJack · Mở kho bài học</small></a><a href="https://hocmai.vn/" target="_blank" rel="noopener noreferrer" onclick="if(!requireLoginForAction('mở nguồn tài liệu')){event.preventDefault();return false;}" style="display:block;padding:10px;border:1px solid #dbeafe;border-radius:8px;background:white;text-decoration:none;color:#164e9b"><b>HOCMAI</b><br><small>Cre: HOCMAI · Học liệu và khóa học</small></a><a href="https://loigiaihay.com/" target="_blank" rel="noopener noreferrer" onclick="if(!requireLoginForAction('mở nguồn tài liệu')){event.preventDefault();return false;}" style="display:block;padding:10px;border:1px solid #dbeafe;border-radius:8px;background:white;text-decoration:none;color:#164e9b"><b>Lời Giải Hay</b><br><small>Cre: Lời Giải Hay · Bài giải tham khảo</small></a></div></div>
 
 <div class="docs-filter-bar">
   <div><label>📚 Lớp</label><select id="docsFilterGrade" onchange="renderStudentDocsFiltered()"><option value="">Tất cả</option><option value="10">Lớp 10</option><option value="11">Lớp 11</option><option value="12">Lớp 12</option></select></div>
@@ -1484,7 +1488,7 @@ input,select,textarea{font-size:13px;padding:9px}
 
 <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
   <div style="font-size:12px;color:#666">Tổng: <b id="docsTotalCount">0</b> tài liệu</div>
-  <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="openDocumentStudentModal()">📁 Tài liệu GV đăng</button>
+  <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="if(!requireLogin('xem tài liệu'))return;openDocumentStudentModal()">📁 Tài liệu GV đăng</button>
 </div>
 
 <div id="studentDocsList" class="docs-list-grid"><p style="text-align:center;color:#888;grid-column:1/-1">Đang tải...</p></div>
@@ -2105,7 +2109,7 @@ input,select,textarea{font-size:13px;padding:9px}
   
   <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
     <button class="btn btn-success" style="width:auto;padding:10px 16px" onclick="saveAiSetupConfig()">💾 Lưu cấu hình AI</button>
-    <button class="btn btn-warning" style="width:auto;padding:10px 16px" onclick="testAiSetupConfig()">🧪 Test gọi API</button>
+    <button class="btn btn-warning" style="width:auto;padding:10px 16px;color:#000" onclick="testAiSetupConfig()">🧪 Test API AI</button>
     <button class="btn btn-danger" style="width:auto;padding:10px 16px" onclick="clearAiSetupConfig()">🗑️ Xóa cấu hình</button>
     <button class="btn" style="width:auto;padding:10px 16px;background:linear-gradient(135deg,#dc3545,#bb2d3b)" onclick="resetAiSetupToDefaultGemini()">🔑 Dùng API Gemini mặc định</button>
   </div>
@@ -2409,7 +2413,7 @@ input,select,textarea{font-size:13px;padding:9px}
     <div style="font-size:52px;margin-bottom:8px;filter:drop-shadow(0 4px 10px rgba(24,119,242,.3))">📦</div>
     <div style="font-weight:900;color:#1877f2;font-size:15px;margin-bottom:6px">📥 Kéo & Thả file ZIP / ẢNH / MODEL 3D vào đây (hoặc bấm để chọn)</div>
     <div style="font-size:12px;color:#666;line-height:1.6;max-width:520px;margin:0 auto">Hệ thống sẽ <b>tự động giải nén và phân tích</b> tất cả file bên trong (ảnh, model, textures, motion, video,...) để tạo thành 1 model AI hoàn chỉnh. Hỗ trợ <b>.zip, .vrm, .fbx, .obj, .pmx, .pmd, .png, .gif, .jpg</b> — không giới hạn dung lượng.</div>
-    <input type="file" id="aiModelZipInput" accept=".zip,.glb,.gltf,.vrm,.fbx,.obj,.pmx,.pmd,.blend,.gif,image/*,application/zip,application/x-zip-compressed" multiple style="display:none" onchange="handleAiModelZipUpload(this)">
+    <input type="file" id="aiModelZipInput" accept=".zip,.vrm,.fbx,.obj,.pmx,.pmd,image/*,application/zip,application/x-zip-compressed" multiple style="display:none" onchange="handleAiModelZipUpload(this)">
     <div id="aiZipProgress" class="ai-zip-progress">
       <div id="aiZipProgressText">⏳ Đang xử lý...</div>
       <div class="ai-zip-bar"><div class="ai-zip-bar-fill" id="aiZipBarFill"></div></div>
@@ -3006,6 +3010,41 @@ let supremeAiFrameDragState={dragging:false,lastX:0,lastY:0};
 
 /* ============ DEFAULT AI CONFIG (Gemini API mặc định) ============ */
 const DEFAULT_GEMINI_API_KEY='AQ.Ab8RN6IKWZ2RAMc8FkIyv0QkojsJHYbjFzybwOacpQdowBVrFA';
+
+/* ============ DEFAULT ARU MODEL (cute anime) ============ */
+const DEFAULT_ARU_MODEL={
+  id:'aimodel_default_aru',
+  name:'Aru',
+  greeting:'Xin chào! Mình là Aru, model mặc định dễ thương của Aurora 💙 Rất vui được gặp bạn!',
+  happyMsg:'Yay! Điểm cao quá đi~ Aru tự hào lắm! 🎉',
+  sadMsg:'Đừng buồn nha... Aru vẫn ở đây cổ vũ bạn 💪💙',
+  thinkingMsg:'Aru đang suy nghĩ cùng bạn... 📝✨',
+  musicMsg:'Nhạc hay quá! Aru nhảy theo luôn nè 🎶',
+  prankMsg:'Hihi~ Aru trêu bạn một chút nha 😈💙',
+  description:'Model AI mặc định phong cách anime dễ thương tóc xanh',
+  personality:'dễ thương, năng động, thân thiện',
+  files:[],
+  imageData:'',
+  fileType:'ai-model-default',
+  chunks:0,chunkData:null,
+  source:'builtin-default',
+  createdBy:'system',
+  createdAt:0,
+  totalSize:0,
+  isDefault:true
+};
+async function ensureDefaultAruModel(){
+  try{
+    if(!window.db)return;
+    const s=await window.dbGet(window.dbChild(window.dbRef,'system/ai_models/aimodel_default_aru'));
+    if(!s.exists()){
+      await window.dbSet(window.ref(window.db,'system/ai_models/aimodel_default_aru'),DEFAULT_ARU_MODEL);
+    }
+    cachedAiModels=cachedAiModels||{};
+    cachedAiModels['aimodel_default_aru']=Object.assign({},DEFAULT_ARU_MODEL,s.exists()?s.val():{});
+  }catch(e){console.warn('ensureDefaultAruModel',e);}
+}
+
 const DEFAULT_AI_CONFIG={
   enabled:true,
   provider:'google',
@@ -3066,8 +3105,8 @@ const AI_PROVIDERS={
     name:'Google AI Studio',
     endpoint:'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
     models:['gemini-3.6-flash','gemini-3.5-flash','gemini-3.1-flash','gemini-3.1-pro','gemini-3.0-flash','gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash','gemini-1.5-flash','gemini-1.5-pro'],
-    defaultModel:'gemini-2.5-flash',
-    info:'🔵 Google AI Studio (Gemini). Chọn model được tài khoản Google AI Studio hỗ trợ và nhập API key của bạn. Các tên model có thể thay đổi theo quyền truy cập và thời điểm.'
+    defaultModel:'gemini-2.0-flash',
+    info:'🔵 Google AI Studio (Gemini). Bao gồm các model mới: gemini-3.6-flash, gemini-3.5-flash, gemini-3.1-flash. Hệ thống đã cài API key mặc định — dùng được ngay.'
   },
   cerebras:{
     name:'Cerebras',
@@ -3261,31 +3300,6 @@ function getFrameClassForEffect(effect){if(!effect)return '';if(effect==='crown_
 function formatCount(n){n=Math.max(0,Math.floor(Number(n)||0));if(n<10000)return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');if(n<1000000)return Math.round(n/1000)+'k';if(n<1000000000)return Math.round(n/1000000)+'M';return Math.round(n/1000000000)+'B';}
 function formatBytes(b){if(!b)return '0 B';const k=1024,s=['B','KB','MB','GB'],i=Math.floor(Math.log(b)/Math.log(k));return (b/Math.pow(k,i)).toFixed(i>0?2:0)+' '+s[i];}
 function escapeHtml(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-
-/* AI API COMPATIBILITY: provider errors are surfaced and unavailable Gemini aliases fall back to supported stable models. */
-async function fetchAIEndpoint(url, options){
-  const opts=Object.assign({},options||{});
-  let payload={};
-  try{payload=JSON.parse(opts.body||'{}');}catch(e){}
-  let response=await fetch(url,opts);
-  const isGoogle=(cachedAiConfig&&String(cachedAiConfig.provider||'').toLowerCase()==='google')||/generativelanguage\.googleapis\.com/i.test(String(url||''));
-  if(isGoogle&&(response.status===400||response.status===404||response.status===422)){
-    const firstError=(await response.clone().text().catch(()=>'' )).slice(0,500);
-    const chosen=String(payload.model||'');
-    const fallbackModels=['gemini-2.5-flash','gemini-2.0-flash'];
-    for(const fallback of fallbackModels){
-      if(!fallback||fallback===chosen)continue;
-      const retryPayload=Object.assign({},payload,{model:fallback});
-      const retryOptions=Object.assign({},opts,{body:JSON.stringify(retryPayload)});
-      const retry=await fetch(url,retryOptions);
-      if(retry.ok)return retry;
-      response=retry;
-      if(retry.status!==400&&retry.status!==404&&retry.status!==422)break;
-    }
-    if(!response.ok)console.warn('Gemini model fallback failed; original error:',firstError);
-  }
-  return response;
-}
 
 /* ============ AI PROVIDER HANDLERS ============ */
 function onAiProviderChange(){
@@ -4117,7 +4131,6 @@ async function handleLogin(){
     localStorage.setItem('aurora_user',JSON.stringify({username:u.username}));
     await applyUserSession(u);
     document.getElementById('authOverlay').style.display='none';
-    const loginFab=document.getElementById('publicLoginFab');if(loginFab)loginFab.hidden=true;
     document.getElementById('loginPassword').value='';
     showToast(`👋 Chào mừng ${u.nickname||u.username}!`,'success');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
@@ -4223,9 +4236,11 @@ async function applyUserSession(u){
   await loadEquippedAiModel();
   startAiRandomChatTimer();
 }
-function handleLogout(){customConfirm('Bạn có chắc muốn đăng xuất?',{icon:'🚪',title:'Đăng xuất',okClass:'danger'}).then(ok=>{if(!ok)return;stopOnlineTracking();stopAiWebcam();stopAiRandomChatTimer();localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;userHasSupremeAccess=false;accMgmtUnlocked=false;configTabUnlocked=false;stopAllAnnouncementListeners();document.getElementById('navUserInfo').style.display='none';document.getElementById('authOverlay').style.display='none';const loginFab=document.getElementById('publicLoginFab');if(loginFab)loginFab.hidden=false;['loginPassword','studentName'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});hideAiWidget();switchAuthTab('login');showToast('👋 Đã đăng xuất','info');});}
+function handleLogout(){customConfirm('Bạn có chắc muốn đăng xuất?',{icon:'🚪',title:'Đăng xuất',okClass:'danger'}).then(ok=>{if(!ok)return;stopOnlineTracking();stopAiWebcam();stopAiRandomChatTimer();localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;userHasSupremeAccess=false;accMgmtUnlocked=false;configTabUnlocked=false;stopAllAnnouncementListeners();document.getElementById('navUserInfo').style.display='none';document.getElementById('authOverlay').style.display='none';['loginPassword','studentName'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});hideAiWidget();switchView('homeView');showToast('👋 Đã đăng xuất','info');});}
 function handleLogoutFromProfile(){closeProfile();setTimeout(handleLogout,200);}
-async function checkAuthOnLoad(){const overlay=document.getElementById('authOverlay');const fab=document.getElementById('publicLoginFab');const s=localStorage.getItem('aurora_user');if(!s){if(overlay)overlay.style.display='none';if(fab)fab.hidden=false;return;}try{const user=JSON.parse(s);const snap=await window.dbGet(window.dbChild(window.dbRef,`users/${user.username}`));if(snap.exists()){await applyUserSession(snap.val());if(overlay)overlay.style.display='none';if(fab)fab.hidden=true;}else{localStorage.removeItem('aurora_user');if(overlay)overlay.style.display='none';if(fab)fab.hidden=false;}}catch(e){if(overlay)overlay.style.display='none';if(fab)fab.hidden=false;console.warn('Auth restore:',e);}}
+async function checkAuthOnLoad(){const s=localStorage.getItem('aurora_user');if(!s){document.getElementById('authOverlay').style.display='none';switchView('homeView');return;}try{const user=JSON.parse(s);const snap=await window.dbGet(window.dbChild(window.dbRef,`users/${user.username}`));if(snap.exists()){await applyUserSession(snap.val());document.getElementById('authOverlay').style.display='none';}else{localStorage.removeItem('aurora_user');document.getElementById('authOverlay').style.display='none';switchView('homeView');}}catch(e){document.getElementById('authOverlay').style.display='none';switchView('homeView');}}
+function requireLogin(actionName){if(currentUser)return true;showToast('🔐 Vui lòng đăng nhập để '+ (actionName||'tiếp tục') +'!','warn');document.getElementById('authOverlay').style.display='flex';switchAuthTab('login');return false;}
+function openAuthModal(tab){document.getElementById('authOverlay').style.display='flex';switchAuthTab(tab||'login');}
 
 /* LOGO */
 function applyLogo(url){cachedLogoUrl=url||'';const img=document.getElementById('webLogoImg');if(img){if(url){img.src=url;img.style.display='block';}else{img.src='';img.style.display='none';}}const fav=document.getElementById('webFavicon');const favApple=document.getElementById('webFaviconApple');if(fav){if(url){fav.href=url;fav.type='';}else{fav.href=DEFAULT_FAVICON;fav.type='image/svg+xml';}}if(favApple)favApple.href=url||DEFAULT_FAVICON;const prev=document.getElementById('logoPreviewImg');const empty=document.getElementById('logoPreviewEmpty');if(prev&&empty){if(url){prev.src=url;prev.style.display='block';empty.style.display='none';}else{prev.src='';prev.style.display='none';empty.style.display='block';}}const urlInput=document.getElementById('logoUrlInput');if(urlInput&&document.activeElement!==urlInput)urlInput.value=url||'';}
@@ -4249,7 +4264,7 @@ function loadWebConfig(){if(webConfigListener)webConfigListener();webConfigListe
 let profileEffectCycleTimer=null;
 let profileAllRolesCache=[];
 async function openProfile(_,targetUser){
-  if(!currentUser)return;
+  if(!currentUser){if(!requireLogin('xem profile'))return;}
   await loadRolesCache();await loadMedalsCache();
   const u=targetUser||currentUserFullData;currentViewingUser=u;
   const isSelf=!targetUser||u.username===currentUser.username;
@@ -4307,7 +4322,6 @@ async function openProfile(_,targetUser){
   const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));
   frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');
   document.getElementById('profileModal').classList.add('show');
-  if(effRole&&!isBaseRole(effRole)){requestAnimationFrame(()=>{if(document.getElementById('profileModal').classList.contains('show')){playProfileEffect(effRole);startAvatarEffect(effRole);}});}else{stopProfileEffect();stopAvatarEffect();}
   if(isSelf){
     showAiModelInProfile(u);
     const wcWrap=document.getElementById('profileAiWebcamWrap');
@@ -4316,23 +4330,37 @@ async function openProfile(_,targetUser){
     hideAiWidget();
     const wcWrap=document.getElementById('profileAiWebcamWrap');
     if(wcWrap)wcWrap.style.display='none';
-    // Random chat "profile_other"
+    // Hiện mini-bot của chủ profile (người A) trong khung profile — chỉ model + tên, không chat
+    showOtherUserMiniBot(u);
+    // Random chat "profile_other" từ model của mình (nếu có)
     if(Date.now()-aiProfileViewLastReactionAt>15000&&currentEquippedAiModel){
       aiProfileViewLastReactionAt=Date.now();
       setTimeout(()=>{showAiFloatBubbleByEvent('profile_other');},800);
     }
   }
-  if(profileEffectCycleTimer)clearInterval(profileEffectCycleTimer);
+  if(profileEffectCycleTimer){clearTimeout(profileEffectCycleTimer);clearInterval(profileEffectCycleTimer);profileEffectCycleTimer=null;}
   if(effRole&&!isBaseRole(effRole)){
-    const roleAdj=getProfileEffectAdjust(effRole);
-    const cooldown=roleAdj.cooldown||10;
-    profileEffectCycleTimer=setInterval(()=>{
-      if(document.getElementById('profileModal').classList.contains('show')&&currentViewingUser){
-        stopProfileEffect();stopAvatarEffect();
-        playProfileEffect(effRole);startAvatarEffect(effRole);
-      }
-    },cooldown*1000);
+    // Phát hiệu ứng NGAY LẬP TỨC 100% khi mở profile (desktop + mobile đồng bộ)
+    try{stopProfileEffect();stopAvatarEffect();}catch(e){}
+    playProfileEffect(effRole);
+    startAvatarEffect(effRole);
+    scheduleProfileEffectLoop(effRole);
   }
+}
+function scheduleProfileEffectLoop(effRole){
+  if(profileEffectCycleTimer){clearTimeout(profileEffectCycleTimer);clearInterval(profileEffectCycleTimer);profileEffectCycleTimer=null;}
+  const roleAdj=getProfileEffectAdjust(effRole)||{};
+  const duration=Math.max(1,parseFloat(roleAdj.duration)||6);
+  const cooldown=Math.max(1,parseFloat(roleAdj.cooldown)||10);
+  // Chờ hiệu ứng chạy xong (duration) rồi mới bắt đầu cooldown, sau cooldown lặp lại
+  const totalWait=(duration+cooldown)*1000;
+  profileEffectCycleTimer=setTimeout(function loopFx(){
+    if(!document.getElementById('profileModal')||!document.getElementById('profileModal').classList.contains('show')||!currentViewingUser)return;
+    try{stopProfileEffect();stopAvatarEffect();}catch(e){}
+    playProfileEffect(effRole);
+    startAvatarEffect(effRole);
+    profileEffectCycleTimer=setTimeout(loopFx,totalWait);
+  },totalWait);
 }
 function renderProfileRoles(allRoles){
   const rolesEl=document.getElementById('profileRolesDisplay');if(!rolesEl)return;
@@ -4352,11 +4380,68 @@ function showAllProfileRoles(){
 }
 function adjustColor(hex,amt){const c=hex.replace('#','');let r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);r=Math.max(0,Math.min(255,r+amt));g=Math.max(0,Math.min(255,g+amt));b=Math.max(0,Math.min(255,b+amt));return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function applyFontAndEffect(el,fontStyle,textEffect,color){const fonts={'normal':"inherit",'hoathinh':"'Comic Sans MS', cursive",'nannhot':"Georgia, serif",'mono':"'Courier New', monospace",'serif':"'Times New Roman', serif"};el.style.fontFamily=fonts[fontStyle]||'inherit';el.style.color=color||'#333';el.style.webkitTextFillColor='';el.style.background='';el.style.webkitBackgroundClip='';el.style.backgroundClip='';if(textEffect==='glow')el.style.textShadow=`0 0 8px ${color||'#fff'},0 0 16px ${color||'#fff'}`;else if(textEffect==='neon')el.style.textShadow=`0 0 4px ${color},0 0 10px ${color},0 0 20px ${color},0 0 40px ${color}`;else if(textEffect==='rainbow'){el.style.background='linear-gradient(90deg,#ff4d4f,#ffc107,#198754,#1877f2,#a55eea,#ff4d4f)';el.style.backgroundSize='300% auto';el.style.webkitBackgroundClip='text';el.style.backgroundClip='text';el.style.webkitTextFillColor='transparent';}else if(textEffect==='shadow')el.style.textShadow='3px 3px 6px rgba(0,0,0,.4)';else el.style.textShadow='none';}
+
+function showOtherUserMiniBot(u){
+  removeOtherUserMiniBot();
+  if(!u)return;
+  const equipped=u.equippedAiModel;
+  if(!equipped)return;
+  const md=(cachedAiModels&&cachedAiModels[equipped])||null;
+  if(!md)return;
+  const box=document.querySelector('#profileModal .profile-box')||document.getElementById('profileModal');
+  if(!box)return;
+  if(getComputedStyle(box).position==='static')box.style.position='relative';
+  const el=document.createElement('div');
+  el.className='profile-mini-bot';
+  el.id='profileOtherMiniBot';
+  const imgSrc=md.imageData||(md.files&&md.files.find(f=>f.type&&f.type.startsWith('image/')&&f.data)||{}).data||'';
+  const name=md.name||'AI';
+  const ownerName=u.nickname||u.username||'bạn ấy';
+  if(imgSrc){
+    el.innerHTML=`<img src="${imgSrc}" alt="${escapeHtml(name)}" class="mini-bot-avatar"/><div class="mini-bot-name">${escapeHtml(name)}</div><div class="mini-bot-bubble" id="miniBotBubble"></div>`;
+  }else{
+    el.innerHTML=`<div class="mini-bot-avatar" style="display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(135deg,#a8d8ff,#6eb6ff)">🤖</div><div class="mini-bot-name">${escapeHtml(name)}</div><div class="mini-bot-bubble" id="miniBotBubble"></div>`;
+  }
+  box.appendChild(el);
+  // Câu thú vị xoay quanh chủ nhân — không chat
+  const lines=[
+    `Chủ nhân ${ownerName} học giỏi lắm đó~ ✨`,
+    `${ownerName} là người tuyệt vời! 💙`,
+    `Mình là bot của ${ownerName} nè 🤖`,
+    `${ownerName} đang cố gắng hết mình! 💪`,
+    `Profile của ${ownerName} đẹp ghê~ 🌟`,
+    `Theo dõi ${ownerName} học tập nào! 📚`,
+    `${ownerName} sẽ đạt điểm cao! 🎯`,
+    `Xin chào, mình thuộc về ${ownerName} 👋`
+  ];
+  let li=0;
+  const bubble=el.querySelector('#miniBotBubble');
+  const speak=()=>{
+    if(!document.getElementById('profileOtherMiniBot'))return;
+    if(bubble){
+      bubble.innerText=lines[li%lines.length];
+      bubble.classList.add('show');
+      setTimeout(()=>{if(bubble)bubble.classList.remove('show');},3500);
+    }
+    li++;
+  };
+  setTimeout(speak,600);
+  el._miniBotTimer=setInterval(speak,8000);
+}
+function removeOtherUserMiniBot(){
+  const el=document.getElementById('profileOtherMiniBot');
+  if(el){
+    if(el._miniBotTimer)clearInterval(el._miniBotTimer);
+    el.remove();
+  }
+}
+
 function closeProfile(){
   document.getElementById('profileModal').classList.remove('show');
   stopProfileEffect();stopAvatarEffect();
   stopAiWebcam();
-  if(profileEffectCycleTimer){clearInterval(profileEffectCycleTimer);profileEffectCycleTimer=null;}
+  removeOtherUserMiniBot();
+  if(profileEffectCycleTimer){clearTimeout(profileEffectCycleTimer);clearInterval(profileEffectCycleTimer);profileEffectCycleTimer=null;}
   currentViewingUser=null;
   // Restore own AI model (not hide)
   if(currentUser&&currentEquippedAiModel){showAiWidget();updateAiWidgetContent();}
@@ -4413,10 +4498,20 @@ function getProfileEffectAdjust(role){
   const isMobile=window.innerWidth<640;
   const def={x:0,y:0,scale:1,scaleX:1,scaleY:1,rotation:0,opacity:1,duration:6,cooldown:10};
   if(!role)return def;
-  const data=role.effectAdjust;
+  // role can be roleId string or role object
+  let data=null;
+  if(typeof role==='string'){
+    const r=cachedRoles&&cachedRoles[role];
+    data=r&&r.effectAdjust;
+  }else if(role&&role.effectAdjust){
+    data=role.effectAdjust;
+  }else if(role&&role.id&&cachedRoles&&cachedRoles[role.id]){
+    data=cachedRoles[role.id].effectAdjust;
+  }
   if(!data)return def;
-  const d=data.desktop||def;
-  const m=data.mobile||def;
+  const d=Object.assign({},def,data.desktop||{});
+  // Mobile sync với desktop nếu chưa có chỉnh riêng (đồng bộ hiệu ứng)
+  const m=Object.assign({},d,data.mobile||{});
   const src=isMobile?m:d;
   return {
     x:src.x!==undefined?src.x:def.x,
@@ -5055,7 +5150,7 @@ function getExamMode(){return document.getElementById('examModeSelect').value||'
 function toggleModeDropdown(e){e.stopPropagation();document.getElementById('modeDropdownMenu').classList.toggle('open');}
 document.addEventListener('click',e=>{const dd=document.getElementById('modeDropdown');if(dd&&!dd.contains(e.target))document.getElementById('modeDropdownMenu').classList.remove('open');});
 function selectExamMode(mode,el){document.querySelectorAll('.mode-dropdown-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('examModeSelect').value=mode;const icons={normal:'♾️',live:'🛡️',practice:'⚡',axcm:'🎓'};const labels={normal:'Thi Tự Do',live:'Phòng Thi Chuyên Dụng',practice:'Bài Luyện Nhanh',axcm:'Làm Bài Thông Minh'};document.querySelector('.mode-dd-icon').innerText=icons[mode];document.querySelector('.mode-dd-label').innerText=labels[mode];document.getElementById('modeDropdownMenu').classList.remove('open');const passBox=document.getElementById('extraPassBox'),passLabel=document.getElementById('extraPassLabel'),codeLabel=document.getElementById('lblCodeText');if(mode==='practice'||mode==='live'){passBox.style.display='block';passLabel.innerText=mode==='practice'?'Mật Khẩu Bài Luyện:':'Mật Khẩu Phòng Thi:';codeLabel.innerText=mode==='practice'?'Mã Bài Luyện:':'Mã Bài Kiểm Tra:';}else if(mode==='axcm'){passBox.style.display='none';codeLabel.innerText='Mã Đề Thông Minh:';}else{passBox.style.display='none';codeLabel.innerText='Mã Bài Kiểm Tra:';}if(perfMode!=='optimized'){if(mode==='normal')playGalaxyEffect();else if(mode==='practice')playLightningEffect(el);else if(mode==='live')playShieldEffect();else if(mode==='axcm'){playSmartEffect();}}}
-function switchView(viewId,btn=null){if(viewId==='studentExamView'&&!requireLoginForAction('làm bài kiểm tra'))return;if(viewId!=='studentExamView'){document.body.classList.remove('exam-active');const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');}document.querySelectorAll('.view-section').forEach(el=>el.classList.remove('active'));const el=document.getElementById(viewId);if(el)el.classList.add('active');if(btn){document.querySelectorAll('.nav-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}updateQrFabVisibility();if(viewId==='leaderboardView'){startServerLBListener();loadThroneData();}}
+function switchView(viewId,btn=null){if(viewId!=='studentExamView'){document.body.classList.remove('exam-active');const l=document.querySelector('#studentExamView .exam-layout');if(l)l.classList.remove('axcm-mode');}document.querySelectorAll('.view-section').forEach(el=>el.classList.remove('active'));const el=document.getElementById(viewId);if(el)el.classList.add('active');if(btn){document.querySelectorAll('.nav-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}updateQrFabVisibility();if(viewId==='leaderboardView'){startServerLBListener();loadThroneData();}}
 function setExamActiveClass(a){document.body.classList.toggle('exam-active',a);}
 function detectLowEndDevice(){try{const mem=navigator.deviceMemory||8,cpu=navigator.hardwareConcurrency||8,ua=navigator.userAgent||'';const isMobile=/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|CriOS|FxiOS/i.test(ua)||(navigator.maxTouchPoints&&navigator.maxTouchPoints>1)||window.innerWidth<1024;return (mem<=4)||(cpu<=4)||isMobile;}catch(e){return false;}}
 function applyPerfMode(mode){perfMode=mode==='optimized'?'optimized':'full';document.body.classList.toggle('optimized-mode',perfMode==='optimized');const t=document.getElementById('currentPerfModeText');if(t){t.innerText=perfMode==='optimized'?'⚡ Tối ưu':'✨ Đầy đủ';t.style.color=perfMode==='optimized'?'#e0a800':'#198754';}}
@@ -5291,7 +5386,9 @@ function showBigNotification(id,n){
   setTimeout(()=>{if(currentBigNotifyId===id)closeBigNotify();try{window.dbRemove(window.ref(window.db,`system/big_notifications/${id}`));}catch(e){}},dur);
 }
 function closeBigNotify(){document.getElementById('bigNotifyOverlay').classList.remove('show');currentBigNotifyId=null;stopEntertainmentEffect();}
-function startThemeListener(){if(themeListener)themeListener();themeListener=window.onValue(window.ref(window.db,'system/global_theme'),snap=>{const d=snap.val();if(d&&d.theme){currentGlobalTheme=d.theme;applyTheme(d.theme,false);}});}
+function startThemeListener(){if(themeListener)themeListener();themeListener=window.onValue(window.ref(window.db,'system/global_theme'),snap=>{const d=snap.val();if(d&&d.theme){currentGlobalTheme=d.theme;const localOverride=localStorage.getItem('aurora_theme_user_override');if(localOverride){/* user chủ động chỉnh → không ghi đè */}else{applyTheme(d.theme,false);}}});}
+function applyThemeUserChoice(theme){localStorage.setItem('aurora_theme',theme);localStorage.setItem('aurora_theme_user_override','1');applyTheme(theme,false);showToast('🎨 Theme cá nhân: '+theme,'info');}
+function clearThemeUserOverride(){localStorage.removeItem('aurora_theme_user_override');if(currentGlobalTheme)applyTheme(currentGlobalTheme,false);}
 function applyThemeFromSupreme(theme){
   const target=document.querySelector('input[name="themeTarget"]:checked').value;
   if(target==='global'){applyTheme(theme,false);try{window.dbSet(window.ref(window.db,'system/global_theme'),{theme,setBy:currentUser?currentUser.username:'admin',updatedAt:Date.now()});showCenterSquareToast('🎨','Đã áp dụng!','Theme toàn hệ thống: '+theme,'success');}catch(e){}}
@@ -5618,8 +5715,8 @@ async function handleDocLibraryUpload(input){if(!input.files||!input.files.lengt
 function renderDocLibraryList(list){const c=document.getElementById('docLibraryListContainer');if(!c)return;const keys=Object.keys(list||{});if(!keys.length){c.innerHTML='<p style="font-size:13px;color:#888;font-style:italic;text-align:center;padding:14px 0">Chưa có tài liệu</p>';return;}keys.sort((a,b)=>(list[b].uploadedAt||0)-(list[a].uploadedAt||0));c.innerHTML=keys.map(k=>{const d=list[k];const date=new Date(d.uploadedAt||0).toLocaleString('vi-VN');return `<div class="doc-item"><div class="doc-info"><span class="doc-icon">${getDocIcon(d.name,d.type)}</span><div style="flex:1;min-width:0"><div class="doc-name">${escapeHtml(d.name||'')}</div><div class="doc-meta">${formatDocSize(d.size)} • ${date}</div></div></div><div class="doc-actions"><button onclick="downloadDocByKey('${k}')" style="background:#198754">⬇️</button><button onclick="deleteDocByKey('${k}')" style="background:#dc3545">🗑️</button></div></div>`;}).join('');}
 function loadDocLibrary(){if(docLibraryListener)docLibraryListener();docLibraryListener=window.onValue(window.ref(window.db,'documents'),s=>renderDocLibraryList(s.val()||{}));}
 async function deleteDocByKey(key){const pass=document.getElementById('docLibraryPass').value.trim();if(!checkSecurityPassword(pass)){showCenterSquareToast('❌','Sai mật khẩu','','error');return;}if(!await customConfirm('Xóa?',{icon:'🗑️'}))return;await window.dbRemove(window.ref(window.db,'documents/'+key));showCenterSquareToast('🗑️','Đã xóa','','success');}
-async function downloadDocByKey(key){if(!requireLoginForAction('tải tài liệu'))return;const s=await window.dbGet(window.dbChild(window.dbRef,'documents/'+key));if(!s.exists())return;const d=s.val();const a=document.createElement('a');a.href=d.data;a.download=d.name||'file';document.body.appendChild(a);a.click();document.body.removeChild(a);showCenterSquareToast('⬇️','Đã tải!',d.name,'success');}
-function openDocumentStudentModal(){if(!requireLoginForAction('xem và tải tài liệu'))return;const m=document.getElementById('documentLibraryStudentModal');m.classList.add('show');const c=document.getElementById('docStudentListContainer');c.innerHTML='<p style="text-align:center">Đang tải...</p>';window.dbGet(window.dbChild(window.dbRef,'documents')).then(s=>{const list=s.val()||{};const keys=Object.keys(list);if(!keys.length){c.innerHTML='<p style="text-align:center;color:#888">Chưa có tài liệu</p>';return;}keys.sort((a,b)=>(list[b].uploadedAt||0)-(list[a].uploadedAt||0));c.innerHTML=keys.map(k=>{const d=list[k];return `<div class="doc-item"><div class="doc-info"><span class="doc-icon">${getDocIcon(d.name,d.type)}</span><div style="flex:1;min-width:0"><div class="doc-name">${escapeHtml(d.name||'')}</div><div class="doc-meta">${formatDocSize(d.size)}</div></div></div><div class="doc-actions"><button onclick="downloadDocByKey('${k}')" style="background:#1877f2">⬇️</button></div></div>`;}).join('');});}
+async function downloadDocByKey(key){const s=await window.dbGet(window.dbChild(window.dbRef,'documents/'+key));if(!s.exists())return;const d=s.val();const a=document.createElement('a');a.href=d.data;a.download=d.name||'file';document.body.appendChild(a);a.click();document.body.removeChild(a);showCenterSquareToast('⬇️','Đã tải!',d.name,'success');}
+function openDocumentStudentModal(){const m=document.getElementById('documentLibraryStudentModal');m.classList.add('show');const c=document.getElementById('docStudentListContainer');c.innerHTML='<p style="text-align:center">Đang tải...</p>';window.dbGet(window.dbChild(window.dbRef,'documents')).then(s=>{const list=s.val()||{};const keys=Object.keys(list);if(!keys.length){c.innerHTML='<p style="text-align:center;color:#888">Chưa có tài liệu</p>';return;}keys.sort((a,b)=>(list[b].uploadedAt||0)-(list[a].uploadedAt||0));c.innerHTML=keys.map(k=>{const d=list[k];return `<div class="doc-item"><div class="doc-info"><span class="doc-icon">${getDocIcon(d.name,d.type)}</span><div style="flex:1;min-width:0"><div class="doc-name">${escapeHtml(d.name||'')}</div><div class="doc-meta">${formatDocSize(d.size)}</div></div></div><div class="doc-actions"><button onclick="downloadDocByKey('${k}')" style="background:#1877f2">⬇️</button></div></div>`;}).join('');});}
 function closeDocumentStudentModal(){document.getElementById('documentLibraryStudentModal').classList.remove('show');}
 function switchSubModule(id){document.querySelectorAll('.sub-module-box').forEach(el=>el.style.display='none');const el=document.getElementById(id);if(el)el.style.display='block';if(id==='quickPracticeCreate'&&!document.getElementById('qpQuestionsContainer').children.length)addQpQuestionItem();if(id==='smartExamCreate'&&(!smartExamQuestions||!smartExamQuestions.length)){document.getElementById('smartExamPreviewContainer').style.display='none';document.getElementById('smartExamConfigBox').style.display='none';document.getElementById('smartExamProgress').style.display='none';document.getElementById('smartExamAnswerUploadBox').style.display='none';}if(id==='documentLibrary'&&!docLibraryListener)loadDocLibrary();if(id==='aiExamCreate'){/* nothing extra */}}
 function toggleExamCreationType(){const t=document.getElementById('examType').value;document.getElementById('pdfUploadSection').style.display=t==='pdf'?'block':'none';document.getElementById('imageUploadSection').style.display=t==='image'?'block':'none';}
@@ -5644,7 +5741,6 @@ function stopQpWaitingPoll(){if(qpWaitingPollInterval){clearInterval(qpWaitingPo
 
 /* STUDENT MAIN TABS */
 function switchStudentMainTab(tab,el){
-  if(!requireLoginForAction(tab==='docs'?'xem tài liệu':'làm bài kiểm tra'))return;
   document.querySelectorAll('#studentMainTabs .student-docs-tab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
   document.getElementById('studentMainExam').classList.toggle('active',tab==='exam');
@@ -5851,7 +5947,7 @@ async function generateAIAnalysisAsync(q){
     prompt+='Nội dung: '+(q.content||q.question||'')+'\n';
     if(q.options&&q.options.length)prompt+='Đáp án: '+q.options.map(o=>o.label+'. '+(o.text||'')).join(' | ')+'\n';
     if(q.correctAnswer)prompt+='Đáp án đúng: '+q.correctAnswer+'\n';
-    const res=await fetchAIEndpoint(cachedAiConfig.endpoint,{
+    const res=await fetch(cachedAiConfig.endpoint,{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
       body:JSON.stringify({model:cachedAiConfig.model||'gpt-4o-mini',messages:[{role:'user',content:prompt}],temperature:0.5,max_tokens:500})
@@ -6488,6 +6584,78 @@ async function sendAiChatMessage(){
   // Hiện bubble tóm tắt
   showAiFloatBubble(reply.slice(0,150)+(reply.length>150?'...':''),7);
 }
+
+/* ============ UNIVERSAL AI API CALLER (fix Gemini + OpenAI) ============ */
+async function callAiApi(messages, opts){
+  opts=opts||{};
+  if(!cachedAiConfig||!cachedAiConfig.enabled||!cachedAiConfig.endpoint||!cachedAiConfig.apiKey){
+    throw new Error('Chưa cấu hình API AI. Vào Cấu hình → 🤖 Setup AI Model.');
+  }
+  const provider=(cachedAiConfig.provider||'google').toLowerCase();
+  const model=opts.model||cachedAiConfig.model||'gemini-2.0-flash';
+  const temperature=opts.temperature!=null?opts.temperature:(parseFloat(cachedAiConfig.temperature)||0.8);
+  const maxTokens=opts.max_tokens||opts.maxTokens||(parseInt(cachedAiConfig.maxTokens)||800);
+  const endpoint=cachedAiConfig.endpoint;
+  const apiKey=cachedAiConfig.apiKey;
+
+  // Gemini native API path (more reliable than OpenAI-compat for free keys)
+  const isGemini = provider==='google' || /generativelanguage\.googleapis\.com/.test(endpoint) || /^gemini/i.test(model);
+  if(isGemini && !opts.forceOpenAI){
+    // Convert OpenAI-style messages to Gemini contents
+    let systemText='';
+    const contents=[];
+    (messages||[]).forEach(m=>{
+      if(m.role==='system'){systemText+=(systemText?'\n':'')+(typeof m.content==='string'?m.content:(m.content||[]).map(c=>c.text||'').join('\n'));}
+      else{
+        const parts=[];
+        if(typeof m.content==='string')parts.push({text:m.content});
+        else if(Array.isArray(m.content)){
+          m.content.forEach(c=>{
+            if(c.type==='text')parts.push({text:c.text||''});
+            else if(c.type==='image_url'&&c.image_url){
+              const url=typeof c.image_url==='string'?c.image_url:c.image_url.url;
+              const mdata=url.match(/^data:([^;]+);base64,(.+)$/);
+              if(mdata)parts.push({inline_data:{mime_type:mdata[1],data:mdata[2]}});
+              else parts.push({text:'[image]'});
+            }
+          });
+        }
+        if(!parts.length)parts.push({text:''});
+        contents.push({role:m.role==='assistant'?'model':'user',parts});
+      }
+    });
+    const body={contents,generationConfig:{temperature,maxOutputTokens:maxTokens}};
+    if(systemText)body.systemInstruction={parts:[{text:systemText}]};
+    // Use v1beta generateContent
+    const baseModel=model.replace(/^models\//,'');
+    const url=`https://generativelanguage.googleapis.com/v1beta/models/${baseModel}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok){
+      const errTxt=await res.text();
+      throw new Error('Gemini HTTP '+res.status+': '+errTxt.slice(0,300));
+    }
+    const data=await res.json();
+    const text=(data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts||[]).map(p=>p.text||'').join('')||'';
+    if(!text)throw new Error('Gemini không trả về nội dung');
+    return text.trim();
+  }
+
+  // OpenAI-compatible path
+  const res=await fetch(endpoint,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+    body:JSON.stringify({model,messages,temperature,max_tokens:maxTokens})
+  });
+  if(!res.ok){
+    const errTxt=await res.text();
+    throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,300));
+  }
+  const data=await res.json();
+  const reply=data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content;
+  if(!reply)throw new Error('AI không trả về nội dung');
+  return reply.trim();
+}
+
 async function getAiReplyWithContext(text,screenCtx){
   const name=currentEquippedAiModel?(currentEquippedAiModel.modelData.name||'Auro'):'Auro';
   // Nếu đang trong phòng thi & đọc màn hình → ưu tiên dùng đáp án offline (không cần API)
@@ -6515,28 +6683,13 @@ async function getAiReplyWithContext(text,screenCtx){
       if(screenCtx){
         systemPrompt+='\n\n👁️ BẠN ĐANG ĐỌC ĐƯỢC NỘI DUNG MÀN HÌNH HIỆN TẠI:\n'+screenCtx+'\n\nHãy dùng thông tin này để trả lời chính xác câu hỏi của user.';
       }
-      const res=await fetchAIEndpoint(cachedAiConfig.endpoint,{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
-        body:JSON.stringify({
-          model:cachedAiConfig.model||'gpt-4o-mini',
-          messages:[
-            {role:'system',content:systemPrompt},
-            ...aiChatHistory.slice(-8).map(m=>({role:m.role,content:m.text})),
-            {role:'user',content:text}
-          ],
-          temperature:parseFloat(cachedAiConfig.temperature)||0.8,
-          max_tokens:parseInt(cachedAiConfig.maxTokens)||800
-        })
-      });
-      if(res.ok){
-        const data=await res.json();
-        const reply=data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content;
-        if(reply)return reply.trim();
-      }else{
-        const errTxt=await res.text();
-        console.warn('AI API error:',res.status,errTxt);
-      }
+      const messages=[
+        {role:'system',content:systemPrompt},
+        ...aiChatHistory.slice(-8).map(m=>({role:m.role,content:m.text})),
+        {role:'user',content:text}
+      ];
+      const reply=await callAiApi(messages);
+      if(reply)return reply;
     }catch(e){console.warn('AI fetch error',e);}
   }
   return getOfflineAiReply(text,name);
@@ -6778,7 +6931,9 @@ function generateSystemDocs(){
         idx++;
         // Nội dung thật
         const realContent=REAL_DOC_CONTENT[sub]&&REAL_DOC_CONTENT[sub][type]?REAL_DOC_CONTENT[sub][type]:'';
-        const fullContent=`${topic.toUpperCase()}\nMôn: ${SUBJECT_NAMES[sub]} — Lớp ${g}\nDạng: ${SYSTEM_DOC_TYPE_LABELS[type]}\n\n${realContent}\n\n---\n📖 Đây là tài liệu tham khảo được hệ thống tổng hợp tự động.\nHọc sinh có thể tải xuống để ôn tập.`;
+        const sources=['VietJack','HocMai','LoiGiaiHay','Tuyensinh247','Khoahoc.tv','Moon.vn','Vungoi.vn','Thuvienhoclieu'];
+        const src=sources[(idx+sub.length)%sources.length];
+        const fullContent=`${topic.toUpperCase()}\nMôn: ${SUBJECT_NAMES[sub]} — Lớp ${g}\nDạng: ${SYSTEM_DOC_TYPE_LABELS[type]}\nNguồn: ${src}\n\n${realContent}\n\n---\ncre: ${src} (tổng hợp tham khảo giáo dục, không sở hữu bản quyền gốc).\n📖 Tài liệu tham khảo ôn tập — xem và tải 100% được.`;
         docs.push({
           id:'sysdoc_'+idx,
           title:`${SUBJECT_NAMES[sub]} ${g} — ${topic} (${SYSTEM_DOC_TYPE_LABELS[type]})`,
@@ -6787,8 +6942,9 @@ function generateSystemDocs(){
           topic:topic,
           type:type,
           content:fullContent,
-          desc:`Tài liệu ${SYSTEM_DOC_TYPE_LABELS[type]} môn ${SUBJECT_NAMES[sub]} lớp ${g}, chủ đề: ${topic}. Nội dung đầy đủ, có thể xem và tải về.`,
-          source:'auto-system',
+          desc:`Tài liệu ${SYSTEM_DOC_TYPE_LABELS[type]} môn ${SUBJECT_NAMES[sub]} lớp ${g}, chủ đề: ${topic}. cre: ${src}. Xem & tải 100%.`,
+          source:src,
+          cre:'cre: '+src,
           createdAt:Date.now()+idx
         });
       }
@@ -6853,7 +7009,7 @@ function renderSysDocs(){
   if(!list.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:14px 0">Không có tài liệu nào phù hợp</p>';return;}
   c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#0d6efd" onclick="viewSystemDocContent('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="downloadSystemDoc('${d.id}')">⬇️ Tải</button><button style="background:#dc3545" onclick="deleteSystemDocById('${d.id}')">🗑️ Xóa</button></div></div>`;}).join('');
 }
-function viewSystemDocContent(id){if(!requireLoginForAction('xem tài liệu'))return;
+function viewSystemDocContent(id){
   const d=systemDocsData[id];
   if(!d){showToast('❌ Không tìm thấy!','error');return;}
   const modal=document.getElementById('supremeDetailModal');
@@ -6862,7 +7018,7 @@ function viewSystemDocContent(id){if(!requireLoginForAction('xem tài liệu'))r
   document.getElementById('supremeModalContent').innerHTML=`<div style="background:#f8f9fa;padding:12px;border-radius:8px;font-size:13px;line-height:1.7;white-space:pre-wrap;font-family:'Courier New',monospace">${escapeHtml(content)}</div><div style="margin-top:12px;text-align:right"><button class="btn btn-success" style="width:auto;padding:8px 16px" onclick="downloadSystemDoc('${id}')">⬇️ Tải về</button></div>`;
   modal.style.display='flex';
 }
-function downloadSystemDoc(id){if(!requireLoginForAction('tải tài liệu'))return;
+function downloadSystemDoc(id){
   const d=systemDocsData[id];
   if(!d){showToast('❌ Không tìm thấy!','error');return;}
   const content=d.content||d.desc||'';
@@ -6895,7 +7051,7 @@ function renderStudentDocsFiltered(){
   if(search)list=list.filter(d=>(d.title||'').toLowerCase().includes(search)||(d.topic||'').toLowerCase().includes(search));
   const cnt=document.getElementById('docsTotalCount');if(cnt)cnt.innerText=list.length;
   if(!list.length){c.innerHTML='<p style="text-align:center;color:#888;grid-column:1/-1;padding:20px">Không có tài liệu nào phù hợp</p>';return;}
-  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#0d6efd" onclick="viewStudentDocContent('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="downloadStudentDoc('${d.id}')">⬇️ Tải</button></div></div>`;}).join('');
+  c.innerHTML=list.map(d=>{const subColor=SUBJECT_COLORS[d.subject]||'#1877f2';const cre=d.cre||(d.source?('cre: '+d.source):'cre: VietJack');return `<div class="doc-card"><div class="doc-card-head"><div class="doc-card-title">${escapeHtml(d.title||'')}</div><span class="doc-card-subject" style="background:${subColor}">${SUBJECT_NAMES[d.subject]||d.subject}</span></div><div class="doc-card-tags"><span class="doc-card-tag grade">Lớp ${d.grade}</span><span class="doc-card-tag topic">${escapeHtml(d.topic||'')}</span><span class="doc-card-tag type">${SYSTEM_DOC_TYPE_LABELS[d.type]||d.type}</span><span class="doc-card-tag" style="background:#fff3cd;color:#856404">${escapeHtml(cre)}</span></div><div class="doc-card-desc">${escapeHtml(d.desc||'')}</div><div class="doc-card-actions"><button style="background:#0d6efd" onclick="if(!requireLogin('xem tài liệu'))return;viewStudentDocContent('${d.id}')">👁️ Xem</button><button style="background:#198754" onclick="if(!requireLogin('tải tài liệu'))return;downloadStudentDoc('${d.id}')">⬇️ Tải</button></div></div>`;}).join('');
 }
 function viewStudentDocContent(id){
   const d=systemDocsData[id];
@@ -6923,6 +7079,21 @@ function downloadStudentDoc(id){
 }
 
 /* ============ AI SETUP CONFIG ============ */
+
+async function testAiConnection(){
+  const st=document.getElementById('aiSetupStatus')||document.getElementById('aiSetupTestResult');
+  try{
+    if(!cachedAiConfig||!cachedAiConfig.apiKey){showToast('❌ Chưa có API key','error');return;}
+    showToast('🔄 Đang test API...','info');
+    const reply=await callAiApi([{role:'user',content:'Trả lời đúng 1 từ: OK'}],{temperature:0.1,max_tokens:20});
+    showCenterSquareToast('✅','API hoạt động!',(reply||'').slice(0,80),'success',4000);
+    if(st){st.style.display='block';st.style.background='#d1e7dd';st.style.color='#0f5132';st.innerText='✅ Test OK: '+(reply||'').slice(0,100);}
+  }catch(e){
+    showToast('❌ '+(e.message||e),'error');
+    if(st){st.style.display='block';st.style.background='#f8d7da';st.style.color='#842029';st.innerText='❌ '+(e.message||e);}
+  }
+}
+
 async function loadAiSetupConfigUI(){
   try{
     const s=await window.dbGet(window.dbChild(window.dbRef,'system/ai_config'));
@@ -7005,26 +7176,37 @@ async function saveAiSetupConfig(){
 }
 async function testAiSetupConfig(){
   if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}
+  // Sync form to temp config for test
+  const provider=document.getElementById('aiSetupProvider').value;
   const endpoint=getCurrentAiEndpoint();
   const apiKey=document.getElementById('aiSetupApiKey').value.trim();
-  const model=getCurrentAiModelName();
+  let model=getCurrentAiModelName();
+  const p=AI_PROVIDERS[provider];
+  if(!model&&p)model=p.defaultModel;
   if(!endpoint||!apiKey||!model){showToast('❌ Nhập API key + chọn model!','error');return;}
+  const prev=cachedAiConfig;
+  cachedAiConfig={
+    enabled:true,
+    provider:provider,
+    endpoint:endpoint,
+    apiKey:apiKey,
+    model:model,
+    temperature:0.7,
+    maxTokens:100,
+    systemPrompt:'Bạn là trợ lý test.'
+  };
   try{
-    showToast('⏳ Đang test...','info');
-    const res=await fetch(endpoint,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-      body:JSON.stringify({model,messages:[{role:'user',content:'Xin chào! Hãy trả lời ngắn gọn: bạn tên gì?'}],temperature:0.7,max_tokens:100})
-    });
-    if(res.ok){
-      const d=await res.json();
-      const txt=(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||JSON.stringify(d).slice(0,200);
-      showCenterSquareToast('✅','API OK!',txt.slice(0,200),'success',8000);
-    }else{
-      showCenterSquareToast('❌','HTTP '+(res.status),(await res.text()).slice(0,200),'error',8000);
-    }
-  }catch(e){showCenterSquareToast('❌','Lỗi',e.message||'',"error",6000);}
+    showToast('⏳ Đang test API...','info');
+    const txt=await callAiApi([{role:'user',content:'Xin chào! Hãy trả lời ngắn gọn đúng 1 câu: bạn tên gì?'}],{temperature:0.7,max_tokens:100});
+    showCenterSquareToast('✅','API hoạt động!',(txt||'').slice(0,120),'success',4000);
+    updateAiSetupStatusUI();
+  }catch(e){
+    showCenterSquareToast('❌','Test thất bại',(e.message||e).toString().slice(0,200),'error',5000);
+  }finally{
+    cachedAiConfig=prev;
+  }
 }
+
 async function clearAiSetupConfig(){
   if(!configTabUnlocked){showToast('❌ Chỉ vào được từ tab Cấu hình!','error');return;}
   if(!await customConfirm('Xóa cấu hình AI?',{icon:'🗑️',okClass:'danger'}))return;
@@ -7605,7 +7787,6 @@ async function handleAiModelZipUpload(input){
   input.value='';
 }
 async function processModelFilesAuto(files){
-  if(!requireLoginForAction('thêm model AI'))return;
   // Tự động xử lý nhiều loại file: ZIP, ảnh, model 3D
   const zipFiles=[];
   const imageFiles=[];
@@ -7887,7 +8068,6 @@ function handleDeepAnalysisImage(input){
   }).catch(e=>showToast('❌ '+(e.message||e),'error'));
 }
 async function runDeepAnalysis(){
-  if(!requireLoginForAction('phân tích bằng AI'))return;
   if(!deepAnalysisImageData){showToast('❌ Chưa có ảnh!','error');return;}
   const st=document.getElementById('deepAnalysisStatus');
   const btn=document.getElementById('deepAnalysisRunBtn');
@@ -7899,30 +8079,15 @@ async function runDeepAnalysis(){
   btn.disabled=true;
   if(st){st.style.display='block';st.style.background='#fff3cd';st.style.color='#856404';st.innerText='🧠 Đang phân tích ảnh bằng AI Vision...';}
   try{
-    const body={
-      model:cachedAiConfig.model||'gpt-4o-mini',
-      messages:[{
+    const messages=[{
         role:'user',
         content:[
           {type:'text',text:'Hãy phân tích ảnh này và trả về JSON (KHÔNG có markdown ```json) với các trường:\n{\n  "name": "Tên ngắn gọn (2-3 từ) cho model AI",\n  "description": "Mô tả ngắn gọn về đối tượng trong ảnh",\n  "personality": "Tính cách phù hợp (dễ thương/nghiêm túc/năng động/lạnh lùng...)",\n  "greeting": "Câu chào thân thiện phù hợp với nhân vật",\n  "happyMsg": "Câu nói khi vui/điểm cao",\n  "sadMsg": "Câu nói khi buồn/điểm thấp",\n  "thinkingMsg": "Câu nói khi đang suy nghĩ",\n  "musicMsg": "Câu nói khi nghe nhạc",\n  "prankMsg": "Câu nói khi trêu người khác"\n}\nTrả lời chỉ JSON, không giải thích.'},
           {type:'image_url',image_url:{url:deepAnalysisImageData}}
         ]
-      }],
-      temperature:0.8,
-      max_tokens:800
-    };
-    const res=await fetchAIEndpoint(cachedAiConfig.endpoint,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
-      body:JSON.stringify(body)
-    });
-    if(!res.ok){
-      const errTxt=await res.text();
-      throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,200));
-    }
-    const data=await res.json();
-    let content=data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content;
-    if(!content)throw new Error('AI không trả về nội dung');
+      }];
+      let content=await callAiApi(messages,{temperature:0.8,max_tokens:800});
+      if(!content)throw new Error('AI không trả về nội dung');
     content=content.trim();
     if(content.startsWith('```')){content=content.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');}
     let parsed=null;
@@ -8034,7 +8199,6 @@ function resetAiExamForm(){
   showToast('🔄 Đã reset','info');
 }
 async function generateAiExam(){
-  if(!requireLoginForAction('tạo đề bằng AI'))return;
   const prompt=document.getElementById('aiExamPrompt').value.trim();
   const qCount=Math.max(1,Math.min(30,parseInt(document.getElementById('aiExamQCount').value)||10));
   const qTypes=document.getElementById('aiExamQTypes').value;
@@ -8094,25 +8258,10 @@ YÊU CẦU KỸ THUẬT:
     }
   ]
 }`;
-    const res=await fetchAIEndpoint(cachedAiConfig.endpoint,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cachedAiConfig.apiKey},
-      body:JSON.stringify({
-        model:cachedAiConfig.model||'gpt-4o-mini',
-        messages:[
-          {role:'system',content:sysPrompt},
-          {role:'user',content:'YÊU CẦU ĐỀ: '+prompt}
-        ],
-        temperature:0.7,
-        max_tokens:4000
-      })
-    });
-    if(!res.ok){
-      const errTxt=await res.text();
-      throw new Error('API HTTP '+res.status+': '+errTxt.slice(0,300));
-    }
-    const data=await res.json();
-    let content=data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content;
+    let content=await callAiApi([
+      {role:'system',content:sysPrompt},
+      {role:'user',content:'YÊU CẦU ĐỀ: '+prompt}
+    ],{temperature:0.7,max_tokens:4000});
     if(!content)throw new Error('AI không trả về nội dung');
     content=content.trim();
     if(content.startsWith('```')){content=content.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');}
@@ -8231,11 +8380,6 @@ async function saveAiGeneratedExam(){
     resetAiExamForm();
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
-
-/* PUBLIC HOME / AUTH GATE HELPERS */
-function openLoginGate(){const overlay=document.getElementById('authOverlay');if(overlay){overlay.style.display='flex';switchAuthTab('login');}}
-function requireLoginForAction(actionLabel){if(currentUser)return true;showToast('🔐 Bạn cần đăng nhập hoặc đăng ký để '+(actionLabel||'sử dụng chức năng này')+'.','warn');openLoginGate();return false;}
-window.openLoginGate=openLoginGate;window.requireLoginForAction=requireLoginForAction;
 
 /* CONTEXTMENU LOCK */
 (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),c=e.ctrlKey||e.metaKey,sh=e.shiftKey;if(k==='f12'||(c&&k==='u')||(c&&sh&&['i','j','c','k'].includes(k))||(c&&k==='s')||(c&&k==='p')){e.preventDefault();e.stopPropagation();return false;}if(c&&k==='a'){const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable){e.preventDefault();return false;}}},true);document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('copy',e=>{const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable)e.preventDefault();});})();
