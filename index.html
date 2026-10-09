@@ -1094,6 +1094,27 @@ input,select,textarea{font-size:13px;padding:9px}
 .doc-card-actions button{border:none;padding:5px 9px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;color:#fff}
 .student-actions-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .student-actions-row button{flex:1;min-width:140px;padding:12px;font-size:14px;font-weight:bold}
+
+/* Aurora upgrade pack */
+#auroraUpgradePanel{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,12,30,.72);z-index:1000000000;backdrop-filter:blur(8px)}
+#auroraUpgradePanel.open{display:flex}
+.aup-box{width:min(1100px,98vw);max-height:92vh;overflow:auto;background:#fff;color:#182235;border-radius:20px;padding:20px;box-shadow:0 24px 90px #0005}
+.aup-head{display:flex;align-items:center;gap:12px;justify-content:space-between;position:sticky;top:-20px;background:#fff;padding:8px 0 14px;z-index:2;border-bottom:1px solid #e8edf5}
+.aup-head h2{color:#1877f2;font-size:21px}.aup-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.aup-tabs button{border:1px solid #dbe3ef;background:#f6f9ff;color:#245078;padding:9px 12px;border-radius:9px;cursor:pointer;font-weight:700}
+.aup-tabs button.active{background:#1877f2;color:white}.aup-pane{display:none}.aup-pane.active{display:block}
+.aup-card{border:1px solid #e1e8f0;border-radius:12px;padding:14px;margin:10px 0;background:#fbfdff}
+.aup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.aup-field{margin:9px 0}.aup-field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
+.aup-field input,.aup-field textarea,.aup-field select{width:100%;padding:10px;border:1px solid #ccd5e2;border-radius:8px;margin:0}
+.aup-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.aup-btn{border:0;border-radius:8px;background:#1877f2;color:white;padding:10px 14px;cursor:pointer;font-weight:700}.aup-btn.secondary{background:#64748b}.aup-btn.green{background:#198754}.aup-note{font-size:12px;color:#64748b;line-height:1.6}
+.aup-tier{border:1px solid #dce5f0;border-radius:10px;padding:10px}.aup-tier b{display:block;margin-bottom:4px}
+#aru3dBadge{position:fixed;right:14px;bottom:14px;z-index:9997;width:100px;text-align:center;display:none;pointer-events:none}
+#aru3dBadge img{width:74px;height:74px;object-fit:contain;background:#eef6ff;border:2px solid white;border-radius:18px;box-shadow:0 5px 20px #0002}
+#aru3dBadge span{display:block;font-size:12px;font-weight:900;color:#1877f2}
+.aup-menu{position:relative}.aup-menu-list{display:none;position:absolute;right:0;top:calc(100% + 8px);min-width:230px;background:#fff;color:#233;border-radius:12px;padding:8px;box-shadow:0 12px 36px #0003;z-index:10000}.aup-menu-list.open{display:block}.aup-menu-list button{width:100%;padding:10px;border:0;background:white;text-align:left;border-radius:7px;cursor:pointer}.aup-menu-list button:hover{background:#eef6ff}
+@media(max-width:640px){.aup-box{padding:13px}.aup-head h2{font-size:17px}}
+
 </style>
 </head><body>
 
@@ -1311,6 +1332,67 @@ input,select,textarea{font-size:13px;padding:9px}
 </div>
 </div></div>
 
+
+<div id="auroraUpgradePanel" aria-hidden="true">
+ <div class="aup-box">
+  <div class="aup-head"><h2>✨ Aurora Studio — Cấu hình mở rộng</h2><button class="aup-btn secondary" onclick="closeAuroraUpgradePanel()">Đóng ✕</button></div>
+  <div class="aup-note">Các thiết lập được lưu vào Firebase tại system/aurora_extension. Dữ liệu âm thanh/ảnh lưu dạng Data URL nên giới hạn thực tế phụ thuộc Firebase và trình duyệt; không có dung lượng tải lên vô hạn an toàn ở cơ sở dữ liệu.</div>
+  <div class="aup-tabs">
+   <button class="active" data-aup-tab="general" onclick="switchAupTab('general',this)">🌐 Chung</button>
+   <button data-aup-tab="menu" onclick="switchAupTab('menu',this)">☰ Định dạng menu</button>
+   <button data-aup-tab="sound" onclick="switchAupTab('sound',this)">🔊 Âm thanh</button>
+   <button data-aup-tab="donate" onclick="switchAupTab('donate',this)">💙 Ủng hộ</button>
+   <button data-aup-tab="ads" onclick="switchAupTab('ads',this)">📣 Quảng cáo</button>
+   <button data-aup-tab="plans" onclick="switchAupTab('plans',this)">💎 Gói nâng cấp</button>
+   <button data-aup-tab="language" onclick="switchAupTab('language',this)">🌏 Ngôn ngữ</button>
+   <button data-aup-tab="profile" onclick="switchAupTab('profile',this)">🖼️ Viền profile</button>
+   <button data-aup-tab="aru" onclick="switchAupTab('aru',this)">🤖 Aru VTuber</button>
+  </div>
+  <section class="aup-pane active" data-aup-pane="general">
+   <div class="aup-card"><h3>Chung</h3><p class="aup-note">Mặc định giữ chức năng bán gói ở trạng thái chưa mở bán. Các mục mới không tự xuất hiện trên menu người dùng cho tới khi bật.</p>
+    <div class="aup-grid">
+     <div class="aup-field"><label>QR ủng hộ</label><input type="file" id="aupQrFile" accept="image/*"><div id="aupQrPreview" class="aup-note"></div></div>
+     <div class="aup-field"><label>Lời cảm ơn / ghi chú</label><textarea id="aupDonateNote" rows="3" placeholder="Cảm ơn bạn đã ủng hộ Aurora!"></textarea></div>
+     <div class="aup-field"><label>Trạng thái bán gói</label><select id="aupSalesState"><option value="closed">Chưa mở bán (mặc định)</option><option value="open">Đang mở bán</option></select></div>
+    </div><div class="aup-row"><button class="aup-btn" onclick="saveAupGeneral()">Lưu cấu hình chung</button></div>
+   </div>
+  </section>
+  <section class="aup-pane" data-aup-pane="menu">
+   <div class="aup-card"><h3>Định dạng menu</h3><div class="aup-field"><label>Kiểu hiển thị</label><select id="aupMenuMode"><option value="current">Kiểu menu mặc định (hiện tại)</option><option value="drawer">Ba gạch — mở menu từ bên phải</option><option value="modern">Kiểu tối ưu hiện đại</option></select></div>
+    <div class="aup-field"><label><input id="aupEmojiEnabled" type="checkbox" checked style="width:auto"> Hiện emoji</label></div>
+    <div class="aup-field"><label>Tên/emoji mục menu (mỗi dòng: key|emoji|tên)</label><textarea id="aupMenuLabels" rows="5" placeholder="home|🏠|Trang chủ&#10;student|📝|Vào thi&#10;teacher|👨‍🏫|Giáo viên"></textarea></div>
+    <div class="aup-field"><label>Mục bổ sung (mỗi dòng một key; mặc định ẩn)</label><textarea id="aupExtraMenuItems" rows="4" placeholder="donate&#10;ads&#10;presentations&#10;upgrade"></textarea></div>
+    <div class="aup-row"><button class="aup-btn" onclick="saveAupMenu()">Lưu menu</button><button class="aup-btn secondary" onclick="resetAupMenu()">Reset mặc định</button></div>
+   </div>
+   <div class="aup-card"><b>Ghi chú:</b> <span class="aup-note">Chế độ drawer được áp dụng cho thanh menu chính. Việc đổi nhãn lưu cấu hình và áp dụng cho các nút tương thích; không tự tạo quyền truy cập hoặc tính năng backend chưa có.</span></div>
+  </section>
+  <section class="aup-pane" data-aup-pane="sound">
+   <div class="aup-card"><h3>🔊 Cấu hình âm thanh</h3><div class="aup-grid"><div class="aup-field"><label>Sự kiện</label><select id="aupSoundEvent"><option value="enter">Khi vào website</option><option value="register">Khi tạo tài khoản</option><option value="exam">Khi bắt đầu làm bài thi</option><option value="submit">Khi nộp bài thi</option><option value="click">Khi bấm menu</option></select></div><div class="aup-field"><label>Tệp âm thanh</label><input type="file" id="aupSoundFile" accept="audio/*"></div></div><div class="aup-row"><button class="aup-btn" onclick="uploadAupSound()">Tải lên và gán</button><button class="aup-btn secondary" onclick="previewAupSound()">Nghe thử</button></div><div id="aupSoundList" class="aup-note"></div></div>
+  </section>
+  <section class="aup-pane" data-aup-pane="donate">
+   <div class="aup-card"><h3>💙 Ủng hộ</h3><p class="aup-note">QR và lời cảm ơn được cấu hình ở mục Chung. Bảng xếp hạng dưới đây là dữ liệu do quản trị nhập, không phải giao dịch thanh toán đã xác minh.</p><div class="aup-grid"><div class="aup-field"><label>Tên hiển thị (@username hoặc ẩn danh)</label><input id="aupDonorName" placeholder="@username hoặc Ẩn danh"></div><div class="aup-field"><label>Số tiền hiển thị (VND)</label><input id="aupDonorAmount" type="number" min="0" placeholder="50000"></div></div><button class="aup-btn" onclick="addAupDonor()">Lưu mục BXH</button><div id="aupDonorList"></div></div>
+  </section>
+  <section class="aup-pane" data-aup-pane="ads">
+   <div class="aup-card"><h3>📣 Nhà tài trợ (tối đa 4)</h3><p class="aup-note">Mỗi nhà tài trợ có tên, đường dẫn và ảnh. Chỉ bật menu quảng cáo khi đã thêm nội dung phù hợp.</p><div id="aupAdsEditor"></div><button class="aup-btn" onclick="saveAupAds()">Lưu quảng cáo</button></div>
+  </section>
+  <section class="aup-pane" data-aup-pane="plans">
+   <div class="aup-card"><h3>💎 Cấu hình gói</h3><div class="aup-grid" id="aupPlanGrid"></div><div class="aup-field"><label><input id="aupPlansEnabled" type="checkbox" style="width:auto"> Hiện mục gói nâng cấp</label></div><button class="aup-btn" onclick="saveAupPlans()">Lưu gói</button>
+    <div class="aup-field"><label>Tặng gói cho @username (chỉ quản trị)</label><input id="aupGiftUser" placeholder="@username"><select id="aupGiftPlan"><option>plus</option><option>pro</option><option>premium</option><option>ultra</option><option>CEO</option><option>AROM+</option></select></div><button class="aup-btn green" onclick="giftAupPlan()">Ghi nhận tặng gói</button><p class="aup-note">Ghi nhận quà không phải xử lý thanh toán; quyền admin phải được kiểm tra bởi Firebase Rules/backend để an toàn.</p>
+   </div>
+  </section>
+  <section class="aup-pane" data-aup-pane="language">
+   <div class="aup-card"><h3>🌏 Ngôn ngữ hệ thống</h3><div class="aup-field"><label>Ngôn ngữ</label><select id="aupLanguage" onchange="applyAupLanguage(this.value)"><option value="vi">Tiếng Việt (mặc định)</option><option value="en">English</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option></select></div><p class="aup-note">Lựa chọn được lưu trên thiết bị. Giao diện hiện tại chưa có toàn bộ chuỗi dịch, vì vậy lựa chọn này thiết lập ngôn ngữ ưu tiên chứ không thể dịch tự động mọi nội dung.</p></div>
+  </section>
+  <section class="aup-pane" data-aup-pane="profile">
+   <div class="aup-card"><h3>🖼️ Profile viền (khu giải trí)</h3><div class="aup-field"><label>Tải tệp viền ảnh động/tĩnh (PNG, GIF, WEBP, SVG)</label><input type="file" id="aupFrameFile" accept="image/*,.svg,.gif,.webp"></div><div class="aup-field"><label>Tên viền</label><input id="aupFrameName" placeholder="Viền Aurora"></div><button class="aup-btn" onclick="uploadAupFrame()">Tải viền lên</button><div id="aupFrameList" class="aup-note"></div><p class="aup-note">Không giới hạn MB không thể đảm bảo trong trình duyệt/Firebase; nên dùng Storage có quota và xác thực loại tệp.</p></div>
+  </section>
+  <section class="aup-pane" data-aup-pane="aru">
+   <div class="aup-card"><h3>🤖 Aru — model AI mặc định không thể xóa</h3><p class="aup-note">Tệp tải lên hiện là Blender (.blend) và texture. Trình duyệt không thể render trực tiếp .blend; cần xuất .glb/.gltf trong Blender, kiểm tra vật liệu và rig/shape keys. Chớp mắt/đồng bộ miệng yêu cầu rig/shape keys tương ứng.</p><p><b>Trạng thái:</b> <span id="aupAruStatus">Aru được đăng ký như model mặc định trong dữ liệu hệ thống.</span></p><div class="aup-field"><label>Gói model Blender gốc</label><input type="text" value="cute-anime-girl-3d-model-stylized-blue-hair — source/V3_1.blend + textures" readonly></div><button class="aup-btn" onclick="ensureAruProtected()">Đảm bảo Aru không thể xóa</button><p class="aup-note">Bảo vệ UI không thay thế Firebase Security Rules; cần rules/backend để ngăn xóa trái phép từ client khác.</p></div>
+  </section>
+ </div>
+</div>
+<div id="aru3dBadge"><img alt="Aru avatar" src="" id="aru3dBadgeImage"><span>Aru · AI mặc định</span></div>
+
 <div id="authOverlay"><div class="auth-box"><h2>✨ AURORA</h2><p class="auth-sub">🔐 Hệ thống kiểm tra trực tuyến</p><div class="auth-tabs"><button class="active" id="authTabLogin" onclick="switchAuthTab('login')">🔓 Đăng Nhập</button><button id="authTabRegister" onclick="switchAuthTab('register')">📝 Đăng Ký</button></div><div id="authViewLogin" class="auth-view active"><label>Tên đăng nhập hoặc Email:</label><input type="text" id="loginIdentifier" placeholder="Username hoặc email..." autocomplete="username"><label>Mật khẩu:</label><input type="password" id="loginPassword" placeholder="Mật khẩu..." autocomplete="current-password"><a class="link" onclick="switchAuthTab('forgot')">🤔 Quên mật khẩu?</a><button class="btn btn-success" onclick="handleLogin()">🔓 Đăng Nhập</button></div><div id="authViewRegister" class="auth-view"><label>Vai trò:</label><select id="regRole" style="margin-bottom:12px"><option value="student">🧑‍🎓 Học sinh</option><option value="teacher">👨‍🏫 Giáo viên</option><option value="other">👤 Khác</option></select><label>Tên đăng nhập (tên thật):</label><input type="text" id="regUsername" placeholder="3-20 ký tự a-z, 0-9, _ . (không dùng từ ngữ không phù hợp)"><label>Email:</label><input type="email" id="regEmail" placeholder="user@gmail.com"><label>Mật khẩu:</label><input type="password" id="regPassword" placeholder="Ít nhất 6 ký tự..."><label>Xác nhận mật khẩu:</label><input type="password" id="regPassword2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleRegister()">✅ Đăng Ký</button></div><div id="authViewForgot" class="auth-view"><div id="forgotStep1"><label>📧 Email đã đăng ký:</label><input type="email" id="forgotEmail" placeholder="user@gmail.com"><div id="forgotEmailStatus" class="email-status-badge demo">⏳ Đang kiểm tra trạng thái email...</div><button class="btn btn-warning" id="forgotSendBtn" onclick="handleSendResetCode(this)">📨 Gửi Mã</button><a class="link center" onclick="switchAuthTab('login')">← Quay lại</a></div><div id="forgotStep2" style="display:none"><div class="email-locked-info" id="forgotEmailLockedInfo" style="display:none">✅ Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (kể cả thư mục Spam/Quảng cáo).</div><div class="code-display" id="forgotCodeDisplay">------</div><p id="forgotCodeLabel" style="font-size:12px;color:#856404;text-align:center;margin-bottom:12px">Mã đã gửi:</p><label>Mã xác nhận:</label><input type="text" id="forgotCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:bold"><button class="btn btn-success" onclick="handleVerifyResetCode()">✓ Xác Nhận</button><a class="link center" onclick="switchAuthTab('forgot')">← Gửi lại</a></div><div id="forgotStep3" style="display:none"><label>🔐 Mật khẩu mới:</label><input type="password" id="forgotNewPass" placeholder="Ít nhất 6 ký tự..."><label>🔐 Xác nhận:</label><input type="password" id="forgotNewPass2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleResetPassword()">🔐 Đặt Lại</button></div></div></div></div>
 
 <div id="perfModeModal" style="display:none"><div class="perf-box"><div style="font-size:56px;line-height:1;margin-bottom:10px">⚙️</div><h3>CHỌN CHẾ ĐỘ HIỂN THỊ</h3><p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Chọn chế độ phù hợp thiết bị.</p><div class="perf-option" onclick="choosePerfMode('full')"><span class="perf-icon">✨</span><div class="perf-text"><div class="perf-title">1. Đầy đủ</div><div class="perf-sub">Bật tất cả hiệu ứng.</div></div></div><div class="perf-option" onclick="choosePerfMode('optimized')"><span class="perf-icon">⚡</span><div class="perf-text"><div class="perf-title">2. Tối ưu <span class="perf-badge" id="perfRecommendBadge">💡</span></div><div class="perf-sub">Tắt hiệu ứng nặng.</div></div></div></div></div>
@@ -1345,6 +1427,9 @@ input,select,textarea{font-size:13px;padding:9px}
 <div style="display:flex;align-items:center;gap:10px">
 <img id="webLogoImg" src="" alt="Logo" style="display:none">
 <div class="logo" id="webLogo">✨ AURORA</div>
+</div>
+<div class="aup-menu" style="display:flex;align-items:center;gap:8px">
+<button class="nav-tabs" style="border:0;background:#ffffff22;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700" onclick="openAuroraUpgradePanel('general')">⚙️ Aurora Studio</button>
 </div>
 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;justify-content:flex-end">
   <label class="theme-switch" title="Sáng / Tối" onclick="event.stopPropagation()">
@@ -4117,7 +4202,7 @@ async function handleRegister(){
     switchAuthTab('login');
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
-async function handleLogin(){
+async function handleLogin(){playAupEvent('click');
   const identifier=document.getElementById('loginIdentifier').value.trim().toLowerCase(),password=document.getElementById('loginPassword').value;
   if(!identifier||!password){showToast('Điền đầy đủ!','error');return;}
   try{
@@ -4213,6 +4298,19 @@ function buildNameTagHtml(u){
 /* SESSION */
 async function applyUserSession(u){
   currentUser=u;currentUserFullData=u;
+  // Aru is granted as a default model without removing any model the account already owns.
+  try{
+    if(window.db&&u&&u.username){
+      await ensureDefaultAruModel();
+      const owned=Array.isArray(u.aiModels)?u.aiModels.slice():[];
+      if(!owned.includes('aimodel_default_aru')){
+        owned.push('aimodel_default_aru');
+        u.aiModels=owned;currentUserFullData=u;
+        await window.dbUpdate(window.ref(window.db,'users/'+u.username),{aiModels:owned});
+      }
+    }
+  }catch(aruGrantError){console.warn('Could not grant default Aru model:',aruGrantError);}
+
   await loadRolesCache();await loadMedalsCache();
   const nav=document.getElementById('navUserInfo');
   if(nav){
@@ -7001,7 +7099,7 @@ function renderSysDocs(){
   const subject=(document.getElementById('sysDocsFilterSubject')||{}).value||'';
   const type=(document.getElementById('sysDocsFilterType')||{}).value||'';
   const search=((document.getElementById('sysDocsFilterSearch')||{}).value||'').toLowerCase().trim();
-  let list=Object.values(systemDocsData||{});
+  let list=Object.values(systemDocsData||{}).filter(d=>{const src=String(d.source||d.origin||d.uploadedByRole||'').toLowerCase();return d.teacherUploaded===true||d.uploadedByTeacher===true||src.includes('teacher')||src.includes('giáo viên')||src.includes('giao vien');});
   if(grade)list=list.filter(d=>d.grade===grade);
   if(subject)list=list.filter(d=>d.subject===subject);
   if(type)list=list.filter(d=>d.type===type);
@@ -7663,6 +7761,7 @@ function loadAiModelsForGrant(){
   if(cur&&ids.includes(cur))sel.value=cur;
 }
 async function deleteAiModelById(id){
+  if(String(id)==='aimodel_default_aru'){showToast('Aru là model hệ thống mặc định và không thể xóa.','warn');return;}
   if(!await customConfirm('Xóa model AI này? Các user đang trang bị sẽ bị mất!',{icon:'🗑️',title:'Xác nhận xóa',okClass:'danger'}))return;
   try{
     await window.dbRemove(window.ref(window.db,`system/ai_models/${id}`));
@@ -8384,9 +8483,134 @@ async function saveAiGeneratedExam(){
 /* CONTEXTMENU LOCK */
 (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),c=e.ctrlKey||e.metaKey,sh=e.shiftKey;if(k==='f12'||(c&&k==='u')||(c&&sh&&['i','j','c','k'].includes(k))||(c&&k==='s')||(c&&k==='p')){e.preventDefault();e.stopPropagation();return false;}if(c&&k==='a'){const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable){e.preventDefault();return false;}}},true);document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('copy',e=>{const t=(e.target.tagName||'').toLowerCase();if(!['input','textarea'].includes(t)&&!e.target.isContentEditable)e.preventDefault();});})();
 
+
+/* ================= AURORA EXTENSION PACK =================
+   Additive implementation: existing exam/profile functions are preserved.
+*/
+const AUP_PATH='system/aurora_extension';
+const AUP_DEFAULTS={
+ general:{donateNote:'Cảm ơn bạn đã đồng hành cùng Aurora 💙',salesState:'closed',qrData:''},
+ menu:{mode:'current',emojiEnabled:true,labels:{},extraItems:[]},
+ sounds:{},donors:[],ads:[],
+ plansEnabled:false,
+ plans:[
+  {id:'basic',name:'Basic',price:0},{id:'plus',name:'Plus',price:29000},
+  {id:'pro',name:'Pro',price:79000},{id:'premium',name:'Premium',price:199000},
+  {id:'ultra',name:'Ultra',price:299000},{id:'CEO',name:'CEO',price:999000},
+  {id:'AROM+',name:'AROM+',price:9999999000}
+ ],
+ frames:[],language:'vi'
+};
+let aupConfig=JSON.parse(JSON.stringify(AUP_DEFAULTS)),aupLastSoundUrl='';
+function aupCloneDefaults(){return JSON.parse(JSON.stringify(AUP_DEFAULTS));}
+function aupSafeText(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function openAuroraUpgradePanel(tab='general'){
+ const p=document.getElementById('auroraUpgradePanel');if(!p)return;
+ p.classList.add('open');p.setAttribute('aria-hidden','false');switchAupTab(tab);
+ renderAupPanel();loadAupConfig();
+}
+function closeAuroraUpgradePanel(){const p=document.getElementById('auroraUpgradePanel');if(p){p.classList.remove('open');p.setAttribute('aria-hidden','true');}}
+function switchAupTab(name,btn){
+ document.querySelectorAll('[data-aup-pane]').forEach(x=>x.classList.toggle('active',x.dataset.aupPane===name));
+ document.querySelectorAll('[data-aup-tab]').forEach(x=>x.classList.toggle('active',x.dataset.aupTab===name));
+ if(btn)btn.classList.add('active');
+}
+async function loadAupConfig(){
+ if(!window.db)return;
+ try{const snap=await window.dbGet(window.dbChild(window.dbRef,AUP_PATH));if(snap.exists())aupConfig=Object.assign(aupCloneDefaults(),snap.val()||{});}
+ catch(e){console.warn('Aurora extension config:',e);}
+ renderAupPanel();applyAupMenuMode();renderAupSoundList();renderAupDonors();renderAupAdsEditor();renderAupPlans();renderAupFrames();
+}
+async function saveAupConfig(){if(!window.db){showToast('Firebase chưa sẵn sàng.','error');return false;}try{aupConfig.updatedAt=Date.now();await window.dbSet(window.ref(window.db,AUP_PATH),aupConfig);showToast('✅ Đã lưu cấu hình Aurora.','success');return true;}catch(e){showToast('Không lưu được: '+(e.message||e),'error');return false;}}
+function renderAupPanel(){
+ const n=document.getElementById('aupDonateNote');if(n)n.value=aupConfig.general?.donateNote||'';
+ const sale=document.getElementById('aupSalesState');if(sale)sale.value=aupConfig.general?.salesState||'closed';
+ const qr=document.getElementById('aupQrPreview');if(qr)qr.innerHTML=aupConfig.general?.qrData?'<img alt="QR ủng hộ" style="max-width:150px;max-height:150px" src="'+aupConfig.general.qrData+'">':'Chưa có QR.';
+ const mm=document.getElementById('aupMenuMode');if(mm)mm.value=aupConfig.menu?.mode||'current';
+ const ee=document.getElementById('aupEmojiEnabled');if(ee)ee.checked=aupConfig.menu?.emojiEnabled!==false;
+ const ml=document.getElementById('aupMenuLabels');if(ml)ml.value=Object.entries(aupConfig.menu?.labels||{}).map(([k,v])=>`${k}|${v.emoji||''}|${v.label||''}`).join('\n');
+ const ex=document.getElementById('aupExtraMenuItems');if(ex)ex.value=(aupConfig.menu?.extraItems||[]).join('\n');
+ const lang=document.getElementById('aupLanguage');if(lang)lang.value=aupConfig.language||'vi';
+ const plans=document.getElementById('aupPlansEnabled');if(plans)plans.checked=!!aupConfig.plansEnabled;
+}
+async function aupReadDataUrl(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');if(file.size>5*1024*1024)return reject(new Error('Tệp vượt 5MB. Hãy dùng Firebase Storage cho tệp lớn.'));const r=new FileReader();r.onload=()=>resolve(String(r.result));r.onerror=()=>reject(new Error('Không đọc được tệp.'));r.readAsDataURL(file);});}
+async function saveAupGeneral(){
+ try{const f=document.getElementById('aupQrFile')?.files?.[0];if(f)aupConfig.general.qrData=await aupReadDataUrl(f);
+ aupConfig.general.donateNote=document.getElementById('aupDonateNote')?.value||'';
+ aupConfig.general.salesState=document.getElementById('aupSalesState')?.value||'closed';
+ if(await saveAupConfig())renderAupPanel();}catch(e){showToast(e.message||String(e),'error');}
+}
+async function saveAupMenu(){
+ const labels={};(document.getElementById('aupMenuLabels')?.value||'').split(/\r?\n/).forEach(line=>{const a=line.split('|');if(a[0]?.trim())labels[a[0].trim()]={emoji:(a[1]||'').trim(),label:(a.slice(2).join('|')||'').trim()};});
+ aupConfig.menu={mode:document.getElementById('aupMenuMode')?.value||'current',emojiEnabled:!!document.getElementById('aupEmojiEnabled')?.checked,labels,extraItems:(document.getElementById('aupExtraMenuItems')?.value||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean)};
+ if(await saveAupConfig()){applyAupMenuMode();applyAupLabels();}
+}
+function resetAupMenu(){aupConfig.menu=aupCloneDefaults().menu;renderAupPanel();applyAupMenuMode();applyAupLabels();saveAupConfig();}
+function applyAupMenuMode(){
+ const nav=document.querySelector('.navbar');if(!nav)return;nav.classList.toggle('aup-drawer-mode',aupConfig.menu?.mode==='drawer');nav.classList.toggle('aup-modern-mode',aupConfig.menu?.mode==='modern');
+ let style=document.getElementById('aupMenuModeStyle');if(!style){style=document.createElement('style');style.id='aupMenuModeStyle';document.head.appendChild(style);}
+ style.textContent=aupConfig.menu?.mode==='drawer'?`.navbar .nav-tabs{display:none!important}.navbar.aup-drawer-mode:after{content:'☰';font-size:26px;cursor:pointer}.navbar.aup-drawer-mode .nav-tabs.aup-drawer-open{display:flex!important;position:fixed;right:0;top:0;bottom:0;width:min(300px,85vw);padding:70px 16px 16px;background:#fff;box-shadow:0 0 0 9999px #0007;z-index:999999;flex-direction:column;align-items:stretch;overflow:auto}.navbar.aup-drawer-mode .nav-tabs.aup-drawer-open button{color:#123;text-align:left;padding:14px;background:#f5f8fc}`:aupConfig.menu?.mode==='modern'?`.navbar{border-radius:0 0 18px 18px;background:linear-gradient(115deg,#105bd0,#6b5ce7)!important}.navbar .nav-tabs button{border-radius:12px;padding:9px 14px}`:'';
+}
+function applyAupLabels(){
+ document.querySelectorAll('.nav-tabs button[data-nav]').forEach(b=>{const c=aupConfig.menu?.labels?.[b.dataset.nav];if(!c)return;b.dataset.aupOriginalText=b.dataset.aupOriginalText||b.textContent.trim();b.textContent=(aupConfig.menu.emojiEnabled!==false&&c.emoji?c.emoji+' ':'')+(c.label||b.dataset.aupOriginalText);});
+}
+async function uploadAupSound(){
+ const event=document.getElementById('aupSoundEvent')?.value,file=document.getElementById('aupSoundFile')?.files?.[0];if(!file){showToast('Chọn tệp âm thanh trước.','warn');return;}
+ try{const data=await aupReadDataUrl(file);aupConfig.sounds=aupConfig.sounds||{};aupConfig.sounds[event]={name:file.name,data,updatedAt:Date.now()};if(await saveAupConfig())renderAupSoundList();}catch(e){showToast(e.message||String(e),'error');}
+}
+function renderAupSoundList(){const el=document.getElementById('aupSoundList');if(!el)return;el.innerHTML=Object.entries(aupConfig.sounds||{}).map(([k,v])=>`<div class="aup-row" style="margin:6px 0"><b>${aupSafeText(k)}</b> — ${aupSafeText(v.name||'audio')} <button class="aup-btn secondary" onclick="playAupSound('${k}')">▶</button><button class="aup-btn secondary" onclick="removeAupSound('${k}')">Xóa</button></div>`).join('')||'Chưa có âm thanh.';}
+function playAupSound(k){const a=aupConfig.sounds?.[k];if(!a?.data)return;try{const audio=new Audio(a.data);audio.play().catch(()=>showToast('Trình duyệt cần thao tác người dùng để phát âm thanh.','info'));}catch(e){}}
+function previewAupSound(){playAupSound(document.getElementById('aupSoundEvent')?.value||'enter');}
+async function removeAupSound(k){if(!aupConfig.sounds)return;delete aupConfig.sounds[k];if(await saveAupConfig())renderAupSoundList();}
+function playAupEvent(k){const a=aupConfig.sounds?.[k];if(a?.data){const audio=new Audio(a.data);audio.play().catch(()=>{});}}
+async function addAupDonor(){
+ const name=(document.getElementById('aupDonorName')?.value||'').trim()||'Ẩn danh',amount=Math.max(0,Number(document.getElementById('aupDonorAmount')?.value)||0);
+ aupConfig.donors=aupConfig.donors||[];aupConfig.donors.push({name:name==='ẩn danh'?'Ẩn danh':name,amount,createdAt:Date.now()});
+ if(await saveAupConfig()){renderAupDonors();document.getElementById('aupDonorName').value='';document.getElementById('aupDonorAmount').value='';}
+}
+function renderAupDonors(){const el=document.getElementById('aupDonorList');if(!el)return;el.innerHTML='<h4 style="margin:12px 0">BXH ủng hộ (do quản trị nhập)</h4>'+((aupConfig.donors||[]).slice().sort((a,b)=>(b.amount||0)-(a.amount||0)).map((d,i)=>`<div class="aup-card">${i+1}. ${aupSafeText(d.name||'Ẩn danh')} — ${Number(d.amount||0).toLocaleString('vi-VN')} ₫</div>`).join('')||'Chưa có mục nào.');}
+function renderAupAdsEditor(){const el=document.getElementById('aupAdsEditor');if(!el)return;const ads=aupConfig.ads||[];el.innerHTML=Array.from({length:4},(_,i)=>{const a=ads[i]||{};return `<div class="aup-card"><h4>Nhà tài trợ ${i+1}</h4><div class="aup-grid"><div class="aup-field"><label>Tên</label><input id="aupAdName${i}" value="${aupSafeText(a.name||'')}"></div><div class="aup-field"><label>URL (https://)</label><input id="aupAdUrl${i}" type="url" value="${aupSafeText(a.url||'')}"></div><div class="aup-field"><label>Ảnh</label><input id="aupAdImage${i}" type="file" accept="image/*"></div></div></div>`}).join('');}
+async function saveAupAds(){const ads=[];try{for(let i=0;i<4;i++){const name=document.getElementById('aupAdName'+i)?.value.trim()||'',url=document.getElementById('aupAdUrl'+i)?.value.trim()||'',f=document.getElementById('aupAdImage'+i)?.files?.[0];let image=aupConfig.ads?.[i]?.image||'';if(f)image=await aupReadDataUrl(f);if(name||url||image){if(url&&!/^https?:\/\//i.test(url))throw new Error('Đường dẫn quảng cáo phải bắt đầu bằng http:// hoặc https://');ads.push({name,url,image});}}aupConfig.ads=ads;if(await saveAupConfig())renderAupAdsEditor();}catch(e){showToast(e.message||String(e),'error');}}
+function renderAupPlans(){const el=document.getElementById('aupPlanGrid');if(!el)return;const plans=aupConfig.plans||AUP_DEFAULTS.plans;el.innerHTML=plans.map((p,i)=>`<div class="aup-tier"><b>${aupSafeText(p.name)}</b><div class="aup-field"><label>Giá VND/tháng</label><input type="number" min="0" id="aupPlanPrice${i}" value="${Number(p.price)||0}"></div></div>`).join('');}
+async function saveAupPlans(){aupConfig.plans=(aupConfig.plans||AUP_DEFAULTS.plans).map((p,i)=>({...p,price:Math.max(0,Number(document.getElementById('aupPlanPrice'+i)?.value)||0)}));aupConfig.plansEnabled=!!document.getElementById('aupPlansEnabled')?.checked;await saveAupConfig();}
+async function giftAupPlan(){
+ if(!currentUser){showToast('Cần đăng nhập.','warn');return;}
+ const role=String(currentUser.role||currentUser.userRole||'').toLowerCase();if(!['admin','owner','supreme','administrator'].includes(role)){showToast('Chỉ quản trị viên mới được tặng gói.','error');return;}
+ const username=(document.getElementById('aupGiftUser')?.value||'').trim().replace(/^@/,'');const plan=document.getElementById('aupGiftPlan')?.value;if(!username||!plan){showToast('Nhập username và chọn gói.','warn');return;}
+ try{const snap=await window.dbGet(window.dbChild(window.dbRef,'users/'+username));if(!snap.exists()){showToast('Không tìm thấy tài khoản.','error');return;}await window.dbUpdate(window.ref(window.db,'users/'+username),{subscriptionTier:plan,subscriptionGiftedAt:Date.now(),subscriptionGiftedBy:currentUser.username});showToast('Đã ghi nhận gói '+plan+' cho @'+username,'success');}catch(e){showToast(e.message||String(e),'error');}
+}
+async function uploadAupFrame(){const f=document.getElementById('aupFrameFile')?.files?.[0],name=(document.getElementById('aupFrameName')?.value||f?.name||'Viền profile').trim();if(!f){showToast('Chọn tệp viền trước.','warn');return;}try{const data=await aupReadDataUrl(f);aupConfig.frames=aupConfig.frames||[];aupConfig.frames.push({id:'frame_'+Date.now(),name,data,type:f.type,createdAt:Date.now()});if(await saveAupConfig())renderAupFrames();}catch(e){showToast(e.message||String(e),'error');}}
+function renderAupFrames(){const el=document.getElementById('aupFrameList');if(!el)return;el.innerHTML=(aupConfig.frames||[]).map((f,i)=>`<div class="aup-row" style="margin:8px 0"><img src="${f.data}" alt="" style="width:42px;height:42px;object-fit:contain"><span>${aupSafeText(f.name)}</span><button class="aup-btn secondary" onclick="deleteAupFrame(${i})">Xóa</button></div>`).join('')||'Chưa tải viền nào.';}
+async function deleteAupFrame(i){if(!aupConfig.frames)return;aupConfig.frames.splice(i,1);if(await saveAupConfig())renderAupFrames();}
+function applyAupLanguage(lang){aupConfig.language=lang;try{localStorage.setItem('aurora_language',lang);}catch(e){}saveAupConfig();}
+async function ensureAruProtected(){
+ if(!window.db)return;try{
+  const p='system/ai_models/aimodel_default_aru',snap=await window.dbGet(window.dbChild(window.dbRef,p));
+  const model=Object.assign({},DEFAULT_ARU_MODEL||{id:'aimodel_default_aru',name:'Aru',isDefault:true,source:'builtin-default'},snap.exists()?snap.val():{});
+  model.id='aimodel_default_aru';model.name='Aru';model.isDefault=true;model.source='builtin-default';model.createdBy='system';
+  await window.dbSet(window.ref(window.db,p),model);
+  const st=document.getElementById('aupAruStatus');if(st)st.textContent='Aru đã được bảo đảm trong system/ai_models/aimodel_default_aru. Bảo vệ xóa phía server vẫn cần Firebase Rules.';
+  showToast('Đã bảo đảm model mặc định Aru.','success');
+ }catch(e){showToast('Không thể bảo đảm Aru: '+(e.message||e),'error');}
+}
+function aupInitDefaults(){renderAupPanel();renderAupSoundList();renderAupDonors();renderAupAdsEditor();renderAupPlans();renderAupFrames();}
+document.addEventListener('click',e=>{const panel=document.getElementById('auroraUpgradePanel');if(e.target===panel)closeAuroraUpgradePanel();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAuroraUpgradePanel();});
+/* public landing stays open; interaction-sensitive navigation prompts for auth */
+const AUP_PUBLIC_VIEWS=new Set(['homeView','guideView','leaderboardView']);
+const _auroraOriginalSwitchView=typeof switchView==='function'?switchView:null;
+if(_auroraOriginalSwitchView){
+ switchView=function(viewId,btn=null){
+  if(!AUP_PUBLIC_VIEWS.has(viewId)&&!currentUser&&viewId!=='studentExamView'){
+   if(typeof requireLogin==='function'&&!requireLogin('truy cập chức năng này'))return;
+  }
+  return _auroraOriginalSwitchView(viewId,btn);
+ };
+}
+
 /* DOMContentLoaded */
 window.addEventListener('DOMContentLoaded',()=>{
-  checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();
+  checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();aupInitDefaults();
   const savedTheme=localStorage.getItem('aurora_theme')||'light';applyTheme(savedTheme,false);
   listenCustomButtons();
   bindAiWidgetInteractions();
@@ -8399,7 +8623,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     loadCustomEmojis();
     listenOnlineUsers();listenAllUsersCount();listenHomeConfig();listenBigNotifications();listenQuizSheets();listenPrankEffects();listenGlobalBroadcast();listenGlobalAudio();startThemeListener();
     listenRoomAnnounceConfig();listenCountdownConfig();startCountdown();listenThroneDesign();
-    listenAiModels();listenAiConfig();
+    listenAiModels();listenAiConfig();loadAupConfig();
     window.dbGet(window.dbChild(window.dbRef,'system/ai_config')).then(s=>{
       if(!s.exists()){
         window.dbSet(window.ref(window.db,'system/ai_config'),Object.assign({},DEFAULT_AI_CONFIG,{updatedAt:Date.now()}));
