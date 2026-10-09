@@ -108,6 +108,17 @@ th{background:#f4f6f8;font-weight:600}
 #globalBroadcastBanner.pos-middle{top:50%;transform:translateY(-50%)}
 #globalBroadcastBanner.pos-bottom{bottom:0}
 #loadingOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.95);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:99999}
+#loadingOverlay{padding:24px;text-align:center;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+#loadingOverlay[aria-busy="true"]{cursor:progress}
+#loadingOverlay .spinner{animation-duration:1s!important;transition-duration:.2s!important}
+body.optimized-mode #loadingOverlay .spinner{animation-duration:1s!important}
+#loadingMessage{font-size:clamp(18px,2.4vw,24px);font-weight:800;margin-top:8px;max-width:min(88vw,620px);line-height:1.35}
+.loading-detail{font-size:13px;color:#5b6573;max-width:min(88vw,560px);line-height:1.6;margin-top:9px;min-height:22px}
+.loading-progress-track{width:min(82vw,360px);height:7px;border-radius:999px;background:rgba(24,119,242,.13);overflow:hidden;margin-top:18px;box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+.loading-progress-bar{width:8%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#1877f2,#49b7ff,#198754);transition:width .28s ease;animation:loadingPulse 1.6s ease-in-out infinite}
+.loading-progress-bar.determinate{animation:none}
+@keyframes loadingPulse{0%,100%{filter:brightness(1);opacity:.78}50%{filter:brightness(1.22);opacity:1}}
+@media(prefers-reduced-motion:reduce){.loading-progress-bar{animation:none;transition:none}}
 .spinner{width:50px;height:50px;border:5px solid #e0e0e0;border-top:5px solid #1877f2;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px}
 @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
 .audio-list-item{display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;border:1px solid #ddd;padding:8px 12px;border-radius:6px;margin-bottom:6px}
@@ -1405,7 +1416,12 @@ body[data-theme="extra"] .extra-theme-tile{border:1px solid rgba(255,255,255,.78
 <div id="globalBroadcastBanner" class="pos-top"></div>
 <audio id="globalAudioPlayer" style="display:none"></audio>
 <div id="systemToast"></div>
-<div id="loadingOverlay"><div class="spinner"></div><h3 style="color:#1877f2">loading...</h3></div>
+<div id="loadingOverlay" role="status" aria-live="polite" aria-busy="true">
+  <div class="spinner" aria-hidden="true"></div>
+  <h3 id="loadingMessage" style="color:#1877f2">Đang kiểm tra thông tin bài thi...</h3>
+  <p id="loadingDetail" class="loading-detail">Vui lòng chờ trong khi Aurora chuẩn bị tài nguyên.</p>
+  <div class="loading-progress-track" aria-hidden="true"><div id="loadingProgressBar" class="loading-progress-bar"></div></div>
+</div>
 
 <div id="welcomeModal" style="display:none"><div id="welcomeFxLayer"><canvas id="welcomeFxCanvas"></canvas></div><div id="welcomeModalBox"><div id="welcomeCrown">👑</div><h3 id="welcomeModalTitle">CHÀO MỪNG</h3><div id="welcomeModalContent"></div><button id="welcomeCloseBtn" onclick="closeWelcomeModal()">ĐÃ HIỂU</button></div></div>
 
@@ -5331,7 +5347,69 @@ function choosePerfMode(mode){applyPerfMode(mode);document.getElementById('perfM
 function openPerfModeModal(){document.getElementById('perfModeModal').style.display='flex';}
 function initPerfMode(){const r=document.getElementById('perfRecommendBadge');if(r)r.style.display=detectLowEndDevice()?'inline-block':'none';document.getElementById('perfModeModal').style.display='flex';}
 function updateQrFabVisibility(){const f=document.getElementById('qrScanFab'),l=document.getElementById('studentLoginView');if(!f||!l)return;f.classList.toggle('show',l.classList.contains('active')&&!isExamActive&&!isQpActive);}
-function showLoadingSequence(cb){const o=document.getElementById('loadingOverlay');o.style.display='flex';setTimeout(()=>{o.style.display='none';if(cb)cb();},1000);}
+let loadingSequenceActive=false;
+let loadingSequenceRunId=0;
+function updateLoadingSequence(message,detail='',progress=null){
+  if(!loadingSequenceActive)return;
+  const title=document.getElementById('loadingMessage');
+  const sub=document.getElementById('loadingDetail');
+  const bar=document.getElementById('loadingProgressBar');
+  if(title&&message)title.textContent=message;
+  if(sub)sub.textContent=detail||'Aurora đang chuẩn bị tài nguyên, vui lòng không đóng trang.';
+  if(bar){
+    if(Number.isFinite(progress)){
+      bar.classList.add('determinate');
+      bar.style.width=Math.max(0,Math.min(100,progress))+'%';
+    }else{
+      bar.classList.remove('determinate');
+      bar.style.width='42%';
+    }
+  }
+}
+function waitForLoadingPaint(){return new Promise(resolve=>{
+  const done=()=>setTimeout(resolve,80);
+  if(typeof requestAnimationFrame==='function')requestAnimationFrame(()=>requestAnimationFrame(done));
+  else done();
+});}
+function loadingDestinationIsReady(){
+  return ['studentExamView','studentWaitingRoomView','qpWaitingRoomView','qpPracticingView'].some(id=>{
+    const el=document.getElementById(id);return !!el&&el.classList.contains('active');
+  });
+}
+async function showLoadingSequence(task,initialMessage='Đang kiểm tra thông tin bài thi...'){
+  const overlay=document.getElementById('loadingOverlay');
+  if(!overlay){if(typeof task==='function')return await task();return;}
+  const runId=++loadingSequenceRunId;
+  loadingSequenceActive=true;
+  overlay.style.display='flex';
+  overlay.setAttribute('aria-busy','true');
+  const bar=document.getElementById('loadingProgressBar');
+  if(bar){bar.classList.remove('determinate');bar.style.width='8%';}
+  updateLoadingSequence(initialMessage,'Đang kiểm tra thông tin và chuẩn bị tài nguyên...',8);
+  await waitForLoadingPaint();
+  let taskError=null;
+  try{
+    if(typeof task==='function')await task();
+  }catch(error){
+    taskError=error;
+    console.error('[Aurora] Lỗi khi chuẩn bị bài thi:',error);
+    showToast('❌ Không thể chuẩn bị bài thi: '+(error&&error.message?error.message:'Lỗi không xác định'),'error');
+  }finally{
+    if(runId===loadingSequenceRunId){
+      const ready=loadingDestinationIsReady();
+      if(ready&&!taskError){
+        updateLoadingSequence('Sắp xong rồi...','Đang hoàn tất giao diện và chuyển đến bài thi/phòng chờ.',100);
+        await new Promise(resolve=>setTimeout(resolve,220));
+      }
+      if(runId===loadingSequenceRunId){
+        overlay.style.display='none';
+        overlay.setAttribute('aria-busy','false');
+        loadingSequenceActive=false;
+        if(bar){bar.classList.remove('determinate');bar.style.width='8%';}
+      }
+    }
+  }
+}
 let resultPopupCallback=null;
 function showResultPopup(score,max=10,cb=null){const popup=document.getElementById('resultPopup'),e=document.getElementById('resultPopupEmoji'),s=document.getElementById('resultPopupScore'),m=document.getElementById('resultPopupMsg');e.className='result-popup-emoji';const pct=(score/max)*10;let em='',msg='';if(pct<3){em='😂💩';msg='Trời ơi, kiểu này thì đúp thật rồi! 😂💩';}else if(pct<5){em='😂😂';msg='Học kém quá, cố lên! 😂';}else if(pct<7){em='👍';msg='Khá đấy! Cố thêm chút nữa 👍';}else if(pct<9){em='💖';msg='Làm tốt lắm! 💖';}else{em='💖✨';msg='XUẤT SẮC! 💖🎉';}e.innerText=em;s.innerText=`${score} / ${max}`;m.innerText=msg;resultPopupCallback=cb;popup.classList.add('show');
   if(currentEquippedAiModel){tryTriggerAiReaction(pct>=8?'happy':(pct<5?'sad':'neutral'));}
@@ -5912,9 +5990,9 @@ async function supremeViewDetail(type,code){const path=type==='exam'?`exams/${co
 async function supremeDeleteData(folder,code){if(userHasSupremeAccess==='partner'){showToast('❌ Partner không thể xóa!','error');return;}if(!await customConfirm(`Xóa vĩnh viễn [${code}]?`,{icon:'🗑️',okClass:'danger'}))return;await window.dbRemove(window.ref(window.db,`${folder}/${code}`));if(folder==='exams'){await window.dbRemove(window.ref(window.db,`leaderboard/${code}`));await window.dbRemove(window.ref(window.db,`liverooms/${code}`));}else{await window.dbRemove(window.ref(window.db,`qp_rooms/${code}`));await window.dbRemove(window.ref(window.db,`qp_leaderboard/${code}`));}showToast('🗑️ Đã xóa!','warn');loadAllSupremeExams();}
 
 /* WAITING POLLS */
-function startLiveWaitingPoll(code,studentKey){if(liveWaitingPollInterval)clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=setInterval(async()=>{if(isExamActive){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;return;}try{const s=await window.dbGet(window.dbChild(window.dbRef,`liverooms/${code}`));const d=s.val()||{};const st=d.students||{};if(!st[studentKey]){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}showToast('Bạn đã bị kick!','error');switchView('studentLoginView');return;}if(d.status==='started'){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}try{await window.dbUpdate(window.ref(window.db,`liverooms/${code}/students/${studentKey}`),{status:'testing'});}catch(e){}launchOfficialExamInterface();return;}if(d.status==='ended'){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}showForcedSubmitModal('teacher','GV đã kết thúc');return;}}catch(e){}},1000);}
+function startLiveWaitingPoll(code,studentKey){if(liveWaitingPollInterval)clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=setInterval(async()=>{if(isExamActive){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;return;}try{const s=await window.dbGet(window.dbChild(window.dbRef,`liverooms/${code}`));const d=s.val()||{};const st=d.students||{};if(!st[studentKey]){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}showToast('Bạn đã bị kick!','error');switchView('studentLoginView');return;}if(d.status==='started'){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}try{await window.dbUpdate(window.ref(window.db,`liverooms/${code}/students/${studentKey}`),{status:'testing'});}catch(e){}await showExamTransitionLoading('exam');return;}if(d.status==='ended'){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}showForcedSubmitModal('teacher','GV đã kết thúc');return;}}catch(e){}},1000);}
 function stopLiveWaitingPoll(){if(liveWaitingPollInterval){clearInterval(liveWaitingPollInterval);liveWaitingPollInterval=null;}}
-function startQpWaitingPoll(code,studentKey){if(qpWaitingPollInterval)clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=setInterval(async()=>{if(isQpActive){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;return;}try{const s=await window.dbGet(window.dbChild(window.dbRef,`qp_rooms/${code}`));const d=s.val()||{};const st=d.students||{};if(!st[studentKey]){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}showToast('Bạn đã bị kick!','error');switchView('studentLoginView');return;}if(d.status==='started'){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}try{await window.dbUpdate(window.ref(window.db,`qp_rooms/${code}/students/${studentKey}`),{status:'testing'});}catch(e){}launchQpPracticeInterface();return;}if(d.status==='ended'&&!isQpActive){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}showForcedSubmitModal('qp','GV đã kết thúc');return;}}catch(e){}},1000);}
+function startQpWaitingPoll(code,studentKey){if(qpWaitingPollInterval)clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=setInterval(async()=>{if(isQpActive){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;return;}try{const s=await window.dbGet(window.dbChild(window.dbRef,`qp_rooms/${code}`));const d=s.val()||{};const st=d.students||{};if(!st[studentKey]){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}showToast('Bạn đã bị kick!','error');switchView('studentLoginView');return;}if(d.status==='started'){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}try{await window.dbUpdate(window.ref(window.db,`qp_rooms/${code}/students/${studentKey}`),{status:'testing'});}catch(e){}await showExamTransitionLoading('practice');return;}if(d.status==='ended'&&!isQpActive){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}showForcedSubmitModal('qp','GV đã kết thúc');return;}}catch(e){}},1000);}
 function stopQpWaitingPoll(){if(qpWaitingPollInterval){clearInterval(qpWaitingPollInterval);qpWaitingPollInterval=null;}}
 
 /* STUDENT MAIN TABS */
@@ -5933,8 +6011,9 @@ async function startStudentParticipation(){
   document.getElementById('studentName').value=name;
   const code=document.getElementById('studentExamCode').value.trim().toUpperCase(),pass=document.getElementById('studentExtraPass').value.trim();
   if(!name||!code){showToast('Điền đầy đủ!','error');return;}
-  showLoadingSequence(async()=>{
+  await showLoadingSequence(async()=>{
     if(mode==='practice'){
+      updateLoadingSequence('Đang tải dữ liệu bài luyện...',`Đang tìm mã bài ${code}...`,12);
       const s=await window.dbGet(window.dbChild(window.dbRef,`quick_practices/${code}`));
       if(!s.exists()){showToast(`❌ Mã "${code}" không tồn tại!`,'error');return;}
       const qp=s.val();
@@ -5945,50 +6024,77 @@ async function startStudentParticipation(){
       const r=window.ref(window.db,`qp_rooms/${code}/students/${sk}`);
       await window.dbSet(r,{name,username:currentUser.username,status:'waiting'});
       listenRoomAnnouncements(code,true);await announceSpecialRoleJoin(code,true);
-      if(!qp.isAdvancedMode){await window.dbUpdate(r,{status:'testing'});launchQpPracticeInterface();return;}
+      if(!qp.isAdvancedMode){updateLoadingSequence('Đang sắp xếp tài nguyên...','Đang dựng câu hỏi và khu vực làm bài luyện.',82);await window.dbUpdate(r,{status:'testing'});launchQpPracticeInterface();return;}
+      updateLoadingSequence('Đang kết nối phòng chờ...','Bài luyện yêu cầu giáo viên bắt đầu. Đang đăng ký thí sinh.',76);
       document.getElementById('qpWaitTitle').innerText=qp.title;
       document.getElementById('qpWaitStudentName').innerText=name;
       document.getElementById('qpWaitQCount').innerText=qp.questions.length;
       switchView('qpWaitingRoomView');
-      activeQpRoomListener=window.onValue(window.ref(window.db,`qp_rooms/${code}`),snap=>{const d=snap.val()||{},st=d.students||{};document.getElementById('qpWaitStudentCount').innerText=Object.keys(st).length;if(!st[sk]){showToast('Bị kick!','error');if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();switchView('studentLoginView');return;}if(d.status==='started'&&!isQpActive){if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();window.dbUpdate(r,{status:'testing'});launchQpPracticeInterface();}else if(d.status==='ended'&&!isQpActive){if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();showForcedSubmitModal('qp','GV đã kết thúc');}});
+      activeQpRoomListener=window.onValue(window.ref(window.db,`qp_rooms/${code}`),snap=>{const d=snap.val()||{},st=d.students||{};document.getElementById('qpWaitStudentCount').innerText=Object.keys(st).length;if(!st[sk]){showToast('Bị kick!','error');if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();switchView('studentLoginView');return;}if(d.status==='started'&&!isQpActive){if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();window.dbUpdate(r,{status:'testing'});showExamTransitionLoading('practice');}else if(d.status==='ended'&&!isQpActive){if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();showForcedSubmitModal('qp','GV đã kết thúc');}});
       startQpWaitingPoll(code,sk);
     }else if(mode==='axcm'){
+      updateLoadingSequence('Đang tải đề thi thông minh...',`Đang tìm mã đề ${code}...`,14);
       const s=await window.dbGet(window.dbChild(window.dbRef,`exams/${code}`));
       if(!s.exists()){showToast(`❌ Mã "${code}" không tồn tại!`,'error');return;}
       const exam=s.val();
       if(exam.attemptLimit>0){const n=await checkUserAttempts(code,currentUser.username,'exam');if(n>=exam.attemptLimit){showToast(`❌ Đã hết lượt!`,'error');return;}}
       currentExamData=exam;studentNameGlobal=name;studentSessionKeyGlobal='axcm_'+Date.now();
+      updateLoadingSequence('Đang sắp xếp tài nguyên...','Đang tạo câu hỏi và bảng trả lời.',75);
       await launchAXCMInterface();
     }else{
+      updateLoadingSequence(mode==='live'?'Đang kết nối phòng thi...':'Đang tải dữ liệu bài thi...',`Đang tìm mã đề ${code}...`,14);
       const s=await window.dbGet(window.dbChild(window.dbRef,`exams/${code}`));
       if(!s.exists()){showToast(`❌ Mã "${code}" không tồn tại!`,'error');return;}
       currentExamData=s.val();studentNameGlobal=name;
       if(currentExamData.attemptLimit>0){const n=await checkUserAttempts(code,currentUser.username,'exam');if(n>=currentExamData.attemptLimit){showToast(`❌ Đã hết lượt!`,'error');return;}}
       if(mode==='live'){
+        updateLoadingSequence('Đang kết nối phòng thi...','Đang xác minh phòng thi và thông tin tham gia.',48);
         if(!currentExamData.isLiveRoom){showToast('❌ Đề này không bật phòng live!','error');return;}
         if(pass!==currentExamData.livePassword){showToast('❌ Sai mật khẩu phòng!','error');return;}
         studentSessionKeyGlobal='s_'+Date.now();
         const r=window.ref(window.db,`liverooms/${code}/students/${studentSessionKeyGlobal}`);
         await window.dbSet(r,{name,username:currentUser.username,status:'waiting',cheatWarnings:0,totalLeaveTime:0});
         listenRoomAnnouncements(code,false);await announceSpecialRoleJoin(code,false);
+        updateLoadingSequence('Đang sắp xếp tài nguyên...','Đang chuẩn bị phòng chờ và đồng bộ danh sách thí sinh.',82);
         document.getElementById('waitingRoomExamTitle').innerText=currentExamData.title;
         document.getElementById('waitStudentName').innerText=name;
         document.getElementById('waitDuration').innerText=currentExamData.timerEnabled===false?'Không giới hạn':currentExamData.duration;
         switchView('studentWaitingRoomView');
-        activeStudentRoomListener=window.onValue(window.ref(window.db,`liverooms/${code}`),snap=>{const d=snap.val()||{},st=d.students||{};document.getElementById('waitStudentCount').innerText=Object.keys(st).length;if(!st[studentSessionKeyGlobal]){showToast('Bị kick!','error');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}stopLiveWaitingPoll();switchView('studentLoginView');return;}if(d.status==='started'&&!isExamActive){if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}stopLiveWaitingPoll();window.dbUpdate(r,{status:'testing'});launchOfficialExamInterface();}else if(d.status==='ended'){if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}stopLiveWaitingPoll();showForcedSubmitModal('teacher','GV đã kết thúc');}});
+        activeStudentRoomListener=window.onValue(window.ref(window.db,`liverooms/${code}`),snap=>{const d=snap.val()||{},st=d.students||{};document.getElementById('waitStudentCount').innerText=Object.keys(st).length;if(!st[studentSessionKeyGlobal]){showToast('Bị kick!','error');if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}stopLiveWaitingPoll();switchView('studentLoginView');return;}if(d.status==='started'&&!isExamActive){if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}stopLiveWaitingPoll();window.dbUpdate(r,{status:'testing'});showExamTransitionLoading('exam');}else if(d.status==='ended'){if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}stopLiveWaitingPoll();showForcedSubmitModal('teacher','GV đã kết thúc');}});
         startLiveWaitingPoll(code,studentSessionKeyGlobal);
       }else{
         studentSessionKeyGlobal='s_free_'+Date.now();
-        launchOfficialExamInterface();
+        updateLoadingSequence('Đang sắp xếp tài nguyên...','Đang dựng tài liệu, câu hỏi và bảng trả lời.',58);
+        await launchOfficialExamInterface();
       }
     }
   });
+}
+
+let teacherStartTransitionInProgress=false;
+async function showExamTransitionLoading(kind){
+  if(teacherStartTransitionInProgress)return;
+  teacherStartTransitionInProgress=true;
+  try{
+    await showLoadingSequence(async()=>{
+      if(kind==='practice'){
+        updateLoadingSequence('Giáo viên đã bắt đầu bài luyện...','Đang dựng câu hỏi và bảng trả lời.',45);
+        launchQpPracticeInterface();
+      }else{
+        updateLoadingSequence('Giáo viên đã bắt đầu bài thi...','Đang tải tài liệu và chuẩn bị giao diện thi.',32);
+        await launchOfficialExamInterface();
+      }
+    },kind==='practice'?'Đang mở bài luyện...':'Đang mở bài thi...');
+  }finally{
+    teacherStartTransitionInProgress=false;
+  }
 }
 function leaveQpWaitingRoom(){if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}stopQpWaitingPoll();stopAllAnnouncementListeners();switchView('studentLoginView');}
 function leaveWaitingRoom(){stopLiveWaitingPoll();if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}stopAllAnnouncementListeners();switchView('studentLoginView');}
 
 /* EXAM LAUNCH */
 async function launchAXCMInterface(){
+  updateLoadingSequence('Đang sắp xếp tài nguyên...','Đang khởi tạo giao diện đề thi thông minh.',84);
   document.getElementById('displayExamTitle').innerText='🎓 '+(currentExamData.title||'Đề Thông Minh');
   document.getElementById('displayStudentInfo').innerText=`Thí sinh: ${studentNameGlobal} | AXCM`;
   currentAntiCheatEnabled=currentExamData.antiCheatEnabled!==false;
@@ -6017,11 +6123,13 @@ async function launchAXCMInterface(){
   const td=document.getElementById('timerDisplay');
   if(currentTimerEnabled){timeLeft=currentExamData.duration*60;clearInterval(examTimer);examTimer=setInterval(()=>{timeLeft--;const m=Math.floor(timeLeft/60),s=timeLeft%60;td.innerText=`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;if(timeLeft<=0){clearInterval(examTimer);showForcedSubmitModal('timeout','Hết thời gian');}},1000);}else{td.innerText='∞';clearInterval(examTimer);timeLeft=0;}
   cheatWarnings=0;totalTabLeaveTime=0;document.getElementById('cheatWarningBadge').innerText='Cảnh báo: 0';
+  updateLoadingSequence('Sắp xong rồi...','Đang mở đề thi thông minh.',96);
   isExamActive=true;setExamActiveClass(true);switchView('studentExamView');
   showToast('🎓 Đã vào AXCM!','success');
   if(currentEquippedAiModel){tryTriggerAiReaction('thinking');}
 }
 async function launchOfficialExamInterface(){
+  updateLoadingSequence('Đang sắp xếp tài nguyên...','Đang khởi tạo khu vực làm bài.',58);
   document.getElementById('displayExamTitle').innerText=currentExamData.title;
   document.getElementById('displayStudentInfo').innerText=`Thí sinh: ${studentNameGlobal}`;
   currentAntiCheatEnabled=currentExamData.antiCheatEnabled!==false;
@@ -6033,8 +6141,18 @@ async function launchOfficialExamInterface(){
   document.getElementById('cheatThresholdDisplay').innerText=currentExamData.cheatThreshold||7;
   const mc=document.getElementById('examMediaContainer');
   mc.innerHTML='';
-  if(currentExamData.media&&currentExamData.media.type==='pdf'&&currentExamData.media.files.length){const pdf=await pdfjsLib.getDocument(currentExamData.media.files[0]).promise;for(let i=1;i<=pdf.numPages;i++){const p=await pdf.getPage(i);const v=p.getViewport({scale:1.1});const cv=document.createElement('canvas');cv.className='pdf-canvas';cv.height=v.height;cv.width=v.width;await p.render({canvasContext:cv.getContext('2d'),viewport:v}).promise;mc.appendChild(cv);}}
-  else if(currentExamData.media&&currentExamData.media.type==='image'){currentExamData.media.files.forEach(b=>{const i=document.createElement('img');i.src=b;i.className='img-preview';mc.appendChild(i);});}
+  if(currentExamData.media&&currentExamData.media.type==='pdf'&&currentExamData.media.files.length){
+    updateLoadingSequence('Đang tải tài liệu PDF...','Đang mở file và phân tích số trang.',62);
+    const pdf=await pdfjsLib.getDocument(currentExamData.media.files[0]).promise;
+    for(let i=1;i<=pdf.numPages;i++){
+      updateLoadingSequence(`Đang sắp xếp tài nguyên (${i}/${pdf.numPages})...`,`Đang dựng trang ${i} trên ${pdf.numPages}.`,62+(i/pdf.numPages)*24);
+      const p=await pdf.getPage(i);const v=p.getViewport({scale:1.1});const cv=document.createElement('canvas');cv.className='pdf-canvas';cv.height=v.height;cv.width=v.width;await p.render({canvasContext:cv.getContext('2d'),viewport:v}).promise;mc.appendChild(cv);
+    }
+  }
+  else if(currentExamData.media&&currentExamData.media.type==='image'){
+    updateLoadingSequence('Đang tải hình ảnh đề thi...','Đang sắp xếp tài nguyên hình ảnh.',74);
+    currentExamData.media.files.forEach(b=>{const i=document.createElement('img');i.src=b;i.className='img-preview';mc.appendChild(i);});
+  }
   const sheet=document.getElementById('studentAnswerSheet');sheet.innerHTML='';
   currentExamData.questions.forEach(q=>{
     const item=document.createElement('div');item.style.marginBottom='12px';item.style.paddingBottom='8px';item.style.borderBottom='1px solid #eee';
@@ -6049,6 +6167,7 @@ async function launchOfficialExamInterface(){
   const td=document.getElementById('timerDisplay');
   if(currentTimerEnabled){timeLeft=currentExamData.duration*60;clearInterval(examTimer);examTimer=setInterval(()=>{timeLeft--;const m=Math.floor(timeLeft/60),s=timeLeft%60;td.innerText=`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;if(timeLeft<=0){clearInterval(examTimer);showForcedSubmitModal('timeout','Hết thời gian');}},1000);}else{td.innerText='∞';clearInterval(examTimer);timeLeft=0;}
   cheatWarnings=0;totalTabLeaveTime=0;document.getElementById('cheatWarningBadge').innerText='Cảnh báo: 0';
+  updateLoadingSequence('Sắp xong rồi...','Đang hoàn thiện bảng trả lời và mở giao diện thi.',96);
   isExamActive=true;setExamActiveClass(true);switchView('studentExamView');
   if(currentExamData.isLiveRoom){activeStudentRoomListener=window.onValue(window.ref(window.db,`liverooms/${currentExamData.code}`),snap=>{const d=snap.val()||{},st=d.students||{};if(!st[studentSessionKeyGlobal]){if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}showForcedSubmitModal('kick','Bị kick');return;}if(d.status==='ended'&&isExamActive){if(activeStudentRoomListener){try{activeStudentRoomListener();}catch(e){}activeStudentRoomListener=null;}showForcedSubmitModal('teacher','GV kết thúc');}});}
   if(currentEquippedAiModel){tryTriggerAiReaction('thinking');}
@@ -6066,7 +6185,7 @@ function toggleResultExp(btn){const b=btn.nextElementSibling;if(b.style.display=
 
 /* QP PRACTICE */
 async function cancelQpPractice(){if(!await customConfirm('Thoát?',{icon:'🚪',okClass:'danger'}))return;clearInterval(qpTimer);isQpActive=false;stopQpWaitingPoll();stopAllAnnouncementListeners();if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}currentQpData=null;studentNameGlobal='';qpStudentAnswers={};currentQpV2Index=0;cheatWarnings=0;totalTabLeaveTime=0;tabLeaveStartTime=null;document.getElementById('qpPlayQuestionsContainer').innerHTML='';showToast('🚪 Đã thoát','warn');switchView('studentLoginView');}
-function launchQpPracticeInterface(){isQpActive=true;currentQpV2Index=0;qpStudentAnswers={};document.getElementById('qpPlayTitle').innerText=currentQpData.title;if(currentQpData.enableAntiCheat){document.getElementById('qpCheatWarningBanner').style.display='flex';cheatWarnings=0;totalTabLeaveTime=0;document.getElementById('qpCheatWarningBadge').innerText='Cảnh báo: 0';}else document.getElementById('qpCheatWarningBanner').style.display='none';if(currentQpData.useLayoutV2)renderQpQuestionV2Item();else renderQpLayoutV1();if(currentQpData.enableTimer){qpTimeLeft=(currentQpData.durationMinutes||15)*60;document.getElementById('qpPlayTimer').style.display='block';clearInterval(qpTimer);qpTimer=setInterval(()=>{qpTimeLeft--;const m=Math.floor(qpTimeLeft/60),s=qpTimeLeft%60;document.getElementById('qpPlayTimer').innerText=`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;if(qpTimeLeft<=0){clearInterval(qpTimer);showForcedSubmitModal('timeout','Hết thời gian');}},1000);}else{qpTimeLeft=0;document.getElementById('qpPlayTimer').style.display='none';clearInterval(qpTimer);qpTimer=setInterval(()=>{qpTimeLeft++;},1000);}switchView('qpPracticingView');if(currentQpData.isAdvancedMode){activeQpRoomListener=window.onValue(window.ref(window.db,`qp_rooms/${currentQpData.code}`),snap=>{const d=snap.val()||{};if(d.status==='ended'&&isQpActive){if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}showForcedSubmitModal('qp','GV đã kết thúc');}});}}
+function launchQpPracticeInterface(){updateLoadingSequence('Đang sắp xếp tài nguyên...','Đang chuẩn bị câu hỏi và bảng trả lời bài luyện.',82);isQpActive=true;currentQpV2Index=0;qpStudentAnswers={};document.getElementById('qpPlayTitle').innerText=currentQpData.title;if(currentQpData.enableAntiCheat){document.getElementById('qpCheatWarningBanner').style.display='flex';cheatWarnings=0;totalTabLeaveTime=0;document.getElementById('qpCheatWarningBadge').innerText='Cảnh báo: 0';}else document.getElementById('qpCheatWarningBanner').style.display='none';if(currentQpData.useLayoutV2)renderQpQuestionV2Item();else renderQpLayoutV1();if(currentQpData.enableTimer){qpTimeLeft=(currentQpData.durationMinutes||15)*60;document.getElementById('qpPlayTimer').style.display='block';clearInterval(qpTimer);qpTimer=setInterval(()=>{qpTimeLeft--;const m=Math.floor(qpTimeLeft/60),s=qpTimeLeft%60;document.getElementById('qpPlayTimer').innerText=`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;if(qpTimeLeft<=0){clearInterval(qpTimer);showForcedSubmitModal('timeout','Hết thời gian');}},1000);}else{qpTimeLeft=0;document.getElementById('qpPlayTimer').style.display='none';clearInterval(qpTimer);qpTimer=setInterval(()=>{qpTimeLeft++;},1000);}updateLoadingSequence('Sắp xong rồi...','Đang mở giao diện bài luyện.',96);switchView('qpPracticingView');if(currentQpData.isAdvancedMode){activeQpRoomListener=window.onValue(window.ref(window.db,`qp_rooms/${currentQpData.code}`),snap=>{const d=snap.val()||{};if(d.status==='ended'&&isQpActive){if(activeQpRoomListener){try{activeQpRoomListener();}catch(e){}activeQpRoomListener=null;}showForcedSubmitModal('qp','GV đã kết thúc');}});}}
 function renderQpLayoutV1(){const c=document.getElementById('qpPlayQuestionsContainer');c.innerHTML='';document.getElementById('qpPrevBtn').style.display='none';document.getElementById('qpNextBtn').style.display='none';document.getElementById('qpSubmitBtn').style.display='block';currentQpData.questions.forEach((q,idx)=>{let opt='';q.options.forEach(o=>{opt+=`<div class="opt-btn" onclick="selectQpOpt(this,${q.id},'${o.label}')" style="width:auto;height:auto;padding:8px 12px;border-radius:6px">${o.label}. ${o.text}</div>`;});const hasExp=q.explanation||q.expImage;c.innerHTML+=`<div class="card" style="background:#fdfdfd;border:1px solid #ddd;margin-bottom:12px"><p style="font-weight:bold;margin-bottom:6px">Câu ${idx+1} (${q.score||.25}đ): ${q.question}</p>${q.image?`<img src="${q.image}" class="img-preview">`:''}<div class="opt-group" data-qid="${q.id}" style="flex-direction:column;gap:6px">${opt}</div><div id="qp-feedback-${q.id}" style="font-size:13px;font-weight:bold;margin-top:6px"></div>${hasExp?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleQpExp(${q.id})">></button><div id="qp-exp-${q.id}" class="explanation-box">${q.explanation?`<p>${q.explanation}</p>`:''}${q.expImage?`<img src="${q.expImage}" class="img-preview">`:''}</div></div>`:''}</div>`;});}
 function renderQpQuestionV2Item(){const c=document.getElementById('qpPlayQuestionsContainer');const q=currentQpData.questions[currentQpV2Index],tot=currentQpData.questions.length;const done=qpStudentAnswers.hasOwnProperty(q.id),saved=done?qpStudentAnswers[q.id]:'';document.getElementById('qpPrevBtn').style.display=currentQpV2Index>0?'block':'none';const nb=document.getElementById('qpNextBtn'),sb=document.getElementById('qpSubmitBtn');if(currentQpV2Index<tot-1){nb.style.display='block';nb.innerText=done?'Tiếp Tục ➡️':'Xác Nhận & Tiếp ➡️';sb.style.display='none';}else{nb.style.display='none';sb.style.display='block';sb.innerText=done?'📤 Nộp Bài':'Xác Nhận & Nộp';}let opt='';q.options.forEach(o=>{let sel=saved===o.label,st='';if(done){if(o.label===saved)st=(saved===q.correct)?'background:#1877f2;color:white;':'background:#dc3545;color:white;';else if(o.label===q.correct)st='background:#1877f2;color:white;';}const ev=done?'':`onclick="selectQpOpt(this,${q.id},'${o.label}')"`;opt+=`<div class="opt-btn ${sel?'selected':''}" ${ev} style="width:auto;height:auto;padding:8px 12px;border-radius:6px;${st}${done?'cursor:not-allowed;opacity:0.8;':'cursor:pointer;'}">${o.label}. ${o.text}</div>`;});let fb='';if(done)fb=saved===q.correct?'<span style="color:#1877f2">✓ Chính xác!</span>':`<span style="color:#dc3545">✗ Sai! ĐA đúng: ${q.correct}</span>`;const hasExp=q.explanation||q.expImage||currentQpData.aiNote;c.innerHTML=`<div class="card" style="background:#fdfdfd;border:1px solid #ddd"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:bold;color:#1877f2">Câu ${currentQpV2Index+1}/${tot} ${done?'<span style="color:red;font-size:12px">(Khóa)</span>':''}</span><span style="font-size:12px;color:#666">${q.score||.25}đ</span></div><p style="font-weight:bold;margin-bottom:8px">${q.question}</p>${q.image?`<img src="${q.image}" class="img-preview">`:''}<div class="opt-group" data-qid="${q.id}" data-val="${saved}" style="flex-direction:column;gap:6px">${opt}</div><div id="qp-feedback-${q.id}" style="font-size:13px;font-weight:bold;margin-top:6px">${fb}</div>${(hasExp&&done)?`<div style="margin-top:6px"><button class="toggle-exp-btn" onclick="toggleQpExp(${q.id})">></button><div id="qp-exp-${q.id}" class="explanation-box">${q.explanation?`<p>${q.explanation}</p>`:''}${q.expImage?`<img src="${q.expImage}" class="img-preview">`:''}${!q.explanation&&currentQpData.aiNote?`<div style="background:#f0f8ff;padding:10px;border-radius:8px;border-left:3px solid #1877f2;font-size:12px;line-height:1.6"><b style="color:#1877f2">🤖 AI:</b><br>${generateAIAnalysis({type:'mc',question:q.question,options:q.options,imageData:q.image})}</div>`:''}</div></div>`:''}</div>`;}
 function nextQpQuestionV2(){const q=currentQpData.questions[currentQpV2Index];const g=document.querySelector(`.opt-group[data-qid="${q.id}"]`);const vFromDom=g?(g.dataset.val||''):'';if(vFromDom&&!qpStudentAnswers[q.id])qpStudentAnswers[q.id]=vFromDom;if(!qpStudentAnswers.hasOwnProperty(q.id)||!qpStudentAnswers[q.id]){showToast('Chọn 1 đáp án!','error');return;}if(currentQpV2Index<currentQpData.questions.length-1){currentQpV2Index++;renderQpQuestionV2Item();}}
@@ -6396,6 +6515,7 @@ function listenAiConfig(){
     cachedAiConfig=snap.val()||null;
     if(!cachedAiConfig){cachedAiConfig=Object.assign({},DEFAULT_AI_CONFIG);}
     updateAiSetupStatusUI();
+    if(typeof window.auroraRetryDynamicTranslations==='function')window.auroraRetryDynamicTranslations();
   });
 }
 async function loadEquippedAiModel(){
@@ -7532,6 +7652,7 @@ async function saveAiSetupConfig(){
     await window.dbSet(window.ref(window.db,'system/ai_config'),cfg);
     cachedAiConfig=cfg;
     updateAiSetupStatusUI();
+    if(typeof window.auroraRetryDynamicTranslations==='function')window.auroraRetryDynamicTranslations();
     showCenterSquareToast('✅','Đã lưu!','Cấu hình AI'+(provider==='custom'?'':' ('+(p?p.name:provider)+')'),'success',2600);
   }catch(e){showToast('❌ '+(e.message||e),'error');}
 }
@@ -9202,7 +9323,12 @@ initEcCreatePanel();
     ['Làm Bài Thi','Take an exam','Сдать тест','参加考试','試験を受ける'],['Tài Liệu','Documents','Документы','资料','資料'],['Học Sinh Vào Thi','Student exam entry','Вход ученика на экзамен','学生进入考试','生徒の試験参加'],['Hình thức:','Mode:','Формат:','形式：','形式：'],['Thi Tự Do','Free exam','Свободный тест','自由考试','自由試験'],['Phòng Thi Chuyên Dụng','Dedicated exam room','Специальная экзаменационная комната','专用考场','専用試験室'],['Cần mật khẩu','Password required','Требуется пароль','需要密码','パスワードが必要'],['Bài Luyện Nhanh','Quick practice','Быстрая практика','快速练习','クイック練習'],['Luyện tập','Practice','Практика','练习','練習'],['Đề cắt ảnh','Image-based test','Тест по изображениям','图片试卷','画像テスト'],['Biệt danh:','Nickname:','Псевдоним:','昵称：','ニックネーム：'],['Bấm tên trên navbar để đổi.','Click your name in the navbar to change it.','Нажмите на имя в панели навигации, чтобы изменить его.','点击导航栏中的名字即可更改。','ナビゲーションバーの名前をクリックして変更します。'],['Bắt Đầu','Start','Начать','开始','開始'],['Quét QR','Scan QR','Сканировать QR','扫描二维码','QR をスキャン'],['KHO TÀI LIỆU HỌC TẬP','STUDY DOCUMENT LIBRARY','БИБЛИОТЕКА УЧЕБНЫХ МАТЕРИАЛОВ','学习资料库','学習資料ライブラリ'],['Lớp','Grade','Класс','年级','学年'],['Tất cả','All','Все','全部','すべて'],['Môn','Subject','Предмет','科目','科目'],['Dạng','Type','Тип','类型','種類'],['Công thức','Formula','Формулы','公式','公式'],['Lý thuyết','Theory','Теория','理论','理論'],['Dạng đề','Test format','Тип задания','试卷类型','問題形式'],['Dạng câu hỏi','Question type','Тип вопроса','题型','設問形式'],['Mẫu','Template','Шаблон','模板','テンプレート'],['Tìm','Search','Поиск','搜索','検索'],['Tổng:','Total:','Всего:','总计：','合計：'],['tài liệu','documents','документов','份资料','件の資料'],['Tài liệu GV đăng','Teacher-uploaded documents','Материалы учителей','教师上传的资料','教師がアップロードした資料'],
     ['Tạo Đề Kiểm Tra V2','Create Test V2','Создать тест V2','创建试卷 V2','テスト作成 V2'],['Đặt Lại','Reset','Сбросить','重置','リセット'],['Nâng Cao','Advanced','Дополнительно','高级','詳細'],['Tên bài:','Test name:','Название теста:','试卷名称：','テスト名：'],['Hình thức tải:','Upload format:','Формат загрузки:','上传格式：','アップロード形式：'],['PDF đề thi','Exam PDF','PDF теста','试卷 PDF','試験 PDF'],['Ảnh đề thi','Exam images','Изображения теста','试卷图片','試験画像'],['Cài đặt nâng cao','Advanced settings','Расширенные настройки','高级设置','詳細設定'],['Đếm ngược','Countdown','Обратный отсчёт','倒计时','カウントダウン'],['Chống gian lận','Anti-cheating','Защита от списывания','防作弊','不正防止'],['Giới hạn:','Limit:','Лимит:','限制：','制限：'],['Không','No','Нет','否','なし'],['Có','Yes','Да','是','あり'],['Tối đa:','Maximum:','Максимум:','最多：','最大：'],['Giới hạn lần làm','Attempt limit','Ограничение попыток','答题次数限制','受験回数制限'],['Phân tích AI (đang thử nghiệm)','AI analysis (experimental)','Анализ ИИ (экспериментально)','AI 分析（实验功能）','AI 分析（試験中）'],['Giới hạn HS:','Student limit:','Лимит учеников:','学生限制：','生徒数の上限：'],['Tự Động Nhập Đáp Án','Automatic answer entry','Автоматический ввод ответов','自动录入答案','解答の自動入力'],['Câu Hỏi','Questions','Вопросы','问题','質問'],['Lưu & Phát Hành','Save & Publish','Сохранить и опубликовать','保存并发布','保存して公開'],['PHÒNG CHỜ BÀI LUYỆN','PRACTICE WAITING ROOM','КОМНАТА ОЖИДАНИЯ ПРАКТИКИ','练习等待室','練習待機室'],['Thí sinh:','Candidates:','Участники:','考生：','受験者：'],['Số câu:','Questions:','Количество вопросов:','题数：','問題数：'],['Đang trong phòng:','In room:','В комнате:','房间内：','ルーム内：'],['Rời Phòng','Leave room','Покинуть комнату','离开房间','ルームを退出'],['PHÒNG CHỜ THI','EXAM WAITING ROOM','КОМНАТА ОЖИДАНИЯ ЭКЗАМЕНА','考试等待室','試験待機室'],['Thời gian:','Time:','Время:','时间：','時間：'],['phút','minutes','минут','分钟','分'],['CHỜ GIÁO VIÊN...','WAITING FOR TEACHER...','ОЖИДАНИЕ УЧИТЕЛЯ...','等待老师…','先生を待っています…'],['Đề Thi','Exam','Экзамен','试卷','試験'],['Thoát','Exit','Выход','退出','終了'],['Nộp Bài','Submit','Сдать работу','提交答卷','提出'],['Kết Quả Bài Kiểm Tra','Test Results','Результаты теста','考试结果','試験結果'],['Chi Tiết','Details','Подробности','详情','詳細'],['Về Trang Chủ','Back to Home','На главную','返回首页','ホームへ戻る'],['Kết Quả Bài Luyện','Practice Results','Результаты практики','练习结果','練習結果'],['BẢNG XẾP HẠNG','LEADERBOARD','ТАБЛИЦА РЕЙТИНГА','排行榜','ランキング'],['BXH TOÀN SEVER','GLOBAL SERVER RANKING','ОБЩИЙ РЕЙТИНГ СЕРВЕРА','全服排行榜','全サーバーランキング'],['BXH BÀI THI','EXAM RANKING','РЕЙТИНГ ЭКЗАМЕНОВ','考试排行榜','試験ランキング'],['BỤC VINH DANH','HALL OF FAME','ДОСКА ПОЧЁТА','荣誉榜','殿堂入り'],['Làm mới','Refresh','Обновить','刷新','更新'],['Hạng','Rank','Место','排名','順位'],['Tổng Điểm','Total points','Всего баллов','总分','合計点'],['Số Bài','Submissions','Количество работ','答题数','提出数'],['ĐTB','Average score','Средний балл','平均分','平均点'],['Hồ sơ','Profile','Профиль','个人资料','プロフィール'],['Xóa Lịch Sử','Clear history','Очистить историю','清除记录','履歴を削除'],['Tài khoản (Biệt danh)','Account (nickname)','Аккаунт (псевдоним)','账户（昵称）','アカウント（ニックネーム）'],['Điểm','Score','Баллы','分数','点数'],['Cẩm nang','Guidebook','Справочник','指南','ガイドブック'],['Trang Chủ','Home','Главная','首页','ホーム'],['Xếp Hạng','Ranking','Рейтинг','排名','ランキング'],['Hồ Sơ','Profile','Профиль','个人资料','プロフィール'],['Tối Cao','Supreme','Администратор','高级管理','管理者'],['Giải Trí','Entertainment','Развлечения','娱乐','エンタメ'],['Giao Diện','Appearance','Внешний вид','外观','外観'],['Chế độ hiển thị','Display mode','Режим отображения','显示模式','表示モード'],['Hiện tại:','Current:','Текущий:','当前：','現在：'],['Đổi chế độ','Change mode','Изменить режим','切换模式','モードを変更'],
     ['Kiểu phát:','Playback mode:','Режим воспроизведения:','播放模式：','再生モード：'],['Âm lượng','Volume','Громкость','音量','音量'],['Lưu thứ tự','Save order','Сохранить порядок','保存顺序','順序を保存'],['Tìm tên hoặc email...','Search name or email...','Поиск по имени или email...','搜索姓名或邮箱…','名前またはメールを検索…'],['Đối tượng nhận','Recipients','Получатели','接收对象','受信者'],['Tất cả người đang online','Everyone online','Все онлайн','所有在线用户','オンラインの全員'],['Chọn người cụ thể','Choose specific users','Выбрать конкретных пользователей','选择指定用户','特定ユーザーを選択'],['Tiêu đề:','Title:','Заголовок:','标题：','タイトル：'],['Nội dung chữ:','Text content:','Текст сообщения:','文本内容：','本文：'],['Nhập nội dung...','Enter content...','Введите текст...','输入内容…','内容を入力…'],['Gửi Thông Báo','Send announcement','Отправить объявление','发送通知','お知らせを送信'],['Xóa Tất Cả Thông Báo','Clear all announcements','Удалить все объявления','清除所有通知','すべてのお知らせを削除'],
-    ['🔒 VOICE KÍN — ÂM THANH RIÊNG THEO @ID','🔒 PRIVATE VOICE — AUDIO FOR @ID ONLY','🔒 ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','🔒 私密语音 — 仅发送给 @ID','🔒 プライベート音声 — @ID のみ'],['VOICE KÍN — ÂM THANH RIÊNG THEO @ID','PRIVATE VOICE — AUDIO FOR @ID ONLY','ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','私密语音 — 仅发送给 @ID','プライベート音声 — @ID のみ'],['👤 ID người nhận (ví dụ @username)','👤 Recipient ID (e.g. @username)','👤 ID получателя (например, @username)','👤 接收者 ID（例如 @username）','👤 受信者 ID（例：@username）'],['🎵 File âm thanh (tối đa 20 MB)','🎵 Audio file (up to 20 MB)','🎵 Аудиофайл (до 20 МБ)','🎵 音频文件（最大 20 MB）','🎵 音声ファイル（最大 20 MB）'],['Tải âm thanh, nhập @ID người nhận rồi bấm Phát voice kín. Hệ thống chỉ gửi tín hiệu tới hộp thư riêng của tài khoản đích khi tài khoản đó đang online.','Upload audio, enter the recipient @ID, then click Play private voice. The system sends the notification only to the recipient inbox while that account is online.','Загрузите аудио, введите @ID получателя и нажмите «Отправить личное аудио». Уведомление отправляется только в личный входящий ящик получателя, когда он в сети.','上传音频，输入接收者 @ID，然后点击“发送私密语音”。仅当目标账户在线时，系统才向其私人收件箱发送通知。','音声をアップロードし、受信者の @ID を入力して「プライベート音声を送信」をクリックします。対象アカウントがオンラインの場合のみ、個人受信箱へ通知されます。'],['Lưu ý: trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó người nhận sẽ thấy nút bấm để nghe. Tính riêng tư dữ liệu cũng phụ thuộc Firebase Security Rules của dự án.','Note: the recipient browser may block autoplay; if so, the recipient will see a button to play. Data privacy also depends on this project’s Firebase Security Rules.','Примечание: браузер получателя может блокировать автовоспроизведение; в таком случае появится кнопка воспроизведения. Конфиденциальность данных также зависит от правил безопасности Firebase.','注意：接收者的浏览器可能会阻止自动播放；此时接收者会看到播放按钮。数据隐私还取决于项目的 Firebase 安全规则。','注意：受信者のブラウザーが自動再生をブロックする場合、再生ボタンが表示されます。データのプライバシーは Firebase セキュリティルールにも依存します。'],['Phát voice kín','Play private voice','Отправить личное аудио','发送私密语音','プライベート音声を送信'],['Sẵn sàng. Chỉ gửi tới người đang online.','Ready. Only online users can receive.','Готово. Получать могут только пользователи онлайн.','就绪。仅在线用户可以接收。','準備完了。オンラインのユーザーのみ受信できます。'],['CHUNG — ỦNG HỘ, QUẢNG CÁO, GÓI NÂNG CẤP','GENERAL — DONATIONS, ADS, UPGRADE PLANS','ОБЩЕЕ — ПОЖЕРТВОВАНИЯ, РЕКЛАМА, ТАРИФЫ','常规 — 捐赠、广告、升级套餐','全般 — 寄付、広告、アップグレード'],['ỦNG HỘ & BXH HIỂN THỊ','DONATIONS & DISPLAY RANKING','ПОЖЕРТВОВАНИЯ И РЕЙТИНГ','捐赠与展示排行榜','寄付と表示ランキング'],['QUẢNG CÁO & NHÀ TÀI TRỢ (TỐI ĐA 4)','ADS & SPONSORS (MAX 4)','РЕКЛАМА И СПОНСОРЫ (МАКС. 4)','广告与赞助商（最多 4 个）','広告とスポンサー（最大 4 件）'],['GÓI NÂNG CẤP & TẶNG GÓI','UPGRADE PLANS & GIFTING','ТАРИФЫ И ПОДАРКИ','升级套餐与赠送套餐','アップグレードとギフト'],['CẤU HÌNH ĐỊNH DẠNG MENU','MENU LAYOUT SETTINGS','НАСТРОЙКИ МЕНЮ','菜单布局设置','メニュー表示設定'],['CẤU HÌNH ÂM THANH THEO SỰ KIỆN','EVENT SOUND SETTINGS','НАСТРОЙКИ ЗВУКОВ СОБЫТИЙ','事件音效设置','イベント音声設定'],['NGÔN NGỮ HỆ THỐNG','SYSTEM LANGUAGE','ЯЗЫК СИСТЕМЫ','系统语言','システム言語']
+    ['🔒 VOICE KÍN — ÂM THANH RIÊNG THEO @ID','🔒 PRIVATE VOICE — AUDIO FOR @ID ONLY','🔒 ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','🔒 私密语音 — 仅发送给 @ID','🔒 プライベート音声 — @ID のみ'],['VOICE KÍN — ÂM THANH RIÊNG THEO @ID','PRIVATE VOICE — AUDIO FOR @ID ONLY','ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','私密语音 — 仅发送给 @ID','プライベート音声 — @ID のみ'],['👤 ID người nhận (ví dụ @username)','👤 Recipient ID (e.g. @username)','👤 ID получателя (например, @username)','👤 接收者 ID（例如 @username）','👤 受信者 ID（例：@username）'],['🎵 File âm thanh (tối đa 20 MB)','🎵 Audio file (up to 20 MB)','🎵 Аудиофайл (до 20 МБ)','🎵 音频文件（最大 20 MB）','🎵 音声ファイル（最大 20 MB）'],['Tải âm thanh, nhập @ID người nhận rồi bấm Phát voice kín. Hệ thống chỉ gửi tín hiệu tới hộp thư riêng của tài khoản đích khi tài khoản đó đang online.','Upload audio, enter the recipient @ID, then click Play private voice. The system sends the notification only to the recipient inbox while that account is online.','Загрузите аудио, введите @ID получателя и нажмите «Отправить личное аудио». Уведомление отправляется только в личный входящий ящик получателя, когда он в сети.','上传音频，输入接收者 @ID，然后点击“发送私密语音”。仅当目标账户在线时，系统才向其私人收件箱发送通知。','音声をアップロードし、受信者の @ID を入力して「プライベート音声を送信」をクリックします。対象アカウントがオンラインの場合のみ、個人受信箱へ通知されます。'],['Lưu ý: trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó người nhận sẽ thấy nút bấm để nghe. Tính riêng tư dữ liệu cũng phụ thuộc Firebase Security Rules của dự án.','Note: the recipient browser may block autoplay; if so, the recipient will see a button to play. Data privacy also depends on this project’s Firebase Security Rules.','Примечание: браузер получателя может блокировать автовоспроизведение; в таком случае появится кнопка воспроизведения. Конфиденциальность данных также зависит от правил безопасности Firebase.','注意：接收者的浏览器可能会阻止自动播放；此时接收者会看到播放按钮。数据隐私还取决于项目的 Firebase 安全规则。','注意：受信者のブラウザーが自動再生をブロックする場合、再生ボタンが表示されます。データのプライバシーは Firebase セキュリティルールにも依存します。'],['Phát voice kín','Play private voice','Отправить личное аудио','发送私密语音','プライベート音声を送信'],['Sẵn sàng. Chỉ gửi tới người đang online.','Ready. Only online users can receive.','Готово. Получать могут только пользователи онлайн.','就绪。仅在线用户可以接收。','準備完了。オンラインのユーザーのみ受信できます。'],['CHUNG — ỦNG HỘ, QUẢNG CÁO, GÓI NÂNG CẤP','GENERAL — DONATIONS, ADS, UPGRADE PLANS','ОБЩЕЕ — ПОЖЕРТВОВАНИЯ, РЕКЛАМА, ТАРИФЫ','常规 — 捐赠、广告、升级套餐','全般 — 寄付、広告、アップグレード'],['ỦNG HỘ & BXH HIỂN THỊ','DONATIONS & DISPLAY RANKING','ПОЖЕРТВОВАНИЯ И РЕЙТИНГ','捐赠与展示排行榜','寄付と表示ランキング'],['QUẢNG CÁO & NHÀ TÀI TRỢ (TỐI ĐA 4)','ADS & SPONSORS (MAX 4)','РЕКЛАМА И СПОНСОРЫ (МАКС. 4)','广告与赞助商（最多 4 个）','広告とスポンサー（最大 4 件）'],['GÓI NÂNG CẤP & TẶNG GÓI','UPGRADE PLANS & GIFTING','ТАРИФЫ И ПОДАРКИ','升级套餐与赠送套餐','アップグレードとギフト'],['CẤU HÌNH ĐỊNH DẠNG MENU','MENU LAYOUT SETTINGS','НАСТРОЙКИ МЕНЮ','菜单布局设置','メニュー表示設定'],['CẤU HÌNH ÂM THANH THEO SỰ KIỆN','EVENT SOUND SETTINGS','НАСТРОЙКИ ЗВУКОВ СОБЫТИЙ','事件音效设置','イベント音声設定'],['NGÔN NGỮ HỆ THỐNG','SYSTEM LANGUAGE','ЯЗЫК СИСТЕМЫ','系统语言','システム言語'],
+    ['⏰ Thời gian đếm ngược đến kỳ thi tốt nghiệp THPT Quốc gia','⏰ Countdown to the National High School Graduation Exam','⏰ Обратный отсчёт до выпускного экзамена','⏰ 全国高中毕业考试倒计时','⏰ 高校卒業試験までのカウントダウン'],
+    ['Hệ thống kiểm tra trực tuyến thông minh — Nơi tri thức tỏa sáng!','Smart online testing system — Where knowledge shines!','Умная система онлайн-тестирования — место, где сияют знания!','智能在线考试系统——让知识闪耀！','スマートオンライン試験システム — 知識が輝く場所！'],
+    ['🏠 TRANG CHỦ','🏠 HOME','🏠 ГЛАВНАЯ','🏠 首页','🏠 ホーム'],['🧑‍🎓 HỌC SINH','🧑‍🎓 STUDENT','🧑‍🎓 УЧЕНИК','🧑‍🎓 学生','🧑‍🎓 生徒'],['👨‍🏫 GIÁO VIÊN','👨‍🏫 TEACHER','👨‍🏫 УЧИТЕЛЬ','👨‍🏫 教师','👨‍🏫 教師'],['⚙️ GV NÂNG CAO','⚙️ ADVANCED TEACHER','⚙️ ПРЕПОДАВАТЕЛЬ+','⚙️ 高级教师','⚙️ 上級教師'],['📖 HƯỚNG DẪN','📖 GUIDE','📖 СПРАВКА','📖 指南','📖 ガイド'],['🏆 BXH','🏆 LEADERBOARD','🏆 РЕЙТИНГ','🏆 排行榜','🏆 ランキング'],['👑 TỐI CAO','👑 SUPREME','👑 АДМИН','👑 管理','👑 管理者'],
+    ['Chưa có','None yet','Пока нет','暂无','まだありません'],['Đang tải...','Loading...','Загрузка...','正在加载…','読み込み中…'],['Không có','None','Нет','无','なし'],['Không có thông báo mới.','No new announcements.','Новых объявлений нет.','暂无新通知。','新しいお知らせはありません。'],['Không có dữ liệu.','No data available.','Нет данных.','暂无数据。','データがありません。'],
+    ['Dịch giao diện và nội dung đang hiển thị của các trang. Phần chữ động như giới thiệu, thông báo cập nhật sẽ được dịch bằng API AI đã cấu hình nếu chưa có trong từ điển. Nội dung được gửi tới nhà cung cấp AI hiện tại để dịch; nếu AI chưa được cấu hình hoặc gặp lỗi, phần chưa có bản dịch sẽ giữ nguyên.','Translate the interface and visible page content. Dynamic text such as the introduction and update announcements is translated using the configured AI API when it is not in the local dictionary. Text is sent to the currently configured AI provider for translation; if AI is not configured or fails, unmatched content remains unchanged.','Переводит интерфейс и видимое содержимое страниц. Динамический текст, например описание сайта и объявления об обновлениях, переводится через настроенный API ИИ, если его нет в словаре. Текст отправляется текущему поставщику ИИ; если ИИ не настроен или произошла ошибка, непереведённый текст останется без изменений.','翻译界面和当前显示的页面内容。对于本地词典中没有的动态文本（例如网站介绍和更新公告），将使用已配置的 AI API 翻译。文本会发送给当前配置的 AI 服务商；如果未配置 AI 或请求失败，未匹配的内容将保持原样。','インターフェースと表示中のページ内容を翻訳します。サイト紹介や更新のお知らせなど、辞書にない動的テキストは設定済みの AI API で翻訳します。テキストは現在設定されている AI プロバイダーに送信されます。AI が未設定またはエラーの場合、翻訳できない内容は元のまま表示されます。']
   ];
   function auroraLanguageDictionary(lang){
     const dict={...(UI_TEXT_TRANSLATIONS[lang]||{})};
@@ -9213,46 +9339,265 @@ initEcCreatePanel();
 
   const auroraOriginalTextNodes = new WeakMap();
   const auroraOriginalAttributes = new WeakMap();
+  const auroraAppliedTextTranslations = new WeakMap();
+  const auroraAppliedAttributeTranslations = new WeakMap();
+  const auroraAutoTranslationCache = new Map();
+  const auroraAutoTranslationPending = new Map();
+  const auroraAutoTranslationInFlight = new Map();
+  const auroraTranslationObjectIds = new WeakMap();
+  const auroraTranslationBlockedLanguages = new Set();
+  let auroraNextTranslationObjectId = 1;
+  let auroraTranslationFlushTimer = null;
+  let auroraTranslationFlushRunning = false;
+  let auroraLanguageObserver=null;
+  let auroraLanguageMutationScheduled=false;
+  let auroraLastAppliedLanguage='';
+
+  const AURORA_TRANSLATION_LANGUAGE_NAMES = {
+    en: 'English', ru: 'Russian', zh: 'Simplified Chinese', ja: 'Japanese'
+  };
+  function auroraTranslationCacheKey(lang, text) { return lang + '\u0000' + text; }
+  function auroraTranslationObjectId(obj) {
+    if (!auroraTranslationObjectIds.has(obj)) auroraTranslationObjectIds.set(obj, auroraNextTranslationObjectId++);
+    return auroraTranslationObjectIds.get(obj);
+  }
+  function auroraTranslationTargetKey(target) {
+    return target.type === 'text' ? 't:' + auroraTranslationObjectId(target.node) : 'a:' + auroraTranslationObjectId(target.el) + ':' + target.attr;
+  }
+  function auroraHasVietnameseMarks(text) {
+    return /[ăâđêôơưàáảãạằắẳẵặầấẩẫậèéẻẽẹềếểệìíỉĩịòóỏõọồốổỗộờớởợùúủũụừứửữựỳýỷỹỵ]/i.test(String(text || '').normalize('NFC'));
+  }
+  function auroraIsVisible(el) {
+    if (!el || !el.isConnected || el.closest('[hidden],[aria-hidden="true"],script,style,template,noscript')) return false;
+    try { return el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden'; }
+    catch (_) { return true; }
+  }
+  function auroraShouldUseAITranslation(text, el) {
+    const value=String(text||'').trim();
+    if (!value || value.length < 4 || value.length > 3500 || !auroraHasVietnameseMarks(value)) return false;
+    if (/^(https?:\/\/|www\.|[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|#[0-9a-f]{3,8}|\d+[.,]?\d*[%]?|[\W_]+)$/i.test(value)) return false;
+    if (el && el.closest('script,style,textarea,input,select,option,code,pre,kbd,samp,[contenteditable="true"],[data-no-translate],.no-translate,.katex,.math,.role-users-box,.profile-name,.profile-username,.acc-name,.acc-email,.nav-user,.user-display-name,.username,.user-name,.doc-name,.student-name,.ai-chat-message,.chat-message')) return false;
+    return true;
+  }
+  function auroraTranslateTargetNow(target, translation, lang) {
+    if (!target || !translation || (extConfig.language || 'vi') !== lang) return;
+    if (target.type === 'text') {
+      const node=target.node;
+      if (!node || !node.isConnected || auroraOriginalTextNodes.get(node) !== target.original) return;
+      // Do not overwrite content that the application has since re-rendered.
+      const current=String(node.nodeValue || '');
+      const orig=String(target.original || '');
+      const existingTranslated=orig.replace(target.source, translation);
+      if (current !== orig && current !== existingTranslated) return;
+      const value=orig.replace(target.source, translation);
+      if (node.nodeValue !== value) node.nodeValue=value;
+      auroraAppliedTextTranslations.set(node,value);
+      return;
+    }
+    const el=target.el;
+    if (!el || !el.isConnected) return;
+    const originals=auroraOriginalAttributes.get(el);
+    if (!originals || originals[target.attr] !== target.original) return;
+    const current=el.getAttribute(target.attr);
+    const expected=String(target.original || '').replace(target.source, translation);
+    if (current !== target.original && current !== expected) return;
+    if (current !== expected) el.setAttribute(target.attr, expected);
+    let applied=auroraAppliedAttributeTranslations.get(el);if(!applied){applied={};auroraAppliedAttributeTranslations.set(el,applied);}applied[target.attr]=expected;
+  }
+  function auroraQueueAITranslation(source, lang, target) {
+    source=String(source || '').trim();
+    if (!source || lang === 'vi' || auroraTranslationBlockedLanguages.has(lang)) return;
+    const key=auroraTranslationCacheKey(lang, source);
+    if (auroraAutoTranslationCache.has(key)) {
+      auroraTranslateTargetNow(target, auroraAutoTranslationCache.get(key), lang);
+      return;
+    }
+    const inFlight=auroraAutoTranslationInFlight.get(key);
+    if(inFlight){inFlight.targets.set(auroraTranslationTargetKey(target),target);return;}
+    let record=auroraAutoTranslationPending.get(key);
+    if (!record) { record={ key, source, lang, targets:new Map() }; auroraAutoTranslationPending.set(key,record); }
+    record.targets.set(auroraTranslationTargetKey(target),target);
+    if (!auroraTranslationFlushTimer && !auroraTranslationFlushRunning) {
+      auroraTranslationFlushTimer=setTimeout(()=>{auroraTranslationFlushTimer=null;auroraFlushAITranslations();},350);
+    }
+  }
+  function auroraParseTranslationArray(raw, expectedLength) {
+    let text=String(raw || '').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');
+    const first=text.indexOf('['), last=text.lastIndexOf(']');
+    if (first < 0 || last < first) throw new Error('AI translation response was not a JSON array');
+    const parsed=JSON.parse(text.slice(first,last+1));
+    if (!Array.isArray(parsed) || parsed.length !== expectedLength) throw new Error('AI translation response length mismatch');
+    return parsed.map(x => typeof x === 'string' ? x : (x && typeof x.translation === 'string' ? x.translation : ''));
+  }
+  async function auroraFlushAITranslations() {
+    if (auroraTranslationFlushRunning) return;
+    auroraTranslationFlushRunning=true;
+    try {
+      while (auroraAutoTranslationPending.size) {
+        const activeLang=extConfig.language||'vi';
+        [...auroraAutoTranslationPending.entries()].forEach(([k,v])=>{if(v.lang!==activeLang)auroraAutoTranslationPending.delete(k);});
+        if (!auroraAutoTranslationPending.size) break;
+        const first=auroraAutoTranslationPending.values().next().value;
+        const lang=first.lang;
+        if (auroraTranslationBlockedLanguages.has(lang)) {
+          [...auroraAutoTranslationPending.entries()].forEach(([k,v])=>{if(v.lang===lang)auroraAutoTranslationPending.delete(k);});
+          continue;
+        }
+        const batch=[]; let totalChars=0;
+        for (const [key, rec] of auroraAutoTranslationPending) {
+          if (rec.lang !== lang) continue;
+          if (batch.length >= 22 || (batch.length && totalChars + rec.source.length > 6500)) break;
+          batch.push(rec); totalChars += rec.source.length;
+        }
+        if (!batch.length) { auroraAutoTranslationPending.delete(first.key); continue; }
+        batch.forEach(rec=>{auroraAutoTranslationPending.delete(rec.key);auroraAutoTranslationInFlight.set(rec.key,rec);});
+        try {
+          if (typeof callAiApi !== 'function' || !cachedAiConfig) throw new Error('Chưa cấu hình API AI. Vào Cấu hình → Setup AI Model.');
+          const languageName=AURORA_TRANSLATION_LANGUAGE_NAMES[lang] || lang;
+          const input=batch.map(rec=>rec.source);
+          const systemPrompt='You are a professional UI and website translator. Translate Vietnamese text to '+languageName+'. Translate every item faithfully and naturally. Preserve facts, names, emojis, numbers, URLs, placeholders, code-like tokens and formatting intent. Do not summarize or answer the content. Return ONLY a valid JSON array of strings in the same order and exactly the same length as the input. Do not wrap it in markdown.';
+          const raw=await callAiApi([
+            {role:'system',content:systemPrompt},
+            {role:'user',content:JSON.stringify(input)}
+          ],{temperature:0.1,max_tokens:Math.min(7000,Math.max(1800,batch.length*180))});
+          const translations=auroraParseTranslationArray(raw,batch.length);
+          batch.forEach((rec,index)=>{
+            let translated=String(translations[index]||'').trim();
+            if (!translated) return;
+            // Safety guard: never replace source with a malformed giant response.
+            if (translated.length > Math.max(6000,rec.source.length*5)) return;
+            const cacheKey=auroraTranslationCacheKey(rec.lang,rec.source);
+            auroraAutoTranslationCache.set(cacheKey,translated);
+            rec.targets.forEach(target=>auroraTranslateTargetNow(target,translated,rec.lang));
+          });
+        } catch (error) {
+          console.warn('Aurora dynamic translation skipped:',error);
+          auroraTranslationBlockedLanguages.add(lang);
+          [...auroraAutoTranslationPending.entries()].forEach(([k,v])=>{if(v.lang===lang)auroraAutoTranslationPending.delete(k);});
+          if ((extConfig.language||'vi')===lang && !auroraTranslationBlockedLanguages.has(lang+'-warned')) {
+            auroraTranslationBlockedLanguages.add(lang+'-warned');
+            const message=/Chưa cấu hình API AI/i.test(String(error&&error.message||error))
+              ? 'Một số nội dung động chưa được dịch. Hãy cấu hình/bật API AI trong Cấu hình → Setup AI Model.'
+              : 'Không dịch được một số nội dung động do API AI đang lỗi. Nhãn có trong từ điển vẫn đã được dịch.';
+            if (typeof window.showToast === 'function') window.showToast(message,'warn');
+          }
+        }
+        batch.forEach(rec=>{if(auroraAutoTranslationInFlight.get(rec.key)===rec)auroraAutoTranslationInFlight.delete(rec.key);});
+      }
+    } finally {
+      auroraTranslationFlushRunning=false;
+      if (auroraAutoTranslationPending.size && !auroraTranslationFlushTimer) {
+        auroraTranslationFlushTimer=setTimeout(()=>{auroraTranslationFlushTimer=null;auroraFlushAITranslations();},600);
+      }
+    }
+  }
   function syncLanguageControls(){
     const lang=extConfig.language||'vi';
     const top=byId('auroraLanguage');if(top&&top.value!==lang)top.value=lang;
     const def=byId('auroraDefaultLanguage');if(def&&def.value!==lang)def.value=lang;
   }
-  let auroraLanguageMutationObserver=null;
-  let auroraLanguageMutationScheduled=false;
   function installLanguageMutationObserver(){
-    if(auroraLanguageMutationObserver||!document.body||typeof MutationObserver==='undefined')return;
-    auroraLanguageMutationObserver=new MutationObserver(records=>{
-      if(auroraLanguageMutationScheduled||!records.some(r=>r.addedNodes&&r.addedNodes.length))return;
+    if(auroraLanguageObserver||!document.body||typeof MutationObserver==='undefined')return;
+    auroraLanguageObserver=new MutationObserver(records=>{
+      const relevant=records.some(r=>
+        (r.type==='childList' && r.addedNodes && r.addedNodes.length) ||
+        (r.type==='attributes' && r.target && ((r.attributeName==='class' && (r.target.classList?.contains('view-section') || r.target.classList?.contains('collapse-body') || r.target.classList?.contains('guide-panel') || r.target.classList?.contains('student-docs-panel') || r.target.classList?.contains('guide-tab') || r.target.classList?.contains('student-docs-tab'))) || r.target.id==='homeView' || r.target.id==='navTabsContainer'))
+      );
+      if(auroraLanguageMutationScheduled||!relevant)return;
       auroraLanguageMutationScheduled=true;
-      requestAnimationFrame(()=>{auroraLanguageMutationScheduled=false;try{translateKnownTextNodes();}catch(e){console.warn('Aurora language refresh failed',e);}});
+      requestAnimationFrame(()=>{
+        auroraLanguageMutationScheduled=false;
+        try{translateKnownTextNodes();}catch(e){console.warn('Aurora language refresh failed',e);}
+      });
     });
-    auroraLanguageMutationObserver.observe(document.body,{subtree:true,childList:true});
+    auroraLanguageObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style','hidden']});
   }
-
   function translateKnownTextNodes(){
     const lang=extConfig.language||'vi';
     const dict=auroraLanguageDictionary(lang);
+    if (lang !== auroraLastAppliedLanguage) {
+      auroraTranslationBlockedLanguages.clear();
+      auroraLastAppliedLanguage=lang;
+    }
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
     let node;
     while((node=walker.nextNode())){
-      const parent=node.parentElement;if(!parent||parent.closest('script,style,textarea,[contenteditable="true"]'))continue;
-      if(!auroraOriginalTextNodes.has(node))auroraOriginalTextNodes.set(node,node.nodeValue);
-      const original=auroraOriginalTextNodes.get(node);const trimmed=String(original||'').trim();
+      const parent=node.parentElement;
+      if(!parent||parent.closest('script,style,textarea,[contenteditable="true"],template,noscript'))continue;
+      const currentText=String(node.nodeValue||'');
+      if(!auroraOriginalTextNodes.has(node))auroraOriginalTextNodes.set(node,currentText);
+      let original=String(auroraOriginalTextNodes.get(node)||'');
+      const applied=auroraAppliedTextTranslations.get(node);
+      // If the app updated a text node in place (counter/status/live label), treat that
+      // as new source text unless the current value is the translation this code applied.
+      if(applied!==undefined && currentText!==applied && currentText!==original){
+        original=currentText;auroraOriginalTextNodes.set(node,original);auroraAppliedTextTranslations.delete(node);
+      }else if(applied===undefined && currentText!==original){
+        original=currentText;auroraOriginalTextNodes.set(node,original);
+      }
+      const trimmed=original.trim();
       if(!trimmed)continue;
-      const translated=lang==='vi'?original:(Object.prototype.hasOwnProperty.call(dict,trimmed)?String(original).replace(trimmed,dict[trimmed]):original);
-      if(node.nodeValue!==translated)node.nodeValue=translated;
+      if(lang==='vi'){
+        if(applied!==undefined && currentText===applied){node.nodeValue=original;}
+        auroraAppliedTextTranslations.delete(node);
+        continue;
+      }
+      if(Object.prototype.hasOwnProperty.call(dict,trimmed)){
+        const translated=original.replace(trimmed,String(dict[trimmed]));
+        if(node.nodeValue!==translated)node.nodeValue=translated;
+        auroraAppliedTextTranslations.set(node,translated);
+        continue;
+      }
+      const key=auroraTranslationCacheKey(lang,trimmed);
+      if(auroraAutoTranslationCache.has(key)){
+        const translated=original.replace(trimmed,auroraAutoTranslationCache.get(key));
+        if(node.nodeValue!==translated)node.nodeValue=translated;
+        auroraAppliedTextTranslations.set(node,translated);
+        continue;
+      }
+      // Restore only text previously translated by this module. Never reset dynamic
+      // labels/numbers simply because they have no translation dictionary entry.
+      if(applied!==undefined && currentText===applied){node.nodeValue=original;}
+      auroraAppliedTextTranslations.delete(node);
+      // Keep hidden pages local until they are opened. When their view becomes active,
+      // the class observer triggers another scan and translates the visible content.
+      if(auroraShouldUseAITranslation(trimmed,parent) && auroraIsVisible(parent)){
+        auroraQueueAITranslation(trimmed,lang,{type:'text',node,source:trimmed,original});
+      }
     }
-    const attrNames=['placeholder','title','aria-label'];
-    document.querySelectorAll('input,button,select,textarea,[title],[aria-label]').forEach(el=>{
+    const attrNames=['placeholder','title','aria-label','alt'];
+    document.querySelectorAll('input,button,select,textarea,img,[title],[aria-label],[alt]').forEach(el=>{
       let originals=auroraOriginalAttributes.get(el);if(!originals){originals={};auroraOriginalAttributes.set(el,originals);}
+      let appliedAttrs=auroraAppliedAttributeTranslations.get(el);if(!appliedAttrs){appliedAttrs={};auroraAppliedAttributeTranslations.set(el,appliedAttrs);}
       attrNames.forEach(attr=>{
         if(!el.hasAttribute(attr))return;
-        if(!(attr in originals))originals[attr]=el.getAttribute(attr);
-        const origin=originals[attr];const trans=lang==='vi'?origin:(dict[String(origin||'').trim()]||origin);
-        if(el.getAttribute(attr)!==trans)el.setAttribute(attr,trans);
+        const current=el.getAttribute(attr);
+        if(!(attr in originals))originals[attr]=current;
+        else if(appliedAttrs[attr]!==undefined && current!==appliedAttrs[attr] && current!==originals[attr]){originals[attr]=current;delete appliedAttrs[attr];}
+        else if(appliedAttrs[attr]===undefined && current!==originals[attr]){originals[attr]=current;}
+        const origin=String(originals[attr]||'');const trimmed=origin.trim();
+        if(lang==='vi') {if(appliedAttrs[attr]!==undefined && current===appliedAttrs[attr])el.setAttribute(attr,origin);delete appliedAttrs[attr];return;}
+        if(Object.prototype.hasOwnProperty.call(dict,trimmed)) {
+          const trans=origin.replace(trimmed,String(dict[trimmed]));
+          if(el.getAttribute(attr)!==trans)el.setAttribute(attr,trans);
+          appliedAttrs[attr]=trans;return;
+        }
+        const key=auroraTranslationCacheKey(lang,trimmed);
+        if(auroraAutoTranslationCache.has(key)) {
+          const trans=origin.replace(trimmed,auroraAutoTranslationCache.get(key));
+          if(el.getAttribute(attr)!==trans)el.setAttribute(attr,trans);
+          appliedAttrs[attr]=trans;return;
+        }
+        if(appliedAttrs[attr]!==undefined && current===appliedAttrs[attr])el.setAttribute(attr,origin);
+        delete appliedAttrs[attr];
+        if(auroraShouldUseAITranslation(trimmed,el) && auroraIsVisible(el)) {
+          auroraQueueAITranslation(trimmed,lang,{type:'attr',el,attr,source:trimmed,original:origin});
+        }
       });
     });
+    const titleMap={en:'Aurora - Smart Online Testing System',ru:'Aurora — Умная система онлайн-тестирования',zh:'Aurora - 智能在线考试系统',ja:'Aurora - スマートオンライン試験システム'};
+    if (lang==='vi') document.title='Aurora - Hệ Thống Kiểm Tra Trực Tuyến';
+    else document.title=titleMap[lang]||document.title;
   }
   function applyLanguage() {
     const activeLang=extConfig.language||'vi'; document.documentElement.lang=activeLang==='zh'?'zh-CN':activeLang;
@@ -9264,13 +9609,14 @@ initEcCreatePanel();
       zh: { donate:'💙 支持 AURORA', ads:'📣 赞助与广告', presentations:'🎞️ 创建演示文稿', upgrades:'💎 升级套餐' },
       ja: { donate:'💙 AURORAを応援', ads:'📣 広告・スポンサー', presentations:'🎞️ プレゼンを作成', upgrades:'💎 プランをアップグレード' }
     };
-    const t = labels[extConfig.language] || {};
+    const t = labels[activeLang] || {};
     Object.entries({ donate:'💙 ỦNG HỘ AURORA', ads:'📣 NHÀ TÀI TRỢ & QUẢNG CÁO', presentations:'🎞️ TẠO BÀI THUYẾT TRÌNH', upgrades:'💎 CÁC GÓI NÂNG CẤP' }).forEach(([id, vi]) => {
       const h = byId('auroraTitle_' + id); if (h) h.textContent = t[id] || vi;
     });
-    translateKnownTextNodes();
     installLanguageMutationObserver();
+    translateKnownTextNodes();
   }
+  window.auroraRetryDynamicTranslations=function(){auroraTranslationBlockedLanguages.clear();translateKnownTextNodes();};
   function addExtensionPage(id, title, desc, content) {
     if (byId(id)) return byId(id);
     const section = createElement('div', { id, class: 'view-section aurora-ext-page' });
@@ -9306,7 +9652,7 @@ initEcCreatePanel();
       </div>
       <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🎛️ CẤU HÌNH ĐỊNH DẠNG MENU</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label>Kiểu menu</label><select id="auroraMenuMode"><option value="default">1. Kiểu menu mặc định (hiện tại)</option><option value="hamburger">2. Ba gạch — menu trượt từ trái</option><option value="modern">3. Tối ưu hiện đại (gọn, cuộn ngang)</option></select><label><input id="auroraMenuEmojiEnabled" type="checkbox" checked style="width:auto;margin-right:6px"> Hiển thị emoji trong menu</label><div id="auroraMenuEntryEditor"></div><hr style="margin:12px 0"><b>➕ Thêm mục menu</b><div class="aurora-ext-row"><div><label>Tên mục</label><input id="auroraCustomMenuName" placeholder="Ví dụ: Cộng đồng"></div><div><label>Emoji (có thể để trống)</label><input id="auroraCustomMenuEmoji" placeholder="🌐"></div></div><label>URL (tùy chọn)</label><input id="auroraCustomMenuURL" type="url" placeholder="https://example.com"><button type="button" class="btn btn-secondary aurora-ext-small-btn" onclick="auroraAddCustomMenu()">➕ Thêm mục</button><div id="auroraCustomMenuList" style="margin-top:8px"></div><div class="aurora-ext-row" style="margin-top:12px"><button type="button" class="btn btn-success" onclick="auroraSaveMenuSettings()">💾 Lưu menu</button><button type="button" class="btn btn-warning" onclick="auroraResetMenuSettings()">↩️ Reset mặc định</button></div></div></div>
       <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🔊 CẤU HÌNH ÂM THANH THEO SỰ KIỆN</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label><input id="auroraAudioEnabled" type="checkbox" checked style="width:auto;margin-right:6px"> Bật âm thanh sự kiện</label><div id="auroraAudioSettingsList"></div><p class="aurora-ext-note">Âm thanh được chia thành các phần nhỏ khi lưu. Việc tự phát âm thanh khi người dùng vừa vào web còn phụ thuộc quyền autoplay của trình duyệt; nếu bị chặn, âm thanh sẽ phát sau tương tác đầu tiên.</p></div></div>
-      <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🌐 NGÔN NGỮ HỆ THỐNG</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label>Ngôn ngữ mặc định cho giao diện menu</label><select id="auroraDefaultLanguage"><option value="vi">Tiếng Việt (mặc định)</option><option value="en">English (ENG)</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option></select><p class="aurora-ext-muted">Bộ chuyển ngôn ngữ này dịch thanh menu và các trang mới. Các chuỗi giao diện cũ chưa được dịch toàn bộ vẫn giữ tiếng Việt.</p><button class="btn btn-success aurora-ext-small-btn" onclick="auroraSaveLanguageSetting()">💾 Lưu ngôn ngữ</button></div></div>
+      <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🌐 NGÔN NGỮ HỆ THỐNG</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><label>Ngôn ngữ mặc định cho giao diện menu</label><select id="auroraDefaultLanguage"><option value="vi">Tiếng Việt (mặc định)</option><option value="en">English (ENG)</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option></select><p class="aurora-ext-muted">Dịch giao diện và nội dung đang hiển thị của các trang. Phần chữ động như giới thiệu, thông báo cập nhật sẽ được dịch bằng API AI đã cấu hình nếu chưa có trong từ điển. Nội dung được gửi tới nhà cung cấp AI hiện tại để dịch; nếu AI chưa được cấu hình hoặc gặp lỗi, phần chưa có bản dịch sẽ giữ nguyên.</p><button class="btn btn-success aurora-ext-small-btn" onclick="auroraSaveLanguageSetting()">💾 Lưu ngôn ngữ</button></div></div>
       <div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>ℹ️ LƯU Ý TRIỂN KHAI / GIỚI HẠN BACKEND</span><span class="collapse-arrow">▼</span></div><div class="collapse-body collapsed"><div class="aurora-ext-card"><p class="aurora-ext-muted">HTML này dùng Firebase Realtime Database hiện hữu. Tệp lớn được chia chunk để tránh một lần ghi quá lớn, nhưng tổng dung lượng vẫn bị giới hạn bởi quota, quyền truy cập và chính sách của Firebase. Muốn triển khai sản phẩm thực tế nên chuyển tệp lớn sang Firebase Storage hoặc object storage; giới hạn upload phía giao diện không đồng nghĩa lưu trữ vô hạn.</p></div></div>`;
     panel.appendChild(root);
     if (typeof window.initCollapseSections === 'function') window.initCollapseSections();
