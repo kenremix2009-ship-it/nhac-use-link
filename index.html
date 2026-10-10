@@ -1168,6 +1168,113 @@ body[data-theme="extra"] .extra-tilt-active{transform:perspective(1100px) rotate
 body[data-theme="extra"] .extra-theme-tile{border:1px solid rgba(255,255,255,.78);box-shadow:0 8px 24px rgba(57,87,135,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 @media (prefers-reduced-motion:reduce){body[data-theme="extra"]::before,body[data-theme="extra"] .navbar::after{animation:none!important}body[data-theme="extra"] *,body[data-theme="extra"] *::before,body[data-theme="extra"] *::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
 
+
+
+/* ============================================================
+   GACHA GLASS THEME + HOME MEDIA SHOWCASE
+   Inspired by the provided layout reference; original Aurora UI/functions remain intact.
+   ============================================================ */
+.aurora-showcase{--as-pink:#f25b8d;--as-violet:#9371f7;position:relative;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(22px,4vw,62px);align-items:center;isolation:isolate;overflow:hidden;margin:0 0 22px;padding:clamp(22px,4vw,48px);border-radius:28px;border:1px solid rgba(100,129,190,.19);background:radial-gradient(ellipse at 86% 18%,rgba(174,191,255,.32),transparent 40%),linear-gradient(125deg,#f8fbff,#f8f4ff 58%,#edf4ff);box-shadow:0 18px 55px rgba(35,50,92,.11)}
+.aurora-showcase::before,.aurora-showcase::after{content:"";position:absolute;pointer-events:none;z-index:-1;border-radius:50%;filter:blur(2px)}
+.aurora-showcase::before{width:300px;height:300px;right:33%;top:-230px;background:rgba(149,133,255,.14)}
+.aurora-showcase::after{width:220px;height:220px;left:-140px;bottom:-160px;background:rgba(255,105,154,.12)}
+.aurora-showcase-copy{position:relative;z-index:2;min-width:0}
+.aurora-showcase-kicker{display:inline-flex;align-items:center;gap:9px;max-width:100%;padding:8px 13px;border:1px solid rgba(226,76,130,.28);border-radius:999px;background:rgba(255,255,255,.55);color:#b73568;font-size:11px;font-weight:900;letter-spacing:.08em;line-height:1.4}
+.aurora-showcase-kicker-dot{width:7px;height:7px;border-radius:50%;background:#ef548b;box-shadow:0 0 0 4px rgba(239,84,139,.13);flex:none}
+.aurora-showcase-copy h1{font-size:clamp(31px,4.5vw,58px);font-weight:950;letter-spacing:-.045em;line-height:1.04;margin:22px 0 15px;color:#1c1a2a;max-width:690px}
+.aurora-showcase-copy p{max-width:550px;color:#706b7e;font-size:clamp(14px,1.35vw,17px);font-weight:500;line-height:1.8;margin:0}
+.aurora-showcase-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.aurora-showcase-actions button{width:auto!important;border-radius:12px;padding:13px 18px;font-size:13px;font-weight:850;display:inline-flex;align-items:center;justify-content:center;gap:16px;cursor:pointer;transition:transform .22s ease,box-shadow .22s ease,background .22s ease}
+.aurora-showcase-actions button:hover{transform:translateY(-3px)}
+.aurora-showcase-primary{color:#fff;border:1px solid transparent;background:linear-gradient(120deg,#f05288,#c54dd1);box-shadow:0 10px 24px rgba(222,69,137,.23)}
+.aurora-showcase-primary:hover{box-shadow:0 14px 30px rgba(222,69,137,.32)}
+.aurora-showcase-secondary{color:#302b3d;border:1px solid rgba(100,91,126,.18);background:rgba(255,255,255,.54);box-shadow:0 6px 20px rgba(28,22,58,.05)}
+.aurora-showcase-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.aurora-showcase-pills span{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid rgba(124,113,153,.18);border-radius:12px;background:rgba(255,255,255,.46);color:#575166;font-size:11px;font-weight:800}
+.aurora-showcase-media{position:relative;min-width:0;aspect-ratio:1.46/1;max-height:455px;min-height:240px;border-radius:25px;overflow:hidden;background:linear-gradient(135deg,#202540,#716ca7 50%,#f58faf);box-shadow:0 24px 60px rgba(25,20,50,.22);isolation:isolate}
+.aurora-showcase-media-stage{position:absolute;inset:0;overflow:hidden;background:linear-gradient(145deg,#1e233e,#7a79b6 56%,#f08fb2)}
+.aurora-showcase-media-stage>img,.aurora-showcase-media-stage>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:2;background:#151321}
+.aurora-showcase-media-stage>img{animation:auroraMediaFade .45s ease-out both}
+@keyframes auroraMediaFade{from{opacity:.35;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}
+.aurora-showcase-media-shade{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(9,9,22,.02) 35%,rgba(9,9,22,.64) 100%)}
+.aurora-showcase-caption{position:absolute;left:20px;right:20px;bottom:61px;z-index:4;color:#fff;font-size:clamp(12px,1.3vw,16px);font-weight:850;text-shadow:0 2px 10px rgba(0,0,0,.34);pointer-events:none}
+.aurora-showcase-media-controls{position:absolute;left:12px;right:12px;bottom:10px;z-index:5;display:flex;align-items:center;gap:8px;min-height:34px}
+.aurora-showcase-arrow{width:31px;height:31px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.27);background:rgba(14,12,27,.44);color:#fff;font-size:23px;line-height:20px;cursor:pointer;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.aurora-showcase-dots{display:flex;gap:5px;align-items:center;justify-content:center;flex:1;min-width:0}
+.aurora-showcase-dot{width:7px;height:7px;border:0;padding:0;border-radius:99px;background:rgba(255,255,255,.5);cursor:pointer;transition:width .2s ease,background .2s ease}
+.aurora-showcase-dot.active{width:21px;background:#ff5b91}
+.aurora-showcase-counter{font-size:10px;font-weight:900;letter-spacing:.06em;color:#fff;white-space:nowrap}
+.aurora-showcase-config-hint{position:absolute;right:14px;top:14px;z-index:5;max-width:70%;font-size:9px;line-height:1.35;color:rgba(255,255,255,.8);background:rgba(12,10,24,.22);padding:5px 8px;border-radius:999px;backdrop-filter:blur(8px);display:none}
+.aurora-showcase-media.is-placeholder .aurora-showcase-config-hint{display:block}
+.aurora-showcase-art{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 20% 18%,rgba(255,255,255,.5),transparent 30%),linear-gradient(130deg,#6e9dbb 0%,#7d78bd 48%,#f293b3 100%)}
+.aurora-showcase-art::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 28%,rgba(255,255,255,.16) 45%,transparent 58%);transform:translateX(-100%);animation:auroraShowcaseSheen 7s ease-in-out infinite}
+@keyframes auroraShowcaseSheen{0%,35%{transform:translateX(-110%)}75%,100%{transform:translateX(120%)}}
+.aurora-art-orb{position:absolute;border-radius:50%;filter:blur(.3px);opacity:.68;animation:auroraOrbFloat 8s ease-in-out infinite alternate}
+.aurora-art-orb-a{width:48%;aspect-ratio:1;right:-4%;top:-20%;background:radial-gradient(circle at 32% 30%,#fff4f8,rgba(238,145,191,.14) 64%,transparent 70%);box-shadow:inset -16px -20px 45px rgba(44,38,93,.15)}
+.aurora-art-orb-b{width:35%;aspect-ratio:1;left:-9%;bottom:-22%;background:radial-gradient(circle at 60% 30%,rgba(202,242,255,.95),rgba(76,113,178,.1) 67%,transparent 72%);animation-delay:-4s}
+@keyframes auroraOrbFloat{from{transform:translate3d(0,-7px,0) rotate(-5deg)}to{transform:translate3d(-13px,16px,0) rotate(7deg)}}
+.aurora-art-rings{position:absolute;width:68%;aspect-ratio:1;right:2%;top:2%;border:1px solid rgba(255,255,255,.27);border-radius:50%;transform:rotateX(67deg) rotateZ(-24deg);box-shadow:0 0 0 22px rgba(255,255,255,.055),0 0 0 48px rgba(255,255,255,.045),0 0 0 74px rgba(255,255,255,.035)}
+.aurora-art-main-card{position:absolute;left:14%;top:17%;width:56%;min-height:62%;padding:clamp(16px,2vw,28px);border:1px solid rgba(255,255,255,.52);border-radius:18px;background:linear-gradient(140deg,rgba(255,255,255,.3),rgba(255,255,255,.07));color:#fff;box-shadow:0 25px 55px rgba(29,31,78,.25);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);transform:rotate(-5deg);animation:auroraCardFloat 6s ease-in-out infinite alternate}
+@keyframes auroraCardFloat{from{translate:0 -4px;rotate:-1deg}to{translate:0 7px;rotate:1deg}}
+.aurora-art-symbol{font-size:clamp(28px,4vw,50px);line-height:1;margin-bottom:14px;text-shadow:0 4px 25px rgba(255,255,255,.45)}
+.aurora-art-mini-label{font-size:clamp(7px,.8vw,10px);font-weight:900;letter-spacing:.21em;opacity:.86;margin-bottom:9px}
+.aurora-art-main-card strong{display:block;font-size:clamp(25px,4.2vw,51px);line-height:.92;font-weight:950;letter-spacing:-.06em;text-shadow:0 6px 26px rgba(31,30,79,.15)}
+.aurora-art-main-card p{font-size:clamp(8px,.95vw,11px);line-height:1.5;opacity:.92;margin-top:15px}
+.aurora-art-float{position:absolute;z-index:2;display:flex;align-items:center;gap:9px;max-width:53%;padding:10px 13px;border:1px solid rgba(255,255,255,.5);border-radius:13px;background:rgba(250,248,255,.83);color:#363049;box-shadow:0 14px 32px rgba(28,26,67,.15);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:auroraFloatTag 5s ease-in-out infinite alternate}
+.aurora-art-float>span{display:grid;place-items:center;width:29px;height:29px;flex:none;border-radius:9px;color:#fff;background:linear-gradient(135deg,#f25b8d,#9271f7);font-weight:900}
+.aurora-art-float b{display:block;font-size:clamp(8px,.9vw,11px);white-space:nowrap}
+.aurora-art-float small{display:block;font-size:clamp(7px,.75vw,9px);white-space:nowrap;opacity:.7;margin-top:3px}
+.aurora-art-float-top{right:5%;top:14%}
+.aurora-art-float-bottom{left:9%;bottom:10%;animation-delay:-2s}
+@keyframes auroraFloatTag{from{transform:translateY(3px)}to{transform:translateY(-7px)}}
+.aurora-showcase-admin{margin:0 0 18px;padding:16px;border:1px solid #e0d6f1;border-radius:15px;background:linear-gradient(135deg,#faf7ff,#f3f7ff)}
+.aurora-showcase-admin h3{font-size:15px;color:#6a3a99;margin-bottom:6px}
+.aurora-showcase-admin .aurora-field-help{font-size:12px;color:#707080;line-height:1.55;margin:5px 0 12px}
+.aurora-showcase-admin textarea,.aurora-showcase-admin input[type="text"],.aurora-showcase-admin input[type="url"]{width:100%;border:1px solid #d8d1e4;border-radius:9px;padding:10px;background:#fff;color:#242133;margin:5px 0 10px}
+.aurora-showcase-admin .aurora-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.aurora-showcase-admin .aurora-admin-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.aurora-showcase-admin .aurora-upload-status{font-size:12px;color:#65527f;min-height:18px;margin-top:6px}
+body[data-theme="gacha"]{background:#0c0b14!important;color:#f4f1fb!important;color-scheme:dark}
+body[data-theme="gacha"]::before{content:"";position:fixed;inset:-15%;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 12% 8%,rgba(173,75,147,.24),transparent 35%),radial-gradient(ellipse at 82% 22%,rgba(82,86,170,.25),transparent 36%),radial-gradient(ellipse at 55% 92%,rgba(190,75,117,.12),transparent 34%),linear-gradient(145deg,#100e19,#0a0b13 62%,#120d1a);animation:gachaAmbientMove 18s ease-in-out infinite alternate}
+@keyframes gachaAmbientMove{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1%,1%,0) scale(1.04)}}
+body[data-theme="gacha"] .navbar{position:sticky;top:0;z-index:1000;background:rgba(13,11,21,.79)!important;border-bottom:1px solid rgba(255,255,255,.09);box-shadow:0 10px 36px rgba(0,0,0,.15);backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%)}
+body[data-theme="gacha"] .logo{color:#fff!important;text-shadow:0 0 24px rgba(243,85,147,.28)}
+body[data-theme="gacha"] .nav-tabs button{color:#d9d3e7;border:1px solid transparent;border-radius:12px;padding:9px 13px;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+body[data-theme="gacha"] .nav-tabs button.active,body[data-theme="gacha"] .nav-tabs button:hover{color:#ff82ac;background:rgba(243,81,143,.12);border-color:rgba(243,81,143,.3);transform:translateY(-1px)}
+body[data-theme="gacha"] .container{max-width:1380px}
+body[data-theme="gacha"] .card,body[data-theme="gacha"] .home-card,body[data-theme="gacha"] .exam-right,body[data-theme="gacha"] .profile-box,body[data-theme="gacha"] .modal-box,body[data-theme="gacha"] .doc-modal-box,body[data-theme="gacha"] .item-detail-box,body[data-theme="gacha"] .role-editor-box{background:rgba(25,22,37,.78)!important;color:#f5f0ff!important;border:1px solid rgba(255,255,255,.09);box-shadow:0 14px 40px rgba(0,0,0,.22);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+body[data-theme="gacha"] .home-card h3,body[data-theme="gacha"] .section-title,body[data-theme="gacha"] .profile-name,body[data-theme="gacha"] .profile-section label,body[data-theme="gacha"] .home-content{color:#eee7fb}
+body[data-theme="gacha"] .section-title{background:linear-gradient(100deg,rgba(243,81,143,.14),rgba(151,108,244,.12))!important;border:1px solid rgba(243,81,143,.18);color:#ff9dbb!important}
+body[data-theme="gacha"] .btn{background:linear-gradient(120deg,#f0518a,#b04fd0);color:#fff;border:1px solid rgba(255,255,255,.09);box-shadow:0 7px 22px rgba(218,62,132,.16)}
+body[data-theme="gacha"] .btn:hover{background:linear-gradient(120deg,#ff689d,#bd61de);box-shadow:0 10px 25px rgba(218,62,132,.25)}
+body[data-theme="gacha"] .btn-secondary{background:rgba(255,255,255,.08)!important;color:#eee8fb!important;border-color:rgba(255,255,255,.13)!important}
+body[data-theme="gacha"] input[type="text"],body[data-theme="gacha"] input[type="number"],body[data-theme="gacha"] input[type="password"],body[data-theme="gacha"] input[type="email"],body[data-theme="gacha"] input[type="datetime-local"],body[data-theme="gacha"] input[type="url"],body[data-theme="gacha"] input[type="date"],body[data-theme="gacha"] input[type="time"],body[data-theme="gacha"] select,body[data-theme="gacha"] textarea{background:rgba(17,15,27,.86);color:#f4eefc;border-color:rgba(255,255,255,.14)}
+body[data-theme="gacha"] input::placeholder,body[data-theme="gacha"] textarea::placeholder{color:#a49bb5}
+body[data-theme="gacha"] label{color:#e5ddef}
+body[data-theme="gacha"] .home-stat,body[data-theme="gacha"] .home-cd-cell{background:rgba(26,22,39,.7)!important;border-color:rgba(255,255,255,.11)!important;color:#eee8fb}
+body[data-theme="gacha"] .home-cd-title,body[data-theme="gacha"] .home-cd-num{color:#ff8cb2!important}
+body[data-theme="gacha"] .home-cd-subtitle,body[data-theme="gacha"] .home-cd-lbl{color:#c7bdd5!important}
+body[data-theme="gacha"] .home-hero{display:none!important}
+body[data-theme="gacha"] .aurora-showcase{border:1px solid rgba(255,126,175,.23);background:radial-gradient(ellipse at 10% 6%,rgba(202,73,137,.16),transparent 34%),radial-gradient(ellipse at 92% 20%,rgba(98,93,185,.2),transparent 42%),linear-gradient(125deg,rgba(23,19,34,.96),rgba(17,17,29,.91));box-shadow:0 24px 70px rgba(0,0,0,.3);color:#f8f1fc}
+body[data-theme="gacha"] .aurora-showcase::before{background:rgba(238,90,154,.09)}
+body[data-theme="gacha"] .aurora-showcase-kicker{background:rgba(237,80,144,.09);border-color:rgba(245,96,157,.34);color:#ff8bb3}
+body[data-theme="gacha"] .aurora-showcase-copy h1{color:#fff8fd;text-shadow:0 8px 35px rgba(239,77,145,.1)}
+body[data-theme="gacha"] .aurora-showcase-copy p{color:#c0b6cd}
+body[data-theme="gacha"] .aurora-showcase-pills span{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.09);color:#d9cee4}
+body[data-theme="gacha"] .aurora-showcase-secondary{color:#f0e8f5;border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.055)}
+body[data-theme="gacha"] .aurora-showcase-media{box-shadow:0 28px 65px rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.13)}
+body[data-theme="gacha"] .aurora-showcase-admin{background:linear-gradient(130deg,#191323,#20182b);border-color:rgba(245,97,158,.26);color:#f7eef9}
+body[data-theme="gacha"] .aurora-showcase-admin h3{color:#ff91b9}
+body[data-theme="gacha"] .aurora-showcase-admin .aurora-field-help{color:#bdb0ca}
+body[data-theme="gacha"] .aurora-showcase-admin textarea,body[data-theme="gacha"] .aurora-showcase-admin input[type="text"],body[data-theme="gacha"] .aurora-showcase-admin input[type="url"]{background:#110e1a;color:#f7efff;border-color:#45334f}
+body[data-theme="gacha"] table{color:#ece4f5}
+body[data-theme="gacha"] th{background:#221a2e;color:#f8efff}
+body[data-theme="gacha"] td{border-color:rgba(255,255,255,.12)}
+body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+@media(max-width:850px){.aurora-showcase{grid-template-columns:1fr;gap:20px;padding:22px}.aurora-showcase-copy h1{margin-top:15px}.aurora-showcase-media{aspect-ratio:1.55/1;min-height:230px}.aurora-art-main-card{left:12%;top:15%;width:61%}.aurora-showcase-pills{gap:6px}}
+@media(max-width:520px){.aurora-showcase{border-radius:20px;padding:18px;margin-bottom:16px}.aurora-showcase-media{border-radius:18px;min-height:205px}.aurora-showcase-actions{gap:8px}.aurora-showcase-actions button{flex:1;padding:12px 10px;font-size:12px}.aurora-showcase-kicker{font-size:9px}.aurora-art-float{padding:7px 8px;gap:6px}.aurora-art-float>span{width:24px;height:24px}.aurora-art-float-top{right:3%;top:8%}.aurora-art-float-bottom{left:4%;bottom:7%}.aurora-showcase-admin .aurora-admin-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.aurora-showcase-art::before,.aurora-art-orb,.aurora-art-main-card,.aurora-art-float,body[data-theme="gacha"]::before{animation:none!important}.aurora-showcase-actions button,.aurora-showcase-dot{transition:none!important}}
+
 </style>
 <script type="importmap">
 {
@@ -1460,6 +1567,41 @@ body[data-theme="extra"] .extra-theme-tile{border:1px solid rgba(255,255,255,.78
 <div class="container">
 
 <div id="homeView" class="view-section active">
+<div id="auroraHomeShowcase" class="aurora-showcase" aria-label="Aurora media showcase">
+  <div class="aurora-showcase-copy">
+    <div class="aurora-showcase-kicker"><span class="aurora-showcase-kicker-dot"></span><span id="auroraShowcaseBadgeText">HỌC TẬP THÔNG MINH · AURORA</span></div>
+    <h1 id="auroraShowcaseTitle">Khám phá tri thức theo cách của bạn.</h1>
+    <p id="auroraShowcaseDescription">Thi trực tuyến, tài liệu học tập và trợ lý AI — tất cả trong một không gian học tập linh hoạt.</p>
+    <div class="aurora-showcase-actions">
+      <button type="button" class="aurora-showcase-primary" onclick="switchView('studentLoginView')">✦ Vào học ngay <span aria-hidden="true">↗</span></button>
+      <button type="button" class="aurora-showcase-secondary" onclick="switchView('guideView')">Xem hướng dẫn <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="aurora-showcase-pills" aria-label="Tính năng Aurora">
+      <span>▣ Thi trực tuyến</span><span>◇ Tài liệu học tập</span><span>✧ Trợ lý AI</span><span>↗ Theo dõi tiến độ</span>
+    </div>
+  </div>
+  <div class="aurora-showcase-media" id="auroraShowcaseMedia" aria-label="Video hoặc GIF giới thiệu">
+    <div class="aurora-showcase-media-stage" id="auroraShowcaseMediaStage">
+      <div class="aurora-showcase-art" aria-hidden="true">
+        <div class="aurora-art-orb aurora-art-orb-a"></div><div class="aurora-art-orb aurora-art-orb-b"></div>
+        <div class="aurora-art-rings"></div>
+        <div class="aurora-art-main-card"><div class="aurora-art-symbol">✦</div><div class="aurora-art-mini-label">AURORA LEARNING SPACE</div><strong>LEARN<br>BEYOND.</strong><p>Học tập · Khám phá · Phát triển</p></div>
+        <div class="aurora-art-float aurora-art-float-top"><span>✧</span><div><b>AI Assistant</b><small>Luôn sẵn sàng đồng hành</small></div></div>
+        <div class="aurora-art-float aurora-art-float-bottom"><span>✓</span><div><b>Tiến bộ mỗi ngày</b><small>Small steps, big changes</small></div></div>
+      </div>
+    </div>
+    <div class="aurora-showcase-media-shade"></div>
+    <div class="aurora-showcase-caption" id="auroraShowcaseCaption">Không gian học tập của riêng bạn</div>
+    <div class="aurora-showcase-media-controls">
+      <button type="button" class="aurora-showcase-arrow" aria-label="Slide trước" onclick="auroraShowcaseStep(-1)">‹</button>
+      <div class="aurora-showcase-dots" id="auroraShowcaseDots" aria-label="Chọn video/GIF"></div>
+      <span class="aurora-showcase-counter" id="auroraShowcaseCounter">01 / 01</span>
+      <button type="button" class="aurora-showcase-arrow" aria-label="Slide tiếp theo" onclick="auroraShowcaseStep(1)">›</button>
+    </div>
+    <div class="aurora-showcase-config-hint" id="auroraShowcaseConfigHint">Quản trị viên có thể thêm video/GIF trong Cấu hình.</div>
+  </div>
+</div>
+
 
   <div id="homeCountdownSection">
     <div class="home-cd-header">
@@ -1991,6 +2133,31 @@ body[data-theme="extra"] .extra-theme-tile{border:1px solid rgba(255,255,255,.78
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
   <div style="font-weight:900;color:#1877f2;font-size:16px">🔧 Bảng Điều Khiển Cấu Hình</div>
   <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="lockConfigPanel()">🔒 Khóa Lại</button>
+</div>
+
+<div class="aurora-showcase-admin" id="auroraShowcaseAdminPanel">
+  <h3>🎬 HERO VIDEO / GIF · Giao diện trang chủ</h3>
+  <div class="aurora-field-help">Thêm tối đa 8 mục media công khai. Mỗi dòng theo dạng <b>image|URL|Chú thích</b> hoặc <b>video|URL|Chú thích</b>. Có thể chỉ nhập URL; GIF/ảnh tự nhận diện, video nên là MP4/WebM trực tiếp. Cấu hình lưu chung trên Firebase để người dùng khác cũng thấy. Không dán link trang xem video; hãy dùng URL file media trực tiếp.</div>
+  <div class="aurora-admin-grid">
+    <div><label for="auroraShowcaseAdminBadge">Nhãn nhỏ</label><input id="auroraShowcaseAdminBadge" type="text" value="HỌC TẬP THÔNG MINH · AURORA" maxlength="120"></div>
+    <div><label for="auroraShowcaseAdminTitle">Tiêu đề hero</label><input id="auroraShowcaseAdminTitle" type="text" value="Khám phá tri thức theo cách của bạn." maxlength="180"></div>
+  </div>
+  <label for="auroraShowcaseAdminDescription">Mô tả</label>
+  <textarea id="auroraShowcaseAdminDescription" rows="2" maxlength="500">Thi trực tuyến, tài liệu học tập và trợ lý AI — tất cả trong một không gian học tập linh hoạt.</textarea>
+  <label for="auroraShowcaseAdminMedia">Danh sách GIF / ảnh / video (mỗi dòng một mục)</label>
+  <textarea id="auroraShowcaseAdminMedia" rows="5" placeholder="image|https://example.com/aurora.gif|Một không gian học tập mới&#10;video|https://example.com/intro.mp4|Khám phá Aurora"></textarea>
+  <div class="aurora-admin-actions">
+    <button type="button" class="btn btn-success" style="width:auto" onclick="saveAuroraShowcaseConfig()">💾 Lưu cấu hình showcase</button>
+    <button type="button" class="btn btn-secondary" style="width:auto" onclick="previewAuroraShowcaseConfig()">👁️ Xem trước</button>
+    <button type="button" class="btn btn-secondary" style="width:auto" onclick="resetAuroraShowcaseConfig()">↺ Khôi phục mặc định</button>
+  </div>
+  <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(120,100,160,.18)">
+    <label for="auroraShowcaseUpload">Hoặc tải nhiều file trực tiếp lên Firebase Storage</label>
+    <input id="auroraShowcaseUpload" type="file" multiple accept="image/gif,image/*,video/mp4,video/webm,video/ogg" style="width:100%;margin:6px 0 8px">
+    <div class="aurora-field-help">Hỗ trợ GIF/ảnh/MP4/WebM/OGG. Giới hạn 50 MB mỗi file, tối đa 8 media. Tính năng tải file cần Firebase Storage được bật và quy tắc lưu trữ cho phép quản trị viên ghi file.</div>
+    <button type="button" class="btn btn-secondary" style="width:auto" onclick="uploadAuroraShowcaseFiles()">⬆️ Tải media lên và thêm vào danh sách</button>
+    <div id="auroraShowcaseUploadStatus" class="aurora-upload-status" role="status"></div>
+  </div>
 </div>
 
 <div class="collapse-header" onclick="toggleCollapseSection(this)" data-collapsed="false"><span>🖼️ LOGO WEBSITE (NAVBAR + FAVICON)</span><span class="collapse-arrow">▼</span></div>
@@ -2757,6 +2924,7 @@ body[data-theme="extra"] .extra-theme-tile{border:1px solid rgba(255,255,255,.78
 <div onclick="applyThemeFromSupreme('sky')" style="cursor:pointer;padding:14px;border-radius:10px;text-align:center;background:linear-gradient(180deg,#87ceeb,#fff);border:2px solid #4a9eff;font-weight:bold;color:#333">☁️ Sky</div>
 <div onclick="applyThemeFromSupreme('galaxy')" style="cursor:pointer;padding:14px;border-radius:10px;text-align:center;background:linear-gradient(135deg,#050510,#330066);border:2px solid #a55eea;font-weight:bold;color:#e6e6ff;box-shadow:0 0 15px rgba(165,94,234,.5)">🌌 Galaxy</div>
 <div class="extra-theme-tile" onclick="applyThemeFromSupreme('extra')" style="cursor:pointer;padding:14px;border-radius:12px;text-align:center;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(160,218,255,.72),rgba(202,170,255,.7));border:2px solid #86bcff;font-weight:900;color:#244e83;box-shadow:0 0 18px rgba(112,170,255,.28)">💎 Extra<br><span style="font-size:10px;font-weight:600">Liquid Glass · 3D · Gyro</span></div>
+<div class="gacha-theme-tile" onclick="applyThemeFromSupreme('gacha')" style="cursor:pointer;padding:14px;border-radius:12px;text-align:center;background:linear-gradient(135deg,#170e20,#41223b,#17182c);border:2px solid #ff5c91;font-weight:900;color:#fff0f6;box-shadow:0 0 18px rgba(255,76,143,.25)">🌸 Gacha Glass<br><span style="font-size:10px;font-weight:600">Dark · Glass · Media Hero</span></div>
 </div>
 </div>
 </div>
@@ -5649,7 +5817,7 @@ function applyThemeFromSupreme(theme){
 }
 function applyTheme(theme,saveLocal){
   if(!theme)theme='light';
-  const supportedThemes=['light','dark','glow','sunset','sky','galaxy','extra'];
+  const supportedThemes=['light','dark','glow','sunset','sky','galaxy','extra','gacha'];
   if(!supportedThemes.includes(theme))theme='light';
   document.body.setAttribute('data-theme',theme);
   if(theme==='extra')installExtraThemePointerMotion();
@@ -10546,6 +10714,182 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   window.AuroraVRMViewer=null;
   if(typeof window.__auroraResolveVRMViewer==='function')window.__auroraResolveVRMViewer(null);
 }).finally(()=>{});
+</script>
+
+<script>
+/* ============================================================
+   AURORA HOME SHOWCASE / MULTI-MEDIA SLIDER / GACHA GLASS THEME
+   This extension only decorates the existing homepage and adds config controls.
+   ============================================================ */
+(function(){
+  'use strict';
+  const DEFAULT_CFG={enabled:true,badge:'HỌC TẬP THÔNG MINH · AURORA',title:'Khám phá tri thức theo cách của bạn.',description:'Thi trực tuyến, tài liệu học tập và trợ lý AI — tất cả trong một không gian học tập linh hoạt.',mediaItems:[],updatedAt:0};
+  const LOCAL_KEY='aurora_home_showcase_config_v1';
+  let cfg={...DEFAULT_CFG,mediaItems:[]};
+  let activeIndex=0, autoplayTimer=null, remoteListener=null, initialized=false, dbReady=false;
+  const $=id=>document.getElementById(id);
+  const cloneDefault=()=>JSON.parse(JSON.stringify(DEFAULT_CFG));
+  const safeText=(el,value)=>{if(el)el.textContent=String(value==null?'':value);};
+  const escapeHtmlLocal=value=>String(value==null?'':value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  function normalizeItems(items){
+    if(!Array.isArray(items))return [];
+    return items.slice(0,8).map((item,index)=>{
+      if(typeof item==='string')item={url:item};
+      const url=String(item&&item.url||'').trim();
+      const type=String(item&&item.type||'auto').toLowerCase();
+      const caption=String(item&&item.caption||'').trim().slice(0,160);
+      if(!/^https?:\/\//i.test(url))return null;
+      let kind=type;
+      if(!['image','video'].includes(kind))kind=/\.(mp4|webm|ogg)(?:$|[?#])/i.test(url)?'video':'image';
+      return {url,type:kind,caption,id:String(item&&item.id||('media_'+index))};
+    }).filter(Boolean);
+  }
+  function parseMediaLines(raw){
+    const lines=String(raw||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+    const out=[];
+    for(const line of lines){
+      if(out.length>=8)break;
+      const parts=line.split('|').map(x=>x.trim());
+      let type='auto',url='',caption='';
+      if(parts.length>=2&&/^(image|video|auto)$/i.test(parts[0])){type=parts[0].toLowerCase();url=parts[1];caption=parts.slice(2).join('|');}
+      else{url=parts[0];caption=parts.slice(1).join('|');}
+      if(!/^https?:\/\//i.test(url))continue;
+      out.push({url,type,caption});
+    }
+    return normalizeItems(out);
+  }
+  function mediaLines(items){return normalizeItems(items).map(x=>`${x.type}|${x.url}${x.caption?'|'+x.caption:''}`).join('\n');}
+  function getLocal(){try{const raw=localStorage.getItem(LOCAL_KEY);if(raw){const d=JSON.parse(raw);return {...cloneDefault(),...d,mediaItems:normalizeItems(d.mediaItems)}}}catch(e){}return null;}
+  function setLocal(value){try{localStorage.setItem(LOCAL_KEY,JSON.stringify(value));}catch(e){}}
+  function fillSettings(){
+    const badge=$('auroraShowcaseAdminBadge'),title=$('auroraShowcaseAdminTitle'),desc=$('auroraShowcaseAdminDescription'),media=$('auroraShowcaseAdminMedia');
+    if(badge&&document.activeElement!==badge)badge.value=cfg.badge||DEFAULT_CFG.badge;
+    if(title&&document.activeElement!==title)title.value=cfg.title||DEFAULT_CFG.title;
+    if(desc&&document.activeElement!==desc)desc.value=cfg.description||DEFAULT_CFG.description;
+    if(media&&document.activeElement!==media)media.value=mediaLines(cfg.mediaItems||[]);
+  }
+  function getSettingsFromForm(){return {...cfg,enabled:true,badge:($('auroraShowcaseAdminBadge')?.value||DEFAULT_CFG.badge).trim().slice(0,120),title:($('auroraShowcaseAdminTitle')?.value||DEFAULT_CFG.title).trim().slice(0,180),description:($('auroraShowcaseAdminDescription')?.value||DEFAULT_CFG.description).trim().slice(0,500),mediaItems:parseMediaLines($('auroraShowcaseAdminMedia')?.value||''),updatedAt:Date.now()};}
+  function updatePlaceholderHint(show){const media=$('auroraShowcaseMedia');if(media)media.classList.toggle('is-placeholder',!!show);}
+  function renderMedia(){
+    const stage=$('auroraShowcaseMediaStage'),dots=$('auroraShowcaseDots'),counter=$('auroraShowcaseCounter'),caption=$('auroraShowcaseCaption'),mediaBox=$('auroraShowcaseMedia');
+    if(!stage||!dots||!mediaBox)return;
+    const items=normalizeItems(cfg.mediaItems||[]);
+    if(activeIndex>=items.length)activeIndex=0;
+    stage.replaceChildren();dots.replaceChildren();
+    const hasItems=items.length>0;
+    updatePlaceholderHint(!hasItems);
+    if(!hasItems){
+      const art=document.createElement('div');art.className='aurora-showcase-art';art.setAttribute('aria-hidden','true');
+      art.innerHTML='<div class="aurora-art-orb aurora-art-orb-a"></div><div class="aurora-art-orb aurora-art-orb-b"></div><div class="aurora-art-rings"></div><div class="aurora-art-main-card"><div class="aurora-art-symbol">✦</div><div class="aurora-art-mini-label">AURORA LEARNING SPACE</div><strong>LEARN<br>BEYOND.</strong><p>Học tập · Khám phá · Phát triển</p></div><div class="aurora-art-float aurora-art-float-top"><span>✧</span><div><b>AI Assistant</b><small>Luôn sẵn sàng đồng hành</small></div></div><div class="aurora-art-float aurora-art-float-bottom"><span>✓</span><div><b>Tiến bộ mỗi ngày</b><small>Small steps, big changes</small></div></div>';
+      stage.appendChild(art);
+      safeText(caption,'Không gian học tập của riêng bạn');
+    } else {
+      const item=items[activeIndex];
+      let element;
+      if(item.type==='video'){
+        element=document.createElement('video');element.src=item.url;element.autoplay=true;element.muted=true;element.loop=true;element.playsInline=true;element.preload='metadata';element.setAttribute('aria-label',item.caption||'Video giới thiệu Aurora');
+        element.addEventListener('error',()=>{safeText(caption,'Không tải được video. Hãy kiểm tra URL media trong Cấu hình.');},{once:true});
+        element.dataset.auroraVideo='1';
+      } else {
+        element=document.createElement('img');element.src=item.url;element.alt=item.caption||'Media giới thiệu Aurora';element.loading='eager';element.decoding='async';
+        element.addEventListener('error',()=>safeText(caption,'Không tải được ảnh/GIF. Hãy kiểm tra URL media trong Cấu hình.'),{once:true});
+      }
+      stage.appendChild(element);if(element.tagName==='VIDEO'){const playPromise=element.play();if(playPromise&&typeof playPromise.catch==='function')playPromise.catch(()=>{safeText(caption,'Video đang chờ trình duyệt cho phép phát.');});}safeText(caption,item.caption||'Khám phá Aurora');
+      items.forEach((_,index)=>{const dot=document.createElement('button');dot.type='button';dot.className='aurora-showcase-dot'+(index===activeIndex?' active':'');dot.setAttribute('aria-label',`Mở media ${index+1}`);dot.setAttribute('aria-current',index===activeIndex?'true':'false');dot.addEventListener('click',()=>{activeIndex=index;renderMedia();resetAutoplay();});dots.appendChild(dot);});
+    }
+    if(counter)counter.textContent=String(activeIndex+1).padStart(2,'0')+' / '+String(Math.max(1,items.length)).padStart(2,'0');
+    if(autoplayTimer){clearInterval(autoplayTimer);autoplayTimer=null;}
+    if(items.length>1&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){autoplayTimer=setInterval(()=>{if(document.hidden)return;activeIndex=(activeIndex+1)%items.length;renderMedia();},7000);}
+  }
+  function resetAutoplay(){if(autoplayTimer){clearInterval(autoplayTimer);autoplayTimer=null;}const items=normalizeItems(cfg.mediaItems||[]);if(items.length>1&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){autoplayTimer=setInterval(()=>{if(document.hidden)return;activeIndex=(activeIndex+1)%items.length;renderMedia();},7000);}}
+  window.auroraShowcaseStep=function(delta){const items=normalizeItems(cfg.mediaItems||[]);if(items.length<2)return;activeIndex=(activeIndex+delta+items.length)%items.length;renderMedia();resetAutoplay();};
+  function applyConfig(raw){
+    const d=raw&&typeof raw==='object'?raw:{};
+    cfg={...cloneDefault(),...d,mediaItems:normalizeItems(d.mediaItems)};
+    activeIndex=0;
+    safeText($('auroraShowcaseBadgeText'),cfg.badge||DEFAULT_CFG.badge);
+    safeText($('auroraShowcaseTitle'),cfg.title||DEFAULT_CFG.title);
+    safeText($('auroraShowcaseDescription'),cfg.description||DEFAULT_CFG.description);
+    renderMedia();fillSettings();setLocal(cfg);
+  }
+  async function loadRemote(){
+    const local=getLocal();if(local)applyConfig(local);else applyConfig(cloneDefault());
+    try{
+      if(window.db&&window.ref&&window.onValue){
+        const ref=window.ref(window.db,'system/home_showcase_config');
+        remoteListener=window.onValue(ref,snap=>{if(snap&&snap.exists())applyConfig(snap.val());else if(!local)applyConfig(cloneDefault());},err=>{console.warn('Aurora showcase sync failed:',err);});
+        dbReady=true;
+      }
+    }catch(err){console.warn('Aurora showcase cloud config unavailable:',err);}
+  }
+  window.saveAuroraShowcaseConfig=async function(){
+    const next=getSettingsFromForm();
+    if(!next.title){alert('Vui lòng nhập tiêu đề showcase.');return;}
+    try{
+      if(!window.db||!window.ref||!window.dbSet)throw new Error('Firebase Realtime Database chưa sẵn sàng.');
+      await window.dbSet(window.ref(window.db,'system/home_showcase_config'),next);
+      applyConfig(next);
+      if(typeof window.showToast==='function')window.showToast('✅ Đã lưu cấu hình media trang chủ cho toàn hệ thống.','success');else alert('Đã lưu cấu hình media trang chủ.');
+    }catch(err){
+      setLocal(next);applyConfig(next);
+      if(typeof window.showToast==='function')window.showToast('⚠️ Đã lưu ở trình duyệt này; chưa đồng bộ toàn hệ thống: '+(err.message||err),'warn');else alert('Chưa đồng bộ Firebase: '+(err.message||err));
+    }
+  };
+  window.previewAuroraShowcaseConfig=function(){const next=getSettingsFromForm();cfg=next;activeIndex=0;safeText($('auroraShowcaseBadgeText'),cfg.badge);safeText($('auroraShowcaseTitle'),cfg.title);safeText($('auroraShowcaseDescription'),cfg.description);renderMedia();};
+  window.resetAuroraShowcaseConfig=async function(){
+    const ok=typeof window.customConfirm==='function'?await window.customConfirm('Khôi phục tiêu đề và media showcase mặc định?',{icon:'↺',title:'Khôi phục'}):confirm('Khôi phục tiêu đề và media showcase mặc định?');
+    if(!ok)return;
+    const next=cloneDefault();
+    try{if(!window.db||!window.ref||!window.dbSet)throw new Error('Firebase chưa sẵn sàng');await window.dbSet(window.ref(window.db,'system/home_showcase_config'),next);}
+    catch(err){setLocal(next);if(typeof window.showToast==='function')window.showToast('⚠️ Khôi phục cục bộ; Firebase chưa đồng bộ.','warn');}
+    applyConfig(next);if(typeof window.showToast==='function')window.showToast('Đã khôi phục showcase mặc định.','success');
+  };
+  window.uploadAuroraShowcaseFiles=async function(){
+    const input=$('auroraShowcaseUpload'),status=$('auroraShowcaseUploadStatus');if(!input||!input.files||!input.files.length){if(status)status.textContent='Hãy chọn ít nhất một file.';return;}
+    const files=Array.from(input.files);if(files.length>8){if(status)status.textContent='Tối đa 8 file trong một lần tải.';return;}
+    const currentlyEntered=parseMediaLines($('auroraShowcaseAdminMedia')?.value||'');
+    if(currentlyEntered.length+files.length>8){if(status)status.textContent='Danh sách hiện có gần đủ 8 mục. Hãy xóa bớt URL trước khi tải thêm.';return;}
+    const allowed=/^(image\/(gif|png|jpeg|webp|avif)|video\/(mp4|webm|ogg|quicktime))$/i;
+    for(const file of files){if(file.size>50*1024*1024){if(status)status.textContent=`${file.name}: vượt giới hạn 50 MB.`;return;}if(!allowed.test(file.type)){if(status)status.textContent=`${file.name}: định dạng chưa được hỗ trợ.`;return;}}
+    if(status)status.textContent='Đang chuẩn bị tải media lên Firebase Storage…';
+    try{
+      const appMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js');
+      const storageMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js');
+      const app=appMod.getApp();const storage=storageMod.getStorage(app);const added=[];
+      for(let i=0;i<files.length;i++){
+        const file=files[i];if(status)status.textContent=`Đang tải ${i+1}/${files.length}: ${file.name}`;
+        const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'_').slice(-100)||('media_'+i);
+        const path=`aurora_showcase/${Date.now()}_${Math.random().toString(36).slice(2,9)}_${clean}`;
+        const storageRef=storageMod.ref(storage,path);
+        const snapshot=await storageMod.uploadBytes(storageRef,file,{contentType:file.type,cacheControl:'public,max-age=3600'});
+        const url=await storageMod.getDownloadURL(snapshot.ref);
+        const type=file.type.startsWith('video/')?'video':'image';added.push({url,type,caption:file.name});
+      }
+      const combined=normalizeItems([...currentlyEntered,...added]);
+      cfg={...cfg,mediaItems:combined};
+      const mediaField=$('auroraShowcaseAdminMedia');if(mediaField)mediaField.value=mediaLines(combined);
+      activeIndex=Math.max(0,combined.length-added.length);
+      if(status)status.textContent='Tải lên thành công. Bấm “Lưu cấu hình showcase” để công bố cho toàn hệ thống.';
+      renderMedia();resetAutoplay();input.value='';
+    }catch(err){
+      console.error('Aurora showcase upload failed:',err);
+      if(status)status.textContent='Không tải lên được. Cần bật Firebase Storage và cấp quyền ghi phù hợp; bạn có thể dùng URL HTTPS trực tiếp. Chi tiết: '+(err&&err.message||err);
+    }
+  };
+  function installSettings(){
+    const panel=$('configPanel');if(!panel||$('auroraShowcaseAdminPanel'))return;
+    const source=$('auroraShowcaseAdminPanel');if(source)return;
+  }
+  function initialize(){
+    if(initialized)return;initialized=true;
+    // The editable settings markup is already within the password-gated config panel.
+    if(!($('auroraShowcaseAdminPanel'))){console.warn('Aurora showcase settings panel is missing from the config HTML.');}
+    loadRemote();
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)resetAutoplay();});
+    const mediaBox=$('auroraShowcaseMedia');if(mediaBox){mediaBox.addEventListener('mouseenter',()=>{if(autoplayTimer){clearInterval(autoplayTimer);autoplayTimer=null;}});mediaBox.addEventListener('mouseleave',resetAutoplay);}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();
+})();
 </script>
 
 </body>
