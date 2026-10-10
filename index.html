@@ -10005,7 +10005,14 @@ initEcCreatePanel();
       await window.dbUpdate(dbRef(`users/${username}`), grant);
       if (cachedUsers && cachedUsers[username]) Object.assign(cachedUsers[username], grant);
       if (currentUserFullData && currentUserFullData.username === username) Object.assign(currentUserFullData, grant);
-      if (currentUser && currentUser.username === username) Object.assign(currentUser, grant);
+      if (currentUser && currentUser.username === username) {
+        Object.assign(currentUser, grant);
+        if (typeof window.applyUserSession === 'function') {
+          const fresh = await window.dbGet(window.dbChild(window.dbRef, `users/${username}`));
+          if (fresh && fresh.exists()) await window.applyUserSession(fresh.val());
+        }
+        window.auroraRefreshMembershipUI?.(currentUserFullData || currentUser);
+      }
       setValSafe('auroraGiftPassword', ''); setValSafe('auroraGiftUsername', '');
       toast(`Đã tặng gói ${planDef(tier).name} cho @${username}.`, 'success');
     } catch (e) { toast('Tặng gói thất bại: ' + (e.message || e), 'error'); }
@@ -10651,7 +10658,14 @@ initEcCreatePanel();
     auroraAddSlide: addSlide, auroraDuplicateSlide: duplicateSlide, auroraDeleteSlide: deleteSlide,
     auroraSelectSlide: selectSlide, auroraUpdateCurrentSlide: updateSlideFromFields, auroraSetSlideImage: setSlideImage,
     auroraSaveSlides: saveSlides, auroraExportSlides: exportSlides, auroraLoadPresentationFile: loadPresentationFile,
-    auroraStartPresentation: startPresentation, auroraStartUploadedPresentation: startUploadedPresentation, auroraPrevSlide: prevSlide, auroraNextSlide: nextSlide, auroraStopPresentation: stopPresentation
+    auroraStartPresentation: startPresentation, auroraStartUploadedPresentation: startUploadedPresentation, auroraPrevSlide: prevSlide, auroraNextSlide: nextSlide, auroraStopPresentation: stopPresentation,
+    auroraRefreshMembershipUI: function(user){
+      try{renderPlansPage();renderPackageAdminList();}catch(e){}
+      const profileUser=(typeof currentViewingUser!=='undefined'&&currentViewingUser)||null;
+      const actual=user||(typeof currentUserFullData!=='undefined'&&currentUserFullData)||null;
+      if(profileUser&&actual&&profileUser.username===actual.username){Object.assign(profileUser,actual);try{renderProfileTier(profileUser);}catch(e){}}
+      try{window.dispatchEvent(new CustomEvent('aurora:membership-updated',{detail:{username:actual&&actual.username,tier:actual&&actual.membershipTier}}));}catch(e){}
+    }
   });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountAll, { once: true }); else mountAll();
@@ -10902,6 +10916,24 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     const ext=Object.keys(byExt).find(e=>name.endsWith(e));
     return ext?byExt[ext]:'';
   }
+  function ensureShowcaseUploadProgressUI(status){
+    let track=$('auroraShowcaseUploadProgressTrack');
+    let bar=$('auroraShowcaseUploadProgressBar');
+    if(status&&!track){
+      track=document.createElement('div');track.id='auroraShowcaseUploadProgressTrack';
+      track.setAttribute('role','progressbar');track.setAttribute('aria-valuemin','0');track.setAttribute('aria-valuemax','100');track.setAttribute('aria-valuenow','0');
+      track.style.cssText='height:9px;width:100%;background:rgba(120,120,140,.18);border:1px solid rgba(120,120,140,.22);border-radius:999px;overflow:hidden;margin:7px 0 10px;display:none;';
+      bar=document.createElement('div');bar.id='auroraShowcaseUploadProgressBar';bar.style.cssText='height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#6d5dfc,#ed5798);transition:width .15s linear;';track.appendChild(bar);
+      status.insertAdjacentElement('afterend',track);
+    }else if(track){bar=$('auroraShowcaseUploadProgressBar');}
+    return {track,bar};
+  }
+  function setShowcaseUploadProgress(status,percent,message){
+    const ui=ensureShowcaseUploadProgressUI(status);const pct=Math.max(0,Math.min(100,Number(percent)||0));
+    if(ui.track){ui.track.style.display='block';ui.track.setAttribute('aria-valuenow',String(Math.round(pct)));}
+    if(ui.bar)ui.bar.style.width=pct+'%';
+    if(status)status.textContent=message||('Đang tải media ('+Math.round(pct)+'%)');
+  }
   window.uploadAuroraShowcaseFiles=async function(){
     const input=$('auroraShowcaseUpload'),status=$('auroraShowcaseUploadStatus');
     if(!input||!input.files||!input.files.length){if(status)status.textContent='Hãy chọn ít nhất một file GIF, ảnh hoặc video.';return;}
@@ -10918,56 +10950,104 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     }
     const button=document.querySelector('button[onclick="uploadAuroraShowcaseFiles()"]');
     if(button){button.disabled=true;button.dataset.originalLabel=button.textContent;button.textContent='⏳ Đang tải…';}
-    if(status)status.textContent='Đang kết nối Firebase Storage…';
+    const progressUI=ensureShowcaseUploadProgressUI(status);
+    if(progressUI.track)progressUI.track.style.display='block';
+    if(progressUI.bar)progressUI.bar.style.width='0%';
+    const totalBytes=typed.reduce((sum,item)=>sum+item.file.size,0);
+    let completedBytes=0;
+    const uploadedObjects=[];
+    let storageMod=null;
     try{
+      setShowcaseUploadProgress(status,0,'Đang khởi tạo Firebase Storage…');
       const appMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js');
-      const storageMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js');
+      storageMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js');
       let app=window.firebaseApp||null;
-      if(!app){try{app=appMod.getApp();}catch(_){throw new Error('Firebase App chưa khởi tạo. Tải lại trang rồi thử lại.');}}
+      if(!app){try{app=appMod.getApp();}catch(_){throw new Error('Firebase App chưa khởi tạo. Hãy tải lại trang và thử lại.');}}
+      const bucket=String(app.options&&app.options.storageBucket||'').trim();
+      if(!bucket)throw new Error('Firebase chưa cấu hình storageBucket. Cần thiết lập Storage bucket trong Firebase Console.');
+      const bucketUrl=bucket.startsWith('gs://')?bucket:'gs://'+bucket;
       let storage;
-      try{storage=storageMod.getStorage(app);}catch(storageInitError){
-        const bucket=app.options&&app.options.storageBucket;
-        if(!bucket)throw new Error('Firebase chưa cấu hình storageBucket. Hãy thêm Storage bucket trong Firebase Console.');
-        storage=storageMod.getStorage(app,'gs://'+String(bucket).replace(/^gs:\/\//,''));
+      try{storage=storageMod.getStorage(app,bucketUrl);}catch(storageInitError){
+        console.warn('Không mở được bucket tường minh, thử bucket mặc định:',storageInitError);
+        storage=storageMod.getStorage(app);
       }
+      if(typeof storageMod.setMaxUploadRetryTime==='function')storageMod.setMaxUploadRetryTime(storage,120000);
+      if(typeof storageMod.setMaxOperationRetryTime==='function')storageMod.setMaxOperationRetryTime(storage,120000);
       const added=[];
       for(let i=0;i<typed.length;i++){
         const {file,mime}=typed[i];
-        const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'_').slice(-100)||('media_'+i);
+        const clean=String(file.name||'media').normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'_').slice(-100)||('media_'+i);
         const path=`aurora_showcase/${Date.now()}_${Math.random().toString(36).slice(2,9)}_${clean}`;
         const storageRef=storageMod.ref(storage,path);
-        const metadata={contentType:mime,cacheControl:'public,max-age=3600',customMetadata:{originalName:file.name}};
+        const metadata={contentType:mime,cacheControl:'public,max-age=3600',customMetadata:{originalName:String(file.name||clean).slice(0,200)}};
         const task=storageMod.uploadBytesResumable(storageRef,file,metadata);
+        let lastBytes=0,lastProgressAt=Date.now(),stallTimer=null,settled=false;
         const snapshot=await new Promise((resolve,reject)=>{
+          const cleanUp=()=>{if(stallTimer)clearTimeout(stallTimer);};
+          const fail=err=>{if(settled)return;settled=true;cleanUp();reject(err instanceof Error?err:new Error(String(err||'Upload thất bại.')));};
+          const succeed=snap=>{if(settled)return;settled=true;cleanUp();resolve(snap||task.snapshot);};
+          const armStallWatch=()=>{
+            if(stallTimer)clearTimeout(stallTimer);
+            stallTimer=setTimeout(()=>{
+              // Set our explanatory error first because cancel() may synchronously fire the SDK error callback.
+              fail(new Error('Không có dữ liệu truyền lên Storage trong 90 giây. Kiểm tra mạng, Storage Security Rules và quyền Firebase Auth rồi thử lại.'));
+              try{task.cancel();}catch(_){}
+            },90000);
+          };
+          armStallWatch();
           task.on('state_changed',snap=>{
-            const percent=snap.totalBytes?Math.round((snap.bytesTransferred/snap.totalBytes)*100):0;
-            if(status)status.textContent=`Đang tải ${i+1}/${typed.length}: ${file.name} (${percent}%)`;
-          },reject,()=>resolve(task.snapshot));
+            const transferred=Number(snap.bytesTransferred)||0;
+            if(transferred>lastBytes){lastBytes=transferred;lastProgressAt=Date.now();armStallWatch();}
+            const allTransferred=Math.min(totalBytes,completedBytes+transferred);
+            const pct=totalBytes?Math.floor(allTransferred/totalBytes*100):0;
+            const stateLabel=snap.state==='paused'?'Đang tạm dừng chờ mạng':(transferred===0?'Đang chờ Firebase nhận dữ liệu':'Đang tải lên');
+            setShowcaseUploadProgress(status,pct,`${stateLabel} · file ${i+1}/${typed.length}: ${file.name} · ${pct}% (${formatShowcaseBytes(allTransferred)}/${formatShowcaseBytes(totalBytes)})`);
+          },err=>fail(err),()=>succeed(task.snapshot));
         });
+        uploadedObjects.push(snapshot.ref);
         const url=await storageMod.getDownloadURL(snapshot.ref);
         if(!/^https:\/\//i.test(url))throw new Error('Firebase Storage không trả về URL HTTPS hợp lệ cho '+file.name);
         const type=mime.startsWith('video/')?'video':'image';
         added.push({url,type,caption:file.name});
+        completedBytes+=file.size;
+        const donePercent=totalBytes?Math.floor(completedBytes/totalBytes*100):100;
+        setShowcaseUploadProgress(status,donePercent,`Đã tải ${i+1}/${typed.length} file · ${donePercent}%`);
       }
       const combined=normalizeItems([...currentlyEntered,...added]);
       if(combined.length!==currentlyEntered.length+added.length)throw new Error('Một số URL trả về không hợp lệ; danh sách media chưa được cập nhật.');
-      cfg={...cfg,mediaItems:combined};
       if(mediaField)mediaField.value=mediaLines(combined);
       activeIndex=Math.max(0,combined.length-added.length);
-      renderMedia();resetAutoplay();setLocal(cfg);
-      if(status)status.textContent='Tải lên thành công. Đã thêm '+added.length+' file; bấm “Lưu cấu hình showcase” để công bố cho toàn hệ thống.';
+      const next={...getSettingsFromForm(),mediaItems:combined,updatedAt:Date.now()};
+      cfg=next;renderMedia();resetAutoplay();setLocal(next);
+      try{
+        if(!window.db||!window.ref||!window.dbSet)throw new Error('Firebase Realtime Database chưa sẵn sàng để lưu danh sách media.');
+        await window.dbSet(window.ref(window.db,'system/home_showcase_config'),next);
+        applyConfig(next);
+        setShowcaseUploadProgress(status,100,`✅ Tải xong 100%. Đã tải ${added.length} file và cập nhật showcase lên toàn hệ thống.`);
+      }catch(configErr){
+        // The objects are already uploaded. Keep them in the editor/local fallback and explain that publishing failed.
+        setLocal(next);cfg=next;renderMedia();fillSettings();
+        setShowcaseUploadProgress(status,100,`⚠️ File đã tải lên Storage (${added.length} file), nhưng chưa đồng bộ cấu hình toàn hệ thống: ${configErr.message||configErr}. Bấm “Lưu cấu hình showcase” để thử lại.`);
+      }
       input.value='';
     }catch(err){
       console.error('Aurora showcase upload failed:',err);
       const code=String(err&&err.code||'');
+      const rawMsg=String(err&&err.message||err||'Lỗi không xác định');
       let hint='';
-      if(/unauthorized|permission-denied/i.test(code+' '+(err&&err.message||'')))hint=' Firebase Storage đang từ chối quyền ghi. Cần cấu hình Storage Security Rules cho tài khoản quản trị đã xác thực; tài khoản Aurora tự tạo không tự động là Firebase Auth.';
-      else if(/bucket|storage\/no-default-bucket/i.test(code+' '+(err&&err.message||'')))hint=' Kiểm tra Storage bucket trong Firebase Console và đối chiếu firebaseConfig.storageBucket.';
-      if(status)status.textContent='Không tải được media. '+(err&&err.message||String(err))+hint+' Bạn vẫn có thể dán URL HTTPS trực tiếp vào danh sách media.';
+      if(/unauthorized|permission-denied|storage\/unauthorized/i.test(code+' '+rawMsg))hint=' Firebase Storage đang từ chối quyền ghi. Tài khoản Aurora tự tạo không tự động là Firebase Authentication; hãy kiểm tra Storage Security Rules hoặc thiết lập Firebase Auth phù hợp.';
+      else if(/bucket|storage\/no-default-bucket/i.test(code+' '+rawMsg))hint=' Kiểm tra firebaseConfig.storageBucket và việc đã bật Firebase Storage trong Firebase Console.';
+      else if(/retry-limit-exceeded|network-request-failed|timed out|90 giây/i.test(code+' '+rawMsg))hint=' Kiểm tra kết nối mạng, quyền Storage và thử file nhỏ hơn trước. Nếu vẫn lỗi, kiểm tra Storage Rules và bucket.';
+      if(status)status.textContent='❌ Không tải được media. '+rawMsg+'.'+hint+' Bạn vẫn có thể dán URL HTTPS trực tiếp vào danh sách media.';
+      // Avoid leaving orphaned objects when a later upload fails before the list is committed.
+      if(storageMod&&uploadedObjects.length&&typeof storageMod.deleteObject==='function'){
+        await Promise.all(uploadedObjects.map(ref=>storageMod.deleteObject(ref).catch(()=>{})));
+      }
     }finally{
       if(button){button.disabled=false;button.textContent=button.dataset.originalLabel||'⬆️ Tải media lên và thêm vào danh sách';delete button.dataset.originalLabel;}
     }
   };
+  function formatShowcaseBytes(bytes){const n=Math.max(0,Number(bytes)||0);if(n<1024)return n+' B';if(n<1048576)return (n/1024).toFixed(1)+' KB';if(n<1073741824)return (n/1048576).toFixed(1)+' MB';return (n/1073741824).toFixed(2)+' GB';}
   function installSettings(){
     const panel=$('configPanel');if(!panel||$('auroraShowcaseAdminPanel'))return;
     const source=$('auroraShowcaseAdminPanel');if(source)return;
@@ -11039,6 +11119,36 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   const uname=()=>isLogged()?String(currentUser.username):'';
   const tier=()=>{const u=(typeof currentUserFullData!=='undefined'&&currentUserFullData)||(typeof currentUser!=='undefined'&&currentUser)||{};return String(u.membershipTier||'basic').toLowerCase();};
   const tierAtLeast=id=>(PLAN_ORDER[tier()]||0)>=(PLAN_ORDER[id]||0);
+  let liveMembershipUnsub=null, liveMembershipUsername='', liveMembershipApplyBusy=false;
+  function stopLiveMembershipWatcher(){if(liveMembershipUnsub){try{liveMembershipUnsub();}catch(e){}}liveMembershipUnsub=null;liveMembershipUsername='';liveMembershipApplyBusy=false;}
+  function startLiveMembershipWatcher(){
+    if(!isLogged()||!dbReady()||typeof window.onValue!=='function'){stopLiveMembershipWatcher();return;}
+    const username=uname();if(liveMembershipUsername===username&&liveMembershipUnsub)return;
+    stopLiveMembershipWatcher();liveMembershipUsername=username;
+    try{
+      liveMembershipUnsub=window.onValue(dbRefPath(`users/${username}`),snap=>{
+        if(!snap||!snap.exists()||!isLogged()||uname()!==username)return;
+        const incoming=snap.val()||{};const raw=String(incoming.membershipTier||'basic').toLowerCase();const nextTier=Object.prototype.hasOwnProperty.call(PLAN_ORDER,raw)?raw:'basic';
+        const currentTier=String((currentUserFullData&&currentUserFullData.membershipTier)||(currentUser&&currentUser.membershipTier)||'basic').toLowerCase();
+        if(nextTier===currentTier||liveMembershipApplyBusy)return;
+        liveMembershipApplyBusy=true;
+        const apply=async()=>{
+          try{
+            if(typeof window.applyUserSession==='function')await window.applyUserSession({...incoming,membershipTier:nextTier});
+            else{if(currentUserFullData)Object.assign(currentUserFullData,incoming,{membershipTier:nextTier});if(currentUser)Object.assign(currentUser,incoming,{membershipTier:nextTier});}
+            if(typeof syncAromPlusUi==='function')syncAromPlusUi();
+            if(typeof renderOperatorState==='function')renderOperatorState();
+            if(typeof mountPlusGifControls==='function')mountPlusGifControls();
+            window.auroraRefreshMembershipUI?.(currentUserFullData||currentUser);
+            const def=(typeof planDef==='function')?planDef(nextTier):{name:nextTier.toUpperCase()};
+            toast('Gói tài khoản đã được cập nhật trực tiếp: '+def.name+'. Không cần tải lại trang.','success');
+          }catch(e){console.warn('Aurora live membership refresh failed:',e);}
+          finally{liveMembershipApplyBusy=false;}
+        };
+        apply();
+      },error=>console.warn('Aurora live membership listener:',error));
+    }catch(e){liveMembershipUnsub=null;liveMembershipUsername='';console.warn('Could not subscribe to live membership updates:',e);}
+  }
   const isUltraOperator=()=>isLogged()&&((typeof userHasSupremeAccess!=='undefined'&&userHasSupremeAccess===true)||tier()==='aromplus');
   const dbReady=()=>!!(window.db&&window.ref&&window.dbGet&&window.dbSet&&window.dbChild&&window.dbRef);
   const dbRefPath=path=>window.dbChild(window.dbRef,String(path).replace(/^\/+/,''));
@@ -11047,7 +11157,33 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   async function update(path,value){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return (window.dbUpdate||window.dbSet)(dbRefPath(path),value);}
   async function remove(path){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return window.dbRemove(dbRefPath(path));}
   function childSafe(value){let s=String(value||'');try{s=btoa(unescape(encodeURIComponent(s)));}catch(e){s=btoa(String(s).replace(/[^\x00-\x7F]/g,'_'));}return 'k_'+s.replace(/[^a-zA-Z0-9_-]/g,'_').replace(/=+$/g,'');}
-  function syncAromPlusUi(){const enabled=isLogged()&&tier()==='aromplus';if(document.body)document.body.classList.toggle('aurora-aromplus',enabled);const input=$('accMgmtVuaPass');if(input){const gate=input.parentElement?.parentElement;if(gate){gate.id='auroraAromAccountGate';gate.style.display=enabled?'none':'';}}if(enabled){if(typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;if(typeof accMgmtUnlocked!=='undefined')accMgmtUnlocked=true;const view=$('supremeView');if(view&&view.classList.contains('active')){const tab=$('supremeTabConfig');if(tab&&tab.style.display!=='none'){if(typeof configTabUnlocked!=='undefined')configTabUnlocked=true;if($('configGate'))$('configGate').style.display='none';if($('configPanel'))$('configPanel').style.display='block';}if($('supremeTabAccounts')&&$('supremeTabAccounts').style.display!=='none'){if($('accMgmtPanel'))$('accMgmtPanel').style.display='block';}}}return enabled;}
+  let aromPlusAutoElevationApplied=false;
+  function syncAromPlusUi(){
+    const enabled=isLogged()&&tier()==='aromplus';
+    if(document.body)document.body.classList.toggle('aurora-aromplus',enabled);
+    const input=$('accMgmtVuaPass');if(input){const gate=input.parentElement?.parentElement;if(gate){gate.id='auroraAromAccountGate';gate.style.display=enabled?'none':'';}}
+    if(enabled){
+      if(typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;
+      if(typeof accMgmtUnlocked!=='undefined')accMgmtUnlocked=true;
+      const view=$('supremeView');if(view&&view.classList.contains('active')){
+        const tab=$('supremeTabConfig');if(tab&&tab.style.display!=='none'){if(typeof configTabUnlocked!=='undefined')configTabUnlocked=true;if($('configGate'))$('configGate').style.display='none';if($('configPanel'))$('configPanel').style.display='block';}
+        if($('supremeTabAccounts')&&$('supremeTabAccounts').style.display!=='none'){if($('accMgmtPanel'))$('accMgmtPanel').style.display='block';}
+      }
+      aromPlusAutoElevationApplied=true;
+    }else if(aromPlusAutoElevationApplied){
+      // Remove only the UI elevation that this module gave automatically to AROM+.
+      if(typeof userHasSupremeAccess!=='undefined'&&userHasSupremeAccess===true)userHasSupremeAccess=false;
+      if(typeof accMgmtUnlocked!=='undefined')accMgmtUnlocked=false;
+      if(typeof configTabUnlocked!=='undefined')configTabUnlocked=false;
+      const accGate=$('auroraAromAccountGate');if(accGate)accGate.style.display='';
+      const accPanel=$('accMgmtPanel');if(accPanel)accPanel.style.display='none';
+      const cfgGate=$('configGate');if(cfgGate)cfgGate.style.display='';
+      const cfgPanel=$('configPanel');if(cfgPanel)cfgPanel.style.display='none';
+      const pass=$('configVuaPass');if(pass)pass.value='';
+      aromPlusAutoElevationApplied=false;
+    }
+    return enabled;
+  }
   function toast(message,type){if(typeof window.showToast==='function')window.showToast(message,type||'info');else console.log(message);}
   function activeView(){return document.querySelector('.view-section.active')?.id||'';}
   function requireOperator(){if(!isLogged()){toast('Hãy đăng nhập bằng tài khoản quản trị trước.','warn');return false;}if(!isUltraOperator()){toast('ULTRA CONTROL chỉ dành cho quản trị VUA hoặc AROM+.','error');return false;}return true;}
@@ -11319,7 +11455,8 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     if(window.verifyConfigAccess&&!window.verifyConfigAccess.__auroraPlanHook){const old=window.verifyConfigAccess;const wrap=async function(){if(tier()==='aromplus'&&isLogged()){if(typeof configTabUnlocked!=='undefined')configTabUnlocked=true;if($('configGate'))$('configGate').style.display='none';if($('configPanel'))$('configPanel').style.display='block';if($('configVuaPass'))$('configVuaPass').value='';syncAromPlusUi();await window.loadConfigPanelContent?.();toast('AROM+ đã mở cấu hình không cần mật khẩu VUA.','success');return;}return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.verifyConfigAccess=wrap;}
     if(window.verifySupremePassword&&!window.verifySupremePassword.__auroraPlanHook){const old=window.verifySupremePassword;const wrap=async function(){if(tierAtLeast('ceo')&&isLogged()){return window.checkSupremeAccess?.();}return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.verifySupremePassword=wrap;}
     if(window.switchSupremeTab&&!window.switchSupremeTab.__auroraAromPlanHook){const old=window.switchSupremeTab;const wrap=function(tab,el){const result=old.apply(this,arguments);syncAromPlusUi();if(tier()==='aromplus'&&isLogged()){if(tab==='accounts'){accMgmtUnlocked=true;if($('auroraAromAccountGate'))$('auroraAromAccountGate').style.display='none';if($('accMgmtPanel'))$('accMgmtPanel').style.display='block';Promise.resolve(window.loadAllUsers?.()).catch(e=>console.warn('Load users failed:',e));}else if(tab==='config'){if(typeof configTabUnlocked!=='undefined')configTabUnlocked=true;if($('configGate'))$('configGate').style.display='none';if($('configPanel'))$('configPanel').style.display='block';Promise.resolve(window.loadConfigPanelContent?.()).catch(e=>console.warn('Load config failed:',e));}}return result;};wrap.__auroraAromPlanHook=true;window.switchSupremeTab=wrap;}
-    if(window.applyUserSession&&!window.applyUserSession.__auroraAromUiHook){const old=window.applyUserSession;const wrap=async function(){const result=await old.apply(this,arguments);syncAromPlusUi();if(tier()==='aromplus'&&isLogged()&&typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;return result;};wrap.__auroraAromUiHook=true;window.applyUserSession=wrap;}
+    if(window.applyUserSession&&!window.applyUserSession.__auroraAromUiHook){const old=window.applyUserSession;const wrap=async function(){const result=await old.apply(this,arguments);syncAromPlusUi();if(tier()==='aromplus'&&isLogged()&&typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;startLiveMembershipWatcher();window.auroraRefreshMembershipUI?.(currentUserFullData||currentUser);return result;};wrap.__auroraAromUiHook=true;window.applyUserSession=wrap;}
+    if(window.stopOnlineTracking&&!window.stopOnlineTracking.__auroraLiveTierStop){const oldStop=window.stopOnlineTracking;const stopWrap=function(){stopLiveMembershipWatcher();return oldStop.apply(this,arguments);};stopWrap.__auroraLiveTierStop=true;window.stopOnlineTracking=stopWrap;}
     if(window.openAiModelPicker&&!window.openAiModelPicker.__auroraPlanHook){const old=window.openAiModelPicker;const wrap=function(){if(tierAtLeast('ultra')&&isLogged()){const before=currentUserFullData?.aiModels;try{if(currentUserFullData)currentUserFullData.aiModels=Object.keys(typeof cachedAiModels!=='undefined'?cachedAiModels:{});return old.apply(this,arguments);}finally{if(currentUserFullData)currentUserFullData.aiModels=before||[];}}return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.openAiModelPicker=wrap;}
     if(window.checkUserAttempts&&!window.checkUserAttempts.__auroraPlanHook){const old=window.checkUserAttempts;const wrap=async function(code,username,type){if(tier()==='aromplus'&&isLogged()&&username===uname())return 0;return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.checkUserAttempts=wrap;}
     if(window.customConfirm&&!window.customConfirm.__auroraPlanWarning){const old=window.customConfirm;const wrap=async function(message,options){if(tier()==='aromplus'&&/xóa|xoa|reset|ban\b|kick\b|bảo trì|bao tri|sửa điểm|sua diem|chỉnh sửa|chinh sua|cấu hình|cau hinh/i.test(String(message)))message='⚠️ AROM+ · Hãy cân nhắc kỹ vì thao tác có thể ảnh hưởng dữ liệu quan trọng.\n\n'+message;return old.call(this,message,options);};wrap.__auroraPlanWarning=true;window.customConfirm=wrap;}
@@ -11344,7 +11481,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   function init(){installStyle();installNavHorizontalScroll();installHeroCollapse();mountUltraPanel();installPlanHooks();installBanAndJoinHooks();watchMaintenance();observePlanCards();
     if($('auroraUCCommandInput'))$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});
     let ticks=0;const timer=setInterval(()=>{ticks++;const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;syncAromPlusUi();refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
-    syncAromPlusUi();refreshChatMemberships();startTrollListener();
+    syncAromPlusUi();startLiveMembershipWatcher();refreshChatMemberships();startTrollListener();
   }
   Object.assign(window,{
     auroraUCOpenChat:id=>{if(!chatRooms[id])return;closedChatIds.delete(id);openChatRoom=id;renderChatFloatLayer();},auroraUCDeleteChat:deleteChat,
