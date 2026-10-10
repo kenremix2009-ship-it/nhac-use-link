@@ -2780,7 +2780,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
   <div style="font-weight:900;color:#6f42c1;font-size:14px;margin-bottom:10px">🤖 TẠO MODEL AI MỚI (VTUBER-STYLE)</div>
   <div class="ai-setup-note">📎 Hỗ trợ mọi định dạng: <b>.moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh (OSC/VMC)...</b> — Không giới hạn dung lượng. <b>Model có thể biểu cảm theo tính cách; webcam đã được gỡ khỏi giao diện.</b></div>
   <label>📝 Tên model:</label>
-  <input type="text" id="aiNewModelName" placeholder="Aru~aru hoặc tên riêng của model">
+  <input type="text" id="aiNewModelName" placeholder="Aru~aruu hoặc tên riêng của model">
   <div class="form-grid-2" style="gap:10px">
     <div><label>⚧️ Giới tính:</label><select id="aiNewModelGender"><option value="female">Nữ</option><option value="male">Nam</option><option value="other">Khác / tùy chỉnh</option></select></div>
     <div><label>🎭 Tính cách:</label><select id="aiNewModelPersonality"><option value="tsundere">Tsundere — ngoài lạnh trong ấm</option><option value="cute">Cute — đáng yêu</option><option value="badboy">Badboy — ngầu, tự tin</option><option value="sadgirl">Sadgirl — dịu dàng, dễ buồn</option><option value="yandere">Yandere — mãnh liệt, bám bạn</option><option value="kuudere">Kuudere — điềm tĩnh</option><option value="dandere">Dandere — ít nói, ngại ngùng</option><option value="genki">Genki — năng động</option><option value="cool">Cool — bình tĩnh, sắc sảo</option><option value="shy">Shy — rụt rè</option><option value="friendly">Friendly — thân thiện</option><option value="chaotic">Chaotic — tinh nghịch</option><option value="custom">Tùy chỉnh</option></select></div>
@@ -2790,7 +2790,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
   <img id="aiNewModelMainImagePreview" class="ai-model-main-image" alt="">
   <label>📁 File model (có thể chọn nhiều file — textures, motion, v.v...):</label>
   <input type="file" id="aiNewModelFiles" multiple accept=".vrm,.glb,.gltf,.blend,.zip,.fbx,.obj,.pmx,.pmd,.moc3,.json,.psd,*/*" style="padding:6px;background:#fff;border-radius:8px" onchange="previewAiModelFileSelection(this)">
-  <div class="aurora-model-format-note">Hỗ trợ tải lên <b>.vrm</b> và <b>.glb</b> để dựng model 3D trong khung AI. Model mặc định Aru~aru được dựng bằng hình học 3D, có chuyển động theo trạng thái và tính cách; không cần webcam. Có thể tải <b>.zip</b> chứa file <b>.blend</b> cùng texture như gói model Blender đã gửi. Lưu ý: trình duyệt không dựng trực tiếp file <b>.blend</b>; cần xuất sang GLB/VRM trong Blender để xem 3D.</div>
+  <div class="aurora-model-format-note">Hỗ trợ tải lên <b>.vrm</b> và <b>.glb</b> để dựng model 3D trong khung AI; tự động nháy mắt và mô phỏng miệng khi webcam cung cấp dữ liệu. Có thể tải <b>.zip</b> chứa file <b>.blend</b> cùng texture như gói model Blender đã gửi. Lưu ý: trình duyệt không dựng trực tiếp file <b>.blend</b>; cần xuất sang GLB/VRM trong Blender để xem 3D.</div>
   <div id="aiNewModelVrmPreview" class="aurora-vrm-preview"><div id="aiNewModelVrmPreviewCanvas" style="width:100%;height:100%"></div><div id="aiNewModelVrmPreviewStatus" class="aurora-vrm-status">Chọn file VRM/GLB để xem trước.</div></div>
   <label>🧸 Phụ kiện model (ảnh/GIF/WEBP; có thể chỉnh vị trí trong Safe Zone):</label>
   <input type="file" id="aiNewModelAccessories" accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml,.png,.jpg,.jpeg,.gif,.webp,.svg" multiple style="padding:6px;background:#fff;border-radius:8px">
@@ -3243,6 +3243,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
     <div class="ai-model-body" id="aiModelBody">
       <div id="aiModelContent"><div class="ai-model-emoji">🤖</div></div>
       <div class="ai-model-frame-layer" id="aiModelFrameLayer"></div>
+      <video id="aiWebcamVideo" autoplay muted playsinline></video>
     </div>
     <div class="ai-model-badge" id="aiModelBadge">Auro</div>
     <button id="aiDoorBtn" onclick="hideAiModelWithAnimation()" title="Ẩn model">🚪</button>
@@ -6799,7 +6800,7 @@ async function saveSafeAreaCalibration(){
 function listenAiModels(){
   if(aiModelListener)aiModelListener();
   aiModelListener=window.onValue(window.ref(window.db,'system/ai_models'),snap=>{
-    cachedAiModels=auroraMergeAiModelCache(snap.val()||{});
+    cachedAiModels=auroraMergeAiModelCache(snap.val()||{});delete cachedAiModels['aimodel_default_aru'];
     loadAiModelsForGrant();loadAiModelsList();loadSupremeAiFrameModelList();
     if(currentEquippedAiModel&&cachedAiModels[currentEquippedAiModel.modelId]){currentEquippedAiModel.modelData=cachedAiModels[currentEquippedAiModel.modelId];updateAiWidgetContent();}
   });
@@ -7002,7 +7003,6 @@ function bindAiWidgetInteractions(){
       aiLastBigWarnAt=Date.now();
       showAiFloatBubbleByEvent('big');
     }
-    if(aiWidgetScale<0.6&&prevScale>=0.6&&currentEquippedAiModel){showAiFloatBubbleByEvent('small');}
     applyAiWidgetPosition();
   };
   body.ondblclick=(e)=>{
@@ -8054,7 +8054,7 @@ function openAiModelPicker(){
 }
 async function selectAiModelPick(modelId){
   if(!currentUser)return;
-  if(modelId==='aimodel_default_aru_3d'&&!((currentUserFullData&&currentUserFullData.aiModels)||[]).includes('aimodel_default_aru_3d')){showToast('🔒 Aru~aru chỉ có thể được trang bị sau khi Admin cấp cho tài khoản này.','error');return;}
+  if(modelId==='aimodel_default_aruu'&&!((currentUserFullData&&currentUserFullData.aiModels)||[]).includes('aimodel_default_aruu')){showToast('🔒 Aru~aruu chỉ có thể được trang bị sau khi Admin cấp cho tài khoản này.','error');return;}
   try{
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{equippedAiModel:modelId,updatedAt:Date.now()});
     currentUserFullData.equippedAiModel=modelId;currentUser.equippedAiModel=modelId;
@@ -8417,11 +8417,11 @@ async function revokeAiModelFromUser(){
 function loadAiModelsList(){
   const c=document.getElementById('aiModelListContainer');
   if(!c)return;
-  const ids=Object.keys(cachedAiModels||{}).sort((a,b)=>a==='aimodel_default_aru_3d'?-1:(b==='aimodel_default_aru_3d'?1:0));
+  const ids=Object.keys(cachedAiModels||{}).sort((a,b)=>a==='aimodel_default_aruu'?-1:(b==='aimodel_default_aruu'?1:0));
   if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:10px 0">Chưa có model nào. Hãy tạo model mới ở trên!</p>';return;}
   c.innerHTML=ids.map(id=>{
     const m=cachedAiModels[id];if(!m)return '';
-    const protectedModel=!!(m.systemDefault||id==='aimodel_default_aru_3d');
+    const protectedModel=!!(m.systemDefault||id==='aimodel_default_aruu');
     const fileCount=(m.files||[]).length+(m.accessories||[]).length;
     const size=m.totalSize?formatBytes(m.totalSize):(protectedModel?'Model hệ thống':(m.sourceZip?'từ ZIP':'?'));
     const srcTag=protectedModel?'🔒 Model mặc định':(m.source==='vision-analysis'?'🧠 Vision':(m.source==='image-fallback'?'🖼️ Ảnh':(m.fileType==='ai-model-zip'?'📦 ZIP':'📁 File')));
@@ -8469,7 +8469,7 @@ function loadAiModelsForGrant(){
   if(cur&&ids.includes(cur))sel.value=cur;
 }
 async function deleteAiModelById(id){
-  if(id==='aimodel_default_aru_3d'||(cachedAiModels[id]&&cachedAiModels[id].systemDefault)){showToast('🔒 Aru~aru là model hệ thống, không thể xóa.','warn');return;}
+  if(id==='aimodel_default_aruu'||(cachedAiModels[id]&&cachedAiModels[id].systemDefault)){showToast('🔒 Aru~aruu là model hệ thống, không thể xóa.','warn');return;}
   if(!await customConfirm('Xóa model AI này? Các user đang trang bị sẽ bị mất!',{icon:'🗑️',title:'Xác nhận xóa',okClass:'danger'}))return;
   try{
     await window.dbRemove(window.ref(window.db,`system/ai_models/${id}`));
@@ -9327,8 +9327,7 @@ initEcCreatePanel();
 (function () {
   'use strict';
   const EXT_PATH = 'system/aurora_extensions';
-  const LEGACY_ARU_IDS = ['aimodel_default_aru','aimodel_default_aruu']; // retired built-in defaults
-  const NEW_ARU_MODEL_ID = 'aimodel_default_aru_3d';
+  const LEGACY_ARU_ID = 'aimodel_default_aru'; // used only to remove legacy records
   const CHUNK_BYTES = 180 * 1024; // divisible by 3; avoids Realtime Database large writes.
   const PLAN_DEFS = [
     { id: 'basic', name: 'Basic', price: 'Miễn phí', color: '#6c757d' },
@@ -10407,15 +10406,17 @@ initEcCreatePanel();
   }
   function refreshAllExtensionPages() { renderDonatePage(); renderAdsPage(); renderPlansPage(); renderDonationQRPreview(); renderDonorAdminList(); renderAdEditor(); renderPackageAdminList(); renderMenuEditor(); renderAudioSettings(); if(typeof applyLanguage==='function') applyLanguage(); }
   async function purgeLegacyAruSystemModel() {
-    // Remove only the two retired built-in identifiers, plus their uploaded chunks.
-    for (const id of LEGACY_ARU_IDS) {
-      if (cachedAiModels && Object.prototype.hasOwnProperty.call(cachedAiModels, id)) delete cachedAiModels[id];
+    // Best-effort migration: remove the old built-in model record. Firebase rules still
+    // decide whether this browser session has permission to perform the deletion.
+    if (cachedAiModels && Object.prototype.hasOwnProperty.call(cachedAiModels, LEGACY_ARU_ID)) {
+      delete cachedAiModels[LEGACY_ARU_ID];
     }
     if (!dbReady()) return;
-    await Promise.all(LEGACY_ARU_IDS.flatMap(id => [
-      Promise.resolve().then(() => window.dbRemove(dbRef('system/ai_models/' + id))).catch(error => console.warn('Không thể xóa model mặc định cũ ' + id + ':', error)),
-      Promise.resolve().then(() => window.dbRemove(dbRef('system/ai_model_chunks/' + id))).catch(error => console.warn('Không thể xóa tài nguyên model cũ ' + id + ':', error))
-    ]));
+    try {
+      await window.dbRemove(dbRef('system/ai_models/' + LEGACY_ARU_ID));
+    } catch (error) {
+      console.warn('Không thể xóa bản ghi model mặc định cũ khỏi Firebase trong phiên này:', error);
+    }
   }
 
   function patchUserPlans() {
@@ -10425,20 +10426,19 @@ initEcCreatePanel();
       wrappedStopOnline.__auroraPrivateVoiceStop=true;window.stopOnlineTracking=wrappedStopOnline;
     }
 
-    // Preserve existing grants by replacing only retired built-in IDs with the new system model.
-    // Accounts without an old default keep their AI-model list unchanged.
+    // Retain membership behavior, but do not seed any AI model. Existing accounts are
+    // cleaned lazily when their session loads; all unrelated model IDs remain unchanged.
     if (typeof window.applyUserSession === 'function' && !window.applyUserSession.__auroraNoDefaultBot) {
       const old = window.applyUserSession;
       const enhanced = async function (user) {
         if (user && user.username) {
           const oldModels = Array.isArray(user.aiModels) ? user.aiModels : [];
-          const aiModels = Array.from(new Set(oldModels.map(id => LEGACY_ARU_IDS.includes(id) ? NEW_ARU_MODEL_ID : id)));
-          const equippedAiModel = LEGACY_ARU_IDS.includes(user.equippedAiModel) ? NEW_ARU_MODEL_ID : (user.equippedAiModel || '');
+          const aiModels = oldModels.filter(id => id !== LEGACY_ARU_ID);
+          const equippedAiModel = user.equippedAiModel === LEGACY_ARU_ID ? '' : (user.equippedAiModel || '');
           const tier = PLAN_DEFS.some(p => p.id === user.membershipTier) ? user.membershipTier : 'basic';
           const membershipPurchased = user.membershipPurchased === true;
           const changed = !Array.isArray(user.aiModels)
             || aiModels.length !== oldModels.length
-            || aiModels.some((id, index) => id !== oldModels[index])
             || equippedAiModel !== (user.equippedAiModel || '')
             || user.membershipTier !== tier
             || user.membershipPurchased !== membershipPurchased;
@@ -12198,7 +12198,7 @@ import * as THREE from 'three';
   function mount(host){
     if(!host||!host.isConnected)return null;
     const existing=host.__auroraPetCatInstance;if(existing&&!existing.dead)return existing;
-    const coat=coatChoices[2]; // Cream Persian coat matching the warm reference image.
+    const coat=coatChoices[Math.floor(Math.random()*coatChoices.length)];
     const interactables=[];
     const pendingInteractions=[];
     host.classList.add('aurora-pet-cat-host');
@@ -12223,12 +12223,12 @@ import * as THREE from 'three';
     renderer.outputColorSpace=THREE.SRGBColorSpace;
     renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
     renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-    const scene=new THREE.Scene();scene.background=color(0xd8c2a8);scene.fog=new THREE.Fog(0xd8c2a8,8,16);
+    const scene=new THREE.Scene();scene.background=color(0xc7d8df);scene.fog=new THREE.Fog(0xc7d8df,8,15);
     const camera=new THREE.PerspectiveCamera(36,1,.1,60);camera.position.set(0,2.75,6.15);camera.lookAt(0,.86,-.2);
-    scene.add(new THREE.HemisphereLight(0xfff3e3,0x8c6548,2.2));
-    const sunlight=new THREE.DirectionalLight(0xffe2bc,3.6);sunlight.position.set(-3.5,6,4.5);sunlight.castShadow=true;sunlight.shadow.mapSize.set(1024,1024);sunlight.shadow.camera.left=-5;sunlight.shadow.camera.right=5;sunlight.shadow.camera.top=5;sunlight.shadow.camera.bottom=-4;sunlight.shadow.bias=-.0004;scene.add(sunlight);
-    const rimLight=new THREE.DirectionalLight(0xffd9ad,1.0);rimLight.position.set(3,3,-3);scene.add(rimLight);
-    const fillLight=new THREE.PointLight(0xffc29b,.95,9);fillLight.position.set(0,1.7,2);scene.add(fillLight);
+    scene.add(new THREE.HemisphereLight(0xf4f7ff,0x927858,2.0));
+    const sunlight=new THREE.DirectionalLight(0xffedcf,3.25);sunlight.position.set(-3.5,6,4.5);sunlight.castShadow=true;sunlight.shadow.mapSize.set(1024,1024);sunlight.shadow.camera.left=-5;sunlight.shadow.camera.right=5;sunlight.shadow.camera.top=5;sunlight.shadow.camera.bottom=-4;sunlight.shadow.bias=-.0004;scene.add(sunlight);
+    const rimLight=new THREE.DirectionalLight(0x91caff,1.3);rimLight.position.set(3,3,-3);scene.add(rimLight);
+    const fillLight=new THREE.PointLight(0xffa8a1,.8,9);fillLight.position.set(0,1.7,2);scene.add(fillLight);
     const world=new THREE.Group();scene.add(world);
     const woodTex=woodTexture();woodTex.wrapS=woodTex.wrapT=THREE.RepeatWrapping;woodTex.repeat.set(2.4,2.2);
     const floorMat=new THREE.MeshStandardMaterial({map:woodTex,roughness:.82});
@@ -12242,25 +12242,18 @@ import * as THREE from 'three';
     mesh(new THREE.BoxGeometry(1.36,1.00,.04),new THREE.MeshStandardMaterial({color:0x91c7e4,roughness:.25,metalness:.05,emissive:0x1a4865,emissiveIntensity:.22}),windowG,[0,0,.04]);
     mesh(new THREE.BoxGeometry(.055,1.04,.08),standard(0xf0dfc8,.55),windowG,[0,0,.085]);mesh(new THREE.BoxGeometry(1.38,.055,.08),standard(0xf0dfc8,.55),windowG,[0,0,.085]);
     mesh(new THREE.BoxGeometry(.045,1,.08),standard(0xe9d8c1,.6),windowG,[0,0,.09]);mesh(new THREE.BoxGeometry(1.35,.045,.08),standard(0xe9d8c1,.6),windowG,[0,.05,.09]);
-    const curtainMat=physical(0xd9c3a7,.88);
-    mesh(new THREE.BoxGeometry(.29,1.28,.12),curtainMat,world,[-2.08,1.72,-2.18],[1,1,1],[0,0,-.06]);mesh(new THREE.BoxGeometry(.27,1.28,.12),physical(0xe7d6c2,.88),world,[-.49,1.72,-2.18],[1,1,1],[0,0,.07]);
+    const curtainMat=physical(0x9daecb,.84);
+    mesh(new THREE.BoxGeometry(.29,1.28,.12),curtainMat,world,[-2.08,1.72,-2.18],[1,1,1],[0,0,-.06]);mesh(new THREE.BoxGeometry(.27,1.28,.12),physical(0xb8a0ce,.84),world,[-.49,1.72,-2.18],[1,1,1],[0,0,.07]);
     // Wall pictures.
     const frameMat=standard(0x90704f,.62);const artTex=makeCanvasTexture((ctx,w,h)=>{ctx.fillStyle='#dce8ef';ctx.fillRect(0,0,w,h);ctx.fillStyle='#86b6a4';ctx.beginPath();ctx.arc(w*.5,h*.82,w*.4,Math.PI,Math.PI*2);ctx.fill();ctx.fillStyle='#ead6bc';ctx.beginPath();ctx.arc(w*.68,h*.26,w*.14,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(54,89,95,.5)';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(0,h*.62);ctx.quadraticCurveTo(w*.4,h*.42,w,h*.67);ctx.stroke();},256,192);
     mesh(new THREE.BoxGeometry(.82,.66,.06),frameMat,world,[1.42,1.95,-2.23]);mesh(new THREE.PlaneGeometry(.72,.56),new THREE.MeshStandardMaterial({map:artTex,roughness:.9}),world,[1.42,1.95,-2.18]);
-    // A compact oak bookshelf, ceramic vase and upright books deepen the warm room behind the cat.
-    const shelf=group(world,[2.28,0,-2.16]);const oak=standard(0x8c6040,.74),oakLight=standard(0xb8895c,.78);
-    mesh(new THREE.BoxGeometry(.72,1.48,.26),oak,shelf,[0,1.03,0]);mesh(new THREE.BoxGeometry(.78,1.38,.20),wallMat,shelf,[0,1.03,.145]);
-    for(const y of [.38,.86,1.34,1.72])mesh(new THREE.BoxGeometry(.82,.065,.34),oakLight,shelf,[0,y,.02]);
-    for(const spec of [{x:-.25,h:.35,c:0x748b87},{x:-.15,h:.41,c:0xb77b59},{x:-.04,h:.31,c:0x687d9a},{x:.07,h:.38,c:0xe1c28d},{x:.17,h:.34,c:0x9c7180}])mesh(new THREE.BoxGeometry(.075,spec.h,.12),standard(spec.c,.82),shelf,[spec.x,.60+spec.h/2,.08],[1,1,1],[0,0,(spec.x<0?-.05:.05)]);
-    mesh(new THREE.CylinderGeometry(.11,.16,.28,20),physical(0xd7c0a2,.48),shelf,[.22,1.52,.07]);mesh(new THREE.CylinderGeometry(.07,.08,.09,18),physical(0xd7c0a2,.48),shelf,[.22,1.70,.07]);
-    for(let i=0;i<3;i++){const leaf=mesh(new THREE.SphereGeometry(1,12,10),physical(0x647a52,.76),shelf,[.20+(i-1)*.07,1.91+(i%2)*.06,.07],[.045,.18,.06],[0,0,(i-1)*.35]);}
     // Indoor plant pot and leaves.
     const plant=group(world,[-2.38,0,-.82]);mesh(new THREE.CylinderGeometry(.2,.29,.35,20),standard(0xb76f55,.78),plant,[0,.18,0]);mesh(new THREE.CylinderGeometry(.245,.245,.045,20),standard(0x453a2c,.98),plant,[0,.365,0]);
     const leafMat=physical(0x4c7655,.77);for(let i=0;i<8;i++){const a=i*Math.PI*2/8;const leaf=mesh(new THREE.SphereGeometry(1,12,10),leafMat,plant,[Math.cos(a)*(.15+Math.random()*.08),.65+Math.random()*.23,Math.sin(a)*(.15+Math.random()*.08)],[.09,.31,.16],[Math.cos(a)*.2,0,-Math.sin(a)*.4]);}
     // Rugs and woven stitching.
-    const rug=mesh(new THREE.CircleGeometry(1.55,64),physical(0xb7a28b,.97),world,[0,.004,.05],[1,1,1],[-Math.PI/2,0,0]);rug.receiveShadow=true;
-    const rugRim=mesh(new THREE.TorusGeometry(1.48,.035,8,72),standard(0xe6d3b8,.95),world,[0,.016,.05],[1,1,1],[Math.PI/2,0,0]);
-    const rugPattern=standard(0x987d66,.98);for(let i=0;i<28;i++){const angle=i*Math.PI*2/28;const x=Math.cos(angle)*1.34,z=.05+Math.sin(angle)*1.34;mesh(new THREE.SphereGeometry(.025,7,6),rugPattern,world,[x,.022,z],[1,.45,1]);}
+    const rug=mesh(new THREE.CircleGeometry(1.55,64),physical(0x91aaa0,.97),world,[0,.004,.05],[1,1,1],[-Math.PI/2,0,0]);rug.receiveShadow=true;
+    const rugRim=mesh(new THREE.TorusGeometry(1.48,.035,8,72),standard(0xd8c9a8,.95),world,[0,.016,.05],[1,1,1],[Math.PI/2,0,0]);
+    const rugPattern=standard(0x6f9188,.98);for(let i=0;i<28;i++){const angle=i*Math.PI*2/28;const x=Math.cos(angle)*1.34,z=.05+Math.sin(angle)*1.34;mesh(new THREE.SphereGeometry(.025,7,6),rugPattern,world,[x,.022,z],[1,.45,1]);}
     // Little feeding pedestal and ceramic bowl.
     const foodStand=group(world,[-1.35,0,.06]);
     mesh(new THREE.CylinderGeometry(.31,.35,.14,24),standard(0x8d6348,.7),foodStand,[0,.12,0]);mesh(new THREE.CylinderGeometry(.24,.28,.18,20),standard(0xa97a57,.67),foodStand,[0,.27,0]);mesh(new THREE.CylinderGeometry(.36,.34,.065,24),physical(0xc79b70,.55),foodStand,[0,.39,0]);
@@ -12294,17 +12287,13 @@ import * as THREE from 'three';
     const catRoot=group(world,[0,0,.06]);catRoot.userData.petAction='pet';
     const pose=group(catRoot);
     const fur=physical(coat.base,.92,{sheen:.22,sheenColor:0xd5d2cd,sheenRoughness:.88});
-    const darkFur=standard(coat.dark,.95),creamFur=physical(coat.cream,.95,{sheen:.15}),pink=physical(coat.nose,.38,{clearcoat:.22}),earPink=physical(0xc78e98,.85),eyeWhite=physical(0xe9e4d9,.3),iris=physical(coat.name==='kem sữa'?0xc5813d:(coat.name==='đen khói'?0x9cb0a8:0x8bb6a0),.26),pupil=physical(0x151a20,.12),eyeGlint=new THREE.MeshBasicMaterial({color:0xffffff});
+    const darkFur=standard(coat.dark,.95),creamFur=physical(coat.cream,.95,{sheen:.15}),pink=physical(coat.nose,.38,{clearcoat:.22}),earPink=physical(0xc78e98,.85),eyeWhite=physical(0xe9e4d9,.3),iris=physical(coat.name==='đen khói'?0x9cb0a8:0x8bb6a0,.26),pupil=physical(0x151a20,.12),eyeGlint=new THREE.MeshBasicMaterial({color:0xffffff});
     const body=mesh(new THREE.SphereGeometry(1,32,24),fur,pose,[0,.66,-.19],[.48,.37,.77]);
     const chest=mesh(new THREE.SphereGeometry(1,24,18),creamFur,pose,[0,.66,.30],[.36,.35,.43]);
     const belly=mesh(new THREE.SphereGeometry(1,24,18),creamFur,pose,[0,.44,-.13],[.34,.17,.54]);
-    // Fibonacci-distributed instanced tufts give the Persian coat soft volume without hundreds of draw calls.
-    function furTufts(center,scale,count,material,parent){
-      const tuftGeo=new THREE.ConeGeometry(.018,.075,5);const instanced=new THREE.InstancedMesh(tuftGeo,material,count);const dummy=new THREE.Object3D();const up=new THREE.Vector3(0,1,0);const golden=Math.PI*(3-Math.sqrt(5));
-      for(let i=0;i<count;i++){const y=1-2*(i+.5)/count;const r=Math.sqrt(Math.max(0,1-y*y));const angle=i*golden;const normal=new THREE.Vector3(Math.cos(angle)*r,y,Math.sin(angle)*r);dummy.position.set(center[0]+normal.x*scale[0]*.985,center[1]+normal.y*scale[1]*.985,center[2]+normal.z*scale[2]*.985);dummy.quaternion.setFromUnitVectors(up,normal);dummy.rotateY(angle*.07);dummy.scale.set(.8,1,.8);dummy.updateMatrix();instanced.setMatrixAt(i,dummy.matrix);}
-      instanced.instanceMatrix.needsUpdate=true;instanced.castShadow=true;instanced.receiveShadow=true;parent.add(instanced);return instanced;
-    }
-    furTufts([0,.66,-.19],[.48,.37,.77],240,creamFur,pose);furTufts([0,.66,.30],[.36,.35,.43],150,creamFur,pose);
+    // Subtle short fur strokes are batched into one mesh per body section for mobile performance.
+    function furStrokes(center,scale,count,material,parent){const positions=[];for(let i=0;i<count;i++){const z=Math.random()*2-1,a=Math.random()*Math.PI*2,r=Math.sqrt(1-z*z);const n=new THREE.Vector3(Math.cos(a)*r,z,Math.sin(a)*r);const p=new THREE.Vector3(center[0]+n.x*scale[0],center[1]+n.y*scale[1],center[2]+n.z*scale[2]);const end=p.clone().add(new THREE.Vector3(n.x,n.y,n.z).multiplyScalar(.022+Math.random()*.015));positions.push(p.x,p.y,p.z,end.x,end.y,end.z);}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));const lines=new THREE.LineSegments(geo,material);parent.add(lines);return lines;}
+    const furLineMat=new THREE.LineBasicMaterial({color:coat.dark,transparent:true,opacity:.27});furStrokes([0,.66,-.19],[.48,.37,.77],260,furLineMat,pose);furStrokes([0,.66,.30],[.36,.35,.43],90,new THREE.LineBasicMaterial({color:coat.cream,transparent:true,opacity:.3}),pose);
     // Legs are jointed groups, so the feet can step and scratch.
     const legs=[];
     for(const spec of [{x:-.29,z:.34,front:true},{x:.29,z:.34,front:true},{x:-.3,z:-.62,front:false},{x:.3,z:-.62,front:false}]){
@@ -12315,16 +12304,16 @@ import * as THREE from 'three';
     // cheeks and muzzle
     mesh(new THREE.SphereGeometry(1,20,16),creamFur,head,[-.12,-.105,.255],[.145,.105,.12]);mesh(new THREE.SphereGeometry(1,20,16),creamFur,head,[.12,-.105,.255],[.145,.105,.12]);mesh(new THREE.SphereGeometry(1,18,14),creamFur,head,[0,-.17,.23],[.16,.09,.11]);
     // Cat ears with pink inset.
-    const earL=mesh(new THREE.ConeGeometry(.12,.26,5,1),fur,head,[-.235,.275,-.02],[1,1,1],[0,0,.20]);const earR=mesh(new THREE.ConeGeometry(.12,.26,5,1),fur,head,[.235,.275,-.02],[1,1,1],[0,0,-.20]);
-    mesh(new THREE.ConeGeometry(.073,.18,5,1),earPink,head,[-.232,.285,.035],[1,1,1],[0,0,.20]);mesh(new THREE.ConeGeometry(.073,.18,5,1),earPink,head,[.232,.285,.035],[1,1,1],[0,0,-.20]);
+    const earL=mesh(new THREE.ConeGeometry(.145,.32,3,1),fur,head,[-.235,.275,-.02],[1,1,1],[0,0,.20]);const earR=mesh(new THREE.ConeGeometry(.145,.32,3,1),fur,head,[.235,.275,-.02],[1,1,1],[0,0,-.20]);
+    mesh(new THREE.ConeGeometry(.095,.23,3,1),earPink,head,[-.232,.285,.035],[1,1,1],[0,0,.20]);mesh(new THREE.ConeGeometry(.095,.23,3,1),earPink,head,[.232,.285,.035],[1,1,1],[0,0,-.20]);
     // Eyes, vertical pupils, tiny catchlights.
     const eyes=[];for(const side of [-1,1]){const eg=group(head,[side*.15,.035,.282]);mesh(new THREE.SphereGeometry(1,24,18),eyeWhite,eg,[0,0,0],[.086,.115,.046]);mesh(new THREE.SphereGeometry(1,20,16),iris,eg,[0,0,.038],[.054,.082,.022]);mesh(new THREE.SphereGeometry(1,16,12),pupil,eg,[0,0,.056],[.019,.065,.014]);mesh(new THREE.SphereGeometry(.014,8,6),eyeGlint,eg,[-.017,.034,.07]);mesh(new THREE.SphereGeometry(.006,6,5),eyeGlint,eg,[.016,-.022,.071]);eyes.push(eg);}
     const nose=mesh(new THREE.SphereGeometry(1,16,12),pink,head,[0,-.1,.36],[.046,.03,.028]);
     const mouthMat=standard(0x5b4845,.8);tube([[0,-.12,.372],[0,-.17,.367],[-.055,-.19,.35]],.006,mouthMat,head,10);tube([[0,-.17,.367],[.055,-.19,.35]],.006,mouthMat,head,10);
     const whiskerMat=standard(coat.cream,.8);for(const side of [-1,1])for(let k=0;k<3;k++){const y=-.105+k*.028; tube([[side*.12,y,.32],[side*.27,y+(k-1)*.02,.31],[side*.39,y+(k-1)*.045,.29]],.0035,whiskerMat,head,9);}
-    furTufts([0,0,0],[.36,.33,.32],110,creamFur,head);
+    furStrokes([0,0,0],[.36,.33,.32],140,new THREE.LineBasicMaterial({color:coat.dark,transparent:true,opacity:.2}),head);
     // Tail: one curved, swishable 3D tube.
-    const tailRoot=group(pose,[0,.7,-.78]);const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(-.04,.08,-.18),new THREE.Vector3(.12,.19,-.31),new THREE.Vector3(.30,.35,-.33),new THREE.Vector3(.31,.52,-.22)]);const tail=mesh(new THREE.TubeGeometry(tailCurve,40,.12,14,false),fur,tailRoot);const tailTip=mesh(new THREE.SphereGeometry(.12,18,14),fur,tailRoot,[.31,.52,-.22]);
+    const tailRoot=group(pose,[0,.7,-.78]);const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(-.04,.08,-.18),new THREE.Vector3(.12,.19,-.31),new THREE.Vector3(.30,.35,-.33),new THREE.Vector3(.31,.52,-.22)]);const tail=mesh(new THREE.TubeGeometry(tailCurve,40,.085,12,false),fur,tailRoot);const tailTip=mesh(new THREE.SphereGeometry(.087,14,10),fur,tailRoot,[.31,.52,-.22]);
     // A few coat markings that change hue with the chosen coat.
     if(!['đen khói','kem sữa','bạc trắng'].includes(coat.name)){for(let i=0;i<4;i++){const zz=-.55+i*.25;const stripePoints=[[-.30,.93,zz-.04],[-.18,.98,zz],[0,1.005,zz+.035],[.18,.98,zz],[.30,.93,zz-.04]];tube(stripePoints,.012,darkFur,pose,14);}}
     const catTarget={x:0,z:.05};let state='idle',stateUntil=0,moveTarget=null,arrivalState='idle',sleepSince=0,butterflyMode='fly',butterflyLandAt=0,petPulseUntil=0,foodCount=foodBits.length,playStart=0,ownerKey=getOwner(),catName='Miu',nameVersion=0,blinkNext=performance.now()/1000+2,blinkUntil=0,lastOwnerCheck=0,lastFoodNibble=0;
@@ -12415,7 +12404,7 @@ import * as THREE from 'three';
 </script>
 
 <style id="auroraAruCompanionStyles">
-/* Aru~aru: 3D personality, accessory and interaction layer */
+/* Aru~aruu: 2D personality and interaction animation layer */
 .aru-settings-modal{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(7,17,42,.72);backdrop-filter:blur(8px)}
 .aru-settings-modal.show{display:flex}
 .aru-settings-panel{width:min(100%,760px);max-height:92dvh;overflow:auto;background:#f8fbff;border:1px solid #c7d8ff;border-radius:18px;box-shadow:0 28px 90px rgba(0,0,0,.42);padding:18px;color:#17233e}
@@ -12430,7 +12419,7 @@ import * as THREE from 'three';
 .aru-attachment-row img{width:38px;height:38px;object-fit:contain;background:#edf2ff;border-radius:7px}
 .aru-personality-tags{display:flex;flex-wrap:wrap;gap:6px;margin:7px 0}
 .aru-personality-tag{border:1px solid #c7d2fe;border-radius:999px;padding:5px 9px;font-size:11px;background:#eef2ff;color:#384a84}
-#aiScreenReadBtn{top:auto!important;bottom:8px!important;left:8px!important;right:auto!important}
+#aiScreenReadBtn{top:auto!important;bottom:48px!important;left:6px!important;right:auto!important}
 #aiWebcamBtn,.profile-ai-webcam-wrap,#profileWebcamPreview,#profileWebcamMouthIndicator{display:none!important}
 #aiModelWidget.aru-system-model{overflow:visible}
 #aiModelWidget .aru-accessory-layer{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:visible}
@@ -12481,7 +12470,7 @@ body.optimized-mode #aiModelWidget .aru-bear-cover{animation:none!important;tran
 @keyframes aruDizzy{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
 @keyframes aruTap{0%,100%{transform:translateY(0)}35%{transform:translateY(-6px) scale(1.015)}65%{transform:translateY(3px)}}
 @keyframes aruPropFloat{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-8px) rotate(7deg)}}
-@media(max-width:650px){.aru-settings-modal{padding:5px}.aru-settings-panel{padding:12px;max-height:96dvh}.aru-settings-grid{grid-template-columns:1fr}.aru-safe-stage{height:230px}#aiScreenReadBtn{bottom:8px!important}}
+@media(max-width:650px){.aru-settings-modal{padding:5px}.aru-settings-panel{padding:12px;max-height:96dvh}.aru-settings-grid{grid-template-columns:1fr}.aru-safe-stage{height:230px}#aiScreenReadBtn{bottom:48px!important}}
 @media(prefers-reduced-motion:reduce){#aiModelWidget.aru-system-model #aiModelContent img{animation:none!important;transition:none!important}}
 body.optimized-mode #aiModelWidget #aiModelContent img{animation:none!important;transition:none!important;filter:none!important;transform:none!important}
 body.optimized-mode #aiModelWidget .aru-accessory-layer,body.optimized-mode #aiModelWidget .aru-floating-prop,body.optimized-mode #aiModelWidget .aru-mood-caption{display:none!important}
@@ -12493,7 +12482,7 @@ body.optimized-mode #aiModelWidget .ai-model-body{pointer-events:none!important}
     <div class="aru-settings-head"><div><h3 id="aiModelSettingsTitle" style="margin:0;color:#27345b">⚙️ Cài đặt model AI</h3><p id="aiModelSettingsSubtitle" style="margin:5px 0 0;font-size:12px;color:#6b7892">Chỉnh tên, tính cách và phụ kiện</p></div><button type="button" class="btn btn-danger" style="width:38px;height:38px;padding:0;border-radius:50%;font-size:18px" onclick="closeAiModelSettings()" aria-label="Đóng">×</button></div>
     <div class="aru-settings-grid">
       <div class="aru-settings-card">
-        <label for="aiEditModelName">Tên model</label><input id="aiEditModelName" type="text" maxlength="80" placeholder="Aru~aru">
+        <label for="aiEditModelName">Tên model</label><input id="aiEditModelName" type="text" maxlength="80" placeholder="Aru~aruu">
         <div class="form-grid-2" style="gap:8px"><div><label for="aiEditGender">Giới tính</label><select id="aiEditGender"><option value="female">Nữ</option><option value="male">Nam</option><option value="other">Khác / tùy chỉnh</option></select></div><div><label for="aiEditPersonality">Tính cách</label><select id="aiEditPersonality"><option value="tsundere">Tsundere</option><option value="cute">Cute</option><option value="badboy">Badboy</option><option value="sadgirl">Sadgirl</option><option value="yandere">Yandere</option><option value="kuudere">Kuudere</option><option value="dandere">Dandere</option><option value="genki">Genki</option><option value="cool">Cool</option><option value="shy">Shy</option><option value="friendly">Friendly</option><option value="chaotic">Chaotic</option><option value="custom">Tùy chỉnh</option></select></div></div>
         <label for="aiEditDescription">Mô tả / giọng điệu riêng</label><textarea id="aiEditDescription" rows="2" placeholder="Mô tả cách nhân vật phản ứng..."></textarea>
         <label for="aiEditGreeting">Câu chào</label><input id="aiEditGreeting" type="text" maxlength="500">
@@ -12501,14 +12490,14 @@ body.optimized-mode #aiModelWidget .ai-model-body{pointer-events:none!important}
         <label for="aiEditThinking">Câu suy nghĩ</label><input id="aiEditThinking" type="text" maxlength="500">
         <label for="aiEditMusic">Câu khi nghe nhạc</label><input id="aiEditMusic" type="text" maxlength="500">
         <label for="aiEditPrank">Câu tinh nghịch</label><input id="aiEditPrank" type="text" maxlength="500">
-        <div style="padding:9px;border-radius:9px;background:#f0f6ff;border:1px solid #d2e3ff;font-size:11px;color:#455979;margin-top:10px" id="aiModelDefaultLockNote">Aru~aru là model 3D mặc định do Aurora AI tạo, không thể xóa và chỉ tài khoản được cấp mới sở hữu.</div>
+        <div style="padding:9px;border-radius:9px;background:#f0f6ff;border:1px solid #d2e3ff;font-size:11px;color:#455979;margin-top:10px" id="aiModelDefaultLockNote">Aru~aruu là model mặc định do Aurora AI tạo, không thể xóa và chỉ tài khoản được cấp mới sở hữu.</div>
       </div>
       <div class="aru-settings-card">
         <b>🧸 Phụ kiện mặc định</b>
         <div id="aiEditBuiltinAccessories" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0">
           <label><input type="checkbox" id="aiAccBear" checked> Gấu bông</label><label><input type="checkbox" id="aiAccCatEars" checked> Tai mèo</label><label><input type="checkbox" id="aiAccHeadphones"> Tai nghe</label><label><input type="checkbox" id="aiAccHairBow" checked> Nơ tóc</label><label><input type="checkbox" id="aiAccDress" checked> Váy trắng</label>
         </div>
-        <p style="font-size:11px;color:#6b7892;line-height:1.45;margin:6px 0">Phụ kiện của Aru~aru được dựng thành các phần 3D riêng, có thể bật/tắt tại đây. Khi bật chế độ tối ưu, nhân vật chuyển sang ảnh tĩnh; các phụ kiện tùy chọn được phản ánh trong ảnh.</p>
+        <p style="font-size:11px;color:#6b7892;line-height:1.45;margin:6px 0">Gấu bông có thể bật/tắt bằng lớp phủ trang phục của art hệ thống. Tai mèo/nơ/váy là chi tiết vẽ liền trong ảnh nên bị khóa tại đây; muốn tách riêng hoàn toàn cần art chia lớp hoặc Live2D. Tai nghe và phụ kiện ảnh tải thêm có thể bật/tắt độc lập.</p>
         <label for="aiEditAccessoryFiles">➕ Tải phụ kiện mới (PNG/JPG/GIF/WEBP)</label><input type="file" id="aiEditAccessoryFiles" multiple accept="image/png,image/jpeg,image/gif,image/webp,.png,.jpg,.jpeg,.gif,.webp">
         <div id="aiEditAccessoryList" class="aru-attachment-list"></div>
         <label for="aiEditAccessoryPick">Chọn phụ kiện để chỉnh Safe Zone</label><select id="aiEditAccessoryPick" onchange="auroraSelectAccessoryForSafeZone()"><option value="">Chưa có phụ kiện rời</option></select>
@@ -12524,44 +12513,8 @@ body.optimized-mode #aiModelWidget .ai-model-body{pointer-events:none!important}
 
 <script>
 /* ================= AURORA ARU~ARUU MODEL SYSTEM ================= */
-const AURORA_ARU_MODEL_ID='aimodel_default_aru_3d';
-const AURORA_ARU_RETIRED_IDS=['aimodel_default_aru','aimodel_default_aruu'];
-function auroraAruStaticArt(settings={}){
- const s=Object.assign({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},settings||{});
- const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 600" role="img" aria-label="Aru~aru, nhân vật anime tóc trắng mắt xanh">
- <defs>
-  <linearGradient id="hair" x1=".08" y1="0" x2=".9" y2="1"><stop stop-color="#fff"/><stop offset=".58" stop-color="#edf1fa"/><stop offset="1" stop-color="#cbd5e8"/></linearGradient>
-  <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0e7"/><stop offset="1" stop-color="#f6cdbd"/></linearGradient>
-  <linearGradient id="dress" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#dce8fa"/></linearGradient>
-  <radialGradient id="iris"><stop stop-color="#c7fff0"/><stop offset=".48" stop-color="#5cc9a9"/><stop offset="1" stop-color="#21866f"/></radialGradient>
-  <linearGradient id="bear" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8c49c"/><stop offset="1" stop-color="#b98258"/></linearGradient>
-  <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
- </defs>
- <ellipse cx="220" cy="570" rx="150" ry="20" fill="#c9cfe0" opacity=".20"/>
- <path d="M105 292Q70 348 65 600h310q-5-252-50-308Q302 266 220 266q-79 0-115 26" fill="url(#hair)"/>
- <!--ARU_DRESS--><path d="M122 320q25-39 66-45h64q42 7 67 47l31 278H91z" fill="url(#dress)" stroke="#ccd8ec" stroke-width="5"/><path d="M169 285q20 23 51 25 31-2 51-25l21 32q-25 30-72 30t-72-30z" fill="#fff" stroke="#d6e0f0" stroke-width="4"/><path d="M170 367q49 23 100 0M150 502q70 26 140 0M127 568q92 23 185 0" fill="none" stroke="#c2d2ec" stroke-width="5" stroke-linecap="round"/><path d="M205 329h30l-15 23z" fill="#7a9ad1"/><circle cx="220" cy="384" r="5" fill="#86a6dc"/><circle cx="220" cy="424" r="5" fill="#86a6dc"/>
- <path d="M126 328q-40 24-45 86l27 48q19 1 35-22l22-73M314 328q40 24 45 86l-27 48q-19 1-35-22l-22-73" fill="url(#skin)" stroke="#e6c3b5" stroke-width="5"/>
- <!--ARU_BEAR--><g><ellipse cx="221" cy="449" rx="74" ry="88" fill="url(#bear)" stroke="#a97753" stroke-width="5"/><circle cx="221" cy="377" r="62" fill="url(#bear)" stroke="#a97753" stroke-width="5"/><circle cx="175" cy="330" r="25" fill="#c79569" stroke="#a97753" stroke-width="5"/><circle cx="267" cy="330" r="25" fill="#c79569" stroke="#a97753" stroke-width="5"/><ellipse cx="221" cy="393" rx="34" ry="25" fill="#f1d7bb"/><circle cx="201" cy="372" r="5" fill="#493c38"/><circle cx="241" cy="372" r="5" fill="#493c38"/><ellipse cx="221" cy="389" rx="8" ry="6" fill="#66443e"/><path d="M221 395v10m0 0q-10 9-18 0m18 0q10 9 18 0" fill="none" stroke="#66443e" stroke-width="3" stroke-linecap="round"/><path d="M194 437q27 16 54 0" fill="none" stroke="#a97753" stroke-width="4"/><path d="M190 427l-19 10 19 10 12-10zm62 0 19 10-19 10-12-10z" fill="#e79caf"/><circle cx="221" cy="437" r="7" fill="#f2bac8"/></g>
- <path d="M102 260q-29-35-16-80 12-43 55-68Q176 70 221 75q49-7 91 29 37 32 41 82 4 53-20 97l-20-9q9-47-2-73-22 26-43 32-30 6-48-9-25 31-69 33-23 0-39-12l-3 54z" fill="url(#hair)" stroke="#d1d9e8" stroke-width="5"/>
- <!--ARU_EARS--><g><path d="M129 128 100 21q-4-17 13-5l87 77z" fill="url(#hair)" stroke="#c6d0e1" stroke-width="5"/><path d="m135 104-18-64 57 48z" fill="#efb9c4"/><path d="m311 128 29-107q4-17-13-5l-87 77z" fill="url(#hair)" stroke="#c6d0e1" stroke-width="5"/><path d="m305 104 18-64-57 48z" fill="#efb9c4"/></g>
- <!-- face -->
- <path d="M134 172q6-75 86-81 81 7 87 82l-8 91q-23 72-79 75-57-3-80-75z" fill="url(#skin)" stroke="#eac9bd" stroke-width="4"/>
- <ellipse cx="164" cy="247" rx="19" ry="9" fill="#ef9eaa" opacity=".32" filter="url(#soft)"/><ellipse cx="276" cy="247" rx="19" ry="9" fill="#ef9eaa" opacity=".32" filter="url(#soft)"/>
- <path d="M145 206q26-26 51 0" fill="#fff" stroke="#936c68" stroke-width="5"/><ellipse cx="171" cy="216" rx="17" ry="25" fill="#fff"/><ellipse cx="171" cy="218" rx="11" ry="18" fill="url(#iris)"/><ellipse cx="171" cy="222" rx="5" ry="12" fill="#1f3b39"/><circle cx="166" cy="208" r="6" fill="#fff"/><circle cx="179" cy="225" r="3" fill="#fff"/>
- <path d="M244 206q26-26 51 0" fill="#fff" stroke="#936c68" stroke-width="5"/><ellipse cx="269" cy="216" rx="17" ry="25" fill="#fff"/><ellipse cx="269" cy="218" rx="11" ry="18" fill="url(#iris)"/><ellipse cx="269" cy="222" rx="5" ry="12" fill="#1f3b39"/><circle cx="264" cy="208" r="6" fill="#fff"/><circle cx="277" cy="225" r="3" fill="#fff"/>
- <path d="M193 190q20-10 34 0m19 0q17-10 31 0" fill="none" stroke="#a58a88" stroke-width="4" stroke-linecap="round"/><path d="M216 247q4 7 9 0" fill="none" stroke="#d49588" stroke-width="4" stroke-linecap="round"/><path d="M197 270q23 23 47 0-2 28-24 29-20-1-23-29" fill="#a94c61"/><path d="M202 273q20 11 38 0" fill="none" stroke="#fff3f3" stroke-width="5" stroke-linecap="round"/>
- <!-- fringe and long side locks -->
- <path d="M130 186q-8-89 78-111 66-16 107 35-30 3-44 23 28 24 21 79-18-20-40-30-18 28-51 44 8-32-6-60-22 35-59 48 11-31-6-63z" fill="url(#hair)" stroke="#d1d9e8" stroke-width="4"/><path d="M157 127q-10 75-3 120m42-139q-12 69-2 125m39-120q-10 72 0 116m40-103q-9 61 5 100M113 194q-10 93 0 171m220-170q14 92 1 170" fill="none" stroke="#c4cede" stroke-width="5" stroke-linecap="round" opacity=".85"/>
- <!--ARU_BOW--><g><path d="M306 139q-24-31-50-12 10 27 36 29-22 18-12 37 29-6 34-31 20 20 43 8-7-27-39-30z" fill="#91a9d6" stroke="#748ab8" stroke-width="4"/><circle cx="318" cy="158" r="9" fill="#e6ecf8"/></g>
- <!--ARU_HEADPHONES--><g fill="none" stroke="#8298c6" stroke-width="12"><path d="M132 165q-11-105 88-109 99 4 88 109"/><path d="M126 165v34m188-34v34" stroke-width="18" stroke-linecap="round"/></g>
- <path d="M128 313q25 4 42-18m141 18q-25 4-42-18" fill="none" stroke="#f1d7cb" stroke-width="15" stroke-linecap="round"/>
- </svg>`;
- const parts={ARU_EARS:s.catEars?svg.match(/<!--ARU_EARS-->([\s\S]*?)<!-- face -->/)[1].replace(/<!-- face -->[\s\S]*/, ''):'',ARU_DRESS:s.whiteDress?svg.match(/<!--ARU_DRESS-->([\s\S]*?)<!--ARU_BEAR-->/)[1]:'<path d="M122 320q25-39 66-45h64q42 7 67 47l31 278H91z" fill="#f5f2f7" stroke="#d8d2e3" stroke-width="5"/>',ARU_BEAR:s.bear?svg.match(/<!--ARU_BEAR-->([\s\S]*?)<path d="M102 260/)[1]:'',ARU_BOW:s.hairBow?svg.match(/<!--ARU_BOW-->([\s\S]*?)<!--ARU_HEADPHONES-->/)[1]:'',ARU_HEADPHONES:s.headphones?svg.match(/<!--ARU_HEADPHONES-->([\s\S]*?)<path d="M128 313/)[1]:''};
- let out=svg;
- for(const [key,value] of Object.entries(parts)){const marker=new RegExp('<!--'+key+'-->[\\s\\S]*?'+(key==='ARU_EARS'?'<!-- face -->':key==='ARU_DRESS'?'<!--ARU_BEAR-->':key==='ARU_BEAR'?'(?=<path d="M102 260)':key==='ARU_BOW'?'<!--ARU_HEADPHONES-->':'(?=<path d="M128 313)'));out=out.replace(marker,value);}
- return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(out);
-}
-const AURORA_ARU_IMAGE=auroraAruStaticArt({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true});
+const AURORA_ARU_MODEL_ID='aimodel_default_aruu';
+const AURORA_ARU_IMAGE='data:image/webp;base64,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';
 const AURORA_PERSONALITY_LABELS={tsundere:'Tsundere',cute:'Cute',badboy:'Badboy',sadgirl:'Sadgirl',yandere:'Yandere',kuudere:'Kuudere',dandere:'Dandere',genki:'Genki',cool:'Cool',shy:'Shy',friendly:'Friendly',chaotic:'Chaotic',custom:'Tùy chỉnh'};
 const AURORA_PERSONALITY_INSTRUCTIONS={
  tsundere:'hơi ngại, ngoài miệng có thể chối nhưng quan tâm thật lòng; trêu nhẹ, không xúc phạm người dùng',
@@ -12579,12 +12532,11 @@ const AURORA_PERSONALITY_INSTRUCTIONS={
  custom:'làm theo mô tả tính cách tùy chỉnh trong cài đặt model'
 };
 function auroraPersonalityInstruction(key){return AURORA_PERSONALITY_INSTRUCTIONS[key]||AURORA_PERSONALITY_INSTRUCTIONS.tsundere;}
-function auroraAruuTemplate(){return {id:AURORA_ARU_MODEL_ID,name:'Aru~aru',gender:'female',personality:'tsundere',style:'anime-3d',description:'Nhân vật nữ anime 3D từ phần bụng trở lên, tóc trắng dài, tai mèo, mắt xanh, váy trắng và gấu bông có thể bật/tắt. Model có hoạt ảnh mượt theo trạng thái và tính cách.',greeting:'Hứ! Đừng hiểu lầm nhé… mình ở đây vì muốn giúp bạn thôi! 💙',happyMsg:'Hả?! Điểm cao vậy sao… t-thì mình biết bạn làm được mà! 🎉',sadMsg:'Này… đừng buồn quá nha. Nghỉ một chút rồi mình thử lại cùng nhau nhé…',thinkingMsg:'Ừm… để mình nghĩ kỹ đã, đừng nhìn mình chăm chăm chứ…',musicMsg:'Bài này hay đấy… mình chỉ lắc lư theo nhạc một chút thôi nha! 🎧',prankMsg:'Hihi, lần này mình sẽ tinh nghịch một xíu nhé~',files:[],imageData:AURORA_ARU_IMAGE,fileType:'ai-model-3d',source:'aurora-ai',createdBy:'Aurora AI',createdAt:0,totalSize:0,systemDefault:true,renderMode:'procedural-3d',accessorySettings:{bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},accessories:[],is3DSystemModel:true};}
+function auroraAruuTemplate(){return {id:AURORA_ARU_MODEL_ID,name:'Aru~aruu',gender:'female',personality:'tsundere',style:'anime-2d',description:'Nữ anime 2D từ phần bụng trở lên; tóc trắng, tai mèo, mắt xanh, váy trắng, ôm gấu bông. Nhân vật đồng hành do Aurora AI tạo.',greeting:'Hứ! Đừng hiểu lầm nhé… mình ở đây vì muốn giúp bạn thôi! 💙',happyMsg:'Hả?! Điểm cao vậy sao… t-thì mình biết bạn làm được mà! 🎉',sadMsg:'Này… đừng buồn quá nha. Nghỉ một chút rồi mình thử lại cùng nhau nhé…',thinkingMsg:'Ừm… để mình nghĩ kỹ đã, đừng nhìn mình chăm chăm chứ…',musicMsg:'Bài này hay đấy… mình chỉ lắc lư theo nhạc một chút thôi nha! 🎧',prankMsg:'Hihi, lần này mình sẽ tinh nghịch một xíu nhé~',files:[],imageData:AURORA_ARU_IMAGE,fileType:'ai-model-2d',source:'aurora-ai',createdBy:'Aurora AI',createdAt:0,totalSize:0,systemDefault:true,accessorySettings:{bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},accessories:[],is2DSystemModel:true};}
 function auroraMergeAiModelCache(serverModels){
  const models=Object.assign({},serverModels||{});
- AURORA_ARU_RETIRED_IDS.forEach(id=>delete models[id]);
  const saved=models[AURORA_ARU_MODEL_ID]||{};
- models[AURORA_ARU_MODEL_ID]=Object.assign(auroraAruuTemplate(),saved,{id:AURORA_ARU_MODEL_ID,name:(saved&&saved.name&&saved.name!=='Aru~Aruu'&&saved.name!=='Aru~aruu')?saved.name:'Aru~aru',systemDefault:true,is2DSystemModel:false,is3DSystemModel:true,renderMode:'procedural-3d',style:'anime-3d',imageData:(saved&&saved.imageData)||AURORA_ARU_IMAGE,files:Array.isArray(saved.files)?saved.files:[],accessories:Array.isArray(saved.accessories)?saved.accessories:[],accessorySettings:Object.assign({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},saved.accessorySettings||{}),createdBy:'Aurora AI'});
+ models[AURORA_ARU_MODEL_ID]=Object.assign(auroraAruuTemplate(),saved,{id:AURORA_ARU_MODEL_ID,name:(saved&&saved.name&&saved.name!=='Aru~Aruu')?saved.name:'Aru~aruu',systemDefault:true,is2DSystemModel:true,imageData:(saved&&saved.imageData)||AURORA_ARU_IMAGE,files:Array.isArray(saved.files)?saved.files:[],accessories:Array.isArray(saved.accessories)?saved.accessories:[],accessorySettings:Object.assign({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},saved.accessorySettings||{}),createdBy:'Aurora AI'});
  return models;
 }
 try{cachedAiModels=auroraMergeAiModelCache(cachedAiModels||{});}catch(e){console.warn('Aru model cache init',e);}
@@ -12600,14 +12552,14 @@ function openAiModelSettings(id){
  const byId=(x)=>document.getElementById(x);
  byId('aiModelSettingsTitle').textContent='⚙️ Cài đặt model: '+(model.name||'AI');
  byId('aiModelSettingsSubtitle').textContent=(model.systemDefault?'Model hệ thống do Aurora AI tạo · không thể xóa':'Model do '+(model.createdBy||'người dùng')+' tạo')+' · chỉnh tính cách, lời thoại, phụ kiện và Safe Zone';
- byId('aiEditModelName').value=model.name||'Aru~aru';const nameField=byId('aiEditModelName');nameField.readOnly=!!model.systemDefault;nameField.title=model.systemDefault?'Tên model hệ thống được cố định là Aru~aru.':'';byId('aiEditGender').value=model.gender||'female';byId('aiEditPersonality').value=model.personality||'tsundere';byId('aiEditDescription').value=model.description||'';
+ byId('aiEditModelName').value=model.name||'Auro';byId('aiEditGender').value=model.gender||'female';byId('aiEditPersonality').value=model.personality||'tsundere';byId('aiEditDescription').value=model.description||'';
  byId('aiEditGreeting').value=model.greeting||'';byId('aiEditHappy').value=model.happyMsg||'';byId('aiEditSad').value=model.sadMsg||'';byId('aiEditThinking').value=model.thinkingMsg||'';byId('aiEditMusic').value=model.musicMsg||'';byId('aiEditPrank').value=model.prankMsg||'';
  const a=Object.assign({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},model.accessorySettings||{});
  byId('aiAccBear').checked=!!a.bear;byId('aiAccCatEars').checked=!!a.catEars;byId('aiAccHeadphones').checked=!!a.headphones;byId('aiAccHairBow').checked=!!a.hairBow;byId('aiAccDress').checked=!!a.whiteDress;
- ['aiAccCatEars','aiAccHairBow','aiAccDress'].forEach(accId=>{const el=byId(accId);if(el){el.disabled=!!model.is2DSystemModel;el.title=model.is2DSystemModel?'Chi tiết này nằm liền trong ảnh 2D nên không thể tắt riêng.':'';}});
+ ['aiAccCatEars','aiAccHairBow','aiAccDress'].forEach(accId=>{const el=byId(accId);if(el){el.disabled=!!model.is2DSystemModel;el.title=model.is2DSystemModel?'Chi tiết này nằm liền trong ảnh 2D; cần art chia lớp/Live2D để tắt riêng.':'';}});
  byId('aiEditAccessoryFiles').value='';
  const lockNote=byId('aiModelDefaultLockNote');if(lockNote)lockNote.style.display=model.systemDefault?'block':'none';
- const base=byId('aiEditSafeBase');base.src=model.is3DSystemModel?auroraAruStaticArt(model.accessorySettings||{}):(model.imageData||AURORA_ARU_IMAGE);base.alt=model.name||'AI model';
+ const base=byId('aiEditSafeBase');base.src=(model.imageData||AURORA_ARU_IMAGE);base.alt=model.name||'AI model';
  auroraRenderAccessoryList();auroraRenderAccessorySelect();auroraSelectAccessoryForSafeZone();
  byId('aiModelSettingsModal').classList.add('show');
 }
@@ -12660,10 +12612,10 @@ async function saveAiModelSettings(){
  const name=(document.getElementById('aiEditModelName').value||'').trim();if(!name){showToast('Tên model không được để trống.','error');return;}
  const btn=document.getElementById('aiSaveModelSettingsBtn');if(btn)btn.disabled=true;
  const accessorySettings={bear:!!document.getElementById('aiAccBear').checked,catEars:!!document.getElementById('aiAccCatEars').checked,headphones:!!document.getElementById('aiAccHeadphones').checked,hairBow:!!document.getElementById('aiAccHairBow').checked,whiteDress:!!document.getElementById('aiAccDress').checked};
- const updates={name:old.systemDefault?'Aru~aru':name,gender:document.getElementById('aiEditGender').value||'female',personality:document.getElementById('aiEditPersonality').value||'tsundere',description:(document.getElementById('aiEditDescription').value||'').trim(),greeting:(document.getElementById('aiEditGreeting').value||'').trim(),happyMsg:(document.getElementById('aiEditHappy').value||'').trim(),sadMsg:(document.getElementById('aiEditSad').value||'').trim(),thinkingMsg:(document.getElementById('aiEditThinking').value||'').trim(),musicMsg:(document.getElementById('aiEditMusic').value||'').trim(),prankMsg:(document.getElementById('aiEditPrank').value||'').trim(),accessorySettings,accessories:auroraCloneAccessories(auroraPendingAccessories),updatedAt:Date.now()};
+ const updates={name,gender:document.getElementById('aiEditGender').value||'female',personality:document.getElementById('aiEditPersonality').value||'tsundere',description:(document.getElementById('aiEditDescription').value||'').trim(),greeting:(document.getElementById('aiEditGreeting').value||'').trim(),happyMsg:(document.getElementById('aiEditHappy').value||'').trim(),sadMsg:(document.getElementById('aiEditSad').value||'').trim(),thinkingMsg:(document.getElementById('aiEditThinking').value||'').trim(),musicMsg:(document.getElementById('aiEditMusic').value||'').trim(),prankMsg:(document.getElementById('aiEditPrank').value||'').trim(),accessorySettings,accessories:auroraCloneAccessories(auroraPendingAccessories),updatedAt:Date.now()};
  try{
   await window.dbUpdate(window.ref(window.db,`system/ai_models/${id}`),updates);
-  cachedAiModels[id]=Object.assign({},old,updates,{id,systemDefault:!!old.systemDefault,is2DSystemModel:!!old.is2DSystemModel,is3DSystemModel:!!old.is3DSystemModel,renderMode:old.renderMode||'procedural-3d',imageData:old.imageData||AURORA_ARU_IMAGE});
+  cachedAiModels[id]=Object.assign({},old,updates,{id,systemDefault:!!old.systemDefault,is2DSystemModel:!!old.is2DSystemModel,imageData:old.imageData||AURORA_ARU_IMAGE});
   if(currentEquippedAiModel&&currentEquippedAiModel.modelId===id){currentEquippedAiModel.modelData=cachedAiModels[id];updateAiWidgetContent();}
   loadAiModelsList();loadAiModelsForGrant();loadSupremeAiFrameModelList();
   closeAiModelSettings();showCenterSquareToast('✅','Đã lưu model',name,'success',2600);
@@ -12702,7 +12654,7 @@ function auroraSetAruState(state,withMessage=true){
  const widget=document.getElementById('aiModelWidget');const body=document.getElementById('aiModelBody');if(!widget||widget.classList.contains('ai-hidden'))return;
  const aliases={neutral:'idle',nuzzle:'pet',score:'happy',large:'big',zoom:'big',shrink:'small',lonely:'lonely',fear:'fear',music:'music',drag:'drag',thinking:'thinking',sad:'sad',happy:'happy',exam:'thinking',chat:'chat',blink:'blink',sleep:'sleep'};
  state=aliases[state]||state;if(state==='drag')state='dizzy';if(!AURORA_ARU_STATES[state])state='idle';
- if(state==='music'){const acc=currentEquippedAiModel?.modelData?.accessorySettings||{};widget.dataset.musicHeadphones=acc.headphones?'1':'0';}else{delete widget.dataset.musicHeadphones;}
+ if(state==='music'){widget.dataset.musicHeadphones=Math.random()<.58?'1':'0';}else{delete widget.dataset.musicHeadphones;}
  widget.classList.remove(...AURORA_ARU_WIDGET_STATES.map(k=>'aru-state-'+k));widget.classList.add('aru-state-'+state);widget.classList.add('aru-system-model');
  const old=widget.querySelector('.aru-mood-caption');if(old)old.remove();
  const label=AURORA_ARU_STATES[state]?.label||'Đang tương tác';const caption=document.createElement('div');caption.className='aru-mood-caption';caption.textContent=label;widget.querySelector('.ai-model-container')?.appendChild(caption);
@@ -12730,12 +12682,11 @@ function auroraRenderAccessoryLayer(){
  let layer=content.querySelector('.aru-accessory-layer');if(!layer){layer=document.createElement('div');layer.className='aru-accessory-layer';content.appendChild(layer);}layer.innerHTML='';
  const md=currentEquippedAiModel?.modelData;if(!md)return;
  const settings=Object.assign({},md.accessorySettings||{});
- if(md.is3DSystemModel){if(document.body.classList.contains('optimized-mode'))return;return;}
  if(md.is2DSystemModel&&settings.bear===false)layer.appendChild(auroraCreateBearCover());
  if(document.body.classList.contains('optimized-mode'))return;
  const props=[];
  if(settings.headphones)props.push({emoji:'🎧',left:'50%',top:'10%',size:'30px'});
- if(document.getElementById('aiModelWidget')?.dataset.musicHeadphones==='1')props.push({emoji:'🎧',left:'50%',top:'10%',size:'30px'});
+ if(widgetMusicHeadphoneActive())props.push({emoji:'🎧',left:'50%',top:'10%',size:'30px'});
  if(settings.hairBow && !md.systemDefault)props.push({emoji:'🎀',left:'72%',top:'20%',size:'23px'});
  const state=currentEquippedAiModel&&currentEquippedAiModel.modelData&&currentEquippedAiModel.modelData.personality;
  const accessoryList=Array.isArray(md.accessories)?md.accessories:[];
@@ -12747,7 +12698,7 @@ function auroraUpdateWidgetMode(){
  const optimized=document.body.classList.contains('optimized-mode');
  if(optimized){
   auroraStopIdleLoop();auroraClearAruState();widget.classList.add('aru-static-art');widget.classList.remove('aru-system-model');
-  const src=md.is3DSystemModel?auroraAruStaticArt(md.accessorySettings||{}):(md.imageData||(md.files||[]).find(f=>/^image\//.test(f.type||'')&&f.data)?.data);
+  const src=md.imageData||(md.files||[]).find(f=>/^image\//.test(f.type||'')&&f.data)?.data;
   if(src){content.innerHTML='';const img=document.createElement('img');img.src=src;img.alt=md.name||'AI art';img.style.cssText='width:100%;height:100%;object-fit:contain;animation:none!important;transform:none!important;filter:none!important';content.appendChild(img);if(md.is2DSystemModel&&md.accessorySettings&&md.accessorySettings.bear===false){content.appendChild(auroraCreateBearCover());}}else{content.innerHTML='<div class="ai-model-emoji">🤖</div>';}
   return;
  }
@@ -12767,9 +12718,9 @@ showAiWidget=function(forceSummon=false){auroraOriginalShowAiWidget.apply(this,a
 const auroraOriginalHideAiWidget=hideAiWidget;
 hideAiWidget=function(){auroraOriginalHideAiWidget.apply(this,arguments);auroraStopIdleLoop();};
 const auroraOriginalTryTriggerAiReaction=tryTriggerAiReaction;
-tryTriggerAiReaction=async function(type){const stateMap={thinking:'thinking',happy:'happy',sad:'cry',music:'music',prank:'chat',neutral:'idle'};auroraSetAruState(stateMap[type]||'idle',true);return auroraOriginalTryTriggerAiReaction.apply(this,arguments);};
+tryTriggerAiReaction=async function(type){const stateMap={thinking:'thinking',happy:'happy',sad:'sad',music:'music',prank:'chat',neutral:'idle'};auroraSetAruState(stateMap[type]||'idle',true);return auroraOriginalTryTriggerAiReaction.apply(this,arguments);};
 const auroraOriginalShowAiFloatBubbleByEvent=showAiFloatBubbleByEvent;
-showAiFloatBubbleByEvent=function(eventKey){const m={big:'big',small:'small',drag:'drag',profile_other:'chat',lonely:'lonely',idle:'idle'};if(m[eventKey])auroraSetAruState(m[eventKey],true);if(typeof auroraOriginalShowAiFloatBubbleByEvent==='function')return auroraOriginalShowAiFloatBubbleByEvent.apply(this,arguments);};
+showAiFloatBubbleByEvent=function(eventKey){const m={big:'big',drag:'drag',profile_other:'chat',lonely:'lonely',idle:'idle'};if(m[eventKey])auroraSetAruState(m[eventKey],true);if(typeof auroraOriginalShowAiFloatBubbleByEvent==='function')return auroraOriginalShowAiFloatBubbleByEvent.apply(this,arguments);};
 const auroraOriginalToggleAiChat=toggleAiChat;
 toggleAiChat=function(){auroraOriginalToggleAiChat.apply(this,arguments);const chat=document.getElementById('aiChatBubble');if(chat?.classList.contains('show')){auroraAruLastInteraction=Date.now();auroraSetAruState('chat',false);}};
 const auroraOriginalApplyPerfMode=applyPerfMode;
@@ -12792,11 +12743,11 @@ sendAiChatMessage=async function(){
   const aliases={'vuotve':'pet','vuốt ve':'pet','xoadau':'pet','choan':'happy','cho ăn':'happy','ngu':'sleep','ngủ':'sleep','nhac':'music','nhạc':'music','hoc':'thinking','học':'thinking','happy':'happy','vui':'happy','sad':'sad','buon':'sad','buồn':'sad','ngai':'big','ngại':'big','sohai':'fear','sợ hãi':'fear','giandoi':'angry','giận dỗi':'angry','tucgian':'drag','tức giận':'drag','dizzy':'dizzy','chongmat':'dizzy','chóng mặt':'dizzy','chat':'chat','phongto':'big','phóng to':'big','thunho':'small','thu nhỏ':'small','khoc':'cry','khóc':'cry','buom':'pet','bướm':'pet','headphones':'music','dance':'music','thinking':'thinking','suy nghĩ':'thinking','tap':'tap','gõ màn hình':'tap'};
   if(!sub){
    const lines=Object.entries(AURORA_ARU_STATES).map(([k,v])=>`• /tuongtac ${k} — ${v.label}`).join('\n');
-   const reply=`📖 DANH SÁCH TƯƠNG TÁC CỦA ${currentEquippedAiModel?.modelData?.name||'AI'}\n${lines}\n\nNgoài ra, bạn có thể vuốt/chạm nhân vật để vuốt ve, nhấp đúp để mở chat, dùng kéo/thu phóng để thay đổi kích thước, mở nhạc để kích hoạt trạng thái nghe nhạc. Tính cách hiện tại: ${AURORA_PERSONALITY_LABELS[auroraGetPersonality()]||auroraGetPersonality()}.`;
+   const reply=`📖 DANH SÁCH TƯƠNG TÁC CỦA ${currentEquippedAiModel?.modelData?.name||'AI'}\\n${lines}\\n\\nNgoài ra, bạn có thể vuốt/chạm nhân vật để vuốt ve, nhấp đúp để mở chat, dùng kéo/thu phóng để thay đổi kích thước, mở nhạc để kích hoạt trạng thái nghe nhạc. Tính cách hiện tại: ${AURORA_PERSONALITY_LABELS[auroraGetPersonality()]||auroraGetPersonality()}.`;
    addAiChatMessage('ai',reply);showAiFloatBubble('Mở /tuongtac để xem danh sách trạng thái nha~',5);speakAiChatText(reply);return;
   }
   const state=aliases[sub]||sub;
-  if(AURORA_ARU_STATES[state]){auroraSetAruState(state,true);const reply=auroraGetStateMessage(state)+'\n\nTrạng thái: '+AURORA_ARU_STATES[state].label+'.';addAiChatMessage('ai',reply);speakAiChatText(reply);return;}
+  if(AURORA_ARU_STATES[state]){auroraSetAruState(state,true);const reply=auroraGetStateMessage(state)+'\\n\\nTrạng thái: '+AURORA_ARU_STATES[state].label+'.';addAiChatMessage('ai',reply);speakAiChatText(reply);return;}
   const reply='Mình chưa biết tương tác “'+sub+'”. Gõ /tuongtac để xem danh sách tương tác hợp lệ nhé.';addAiChatMessage('ai',reply);return;
  }
  await auroraOriginalSendAiChatMessage.apply(this,arguments);
@@ -12949,408 +12900,173 @@ try{loadAiModelsForGrant();loadAiModelsList();}catch(e){}
 })();
 </script>
 
-
-<style id="auroraAru3DStyles">
-#aiModelWidget.aru-system-model #aiModelContent{isolation:isolate;background:radial-gradient(ellipse at 50% 28%,#fffefa 0,#f7f1eb 57%,#e7ded8 100%)}
-#aiModelWidget .aru-three-stage{position:absolute;inset:0;width:100%;height:100%;min-width:1px;min-height:1px;overflow:hidden;contain:layout paint;touch-action:pan-y;cursor:grab;background:radial-gradient(ellipse at 50% 28%,#fffefa 0,#f7f1eb 60%,#e7ded8 100%)}
-#aiModelWidget .aru-three-stage:active{cursor:grabbing}
-#aiModelWidget .aru-three-stage canvas{display:block;width:100%!important;height:100%!important;outline:0;touch-action:pan-y}
-#aiModelWidget.aru-system-model .aru-mood-caption{z-index:8}
-#aiModelWidget.aru-static-art #aiModelContent{background:transparent}
-#aiModelWidget.aru-static-art #aiModelContent img{object-fit:contain!important}
-#aiScreenReadBtn{top:auto!important;bottom:8px!important;left:8px!important;right:auto!important}
-#aiWebcamBtn,.profile-ai-webcam-wrap,#profileWebcamPreview,#profileWebcamMouthIndicator,#aiWebcamVideo{display:none!important}
-@media(prefers-reduced-motion:reduce){#aiModelWidget .aru-three-stage{cursor:default}}
-
+<!-- Aru~aruu 3D companion upgrade: isolated renderer, preserves the rest of Aurora. -->
+<style id="aurora-aru-3d-style">
+#aiModelWidget.aru-3d-active{width:300px!important;height:390px!important;overflow:visible!important}
+#aiModelWidget.aru-3d-active #aiModelContent{overflow:visible!important;pointer-events:none!important}
+#aiModelWidget .aru3d-canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;object-fit:contain;pointer-events:auto;touch-action:pan-y;filter:drop-shadow(0 12px 22px rgba(28,39,74,.22))}
+#aiModelWidget.aru-3d-active .aru-accessory-layer{pointer-events:none!important}
+#aiModelWidget.aru-3d-active .aru-mood-caption{top:-28px}
+#aiModelWidget.aru-3d-active .ai-model-badge{bottom:-2px}
+body.optimized-mode #aiModelWidget.aru-3d-active{width:240px!important;height:300px!important}
+@media(max-width:600px){#aiModelWidget.aru-3d-active{width:220px!important;height:300px!important;right:8px!important;bottom:8px!important}}
+@media(prefers-reduced-motion:reduce){#aiModelWidget .aru3d-canvas{filter:none}}
 </style>
-<script type="module" id="auroraAru3DModule">
-import * as THREE from 'three';
-
-/* Procedural, waist-up Aru~aru. Every visible part is geometry so her face,
-   hair, outfit, teddy and expressions remain real-time 3D in normal mode. */
-(() => {
-  'use strict';
-  const active = new Map();
-  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-  const smooth = (current, target, amount) => current + (target - current) * (1 - Math.exp(-amount));
-  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)');
-
-  function makeModel(scene) {
-    const root = new THREE.Group();
-    root.position.y = -.02;
-    scene.add(root);
-    const sphereGeometry = new THREE.SphereGeometry(1, 32, 24);
-    const skin = new THREE.MeshPhysicalMaterial({color:0xffe2d5, roughness:.73, clearcoat:.08, clearcoatRoughness:.8});
-    const skinShade = new THREE.MeshStandardMaterial({color:0xeab9ac, roughness:.8});
-    const hairMat = new THREE.MeshPhysicalMaterial({color:0xf5f7fc, roughness:.34, metalness:.015, sheen:.9, sheenColor:0xc8d3e9, sheenRoughness:.42, clearcoat:.32, clearcoatRoughness:.35});
-    const hairLight = new THREE.MeshStandardMaterial({color:0xffffff, roughness:.38});
-    const hairShade = new THREE.MeshStandardMaterial({color:0xd5ddec, roughness:.48});
-    const dressMat = new THREE.MeshPhysicalMaterial({color:0xfafcff, roughness:.58, sheen:.55, sheenColor:0xd8e4f5, sheenRoughness:.52, clearcoat:.12});
-    const dressShade = new THREE.MeshStandardMaterial({color:0xdce6f5, roughness:.7});
-    const accent = new THREE.MeshStandardMaterial({color:0x7594ca, roughness:.45, metalness:.06});
-    const earPink = new THREE.MeshStandardMaterial({color:0xe8aab8, roughness:.75, side:THREE.DoubleSide});
-    const irisMat = new THREE.MeshPhysicalMaterial({color:0x43b596, roughness:.22, metalness:.04, clearcoat:.72, clearcoatRoughness:.2, emissive:0x0c3028, emissiveIntensity:.12});
-    const pupilMat = new THREE.MeshStandardMaterial({color:0x172b2b, roughness:.16});
-    const eyeWhite = new THREE.MeshPhysicalMaterial({color:0xfffdfc, roughness:.2, clearcoat:.35});
-    const glintMat = new THREE.MeshBasicMaterial({color:0xffffff});
-    const blushMat = new THREE.MeshBasicMaterial({color:0xf39da8, transparent:true, opacity:.30, depthWrite:false});
-    const mouthMat = new THREE.MeshStandardMaterial({color:0x9c5160, roughness:.7});
-    const browMat = new THREE.MeshStandardMaterial({color:0xb4a9a9, roughness:.8});
-    const bearMat = new THREE.MeshPhysicalMaterial({color:0xc99568, roughness:.9, sheen:.35, sheenColor:0xf4ddbd});
-    const bearLight = new THREE.MeshStandardMaterial({color:0xf0d7bb, roughness:.94});
-    const bearDark = new THREE.MeshStandardMaterial({color:0x51413b, roughness:.6});
-    const bearBow = new THREE.MeshStandardMaterial({color:0xd9879f, roughness:.5});
-    const mats = [skin,skinShade,hairMat,hairLight,hairShade,dressMat,dressShade,accent,earPink,irisMat,pupilMat,eyeWhite,glintMat,blushMat,mouthMat,browMat,bearMat,bearLight,bearDark,bearBow];
-
-    function mesh(parent, geometry, material, position, scale, rotation) {
-      const item = new THREE.Mesh(geometry, material);
-      item.position.set(...position);
-      if (scale) item.scale.set(...scale);
-      if (rotation) item.rotation.set(...rotation);
-      item.castShadow = false;
-      item.receiveShadow = false;
-      parent.add(item);
-      return item;
-    }
-    function orb(parent, material, position, scale, rotation) {
-      return mesh(parent, sphereGeometry, material, position, scale, rotation);
-    }
-    function tube(parent, points, radius, material, segments=24) {
-      const curve = new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
-      const line = new THREE.Mesh(new THREE.TubeGeometry(curve,segments,radius,8,false),material);
-      parent.add(line);
-      return line;
-    }
-
-    // Waist-up white dress, soft collar and sleeves.
-    const torso = new THREE.Group(); root.add(torso);
-    orb(torso, skin, [0,-.72,0], [.55,.79,.33]);
-    const dressGroup = new THREE.Group(); torso.add(dressGroup);
-    const underDress = orb(torso,dressShade,[0,-.77,.10],[.57,.76,.32]);underDress.visible=false;
-    orb(dressGroup, dressMat, [0,-.78,.12], [.66,.84,.38]);
-    orb(dressGroup, dressShade, [0,-1.30,.11], [.61,.31,.34]);
-    orb(dressGroup, dressMat, [0,-.22,.12], [.63,.37,.36]);
-    const collar = new THREE.Mesh(new THREE.TorusGeometry(.30,.045,10,40),dressShade);
-    collar.position.set(0,-.10,.33); collar.rotation.x=Math.PI/2; dressGroup.add(collar);
-    const collarInset = new THREE.Mesh(new THREE.TorusGeometry(.24,.024,8,40),hairLight);
-    collarInset.position.set(0,-.12,.35); collarInset.rotation.x=Math.PI/2; dressGroup.add(collarInset);
-    const ribbon = new THREE.Group(); dressGroup.add(ribbon);
-    orb(ribbon,accent,[-.075,-.30,.44],[.10,.075,.045],[0,0,-.35]);
-    orb(ribbon,accent,[.075,-.30,.44],[.10,.075,.045],[0,0,.35]);
-    orb(ribbon,dressShade,[0,-.30,.47],[.047,.052,.03]);
-    for (const y of [-.52,-.78,-1.04]) orb(dressGroup,accent,[0,y,.475],[.025,.025,.012]);
-
-    const sleeveL = orb(torso,dressMat,[-.48,-.36,.08],[.22,.34,.29],[0,0,-.42]);
-    const sleeveR = orb(torso,dressMat,[.48,-.36,.08],[.22,.34,.29],[0,0,.42]);
-    const armL = orb(torso,skin,[-.42,-.62,.38],[.13,.34,.16],[0,0,.55]);
-    const armR = orb(torso,skin,[.42,-.62,.38],[.13,.34,.16],[0,0,-.55]);
-
-    // Neck and softly shaded anime face.
-    orb(root,skin,[0,.13,.02],[.19,.32,.19]);
-    const head = new THREE.Group(); head.position.set(0,.83,.02); root.add(head);
-    orb(head,skin,[0,0,0],[.62,.72,.50]);
-    orb(head,skinShade,[0,-.40,.22],[.30,.12,.20]);
-    const faceDetails = new THREE.Group(); head.add(faceDetails);
-    const eyeGroups=[];
-    for (const side of [-1,1]) {
-      const eye = new THREE.Group(); eye.position.set(side*.235,-.015,.436); head.add(eye); eyeGroups.push(eye);
-      orb(eye,eyeWhite,[0,0,0],[.137,.174,.052]);
-      orb(eye,irisMat,[0,-.012,.044],[.087,.123,.030]);
-      orb(eye,pupilMat,[0,-.025,.068],[.036,.083,.018]);
-      orb(eye,glintMat,[-.032,.044,.081],[.027,.037,.012]);
-      orb(eye,glintMat,[.033,-.045,.082],[.012,.016,.008]);
-      tube(head,[[side*.33,.18,.45],[side*.24,.205,.48],[side*.14,.18,.47]],.018,browMat,12);
-      orb(head,blushMat,[side*.39,-.20,.36],[.115,.052,.016]);
-    }
-    orb(head,skinShade,[0,-.12,.496],[.035,.025,.018]);
-    const mouth = new THREE.Group(); head.add(mouth);
-    tube(mouth,[[-.075,-.255,.468],[-.035,-.292,.486],[0,-.30,.49],[.035,-.292,.486],[.075,-.255,.468]],.012,mouthMat,20);
-    const mouthOpen = orb(mouth,mouthMat,[0,-.285,.49],[.065,.052,.016]); mouthOpen.visible=false;
-    const tears=[];
-    for(const side of [-1,1]){const tear=orb(head,new THREE.MeshPhysicalMaterial({color:0x82c9ed,transparent:true,opacity:.78,roughness:.12,clearcoat:.8}),[side*.28,-.20,.49],[.028,.065,.018]);tear.visible=false;tears.push(tear);}
-
-    // White hair cap, flowing side locks and separate fine strands for visible depth.
-    const hair = new THREE.Group(); hair.position.set(0,.02,-.05); head.add(hair);
-    orb(hair,hairMat,[0,.17,-.10],[.68,.76,.56]);
-    orb(hair,hairLight,[-.18,.52,-.07],[.38,.28,.40]);
-    const sideLocks=[];
-    for(const side of [-1,1]){
-      const lock = new THREE.Group(); hair.add(lock); sideLocks.push(lock);
-      const baseX=side*.50;
-      tube(lock,[[side*.32,.35,.04],[side*.59,.08,.20],[side*.62,-.28,.28],[side*.54,-.66,.31],[side*.43,-1.03,.26]],.105,hairMat,32);
-      tube(lock,[[side*.48,.16,.12],[side*.66,-.12,.26],[side*.67,-.47,.30],[side*.57,-.82,.29]],.052,hairLight,28);
-      tube(lock,[[side*.39,.12,.19],[side*.51,-.20,.31],[side*.48,-.55,.34],[side*.38,-.88,.30]],.012,hairShade,24);
-      tube(lock,[[side*.55,.07,.24],[side*.61,-.29,.34],[side*.53,-.70,.34]],.010,hairLight,20);
-      lock.position.x=baseX*.12;
-    }
-    for (let i=0;i<7;i++) {
-      const x=-.38+i*.125;
-      const endX=x+(i-3)*.055;
-      const endY=-.10-Math.abs(i-3)*.035;
-      tube(hair,[[x,.61,.13],[x*.82,.42,.39],[endX*.76,.20,.475],[endX,endY,.48]],.071-(Math.abs(i-3)*.003),i%2?hairMat:hairLight,24);
-    }
-    const hairFine=[];
-    for(let i=0;i<11;i++){
-      const side=i<6?-1:1;const k=i<6?i:i-5;
-      const x=side*(.36+k*.045);
-      hairFine.push(tube(hair,[[x,.51,-.02],[x*1.25,.23,.22],[x*1.18,-.18,.30],[x*.95,-.67+(k%3)*-.035,.29]],.007,i%2?hairShade:hairLight,20));
-    }
-
-    // Optional cat ears, hair bow and music headphones are separate 3D groups.
-    const catEars = new THREE.Group(); hair.add(catEars);
-    for(const side of [-1,1]){
-      const ear = new THREE.Group(); ear.position.set(side*.43,.62,-.03); ear.rotation.z=-side*.20; catEars.add(ear);
-      mesh(ear,new THREE.ConeGeometry(.205,.49,7,2),hairMat,[0,.18,0],[1,1,.72]);
-      mesh(ear,new THREE.ConeGeometry(.116,.31,7,1),earPink,[0,.17,.118],[1,1,.55]);
-      tube(ear,[[-.10,.02,.15],[0,-.015,.17],[.10,.02,.15]],.008,hairShade,10);
-    }
-    const bow = new THREE.Group(); bow.position.set(.49,.38,.44); hair.add(bow);
-    orb(bow,accent,[-.085,0,0],[.12,.085,.035],[0,0,-.35]); orb(bow,accent,[.085,0,0],[.12,.085,.035],[0,0,.35]); orb(bow,dressShade,[0,0,.025],[.04,.05,.025]);
-    const headphones = new THREE.Group(); hair.add(headphones);
-    tube(headphones,[[-.56,.12,-.02],[-.56,.56,-.06],[-.30,.84,-.08],[0,.92,-.08],[.30,.84,-.08],[.56,.56,-.06],[.56,.12,-.02]],.045,accent,40);
-    for(const side of [-1,1]){
-      orb(headphones,accent,[side*.55,.05,.03],[.12,.20,.11]);
-      orb(headphones,dressShade,[side*.56,.05,.105],[.065,.12,.025]);
-    }
-
-    // Teddy bear held in front, with paws and arms around it.
-    const teddy = new THREE.Group(); teddy.position.set(0,-.91,.49); root.add(teddy);
-    orb(teddy,bearMat,[0,-.02,0],[.40,.48,.22]);
-    orb(teddy,bearMat,[0,.39,.015],[.34,.34,.23]);
-    for(const side of [-1,1]){
-      orb(teddy,bearMat,[side*.25,.63,.01],[.14,.15,.12]);
-      orb(teddy,bearLight,[side*.25,.63,.11],[.075,.08,.025]);
-      orb(teddy,bearDark,[side*.12,.42,.222],[.027,.034,.012]);
-      orb(teddy,bearMat,[side*.43,.04,.06],[.15,.20,.16],[0,0,-side*.34]);
-      orb(teddy,bearMat,[side*.17,-.35,.08],[.19,.13,.15],[0,0,-side*.18]);
-    }
-    orb(teddy,bearLight,[0,.32,.225],[.16,.12,.035]);
-    orb(teddy,bearDark,[0,.37,.26],[.035,.026,.018]);
-    tube(teddy,[[0,.34,.274],[0,.29,.276],[-.035,.27,.272]],.007,bearDark,10);
-    tube(teddy,[[0,.29,.276],[.035,.27,.272]],.007,bearDark,8);
-    orb(teddy,bearBow,[-.11,-.22,.19],[.09,.055,.025],[0,0,-.3]);
-    orb(teddy,bearBow,[.11,-.22,.19],[.09,.055,.025],[0,0,.3]);
-    orb(teddy,bearLight,[0,-.22,.21],[.035,.035,.02]);
-    // Sleeves and small hands visibly embrace the teddy.
-    armL.position.set(-.36,-.64,.58); armL.rotation.z=.75;
-    armR.position.set(.36,-.64,.58); armR.rotation.z=-.75;
-    orb(torso,skin,[-.11,-.76,.72],[.13,.11,.10],[0,0,-.24]);
-    orb(torso,skin,[.11,-.76,.72],[.13,.11,.10],[0,0,.24]);
-
-    return {root,head,hair,sideLocks,hairFine,torso,teddy,eyeGroups,mouth,mouthOpen,tears,catEars,bow,headphones,dressGroup,underDress,sleeveL,sleeveR,armL,armR,dispose(){
-      const geometries=new Set(), materials=new Set();
-      root.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>materials.add(m));});
-      geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());
-    }};
-  }
-
-  function mount(slot, host, options={}) {
-    if(!host || !host.isConnected) return null;
-    const existing=active.get(slot);
-    if(existing && existing.host===host && !existing.dead){setAccessories(slot,options.accessories||{});return existing;}
-    if(existing) stop(slot);
-    let renderer;
-    try{
-      renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power',premultipliedAlpha:true});
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));
-      renderer.setClearColor(0x000000,0);
-      renderer.outputColorSpace=THREE.SRGBColorSpace;
-      renderer.toneMapping=THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure=1.12;
-    }catch(error){throw new Error('WebGL không khởi tạo được: '+(error?.message||error));}
-    const scene=new THREE.Scene();
-    const camera=new THREE.PerspectiveCamera(36,1,.1,40);camera.position.set(0,.05,6.2);camera.lookAt(0,.02,0);
-    scene.add(new THREE.HemisphereLight(0xfff5ed,0xb3a3aa,1.9));
-    const key=new THREE.DirectionalLight(0xfff0df,2.65);key.position.set(-2.7,4.1,4.2);scene.add(key);
-    const fill=new THREE.DirectionalLight(0xd4e4ff,1.1);fill.position.set(3,1.4,2.4);scene.add(fill);
-    const rim=new THREE.DirectionalLight(0xffffff,1.55);rim.position.set(0.2,3,-3);scene.add(rim);
-    const character=makeModel(scene);
-    host.replaceChildren(renderer.domElement);
-    renderer.domElement.setAttribute('aria-label','Aru~aru, nhân vật anime 3D có thể tương tác');
-    renderer.domElement.setAttribute('role','img');
-    const instance={slot,host,renderer,scene,camera,character,state:'idle',personality:'tsundere',accessories:{},dead:false,raf:0,resizeObserver:null,lastTime:performance.now(),elapsed:0,blinkAt:performance.now()/1000+2.4,blinkUntil:0,stateUntil:0,dragSpin:0};
-    active.set(slot,instance);
-    setAccessories(slot,options.accessories||{});
-    if(options.state)setState(slot,options.state,options.personality);
-    const resize=()=>{
-      if(instance.dead||!host.isConnected)return;
-      const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);
-      renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
-    };
-    if(typeof ResizeObserver!=='undefined'){instance.resizeObserver=new ResizeObserver(resize);instance.resizeObserver.observe(host);}else window.addEventListener('resize',resize);
-    instance.resize=resize;resize();
-    const animate=now=>{
-      if(instance.dead)return;
-      if(!host.isConnected){stop(slot);return;}
-      instance.raf=requestAnimationFrame(animate);
-      if(document.hidden)return;
-      const dt=Math.min(.05,Math.max(.001,(now-instance.lastTime)/1000));instance.lastTime=now;instance.elapsed+=dt;
-      const t=instance.elapsed,character=instance.character,state=instance.state;
-      if(instance.stateUntil && now>instance.stateUntil){instance.state='idle';instance.stateUntil=0;syncMusicAccessories(instance);}
-      const activeState=instance.state;
-      const amp=({tsundere:.82,cute:1,badboy:.78,sadgirl:.72,yandere:.9,kuudere:.55,dandere:.62,genki:1.14,cool:.68,shy:.7,friendly:.95,chaotic:1.18,custom:.9}[instance.personality]||.9)*(reducedMotion&&reducedMotion.matches?0.5:1);
-      if(now/1000>=instance.blinkAt){instance.blinkUntil=now/1000+.15;instance.blinkAt=now/1000+2.6+Math.random()*2.5;}
-      const blink=now/1000<instance.blinkUntil?Math.sin(clamp((now/1000-(instance.blinkUntil-.15))/.15,0,1)*Math.PI):0;
-      let hx=Math.sin(t*1.25)*.018,hy=Math.sin(t*.72)*.035,hz=Math.sin(t*.9)*.012,rz=Math.sin(t*1.2)*.012,by=Math.sin(t*2.0)*.012;
-      let eyeY=1-blink*.94,mouthSmile=activeState==='happy'||activeState==='pet'||activeState==='chat',openMouth=false;
-      let browTilt=0,tear=false,spin=0;
-      switch(activeState){
-        case 'blink': eyeY=1-blink*.94; break;
-        case 'pet': case 'nuzzle': hx=-.10;hz=-.11*amp;by=.025;break;
-        case 'thinking': hy=-.12;hx=-.035;eyeY=.9;break;
-        case 'sleep': eyeY=.055;hx=.22;by=-.012;break;
-        case 'happy': hx=-.045;rz=Math.sin(t*7)*.075*amp;by=.06;eyeY=.62;openMouth=true;break;
-        case 'sad': case 'cry': hx=.10*amp;hz=.045*amp;eyeY=.66;tear=true;break;
-        case 'angry': hx=-.055*amp;hz=.025*amp;browTilt=.16*amp;eyeY=.72;break;
-        case 'lonely': hx=.08;hz=-.09;eyeY=.82;break;
-        case 'fear': case 'small': hx=-.02;hy=.10;eyeY=1.12;hz=-.035;break;
-        case 'big': hx=-.02;hy=-.08;eyeY=1.08;hz=.035;break;
-        case 'music': hz=Math.sin(t*4.3)*.075*amp;hy=Math.sin(t*2.2)*.09*amp;by=Math.abs(Math.sin(t*4.3))*.055;openMouth=Math.sin(t*3.4)> .55;break;
-        case 'chat': hy=Math.sin(t*1.7)*.05;openMouth=Math.sin(t*5)>0;break;
-        case 'drag': case 'dizzy': spin=Math.sin(t*7)*.055*amp;hy=Math.sin(t*5)*.12*amp;break;
-        case 'tap': by=Math.abs(Math.sin(t*7))*.07;hx=-.025;break;
-      }
-      character.head.rotation.x=smooth(character.head.rotation.x,hx,dt*9);
-      character.head.rotation.y=smooth(character.head.rotation.y,hy,dt*7);
-      character.head.rotation.z=smooth(character.head.rotation.z,hz,dt*8);
-      character.root.rotation.z=smooth(character.root.rotation.z,rz+spin,dt*6);
-      character.root.position.y=smooth(character.root.position.y,-.02+by,dt*7);
-      character.hair.rotation.z=smooth(character.hair.rotation.z,Math.sin(t*1.6)*.018+hz*.3,dt*6);
-      character.hair.rotation.y=smooth(character.hair.rotation.y,Math.sin(t*.8)*.018+hy*.24,dt*5);
-      character.sideLocks.forEach((lock,i)=>{lock.rotation.z=smooth(lock.rotation.z,Math.sin(t*2+i)*.018+hz*.3,dt*4);});
-      character.teddy.rotation.z=smooth(character.teddy.rotation.z,activeState==='music'?Math.sin(t*4.3)*.035:hz*.18,dt*6);
-      character.eyeGroups.forEach((eye,i)=>{eye.scale.y=smooth(eye.scale.y,eyeY,dt*18);eye.rotation.z=smooth(eye.rotation.z,activeState==='fear'?0:activeState==='angry'?(i===0?browTilt:-browTilt):0,dt*9);});
-      character.mouthOpen.visible=openMouth;
-      character.mouth.scale.y=smooth(character.mouth.scale.y,mouthSmile?1.22:1,dt*8);
-      character.tears.forEach(x=>{x.visible=tear;x.scale.y=smooth(x.scale.y,tear ? .065*amp : .065,dt*5);x.position.y=-.20-Math.sin(t*5)*.02;});
-      character.sleeveL.rotation.z=smooth(character.sleeveL.rotation.z,-.42+(activeState==='happy'?.12:0),dt*5);
-      character.sleeveR.rotation.z=smooth(character.sleeveR.rotation.z,.42-(activeState==='happy'?.12:0),dt*5);
-      renderer.render(scene,camera);
-    };
-    instance.raf=requestAnimationFrame(animate);
-    return instance;
-  }
-
-  function setState(slot,state='idle',personality='tsundere'){
-    const i=active.get(slot);if(!i||i.dead)return;
-    const aliases={neutral:'idle',nuzzle:'nuzzle',score:'happy',exam:'thinking',sad:'cry',large:'big',zoom:'big',shrink:'small'};
-    state=aliases[state]||state;
-    const known=new Set(['idle','blink','pet','nuzzle','thinking','sleep','happy','sad','cry','angry','lonely','fear','big','small','music','chat','drag','tap','dizzy']);
-    i.state=known.has(state)?state:'idle';i.personality=personality||'tsundere';
-    if(i.state==='idle')i.stateUntil=0;
-    else i.stateUntil=performance.now()+(['music'].includes(i.state)?9000:(['happy','cry','sad','fear','big','small','dizzy','drag'].includes(i.state)?5600:4300));
-    if(i.state==='blink'){i.blinkUntil=performance.now()/1000+.16;}
-  }
-  function setAccessories(slot,settings={}){
-    const i=active.get(slot);if(!i||i.dead)return;
-    const s=Object.assign({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},settings||{});
-    i.accessories=s;
-    i.character.teddy.visible=!!s.bear;
-    i.character.catEars.visible=!!s.catEars;
-    i.character.bow.visible=!!s.hairBow;
-    i.character.dressGroup.visible=!!s.whiteDress;
-    i.character.underDress.visible=!s.whiteDress;
-    i.character.headphones.visible=!!s.headphones;
-  }
-  function syncMusicAccessories(i){if(i&&i.character)i.character.headphones.visible=!!i.accessories.headphones;}
-  function stop(slot){
-    const i=active.get(slot);if(!i)return;
-    i.dead=true;if(i.raf)cancelAnimationFrame(i.raf);if(i.resizeObserver)i.resizeObserver.disconnect();else if(i.resize)window.removeEventListener('resize',i.resize);
-    try{i.character.dispose();i.renderer.dispose();i.renderer.forceContextLoss();}catch(_){}
-    if(i.host&&i.host.isConnected)i.host.replaceChildren();active.delete(slot);
-  }
-  const originalSetState=setState;
-  setState=function(slot,state='idle',personality='tsundere'){
-    originalSetState(slot,state,personality);syncMusicAccessories(active.get(slot));
-  };
-  window.AuroraAru3D=Object.freeze({mount,setState,setAccessories,stop,stopAll:()=>Array.from(active.keys()).forEach(stop),activeCount:()=>active.size});
-  window.dispatchEvent(new Event('aurora-aru3d-ready'));
+<script id="aurora-aru-3d-upgrade">
+(function(){
+ 'use strict';
+ const WIDGET_ID='aiModelWidget', MODEL_ID='aimodel_default_aruu';
+ const states=['idle','blink','pet','thinking','sleep','angry','lonely','fear','music','happy','sad','big','small','chat','drag','tap','cry','dizzy'];
+ const stateLabels={idle:'Ở đây với bạn',blink:'*chớp mắt*',pet:'Đ-đừng xoa đầu bất ngờ chứ!',thinking:'Ừm… để mình nghĩ đã',sleep:'Zzz…',angry:'Hứ! Mình đang giận đấy!',lonely:'Bạn còn ở đó không…?',fear:'Ơ?! Làm mình giật cả mình!',music:'Mình chỉ lắc lư theo nhạc thôi!',happy:'L-làm tốt lắm! Mình biết mà!',sad:'Không sao, mình cùng thử lại nhé…',big:'Đừng phóng to quá… ngại lắm!',small:'Mình nhỏ quá rồi…',chat:'Mình đang nghe đây!',drag:'Đừng kéo mình liên tục chứ!',tap:'Này! Nhìn mình một chút!',cry:'Hức… lần sau sẽ tốt hơn',dizzy:'Chóng mặt quá…'};
+ let threePromise=null, sceneState=null, raf=0, lastTime=0, lastPointer=0, dragCount=0, audioContext=null, analyser=null, audioSource=null;
+ const $=id=>document.getElementById(id);
+ function loadThree(){
+   if(window.THREE)return Promise.resolve(window.THREE);
+   if(threePromise)return threePromise;
+   threePromise=new Promise((resolve,reject)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';sc.async=true;sc.onload=()=>window.THREE?resolve(window.THREE):reject(new Error('Three.js không khả dụng'));sc.onerror=()=>reject(new Error('Không tải được thư viện 3D'));document.head.appendChild(sc);});
+   return threePromise;
+ }
+ function material(T,color,roughness=.72,metalness=0){return new T.MeshStandardMaterial({color,roughness,metalness});}
+ function addMesh(T,parent,geometry,mat,pos,scale,rot){const m=new T.Mesh(geometry,mat);if(pos)m.position.set(...pos);if(scale)m.scale.set(...scale);if(rot)m.rotation.set(...rot);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+ function sphere(T,parent,mat,pos,scale){return addMesh(T,parent,new T.SphereGeometry(1,32,24),mat,pos,scale);}
+ function curveLine(T,parent,points,color,radius=.009){const curve=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p)));const obj=new T.Mesh(new T.TubeGeometry(curve,Math.max(24,points.length*8),radius,8,false),material(T,color));parent.add(obj);return obj;}
+ function makeAru(T,scene){
+   const root=new T.Group();scene.add(root);
+   const skin=material(T,0xffe0d7,.76), skinShade=material(T,0xf4bfb9,.8), hair=material(T,0xf5f7ff,.36), hairShade=material(T,0xcbd7ed,.42), hairLight=material(T,0xffffff,.28), dress=material(T,0xffffff,.5), dressShade=material(T,0xdce7f7,.65), blue=material(T,0x30aaff,.28), iris=material(T,0x0879d9,.24), pupil=material(T,0x092344,.2), white=material(T,0xffffff,.2), black=material(T,0x433b50,.48), pink=material(T,0xff9dba,.6), earInner=material(T,0xeaa9bf,.65), bearFur=material(T,0xb98662,.95), bearLight=material(T,0xd9b28e,.9), bearDark=material(T,0x654438,.8);
+   const torso=new T.Group();root.add(torso);
+   // waist-up body and white dress with tailored seams
+   addMesh(T,torso,new T.SphereGeometry(1,40,32),dress,[0,-1.1,0],[.77,.82,.42],[0,0,0]);
+   addMesh(T,torso,new T.CylinderGeometry(.38,.68,.56,40,1,false),dressShade,[0,-1.48,.015],[1,1,1]);
+   addMesh(T,torso,new T.SphereGeometry(1,32,24),skin,[0,-.43,.015],[.35,.42,.34]);
+   // shoulders / sleeves / arms wrap around plush bear
+   const armL=sphere(T,torso,dress,[-.55,-.73,.16],[.22,.48,.22]);armL.rotation.z=-.48;
+   const armR=sphere(T,torso,dress,[.55,-.73,.16],[.22,.48,.22]);armR.rotation.z=.48;
+   curveLine(T,torso,[[-.5,-1.2,.38],[-.25,-1.28,.41],[0,-1.3,.43],[.25,-1.28,.41],[.5,-1.2,.38]],0xbccce6,.012);
+   const neck=addMesh(T,torso,new T.CylinderGeometry(.16,.2,.25,24),skin,[0,.02,0]);
+   const headPivot=new T.Group();headPivot.position.set(0,.63,.02);root.add(headPivot);
+   sphere(T,headPivot,skin,[0,0,0],[.75,.84,.62]);
+   // cheeks and nose
+   sphere(T,headPivot,pink,[-.43,-.25,.51],[.17,.075,.035]);sphere(T,headPivot,pink,[.43,-.25,.51],[.17,.075,.035]);
+   sphere(T,headPivot,skinShade,[0,-.12,.605],[.055,.04,.025]);
+   // eyes with iris gradients, highlights and eyelid arcs
+   const eyePivots=[];
+   [-1,1].forEach(side=>{
+     const x=side*.29;const ep=new T.Group();ep.position.set(x,-.015,.49);headPivot.add(ep);eyePivots.push(ep);
+     sphere(T,ep,white,[0,0,0],[.205,.265,.105]);
+     sphere(T,ep,blue,[0,-.012,.075],[.151,.204,.065]);
+     sphere(T,ep,iris,[side*.008,-.025,.123],[.108,.16,.035]);
+     sphere(T,ep,pupil,[side*.008,-.025,.151],[.064,.118,.02]);
+     sphere(T,ep,white,[-.045,.075,.17],[.045,.058,.018]);sphere(T,ep,white,[.045,-.065,.169],[.022,.028,.012]);
+     curveLine(T,ep,[[-.205,.015,.035],[-.15,.16,.05],[-.04,.205,.05],[.1,.19,.05],[.2,.1,.035]],0x574b67,.022);
+     for(let k=0;k<3;k++){curveLine(T,ep,[[side*.15,.16,.035],[side*(.2+k*.022),.22+k*.008,.02],[side*(.23+k*.03),.24+k*.012,.01]],0x65556e,.009);}
+   });
+   // eyebrows and mouth (the mouth group changes subtly while chatting)
+   curveLine(T,headPivot,[[-.48,.27,.52],[-.34,.32,.55],[-.19,.29,.55]],0xaaa9c6,.018);
+   curveLine(T,headPivot,[[.19,.29,.55],[.34,.32,.55],[.48,.27,.52]],0xaaa9c6,.018);
+   const mouth=new T.Group();mouth.position.set(0,-.34,.59);headPivot.add(mouth);
+   curveLine(T,mouth,[[-.09,0,0],[0,-.035,.005],[.09,0,0]],0x9d5368,.012);
+   // hair cap and layered bangs
+   sphere(T,headPivot,hair,[0,.36,-.005],[.79,.61,.66]);
+   const bangShapes=[[-.53,.34,.48,.23],[-.34,.47,.55,.27],[-.12,.48,.57,.31],[.12,.46,.57,.31],[.34,.39,.53,.28],[.52,.27,.46,.23]];
+   bangShapes.forEach((b,i)=>{const m=addMesh(T,headPivot,new T.SphereGeometry(1,28,22),i%2?hairLight:hair,[b[0],b[1],.48],[.19,b[3],.12],[0,0,(i-2.5)*-.13]);});
+   // long side locks, individually articulated strands
+   const locks=[];
+   [-1,1].forEach(side=>{for(let i=0;i<7;i++){
+     const x=side*(.53+i*.022), z=.25-(i%3)*.035, len=.64+(i%4)*.14;
+     const g=new T.Group();g.position.set(x,.05,z);headPivot.add(g);locks.push({group:g,side,index:i});
+     addMesh(T,g,new T.SphereGeometry(1,20,18),i%3===0?hairLight:hair,[side*.035,-len*.42,0],[.095,len*.61,.105],[0,0,-side*(.12+i*.018)]);
+     curveLine(T,g,[[side*.015,.13,.095],[side*.025,-len*.3,.105],[side*.055,-len*.73,.075]],0xd2def1,.008);
+   }});
+   // distinct cat ears, inner ear and white tufts
+   [-1,1].forEach(side=>{const ear=addMesh(T,headPivot,new T.ConeGeometry(.22,.52,4),hair,[side*.49,.81,.02],[1,1,1],[0,0,-side*.22]);addMesh(T,headPivot,new T.ConeGeometry(.115,.31,4),earInner,[side*.49,.82,.112],[1,1,1],[0,0,-side*.22]);});
+   // hair bow on left side
+   const bow=new T.Group();bow.position.set(-.56,.42,.42);headPivot.add(bow);sphere(T,bow,material(T,0x9ed8ff,.45),[-.105,0,0],[.13,.09,.045]);sphere(T,bow,material(T,0x9ed8ff,.45),[.105,0,0],[.13,.09,.045]);sphere(T,bow,blue,[0,0,.025],[.045,.05,.04]);
+   // teddy bear hugged at chest
+   const bear=new T.Group();bear.position.set(0,-1.0,.49);torso.add(bear);
+   sphere(T,bear,bearFur,[0,0,0],[.39,.43,.25]);sphere(T,bear,bearFur,[-.29,.26,.03],[.13,.14,.12]);sphere(T,bear,bearFur,[.29,.26,.03],[.13,.14,.12]);sphere(T,bear,bearLight,[-.29,.26,.13],[.065,.075,.035]);sphere(T,bear,bearLight,[.29,.26,.13],[.065,.075,.035]);
+   sphere(T,bear,bearLight,[0,-.08,.225],[.22,.17,.045]);sphere(T,bear,bearDark,[0,.075,.255],[.055,.04,.025]);sphere(T,bear,bearDark,[-.11,.13,.23],[.025,.025,.018]);sphere(T,bear,bearDark,[.11,.13,.23],[.025,.025,.018]);
+   const bearBow=new T.Group();bearBow.position.set(0,.34,.21);bear.add(bearBow);sphere(T,bearBow,material(T,0x8dcfff,.4),[-.07,0,0],[.09,.055,.035]);sphere(T,bearBow,material(T,0x8dcfff,.4),[.07,0,0],[.09,.055,.035]);sphere(T,bearBow,blue,[0,0,.02],[.03,.035,.025]);
+   // headphones are toggled separately
+   const headphones=new T.Group();headphones.visible=false;headPivot.add(headphones);
+   const band=new T.Mesh(new T.TorusGeometry(.55,.045,12,48,Math.PI),material(T,0x83cfff,.32,.15));band.position.set(0,.35,.02);band.rotation.z=Math.PI;headphones.add(band);
+   [-1,1].forEach(side=>{const cup=addMesh(T,headphones,new T.BoxGeometry(.13,.28,.12),material(T,0x5b9fe5,.38,.12),[side*.59,.05,.03],[1,1,1],[0,0,side*.08]);sphere(T,headphones,white,[side*.6,.05,.105],[.04,.1,.02]);});
+   // a small collar / jewel provides material detail
+   sphere(T,torso,material(T,0x75c8ff,.25,.25),[0,-.04,.32],[.055,.07,.035]);
+   return {root,torso,headPivot,eyePivots,locks,bear,headphones,mouth,bow,eyesOpen:true};
+ }
+ function initScene(T){
+   const widget=$(WIDGET_ID),content=$('aiModelContent');if(!widget||!content||sceneState)return;
+   const canvas=document.createElement('canvas');canvas.className='aru3d-canvas';canvas.setAttribute('aria-label','Aru~aruu, nhân vật anime 3D có thể tương tác');canvas.setAttribute('role','img');
+   content.innerHTML='';content.appendChild(canvas);
+   let renderer;
+   try{renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});}catch(e){content.innerHTML='';const img=document.createElement('img');img.src=(currentEquippedAiModel&&currentEquippedAiModel.modelData&&currentEquippedAiModel.modelData.imageData)||'';img.alt='Aru~aruu';img.style.cssText='width:100%;height:100%;object-fit:contain';content.appendChild(img);console.warn('Aru 3D renderer unavailable',e);return;}
+   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));renderer.setSize(Math.max(1,content.clientWidth),Math.max(1,content.clientHeight),false);renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
+   const scene=new T.Scene();scene.fog=new T.Fog(0xeaf3ff,7,15);
+   const camera=new T.PerspectiveCamera(31,Math.max(.1,content.clientWidth/Math.max(1,content.clientHeight)),.1,100);camera.position.set(0,.25,7.4);camera.lookAt(0,-.12,0);
+   scene.add(new T.HemisphereLight(0xdceaff,0x76617d,2.1));const key=new T.DirectionalLight(0xfff5eb,3.0);key.position.set(-3,5,6);scene.add(key);const fill=new T.DirectionalLight(0x9acbff,1.65);fill.position.set(4,1,4);scene.add(fill);const rim=new T.DirectionalLight(0xffffff,2.3);rim.position.set(0,4,-4);scene.add(rim);
+   const character=makeAru(T,scene);character.root.position.y=.2;character.root.scale.setScalar(1.04);
+   // Soft studio halo and floor-free transparent composition
+   const halo=new T.Mesh(new T.CircleGeometry(1.15,64),new T.MeshBasicMaterial({color:0xc6e3ff,transparent:true,opacity:.18,depthWrite:false}));halo.position.set(0,.65,-1.1);scene.add(halo);
+   let width=0,height=0,disposed=false;function resize(){if(disposed)return;const w=Math.max(1,content.clientWidth),h=Math.max(1,content.clientHeight);if(w===width&&h===height)return;width=w;height=h;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+   const observer=window.ResizeObserver?new ResizeObserver(resize):null;if(observer)observer.observe(content);else window.addEventListener('resize',resize);resize();
+   const pointer={down:false,x:0,y:0,dx:0,dy:0};let current='idle',stateStart=performance.now(),lastBlink=0,nextBlink=performance.now()+2200,eyeBlink=0,chatPulse=0,dragVel=0;
+   function setState(name){if(!states.includes(name))name='idle';current=name;stateStart=performance.now();widget.dataset.aru3dState=name;widget.classList.remove(...states.map(s=>'aru-state-'+s));widget.classList.add('aru-state-'+name);const label=stateLabels[name];let cap=widget.querySelector('.aru-mood-caption');if(!cap){cap=document.createElement('div');cap.className='aru-mood-caption';widget.querySelector('.ai-model-container')?.appendChild(cap);}cap.textContent=label;}
+   function animate(now){if(disposed)return;raf=requestAnimationFrame(animate);const t=now*.001,dt=Math.min(.05,(now-lastTime)/1000||.016);lastTime=now;
+     const md=currentEquippedAiModel&&currentEquippedAiModel.modelData;const acc=md&&md.accessorySettings||{};character.bear.visible=acc.bear!==false;character.bow.visible=acc.hairBow!==false;character.headphones.visible=!!acc.headphones||widget.dataset.musicHeadphones==='1';
+     if(document.body.classList.contains('optimized-mode')){renderer.render(scene,camera);return;}
+     if(now>nextBlink&&current!=='sleep'){eyeBlink=.14;nextBlink=now+2400+Math.random()*3600;}if(eyeBlink>0)eyeBlink=Math.max(0,eyeBlink-dt);const blinkScale=1-Math.min(1,eyeBlink/.14)*.92;character.eyePivots.forEach(e=>{e.scale.y=blinkScale;});
+     const elapsed=(now-stateStart)/1000;const h=character.headPivot,torso=character.torso,root=character.root;
+     h.rotation.x=Math.sin(t*1.15)*.025;h.rotation.y=Math.sin(t*.7)*.045+pointer.dx*.0009;h.rotation.z=Math.sin(t*.85)*.018;
+     torso.rotation.z=Math.sin(t*.8)*.012;root.position.y=.2+Math.sin(t*1.5)*.025;
+     character.locks.forEach((lock,i)=>{lock.group.rotation.z=Math.sin(t*2.1+i*.47)*.025*lock.side;lock.group.rotation.x=Math.sin(t*1.7+i*.38)*.018;});
+     character.bear.rotation.z=Math.sin(t*1.4)*.025;character.bear.position.y=-1+Math.sin(t*1.7)*.012;
+     if(current==='thinking'){h.rotation.z=-.11+Math.sin(t*2)*.025;h.rotation.y=-.13;}
+     else if(current==='sleep'){h.rotation.x=.22;h.rotation.z=-.055;character.eyePivots.forEach(e=>e.scale.y=.06);root.position.y=.17+Math.sin(t*1.7)*.012;}
+     else if(current==='angry'){h.rotation.z=Math.sin(t*24)*.035;torso.rotation.z=Math.sin(t*19)*.012;}
+     else if(current==='lonely'||current==='sad'||current==='cry'){h.rotation.x=.08;h.rotation.z=.045+Math.sin(t*2)*.015;}
+     else if(current==='fear'||current==='small'){h.rotation.z=Math.sin(t*18)*.018;root.position.y=.2+Math.sin(t*20)*.012;}
+     else if(current==='music'){root.rotation.y=Math.sin(t*3.3)*.075;torso.rotation.z=Math.sin(t*3.3)*.055;h.rotation.z=Math.sin(t*3.3)*.035;character.bear.rotation.z=Math.sin(t*3.3)*.08;}
+     else if(current==='happy'){root.position.y=.2+Math.abs(Math.sin(t*7))*.09;torso.rotation.z=Math.sin(t*7)*.025;}
+     else if(current==='big'){root.scale.setScalar(1.1+Math.sin(t*5)*.015);h.rotation.z=.04;}
+     else if(current==='small'){root.scale.setScalar(.92+Math.sin(t*7)*.008);}
+     else if(current==='chat'){h.rotation.y=Math.sin(t*2.8)*.07;character.mouth.scale.y=.8+Math.abs(Math.sin(t*9))*.7;}
+     else if(current==='dizzy'){h.rotation.z=Math.sin(t*8)*.16;root.rotation.z=Math.sin(t*5)*.045;}
+     else if(current==='tap'){root.position.y=.2+Math.abs(Math.sin(t*8))*.07;}
+     else {root.rotation.z=0;root.scale.setScalar(1.04);character.mouth.scale.y=1;}
+     if(elapsed>(current==='music'?12:current==='sleep'?9:4.5)&&current!=='idle'&&current!=='chat'&&current!=='music'&&current!=='sleep'){current='idle';widget.dataset.aru3dState='idle';}
+     renderer.render(scene,camera);
+   }
+   function down(e){pointer.down=true;pointer.x=e.clientX;pointer.y=e.clientY;lastPointer=performance.now();dragCount=0;canvas.setPointerCapture?.(e.pointerId);}
+   function move(e){if(!pointer.down)return;const dx=e.clientX-pointer.x,dy=e.clientY-pointer.y;pointer.dx=dx;pointer.dy=dy;dragVel=Math.hypot(dx,dy);if(Math.hypot(dx,dy)>4){dragCount++;if(dragCount>3)setState(dragVel>24?'dizzy':'drag');}pointer.x=e.clientX;pointer.y=e.clientY;}
+   function up(){if(pointer.down&&dragCount===0){setState('pet');}pointer.down=false;}
+   canvas.addEventListener('pointerdown',down);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',()=>{pointer.down=false;});
+   sceneState={scene,camera,renderer,canvas,character,setState,dispose(){disposed=true;cancelAnimationFrame(raf);observer?.disconnect();if(!observer)window.removeEventListener('resize',resize);canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);renderer.dispose();renderer.forceContextLoss();sceneState=null;}};
+   widget.classList.add('aru-3d-active','aru-system-model');widget.classList.remove('aru-static-art');setState('idle');raf=requestAnimationFrame(animate);
+ }
+ function isDefaultAru(){const md=currentEquippedAiModel&&currentEquippedAiModel.modelData;return !!(md&&(md.id===MODEL_ID||md.systemDefault===true&&md.source==='aurora-ai'));}
+ function stopScene(){if(sceneState)sceneState.dispose();const w=$(WIDGET_ID);if(w)w.classList.remove('aru-3d-active');}
+ async function refresh(){const widget=$(WIDGET_ID),content=$('aiModelContent');if(!widget||!content||!currentEquippedAiModel)return;const md=currentEquippedAiModel.modelData;if(document.body.classList.contains('optimized-mode')){stopScene();widget.classList.add('aru-static-art');return;}if(!isDefaultAru()) {stopScene();return;}try{const T=await loadThree();if(!sceneState)initScene(T);widget.classList.add('aru-3d-active');const badge=$('aiModelBadge');if(badge)badge.textContent='Aru~aruu · 3D';}catch(e){console.warn('Aru 3D unavailable; retaining image fallback',e);}}
+ const origUpdate=window.updateAiWidgetContent;
+ if(typeof origUpdate==='function')window.updateAiWidgetContent=async function(){await origUpdate.apply(this,arguments);await refresh();};
+ const origShow=window.showAiWidget;if(typeof origShow==='function')window.showAiWidget=function(){const r=origShow.apply(this,arguments);setTimeout(refresh,0);return r;};
+ const origHide=window.hideAiWidget;if(typeof origHide==='function')window.hideAiWidget=function(){stopScene();return origHide.apply(this,arguments);};
+ const origPerf=window.applyPerfMode;if(typeof origPerf==='function')window.applyPerfMode=function(mode){const r=origPerf.apply(this,arguments);if(document.body.classList.contains('optimized-mode'))stopScene();else setTimeout(refresh,0);return r;};
+ // Keep current settings and persistent model cache, but standardize the protected default record.
+ function normalizeDefault(){try{if(typeof auroraAruuTemplate==='function'&&typeof cachedAiModels!=='undefined'){const old=cachedAiModels[MODEL_ID]||{};cachedAiModels[MODEL_ID]=Object.assign(auroraAruuTemplate(),old,{id:MODEL_ID,name:'Aru~aruu',gender:'female',personality:old.personality||'tsundere',style:'anime-3d',systemDefault:true,is2DSystemModel:false,is3DSystemModel:true,source:'aurora-ai',createdBy:'Aurora AI',accessorySettings:Object.assign({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},old.accessorySettings||{})});}}catch(e){console.warn('Aru default normalization',e);}}
+ normalizeDefault();
+ // Commands /tuongtac and /tươngtác open the full, built-in interaction catalogue in the chat.
+ const catalogue=[['idle','Bình thường: thở, chớp mắt, tóc và thân chuyển động nhẹ'],['blink','Nháy mắt / nhìn theo'],['pet','Vuốt ve hoặc xoa đầu'],['thinking','Suy nghĩ khi chờ câu trả lời'],['sleep','Ngủ gật khi lâu không tương tác'],['angry','Giận dỗi khi bị trêu hoặc kéo liên tục'],['lonely','Cô đơn khi người dùng để yên lâu'],['fear','Giật mình / lo lắng'],['music','Lắc lư theo nhạc; có thể bật tai nghe trong cài đặt'],['happy','Vui mừng khi kết quả tốt'],['sad','Buồn và động viên khi điểm dưới 5'],['big','Ngại khi phóng to quá mức'],['small','Lo lắng khi bị thu nhỏ quá mức'],['chat','Lắng nghe, nghiêng đầu, chuyển động miệng khi chat'],['drag','Phản ứng khi bị di chuyển liên tục'],['tap','Gõ/nhún để thu hút chú ý'],['cry','Khóc khi kết quả thấp'],['dizzy','Chóng mặt khi kéo quá nhanh']];
+ function showCatalogue(){const box=$('aiChatMessages');if(!box)return false;const wrap=document.createElement('div');wrap.className='ai-chat-msg ai';wrap.style.maxWidth='100%';const title=document.createElement('strong');title.textContent='Danh sách tương tác Aru~aruu (/tuongtac)';wrap.appendChild(title);const ul=document.createElement('div');ul.style.cssText='margin-top:7px;line-height:1.6';catalogue.forEach(([cmd,desc])=>{const row=document.createElement('div');row.textContent='/'+cmd+' — '+desc;ul.appendChild(row);});wrap.appendChild(ul);box.appendChild(wrap);box.scrollTop=box.scrollHeight;return true;}
+ const origSend=window.sendAiChatMessage;if(typeof origSend==='function')window.sendAiChatMessage=async function(){const input=$('aiChatInput');const text=(input?.value||'').trim().toLowerCase();if(['/tuongtac','/tươngtác','/interaction','/help'].includes(text)){if(input)input.value='';showCatalogue();if(sceneState)sceneState.setState('chat');return;}if(text.startsWith('/')){const cmd=text.slice(1).split(/\s+/)[0];if(states.includes(cmd)){if(input)input.value='';if(sceneState)sceneState.setState(cmd);const messages=$('aiChatMessages');if(messages){const m=document.createElement('div');m.className='ai-chat-msg ai';m.textContent='Đã kích hoạt tương tác: '+(stateLabels[cmd]||cmd);messages.appendChild(m);messages.scrollTop=messages.scrollHeight;}return;}}return origSend.apply(this,arguments);};
+ // Connect result and music triggers to the actual 3D rig without replacing their existing behavior.
+ const origSetState=window.auroraSetAruState;if(typeof origSetState==='function')window.auroraSetAruState=function(state){const r=origSetState.apply(this,arguments);if(sceneState)sceneState.setState(state);return r;};
+ document.addEventListener('visibilitychange',()=>{if(document.hidden&&sceneState){/* RAF naturally throttles in background; keep state */}});
+ window.AuroraAru3D={refresh,interact:state=>{if(sceneState)sceneState.setState(state);},catalogue:catalogue.map(([command,description])=>({command,description})),dispose:stopScene};
+ document.addEventListener('DOMContentLoaded',()=>setTimeout(refresh,400));
+ const watch=new MutationObserver(()=>{if(document.body.classList.contains('optimized-mode')){if(sceneState)stopScene();}else if(currentEquippedAiModel&&isDefaultAru()&&!sceneState&&aiWidgetVisible)setTimeout(refresh,100);});
+ if(document.body)watch.observe(document.body,{attributes:true,attributeFilter:['class']});
 })();
-
 </script>
-<script id="auroraAru3DIntegration">
-(() => {
-  'use strict';
-  if(window.__auroraAru3dIntegrationInstalled)return;
-  window.__auroraAru3dIntegrationInstalled=true;
-  let lastState='idle';
-  let lastMusicRefresh=0;
-  const modelId='aimodel_default_aru_3d';
-  const getModel=()=>{try{return typeof currentEquippedAiModel!=='undefined'&&currentEquippedAiModel&&currentEquippedAiModel.modelId===modelId?currentEquippedAiModel.modelData:null;}catch(_){return null;}};
-  const getContent=()=>document.getElementById('aiModelContent');
-  function renderStatic(model){
-    const content=getContent(),widget=document.getElementById('aiModelWidget');if(!content||!widget||!model)return;
-    const src=typeof auroraAruStaticArt==='function'?auroraAruStaticArt(model.accessorySettings||{}):(model.imageData||'');
-    if(window.AuroraAru3D)window.AuroraAru3D.stop('widget');
-    content.replaceChildren();
-    if(src){const img=document.createElement('img');img.src=src;img.alt=model.name||'Aru~aru';img.decoding='async';img.style.cssText='display:block;width:100%;height:100%;object-fit:contain;animation:none!important;transition:none!important;transform:none!important;filter:none!important';content.appendChild(img);}
-    widget.classList.add('aru-static-art');widget.classList.remove('aru-system-model');
-  }
-  function sync3D(){
-    const model=getModel(),widget=document.getElementById('aiModelWidget'),content=getContent();
-    if(!widget||!content)return;
-    if(!model){if(window.AuroraAru3D)window.AuroraAru3D.stop('widget');return;}
-    const badge=document.getElementById('aiModelBadge'),chatName=document.getElementById('aiChatName');
-    if(badge)badge.textContent=model.name||'Aru~aru';if(chatName)chatName.textContent=model.name||'Aru~aru';
-    if(document.body.classList.contains('optimized-mode')){renderStatic(model);return;}
-    widget.classList.remove('aru-static-art');widget.classList.add('aru-system-model');
-    let stage=content.querySelector('.aru-three-stage');
-    if(!stage){if(window.AuroraAru3D)window.AuroraAru3D.stop('widget');content.replaceChildren();stage=document.createElement('div');stage.className='aru-three-stage';stage.setAttribute('aria-label','Aru~aru 3D');content.appendChild(stage);}
-    if(!window.AuroraAru3D){renderStatic(model);return;}
-    try{
-      window.AuroraAru3D.mount('widget',stage,{accessories:model.accessorySettings||{},state:lastState,personality:model.personality||'tsundere'});
-      window.AuroraAru3D.setAccessories('widget',model.accessorySettings||{});
-      window.AuroraAru3D.setState('widget',lastState,model.personality||'tsundere');
-    }catch(error){console.warn('Aru~aru 3D renderer fallback:',error);renderStatic(model);}
-  }
 
-  const previousUpdate=window.updateAiWidgetContent;
-  if(typeof previousUpdate==='function'&&!previousUpdate.__auroraAru3d){
-    const wrapped=async function(){const result=await previousUpdate.apply(this,arguments);sync3D();return result;};
-    wrapped.__auroraAru3d=true;window.updateAiWidgetContent=wrapped;
-  }
-  const previousState=window.auroraSetAruState;
-  if(typeof previousState==='function'&&!previousState.__auroraAru3d){
-    const wrapped=function(state,withMessage){
-      const normalized=state==='sad'?'cry':state==='score'?'happy':state==='exam'?'thinking':state==='drag'?'dizzy':state||'idle';
-      lastState=normalized;
-      const result=previousState.apply(this,arguments);
-      const model=getModel();if(model&&window.AuroraAru3D&&!document.body.classList.contains('optimized-mode'))window.AuroraAru3D.setState('widget',normalized,model.personality||'tsundere');
-      return result;
-    };
-    wrapped.__auroraAru3d=true;window.auroraSetAruState=wrapped;
-  }
-  const previousHide=window.hideAiWidget;
-  if(typeof previousHide==='function'&&!previousHide.__auroraAru3d){
-    const wrapped=function(){const result=previousHide.apply(this,arguments);if(window.AuroraAru3D)window.AuroraAru3D.stop('widget');return result;};
-    wrapped.__auroraAru3d=true;window.hideAiWidget=wrapped;
-  }
-  const previousPerf=window.applyPerfMode;
-  if(typeof previousPerf==='function'&&!previousPerf.__auroraAru3d){
-    const wrapped=function(mode){const result=previousPerf.apply(this,arguments);if(document.body.classList.contains('optimized-mode'))renderStatic(getModel());else if(getModel())sync3D();return result;};
-    wrapped.__auroraAru3d=true;window.applyPerfMode=wrapped;
-  }
-  const musicPlayer=document.getElementById('globalAudioPlayer');
-  function syncMusicState(){
-    if(!musicPlayer)return;
-    const playing=!musicPlayer.paused&&!musicPlayer.ended&&!!(musicPlayer.currentSrc||musicPlayer.src);
-    if(playing){
-      if(getModel()&&(lastState!=='music'||Date.now()-lastMusicRefresh>7200)){
-        lastMusicRefresh=Date.now();lastState='music';
-        if(typeof window.auroraSetAruState==='function')window.auroraSetAruState('music',false);
-      }
-    }else if(lastState==='music'){
-      lastState='idle';
-      if(getModel()&&typeof window.auroraSetAruState==='function')window.auroraSetAruState('idle',false);
-    }
-  }
-  if(musicPlayer){['play','playing','pause','ended','emptied'].forEach(eventName=>musicPlayer.addEventListener(eventName,syncMusicState));setInterval(syncMusicState,4000);}
-  window.addEventListener('aurora-aru3d-ready',()=>{if(getModel())sync3D();});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&getModel()&&!document.body.classList.contains('optimized-mode'))sync3D();});
-  document.addEventListener('DOMContentLoaded',()=>{if(getModel())sync3D();},{once:true});
-  if(window.AuroraAru3D&&getModel())sync3D();
-})();
-
-</script>
 </body>
 </html>
