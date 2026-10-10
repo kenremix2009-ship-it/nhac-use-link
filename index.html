@@ -11689,7 +11689,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
           <section class="aurora-uc-card aurora-uc-troll-card"><h3>🔊 Troll · Quản lý âm thanh vui</h3><p class="aurora-uc-muted">Tải file âm thanh để dùng bằng lệnh <code>/trollvoice số @id</code>. Voice có sẵn #1–#5; file tải lên bắt đầu từ #6 theo thứ tự thời gian. Trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó sẽ hiện nút nghe.</p><label for="auroraUCTrollAudioFiles">Chọn file âm thanh (MP3, WAV, OGG, M4A, AAC, WEBM; tối đa 20 MB/file)</label><input id="auroraUCTrollAudioFiles" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.webm" multiple><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCTrollUploadBtn">⬆️ Tải âm thanh</button><button type="button" class="btn btn-secondary" id="auroraUCTrollRefreshBtn">↻ Làm mới danh sách</button></div><div id="auroraUCTrollUploadStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Chưa tải file nào trong phiên này.</div><div id="auroraUCTrollAudioList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Đang tải danh sách âm thanh…</p></div></section>
           <section class="aurora-uc-card"><h3>🛠️ Thao Túng · Quản trị dữ liệu bài thi</h3><label for="auroraUCManipSearch">Tìm theo mã hoặc tên bài</label><input id="auroraUCManipSearch" placeholder="Nhập mã bài thi hoặc tên"><div class="aurora-uc-row"><button type="button" class="btn btn-secondary" id="auroraUCLoadManipBtn">↻ Tải danh sách</button><button type="button" class="btn btn-secondary" id="auroraUCShowMoreBtn">⌄ Xem thêm</button></div><div id="auroraUCManipList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Bấm Tải danh sách để xem bài thi.</p></div><p class="aurora-uc-muted">Lần đầu chỉnh sửa sẽ lưu bản gốc trước khi thay đổi. Reset sẽ khôi phục bản sao lưu đó, không phải bản đã chỉnh sửa gần nhất.</p></section>
           <section class="aurora-uc-card"><h3>🐳 Bảo trì toàn hệ thống</h3><p class="aurora-uc-muted">Bấm bắt đầu để đếm ngược 10 giây. Trong thời gian đếm ngược, có thể hủy; người kích hoạt, CEO và AROM+ không bị khóa ở chế độ bảo trì.</p><div class="aurora-uc-row"><button type="button" class="btn btn-danger" id="auroraUCStartMaintenanceBtn">⏳ Bắt đầu bảo trì</button><button type="button" class="btn btn-secondary" id="auroraUCCancelMaintenanceBtn">✋ Ngưng / tạm hoãn</button></div><div id="auroraUCMaintenanceStatus" class="aurora-uc-muted" style="margin-top:9px">Chưa có lịch bảo trì.</div></section>
-          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện chung cho website. Basic là giao diện hiện tại; Modern dùng bố cục trung tính; Tương lai bổ sung hành trình khám phá công nghệ theo cuộn trang, giữ nguyên chức năng học tập hiện có.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Trải nghiệm 3D Scrollytelling</option></select><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
+          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện chung cho website. Basic là giao diện hiện tại; Modern dùng bố cục trung tính; Tương lai mở trải nghiệm sketchbook tương tác từ source HTML chính thức của ThreeUI trên trang chủ.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Meng To Sketchbook (ThreeUI)</option></select><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
         </div>
         <div class="aurora-uc-card" style="margin-top:12px;border-color:#f59e0b;background:#fffbeb"><b style="color:#92400e">⚠️ Lưu ý bảo mật triển khai</b><p class="aurora-uc-muted" style="margin-top:5px;color:#78350f">Aurora hiện dùng đăng nhập tùy chỉnh phía trình duyệt. Các lệnh quản trị, box chat, ban/kick, đáp án và chỉnh điểm trong module này chỉ được kiểm tra ở client; để ngăn người dùng kỹ thuật tự gọi Firebase bỏ qua giao diện, cần xác thực server/Firebase Authentication, Cloud Functions và Security Rules phù hợp trước khi dùng trên dữ liệu thật.</p></div>
       </div>`;
@@ -12878,219 +12878,6 @@ try{loadAiModelsForGrant();loadAiModelsList();}catch(e){}
 </script>
 
 
-<!-- Aurora Aru 3D companion enhancement (additive; preserves the original app) -->
-<style id="aurora-aruu-3d-enhancement-style">
-#aiModelContent .aurora-aruu-3d-stage{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;border-radius:inherit;background:radial-gradient(ellipse at 50% 34%,#f7fbff 0%,#dfeeff 45%,#c8d9f5 100%);touch-action:pan-y}
-#aiModelContent .aurora-aruu-3d-stage canvas{display:block;width:100%;height:100%;outline:none}
-#aiModelContent .aurora-aruu-3d-status{position:absolute;left:8px;bottom:7px;padding:4px 8px;border-radius:999px;background:#ffffffc9;color:#42516f;font:10px/1.2 'Segoe UI',sans-serif;pointer-events:none;backdrop-filter:blur(5px)}
-#aiModelContent .aurora-aruu-3d-speech{position:absolute;left:50%;top:8px;transform:translateX(-50%);max-width:88%;padding:7px 11px;border:1px solid #d7e5ff;border-radius:13px;background:#ffffffed;color:#3d4d75;font:600 11px/1.35 'Segoe UI',sans-serif;text-align:center;box-shadow:0 5px 16px #32466a1c;pointer-events:none;opacity:0;transition:opacity .25s}
-#aiModelContent .aurora-aruu-3d-speech.show{opacity:1}
-#aiModelContent .aurora-aruu-3d-stage .aurora-aruu-3d-tap{position:absolute;right:8px;bottom:8px;border:1px solid #d6e4ff;background:#ffffffd9;color:#53678e;border-radius:10px;padding:5px 8px;font-size:10px;cursor:pointer}
-body.optimized-mode #aiModelContent .aurora-aruu-3d-stage{display:none!important}
-body.optimized-mode #aiModelContent .aurora-aruu-static-art{display:block!important}
-.aurora-aruu-static-art{display:none;width:100%;height:100%;object-fit:contain;object-position:center bottom}
-@media(prefers-reduced-motion:reduce){#aiModelContent .aurora-aruu-3d-speech{transition:none}}
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js" defer></script>
-<script id="aurora-aruu-3d-enhancement">
-(function(){
-'use strict';
-const MODEL_ID='aimodel_default_aruu';
-const states={
- idle:['Bình thường','Hứ! Đừng hiểu lầm nhé… mình chỉ đang ở đây thôi!'],
- blink:['Nháy mắt','M-mình không có nháy mắt với bạn đâu!'],
- happy:['Vui mừng','Hả?! Làm tốt lắm… t-thì mình biết bạn làm được mà!'],
- sad:['Buồn','Không sao đâu… mình sẽ cùng bạn thử lại.'],
- cry:['Khóc','Mình hơi buồn thôi… cho mình một chút nhé.'],
- thinking:['Suy nghĩ','Ừm… để mình nghĩ thật kỹ đã.'],
- sleep:['Ngủ gật','Zzz… chỉ nghỉ mắt một chút thôi nha…'],
- angry:['Giận dỗi','Hứ! Mình đang giận đấy, dỗ mình đi!'],
- fear:['Sợ hãi','Ơ… ở đây với mình một chút được không?'],
- shy:['Ngại ngùng','Đ-đừng nhìn mình gần thế chứ!'],
- dizzy:['Chóng mặt','Chờ đã… mọi thứ quay vòng vòng rồi…'],
- music:['Nghe nhạc','Mình chỉ lắc lư theo nhạc một chút thôi!'],
- chat:['Trò chuyện','Ừm, mình đang nghe đây. Bạn cứ nói nhé.'],
- tap:['Chú ý','Này! Nhìn mình một chút đi!'],
- pet:['Được xoa đầu','Ưm… mình không có thích đâu… nhưng cứ làm thêm chút nữa.'],
- small:['Quá nhỏ','Mình nhỏ xíu rồi… đừng bỏ mình lại nhé.'],
- big:['Quá lớn','G-gần quá rồi! Thu nhỏ lại một chút đi!']
-};
-let mounted=null, tickTimer=null, lastActivity=Date.now(), currentState='idle', pointerSamples=[];
-function optimized(){return document.body.classList.contains('optimized-mode')}
-function staticArt(){try{return (window.currentEquippedAiModel&&window.currentEquippedAiModel.modelData&&window.currentEquippedAiModel.modelData.imageData)||(typeof AURORA_ARU_IMAGE!=='undefined'?AURORA_ARU_IMAGE:'')}catch(e){return ''}}
-function say(key,force){
- const s=states[key]||states.idle; currentState=key;lastActivity=Date.now();
- const host=document.getElementById('aiModelContent');if(!host)return;
- const bubble=host.querySelector('.aurora-aruu-3d-speech');if(bubble){bubble.textContent=s[1];bubble.classList.add('show');clearTimeout(bubble._hideTimer);bubble._hideTimer=setTimeout(()=>bubble.classList.remove('show'),force?4200:3000)}
- if(mounted)mounted.setState(key);
-}
-function dispose(){if(mounted){mounted.dispose();mounted=null}if(tickTimer){clearInterval(tickTimer);tickTimer=null}}
-function addSphere(parent,geo,mat,pos,scale){
- const o=new THREE.Mesh(geo,mat);o.position.set(...pos);if(scale)o.scale.set(...scale);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;
-}
-function makeCharacter(host){
- if(!window.THREE||!host)return false;
- dispose();
- host.innerHTML='<div class="aurora-aruu-3d-stage" aria-label="Aru~aruu, mô hình anime 3D tương tác"><div class="aurora-aruu-3d-speech"></div><canvas tabindex="0" aria-label="Mô hình Aru~aruu. Nhấp để tương tác."></canvas><div class="aurora-aruu-3d-status">3D · Aru~aruu · nhấp để tương tác</div><button type="button" class="aurora-aruu-3d-tap">Tương tác</button></div>';
- const stage=host.querySelector('.aurora-aruu-3d-stage'),canvas=stage.querySelector('canvas');
- const scene=new THREE.Scene();scene.background=new THREE.Color('#dfeeff');scene.fog=new THREE.Fog('#dfeeff',7,14);
- const camera=new THREE.PerspectiveCamera(33,1,.1,100);camera.position.set(0,0.15,7.4);
- let renderer;
- try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});}catch(e){host.innerHTML='<img class="aurora-aruu-static-art" alt="Aru~aruu" src="'+(staticArt()||'')+'"><div style="padding:12px;font-size:12px">Thiết bị không hỗ trợ WebGL; đang dùng ảnh tĩnh.</div>';return false}
- renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));renderer.setSize(stage.clientWidth,stage.clientHeight,false);
- renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
- scene.add(new THREE.HemisphereLight(0xeaf4ff,0x8e7c99,2.0));
- const keyLight=new THREE.DirectionalLight(0xfff4e7,3.2);keyLight.position.set(-3,5,6);scene.add(keyLight);
- const rim=new THREE.DirectionalLight(0x8db8ff,2.1);rim.position.set(4,2,-3);scene.add(rim);
- const fill=new THREE.PointLight(0xffdce8,0.65,12);fill.position.set(0,-2,4);scene.add(fill);
- const root=new THREE.Group();scene.add(root);root.position.y=-.18;
- const mat=(color,rough=.62,metal=0)=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal});
- const skin=mat('#ffe0d3',.72), blush=mat('#f39caa',.8), hair=mat('#f4f4ff',.43), hairShade=mat('#cfd9f1',.58), hairHi=mat('#ffffff',.3), dress=mat('#fffdfd',.6), trim=mat('#9bbcff',.45), blue=mat('#319de7',.25), iris=mat('#1a9edb',.25), dark=mat('#29324f',.3), white=mat('#ffffff',.2), bearMat=mat('#b58c71',.9), bearLight=mat('#e4c5a7',.9), earInner=mat('#e8a9c1',.8);
- const sph=new THREE.SphereGeometry(1,32,24);
- // Torso and shoulders: waist-up framing.
- const torso=addSphere(root,new THREE.SphereGeometry(1,40,32),dress,[0,-1.25,0],[1.13,1.12,.56]);
- const neck=addSphere(root,sph,skin,[0,.02,.03],[.28,.43,.27]);
- const shoulderL=addSphere(root,sph,skin,[-.92,-.52,.02],[.42,.31,.34]), shoulderR=addSphere(root,sph,skin,[.92,-.52,.02],[.42,.31,.34]);
- // White dress collar and trim.
- const collarL=addSphere(root,sph,trim,[-.35,-.2,.51],[.37,.11,.065]);collarL.rotation.z=-.35;
- const collarR=addSphere(root,sph,trim,[.35,-.2,.51],[.37,.11,.065]);collarR.rotation.z=.35;
- const dressButton=addSphere(root,sph,blue,[0,-.75,.555],[.075,.075,.04]);
- // Arms holding a teddy bear.
- const armL=addSphere(root,sph,skin,[-.72,-1.0,.42],[.22,.66,.23]);armL.rotation.z=-.48;
- const armR=addSphere(root,sph,skin,[.72,-1.0,.42],[.22,.66,.23]);armR.rotation.z=.48;
- // Teddy bear, toggleable in model settings.
- const bear=new THREE.Group();root.add(bear);bear.position.set(.03,-1.32,.7);
- addSphere(bear,sph,bearMat,[0,0,0],[.43,.5,.3]);
- addSphere(bear,sph,bearMat,[0,.52,.02],[.34,.32,.28]);
- addSphere(bear,sph,bearMat,[-.25,.75,.02],[.14,.16,.13]);addSphere(bear,sph,bearMat,[.25,.75,.02],[.14,.16,.13]);
- addSphere(bear,sph,bearLight,[0,.47,.275],[.2,.15,.055]);
- addSphere(bear,sph,dark,[-.12,.58,.27],[.035,.04,.025]);addSphere(bear,sph,dark,[.12,.58,.27],[.035,.04,.025]);
- addSphere(bear,sph,dark,[0,.43,.33],[.045,.035,.025]);
- addSphere(bear,sph,bearMat,[-.43,-.03,.02],[.16,.29,.18]);addSphere(bear,sph,bearMat,[.43,-.03,.02],[.16,.29,.18]);
- // Head, ears and face.
- const headGroup=new THREE.Group();root.add(headGroup);headGroup.position.set(0,.92,.05);
- addSphere(headGroup,sph,skin,[0,0,0],[1.02,1.12,.77]);
- // cheeks
- const cheekL=addSphere(headGroup,sph,blush,[-.59,-.29,.64],[.21,.105,.035]),cheekR=addSphere(headGroup,sph,blush,[.59,-.29,.64],[.21,.105,.035]);
- // Anime eyes with sclera, irises, pupils, highlights, and eyelids.
- const eyes=[];
- for(const side of [-1,1]){
-  const x=side*.39;
-  addSphere(headGroup,sph,white,[x,.08,.665],[.245,.31,.105]);
-  const eyeIris=addSphere(headGroup,sph,iris,[x,.065,.755],[.15,.205,.06]);
-  addSphere(headGroup,sph,dark,[x,.055,.804],[.078,.13,.035]);
-  addSphere(headGroup,sph,white,[x-.045,.14,.84],[.047,.061,.02]);
-  addSphere(headGroup,sph,white,[x+.055,.005,.842],[.021,.027,.015]);
-  const lid=addSphere(headGroup,sph,hairShade,[x,.34,.69],[.255,.045,.08]);eyes.push({lid,iris:eyeIris});
-  // eyebrows
-  const brow=addSphere(headGroup,sph,hairShade,[x,.43,.69],[.19,.035,.04]);brow.rotation.z=side*.08;
- }
- // Nose and mouth.
- addSphere(headGroup,sph,blush,[0,-.12,.77],[.045,.035,.025]);
- const mouth=addSphere(headGroup,sph,dark,[0,-.38,.744],[.105,.035,.025]);
- // Hair cap, long back hair, bangs and individually layered locks.
- addSphere(headGroup,sph,hair,[0,.57,-.12],[1.03,.69,.77]);
- const backHair=addSphere(headGroup,sph,hairShade,[0,-.34,-.38],[1.05,1.15,.36]);
- const locks=[];
- for(let i=0;i<13;i++){
-  const x=-.87+i*.145, y=.22+Math.sin(i*.65)*.12;
-  const lock=addSphere(headGroup,sph,i%3===0?hairHi:hair,[x,y,.55],[.115,.47+((i%4)*.045),.12]);
-  lock.rotation.z=(i-6)*-.035;locks.push({mesh:lock,phase:i*.61,base:lock.rotation.z});
- }
- // Side locks frame cheeks.
- const sideLocks=[];
- for(const side of [-1,1]){
-  const l=addSphere(headGroup,sph,hair,[side*.88,-.28,.28],[.2,.75,.23]);l.rotation.z=-side*.18;sideLocks.push({mesh:l,side});
-  // Cat ears on top, visible as character feature.
-  const ear=addSphere(headGroup,sph,hair,[side*.72,1.0,-.03],[.34,.52,.24]);ear.rotation.z=-side*.5;
-  const inner=addSphere(headGroup,sph,earInner,[side*.73,1.02,.18],[.19,.32,.055]);inner.rotation.z=-side*.5;
- }
- // Tiny hair clip.
- const clip=addSphere(headGroup,sph,trim,[.48,.69,.65],[.22,.07,.045]);clip.rotation.z=-.2;
- // Optional headset is a group, hidden by default.
- const headset=new THREE.Group();headGroup.add(headset);
- const band=addSphere(headset,sph,dark,[0,.88,-.02],[.83,.16,.12]);
- for(const side of [-1,1])addSphere(headset,sph,blue,[side*.83,.1,.12],[.16,.27,.13]);
- headset.visible=false;
- // Framing lights and soft pedestal/background shapes.
- const halo=new THREE.Mesh(new THREE.CircleGeometry(1.8,64),new THREE.MeshBasicMaterial({color:0xf5f8ff,transparent:true,opacity:.42,depthWrite:false}));halo.position.set(0,.55,-1.5);scene.add(halo);
- const floor=new THREE.Mesh(new THREE.CircleGeometry(2.8,64),mat('#c8d8f0',.95));floor.rotation.x=-Math.PI/2;floor.position.set(0,-2.62,0);scene.add(floor);
- const clock=new THREE.Clock();let raf=0,dead=false,state='idle',dragging=false,px=0,py=0,dragDistance=0,zoom=1,blinkUntil=0,lastBlink=0,lastInteraction=performance.now(),disposed=false;
- function setState(next){state=states[next]?next:'idle';lastInteraction=performance.now();if(state==='music')headset.visible=!!(window.currentEquippedAiModel?.modelData?.accessorySettings?.headphones);if(state==='sleep'){}}
- function resize(){if(dead)return;const w=Math.max(1,stage.clientWidth),h=Math.max(1,stage.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
- const ro=window.ResizeObserver?new ResizeObserver(resize):null;if(ro)ro.observe(stage);else window.addEventListener('resize',resize);
- function animate(){
-  if(dead)return;raf=requestAnimationFrame(animate);const t=clock.getElapsedTime(),dt=Math.min(clock.getDelta(),.04);
-  root.position.y=-.18+Math.sin(t*1.35)*.025;root.rotation.y=Math.sin(t*.48)*.045;
-  headGroup.rotation.z=Math.sin(t*.9)*.018;headGroup.rotation.x=Math.sin(t*.7)*.012;
-  locks.forEach(o=>{o.mesh.rotation.z=o.base+Math.sin(t*2.1+o.phase)*.018});
-  sideLocks.forEach(o=>{o.mesh.rotation.z=-o.side*.18+Math.sin(t*2.6+o.side)*.035});
-  torso.scale.y=1.12+(state==='happy'?Math.sin(t*8)*.025:Math.sin(t*1.7)*.006);
-  bear.rotation.z=state==='happy'?Math.sin(t*7)*.055:Math.sin(t*1.8)*.012;
-  if(state==='music'){root.rotation.z=Math.sin(t*3.8)*.075;root.rotation.y=Math.sin(t*2.4)*.11}
-  if(state==='sleep'){headGroup.rotation.z=.12+Math.sin(t*.7)*.02;headGroup.position.y=.88+Math.sin(t*.7)*.02}
-  else headGroup.position.y=.92+Math.sin(t*1.1)*.008;
-  if(state==='dizzy')root.rotation.z=Math.sin(t*7)*.18;
-  if(state==='angry'){headGroup.rotation.z=Math.sin(t*9)*.025;root.rotation.y=Math.sin(t*5)*.05}
-  if(state==='fear'){root.position.y=-.2+Math.sin(t*8)*.035}
-  const now=performance.now();
-  if(now-lastBlink>3400+Math.random()*2300){blinkUntil=now+155;lastBlink=now}
-  const blink=now<blinkUntil?1:0;
-  eyes.forEach(o=>{o.lid.scale.y=blink?.22:.045;o.lid.position.y=blink?.25:.34});
-  mouth.scale.x=state==='happy'||state==='chat'||state==='music'?.14:.105;
-  mouth.scale.y=state==='happy'||state==='chat'||state==='music'?.065:.035;
-  camera.position.z=7.4/zoom;camera.lookAt(0,-.03,0);
-  renderer.render(scene,camera);
- }
- function onDown(e){dragging=true;px=e.clientX;py=e.clientY;dragDistance=0;stage.setPointerCapture?.(e.pointerId)}
- function onMove(e){if(!dragging)return;const dx=e.clientX-px,dy=e.clientY-py;dragDistance+=Math.abs(dx)+Math.abs(dy);px=e.clientX;py=e.clientY;if(dragDistance>3){root.rotation.y+=dx*.008;headGroup.rotation.x=Math.max(-.22,Math.min(.22,headGroup.rotation.x+dy*.004));pointerSamples.push({t:performance.now(),x:e.clientX,y:e.clientY});pointerSamples=pointerSamples.filter(v=>performance.now()-v.t<450);if(pointerSamples.length>3){const a=pointerSamples[0],b=pointerSamples[pointerSamples.length-1],speed=Math.hypot(b.x-a.x,b.y-a.y)/Math.max(.02,(b.t-a.t)/1000);if(speed>1000)say('dizzy');else if(speed>430)say('angry')}}}
- function onUp(e){dragging=false;if(dragDistance<8){say('pet')} }
- function onWheel(e){zoom=Math.max(.78,Math.min(1.28,zoom+(e.deltaY<0?.06:-.06)));if(zoom>1.22)say('big');else if(zoom<.84)say('small')}
- function onKey(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();say('chat')}}
- canvas.addEventListener('pointerdown',onDown);canvas.addEventListener('pointermove',onMove);canvas.addEventListener('pointerup',onUp);canvas.addEventListener('pointercancel',()=>dragging=false);stage.addEventListener('wheel',onWheel,{passive:true});canvas.addEventListener('keydown',onKey);
- stage.querySelector('.aurora-aruu-3d-tap').addEventListener('click',()=>say('tap',true));
- animate();resize();
- mounted={setState,dispose(){if(dead)return;dead=true;cancelAnimationFrame(raf);if(ro)ro.disconnect();else window.removeEventListener('resize',resize);canvas.removeEventListener('pointerdown',onDown);canvas.removeEventListener('pointermove',onMove);canvas.removeEventListener('pointerup',onUp);stage.removeEventListener('wheel',onWheel);try{renderer.dispose();}catch(e){} }};
- return true;
-}
-function shouldUseAru(){
- return !optimized()&&window.currentEquippedAiModel&&window.currentEquippedAiModel.modelId===MODEL_ID;
-}
-function refresh(){
- if(!shouldUseAru()){dispose();return}
- const host=document.getElementById('aiModelContent');if(!host)return;
- if(host.querySelector('.aurora-aruu-3d-stage'))return;
- if(!window.THREE){setTimeout(refresh,350);return}
- makeCharacter(host);
-}
-function install(){
- // Keep optimized mode art-only (no WebGL renderer/animation loop).
- const original=window.updateAiWidgetContent;
- if(typeof original==='function'&&!original.__aurora3dWrapped){
-  const wrapped=async function(){dispose();const result=await original.apply(this,arguments);setTimeout(refresh,0);return result};
-  wrapped.__aurora3dWrapped=true;window.updateAiWidgetContent=wrapped;
- }
- const observer=new MutationObserver(()=>{if(shouldUseAru())setTimeout(refresh,80);else dispose()});
- const widget=document.getElementById('aiModelWidget');if(widget)observer.observe(widget,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
- const bodyObserver=new MutationObserver(()=>{if(optimized())dispose();else refresh()});bodyObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
- document.addEventListener('visibilitychange',()=>{if(document.hidden&&mounted){/* retain scene but browser throttles RAF */}else refresh()});
- document.addEventListener('aurora:aru-state',e=>say(e.detail&&e.detail.state||'idle'));
- // Replace camera/webcam controls only; leave unrelated controls intact.
- document.querySelectorAll('button,a,[role="button"]').forEach(el=>{
-  const label=((el.innerText||el.getAttribute('aria-label')||el.title||'')+'').trim().toLowerCase();
-  if(/webcam|web camera|camera|webcam|bật camera|mở camera|camera trực tiếp/.test(label)){el.style.display='none';el.setAttribute('aria-hidden','true');}
- });
- // Ensure static art exists for performance mode.
- const perfObserver=new MutationObserver(()=>{const host=document.getElementById('aiModelContent');if(host&&!host.querySelector('.aurora-aruu-static-art')){const im=document.createElement('img');im.className='aurora-aruu-static-art';im.alt='Aru~aruu — ảnh tĩnh ở chế độ tối ưu';im.src=staticArt()||'';host.appendChild(im)}});
- const content=document.getElementById('aiModelContent');if(content)perfObserver.observe(content,{childList:true});
- refresh();
-}
-window.AuroraAru3D={setState:say,states,refresh,dispose};
-window.addEventListener('load',()=>setTimeout(install,700));
-})();
-</script>
-
-
 <style id="aurora-disable-ai-model-voice">
 #aiChatSpeakToggle,.ai-chat-speech-toggle{display:none!important;visibility:hidden!important;pointer-events:none!important}
 </style>
@@ -13098,134 +12885,63 @@ window.addEventListener('load',()=>setTimeout(install,700));
 (function(){try{if(typeof aiChatSpeakReplies!=='undefined')aiChatSpeakReplies=false;if(window.speechSynthesis)window.speechSynthesis.cancel();const b=document.getElementById('aiChatSpeakToggle');if(b)b.remove();}catch(e){}})();
 </script>
 \n
-<style id="aurora-interface-future-style">
-/* Scoped Future interface: no global component behavior or legacy selectors are replaced. */
-body.aurora-interface-future{--aurora-fg:#eaf4ff;--aurora-muted:#9db2ce;--aurora-line:rgba(118,190,255,.2);background:#050b18!important;color:var(--aurora-fg)!important;background-image:radial-gradient(ellipse at 15% 0%,rgba(20,91,160,.25),transparent 42%),radial-gradient(ellipse at 90% 24%,rgba(85,54,175,.16),transparent 38%)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important}
-body.aurora-interface-future .navbar{background:rgba(5,12,28,.9)!important;color:#eaf4ff!important;border-bottom:1px solid rgba(112,187,255,.22)!important;box-shadow:0 8px 32px rgba(0,0,0,.24)!important;backdrop-filter:blur(18px)}
-body.aurora-interface-future .logo{color:#b8e5ff!important;text-shadow:0 0 24px rgba(67,180,255,.25)}
-body.aurora-interface-future .nav-tabs button{color:#b4c7df!important;border-radius:10px!important;transition:background .2s,color .2s,transform .2s}
-body.aurora-interface-future .nav-tabs button.active,body.aurora-interface-future .nav-tabs button:hover{background:rgba(55,151,232,.17)!important;color:#fff!important;box-shadow:inset 0 0 0 1px rgba(109,194,255,.22)}
-body.aurora-interface-future .nav-user{background:rgba(30,55,85,.6)!important;color:#e8f5ff!important;border:1px solid rgba(124,190,255,.22)!important}
-body.aurora-interface-future .card,body.aurora-interface-future .home-card,body.aurora-interface-future .role-card,body.aurora-interface-future .profile-box,body.aurora-interface-future .modal-box,body.aurora-interface-future .item-detail-box,body.aurora-interface-future .doc-modal-box{background:linear-gradient(145deg,rgba(15,30,54,.96),rgba(8,17,34,.96))!important;color:#eaf4ff!important;border:1px solid rgba(112,186,255,.2)!important;border-radius:16px!important;box-shadow:0 16px 50px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.025)!important}
-body.aurora-interface-future .section-title{background:linear-gradient(100deg,rgba(21,111,177,.23),rgba(101,77,194,.13))!important;color:#c9edff!important;border:1px solid rgba(100,186,255,.2)!important;border-left:3px solid #48c5ff!important;border-radius:10px!important}
-body.aurora-interface-future .btn:not(.btn-danger):not(.btn-success):not(.btn-warning){background:linear-gradient(115deg,#176da7,#5144a4)!important;color:#fff!important;border:1px solid rgba(131,207,255,.3)!important;box-shadow:0 5px 18px rgba(25,111,190,.15)!important}
-body.aurora-interface-future input,body.aurora-interface-future select,body.aurora-interface-future textarea{background:#0a172b!important;color:#eaf4ff!important;border-color:#294766!important}
-body.aurora-interface-future .view-section{color:#eaf4ff}
-body.aurora-interface-future .aurora-showcase{background:linear-gradient(130deg,#071327,#101b39 58%,#11152f)!important;border:1px solid rgba(98,184,255,.2)!important;border-radius:24px!important;box-shadow:0 25px 80px rgba(0,0,0,.3)!important}
-body.aurora-interface-future .aurora-showcase h1,body.aurora-interface-future .aurora-showcase-copy h1{color:#f2f8ff!important}
-body.aurora-interface-future .aurora-showcase p,body.aurora-interface-future .aurora-showcase-pills{color:#b8cce5!important}
-body.aurora-interface-future .aurora-showcase-media{border-color:rgba(113,194,255,.25)!important}
-.aurora-story-module{display:none;margin:clamp(26px,5vw,70px) auto;max-width:1380px;color:#eaf4ff;position:relative;isolation:isolate}
-body.aurora-interface-future .aurora-story-module{display:block}
-.aurora-story-head{max-width:760px;margin:0 auto 34px;text-align:center;padding:0 18px}
-.aurora-story-eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#65d4ff;font-weight:800}
-.aurora-story-head h2{font-size:clamp(29px,4vw,56px);line-height:1.04;letter-spacing:-.045em;margin:14px 0;color:#f3f8ff}
-.aurora-story-head p{font-size:clamp(14px,1.5vw,17px);line-height:1.75;color:#a9bdd7;margin:0}
-.aurora-story-track{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(20px,5vw,76px);align-items:start;position:relative}
-.aurora-story-stage{position:sticky;top:calc(var(--aurora-nav-height,80px) + 22px);min-height:450px;display:grid;place-items:center;border:1px solid rgba(106,190,255,.22);border-radius:24px;overflow:hidden;background:radial-gradient(ellipse at 50% 44%,rgba(26,111,181,.24),transparent 52%),linear-gradient(150deg,rgba(13,31,59,.95),rgba(6,13,28,.97));box-shadow:0 24px 70px rgba(0,0,0,.24)}
-.aurora-story-stage:before,.aurora-story-stage:after{content:"";position:absolute;inset:12%;border:1px solid rgba(92,190,255,.12);border-radius:50%;transform:rotate(-18deg) scaleY(.42);pointer-events:none}
-.aurora-story-stage:after{inset:20%;transform:rotate(52deg) scaleY(.42);border-color:rgba(159,123,255,.17)}
-.aurora-story-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(97,175,244,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(97,175,244,.055) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(transparent,#000 18%,#000 78%,transparent);pointer-events:none}
-.aurora-story-core{width:min(48%,220px);aspect-ratio:1;position:relative;display:grid;place-items:center;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.7,.2,1);z-index:1}
-.aurora-story-core-orb{position:absolute;inset:14%;border-radius:28%;transform:rotate(45deg);background:linear-gradient(135deg,rgba(87,226,255,.9),rgba(86,95,232,.8) 55%,rgba(177,111,255,.75));box-shadow:0 0 45px rgba(44,170,255,.3),inset 0 0 28px rgba(255,255,255,.3);animation:auroraStoryPulse 5s ease-in-out infinite}
-.aurora-story-core-orb:after{content:"";position:absolute;inset:14%;border:1px solid rgba(255,255,255,.65);border-radius:24%;background:linear-gradient(135deg,rgba(255,255,255,.22),transparent)}
-.aurora-story-core-symbol{position:relative;font-size:clamp(35px,5vw,62px);font-weight:900;color:white;text-shadow:0 0 24px rgba(255,255,255,.55)}
-.aurora-story-satellite{position:absolute;width:clamp(62px,8vw,94px);aspect-ratio:1;border:1px solid rgba(111,199,255,.38);border-radius:18px;background:linear-gradient(145deg,rgba(25,68,112,.9),rgba(18,27,61,.94));box-shadow:0 12px 30px rgba(0,0,0,.28);display:grid;place-items:center;font-size:25px;transition:transform .55s,opacity .4s;z-index:2}
-.aurora-story-satellite-a{top:15%;left:13%;transform:translate3d(var(--sx,0),var(--sy,0),0) rotate(-12deg)}
-.aurora-story-satellite-b{top:19%;right:12%;transform:translate3d(var(--sx,0),var(--sy,0),0) rotate(12deg)}
-.aurora-story-satellite-c{bottom:15%;left:18%;transform:translate3d(var(--sx,0),var(--sy,0),0) rotate(8deg)}
-.aurora-story-satellite-d{bottom:13%;right:17%;transform:translate3d(var(--sx,0),var(--sy,0),0) rotate(-8deg)}
-.aurora-story-stage[data-active="0"]{--sx:0px;--sy:0px}
-.aurora-story-stage[data-active="1"]{--sx:-12px;--sy:8px}
-.aurora-story-stage[data-active="2"]{--sx:13px;--sy:-8px}
-.aurora-story-stage[data-active="3"]{--sx:-9px;--sy:-12px}
-.aurora-story-stage[data-active="4"]{--sx:11px;--sy:10px}
-.aurora-story-stage-caption{position:absolute;left:20px;right:20px;bottom:18px;display:flex;justify-content:space-between;gap:12px;align-items:end;color:#8da9c8;font-size:10px;letter-spacing:.13em;text-transform:uppercase;z-index:3}
-.aurora-story-stage-caption strong{color:#d6f3ff;font-size:11px;letter-spacing:.08em}
-.aurora-story-steps{display:flex;flex-direction:column;gap:clamp(110px,19vh,220px);padding:5vh 0 16vh}
-.aurora-story-step{min-height:42vh;display:flex;flex-direction:column;justify-content:center;opacity:.48;transform:translateY(22px);transition:opacity .45s,transform .45s;padding:8px 4px 8px 22px;border-left:1px solid rgba(116,172,220,.2);position:relative}
-.aurora-story-step:before{content:"";position:absolute;left:-2px;top:24px;width:3px;height:42px;background:#55d9ff;opacity:0;box-shadow:0 0 18px #43bfff;transition:opacity .35s}
-.aurora-story-step.is-active{opacity:1;transform:translateY(0);border-left-color:rgba(91,200,255,.55)}
-.aurora-story-step.is-active:before{opacity:1}
-.aurora-story-number{font-size:11px;letter-spacing:.2em;color:#5fd7ff;font-weight:800}
-.aurora-story-step h3{font-size:clamp(23px,2.5vw,36px);line-height:1.14;letter-spacing:-.03em;margin:13px 0;color:#f3f8ff}
-.aurora-story-step p{font-size:15px;line-height:1.8;color:#a9bdd7;max-width:490px;margin:0}
-.aurora-story-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.aurora-story-tags span{font-size:11px;border:1px solid rgba(111,190,255,.24);background:rgba(38,94,145,.15);color:#b9eaff;padding:7px 10px;border-radius:999px}
-.aurora-story-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
-.aurora-story-cta button{border:1px solid rgba(111,190,255,.32);border-radius:12px;padding:12px 16px;background:linear-gradient(110deg,#176da7,#5144a4);color:white;font-weight:800;cursor:pointer}
-.aurora-story-cta button.secondary{background:rgba(14,31,56,.75);color:#d6eaff}
-.aurora-story-feature-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:30px}
-.aurora-story-feature{padding:19px;border:1px solid rgba(111,190,255,.2);border-radius:17px;background:linear-gradient(145deg,rgba(18,39,69,.8),rgba(8,18,36,.85));min-height:178px}
-.aurora-story-feature-icon{font-size:24px;margin-bottom:14px}
-.aurora-story-feature h3{font-size:16px;margin:0 0 8px;color:#eaf6ff}
-.aurora-story-feature p{font-size:13px;line-height:1.65;color:#9fb5d1;margin:0}
-.aurora-story-guide{margin-top:20px;padding:clamp(18px,3vw,36px);border:1px solid rgba(111,190,255,.22);border-radius:22px;background:linear-gradient(140deg,rgba(11,28,52,.96),rgba(9,16,34,.98))}
-.aurora-story-guide .aurora-story-track{grid-template-columns:.9fr 1.1fr}
-.aurora-story-guide .aurora-story-stage{min-height:330px;top:95px}
-.aurora-story-guide .aurora-story-steps{gap:70px;padding:0}
-.aurora-story-guide .aurora-story-step{min-height:220px}
-@keyframes auroraStoryPulse{0%,100%{filter:hue-rotate(0deg);transform:rotate(45deg) scale(.97)}50%{filter:hue-rotate(16deg);transform:rotate(51deg) scale(1.03)}}
-@media(max-width:800px){.aurora-story-track,.aurora-story-guide .aurora-story-track{grid-template-columns:minmax(0,1fr);gap:22px}.aurora-story-stage,.aurora-story-guide .aurora-story-stage{position:relative;top:auto;min-height:300px;order:0}.aurora-story-core{width:165px}.aurora-story-steps,.aurora-story-guide .aurora-story-steps{gap:42px;padding:0 0 20px}.aurora-story-step,.aurora-story-guide .aurora-story-step{min-height:0;padding:18px 6px 18px 18px}.aurora-story-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.aurora-story-stage-caption{bottom:12px}}
-@media(max-width:420px){.aurora-story-stage,.aurora-story-guide .aurora-story-stage{min-height:260px}.aurora-story-feature-grid{grid-template-columns:minmax(0,1fr)}.aurora-story-feature{min-height:0}.aurora-story-head{text-align:left}.aurora-story-head h2{font-size:32px}}
-@media(prefers-reduced-motion:reduce){.aurora-story-core-orb{animation:none!important}.aurora-story-core,.aurora-story-satellite,.aurora-story-step,.aurora-story-step:before{transition:none!important;transform:none!important}}
+
+
+
+
+<!-- Exact-source integration: MengToSketchbookLandingPage, ThreeUI registered revision e0330548b1ac.
+     The canonical HTML is loaded unchanged from its published source URL. Its original
+     relative images/fonts remain resolved by that origin; this avoids approximating or
+     rewriting the page and preserves its authored DOM/CSS/JavaScript and interaction model. -->
+<style id="aurora-meng-to-sketchbook-integration-style">
+.aurora-mengto-sketchbook-root{display:none;position:relative;isolation:isolate;overflow:hidden;width:var(--aurora-sketchbook-vw,100vw);max-width:none;margin-left:calc((100% - var(--aurora-sketchbook-vw,100vw))/2);margin-top:-15px;background:#ece7dc;min-height:100svh;color:#2b2721}
+.aurora-mengto-sketchbook-frame{display:block;width:100%;height:100svh;min-height:620px;border:0;background:#ece7dc;color-scheme:light}
+body.aurora-interface-future #homeView.active>.aurora-mengto-sketchbook-root{display:block}
+body.aurora-interface-future #homeView.active>:not(.aurora-mengto-sketchbook-root){display:none!important}
+/* Future now uses ThreeUI's authored Sketchbook document instead of the former mock story UI. */
+body.aurora-interface-future .aurora-story-module{display:none!important}
+@media(max-width:640px){.aurora-mengto-sketchbook-frame{height:100svh;min-height:560px}}
+@media(prefers-reduced-motion:reduce){.aurora-mengto-sketchbook-root{scroll-behavior:auto}}
 </style>
-<script id="aurora-interface-future-module">
+<script id="aurora-meng-to-sketchbook-integration">
 (function(){
-'use strict';
-if(window.__auroraFutureStoryInstalled)return;
-window.__auroraFutureStoryInstalled=true;
-const homeMarkup=`
-<section class="aurora-story-module aurora-story-home" aria-label="Hành trình khám phá nền tảng học tập">
- <header class="aurora-story-head"><div class="aurora-story-eyebrow">AURORA · LEARNING SYSTEM</div><h2>Tri thức không đứng yên.</h2><p>Một hành trình khám phá cách các công cụ học tập hiện có kết nối với nhau — từ luyện tập, tài liệu đến trợ lý AI.</p></header>
- <div class="aurora-story-track">
-  <div class="aurora-story-stage" data-active="0" aria-label="Minh họa các thành phần nền tảng"><div class="aurora-story-grid"></div><div class="aurora-story-satellite aurora-story-satellite-a" aria-hidden="true">⌘</div><div class="aurora-story-satellite aurora-story-satellite-b" aria-hidden="true">▤</div><div class="aurora-story-satellite aurora-story-satellite-c" aria-hidden="true">✧</div><div class="aurora-story-satellite aurora-story-satellite-d" aria-hidden="true">↗</div><div class="aurora-story-core"><div class="aurora-story-core-orb"></div><div class="aurora-story-core-symbol">A</div></div><div class="aurora-story-stage-caption"><span>LEARNING ECOSYSTEM</span><strong class="aurora-story-stage-label">01 / Khám phá</strong></div></div>
-  <div class="aurora-story-steps">
-   <article class="aurora-story-step is-active" data-story-step="0"><div class="aurora-story-number">01 — DISCOVER</div><h3>Một không gian, nhiều cách học.</h3><p>Bắt đầu từ trang chủ để khám phá các lối vào của Aurora. Những phần giới thiệu giúp bạn tìm đúng công cụ mà không làm gián đoạn việc học.</p><div class="aurora-story-tags"><span>Không gian học tập</span><span>Điều hướng rõ ràng</span></div></article>
-   <article class="aurora-story-step" data-story-step="1"><div class="aurora-story-number">02 — PRACTICE</div><h3>Kiến thức đi cùng thực hành.</h3><p>Sử dụng khu vực bài thi và bài luyện hiện có để trả lời câu hỏi, thực hành theo nội dung được cung cấp và xem kết quả khi hệ thống hỗ trợ.</p><div class="aurora-story-tags"><span>Bài thi</span><span>Bài luyện</span></div></article>
-   <article class="aurora-story-step" data-story-step="2"><div class="aurora-story-number">03 — EXPLORE</div><h3>Tài liệu ở gần bạn hơn.</h3><p>Kết hợp việc đọc và tra cứu tài liệu với các công cụ học tập sẵn có. Mỗi bước được trình bày rõ ràng để người học tự chọn nhịp độ phù hợp.</p><div class="aurora-story-tags"><span>Tài liệu</span><span>Tự học</span></div></article>
-   <article class="aurora-story-step" data-story-step="3"><div class="aurora-story-number">04 — ASSIST</div><h3>Có trợ lý AI đồng hành.</h3><p>Model AI có thể hỗ trợ tương tác trong website theo các chức năng đã được cấu hình. Trợ lý là công cụ bổ trợ, không thay thế việc tự suy nghĩ và kiểm tra kiến thức.</p><div class="aurora-story-tags"><span>AI Assistant</span><span>Tương tác</span></div></article>
-   <article class="aurora-story-step" data-story-step="4"><div class="aurora-story-number">05 — GROW</div><h3>Nhìn lại hành trình của mình.</h3><p>Dùng hồ sơ và khu vực xếp hạng hiện có để theo dõi thông tin mà website cung cấp, ghi nhận nỗ lực và tiếp tục mục tiêu học tập tiếp theo.</p><div class="aurora-story-tags"><span>Hồ sơ</span><span>Xếp hạng</span></div><div class="aurora-story-cta"><button type="button" data-story-action="learn">Bắt đầu học ↗</button><button type="button" class="secondary" data-story-action="guide">Khám phá hướng dẫn →</button></div></article>
-  </div>
- </div>
- <div class="aurora-story-feature-grid" aria-label="Các khu vực học tập"><article class="aurora-story-feature"><div class="aurora-story-feature-icon">▣</div><h3>Thi & luyện tập</h3><p>Đi vào luồng làm bài và luyện tập đang có trong website.</p></article><article class="aurora-story-feature"><div class="aurora-story-feature-icon">▤</div><h3>Tài liệu học tập</h3><p>Tiếp cận nội dung học tập qua các khu vực tài liệu hiện có.</p></article><article class="aurora-story-feature"><div class="aurora-story-feature-icon">✧</div><h3>Trợ lý AI</h3><p>Tương tác với model AI theo cấu hình của nền tảng.</p></article><article class="aurora-story-feature"><div class="aurora-story-feature-icon">↗</div><h3>Hồ sơ & xếp hạng</h3><p>Xem thông tin hồ sơ và thành tích mà hệ thống ghi nhận.</p></article></div>
-</section>`;
-const guideMarkup=`
-<section class="aurora-story-module aurora-story-guide" aria-label="Hành trình giới thiệu tính năng">
- <header class="aurora-story-head"><div class="aurora-story-eyebrow">FEATURE TOUR · AURORA</div><h2>Hiểu nền tảng qua từng lớp.</h2><p>Đi từ tổng quan đến các công cụ thực tế, sau đó chọn nơi phù hợp để tiếp tục học.</p></header>
- <div class="aurora-story-track"><div class="aurora-story-stage" data-active="0" aria-label="Minh họa hành trình tính năng"><div class="aurora-story-grid"></div><div class="aurora-story-satellite aurora-story-satellite-a">⌘</div><div class="aurora-story-satellite aurora-story-satellite-b">▤</div><div class="aurora-story-satellite aurora-story-satellite-c">✧</div><div class="aurora-story-satellite aurora-story-satellite-d">↗</div><div class="aurora-story-core"><div class="aurora-story-core-orb"></div><div class="aurora-story-core-symbol">A</div></div><div class="aurora-story-stage-caption"><span>FEATURE EXPLORER</span><strong class="aurora-story-stage-label">01 / Tổng quan</strong></div></div>
-  <div class="aurora-story-steps">
-   <article class="aurora-story-step is-active" data-story-step="0"><div class="aurora-story-number">01 — OVERVIEW</div><h3>Tổng quan hệ sinh thái.</h3><p>Trang chủ tập hợp các lối điều hướng và phần giới thiệu nền tảng. Hãy bắt đầu tại đây để xác định khu vực bạn cần.</p></article>
-   <article class="aurora-story-step" data-story-step="1"><div class="aurora-story-number">02 — LEARN</div><h3>Khám phá và ôn tập.</h3><p>Các luồng bài thi và bài luyện hiện có giúp người học làm việc với câu hỏi và thực hành kiến thức theo nội dung được cung cấp.</p></article>
-   <article class="aurora-story-step" data-story-step="2"><div class="aurora-story-number">03 — RESOURCES</div><h3>Tìm đến tài liệu phù hợp.</h3><p>Sử dụng khu vực tài liệu sẵn có để đọc, tra cứu và hỗ trợ quá trình tự học. Tính năng cụ thể tùy thuộc nội dung được cấu hình.</p></article>
-   <article class="aurora-story-step" data-story-step="3"><div class="aurora-story-number">04 — ASSISTANT</div><h3>Tương tác cùng model AI.</h3><p>Model AI cung cấp trải nghiệm tương tác theo thiết lập hiện tại của website. Hãy dùng nó để hỗ trợ khám phá và đặt câu hỏi.</p></article>
-   <article class="aurora-story-step" data-story-step="4"><div class="aurora-story-number">05 — CONTINUE</div><h3>Chọn bước tiếp theo.</h3><p>Khi đã hiểu các khu vực chính, hãy quay lại trang chủ hoặc mở luồng học tập để tiếp tục.</p><div class="aurora-story-cta"><button type="button" data-story-action="learn">Vào khu vực học tập ↗</button><button type="button" class="secondary" data-story-action="home">Về trang chủ →</button></div></article>
-  </div></div>
-</section>`;
-function makeStoryMarkup(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstElementChild}
-function setupStories(){
- const home=document.getElementById('homeView'),guide=document.getElementById('guideView');
- if(home&&!home.querySelector('.aurora-story-home'))home.appendChild(makeStoryMarkup(homeMarkup));
- if(guide&&!guide.querySelector('.aurora-story-guide')){const story=makeStoryMarkup(guideMarkup);const first=guide.firstElementChild;if(first)guide.insertBefore(story,first);else guide.appendChild(story)}
- bindStories();
-}
-function bindStories(){
- document.querySelectorAll('.aurora-story-module').forEach(module=>{
-  if(module.dataset.storyBound==='1')return;module.dataset.storyBound='1';
-  const stage=module.querySelector('.aurora-story-stage'),steps=[...module.querySelectorAll('[data-story-step]')],label=module.querySelector('.aurora-story-stage-label');
-  if(!stage||!steps.length)return;
-  let active=0;
-  const activate=(idx)=>{idx=Math.max(0,Math.min(steps.length-1,idx));if(active===idx&&steps[idx].classList.contains('is-active'))return;active=idx;stage.dataset.active=String(idx);steps.forEach((step,i)=>{step.classList.toggle('is-active',i===idx);step.setAttribute('aria-current',i===idx?'step':'false')});if(label){const titles=['Khám phá','Thực hành','Tài liệu','Trợ lý AI','Tiến bộ'];label.textContent=String(idx+1).padStart(2,'0')+' / '+(titles[idx]||'Khám phá')}}
-  if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>{let best=null;for(const entry of entries){if(entry.isIntersecting&&(!best||entry.intersectionRatio>best.intersectionRatio))best=entry}if(best)activate(Number(best.target.dataset.storyStep)||0)},{root:null,rootMargin:'-30% 0px -30% 0px',threshold:[0,.15,.3,.5,.75]});steps.forEach(step=>observer.observe(step));module._storyObserver=observer}
-  steps.forEach(step=>{step.addEventListener('focusin',()=>activate(Number(step.dataset.storyStep)||0))});
-  module.addEventListener('click',e=>{const btn=e.target.closest('[data-story-action]');if(!btn)return;const action=btn.dataset.storyAction;if(action==='guide')window.switchView&&window.switchView('guideView');else if(action==='home')window.switchView&&window.switchView('homeView');else if(action==='learn')window.switchView&&window.switchView('studentLoginView')});
- });
-}
-function refresh(){setupStories()}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
-window.addEventListener('aurora:interface-mode-changed',()=>{if(document.body&&document.body.dataset.auroraInterfaceMode==='future')refresh()});
-window.addEventListener('pagehide',()=>{document.querySelectorAll('.aurora-story-module').forEach(m=>{if(m._storyObserver){m._storyObserver.disconnect();m._storyObserver=null}})},{once:true});
-window.AuroraFutureStory={refresh};
+ 'use strict';
+ if(window.__auroraMengToSketchbookIntegrated)return;
+ window.__auroraMengToSketchbookIntegrated=true;
+ const SOURCE_URL='https://threeui.com/landing-pages/meng-to-sketchbook.html';
+ const FRAME_SANDBOX='allow-downloads allow-forms allow-modals allow-popups allow-same-origin allow-scripts';
+ let resizeQueued=false;
+ function syncViewportWidth(){
+   resizeQueued=false;
+   const width=Math.max(320,document.documentElement.clientWidth||window.innerWidth||320);
+   document.documentElement.style.setProperty('--aurora-sketchbook-vw',width+'px');
+ }
+ function ensureFrame(){
+   const home=document.getElementById('homeView');
+   if(!home)return;
+   let root=home.querySelector(':scope > .aurora-mengto-sketchbook-root');
+   if(root)return;
+   root=document.createElement('section');
+   root.className='aurora-mengto-sketchbook-root';
+   root.setAttribute('aria-label','Meng To — Singapore Sketchbook');
+   const frame=document.createElement('iframe');
+   frame.className='aurora-mengto-sketchbook-frame';
+   frame.title='Meng To — Singapore Sketchbook';
+   frame.src=SOURCE_URL;
+   frame.setAttribute('sandbox',FRAME_SANDBOX);
+   frame.setAttribute('loading','eager');
+   frame.setAttribute('allow','fullscreen');
+   frame.referrerPolicy='strict-origin-when-cross-origin';
+   root.appendChild(frame);
+   home.appendChild(root);
+ }
+ function refresh(){syncViewportWidth();ensureFrame();}
+ function onResize(){if(resizeQueued)return;resizeQueued=true;requestAnimationFrame(syncViewportWidth);}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
+ window.addEventListener('resize',onResize,{passive:true});
+ window.addEventListener('aurora:interface-mode-changed',refresh);
+ // A small public API allows later view-navigation code to request an idempotent refresh.
+ window.AuroraMengToSketchbook={refresh,sourceUrl:SOURCE_URL};
 })();
 </script>
 
