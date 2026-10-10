@@ -1123,6 +1123,7 @@ input,select,textarea{font-size:13px;padding:9px}
 .aurora-vrm-preview.active{display:block}
 .aurora-vrm-preview canvas,.aurora-vrm-canvas{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain}
 .aurora-vrm-status{position:absolute;left:8px;right:8px;bottom:8px;padding:6px 9px;background:#ffffffdc;color:#344054;border-radius:8px;font-size:11px;line-height:1.4;pointer-events:none}
+.aurora-vrm-canvas{touch-action:none;cursor:grab;outline:none}.aurora-vrm-canvas:active{cursor:grabbing}.aurora-vrm-rotate-badge{position:absolute;top:8px;left:50%;transform:translateX(-50%);max-width:calc(100% - 18px);padding:5px 9px;border-radius:999px;background:rgba(16,24,40,.72);color:#fff;font-size:10px;line-height:1.3;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;z-index:4;box-shadow:0 3px 10px rgba(0,0,0,.12)}.aurora-vrm-rotate-badge.active{background:rgba(22,101,52,.88)}
 #aiModelContent .aurora-vrm-preview{height:100%;min-height:230px;margin:0;border:0;border-radius:0;background:transparent}
 #aiModelContent .aurora-vrm-status{bottom:4px;font-size:10px}
 .profile-mini-bot .mini-bot-vrm{width:56px;height:56px;overflow:hidden;border-radius:14px;background:linear-gradient(135deg,#e7f3ff,#d0e8ff);border:2px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none}
@@ -6918,6 +6919,8 @@ function bindAiWidgetInteractions(){
     return false;
   }
   body.onpointerdown=(e)=>{
+    // A drag on the actual 3D canvas rotates the model; it must not also drag the whole widget.
+    if(e.target&&e.target.closest&&e.target.closest('#aiWidgetVrmCanvas canvas, .aurora-vrm-rotate-badge'))return;
     if(!isVisibleAiModelHit(e))return;
     if(widget.classList.contains('ai-hidden'))return;
     aiWidgetDragState.dragging=true;
@@ -10829,9 +10832,11 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
 </script>
 <script type="module">
 /*
- * Import-map aliases resolve modules but do not define global variables.
- * Import Three.js and its loaders explicitly so GLB/VRM preview has valid
- * THREE, GLTFLoader and VRMLoaderPlugin bindings.
+ * Aurora Three.js/VRM viewer with:
+ * - GLB/VRM front-facing defaults
+ * - drag rotation enabled by click/tap and locked after 3 seconds idle
+ * - VRM expressions and best-effort generic GLB morph-target animation
+ * - idle clips when the asset contains them, subtle procedural idle otherwise
  */
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -10844,7 +10849,9 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     const entry=slots.get(slot); if(!entry)return;
     entry.dead=true;
     if(entry.raf)cancelAnimationFrame(entry.raf);
+    if(entry.rotateLockTimer)clearTimeout(entry.rotateLockTimer);
     if(entry.resizeObserver)entry.resizeObserver.disconnect();
+    if(entry.onFallbackResize)window.removeEventListener('resize',entry.onFallbackResize);
     try{entry.renderer.dispose();}catch(e){}
     try{entry.renderer.forceContextLoss();}catch(e){}
     if(entry.renderer.domElement&&entry.renderer.domElement.parentNode)entry.renderer.domElement.parentNode.removeChild(entry.renderer.domElement);
@@ -10867,7 +10874,9 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     renderer.setClearColor(0x000000,0);
     renderer.outputColorSpace=THREE.SRGBColorSpace;
     renderer.domElement.className='aurora-vrm-canvas';
-    renderer.domElement.setAttribute('aria-label','3D model');
+    renderer.domElement.setAttribute('aria-label','Model 3D: chạm/bấm rồi kéo để xoay');
+    renderer.domElement.setAttribute('role','application');
+    renderer.domElement.tabIndex=0;
     container.appendChild(renderer.domElement);
     scene=new THREE.Scene();
     camera=new THREE.PerspectiveCamera(30,w/h,0.01,200);
@@ -10882,7 +10891,9 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     root=vrm?vrm.scene:gltf.scene;
     if(!root)throw new Error('Tệp không chứa model glTF/VRM có thể dựng.');
     scene.add(root);
-    root.rotation.y=Math.PI;
+    // VRM assets commonly use the opposite forward axis from generic GLB exports.
+    // Previously every asset was rotated by PI, which made many ordinary GLB models show their back.
+    root.rotation.y=vrm?Math.PI:0;
     root.updateMatrixWorld(true);
     const box=new THREE.Box3().setFromObject(root);
     const size=box.getSize(new THREE.Vector3());
@@ -10896,32 +10907,133 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     camera.position.set(0,height*(fullBody?0.54:0.72),Math.max(dist,0.65));
     camera.lookAt(0,height*(fullBody?0.48:0.7),0);
     camera.updateProjectionMatrix();
-    const entry={renderer,scene,camera,vrm,raf:0,resizeObserver:null,dead:false};
+
+    const rotateBadge=document.createElement('div');
+    rotateBadge.className='aurora-vrm-rotate-badge';
+    rotateBadge.setAttribute('aria-live','polite');
+    rotateBadge.textContent='Bấm/chạm rồi kéo để xoay · tự khóa sau 3 giây';
+    container.appendChild(rotateBadge);
+
+    const mixer=(gltf.animations&&gltf.animations.length)?new THREE.AnimationMixer(root):null;
+    if(mixer){
+      const clips=gltf.animations;
+      const idleClip=clips.find(c=>/idle|stand|breath|wait|loop|default/i.test(c.name||''))||clips[0];
+      try{mixer.clipAction(idleClip).reset().play();}catch(e){console.warn('Không chạy được animation clip:',e);}
+    }
+
+    const morphTargets=[];
+    const idleBones=[];
+    const lower=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+    root.traverse(obj=>{
+      if(obj&&obj.isMesh&&obj.morphTargetDictionary&&obj.morphTargetInfluences){
+        for(const [name,index] of Object.entries(obj.morphTargetDictionary)){
+          const n=lower(name);
+          let kind='';
+          if(/blink|eyeblink|eyeclose|closeeye|blinkleft|blinkright/.test(n))kind='blink';
+          else if(/visemeaa|mouthopen|jawopen|mouthaa|phonemeaa|(^|_)aa($|_)/.test(name.toLowerCase())||n==='aa'||n==='jawopen')kind='mouth';
+          else if(/smile|happy|grin/.test(n))kind='smile';
+          if(kind)morphTargets.push({mesh:obj,index,kind,base:Number(obj.morphTargetInfluences[index]||0)});
+        }
+      }
+      if(obj&&obj.isBone){
+        const n=lower(obj.name);
+        if(/head|neck/.test(n))idleBones.push({bone:obj,base:obj.quaternion.clone(),kind:/head/.test(n)?'head':'neck',phase:Math.random()*Math.PI*2});
+        else if(!mixer&&/spine|chest|upperchest/.test(n))idleBones.push({bone:obj,base:obj.quaternion.clone(),kind:'spine',phase:Math.random()*Math.PI*2});
+      }
+    });
+
+    const entry={renderer,scene,camera,vrm,root,raf:0,resizeObserver:null,dead:false,rotateEnabled:false,isRotating:false,lastX:0,lastY:0,pointerId:null,rotateLockTimer:null,rotateBadge,mixer,idleBones,morphTargets,baseRootY:root.position.y,baseRootRotX:root.rotation.x};
     slots.set(slot,entry);
+    function setRotateMode(on){
+      entry.rotateEnabled=!!on;
+      if(entry.rotateLockTimer){clearTimeout(entry.rotateLockTimer);entry.rotateLockTimer=null;}
+      rotateBadge.classList.toggle('active',entry.rotateEnabled);
+      rotateBadge.textContent=entry.rotateEnabled?'Đang bật xoay · kéo để xoay · tự khóa sau 3 giây':'Đã khóa xoay · bấm/chạm model để bật lại';
+      renderer.domElement.style.cursor=entry.rotateEnabled?'grab':'default';
+    }
+    function armRotateLock(){
+      if(entry.rotateLockTimer)clearTimeout(entry.rotateLockTimer);
+      entry.rotateLockTimer=setTimeout(()=>{
+        entry.isRotating=false;entry.pointerId=null;setRotateMode(false);
+      },3000);
+    }
+    const onPointerDown=e=>{
+      if(entry.dead)return;
+      // A click/tap on the model unlocks rotation; dragging rotates the model itself.
+      if(!entry.rotateEnabled){setRotateMode(true);}
+      entry.isRotating=true;entry.pointerId=e.pointerId;entry.lastX=e.clientX;entry.lastY=e.clientY;
+      armRotateLock();
+      try{renderer.domElement.setPointerCapture(e.pointerId);}catch(_){ }
+      e.preventDefault();e.stopPropagation();
+    };
+    const onPointerMove=e=>{
+      if(entry.dead||!entry.rotateEnabled||!entry.isRotating||entry.pointerId!==e.pointerId)return;
+      const dx=e.clientX-entry.lastX,dy=e.clientY-entry.lastY;
+      entry.lastX=e.clientX;entry.lastY=e.clientY;
+      root.rotation.y+=dx*0.012;
+      root.rotation.x=Math.max(-0.38,Math.min(0.38,root.rotation.x+dy*0.006));
+      root.updateMatrixWorld();
+      armRotateLock();
+      e.preventDefault();e.stopPropagation();
+    };
+    const onPointerUp=e=>{
+      if(entry.pointerId!==e.pointerId)return;
+      entry.isRotating=false;entry.pointerId=null;
+      try{renderer.domElement.releasePointerCapture(e.pointerId);}catch(_){ }
+      armRotateLock();
+      e.preventDefault();e.stopPropagation();
+    };
+    renderer.domElement.addEventListener('pointerdown',onPointerDown,{passive:false});
+    renderer.domElement.addEventListener('pointermove',onPointerMove,{passive:false});
+    renderer.domElement.addEventListener('pointerup',onPointerUp,{passive:false});
+    renderer.domElement.addEventListener('pointercancel',onPointerUp,{passive:false});
+    renderer.domElement.addEventListener('lostpointercapture',()=>{entry.isRotating=false;entry.pointerId=null;armRotateLock();});
+
     let last=performance.now(),nextBlink=last+1800+Math.random()*2600,blinkEnds=0;
-    function resize(){if(entry.dead||!container.isConnected)return;const nw=Math.max(1,container.clientWidth||w),nh=Math.max(1,container.clientHeight||h);renderer.setSize(nw,nh,false);camera.aspect=nw/nh;camera.updateProjectionMatrix();}
+    let resize;
+    resize=()=>{if(entry.dead||!container.isConnected)return;const nw=Math.max(1,container.clientWidth||w),nh=Math.max(1,container.clientHeight||h);renderer.setSize(nw,nh,false);camera.aspect=nw/nh;camera.updateProjectionMatrix();};
     if(typeof ResizeObserver!=='undefined'){entry.resizeObserver=new ResizeObserver(resize);entry.resizeObserver.observe(container);}
-    else W.addEventListener('resize',resize,{passive:true});
+    else{entry.onFallbackResize=resize;W.addEventListener('resize',resize,{passive:true});}
     function frame(now){
       if(entry.dead||slotVersions.get(slot)!==version)return;
       entry.raf=requestAnimationFrame(frame);
       const delta=Math.min(0.05,Math.max(0,(now-last)/1000));last=now;
+      if(mixer)try{mixer.update(delta);}catch(e){}
+      else {
+        // Subtle idle motion for a rigged GLB that has no animation clips.
+        for(const item of idleBones){
+          const phase=(now/1000)*0.65+item.phase;
+          const euler=item.kind==='head'?new THREE.Euler(Math.sin(phase)*0.018,Math.sin(phase*0.7)*0.035,Math.sin(phase*0.5)*0.012):item.kind==='neck'?new THREE.Euler(Math.sin(phase)*0.008,Math.sin(phase*0.7)*0.012,0):new THREE.Euler(Math.sin(phase)*0.004,0,0);
+          item.bone.quaternion.copy(item.base).multiply(new THREE.Quaternion().setFromEuler(euler));
+        }
+        root.position.y=entry.baseRootY+Math.sin(now/1000*1.15)*height*0.003;
+      }
       if(vrm&&typeof vrm.update==='function')try{vrm.update(delta);}catch(e){}
       const em=vrm&&vrm.expressionManager;
+      let blinkValue=0;
+      if(now>=nextBlink){blinkEnds=now+125;nextBlink=now+2600+Math.random()*3500;}
+      if(now<blinkEnds){const p=(blinkEnds-now)/125;blinkValue=Math.max(0,Math.sin((1-p)*Math.PI));}
+      const mouthRaw=Number(W.aiWebcamMouthOpenness||W.auroraAiMouthOpen||0);
+      const webcamMouth=Math.max(0,Math.min(1,Number.isFinite(mouthRaw)?mouthRaw:0));
+      const speaking=!!(W.speechSynthesis&&W.speechSynthesis.speaking);
+      const mouth=Math.max(webcamMouth,speaking?(0.12+Math.abs(Math.sin(now*0.021))*0.42):0);
       if(em&&typeof em.setValue==='function'){
-        if(now>=nextBlink){blinkEnds=now+115;nextBlink=now+2400+Math.random()*3400;}
-        let blinkValue=0;
-        if(now<blinkEnds){const p=(blinkEnds-now)/115;blinkValue=Math.max(0,Math.sin((1-p)*Math.PI));}
         try{em.setValue('blink',blinkValue);}catch(e){}
-        const mouthRaw=Number(W.aiWebcamMouthOpenness||W.auroraAiMouthOpen||0);
-        const mouth=Math.max(0,Math.min(1,Number.isFinite(mouthRaw)?mouthRaw:0));
         try{em.setValue('aa',mouth);}catch(e){}
         try{em.setValue('oh',Math.max(0,mouth*0.28));}catch(e){}
+        try{em.setValue('happy',speaking?0.08:0.025);}catch(e){}
+      }
+      for(const target of morphTargets){
+        let value=target.base;
+        if(target.kind==='blink')value=Math.max(value,blinkValue);
+        else if(target.kind==='mouth')value=Math.max(value,mouth);
+        else if(target.kind==='smile')value=Math.max(value,speaking?0.12:0.045);
+        try{target.mesh.morphTargetInfluences[target.index]=value;}catch(e){}
       }
       renderer.render(scene,camera);
     }
     entry.raf=requestAnimationFrame(frame);
-    return {vrm,scene,camera,renderer,stop:()=>stop(slot)};
+    return {vrm,scene,camera,renderer,root,mixer,stop:()=>stop(slot),setRotationEnabled:setRotateMode};
   }
   const viewer={mount,stop};
   window.AuroraVRMViewer=viewer;
@@ -10932,7 +11044,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
   window.AuroraVRMViewerError=error;
   window.AuroraVRMViewer=null;
   if(typeof window.__auroraResolveVRMViewer==='function')window.__auroraResolveVRMViewer(null);
-}).finally(()=>{});
+});
 </script>
 
 <script>
