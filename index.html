@@ -967,7 +967,6 @@ input,select,textarea{font-size:13px;padding:9px}
 #aiWebcamBtn{position:absolute;top:-6px;right:-6px;background:linear-gradient(135deg,#dc3545,#bb2d3b);color:#fff;border:2px solid #fff;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(220,53,69,.5);display:flex;align-items:center;justify-content:center;z-index:9;transition:all .25s;padding:0}
 #aiWebcamBtn:hover{transform:scale(1.12)}
 #aiWebcamBtn.active{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 0 15px #198754}
-#aiModelWidget #aiWebcamVideo{display:none!important}
 #aiWebcamVideo{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #dc3545;z-index:7;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3);pointer-events:none}
 #aiWebcamVideo.active{display:block}
 .ai-float-bubble{position:absolute;bottom:calc(100% + 8px);right:0;max-width:220px;background:#fff;color:#333;padding:10px 14px;border-radius:16px;font-size:12px;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:20;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;border:2px solid #1877f2;word-wrap:break-word}
@@ -1044,7 +1043,7 @@ input,select,textarea{font-size:13px;padding:9px}
 .screen-read-indicator.active{display:flex}
 .screen-read-indicator::before{content:'👁️';animation:eyeBlink 2s ease-in-out infinite}
 @keyframes eyeBlink{0%,90%,100%{opacity:1}95%{opacity:.3}}
-#aiScreenReadBtn{position:absolute;top:auto;bottom:-4px;right:0;left:auto;background:linear-gradient(135deg,#0d6efd,#0b5ed7);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(13,110,253,.4);z-index:9;display:flex;align-items:center;justify-content:center;transition:all .25s}
+#aiScreenReadBtn{position:absolute;top:auto;bottom:6px;left:6px;background:linear-gradient(135deg,#0d6efd,#0b5ed7);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(13,110,253,.4);z-index:9;display:flex;align-items:center;justify-content:center;transition:all .25s}
 #aiScreenReadBtn:hover{transform:scale(1.1)}
 #aiScreenReadBtn.active{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 0 15px #198754}
 #deepAnalysisDropZone{background:linear-gradient(135deg,#f0ebff,#fffbe6);border:3px dashed #6f42c1;padding:20px;border-radius:14px;text-align:center;margin-top:12px;cursor:pointer;transition:all .25s}
@@ -1278,6 +1277,16 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 @media(max-width:520px){.aurora-showcase{border-radius:20px;padding:18px;margin-bottom:16px}.aurora-showcase-media{border-radius:18px;min-height:205px}.aurora-showcase-actions{gap:8px}.aurora-showcase-actions button{flex:1;padding:12px 10px;font-size:12px}.aurora-showcase-kicker{font-size:9px}.aurora-art-float{padding:7px 8px;gap:6px}.aurora-art-float>span{width:24px;height:24px}.aurora-art-float-top{right:3%;top:8%}.aurora-art-float-bottom{left:4%;bottom:7%}.aurora-showcase-admin .aurora-admin-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.aurora-showcase-art::before,.aurora-art-orb,.aurora-art-main-card,.aurora-art-float,body[data-theme="gacha"]::before{animation:none!important}.aurora-showcase-actions button,.aurora-showcase-dot{transition:none!important}}
 
+
+/* AI widget drag + screen-reading control layout fixes */
+#aiModelWidget{touch-action:none;-webkit-user-select:none;user-select:none}
+#aiModelBody{touch-action:none;cursor:grab}
+#aiModelBody:active{cursor:grabbing}
+#aiScreenReadBtn{top:auto!important;bottom:8px!important;left:8px!important;right:auto!important;width:36px;height:36px;font-size:16px}
+@media(max-width:600px){
+  #aiModelWidget{width: min(240px, 58vw);height:min(340px, 58vh)}
+  #aiScreenReadBtn{width:38px;height:38px;bottom:8px!important;left:8px!important}
+}
 </style>
 <script type="importmap">
 {
@@ -3205,7 +3214,8 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
     </div>
     <div class="ai-model-badge" id="aiModelBadge">Auro</div>
     <button id="aiDoorBtn" onclick="hideAiModelWithAnimation()" title="Ẩn model">🚪</button>
-    <button id="aiScreenReadBtn" onclick="toggleAiScreenRead()" title="Chia sẻ nội dung màn hình cho AI">👁️</button>
+    <button id="aiWebcamBtn" onclick="toggleAiWebcam()" title="Bật webcam VTuber">📷</button>
+    <button id="aiScreenReadBtn" onclick="toggleAiScreenRead()" title="Cho AI đọc màn hình">👁️</button>
     <div class="ai-float-bubble" id="aiFloatBubble"></div>
     <div class="ai-chat-bubble" id="aiChatBubble">
       <div class="ai-chat-header">
@@ -3329,7 +3339,7 @@ let aiConfigListener=null;
 let currentEquippedAiModel=null;
 let currentAiModelFrame=null;
 let currentAiModelFrameAdjust={x:0,y:0,scale:1,rotation:0,opacity:1};
-let aiWidgetDragState={dragging:false,pointerId:null,lastX:0,lastY:0,startX:0,startY:0,startLeft:0,startTop:0};
+let aiWidgetDragState={dragging:false,lastX:0,lastY:0,startX:0,startY:0,startLeft:0,startTop:0};
 let aiWidgetScale=1;
 let aiPinchState=null;
 let aiWidgetVisible=false;
@@ -6821,9 +6831,9 @@ function hideAiWidget(){
     w.style.pointerEvents='none';
   }
   aiWidgetVisible=false;
-  aiWidgetDragState.dragging=false;aiWidgetDragState.pointerId=null;
+  aiWidgetDragState.dragging=false;
   const body=document.getElementById('aiModelBody');
-  if(body){body.style.cursor='';}
+  if(body){body.onpointerdown=null;body.onpointermove=null;body.onpointerup=null;body.onpointercancel=null;}
 }
 let auroraAiWidgetVrmRequest=0;
 async function updateAiWidgetContent(){
@@ -6908,62 +6918,52 @@ function bindAiWidgetInteractions(){
   const body=document.getElementById('aiModelBody');
   if(!widget||!body)return;
   function isVisibleAiModelHit(e){
-    if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select,.ai-chat-bubble,.ai-float-bubble,.aurora-vrm-rotate-badge'))return false;
+    if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select,.ai-chat-bubble,.ai-float-bubble'))return false;
     const content=document.getElementById('aiModelContent');if(!content)return false;
     const pointIn=(r,padX=0,padY=0)=>!!r&&e.clientX>=r.left-padX&&e.clientX<=r.right+padX&&e.clientY>=r.top-padY&&e.clientY<=r.bottom+padY;
-    const canvas=content.querySelector('#aiWidgetVrmCanvas canvas');
-    if(canvas){const r=canvas.getBoundingClientRect();if(r.width>2&&r.height>2&&pointIn(r))return true;}
     const media=content.querySelector('img,video');
-    if(media){const r=media.getBoundingClientRect();if(r.width>2&&r.height>2&&pointIn(r,5,5))return true;}
-    const emoji=content.querySelector('.ai-model-emoji');
-    if(emoji){const r=emoji.getBoundingClientRect();const insetX=r.width*.22,insetY=r.height*.12;if(r.width>2&&r.height>2&&e.clientX>=r.left+insetX&&e.clientX<=r.right-insetX&&e.clientY>=r.top+insetY&&e.clientY<=r.bottom-insetY)return true;}
-    return false;
+    if(media){const r=media.getBoundingClientRect();if(r.width>2&&r.height>2)return pointIn(r,5,5);}
+    const emoji=content.querySelector('.ai-model-emoji');if(emoji){const r=emoji.getBoundingClientRect();const insetX=r.width*.22,insetY=r.height*.12;if(r.width>2&&r.height>2)return e.clientX>=r.left+insetX&&e.clientX<=r.right-insetX&&e.clientY>=r.top+insetY&&e.clientY<=r.bottom-insetY;}
+    const canvas=content.querySelector('#aiWidgetVrmCanvas canvas');if(canvas){const r=canvas.getBoundingClientRect();return e.clientX>=r.left+r.width*.13&&e.clientX<=r.right-r.width*.13&&e.clientY>=r.top+r.height*.04&&e.clientY<=r.bottom-r.height*.04;}
+    const status=content.querySelector('.aurora-vrm-status');if(status&&e.target===status)return false;
+    // Fallback to the visible model content box. Images/canvases use pointer-events:none
+    // so relying only on e.target/media hit-testing made dragging fail on many models.
+    const cr=content.getBoundingClientRect();
+    return cr.width>2&&cr.height>2&&pointIn(cr,0,0);
   }
-  const onPointerDown=(e)=>{
-    // Drag starts only from the model, with the primary mouse button or a touch press held.
-    if(e.isPrimary===false||(e.pointerType==='mouse'&&e.button!==0))return;
-    if(widget.classList.contains('ai-hidden')||widget.classList.contains('ai-minimized'))return;
-    if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select,.ai-chat-bubble,.ai-float-bubble,.aurora-vrm-rotate-badge'))return;
+  body.onpointerdown=(e)=>{
+    // Dragging starts only on the model area; UI controls/chat are excluded by hit testing.
+    // Model canvas has pointer-events:none, so the event usually targets this body.
     if(!isVisibleAiModelHit(e))return;
+    if(widget.classList.contains('ai-hidden'))return;
     aiWidgetDragState.dragging=true;
-    aiWidgetDragState.pointerId=e.pointerId;
-    aiWidgetDragState.startX=e.clientX;aiWidgetDragState.startY=e.clientY;
+    aiWidgetDragState.startX=e.clientX;
+    aiWidgetDragState.startY=e.clientY;
     const rect=widget.getBoundingClientRect();
-    aiWidgetDragState.startLeft=rect.left;aiWidgetDragState.startTop=rect.top;
+    aiWidgetDragState.startLeft=rect.left;
+    aiWidgetDragState.startTop=rect.top;
+    // drag count for random
     if(Date.now()-aiDragWindowStart>3000){aiDragCountInWindow=0;aiDragWindowStart=Date.now();}
     aiDragCountInWindow++;
-    if(aiDragCountInWindow===6&&currentEquippedAiModel)showAiFloatBubbleByEvent('drag');
-    try{widget.setPointerCapture(e.pointerId);}catch(err){}
-    body.style.cursor='grabbing';widget.style.cursor='grabbing';
-    if(e.pointerType==='touch'&&e.cancelable)e.preventDefault();
+    if(aiDragCountInWindow===6&&currentEquippedAiModel){showAiFloatBubbleByEvent('drag');}
+    try{body.setPointerCapture(e.pointerId);}catch(err){}
+    body.style.cursor='grabbing';
   };
-  const onPointerMove=(e)=>{
-    if(!aiWidgetDragState.dragging||e.pointerId!==aiWidgetDragState.pointerId)return;
-    if(e.pointerType==='mouse'&&(e.buttons&1)!==1){onPointerUp(e);return;}
-    aiWidgetPos.left=aiWidgetDragState.startLeft+(e.clientX-aiWidgetDragState.startX);
-    aiWidgetPos.top=aiWidgetDragState.startTop+(e.clientY-aiWidgetDragState.startY);
-    applyAiWidgetPosition();
-    if(e.cancelable)e.preventDefault();
-  };
-  const onPointerUp=(e)=>{
+  body.onpointermove=(e)=>{
     if(!aiWidgetDragState.dragging)return;
-    if(e&&e.pointerId!==undefined&&e.pointerId!==aiWidgetDragState.pointerId)return;
-    const pointerId=aiWidgetDragState.pointerId;
-    aiWidgetDragState.dragging=false;aiWidgetDragState.pointerId=null;
-    try{if(pointerId!==null)widget.releasePointerCapture(pointerId);}catch(err){}
-    body.style.cursor='grab';widget.style.cursor='';
+    const dx=e.clientX-aiWidgetDragState.startX;
+    const dy=e.clientY-aiWidgetDragState.startY;
+    // Coordinates are viewport CSS pixels; transform-origin is top-left, preventing jump on first move.
+    aiWidgetPos.left=aiWidgetDragState.startLeft+dx;
+    aiWidgetPos.top=aiWidgetDragState.startTop+dy;
+    applyAiWidgetPosition();
   };
-  // Keep stable handlers so restoring the hidden model never stacks duplicate listeners.
-  if(!widget.__auroraDragBound){
-    widget.__auroraDragBound=true;
-    widget.__auroraPointerDownHandler=onPointerDown;
-    widget.onpointerdown=onPointerDown;
-    document.addEventListener('pointermove',onPointerMove,{passive:false});
-    document.addEventListener('pointerup',onPointerUp,true);
-    document.addEventListener('pointercancel',onPointerUp,true);
-  }else{
-    widget.onpointerdown=widget.__auroraPointerDownHandler;
-  }
+  const endDrag=(e)=>{
+    aiWidgetDragState.dragging=false;
+    try{body.releasePointerCapture(e.pointerId);}catch(err){}
+    body.style.cursor='grab';
+  };
+  body.onpointerup=endDrag;body.onpointercancel=endDrag;
   widget.onwheel=(e)=>{
     if(e.target.closest('.ai-chat-bubble'))return;
     e.preventDefault();
@@ -7088,8 +7088,6 @@ function toggleAiChatSpeech(){
   else {setAiChatStatus('Đã bật đọc thành tiếng cho câu trả lời tiếp theo.',false);const lastAi=[...aiChatHistory].reverse().find(m=>m&&m.role==='ai'&&m.text);if(lastAi)speakAiChatText(lastAi.text);}
 }
 function speakAiChatText(text){
-  // Screen-reading is context sharing for the AI, never a command to speak aloud.
-  if(aiScreenReadActive)return;
   if(!aiChatSpeakReplies||!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window))return;
   const plain=String(text||'').replace(/```[\s\S]*?```/g,'Đoạn mã.').replace(/`([^`]+)`/g,'$1').replace(/https?:\/\/\S+/g,'đường liên kết').replace(/[*_>#~]/g,'').replace(/\n{3,}/g,'\n\n').trim();
   if(!plain)return;
@@ -7195,12 +7193,17 @@ function toggleAiScreenRead(){
   const btn=document.getElementById('aiScreenReadBtn');
   const ind=document.getElementById('aiScreenReadIndicator');
   if(aiScreenReadActive){
+    // Screen reading is a visual context-sharing mode, not text-to-speech.
+    aiChatSpeakReplies=false;
+    if(window.speechSynthesis)window.speechSynthesis.cancel();
+    updateAiChatVoiceControls();
     if(btn)btn.classList.add('active');
     if(ind)ind.classList.add('active');
-    showCenterSquareToast('👁️','Đã bật chia sẻ nội dung màn hình',(currentEquippedAiModel&&currentEquippedAiModel.modelData.name||'AI')+' sẽ nhận nội dung chữ đang hiển thị để hỗ trợ trả lời. Không phát âm thanh.','success',3200);
+    showCenterSquareToast('👁️','AI đã bật đọc màn hình',(currentEquippedAiModel&&currentEquippedAiModel.modelData.name||'AI')+' sẽ đọc chữ đang hiển thị; ảnh/PDF có thể được OCR cục bộ để hỗ trợ trả lời.','success',3200);
     addAiChatMessage('ai','👁️ Mình đã bật đọc màn hình. Bạn cứ hỏi bình thường về nội dung trang, câu hỏi, tài liệu hoặc hình/PDF đang mở nhé. Mình sẽ dùng phần chữ đọc được để trả lời và báo lại nếu có phần không đọc rõ.');
     const chatBubble=document.getElementById('aiChatBubble');if(chatBubble){chatBubble.classList.add('show');aiChatOpen=true;}
     setAiChatStatus('Đọc màn hình đang bật. Nội dung chữ và kết quả OCR sẽ được gửi kèm câu hỏi tới nhà cung cấp AI đã cấu hình.',false);
+    // Deliberately do not speak when screen reading is enabled.
     // Nếu đang trong phòng thi → tự động đọc & trả lời đáp án
     if(isExamActive&&currentExamData){
       setTimeout(()=>autoAnalyzeExamForAi(),500);
