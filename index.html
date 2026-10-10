@@ -1573,6 +1573,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 <div class="profile-section" id="profileNoteSection"><label>📝 Ghi chú</label><textarea id="profileNote" rows="2" placeholder="Ghi chú cá nhân..."></textarea></div>
 <div class="profile-section"><label style="display:flex;justify-content:space-between;align-items:center"><span>🏅 Huy chương &amp; 🏆 Cup</span><button class="btn btn-warning" id="profileAddMedalBtn" style="width:auto;padding:4px 10px;font-size:11px" onclick="openMedalPicker()">➕ Thêm</button></label><div class="profile-medals" id="profileMedalsContainer"></div></div>
 <div class="profile-section" id="profileAiModelSection"><label>🤖 AI Model</label><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="ai-model-btn" onclick="openAiModelPicker()">🤖 Chọn Model</button><button class="ai-model-btn" style="background:linear-gradient(135deg,#0d6efd,#0b5ed7)" onclick="openAiFrameAdjuster()">🖼️ Chỉnh khung</button></div><div id="profileAiModelInfo" style="font-size:12px;color:#666;margin-top:8px">Chưa có model nào được trang bị.</div></div>
+<div class="profile-section" id="profileChatBoxesSection" style="display:none"><label>💬 Box chat của tôi</label><p style="font-size:12px;color:#64748b;line-height:1.5;margin-bottom:8px">Nếu bạn đã bấm × để ẩn bong bóng, có thể bật lại ở đây. Bong bóng bị ẩn chỉ áp dụng trên thiết bị này; tải lại trang cũng sẽ hiện lại.</p><div id="profileChatBoxesList"><p style="font-size:12px;color:#888">Đang tải danh sách box chat…</p></div></div>
 <div class="profile-actions" id="profileActionsSelf"><button class="btn btn-secondary" onclick="closeProfile()">Đóng</button><button class="btn btn-success" onclick="saveProfile()">💾 Lưu Profile</button><button class="btn btn-danger" onclick="handleLogoutFromProfile()">🚪 Đăng Xuất</button></div>
 <div class="profile-actions" id="profileActionsOther" style="display:none"><button class="btn btn-secondary" onclick="closeProfile()">Đóng</button></div>
 </div>
@@ -2597,7 +2598,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 <div id="auroraPrivateVoiceSection" class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🔒 VOICE KÍN — ÂM THANH RIÊNG THEO @ID</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed" id="auroraPrivateVoiceBody">
   <div style="background:linear-gradient(135deg,#eef6ff,#f4edff);border:1px solid #cfe2ff;border-radius:12px;padding:14px;margin-bottom:14px">
-    <p style="font-size:13px;line-height:1.6;color:#334155;margin-bottom:10px">Tải âm thanh, nhập <b>@ID</b> người nhận rồi bấm <b>Phát voice kín</b>. Hệ thống chỉ gửi tín hiệu tới hộp thư riêng của tài khoản đích khi tài khoản đó đang online.</p>
+    <p style="font-size:13px;line-height:1.6;color:#334155;margin-bottom:10px">Tải âm thanh, nhập <b>@ID</b> người nhận rồi bấm <b>Phát voice kín</b>. Người nhận đang online sẽ được gửi voice và thiết bị tự thử phát ngay, không cần bật tùy chọn đồng ý trước. Dùng <b>Dừng voice kín</b> để dừng voice gần nhất đã gửi.</p>
     <label for="auroraPrivateVoiceTarget">👤 ID người nhận (ví dụ @username)</label>
     <input id="auroraPrivateVoiceTarget" type="text" autocomplete="off" maxlength="60" placeholder="@username" style="width:100%">
     <label for="auroraPrivateVoiceFile">🎵 File âm thanh (tối đa 20 MB)</label>
@@ -2605,9 +2606,10 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
     <div id="auroraPrivateVoiceProgress" style="display:none;margin:8px 0;background:#dbeafe;border-radius:8px;padding:8px;font-size:12px;color:#1d4ed8"></div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px">
       <button type="button" class="btn btn-success aurora-ext-small-btn" id="auroraPrivateVoiceSendBtn" onclick="auroraSendPrivateVoice()">▶ Phát voice kín</button>
+      <button type="button" class="btn btn-danger aurora-ext-small-btn" id="auroraPrivateVoiceStopBtn" onclick="auroraStopPrivateVoice()" disabled>⏹ Dừng voice kín</button>
       <span id="auroraPrivateVoiceStatus" style="font-size:12px;color:#475467">Sẵn sàng. Chỉ gửi tới người đang online.</span>
     </div>
-    <p style="font-size:11px;color:#667085;line-height:1.5;margin-top:10px">Lưu ý: trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó người nhận sẽ thấy nút bấm để nghe. Tính riêng tư dữ liệu cũng phụ thuộc Firebase Security Rules của dự án.</p>
+    <p style="font-size:11px;color:#667085;line-height:1.5;margin-top:10px">Aurora tự thử phát âm thanh khi voice đến, không yêu cầu người nhận bật đồng ý. Một số trình duyệt vẫn chặn autoplay ở cấp hệ điều hành; khi đó không website nào có thể bảo đảm phát ra loa nếu trình duyệt yêu cầu một thao tác của người dùng. Tính riêng tư dữ liệu cũng phụ thuộc Firebase Security Rules của dự án.</p>
   </div>
 </div>
 
@@ -4740,7 +4742,9 @@ async function openProfile(_,targetUser){
   const frameEl=document.getElementById('profileAvatarFrame');
   const frameCls=getFrameClassForEffect(getAvatarEffect(effRole));
   frameEl.className='avatar-frame-overlay'+(frameCls?' '+frameCls+' active':'');
+  const profileChatSection=document.getElementById('profileChatBoxesSection');if(profileChatSection)profileChatSection.style.display=isSelf?'block':'none';
   document.getElementById('profileModal').classList.add('show');
+  if(isSelf&&typeof window.auroraChatProfileRefresh==='function'){Promise.resolve(window.auroraChatProfileRefresh()).catch(e=>console.warn('Profile chat restore list refresh failed:',e));}
   if(isSelf){
     showAiModelInProfile(u);
     const wcWrap=document.getElementById('profileAiWebcamWrap');
@@ -9585,7 +9589,7 @@ initEcCreatePanel();
     ['Làm Bài Thi','Take an exam','Сдать тест','参加考试','試験を受ける'],['Tài Liệu','Documents','Документы','资料','資料'],['Học Sinh Vào Thi','Student exam entry','Вход ученика на экзамен','学生进入考试','生徒の試験参加'],['Hình thức:','Mode:','Формат:','形式：','形式：'],['Thi Tự Do','Free exam','Свободный тест','自由考试','自由試験'],['Phòng Thi Chuyên Dụng','Dedicated exam room','Специальная экзаменационная комната','专用考场','専用試験室'],['Cần mật khẩu','Password required','Требуется пароль','需要密码','パスワードが必要'],['Bài Luyện Nhanh','Quick practice','Быстрая практика','快速练习','クイック練習'],['Luyện tập','Practice','Практика','练习','練習'],['Đề cắt ảnh','Image-based test','Тест по изображениям','图片试卷','画像テスト'],['Biệt danh:','Nickname:','Псевдоним:','昵称：','ニックネーム：'],['Bấm tên trên navbar để đổi.','Click your name in the navbar to change it.','Нажмите на имя в панели навигации, чтобы изменить его.','点击导航栏中的名字即可更改。','ナビゲーションバーの名前をクリックして変更します。'],['Bắt Đầu','Start','Начать','开始','開始'],['Quét QR','Scan QR','Сканировать QR','扫描二维码','QR をスキャン'],['KHO TÀI LIỆU HỌC TẬP','STUDY DOCUMENT LIBRARY','БИБЛИОТЕКА УЧЕБНЫХ МАТЕРИАЛОВ','学习资料库','学習資料ライブラリ'],['Lớp','Grade','Класс','年级','学年'],['Tất cả','All','Все','全部','すべて'],['Môn','Subject','Предмет','科目','科目'],['Dạng','Type','Тип','类型','種類'],['Công thức','Formula','Формулы','公式','公式'],['Lý thuyết','Theory','Теория','理论','理論'],['Dạng đề','Test format','Тип задания','试卷类型','問題形式'],['Dạng câu hỏi','Question type','Тип вопроса','题型','設問形式'],['Mẫu','Template','Шаблон','模板','テンプレート'],['Tìm','Search','Поиск','搜索','検索'],['Tổng:','Total:','Всего:','总计：','合計：'],['tài liệu','documents','документов','份资料','件の資料'],['Tài liệu GV đăng','Teacher-uploaded documents','Материалы учителей','教师上传的资料','教師がアップロードした資料'],
     ['Tạo Đề Kiểm Tra V2','Create Test V2','Создать тест V2','创建试卷 V2','テスト作成 V2'],['Đặt Lại','Reset','Сбросить','重置','リセット'],['Nâng Cao','Advanced','Дополнительно','高级','詳細'],['Tên bài:','Test name:','Название теста:','试卷名称：','テスト名：'],['Hình thức tải:','Upload format:','Формат загрузки:','上传格式：','アップロード形式：'],['PDF đề thi','Exam PDF','PDF теста','试卷 PDF','試験 PDF'],['Ảnh đề thi','Exam images','Изображения теста','试卷图片','試験画像'],['Cài đặt nâng cao','Advanced settings','Расширенные настройки','高级设置','詳細設定'],['Đếm ngược','Countdown','Обратный отсчёт','倒计时','カウントダウン'],['Chống gian lận','Anti-cheating','Защита от списывания','防作弊','不正防止'],['Giới hạn:','Limit:','Лимит:','限制：','制限：'],['Không','No','Нет','否','なし'],['Có','Yes','Да','是','あり'],['Tối đa:','Maximum:','Максимум:','最多：','最大：'],['Giới hạn lần làm','Attempt limit','Ограничение попыток','答题次数限制','受験回数制限'],['Phân tích AI (đang thử nghiệm)','AI analysis (experimental)','Анализ ИИ (экспериментально)','AI 分析（实验功能）','AI 分析（試験中）'],['Giới hạn HS:','Student limit:','Лимит учеников:','学生限制：','生徒数の上限：'],['Tự Động Nhập Đáp Án','Automatic answer entry','Автоматический ввод ответов','自动录入答案','解答の自動入力'],['Câu Hỏi','Questions','Вопросы','问题','質問'],['Lưu & Phát Hành','Save & Publish','Сохранить и опубликовать','保存并发布','保存して公開'],['PHÒNG CHỜ BÀI LUYỆN','PRACTICE WAITING ROOM','КОМНАТА ОЖИДАНИЯ ПРАКТИКИ','练习等待室','練習待機室'],['Thí sinh:','Candidates:','Участники:','考生：','受験者：'],['Số câu:','Questions:','Количество вопросов:','题数：','問題数：'],['Đang trong phòng:','In room:','В комнате:','房间内：','ルーム内：'],['Rời Phòng','Leave room','Покинуть комнату','离开房间','ルームを退出'],['PHÒNG CHỜ THI','EXAM WAITING ROOM','КОМНАТА ОЖИДАНИЯ ЭКЗАМЕНА','考试等待室','試験待機室'],['Thời gian:','Time:','Время:','时间：','時間：'],['phút','minutes','минут','分钟','分'],['CHỜ GIÁO VIÊN...','WAITING FOR TEACHER...','ОЖИДАНИЕ УЧИТЕЛЯ...','等待老师…','先生を待っています…'],['Đề Thi','Exam','Экзамен','试卷','試験'],['Thoát','Exit','Выход','退出','終了'],['Nộp Bài','Submit','Сдать работу','提交答卷','提出'],['Kết Quả Bài Kiểm Tra','Test Results','Результаты теста','考试结果','試験結果'],['Chi Tiết','Details','Подробности','详情','詳細'],['Về Trang Chủ','Back to Home','На главную','返回首页','ホームへ戻る'],['Kết Quả Bài Luyện','Practice Results','Результаты практики','练习结果','練習結果'],['BẢNG XẾP HẠNG','LEADERBOARD','ТАБЛИЦА РЕЙТИНГА','排行榜','ランキング'],['BXH TOÀN SEVER','GLOBAL SERVER RANKING','ОБЩИЙ РЕЙТИНГ СЕРВЕРА','全服排行榜','全サーバーランキング'],['BXH BÀI THI','EXAM RANKING','РЕЙТИНГ ЭКЗАМЕНОВ','考试排行榜','試験ランキング'],['BỤC VINH DANH','HALL OF FAME','ДОСКА ПОЧЁТА','荣誉榜','殿堂入り'],['Làm mới','Refresh','Обновить','刷新','更新'],['Hạng','Rank','Место','排名','順位'],['Tổng Điểm','Total points','Всего баллов','总分','合計点'],['Số Bài','Submissions','Количество работ','答题数','提出数'],['ĐTB','Average score','Средний балл','平均分','平均点'],['Hồ sơ','Profile','Профиль','个人资料','プロフィール'],['Xóa Lịch Sử','Clear history','Очистить историю','清除记录','履歴を削除'],['Tài khoản (Biệt danh)','Account (nickname)','Аккаунт (псевдоним)','账户（昵称）','アカウント（ニックネーム）'],['Điểm','Score','Баллы','分数','点数'],['Cẩm nang','Guidebook','Справочник','指南','ガイドブック'],['Trang Chủ','Home','Главная','首页','ホーム'],['Xếp Hạng','Ranking','Рейтинг','排名','ランキング'],['Hồ Sơ','Profile','Профиль','个人资料','プロフィール'],['Tối Cao','Supreme','Администратор','高级管理','管理者'],['Giải Trí','Entertainment','Развлечения','娱乐','エンタメ'],['Giao Diện','Appearance','Внешний вид','外观','外観'],['Chế độ hiển thị','Display mode','Режим отображения','显示模式','表示モード'],['Hiện tại:','Current:','Текущий:','当前：','現在：'],['Đổi chế độ','Change mode','Изменить режим','切换模式','モードを変更'],
     ['Kiểu phát:','Playback mode:','Режим воспроизведения:','播放模式：','再生モード：'],['Âm lượng','Volume','Громкость','音量','音量'],['Lưu thứ tự','Save order','Сохранить порядок','保存顺序','順序を保存'],['Tìm tên hoặc email...','Search name or email...','Поиск по имени или email...','搜索姓名或邮箱…','名前またはメールを検索…'],['Đối tượng nhận','Recipients','Получатели','接收对象','受信者'],['Tất cả người đang online','Everyone online','Все онлайн','所有在线用户','オンラインの全員'],['Chọn người cụ thể','Choose specific users','Выбрать конкретных пользователей','选择指定用户','特定ユーザーを選択'],['Tiêu đề:','Title:','Заголовок:','标题：','タイトル：'],['Nội dung chữ:','Text content:','Текст сообщения:','文本内容：','本文：'],['Nhập nội dung...','Enter content...','Введите текст...','输入内容…','内容を入力…'],['Gửi Thông Báo','Send announcement','Отправить объявление','发送通知','お知らせを送信'],['Xóa Tất Cả Thông Báo','Clear all announcements','Удалить все объявления','清除所有通知','すべてのお知らせを削除'],
-    ['🔒 VOICE KÍN — ÂM THANH RIÊNG THEO @ID','🔒 PRIVATE VOICE — AUDIO FOR @ID ONLY','🔒 ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','🔒 私密语音 — 仅发送给 @ID','🔒 プライベート音声 — @ID のみ'],['VOICE KÍN — ÂM THANH RIÊNG THEO @ID','PRIVATE VOICE — AUDIO FOR @ID ONLY','ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','私密语音 — 仅发送给 @ID','プライベート音声 — @ID のみ'],['👤 ID người nhận (ví dụ @username)','👤 Recipient ID (e.g. @username)','👤 ID получателя (например, @username)','👤 接收者 ID（例如 @username）','👤 受信者 ID（例：@username）'],['🎵 File âm thanh (tối đa 20 MB)','🎵 Audio file (up to 20 MB)','🎵 Аудиофайл (до 20 МБ)','🎵 音频文件（最大 20 MB）','🎵 音声ファイル（最大 20 MB）'],['Tải âm thanh, nhập @ID người nhận rồi bấm Phát voice kín. Hệ thống chỉ gửi tín hiệu tới hộp thư riêng của tài khoản đích khi tài khoản đó đang online.','Upload audio, enter the recipient @ID, then click Play private voice. The system sends the notification only to the recipient inbox while that account is online.','Загрузите аудио, введите @ID получателя и нажмите «Отправить личное аудио». Уведомление отправляется только в личный входящий ящик получателя, когда он в сети.','上传音频，输入接收者 @ID，然后点击“发送私密语音”。仅当目标账户在线时，系统才向其私人收件箱发送通知。','音声をアップロードし、受信者の @ID を入力して「プライベート音声を送信」をクリックします。対象アカウントがオンラインの場合のみ、個人受信箱へ通知されます。'],['Lưu ý: trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó người nhận sẽ thấy nút bấm để nghe. Tính riêng tư dữ liệu cũng phụ thuộc Firebase Security Rules của dự án.','Note: the recipient browser may block autoplay; if so, the recipient will see a button to play. Data privacy also depends on this project’s Firebase Security Rules.','Примечание: браузер получателя может блокировать автовоспроизведение; в таком случае появится кнопка воспроизведения. Конфиденциальность данных также зависит от правил безопасности Firebase.','注意：接收者的浏览器可能会阻止自动播放；此时接收者会看到播放按钮。数据隐私还取决于项目的 Firebase 安全规则。','注意：受信者のブラウザーが自動再生をブロックする場合、再生ボタンが表示されます。データのプライバシーは Firebase セキュリティルールにも依存します。'],['Phát voice kín','Play private voice','Отправить личное аудио','发送私密语音','プライベート音声を送信'],['Sẵn sàng. Chỉ gửi tới người đang online.','Ready. Only online users can receive.','Готово. Получать могут только пользователи онлайн.','就绪。仅在线用户可以接收。','準備完了。オンラインのユーザーのみ受信できます。'],['CHUNG — ỦNG HỘ, QUẢNG CÁO, GÓI NÂNG CẤP','GENERAL — DONATIONS, ADS, UPGRADE PLANS','ОБЩЕЕ — ПОЖЕРТВОВАНИЯ, РЕКЛАМА, ТАРИФЫ','常规 — 捐赠、广告、升级套餐','全般 — 寄付、広告、アップグレード'],['ỦNG HỘ & BXH HIỂN THỊ','DONATIONS & DISPLAY RANKING','ПОЖЕРТВОВАНИЯ И РЕЙТИНГ','捐赠与展示排行榜','寄付と表示ランキング'],['QUẢNG CÁO & NHÀ TÀI TRỢ (TỐI ĐA 4)','ADS & SPONSORS (MAX 4)','РЕКЛАМА И СПОНСОРЫ (МАКС. 4)','广告与赞助商（最多 4 个）','広告とスポンサー（最大 4 件）'],['GÓI NÂNG CẤP & TẶNG GÓI','UPGRADE PLANS & GIFTING','ТАРИФЫ И ПОДАРКИ','升级套餐与赠送套餐','アップグレードとギフト'],['CẤU HÌNH ĐỊNH DẠNG MENU','MENU LAYOUT SETTINGS','НАСТРОЙКИ МЕНЮ','菜单布局设置','メニュー表示設定'],['CẤU HÌNH ÂM THANH THEO SỰ KIỆN','EVENT SOUND SETTINGS','НАСТРОЙКИ ЗВУКОВ СОБЫТИЙ','事件音效设置','イベント音声設定'],['NGÔN NGỮ HỆ THỐNG','SYSTEM LANGUAGE','ЯЗЫК СИСТЕМЫ','系统语言','システム言語'],
+    ['🔒 VOICE KÍN — ÂM THANH RIÊNG THEO @ID','🔒 PRIVATE VOICE — AUDIO FOR @ID ONLY','🔒 ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','🔒 私密语音 — 仅发送给 @ID','🔒 プライベート音声 — @ID のみ'],['VOICE KÍN — ÂM THANH RIÊNG THEO @ID','PRIVATE VOICE — AUDIO FOR @ID ONLY','ПРИВАТНОЕ АУДИО — ТОЛЬКО ДЛЯ @ID','私密语音 — 仅发送给 @ID','プライベート音声 — @ID のみ'],['👤 ID người nhận (ví dụ @username)','👤 Recipient ID (e.g. @username)','👤 ID получателя (например, @username)','👤 接收者 ID（例如 @username）','👤 受信者 ID（例：@username）'],['🎵 File âm thanh (tối đa 20 MB)','🎵 Audio file (up to 20 MB)','🎵 Аудиофайл (до 20 МБ)','🎵 音频文件（最大 20 MB）','🎵 音声ファイル（最大 20 MB）'],['Tải âm thanh, nhập @ID người nhận rồi bấm Phát voice kín. Hệ thống chỉ gửi tín hiệu tới hộp thư riêng của tài khoản đích khi tài khoản đó đang online.','Upload audio, enter the recipient @ID, then click Play private voice. The system sends the notification only to the recipient inbox while that account is online.','Загрузите аудио, введите @ID получателя и нажмите «Отправить личное аудио». Уведомление отправляется только в личный входящий ящик получателя, когда он в сети.','上传音频，输入接收者 @ID，然后点击“发送私密语音”。仅当目标账户在线时，系统才向其私人收件箱发送通知。','音声をアップロードし、受信者の @ID を入力して「プライベート音声を送信」をクリックします。対象アカウントがオンラインの場合のみ、個人受信箱へ通知されます。'],['Aurora tự thử phát âm thanh khi voice đến, không yêu cầu người nhận bật đồng ý. Một số trình duyệt vẫn chặn autoplay ở cấp hệ điều hành; khi đó không website nào có thể bảo đảm phát ra loa nếu trình duyệt yêu cầu một thao tác của người dùng. Tính riêng tư dữ liệu cũng phụ thuộc Firebase Security Rules của dự án.','Note: the recipient browser may block autoplay; if so, the recipient will see a button to play. Data privacy also depends on this project’s Firebase Security Rules.','Примечание: браузер получателя может блокировать автовоспроизведение; в таком случае появится кнопка воспроизведения. Конфиденциальность данных также зависит от правил безопасности Firebase.','注意：接收者的浏览器可能会阻止自动播放；此时接收者会看到播放按钮。数据隐私还取决于项目的 Firebase 安全规则。','注意：受信者のブラウザーが自動再生をブロックする場合、再生ボタンが表示されます。データのプライバシーは Firebase セキュリティルールにも依存します。'],['Phát voice kín','Play private voice','Отправить личное аудио','发送私密语音','プライベート音声を送信'],['Sẵn sàng. Chỉ gửi tới người đang online.','Ready. Only online users can receive.','Готово. Получать могут только пользователи онлайн.','就绪。仅在线用户可以接收。','準備完了。オンラインのユーザーのみ受信できます。'],['CHUNG — ỦNG HỘ, QUẢNG CÁO, GÓI NÂNG CẤP','GENERAL — DONATIONS, ADS, UPGRADE PLANS','ОБЩЕЕ — ПОЖЕРТВОВАНИЯ, РЕКЛАМА, ТАРИФЫ','常规 — 捐赠、广告、升级套餐','全般 — 寄付、広告、アップグレード'],['ỦNG HỘ & BXH HIỂN THỊ','DONATIONS & DISPLAY RANKING','ПОЖЕРТВОВАНИЯ И РЕЙТИНГ','捐赠与展示排行榜','寄付と表示ランキング'],['QUẢNG CÁO & NHÀ TÀI TRỢ (TỐI ĐA 4)','ADS & SPONSORS (MAX 4)','РЕКЛАМА И СПОНСОРЫ (МАКС. 4)','广告与赞助商（最多 4 个）','広告とスポンサー（最大 4 件）'],['GÓI NÂNG CẤP & TẶNG GÓI','UPGRADE PLANS & GIFTING','ТАРИФЫ И ПОДАРКИ','升级套餐与赠送套餐','アップグレードとギフト'],['CẤU HÌNH ĐỊNH DẠNG MENU','MENU LAYOUT SETTINGS','НАСТРОЙКИ МЕНЮ','菜单布局设置','メニュー表示設定'],['CẤU HÌNH ÂM THANH THEO SỰ KIỆN','EVENT SOUND SETTINGS','НАСТРОЙКИ ЗВУКОВ СОБЫТИЙ','事件音效设置','イベント音声設定'],['NGÔN NGỮ HỆ THỐNG','SYSTEM LANGUAGE','ЯЗЫК СИСТЕМЫ','系统语言','システム言語'],
     ['⏰ Thời gian đếm ngược đến kỳ thi tốt nghiệp THPT Quốc gia','⏰ Countdown to the National High School Graduation Exam','⏰ Обратный отсчёт до выпускного экзамена','⏰ 全国高中毕业考试倒计时','⏰ 高校卒業試験までのカウントダウン'],
     ['Hệ thống kiểm tra trực tuyến thông minh — Nơi tri thức tỏa sáng!','Smart online testing system — Where knowledge shines!','Умная система онлайн-тестирования — место, где сияют знания!','智能在线考试系统——让知识闪耀！','スマートオンライン試験システム — 知識が輝く場所！'],
     ['🏠 TRANG CHỦ','🏠 HOME','🏠 ГЛАВНАЯ','🏠 首页','🏠 ホーム'],['🧑‍🎓 HỌC SINH','🧑‍🎓 STUDENT','🧑‍🎓 УЧЕНИК','🧑‍🎓 学生','🧑‍🎓 生徒'],['👨‍🏫 GIÁO VIÊN','👨‍🏫 TEACHER','👨‍🏫 УЧИТЕЛЬ','👨‍🏫 教师','👨‍🏫 教師'],['⚙️ GV NÂNG CAO','⚙️ ADVANCED TEACHER','⚙️ ПРЕПОДАВАТЕЛЬ+','⚙️ 高级教师','⚙️ 上級教師'],['📖 HƯỚNG DẪN','📖 GUIDE','📖 СПРАВКА','📖 指南','📖 ガイド'],['🏆 BXH','🏆 LEADERBOARD','🏆 РЕЙТИНГ','🏆 排行榜','🏆 ランキング'],['👑 TỐI CAO','👑 SUPREME','👑 АДМИН','👑 管理','👑 管理者'],
@@ -10590,9 +10594,42 @@ initEcCreatePanel();
   let privateVoiceQueue=Promise.resolve();
   let privateVoicePending=null;
   let privateVoiceActiveAudio=null;
+  let privateVoiceActiveEntry=null;
+  let privateVoiceLastSent=null;
   function privateVoiceSafeKey(value){return String(value||'').trim().replace(/[.#$\[\]\/]/g,'_').slice(0,90);}
   function privateVoiceSetStatus(message,isError){const el=byId('auroraPrivateVoiceStatus');if(el){el.textContent=message||'';el.style.color=isError?'#b42318':'#475467';}}
   function privateVoiceSetProgress(message,visible=true){const el=byId('auroraPrivateVoiceProgress');if(!el)return;el.textContent=message||'';el.style.display=visible?'block':'none';}
+  function privateVoiceUpdateStopButton(){const btn=byId('auroraPrivateVoiceStopBtn');if(btn)btn.disabled=!privateVoiceLastSent;}
+  function privateVoiceRevokeEntry(entry){if(!entry)return;try{if(entry.url)URL.revokeObjectURL(entry.url);}catch(_){}if(entry.cacheId&&soundObjectURLs[entry.cacheId]===entry.url)delete soundObjectURLs[entry.cacheId];}
+  function privateVoiceStopLocalEntry(entry,showNotice=true){
+    if(!entry)return;
+    try{if(entry.audio){entry.audio.pause();entry.audio.currentTime=0;}}catch(_){}
+    if(privateVoiceActiveAudio===entry.audio)privateVoiceActiveAudio=null;
+    if(privateVoiceActiveEntry===entry)privateVoiceActiveEntry=null;
+    if(privateVoicePending===entry)privateVoicePending=null;
+    privateVoiceHideBanner();privateVoiceRevokeEntry(entry);
+    if(showNotice)privateVoiceSetStatus('Voice kín đã được dừng.',false);
+  }
+  async function stopPrivateVoice(){
+    if(!requireUser('dừng voice kín'))return;
+    const sent=privateVoiceLastSent;
+    if(!sent){privateVoiceSetStatus('Chưa có voice kín nào đang chờ để dừng.');return;}
+    const btn=byId('auroraPrivateVoiceStopBtn');if(btn)btn.disabled=true;
+    try{
+      const inboxPath=`${EXT_PATH}/private_voice/inbox/${sent.recipientKey}/${sent.messageId}`;
+      const snap=await window.dbGet(dbRef(inboxPath));
+      if(snap&&snap.exists())await window.dbRemove(dbRef(inboxPath));
+      if(sent.audioPath){try{await window.dbRemove(dbRef(sent.audioPath));}catch(_){} }
+      privateVoiceLastSent=null;privateVoiceUpdateStopButton();
+      const message=snap&&snap.exists()?'Đã gửi lệnh dừng voice kín tới @'+sent.target+'.':'Voice kín đã kết thúc hoặc không còn trong hàng đợi của người nhận.';
+      privateVoiceSetStatus(message,false);privateVoiceSetProgress(message,true);toast('⏹ '+message,'info');
+      setTimeout(()=>privateVoiceSetProgress('',false),3500);
+    }catch(error){
+      if(btn)btn.disabled=false;
+      privateVoiceSetStatus('Không thể dừng voice kín: '+(error.message||error),true);
+      toast('Không dừng được voice kín: '+(error.message||error),'error');
+    }
+  }
   function ensurePrivateVoiceBanner(){
     if(byId('auroraIncomingPrivateVoice'))return;
     const box=document.createElement('div');box.id='auroraIncomingPrivateVoice';
@@ -10610,18 +10647,19 @@ initEcCreatePanel();
   async function privateVoicePlayLoaded(entry){
     if(!entry||!entry.url)return false;
     try{
+      if(privateVoiceActiveEntry&&privateVoiceActiveEntry!==entry)privateVoiceStopLocalEntry(privateVoiceActiveEntry,false);
       if(privateVoiceActiveAudio&&privateVoiceActiveAudio!==entry.audio){try{privateVoiceActiveAudio.pause();}catch(e){}}
-      const audio=entry.audio||new Audio(entry.url); entry.audio=audio; privateVoiceActiveAudio=audio;
-      audio.onended=async()=>{if(privateVoiceActiveAudio===audio)privateVoiceActiveAudio=null;privateVoicePending=null;privateVoiceHideBanner();await privateVoiceCleanup(entry.messageId,entry.targetKey,entry.audioPath);try{URL.revokeObjectURL(entry.url);}catch(e){} if(entry.cacheId&&soundObjectURLs[entry.cacheId]===entry.url)delete soundObjectURLs[entry.cacheId];};
+      const audio=entry.audio||new Audio(entry.url); entry.audio=audio; privateVoiceActiveAudio=audio;privateVoiceActiveEntry=entry;
+      audio.onended=async()=>{if(privateVoiceActiveAudio===audio)privateVoiceActiveAudio=null;if(privateVoiceActiveEntry===entry)privateVoiceActiveEntry=null;privateVoicePending=null;privateVoiceHideBanner();await privateVoiceCleanup(entry.messageId,entry.targetKey,entry.audioPath);privateVoiceRevokeEntry(entry);};
       audio.onerror=()=>{privateVoiceSetStatus('Không phát được file âm thanh trên thiết bị nhận.',true);};
       await audio.play(); privateVoiceHideBanner(); privateVoicePending=null;
       privateVoiceSetStatus('Đang phát voice kín từ @'+(entry.from||'người dùng')+'.');
       return true;
     }catch(error){
       privateVoicePending=entry;ensurePrivateVoiceBanner();
-      const txt=byId('auroraIncomingPrivateVoiceText');if(txt)txt.textContent='Từ @'+(entry.from||'người dùng')+' · '+(entry.name||'âm thanh')+'. Trình duyệt đang chặn tự phát; bấm “Nghe ngay” để phát.';
+      const txt=byId('auroraIncomingPrivateVoiceText');if(txt)txt.textContent='Từ @'+(entry.from||'người dùng')+' · '+(entry.name||'âm thanh')+'. Đã tự thử phát nhưng trình duyệt chặn autoplay. Bạn có thể bấm “Nghe ngay” nếu muốn phát trên trình duyệt này.';
       const box=byId('auroraIncomingPrivateVoice');if(box)box.style.display='block';
-      privateVoiceSetStatus('Voice đã tới; người nhận cần bấm “Nghe ngay” nếu trình duyệt chặn tự phát.');
+      privateVoiceSetStatus('Voice đã tới và đã tự thử phát. Trình duyệt đang chặn autoplay nên cần thao tác trên thiết bị này để nghe.');
       return false;
     }
   }
@@ -10635,9 +10673,16 @@ initEcCreatePanel();
       const cacheId='pv_'+messageId;
       const url=await readChunksToObjectURL(message.audioPath,{...message.audioMeta,id:cacheId,kind:'sound'});
       if(!url)throw new Error('Không đọc được dữ liệu âm thanh.');
+      // Re-check the inbox after downloading chunks: sender may have pressed Stop while the file was loading.
+      const liveMessage=await window.dbGet(dbRef(`${EXT_PATH}/private_voice/inbox/${recipientKey}/${messageId}`));
+      if(!liveMessage||!liveMessage.exists()){try{URL.revokeObjectURL(url);}catch(_){}if(soundObjectURLs[cacheId]===url)delete soundObjectURLs[cacheId];return;}
       const entry={messageId,targetKey:recipientKey,audioPath:message.audioPath,url,cacheId,from:message.from,name:message.audioMeta.name,audio:new Audio(url)};
       await privateVoicePlayLoaded(entry);
     }catch(error){
+      // If the sender removed the inbox item, this is an intentional Stop command, not a playback error.
+      let stillQueued=true;
+      try{const live=await window.dbGet(dbRef(`${EXT_PATH}/private_voice/inbox/${recipientKey}/${messageId}`));stillQueued=!!(live&&live.exists());}catch(_){ }
+      if(!stillQueued)return;
       console.warn('Private voice receive failed:',error);
       privateVoiceSetStatus('Có voice kín nhưng không tải được âm thanh: '+(error.message||error),true);
     }
@@ -10652,6 +10697,11 @@ initEcCreatePanel();
       privateVoiceUnsubscribe=window.onValue(dbRef(path),snap=>{
         // Prime existing entries on login; old messages must never play unexpectedly after a reload.
         const records=snap.val()||{};
+        // Removing the message is the stop signal. This also stops audio already playing or waiting for an autoplay gesture.
+        const activeEntry=privateVoiceActiveEntry;
+        if(activeEntry&&!records[activeEntry.messageId]){privateVoiceStopLocalEntry(activeEntry,true);}
+        const pendingEntry=privateVoicePending;
+        if(pendingEntry&&!records[pendingEntry.messageId]){privateVoiceStopLocalEntry(pendingEntry,true);}
         if(!privateVoicePrimed){Object.entries(records).forEach(([id,msg])=>{privateVoiceSeenIds.add(id);if(msg&&Number(msg.expiresAt||0)<Date.now())privateVoiceCleanup(id,userKey,msg.audioPath);});privateVoicePrimed=true;return;}
         Object.entries(records).forEach(([id,msg])=>{
           if(privateVoiceSeenIds.has(id))return;privateVoiceSeenIds.add(id);
@@ -10664,7 +10714,11 @@ initEcCreatePanel();
   function stopPrivateVoiceListener(){
     if(privateVoiceUnsubscribe){try{privateVoiceUnsubscribe();}catch(e){}}
     privateVoiceUnsubscribe=null;privateVoiceListenerUsername='';privateVoicePrimed=false;privateVoiceSeenIds=new Set();
+    privateVoiceLastSent=null;privateVoiceUpdateStopButton();
     if(privateVoiceActiveAudio){try{privateVoiceActiveAudio.pause();}catch(e){}privateVoiceActiveAudio=null;}
+    if(privateVoiceActiveEntry){privateVoiceRevokeEntry(privateVoiceActiveEntry);privateVoiceActiveEntry=null;}
+    if(privateVoicePending){privateVoiceRevokeEntry(privateVoicePending);privateVoicePending=null;}
+    privateVoiceHideBanner();
   }
   async function checkPrivateVoiceRecipient(target){
     const onlineSnap=await window.dbGet(dbRef(`online_users/${target}`));
@@ -10699,7 +10753,8 @@ initEcCreatePanel();
       if(!verifyOnline.online){try{await window.dbRemove(dbRef(audioPath));}catch(_){}throw new Error('@'+target+' vừa offline; chưa gửi voice.');}
       const msg={id:messageId,from:currentUser.username,to:target,sentAt:Date.now(),expiresAt:Date.now()+5*60*1000,audioPath,audioMeta};
       await window.dbSet(dbRef(`${EXT_PATH}/private_voice/inbox/${recipientKey}/${messageId}`),msg);
-      privateVoiceSetProgress('Đã gửi tín hiệu tới @'+target+'.',true);privateVoiceSetStatus('Đã gửi voice kín tới @'+target+'.');
+      privateVoiceLastSent={target,recipientKey,messageId,audioPath,sentAt:msg.sentAt};privateVoiceUpdateStopButton();
+      privateVoiceSetProgress('Đã gửi tín hiệu tới @'+target+'.',true);privateVoiceSetStatus('Đã gửi voice kín tới @'+target+'. Bạn có thể bấm “Dừng voice kín” để dừng nếu âm thanh vẫn đang phát.');
       toast('🔒 Đã gửi voice kín tới @'+target+'.', 'success');
       if(input)input.value='';
       setTimeout(()=>privateVoiceSetProgress('',false),4500);
@@ -10713,7 +10768,7 @@ initEcCreatePanel();
   function mountAll() {
     addStyle(); mountMainMenu(); mountPages(); ensureSettingsPanel(); ensureEntertainmentBorderPanel(); ensureProfileBorderUI(); mountDynamicMenuItems(); patchAuthOverlay(); overrideShowView(); patchDocumentLibrary(); patchExamAudio(); patchUserPlans();
     purgeLegacyAruSystemModel();
-    ensurePrivateVoiceBanner(); if(currentUser) startPrivateVoiceListener();
+    ensurePrivateVoiceBanner(); privateVoiceUpdateStopButton(); if(currentUser) startPrivateVoiceListener();
     loadConfig().then(() => { mountSettingsValues(); applyMenuConfig(); if (!extPendingSound) playEventSound('enter_web'); });
     const cfgPanel = byId('configPanel'); if (cfgPanel && typeof MutationObserver !== 'undefined') {
       const observer = new MutationObserver(() => { if (cfgPanel.style.display !== 'none') mountSettingsValues(); }); observer.observe(cfgPanel, { attributes: true, attributeFilter: ['style'] });
@@ -10724,7 +10779,7 @@ initEcCreatePanel();
 
   // Public functions referenced by inline HTML handlers.
   Object.assign(window, {
-    auroraSendPrivateVoice: sendPrivateVoice, auroraPlayPendingPrivateVoice: playPendingPrivateVoice, auroraDismissPendingPrivateVoice: dismissPendingPrivateVoice,
+    auroraSendPrivateVoice: sendPrivateVoice, auroraStopPrivateVoice: stopPrivateVoice, auroraPlayPendingPrivateVoice: playPendingPrivateVoice, auroraDismissPendingPrivateVoice: dismissPendingPrivateVoice,
     auroraUploadConfigImage: uploadConfigImage,
     auroraAddDonor: addDonor, auroraRemoveDonor: removeDonor,
     auroraUploadAdImage: uploadAdImage, auroraAddAdSlot: addAdSlot, auroraRemoveAdSlot: removeAdSlot, auroraSaveAdFields: saveAdFields, auroraSaveGeneralSettings: saveGeneralSettings,
@@ -11346,6 +11401,8 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     #auroraChatFloatLayer{position:fixed;right:18px;bottom:18px;z-index:99999980;display:flex;align-items:flex-end;gap:8px;max-width:calc(100vw - 28px);pointer-events:none;font-family:inherit}
     .aurora-chat-bubble,.aurora-chat-window{pointer-events:auto;box-shadow:0 12px 36px rgba(15,23,42,.25)}
     .aurora-chat-bubble{height:52px;min-width:52px;max-width:180px;border:0;border-radius:30px;background:linear-gradient(135deg,#5b5ce2,#d946ef);color:#fff;padding:0 14px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #profileChatBoxesList{display:flex;flex-direction:column;gap:8px}#profileChatBoxesList .profile-chat-box-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px;border:1px solid #dbe3ef;border-radius:10px;background:#f8fafc}#profileChatBoxesList .profile-chat-box-meta{flex:1;min-width:140px}#profileChatBoxesList .profile-chat-box-actions{display:flex;gap:6px;flex-wrap:wrap}#profileChatBoxesList .profile-chat-box-actions button{width:auto;padding:7px 10px;font-size:12px}
+    @media(max-width:650px){#profileChatBoxesList .profile-chat-box-row{align-items:stretch}#profileChatBoxesList .profile-chat-box-meta{min-width:100%}#profileChatBoxesList .profile-chat-box-actions{width:100%}#profileChatBoxesList .profile-chat-box-actions button{flex:1;min-width:110px}}
     .aurora-chat-window{width:min(360px,calc(100vw - 24px));height:min(460px,calc(100vh - 100px));background:#fff;border:1px solid #e2e8f0;border-radius:16px;display:flex;flex-direction:column;overflow:hidden}
     .aurora-owner-command-window{position:fixed;right:18px;bottom:82px;left:auto;top:auto;z-index:99999982;width:min(330px,calc(100vw - 24px));max-height:min(360px,calc(100vh - 110px));background:#fff;border:1px solid #c4b5fd;border-radius:14px;box-shadow:0 18px 55px rgba(15,23,42,.32);overflow:hidden;display:flex;flex-direction:column;will-change:left,top}.aurora-owner-command-header{touch-action:none;user-select:none;cursor:move}.aurora-owner-command-header button{cursor:pointer;touch-action:manipulation}.aurora-owner-command-window.is-collapsed{max-height:none;height:auto}.aurora-owner-command-window.is-collapsed .aurora-owner-command-body{display:none!important}
     .aurora-owner-command-header{background:linear-gradient(135deg,#111827,#6d28d9);color:#fff;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:900;font-size:12px}
@@ -11359,9 +11416,20 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     .aurora-chat-message{max-width:88%;align-self:flex-start;background:#fff;border:1px solid #e2e8f0;border-radius:13px 13px 13px 3px;padding:8px 10px;font-size:12px;line-height:1.45;overflow-wrap:anywhere;white-space:pre-wrap}
     .aurora-chat-message.mine{align-self:flex-end;background:#e0e7ff;border-color:#c7d2fe;border-radius:13px 13px 3px 13px}
     .aurora-chat-message small{display:block;font-size:10px;color:#64748b;margin-bottom:3px}
-    .aurora-chat-compose{display:flex;gap:7px;padding:9px;border-top:1px solid #e2e8f0;background:#fff}
+    .aurora-chat-message-row{display:flex;align-items:flex-end;gap:7px;width:100%;min-width:0}
+    .aurora-chat-message-row.mine{flex-direction:row-reverse}
+    .aurora-chat-avatar-button{appearance:none;-webkit-appearance:none;flex:0 0 32px;width:32px;height:32px;min-width:32px;min-height:32px;border:1px solid #d7deea;border-radius:50%;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#e0e7ff;color:#3730a3;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 1px 3px rgba(15,23,42,.10)}
+    .aurora-chat-avatar-button img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
+    .aurora-chat-message-content{max-width:calc(100% - 39px)!important;min-width:0;align-self:auto!important}
+    .aurora-chat-name-line{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:3px;line-height:1.2}
+    .aurora-chat-display-name{font-weight:850;color:#334155;font-size:11px}
+    .aurora-chat-time{font-size:9px;color:#94a3b8}
+    .aurora-chat-message-image{display:block;max-width:min(220px,100%);max-height:220px;object-fit:contain;border-radius:9px;margin-top:5px;border:1px solid rgba(148,163,184,.25);background:#fff}
+    .aurora-chat-upload-status{font-size:10px;color:#64748b;padding:0 10px 5px;min-height:0}
+    .aurora-chat-compose{display:flex;gap:7px;padding:9px;border-top:1px solid #e2e8f0;background:#fff;align-items:center}
     .aurora-chat-compose input{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:20px;padding:9px 12px;font-size:13px}
-    .aurora-chat-compose button{border:0;border-radius:50%;width:38px;height:38px;background:#4f46e5;color:#fff;font-weight:900;cursor:pointer}
+    .aurora-chat-compose button{border:0;border-radius:50%;width:38px;height:38px;min-width:38px;background:#4f46e5;color:#fff;font-weight:900;cursor:pointer;touch-action:manipulation}
+    .aurora-chat-compose .aurora-chat-attach{background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;font-size:23px;font-weight:700}
     .aurora-chat-tools{padding:6px 10px;background:#fff;border-top:1px solid #eef2f7;display:flex;gap:6px;justify-content:space-between;flex-wrap:wrap}
     .aurora-chat-tools button{font-size:11px;border:1px solid #d5dbe7;background:#fff;border-radius:7px;padding:4px 7px;cursor:pointer}
     #auroraMaintenanceOverlay{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box;font-family:system-ui,Segoe UI,sans-serif}
@@ -11500,6 +11568,34 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   function updateChatDropTarget(y){const el=$('auroraChatDropClose');if(el)el.style.background=y>window.innerHeight-90?'#dc2626':'#475569';}
   function hideChatDropTarget(){const el=$('auroraChatDropClose');if(el)el.style.display='none';}
   let trollOptInCache=false;
+  function renderProfileChatControls(){
+    const section=$('profileChatBoxesSection'),host=$('profileChatBoxesList');
+    if(!section||!host)return;
+    const selfView=!!(isLogged()&&currentViewingUser&&currentViewingUser.username===uname());
+    section.style.display=selfView?'block':'none';
+    if(!selfView)return;
+    const memberKey=childSafe(uname());
+    const rooms=Object.values(chatRooms).filter(room=>room&&!room.closed&&(room.creator===uname()||room.members?.[memberKey]===true)).sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+    if(!rooms.length){host.innerHTML='<p style="font-size:12px;color:#888;padding:8px 0">Bạn chưa tham gia box chat nào. Khi được thêm vào box, box sẽ xuất hiện ở đây.</p>';return;}
+    host.innerHTML=rooms.map(room=>{
+      const hidden=closedChatIds.has(room.id),open=openChatRoom===room.id;
+      const status=hidden?'Đang ẩn trên thiết bị này':(open?'Đang mở cửa sổ chat':'Bong bóng đang hiển thị');
+      return `<div class="profile-chat-box-row"><div class="profile-chat-box-meta"><b>💬 ${esc(room.title||'Box chat')}</b><div style="font-size:11px;color:#64748b;margin-top:3px">${esc(status)}${room.creator===uname()?' · Chủ box':''}</div></div><div class="profile-chat-box-actions"><button type="button" class="btn btn-primary" data-profile-chat-action="open" data-room-id="${esc(room.id)}">Mở chat</button><button type="button" class="btn ${hidden?'btn-success':'btn-secondary'}" data-profile-chat-action="toggle" data-room-id="${esc(room.id)}">${hidden?'Bật lại bong bóng':'Ẩn bong bóng'}</button></div></div>`;
+    }).join('');
+    host.querySelectorAll('[data-profile-chat-action]').forEach(button=>button.addEventListener('click',()=>{
+      const id=button.getAttribute('data-room-id'),action=button.getAttribute('data-profile-chat-action');
+      if(!id||!chatRooms[id])return;
+      if(action==='open'){closedChatIds.delete(id);openChatRoom=id;}
+      else if(closedChatIds.has(id)){closedChatIds.delete(id);if(openChatRoom===id)openChatRoom='';}
+      else{closedChatIds.add(id);if(openChatRoom===id)openChatRoom='';if(openOwnerCommandRoom===id)openOwnerCommandRoom='';}
+      renderChatFloatLayer();
+    }));
+  }
+  async function refreshProfileChatControls(){
+    renderProfileChatControls();
+    if(isLogged()&&dbReady())await refreshChatMemberships();
+    renderProfileChatControls();
+  }
   function renderChatFloatLayer(){
     let layer=$('auroraChatFloatLayer');
     if(!layer){layer=document.createElement('div');layer.id='auroraChatFloatLayer';document.body.appendChild(layer);}
@@ -11518,6 +11614,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
         const msgs=document.createElement('div');msgs.className='aurora-chat-messages';msgs.id='auroraChatMessages_'+room.id;win.appendChild(msgs);
         const tools=document.createElement('div');tools.className='aurora-chat-tools';const own=room.creator===uname();
         const count=document.createElement('span');count.style.cssText='font-size:10px;color:#64748b;align-self:center';count.textContent=Object.keys(room.members||{}).length+' thành viên';tools.appendChild(count);
+        if(own){const uploadStatus=document.createElement('span');uploadStatus.className='aurora-chat-upload-status';uploadStatus.id='auroraChatUploadStatus_'+room.id;uploadStatus.textContent='';tools.appendChild(uploadStatus);}
         if(own){
           const add=document.createElement('button');add.textContent='＋ Thêm';add.onclick=()=>addChatMember(room.id);tools.appendChild(add);
           const kick=document.createElement('button');kick.textContent='Kick';kick.onclick=()=>kickChatMember(room.id);tools.appendChild(kick);
@@ -11525,8 +11622,16 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
           cmd.onclick=()=>{openOwnerCommandRoom=openOwnerCommandRoom===room.id?'':room.id;renderChatFloatLayer();};tools.appendChild(cmd);
         }
         win.appendChild(tools);
-        const form=document.createElement('form');form.className='aurora-chat-compose';const input=document.createElement('input');input.maxLength=1500;input.placeholder='Nhắn tin…';input.setAttribute('aria-label','Tin nhắn');
-        const send=document.createElement('button');send.type='submit';send.textContent='➤';form.append(input,send);form.addEventListener('submit',e=>{e.preventDefault();sendChatMessage(room.id,input);});win.appendChild(form);layer.appendChild(win);requestAnimationFrame(()=>renderChatWindow(room.id));
+        const form=document.createElement('form');form.className='aurora-chat-compose';const input=document.createElement('input');input.maxLength=1500;input.placeholder='Nhắn tin…';input.setAttribute('aria-label','Tin nhắn');input.autocomplete='off';
+        if(own){
+          const attach=document.createElement('button');attach.type='button';attach.className='aurora-chat-attach';attach.textContent='＋';attach.title='Chủ box gửi ảnh';attach.setAttribute('aria-label','Chọn ảnh gửi vào box chat');
+          const imageInput=document.createElement('input');imageInput.type='file';imageInput.accept='image/*';imageInput.hidden=true;imageInput.setAttribute('aria-label','Ảnh gửi vào box chat');
+          attach.addEventListener('click',()=>imageInput.click());
+          imageInput.addEventListener('change',async()=>{const file=imageInput.files&&imageInput.files[0];if(file)await sendChatImage(room.id,file,input);imageInput.value='';});
+          form.append(attach,input);
+          form.append(imageInput);
+        }else form.append(input);
+        const send=document.createElement('button');send.type='submit';send.textContent='➤';send.setAttribute('aria-label','Gửi tin nhắn');form.append(send);form.addEventListener('submit',e=>{e.preventDefault();sendChatMessage(room.id,input);});win.appendChild(form);layer.appendChild(win);requestAnimationFrame(()=>renderChatWindow(room.id));
       }else{
         const bubble=document.createElement('button');bubble.type='button';bubble.className='aurora-chat-bubble';bubble.innerHTML=`<span>💬</span><span>${esc(room.title)}</span>`;bubble.title='Bấm để mở box chat; kéo xuống sát đáy để ẩn bong bóng.';applyChatPosition(bubble,room.id);let pstart=null,moved=false;
         bubble.addEventListener('pointerdown',e=>{const r=bubble.getBoundingClientRect();pstart={x:e.clientX,y:e.clientY,id:e.pointerId,left:r.left,top:r.top};moved=false;try{bubble.setPointerCapture(e.pointerId);}catch(_){} });
@@ -11536,6 +11641,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
       }
     });
     if(openOwnerCommandRoom){const room=chatRooms[openOwnerCommandRoom];if(room&&room.creator===uname()&&!closedChatIds.has(room.id))renderOwnerCommandWindow(room);else{openOwnerCommandRoom='';const ownerPanel=$('auroraOwnerCommandFloat');if(ownerPanel)ownerPanel.remove();}}
+    renderProfileChatControls();
   }
   function renderOwnerCommandWindow(room){
     let panel=$('auroraOwnerCommandFloat');if(!panel){panel=document.createElement('section');panel.id='auroraOwnerCommandFloat';panel.className='aurora-owner-command-window';document.body.appendChild(panel);try{const p=JSON.parse(localStorage.getItem('aurora_uc_cmd_pos_'+uname())||'null');if(p&&Number.isFinite(p.left)&&Number.isFinite(p.top)){panel.style.left=p.left+'px';panel.style.top=p.top+'px';panel.style.right='auto';panel.style.bottom='auto';}}catch(_){}}
@@ -11562,8 +11668,87 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     head.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const left=Math.max(4,Math.min(window.innerWidth-panel.offsetWidth-4,drag.left+e.clientX-drag.x));const top=Math.max(4,Math.min(window.innerHeight-panel.offsetHeight-4,drag.top+e.clientY-drag.y));panel.style.left=left+'px';panel.style.top=top+'px';panel.style.right='auto';panel.style.bottom='auto';});
     const endDrag=e=>{if(!drag)return;drag=null;try{localStorage.setItem('aurora_uc_cmd_pos_'+uname(),JSON.stringify({left:parseFloat(panel.style.left)||panel.getBoundingClientRect().left,top:parseFloat(panel.style.top)||panel.getBoundingClientRect().top}));}catch(_){};};head.addEventListener('pointerup',endDrag);head.addEventListener('pointercancel',endDrag);
   }
-  function renderChatWindow(id){const el=$('auroraChatMessages_'+id);if(!el)return;const messages=chatMsgCache[id]||[];const wasBottom=el.scrollHeight-el.scrollTop-el.clientHeight<50;el.innerHTML='';if(!messages.length){const hint=document.createElement('div');hint.className='aurora-uc-muted';hint.textContent='Bắt đầu trò chuyện trong box này.';el.appendChild(hint);}messages.forEach(m=>{const row=document.createElement('div');row.className='aurora-chat-message'+(m.from===uname()?' mine':'');const meta=document.createElement('small');meta.textContent='@'+(m.from||'?')+' · '+new Date(Number(m.createdAt||Date.now())).toLocaleTimeString();const text=document.createElement('span');text.textContent=String(m.text||'');row.append(meta,text);el.appendChild(row);});if(wasBottom||messages.length)el.scrollTop=el.scrollHeight;}
-  async function sendChatMessage(id,input){if(!isLogged()||!chatRooms[id]||!input)return;const room=chatRooms[id];const key=childSafe(uname());if(room.creator!==uname()&&(!room.members||room.members[key]!==true)){toast('Bạn không còn là thành viên của box này.','error');return;}const text=String(input.value||'').trim().slice(0,1500);if(!text)return;input.value='';try{const r=window.dbPush(dbRefPath(`${ROOT}/chat_messages/${id}`));await window.dbSet(r,{from:uname(),text,createdAt:Date.now()});}catch(e){toast('Gửi tin nhắn thất bại: '+(e.message||e),'error');}}
+  const chatProfileLoads=new Set(),chatProfileMissing=new Set();
+  function chatProfileFor(username){
+    const key=String(username||'').trim().toLowerCase();
+    if(!key)return null;
+    if(key===uname().toLowerCase())return (typeof currentUserFullData!=='undefined'&&currentUserFullData)||(typeof currentUser!=='undefined'&&currentUser)||null;
+    try{if(typeof cachedUsers!=='undefined'&&cachedUsers)return cachedUsers[key]||cachedUsers[username]||null;}catch(_){}
+    return null;
+  }
+  function chatUserName(username,profile){return String(profile&&(profile.nickname||profile.displayName||profile.name)||username||'Người dùng');}
+  function ensureChatProfileLoaded(username,roomId){
+    const key=String(username||'').trim().toLowerCase();
+    if(!key||key===uname().toLowerCase()||chatProfileFor(key)||chatProfileLoads.has(key)||chatProfileMissing.has(key))return;
+    chatProfileLoads.add(key);
+    get(`users/${key}`).then(user=>{
+      if(user){try{if(typeof cachedUsers!=='undefined'&&cachedUsers)cachedUsers[key]=user;}catch(_){} }
+      else chatProfileMissing.add(key);
+      if(openChatRoom===roomId)renderChatWindow(roomId);
+    }).catch(()=>chatProfileMissing.add(key)).finally(()=>chatProfileLoads.delete(key));
+  }
+  async function openChatSenderProfile(username){
+    const key=String(username||'').trim().toLowerCase();if(!key)return;
+    let user=chatProfileFor(key);
+    if(!user){try{user=await get(`users/${key}`);if(user&&typeof cachedUsers!=='undefined'&&cachedUsers)cachedUsers[key]=user;}catch(e){}}
+    if(!user){toast('Không tìm thấy hồ sơ @'+key+'.','error');return;}
+    if(typeof loadRolesCache==='function')try{await loadRolesCache();}catch(_){}
+    if(typeof loadMedalsCache==='function')try{await loadMedalsCache();}catch(_){}
+    if(typeof openProfile==='function')openProfile(null,user);else toast('Chức năng hồ sơ hiện chưa sẵn sàng.','warn');
+  }
+  function renderChatWindow(id){
+    const el=$('auroraChatMessages_'+id);if(!el)return;
+    const messages=chatMsgCache[id]||[];const wasBottom=el.scrollHeight-el.scrollTop-el.clientHeight<50;el.innerHTML='';
+    if(!messages.length){const hint=document.createElement('div');hint.className='aurora-uc-muted';hint.textContent='Bắt đầu trò chuyện trong box này.';el.appendChild(hint);return;}
+    messages.forEach(m=>{
+      const username=String(m.from||'?');const profile=chatProfileFor(username);const displayName=String(m.fromName||chatUserName(username,profile));
+      const row=document.createElement('div');row.className='aurora-chat-message-row'+(username.toLowerCase()===uname().toLowerCase()?' mine':'');
+      const avatarButton=document.createElement('button');avatarButton.type='button';avatarButton.className='aurora-chat-avatar-button';avatarButton.title='Xem profile '+displayName;avatarButton.setAttribute('aria-label','Xem hồ sơ '+displayName);
+      const avatarUrl=profile&&(profile.avatar||profile.photoURL||profile.photoUrl||profile.avatarUrl);
+      if(avatarUrl&&/^https?:\/\//i.test(String(avatarUrl))||avatarUrl&&/^data:image\//i.test(String(avatarUrl))){const img=document.createElement('img');img.src=String(avatarUrl);img.alt='';img.loading='lazy';img.referrerPolicy='no-referrer';img.addEventListener('error',()=>{avatarButton.textContent=(displayName.trim().charAt(0)||'?').toUpperCase();},{once:true});avatarButton.appendChild(img);}
+      else avatarButton.textContent=(displayName.trim().charAt(0)||'?').toUpperCase();
+      avatarButton.addEventListener('click',()=>openChatSenderProfile(username));
+      const bubble=document.createElement('div');bubble.className='aurora-chat-message aurora-chat-message-content'+(username.toLowerCase()===uname().toLowerCase()?' mine':'');
+      const nameLine=document.createElement('div');nameLine.className='aurora-chat-name-line';
+      const name=document.createElement('span');name.className='aurora-chat-display-name';name.textContent=displayName;
+      const handle=document.createElement('span');handle.className='aurora-chat-time';handle.textContent='@'+username;
+      const time=document.createElement('span');time.className='aurora-chat-time';time.textContent=new Date(Number(m.createdAt||Date.now())).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      nameLine.append(name,handle,time);bubble.appendChild(nameLine);
+      const imageUrl=String(m.imageUrl||'');
+      if(imageUrl&&/^https?:\/\//i.test(imageUrl)){const image=document.createElement('img');image.className='aurora-chat-message-image';image.src=imageUrl;image.alt=String(m.imageName||'Ảnh được gửi trong box chat');image.loading='lazy';image.referrerPolicy='no-referrer';bubble.appendChild(image);}
+      const messageText=String(m.text||'');if(messageText){const text=document.createElement('div');text.textContent=messageText;bubble.appendChild(text);}
+      if(!messageText&&!imageUrl){const text=document.createElement('div');text.textContent='(Tin nhắn trống)';bubble.appendChild(text);}
+      row.append(avatarButton,bubble);el.appendChild(row);ensureChatProfileLoaded(username,id);
+    });
+    if(wasBottom||messages.length)el.scrollTop=el.scrollHeight;
+  }
+  async function sendChatMessage(id,input){if(!isLogged()||!chatRooms[id]||!input)return;const room=chatRooms[id];const key=childSafe(uname());if(room.creator!==uname()&&(!room.members||room.members[key]!==true)){toast('Bạn không còn là thành viên của box này.','error');return;}const text=String(input.value||'').trim().slice(0,1500);if(!text)return;const sender=chatProfileFor(uname())||{};input.value='';try{const r=window.dbPush(dbRefPath(`${ROOT}/chat_messages/${id}`));await window.dbSet(r,{from:uname(),fromName:chatUserName(uname(),sender),text,kind:'text',createdAt:Date.now()});}catch(e){toast('Gửi tin nhắn thất bại: '+(e.message||e),'error');}}
+  async function sendChatImage(id,file,captionInput){
+    if(!isLogged()||!chatRooms[id]||!file)return;
+    const room=chatRooms[id];if(room.creator!==uname())return toast('Chỉ chủ box được gửi ảnh vào chat.','error');
+    if(!String(file.type||'').startsWith('image/'))return toast('Chỉ hỗ trợ file ảnh.','error');
+    if(file.size<=0||file.size>5*1024*1024)return toast('Ảnh phải có dung lượng từ 1 byte đến 5 MB.','warn');
+    const status=$('auroraChatUploadStatus_'+id);if(status)status.textContent='Đang chuẩn bị tải ảnh…';
+    try{
+      const app=window.firebaseApp;if(!app)throw new Error('Firebase App chưa khởi tạo.');
+      const storageMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js');
+      const bucket=String(app.options&&app.options.storageBucket||'').trim();if(!bucket)throw new Error('Chưa cấu hình Firebase Storage bucket.');
+      let storage;try{storage=storageMod.getStorage(app,bucket.startsWith('gs://')?bucket:'gs://'+bucket);}catch(_){storage=storageMod.getStorage(app);}
+      const safeName=String(file.name||'image').normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'_').slice(-90)||'image';
+      const path=`auroraUltraControl/chat-images/${id}/${Date.now()}_${Math.random().toString(36).slice(2,8)}_${safeName}`;
+      const storageRef=storageMod.ref(storage,path);
+      const task=storageMod.uploadBytesResumable(storageRef,file,{contentType:file.type,cacheControl:'public,max-age=3600',customMetadata:{uploadedBy:uname(),chatBoxId:id,originalName:String(file.name||safeName).slice(0,160)}});
+      const snapshot=await new Promise((resolve,reject)=>{
+        let settled=false;const timer=setTimeout(()=>{if(settled)return;settled=true;try{task.cancel();}catch(_){}reject(new Error('Upload ảnh không có tiến độ trong 90 giây. Hãy kiểm tra mạng và Storage Rules.'));},90000);
+        task.on('state_changed',snap=>{if(status){const pct=snap.totalBytes?Math.floor(snap.bytesTransferred/snap.totalBytes*100):0;status.textContent=`Đang tải ảnh ${pct}%`; }},err=>{if(settled)return;settled=true;clearTimeout(timer);reject(err);},()=>{if(settled)return;settled=true;clearTimeout(timer);resolve(task.snapshot);});
+      });
+      const url=await storageMod.getDownloadURL(snapshot.ref);if(!/^https:\/\//i.test(url))throw new Error('Firebase Storage không trả URL HTTPS.');
+      const key=childSafe(uname());if(room.creator!==uname()||(!room.members||room.members[key]!==true))throw new Error('Bạn không còn quyền gửi ảnh vào box này.');
+      const text=String(captionInput?.value||'').trim().slice(0,1500);const sender=chatProfileFor(uname())||{};
+      const r=window.dbPush(dbRefPath(`${ROOT}/chat_messages/${id}`));await window.dbSet(r,{from:uname(),fromName:chatUserName(uname(),sender),text,imageUrl:url,imageName:String(file.name||'Ảnh').slice(0,160),kind:'image',createdAt:Date.now()});
+      if(captionInput)captionInput.value='';if(status)status.textContent='Đã gửi ảnh.';toast('Đã gửi ảnh vào box chat.','success');
+    }catch(e){if(status)status.textContent='Không gửi được ảnh: '+(e.message||e);toast('Gửi ảnh thất bại: '+(e.message||e),'error');}
+  }
   async function addChatMember(id){const room=chatRooms[id];if(!room||room.creator!==uname())return toast('Chỉ chủ box được thêm thành viên.','error');const raw=prompt('Nhập @ID người cần thêm:');if(raw===null)return;const target=raw.trim().replace(/^@+/,'').toLowerCase();if(!target)return;if(target===uname()||room.members?.[childSafe(target)])return toast('Tài khoản đã có trong box.','warn');const user=await get(`users/${target}`).catch(()=>null);if(!user)return toast('Không tìm thấy tài khoản @'+target+'.','error');try{await update(`${ROOT}/chat_boxes/${id}/members`,{[childSafe(target)]:true});await set(`${ROOT}/chat_members/${childSafe(target)}/${id}`,true);await refreshChatMemberships();toast('Đã thêm @'+target+'.','success');}catch(e){toast('Không thêm được: '+e.message,'error');}}
   async function kickChatMember(id){const room=chatRooms[id];if(!room||room.creator!==uname())return toast('Chỉ chủ box được kick.','error');const raw=prompt('Nhập @ID thành viên muốn kick (không phải kick khỏi web):');if(raw===null)return;const target=raw.trim().replace(/^@+/,'').toLowerCase();if(!target||target===room.creator)return toast('Không thể kick chủ box.','error');if(!room.members?.[childSafe(target)])return toast('ID không nằm trong box.','warn');try{await remove(`${ROOT}/chat_boxes/${id}/members/${childSafe(target)}`);await remove(`${ROOT}/chat_members/${childSafe(target)}/${id}`);if(chatRooms[id])delete chatRooms[id].members[childSafe(target)];await refreshChatMemberships();toast('Đã kick @'+target+' khỏi box chat.','success');}catch(e){toast('Không kick được: '+e.message,'error');}}
   async function deleteChat(id){const room=chatRooms[id];if(!room||room.creator!==uname())return toast('Chỉ chủ box được xóa.','error');if(!confirm('Xóa box chat này với toàn bộ thành viên?'))return;const members=Object.keys(room.members||{});closedChatIds.add(id);if(openChatRoom===id)openChatRoom='';if(openOwnerCommandRoom===id)openOwnerCommandRoom='';if(chatUnsubs[id]){try{chatUnsubs[id]();}catch(_){}delete chatUnsubs[id];}delete chatRooms[id];delete chatMsgCache[id];renderChatFloatLayer();try{for(const key of members){await remove(`${ROOT}/chat_members/${key}/${id}`).catch(()=>{});}await remove(`${ROOT}/chat_messages/${id}`).catch(()=>{});await remove(`${ROOT}/chat_boxes/${id}`);await refreshChatMemberships();toast('Đã xóa box chat khỏi hệ thống và ẩn ngay trên giao diện.','success');}catch(e){toast('Không xóa được hoàn toàn trên Firebase: '+(e.message||e),'error');refreshChatMemberships();}}
@@ -11734,6 +11919,8 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     syncAromPlusUi();startLiveMembershipWatcher();startInterfaceModeWatcher();refreshChatMemberships();startTrollListener();
   }
   Object.assign(window,{
+    auroraChatProfileRefresh:refreshProfileChatControls,
+    auroraChatProfileRender:renderProfileChatControls,
     auroraUCDeleteTrollAudio:deleteTrollAudio,
     auroraUCOpenChat:id=>{if(!chatRooms[id])return;closedChatIds.delete(id);openChatRoom=id;renderChatFloatLayer();},auroraUCDeleteChat:deleteChat,
     auroraUCEditManip:editManipulation,auroraUCResetManip:resetManipulation,auroraUCCloseManip:()=>{const m=$('auroraUCManipModal');if(m)m.style.display='none';},auroraUCSaveManipStudent:saveManipStudent,
