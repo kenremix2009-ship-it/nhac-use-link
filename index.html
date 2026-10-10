@@ -1402,6 +1402,7 @@ body.aurora-interface-future:not(:has(#homeView.active)) .auth-box,body.aurora-i
 .profile-recent-score{font-weight:900;color:#3f694f;font-variant-numeric:tabular-nums}
 @media(max-width:760px){.profile-progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-progress-details{padding:11px}.profile-progress-heading{font-size:13px}.profile-recent-row{grid-template-columns:minmax(0,1fr) auto}}
 </style>
+<!-- Aurora interaction cooldown patch: sustained shake 5s; per interaction-type cooldown 60s. -->
 </head><body>
 
 <div id="customAlertOverlay"><div class="custom-alert-box" id="customAlertBox"><span class="ca-icon" id="caIcon">ℹ️</span><div class="ca-title" id="caTitle">Thông báo</div><div class="ca-msg" id="caMsg"></div><input type="text" class="ca-input" id="caInput" style="display:none"><div class="ca-actions" id="caActions"><button class="ca-btn-cancel" id="caCancelBtn" onclick="closeCustomAlert(false)">Hủy</button><button class="ca-btn-ok" id="caOkBtn" onclick="closeCustomAlert(true)">OK</button></div></div></div>
@@ -7055,10 +7056,7 @@ function bindAiWidgetInteractions(){
     const rect=widget.getBoundingClientRect();
     aiWidgetDragState.startLeft=rect.left;
     aiWidgetDragState.startTop=rect.top;
-    // drag count for random
-    if(Date.now()-aiDragWindowStart>3000){aiDragCountInWindow=0;aiDragWindowStart=Date.now();}
-    aiDragCountInWindow++;
-    if(aiDragCountInWindow===6&&currentEquippedAiModel){showAiFloatBubbleByEvent('drag');}
+    // Drag/shake reactions are handled by the sustained-motion detector (5 seconds minimum).
     try{body.setPointerCapture(e.pointerId);}catch(err){}
     body.style.cursor='grabbing';
   };
@@ -11524,50 +11522,179 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
   async function update(path,value){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return (window.dbUpdate||window.dbSet)(dbRefPath(path),value);}
   async function remove(path){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return window.dbRemove(dbRefPath(path));}
 
-  /* Global website presentation mode (functional behavior remains unchanged). */
+  /* Website interface mode: global mode plus account-specific overrides. */
   let interfaceModeUnsub=null;
+  let interfaceModeUpdatedAtUnsub=null;
+  let personalInterfaceModeUnsub=null;
+  let personalModeWatchUsername='';
   let interfaceModeCurrent='basic';
-  function normalizeInterfaceMode(value){const v=String(value||'basic').toLowerCase();return ['modern','future'].includes(v)?v:'basic';}
+  let globalInterfaceMode='basic';
+  let globalInterfaceModeUpdatedAt=0;
+  let personalInterfaceModeRecord=null;
+
+  function normalizeInterfaceMode(value){
+    const raw=(value&&typeof value==='object')?value.mode:value;
+    const v=String(raw||'basic').toLowerCase().trim();
+    return ['modern','future','chunk-loadbox'].includes(v)?v:'basic';
+  }
+  function modeLabel(mode){
+    return ({basic:'Basic',modern:'Modern',future:'Tương lai','chunk-loadbox':'Chunk Loadbox'})[normalizeInterfaceMode(mode)]||'Basic';
+  }
+  function parseInterfaceModeRecord(value){
+    if(value==null||value==='')return null;
+    if(value&&typeof value==='object'&&!Array.isArray(value)){
+      const mode=normalizeInterfaceMode(value.mode);
+      return {mode,updatedAt:Math.max(0,Number(value.updatedAt)||0),updatedBy:String(value.updatedBy||'')};
+    }
+    return {mode:normalizeInterfaceMode(value),updatedAt:0,updatedBy:''};
+  }
+  function currentInterfaceUsername(){
+    try{return isLogged()?String(uname()||'').trim():'';}catch(e){return '';}
+  }
+  function userModeLocalKey(username){
+    return 'aurora-interface-mode-user:'+String(username||'guest').trim().toLowerCase();
+  }
+  function readLocalUserMode(username){
+    try{
+      const raw=localStorage.getItem(userModeLocalKey(username));
+      if(!raw)return null;
+      try{return parseInterfaceModeRecord(JSON.parse(raw));}catch(e){return parseInterfaceModeRecord(raw);}
+    }catch(e){return null;}
+  }
+  function writeLocalUserMode(username,record){
+    try{if(record)localStorage.setItem(userModeLocalKey(username),JSON.stringify(record));else localStorage.removeItem(userModeLocalKey(username));}catch(e){}
+  }
+  function getEffectiveInterfaceMode(){
+    const username=currentInterfaceUsername();
+    if(username){
+      const rec=personalInterfaceModeRecord||readLocalUserMode(username);
+      /* A global sync has a timestamp. It overrides older individual choices;
+         users can choose a personal mode again afterwards. */
+      if(rec&&rec.updatedAt>globalInterfaceModeUpdatedAt)return rec.mode;
+      return globalInterfaceMode;
+    }
+    try{
+      const guest=parseInterfaceModeRecord(localStorage.getItem(userModeLocalKey('guest')));
+      if(guest&&guest.updatedAt>globalInterfaceModeUpdatedAt)return guest.mode;
+      const legacy=localStorage.getItem('aurora-interface-mode');
+      if(legacy&&!globalInterfaceModeUpdatedAt)return normalizeInterfaceMode(legacy);
+    }catch(e){}
+    return globalInterfaceMode;
+  }
   function applyInterfaceMode(value){
     const mode=normalizeInterfaceMode(value);
     interfaceModeCurrent=mode;
     if(document.body){
       document.body.classList.toggle('aurora-interface-modern',mode==='modern');
       document.body.classList.toggle('aurora-interface-future',mode==='future');
+      document.body.classList.toggle('aurora-interface-chunk-loadbox',mode==='chunk-loadbox');
       document.body.dataset.auroraInterfaceMode=mode;
     }
-    try{localStorage.setItem('aurora-interface-mode',mode);}catch(_){}
     const select=$('auroraUCInterfaceMode');if(select&&select.value!==mode)select.value=mode;
-    const status=$('auroraUCInterfaceStatus');if(status)status.textContent=mode==='modern'?'Đang áp dụng giao diện Modern trên website.':mode==='future'?'Đang áp dụng giao diện Tương lai trên website.':'Đang áp dụng giao diện Basic (mặc định).';
+    const status=$('auroraUCInterfaceStatus');
+    if(status)status.textContent='Đang áp dụng giao diện '+modeLabel(mode)+'.';
     try{window.dispatchEvent(new CustomEvent('aurora:interface-mode-changed',{detail:{mode}}));}catch(_){}
     return mode;
   }
+  function refreshEffectiveInterfaceMode(){return applyInterfaceMode(getEffectiveInterfaceMode());}
+
   async function saveInterfaceMode(){
     if(!requireOperator())return;
-    const select=$('auroraUCInterfaceMode');const mode=normalizeInterfaceMode(select&&select.value);
-    const status=$('auroraUCInterfaceStatus');const old=interfaceModeCurrent;
-    const btn=$('auroraUCSaveInterfaceMode');if(btn)btn.disabled=true;
+    const select=$('auroraUCInterfaceMode');
+    const mode=normalizeInterfaceMode(select&&select.value);
+    const status=$('auroraUCInterfaceStatus');
+    const syncBox=$('auroraUCInterfaceSync');
+    const syncAll=!!(syncBox&&syncBox.checked);
+    const targetInput=$('auroraUCInterfaceTarget');
+    const rawTarget=String(targetInput&&targetInput.value||'').trim();
+    const target=rawTarget.replace(/^@+/,'').trim();
+    const actor=currentInterfaceUsername();
+    const btn=$('auroraUCSaveInterfaceMode');
+    if(btn)btn.disabled=true;
     if(status)status.textContent='Đang lưu cấu hình giao diện…';
     try{
-      await set(`${ROOT}/interface_mode`,mode);
-      applyInterfaceMode(mode);
-      if(status)status.textContent=mode==='modern'?'Đã lưu. Modern đang được áp dụng trên website.':mode==='future'?'Đã lưu. Tương lai đang được áp dụng trên website.':'Đã lưu. Basic đang được áp dụng trên website.';
-      toast('Đã cập nhật giao diện '+(mode==='modern'?'Modern':mode==='future'?'Tương lai':'Basic')+'. Không cần tải lại trang.','success');
+      if(target){
+        if(!/^[A-Za-z0-9_.-]{1,48}$/.test(target))throw new Error('ID không hợp lệ. Hãy nhập @username, chỉ dùng chữ, số, dấu chấm, gạch dưới hoặc gạch ngang.');
+        const targetUser=await get('users/'+target);
+        if(!targetUser)throw new Error('Không tìm thấy tài khoản @'+target+'. Hãy kiểm tra lại ID.');
+        const updatedAt=Math.max(Date.now(),globalInterfaceModeUpdatedAt+1);
+        const record={mode,updatedAt,updatedBy:actor||'operator'};
+        await set('users/'+target+'/interface_mode',record);
+        if(target.toLowerCase()===actor.toLowerCase()){
+          personalInterfaceModeRecord=record;
+          writeLocalUserMode(actor,record);
+          refreshEffectiveInterfaceMode();
+        }
+        if(status)status.textContent='Đã đổi giao diện riêng cho @'+target+'. Những tài khoản khác không bị ảnh hưởng.';
+        toast('Đã đổi giao diện riêng cho @'+target+'.','success');
+      }else if(syncAll){
+        if(!dbReady())throw new Error('Firebase chưa sẵn sàng; không thể đồng bộ giao diện toàn hệ thống.');
+        const updatedAt=Math.max(Date.now(),globalInterfaceModeUpdatedAt+1);
+        await set(`${ROOT}/interface_mode`,mode);
+        await set(`${ROOT}/interface_mode_updatedAt`,updatedAt);
+        globalInterfaceMode=mode;
+        globalInterfaceModeUpdatedAt=updatedAt;
+        refreshEffectiveInterfaceMode();
+        if(status)status.textContent='Đã đồng bộ '+modeLabel(mode)+' cho toàn bộ tài khoản. Tuỳ chọn cá nhân cũ hơn đã được nhường cho cấu hình mới.';
+        toast('Đã đồng bộ giao diện '+modeLabel(mode)+' cho toàn bộ website.','success');
+      }else{
+        if(!actor)throw new Error('Hãy đăng nhập để lưu giao diện riêng cho tài khoản.');
+        const updatedAt=Math.max(Date.now(),globalInterfaceModeUpdatedAt+1);
+        const record={mode,updatedAt,updatedBy:actor};
+        if(dbReady())await set('users/'+actor+'/interface_mode',record);
+        personalInterfaceModeRecord=record;
+        writeLocalUserMode(actor,record);
+        refreshEffectiveInterfaceMode();
+        if(status)status.textContent='Đã lưu '+modeLabel(mode)+' riêng cho tài khoản @'+actor+'. Người dùng khác không bị ảnh hưởng.';
+        toast('Đã đổi giao diện riêng cho tài khoản của bạn.','success');
+      }
     }catch(error){
-      applyInterfaceMode(old);
       if(status)status.textContent='Không lưu được cấu hình giao diện: '+(error&&error.message||error);
       toast('Không lưu được giao diện: '+(error&&error.message||error),'error');
     }finally{if(btn)btn.disabled=false;}
   }
+
+  function syncPersonalInterfaceModeWatcher(){
+    const username=currentInterfaceUsername();
+    if(username===personalModeWatchUsername)return;
+    if(typeof personalInterfaceModeUnsub==='function'){try{personalInterfaceModeUnsub();}catch(e){}}
+    personalInterfaceModeUnsub=null;
+    personalModeWatchUsername=username;
+    personalInterfaceModeRecord=username?readLocalUserMode(username):null;
+    if(username&&dbReady()&&typeof window.onValue==='function'){
+      try{
+        personalInterfaceModeUnsub=window.onValue(dbRefPath('users/'+username+'/interface_mode'),snap=>{
+          const value=snap&&snap.exists&&snap.exists()?snap.val():null;
+          personalInterfaceModeRecord=parseInterfaceModeRecord(value);
+          writeLocalUserMode(username,personalInterfaceModeRecord);
+          refreshEffectiveInterfaceMode();
+        },error=>console.warn('Aurora personal interface mode listener:',error));
+      }catch(error){personalInterfaceModeUnsub=null;console.warn('Cannot subscribe to personal interface mode:',error);}
+    }
+    refreshEffectiveInterfaceMode();
+  }
   function startInterfaceModeWatcher(){
-    if(interfaceModeUnsub||!dbReady()||typeof window.onValue!=='function')return !!interfaceModeUnsub;
-    try{
-      interfaceModeUnsub=window.onValue(dbRefPath(`${ROOT}/interface_mode`),snap=>{
-        const value=snap&&snap.exists?snap.exists()?snap.val():'basic':'basic';
-        applyInterfaceMode(value);
-      },error=>{console.warn('Aurora interface-mode listener:',error);});
-      return true;
-    }catch(error){interfaceModeUnsub=null;console.warn('Cannot subscribe to interface mode:',error);return false;}
+    if(dbReady()&&typeof window.onValue==='function'){
+      if(!interfaceModeUnsub){
+        try{
+          interfaceModeUnsub=window.onValue(dbRefPath(`${ROOT}/interface_mode`),snap=>{
+            const value=snap&&snap.exists&&snap.exists()?snap.val():null;
+            globalInterfaceMode=value==null?normalizeInterfaceMode((()=>{try{return localStorage.getItem('aurora-interface-mode')||'basic';}catch(e){return 'basic';}})()):normalizeInterfaceMode(value);
+            refreshEffectiveInterfaceMode();
+          },error=>{console.warn('Aurora interface-mode listener:',error);});
+        }catch(error){interfaceModeUnsub=null;console.warn('Cannot subscribe to interface mode:',error);}
+      }
+      if(!interfaceModeUpdatedAtUnsub){
+        try{
+          interfaceModeUpdatedAtUnsub=window.onValue(dbRefPath(`${ROOT}/interface_mode_updatedAt`),snap=>{
+            globalInterfaceModeUpdatedAt=snap&&snap.exists&&snap.exists()?Math.max(0,Number(snap.val())||0):0;
+            refreshEffectiveInterfaceMode();
+          },error=>console.warn('Aurora interface mode timestamp listener:',error));
+        }catch(error){interfaceModeUpdatedAtUnsub=null;console.warn('Cannot subscribe to interface mode timestamp:',error);}
+      }
+    }
+    syncPersonalInterfaceModeWatcher();
+    return !!interfaceModeUnsub;
   }
 
   function childSafe(value){let s=String(value||'');try{s=btoa(unescape(encodeURIComponent(s)));}catch(e){s=btoa(String(s).replace(/[^\x00-\x7F]/g,'_'));}return 'k_'+s.replace(/[^a-zA-Z0-9_-]/g,'_').replace(/=+$/g,'');}
@@ -11769,7 +11896,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
           <section class="aurora-uc-card aurora-uc-troll-card"><h3>🔊 Troll · Quản lý âm thanh vui</h3><p class="aurora-uc-muted">Tải file âm thanh để dùng bằng lệnh <code>/trollvoice số @id</code>. Voice có sẵn #1–#5; file tải lên bắt đầu từ #6 theo thứ tự thời gian. Trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó sẽ hiện nút nghe.</p><label for="auroraUCTrollAudioFiles">Chọn file âm thanh (MP3, WAV, OGG, M4A, AAC, WEBM; tối đa 20 MB/file)</label><input id="auroraUCTrollAudioFiles" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.webm" multiple><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCTrollUploadBtn">⬆️ Tải âm thanh</button><button type="button" class="btn btn-secondary" id="auroraUCTrollRefreshBtn">↻ Làm mới danh sách</button></div><div id="auroraUCTrollUploadStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Chưa tải file nào trong phiên này.</div><div id="auroraUCTrollAudioList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Đang tải danh sách âm thanh…</p></div></section>
           <section class="aurora-uc-card"><h3>🛠️ Thao Túng · Quản trị dữ liệu bài thi</h3><label for="auroraUCManipSearch">Tìm theo mã hoặc tên bài</label><input id="auroraUCManipSearch" placeholder="Nhập mã bài thi hoặc tên"><div class="aurora-uc-row"><button type="button" class="btn btn-secondary" id="auroraUCLoadManipBtn">↻ Tải danh sách</button><button type="button" class="btn btn-secondary" id="auroraUCShowMoreBtn">⌄ Xem thêm</button></div><div id="auroraUCManipList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Bấm Tải danh sách để xem bài thi.</p></div><p class="aurora-uc-muted">Lần đầu chỉnh sửa sẽ lưu bản gốc trước khi thay đổi. Reset sẽ khôi phục bản sao lưu đó, không phải bản đã chỉnh sửa gần nhất.</p></section>
           <section class="aurora-uc-card"><h3>🐳 Bảo trì toàn hệ thống</h3><p class="aurora-uc-muted">Bấm bắt đầu để đếm ngược 10 giây. Trong thời gian đếm ngược, có thể hủy; người kích hoạt, CEO và AROM+ không bị khóa ở chế độ bảo trì.</p><div class="aurora-uc-row"><button type="button" class="btn btn-danger" id="auroraUCStartMaintenanceBtn">⏳ Bắt đầu bảo trì</button><button type="button" class="btn btn-secondary" id="auroraUCCancelMaintenanceBtn">✋ Ngưng / tạm hoãn</button></div><div id="auroraUCMaintenanceStatus" class="aurora-uc-muted" style="margin-top:9px">Chưa có lịch bảo trì.</div></section>
-          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện chung cho website. Basic là giao diện hiện tại; Modern dùng bố cục trung tính; Tương lai mở sổ tay tri thức tương tác ngay trong website, có lật trang, kính lúp kéo thả và thu phóng; hình minh họa được đóng gói nội bộ, không phụ thuộc máy chủ bên ngoài.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Sổ tay tri thức tương tác</option></select><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
+          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện website. Chunk Loadbox dùng tranh sơn thủy bằng nét mực rồng, sương núi, hiệu ứng mực chảy và tương tác con trỏ; toàn bộ phần dựng hình chạy nội bộ, không cần ThreeUI.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Sổ tay tri thức tương tác</option><option value="chunk-loadbox">Chunk Loadbox — Tranh sơn thủy mực rồng</option></select><div class="aurora-uc-interface-options" style="display:grid;gap:8px;margin-top:10px"><label for="auroraUCInterfaceSync" style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="auroraUCInterfaceSync" checked style="width:17px;height:17px"> Đồng bộ giao diện cho tất cả mọi người</label><p class="aurora-uc-muted" style="margin:0">Bật đồng bộ và để trống ID: thay đổi áp dụng toàn website. Tắt đồng bộ: chỉ đổi giao diện tài khoản đang đăng nhập. Nhập @ID bên dưới để đổi riêng cho một tài khoản; khi có @ID, thao tác này chỉ ảnh hưởng tài khoản đó.</p><label for="auroraUCInterfaceTarget">Đổi riêng cho @ID (không bắt buộc)</label><input id="auroraUCInterfaceTarget" type="text" autocomplete="off" spellcheck="false" placeholder="Ví dụ: @ten_tai_khoan" style="width:100%"></div><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
         </div>
         <div class="aurora-uc-card" style="margin-top:12px;border-color:#f59e0b;background:#fffbeb"><b style="color:#92400e">⚠️ Lưu ý bảo mật triển khai</b><p class="aurora-uc-muted" style="margin-top:5px;color:#78350f">Aurora hiện dùng đăng nhập tùy chỉnh phía trình duyệt. Các lệnh quản trị, box chat, ban/kick, đáp án và chỉnh điểm trong module này chỉ được kiểm tra ở client; để ngăn người dùng kỹ thuật tự gọi Firebase bỏ qua giao diện, cần xác thực server/Firebase Authentication, Cloud Functions và Security Rules phù hợp trước khi dùng trên dữ liệu thật.</p></div>
       </div>`;
@@ -12194,7 +12321,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
   function init(){installStyle();applyInterfaceMode((()=>{try{return localStorage.getItem('aurora-interface-mode')||'basic';}catch(_){return 'basic';}})());startInterfaceModeWatcher();installNavHorizontalScroll();installHeroCollapse();mountUltraPanel();installPlanHooks();installBanAndJoinHooks();watchMaintenance();observePlanCards();
     if($('auroraUCCommandInput'))$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});
-    let ticks=0;const timer=setInterval(()=>{ticks++;if(!interfaceModeUnsub&&ticks%3===0)startInterfaceModeWatcher();const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;syncAromPlusUi();refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
+    let ticks=0;const timer=setInterval(()=>{ticks++;if(!interfaceModeUnsub&&ticks%3===0)startInterfaceModeWatcher();const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;syncPersonalInterfaceModeWatcher();syncAromPlusUi();refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
     syncAromPlusUi();startLiveMembershipWatcher();startInterfaceModeWatcher();refreshChatMemberships();startTrollListener();
   }
   Object.assign(window,{
@@ -12464,6 +12591,18 @@ const AURORA_ARU_STATES={
 function auroraGetPersonality(){return (currentEquippedAiModel&&currentEquippedAiModel.modelData&&currentEquippedAiModel.modelData.personality)||'tsundere';}
 function auroraGetStateMessage(state){const entry=AURORA_ARU_STATES[state]||AURORA_ARU_STATES.idle;const persona=auroraGetPersonality();return entry.messages[persona]||entry.messages.tsundere||entry.label;}
 let auroraAruIdleTimer=null,auroraAruStateTimer=null,auroraAruLastInteraction=Date.now(),auroraAruLastLongIdle=0,auroraAruLastAutoInteraction=0,auroraAruPointerStart=null,auroraAruMoveSamples=[];
+// All interaction types have their own 60-second cooldown. Different types can still react independently.
+const AURORA_ARU_INTERACTION_COOLDOWN_MS=60000;
+const auroraAruInteractionCooldowns=new Map();
+function auroraCanTriggerInteraction(key,now=Date.now()){
+ const until=auroraAruInteractionCooldowns.get(key)||0;
+ if(now<until)return false;
+ auroraAruInteractionCooldowns.set(key,now+AURORA_ARU_INTERACTION_COOLDOWN_MS);
+ if(auroraAruInteractionCooldowns.size>128){for(const [k,expiry] of auroraAruInteractionCooldowns){if(expiry<=now)auroraAruInteractionCooldowns.delete(k);}}
+ return true;
+}
+let auroraAruShakeStartedAt=0,auroraAruShakeLastMoveAt=0,auroraAruShakePeakSpeed=0,auroraAruShakeTriggered=false;
+function auroraResetShakeGesture(){auroraAruShakeStartedAt=0;auroraAruShakeLastMoveAt=0;auroraAruShakePeakSpeed=0;auroraAruShakeTriggered=false;auroraAruMoveSamples=[];}
 const AURORA_ARU_WIDGET_STATES=['idle','blink','pet','nuzzle','thinking','sleep','happy','sad','angry','lonely','fear','big','small','music','chat','dizzy','tap','cry'];
 function auroraSetAruState(state,withMessage=true){
  if(!currentEquippedAiModel)return;
@@ -12471,12 +12610,14 @@ function auroraSetAruState(state,withMessage=true){
  const widget=document.getElementById('aiModelWidget');const body=document.getElementById('aiModelBody');if(!widget||widget.classList.contains('ai-hidden'))return;
  const aliases={neutral:'idle',nuzzle:'pet',score:'happy',large:'big',zoom:'big',shrink:'small',lonely:'lonely',fear:'fear',music:'music',drag:'drag',thinking:'thinking',sad:'sad',happy:'happy',exam:'thinking',chat:'chat',blink:'blink',sleep:'sleep'};
  state=aliases[state]||state;if(state==='drag')state='dizzy';if(!AURORA_ARU_STATES[state])state='idle';
+ if(!auroraCanTriggerInteraction('state:'+state))return false;
  if(state==='music'){widget.dataset.musicHeadphones=Math.random()<.58?'1':'0';}else{delete widget.dataset.musicHeadphones;}
  widget.classList.remove(...AURORA_ARU_WIDGET_STATES.map(k=>'aru-state-'+k));widget.classList.add('aru-state-'+state);widget.classList.add('aru-system-model');
  const old=widget.querySelector('.aru-mood-caption');if(old)old.remove();
  const label=AURORA_ARU_STATES[state]?.label||'Đang tương tác';const caption=document.createElement('div');caption.className='aru-mood-caption';caption.textContent=label;widget.querySelector('.ai-model-container')?.appendChild(caption);
  if(withMessage){const msg=auroraGetStateMessage(state);if(msg&&typeof showAiFloatBubble==='function')showAiFloatBubble(msg,5.5);}
  if(auroraAruStateTimer)clearTimeout(auroraAruStateTimer);auroraAruStateTimer=setTimeout(()=>{widget.classList.remove('aru-state-'+state);if(caption.isConnected)caption.remove();delete widget.dataset.musicHeadphones;auroraRenderAccessoryLayer();if(!document.body.classList.contains('optimized-mode'))widget.classList.add('aru-state-idle');},state==='music'?9000:5500);
+ return true;
 }
 function auroraClearAruState(){const widget=document.getElementById('aiModelWidget');if(!widget)return;widget.classList.remove(...AURORA_ARU_WIDGET_STATES.map(k=>'aru-state-'+k));widget.classList.remove('aru-static-art');const cap=widget.querySelector('.aru-mood-caption');if(cap)cap.remove();if(auroraAruStateTimer)clearTimeout(auroraAruStateTimer);}
 function auroraStartIdleLoop(){if(auroraAruIdleTimer)clearInterval(auroraAruIdleTimer);auroraAruIdleTimer=setInterval(()=>{
@@ -12538,19 +12679,50 @@ showAiWidget=function(forceSummon=false){auroraOriginalShowAiWidget.apply(this,a
 const auroraOriginalHideAiWidget=hideAiWidget;
 hideAiWidget=function(){auroraOriginalHideAiWidget.apply(this,arguments);auroraStopIdleLoop();};
 const auroraOriginalTryTriggerAiReaction=tryTriggerAiReaction;
-tryTriggerAiReaction=async function(type){auroraAruLastAutoInteraction=Date.now();auroraAruLastInteraction=Date.now();const stateMap={thinking:'thinking',happy:'happy',sad:'sad',music:'music',prank:'chat',neutral:'idle'};auroraSetAruState(stateMap[type]||'idle',true);return auroraOriginalTryTriggerAiReaction.apply(this,arguments);};
+tryTriggerAiReaction=async function(type){
+ const stateMap={thinking:'thinking',happy:'happy',sad:'sad',music:'music',prank:'chat',neutral:'idle'};
+ const accepted=auroraSetAruState(stateMap[type]||'idle',true);
+ if(accepted===false)return;
+ auroraAruLastAutoInteraction=Date.now();auroraAruLastInteraction=Date.now();
+ return auroraOriginalTryTriggerAiReaction.apply(this,arguments);
+};
 const auroraOriginalShowAiFloatBubbleByEvent=showAiFloatBubbleByEvent;
-showAiFloatBubbleByEvent=function(eventKey){auroraAruLastAutoInteraction=Date.now();auroraAruLastInteraction=Date.now();const m={big:'big',drag:'drag',profile_other:'chat',lonely:'lonely',idle:'idle'};if(m[eventKey])auroraSetAruState(m[eventKey],true);if(typeof auroraOriginalShowAiFloatBubbleByEvent==='function')return auroraOriginalShowAiFloatBubbleByEvent.apply(this,arguments);};
+showAiFloatBubbleByEvent=function(eventKey){
+ const m={big:'big',drag:'dizzy',profile_other:'chat',lonely:'lonely',idle:'idle'};
+ if(Object.prototype.hasOwnProperty.call(m,eventKey)){
+  const accepted=auroraSetAruState(m[eventKey],true);
+  if(accepted===false)return;
+ }else if(!auroraCanTriggerInteraction('event:'+String(eventKey||'unknown')))return;
+ auroraAruLastAutoInteraction=Date.now();auroraAruLastInteraction=Date.now();
+ if(typeof auroraOriginalShowAiFloatBubbleByEvent==='function')return auroraOriginalShowAiFloatBubbleByEvent.apply(this,arguments);
+};
 const auroraOriginalToggleAiChat=toggleAiChat;
 toggleAiChat=function(){auroraOriginalToggleAiChat.apply(this,arguments);const chat=document.getElementById('aiChatBubble');if(chat?.classList.contains('show')){auroraAruLastInteraction=Date.now();auroraAruLastAutoInteraction=Date.now();auroraSetAruState('chat',false);}};
 const auroraOriginalApplyPerfMode=applyPerfMode;
 applyPerfMode=function(mode){auroraOriginalApplyPerfMode.apply(this,arguments);if(document.body.classList.contains('optimized-mode')){auroraStopIdleLoop();auroraClearAruState();auroraUpdateWidgetMode();}else if(currentEquippedAiModel){updateAiWidgetContent();auroraStartIdleLoop();}};
 
 if(!window.__auroraAruModelPointerBound){window.__auroraAruModelPointerBound=true;document.addEventListener('pointerdown',e=>{if(e.target.closest('#aiModelWidget')){auroraAruLastInteraction=Date.now();auroraAruLastAutoInteraction=Date.now();}});
- document.addEventListener('pointerdown',e=>{const body=e.target.closest('#aiModelBody');if(!body||e.target.closest('button,input,textarea,select,.ai-chat-bubble'))return;auroraAruPointerStart={x:e.clientX,y:e.clientY,t:Date.now(),target:e.target};});
- document.addEventListener('pointerup',e=>{if(!auroraAruPointerStart)return;const a=auroraAruPointerStart;auroraAruPointerStart=null;const moved=Math.hypot(e.clientX-a.x,e.clientY-a.y);const elapsed=Date.now()-a.t;if(moved<9&&elapsed<850&&currentEquippedAiModel&&!(e.detail>1)&&!document.body.classList.contains('optimized-mode')){auroraAruLastInteraction=Date.now();auroraSetAruState('pet',true);}});
- document.addEventListener('pointermove',e=>{if(!currentEquippedAiModel||!aiWidgetDragState?.dragging||document.body.classList.contains('optimized-mode'))return;const now=Date.now();auroraAruMoveSamples.push({x:e.clientX,y:e.clientY,t:now});auroraAruMoveSamples=auroraAruMoveSamples.filter(p=>now-p.t<700);if(auroraAruMoveSamples.length>=4){const f=auroraAruMoveSamples[0],last=auroraAruMoveSamples[auroraAruMoveSamples.length-1];const speed=Math.hypot(last.x-f.x,last.y-f.y)/Math.max(.02,(last.t-f.t)/1000);if(speed>850){auroraSetAruState('dizzy',true);auroraAruMoveSamples=[];}else if(speed>300&&auroraAruMoveSamples.length>8){auroraSetAruState('angry',true);auroraAruMoveSamples=[];}}});
- document.addEventListener('visibilitychange',()=>{if(document.hidden){auroraStopIdleLoop();}else if(currentEquippedAiModel&&!document.body.classList.contains('optimized-mode'))auroraStartIdleLoop();});
+ document.addEventListener('pointerdown',e=>{const body=e.target.closest('#aiModelBody');if(!body||e.target.closest('button,input,textarea,select,.ai-chat-bubble'))return;auroraResetShakeGesture();auroraAruPointerStart={x:e.clientX,y:e.clientY,t:Date.now(),target:e.target};});
+ document.addEventListener('pointerup',e=>{auroraResetShakeGesture();if(!auroraAruPointerStart)return;const a=auroraAruPointerStart;auroraAruPointerStart=null;const moved=Math.hypot(e.clientX-a.x,e.clientY-a.y);const elapsed=Date.now()-a.t;if(moved<9&&elapsed<850&&currentEquippedAiModel&&!(e.detail>1)&&!document.body.classList.contains('optimized-mode')){auroraAruLastInteraction=Date.now();auroraSetAruState('pet',true);}});
+ document.addEventListener('pointercancel',auroraResetShakeGesture);
+ document.addEventListener('pointermove',e=>{
+  if(!currentEquippedAiModel||!aiWidgetDragState?.dragging||document.body.classList.contains('optimized-mode')){if(!aiWidgetDragState?.dragging)auroraResetShakeGesture();return;}
+  const now=Date.now();auroraAruMoveSamples.push({x:e.clientX,y:e.clientY,t:now});auroraAruMoveSamples=auroraAruMoveSamples.filter(p=>now-p.t<800);
+  if(auroraAruMoveSamples.length<4)return;
+  const first=auroraAruMoveSamples[0],last=auroraAruMoveSamples[auroraAruMoveSamples.length-1];
+  const speed=Math.hypot(last.x-first.x,last.y-first.y)/Math.max(.02,(last.t-first.t)/1000);
+  // Qualifying motion must be sustained while the pointer is held and the widget is moving for 5 full seconds.
+  if(speed>320){
+   if(!auroraAruShakeStartedAt||now-auroraAruShakeLastMoveAt>350){auroraAruShakeStartedAt=now;auroraAruShakePeakSpeed=speed;auroraAruShakeTriggered=false;}
+   auroraAruShakeLastMoveAt=now;auroraAruShakePeakSpeed=Math.max(auroraAruShakePeakSpeed,speed);
+   if(!auroraAruShakeTriggered&&now-auroraAruShakeStartedAt>=5000){
+    auroraAruShakeTriggered=true;
+    auroraSetAruState(auroraAruShakePeakSpeed>850?'dizzy':'angry',true);
+    auroraAruMoveSamples=[];
+   }
+  }else if(!auroraAruShakeLastMoveAt||now-auroraAruShakeLastMoveAt>350){auroraResetShakeGesture();}
+ });
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){auroraResetShakeGesture();auroraStopIdleLoop();}else if(currentEquippedAiModel&&!document.body.classList.contains('optimized-mode'))auroraStartIdleLoop();});
 }
 
 const auroraOriginalSendAiChatMessage=sendAiChatMessage;
@@ -12727,10 +12899,6 @@ try{loadAiModelsForGrant();loadAiModelsList();}catch(e){}
 <script id="aurora-disable-ai-model-voice-guard">
 (function(){try{if(typeof aiChatSpeakReplies!=='undefined')aiChatSpeakReplies=false;if(window.speechSynthesis)window.speechSynthesis.cancel();const b=document.getElementById('aiChatSpeakToggle');if(b)b.remove();}catch(e){}})();
 </script>
-\n
-
-
-
 
 <!-- Aurora Future Sketchbook: adapted from the supplied interaction source, rewritten for the learning platform and fully self-contained. All illustrations are locally embedded SVG; no ThreeUI/CDN/API dependencies. -->
 <style id="aurora-meng-to-sketchbook-integration-style">
@@ -12916,7 +13084,7 @@ body.aurora-interface-future.exam-active .container{padding-top:0!important}
  function updateNav(){
    navMarkup();const nav=byId('auroraFutureGlobalNav');if(!nav)return;
    const home=byId('homeView');const homeActive=!!(home&&home.classList.contains('active'));
-   nav.style.display=(document.body.classList.contains('aurora-interface-future')&&!homeActive&&!document.body.classList.contains('exam-active'))?'grid':'none';
+   const isFuture=document.body.classList.contains('aurora-interface-future');const isDragon=document.body.classList.contains('aurora-interface-chunk-loadbox');const isExam=document.body.classList.contains('exam-active');nav.style.display=((isFuture&&!homeActive&&!isExam)||(isDragon&&!isExam))?'grid':'none';nav.classList.toggle('aurora-nav-chunk-loadbox',isDragon);
    const active=(document.querySelector('.view-section.active')||{}).id||'homeView';
    nav.querySelectorAll('[data-future-view]').forEach(b=>{b.classList.toggle('active',b.dataset.futureView===active);b.setAttribute('aria-current',b.dataset.futureView===active?'page':'false')});
    const legacyLang=byId('auroraLanguage'),select=byId('auroraFutureGlobalLanguage');if(legacyLang&&select&&select.value!==legacyLang.value)select.value=legacyLang.value;
@@ -12934,6 +13102,346 @@ body.aurora-interface-future.exam-active .container{padding-top:0!important}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',updateNav,{once:true});else updateNav();
  window.addEventListener('load',()=>setTimeout(updateNav,40),{once:true});window.addEventListener('focus',updateNav);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateNav()});
  window.AuroraFutureSharedNavigation={refresh:updateNav,navigate:navigate,syncAuth:sendAuthState};
+})();
+</script>
+
+
+<!-- Aurora Chunk Loadbox: self-contained ink-dragon landscape interface. -->
+<style id="aurora-chunk-loadbox-style">
+:root{
+  --aurora-ink-paper:#e9e3d5;
+  --aurora-ink-deep:#242c29;
+  --aurora-ink-soft:#52605a;
+  --aurora-ink-red:#a84b3e;
+  --aurora-ink-jade:#768f82;
+  --aurora-ink-rule:rgba(42,53,47,.22);
+}
+body.aurora-interface-chunk-loadbox{background:#e9e3d5!important;color:var(--aurora-ink-deep);background-image:radial-gradient(ellipse at 12% 9%,rgba(117,146,132,.15),transparent 40%),linear-gradient(145deg,#ede8dc,#e4dfd1 65%,#dce4dc)!important;background-attachment:fixed!important}
+body.aurora-interface-chunk-loadbox .navbar{display:none!important}
+body.aurora-interface-chunk-loadbox:not(:has(#homeView.active)){background-image:radial-gradient(ellipse at 12% 0%,rgba(117,146,132,.16),transparent 36%),linear-gradient(145deg,#efeadf,#e4dfd1 68%,#dce4dc)!important;background-attachment:fixed!important}
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView){background-color:transparent}
+body.aurora-interface-chunk-loadbox #studentLoginView::before{background:radial-gradient(circle at 13% 18%,rgba(106,137,123,.23),transparent 27%),radial-gradient(circle at 82% 72%,rgba(169,79,62,.12),transparent 30%),linear-gradient(135deg,#e5e1d6 0%,#eee8dc 52%,#d9e1d8 100%)!important}
+body.aurora-interface-chunk-loadbox .student-card,
+body.aurora-interface-chunk-loadbox .teacher-card,
+body.aurora-interface-chunk-loadbox .teacher-panel,
+body.aurora-interface-chunk-loadbox .role-card,
+body.aurora-interface-chunk-loadbox .profile-card,
+body.aurora-interface-chunk-loadbox .lesson-card{
+  background:rgba(248,245,236,.94)!important;color:#2b332d!important;border:1px solid rgba(70,83,73,.2)!important;box-shadow:0 16px 48px rgba(42,48,40,.10)!important
+}
+body.aurora-interface-chunk-loadbox .student-card h1,
+body.aurora-interface-chunk-loadbox .student-card h2,
+body.aurora-interface-chunk-loadbox .teacher-card h1,
+body.aurora-interface-chunk-loadbox .teacher-card h2{color:#334d41}
+body.aurora-interface-chunk-loadbox input:not([type=checkbox]):not([type=radio]),
+body.aurora-interface-chunk-loadbox select,
+body.aurora-interface-chunk-loadbox textarea{
+  background:rgba(255,252,245,.94)!important;color:#292e29!important;border-color:rgba(76,92,79,.28)!important
+}
+body.aurora-interface-chunk-loadbox .btn-primary,
+body.aurora-interface-chunk-loadbox .btn-success{background:#354d41!important;border-color:#354d41!important;color:#f7f0e3!important}
+body.aurora-interface-chunk-loadbox .btn-info{background:#738e82!important;border-color:#738e82!important;color:#fff!important}
+body.aurora-interface-chunk-loadbox .btn-warning{background:#bc8b52!important;border-color:#bc8b52!important;color:#fff!important}
+body.aurora-interface-chunk-loadbox .btn-danger{background:#9f4a3e!important;border-color:#9f4a3e!important;color:#fff!important}
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) a:not(.btn){color:#526d5e}
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) hr{border-color:rgba(45,61,49,.18)}
+#auroraFutureGlobalNav.aurora-nav-chunk-loadbox{color:#29312b}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav:before{background:linear-gradient(180deg,rgba(238,233,221,.97),rgba(238,233,221,.90) 67%,rgba(238,233,221,0));backdrop-filter:blur(13px) saturate(.9)}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav .aurora-future-global-brand{color:#29312b}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav .aurora-future-global-brand span{color:#a84b3e}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalLanguage{background:rgba(248,245,236,.9);border-color:rgba(44,57,47,.25);color:#34473b}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav .future-nav-btn{color:#526057}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav .future-nav-btn:hover,
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav .future-nav-btn.active{background:#2f4137;color:#f5eddf}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav .future-auth-btn{border-color:rgba(48,63,52,.26);background:rgba(250,247,239,.88);color:#304036}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav .future-auth-register{background:#31483a;color:#f9f3e7}
+body.aurora-interface-chunk-loadbox #auroraFutureGlobalNav .future-user-btn{background:#31483a;color:#f9f3e7}
+#auroraDragonInkRoot{display:none;position:fixed;inset:0;z-index:2000;overflow:hidden;width:100vw;height:100svh;min-height:520px;background:#e9e3d5;color:#242c29;isolation:isolate}
+body.aurora-interface-chunk-loadbox:not(.exam-active) #homeView.active>#auroraDragonInkRoot{display:block}
+body.aurora-interface-chunk-loadbox:not(.exam-active) #homeView.active>:not(#auroraDragonInkRoot){display:none!important}
+body.aurora-interface-chunk-loadbox #homeView.active>.aurora-mengto-sketchbook-root{display:none!important}
+#auroraDragonInkRoot .aurora-dragon-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none}
+#auroraDragonInkRoot:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(239,234,221,.95) 0%,rgba(239,234,221,.81) 26%,rgba(239,234,221,.26) 54%,rgba(239,234,221,.05) 100%),linear-gradient(0deg,rgba(231,225,211,.55),transparent 28%,transparent 74%,rgba(237,232,220,.44))}
+#auroraDragonInkRoot .aurora-dragon-copy{position:absolute;z-index:2;left:clamp(25px,8vw,128px);top:clamp(135px,23vh,230px);width:min(500px,82vw);pointer-events:auto}
+#auroraDragonInkRoot .aurora-dragon-kicker{display:flex;align-items:center;gap:10px;margin:0 0 22px;font:600 10px/1.4 "Segoe UI",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#5a6d5e}
+#auroraDragonInkRoot .aurora-dragon-kicker:before{content:"";display:inline-block;width:34px;height:1px;background:#a84b3e}
+#auroraDragonInkRoot h1{margin:0 0 22px;color:#27312a;font:400 clamp(44px,5.2vw,76px)/.99 "Iowan Old Style",Georgia,"Times New Roman",serif;letter-spacing:-.045em;text-wrap:balance}
+#auroraDragonInkRoot h1 em{font-weight:400;font-style:italic;color:#a04d3f}
+#auroraDragonInkRoot .aurora-dragon-lede{max-width:420px;margin:0;color:#5c655c;font:400 clamp(15px,1.25vw,18px)/1.8 "Segoe UI",sans-serif;letter-spacing:.005em}
+#auroraDragonInkRoot .aurora-dragon-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:27px}
+#auroraDragonInkRoot .aurora-dragon-action{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:45px;border-radius:999px;padding:0 20px;border:1px solid rgba(49,66,54,.24);background:rgba(248,245,236,.78);color:#2f3d33;font:600 12px/1 "Segoe UI",sans-serif;letter-spacing:.015em;cursor:pointer;box-shadow:0 7px 21px rgba(42,48,39,.06);transition:transform .25s ease,background .25s ease,box-shadow .25s ease}
+#auroraDragonInkRoot .aurora-dragon-action:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(42,48,39,.12)}
+#auroraDragonInkRoot .aurora-dragon-action.primary{background:#2f4437;border-color:#2f4437;color:#f7f0e3}
+#auroraDragonInkRoot .aurora-dragon-action .arrow{font-size:16px;line-height:1}
+#auroraDragonInkRoot .aurora-dragon-seal{position:absolute;z-index:2;right:clamp(27px,8vw,124px);top:clamp(132px,19vh,200px);width:57px;height:57px;display:grid;place-items:center;border:1.5px solid rgba(158,65,51,.68);border-radius:4px;color:#a1473b;font:600 20px/1.1 Georgia,serif;writing-mode:vertical-rl;letter-spacing:.12em;transform:rotate(4deg);opacity:.8}
+#auroraDragonInkRoot .aurora-dragon-footnote{position:absolute;z-index:2;left:clamp(25px,8vw,128px);right:clamp(25px,8vw,128px);bottom:clamp(22px,4vh,42px);display:flex;align-items:center;justify-content:space-between;gap:18px;color:rgba(51,64,54,.68);font:600 9px/1.5 "Segoe UI",sans-serif;letter-spacing:.18em;text-transform:uppercase}
+#auroraDragonInkRoot .aurora-dragon-footnote .line{height:1px;flex:1;max-width:180px;background:linear-gradient(90deg,rgba(56,76,61,.45),transparent)}
+#auroraDragonInkRoot .aurora-dragon-inkhint{position:absolute;z-index:2;right:clamp(25px,8vw,128px);bottom:clamp(68px,10vh,105px);color:rgba(47,62,50,.60);font:500 10px/1.6 "Segoe UI",sans-serif;letter-spacing:.12em;text-transform:uppercase}
+#auroraDragonInkRoot .aurora-dragon-inkhint:before{content:"";display:inline-block;width:6px;height:6px;margin:0 8px 1px 0;border-radius:50%;background:#a84b3e;box-shadow:0 0 0 4px rgba(168,75,62,.1)}
+@media(max-width:760px){
+ #auroraDragonInkRoot{min-height:580px}
+ #auroraDragonInkRoot:before{background:linear-gradient(180deg,rgba(239,234,221,.94),rgba(239,234,221,.76) 28%,rgba(239,234,221,.12) 68%,rgba(231,225,211,.54))}
+ #auroraDragonInkRoot .aurora-dragon-copy{left:24px;right:24px;top:clamp(135px,19vh,190px);width:auto}
+ #auroraDragonInkRoot h1{font-size:clamp(42px,10.8vw,64px);max-width:540px}
+ #auroraDragonInkRoot .aurora-dragon-lede{max-width:340px;font-size:14px;line-height:1.7}
+ #auroraDragonInkRoot .aurora-dragon-seal{top:120px;right:22px;width:45px;height:45px;font-size:16px}
+ #auroraDragonInkRoot .aurora-dragon-footnote{left:22px;right:22px;bottom:19px;font-size:8px;letter-spacing:.11em}
+ #auroraDragonInkRoot .aurora-dragon-inkhint{right:22px;bottom:56px;font-size:8px}
+ #auroraDragonInkRoot .aurora-dragon-action{min-height:42px;padding:0 15px;font-size:11px}
+}
+@media(max-width:380px){
+ #auroraDragonInkRoot .aurora-dragon-copy{top:128px}
+ #auroraDragonInkRoot h1{font-size:39px}
+ #auroraDragonInkRoot .aurora-dragon-actions{gap:7px}
+ #auroraDragonInkRoot .aurora-dragon-action{padding:0 12px}
+ #auroraDragonInkRoot .aurora-dragon-seal{display:none}
+}
+
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .card,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .panel,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .section-card,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .dashboard-card,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .lesson-card,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .profile-card,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .student-card,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .teacher-card,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .teacher-panel,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .role-card{
+  color:#2a332c!important;background:rgba(248,245,236,.94)!important;border-color:rgba(65,82,68,.2)!important
+}
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) .table,
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) table{color:#2b332d}
+body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#e4e6d9;color:#304237}
+
+@media(prefers-reduced-motion:reduce){
+ #auroraDragonInkRoot .aurora-dragon-action{transition:none}
+}
+</style>
+
+<script id="aurora-chunk-loadbox-runtime">
+(function(){
+ 'use strict';
+ if(window.__auroraChunkLoadboxV1)return;
+ window.__auroraChunkLoadboxV1=true;
+ const $=id=>document.getElementById(id);
+ let root=null,canvas=null,ctx=null,raf=0,running=false,startedAt=0,resizeObserver=null;
+ const reduced=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+ const pointer={x:800,y:450,active:false};
+ const transform={scale:1,ox:0,oy:0,w:0,h:0,dpr:1};
+ const segments=[
+  [[250,682],[420,666],[500,483],[635,430]],
+  [[635,430],[744,397],[790,565],[945,556]],
+  [[945,556],[1090,548],[1076,421],[974,384]],
+  [[974,384],[884,351],[855,426],[925,449]],
+  [[925,449],[1017,476],[1105,410],[1163,329]]
+ ];
+ const samples=[];
+ function cubic(p0,p1,p2,p3,t){
+  const mt=1-t;
+  return {x:mt*mt*mt*p0[0]+3*mt*mt*t*p1[0]+3*mt*t*t*p2[0]+t*t*t*p3[0],
+          y:mt*mt*mt*p0[1]+3*mt*mt*t*p1[1]+3*mt*t*t*p2[1]+t*t*t*p3[1]};
+ }
+ function cubicTangent(p0,p1,p2,p3,t){
+  const mt=1-t;
+  const x=3*mt*mt*(p1[0]-p0[0])+6*mt*t*(p2[0]-p1[0])+3*t*t*(p3[0]-p2[0]);
+  const y=3*mt*mt*(p1[1]-p0[1])+6*mt*t*(p2[1]-p1[1])+3*t*t*(p3[1]-p2[1]);
+  const n=Math.hypot(x,y)||1;return {x:x/n,y:y/n};
+ }
+ segments.forEach((s,si)=>{for(let i=0;i<=52;i++){if(si&&i===0)continue;const t=i/52,p=cubic(s[0],s[1],s[2],s[3],t),v=cubicTangent(s[0],s[1],s[2],s[3],t);samples.push({x:p.x,y:p.y,tx:v.x,ty:v.y,nx:-v.y,ny:v.x,seg:si,t});}});
+ let rngState=0x4a3354;
+ function rand(){rngState=(rngState*1664525+1013904223)>>>0;return rngState/4294967296;}
+ const inkDust=Array.from({length:112},(_,i)=>({x:rand()*1600,y:rand()*900,r:.35+rand()*1.45,a:.12+rand()*.35,speed:5+rand()*19,phase:rand()*6.28,drift:(rand()-.5)*13,seed:i}));
+ function ensureRoot(){
+  if(root&&root.isConnected)return;
+  const home=$('homeView');if(!home)return;
+  root=$('auroraDragonInkRoot');
+  if(!root){
+   root=document.createElement('section');root.id='auroraDragonInkRoot';root.setAttribute('aria-label','Aurora — Chunk Loadbox, tranh sơn thủy mực rồng');
+   root.innerHTML='<canvas class="aurora-dragon-canvas" id="auroraDragonInkCanvas" aria-hidden="true"></canvas>'+
+    '<div class="aurora-dragon-copy"><p class="aurora-dragon-kicker">AURORA · CHUNK LOADBOX · SƠN THỦY MỰC RỒNG</p><h1>Nét mực mở ra<br><em>chân trời tri thức.</em></h1><p class="aurora-dragon-lede">Một không gian học tập tĩnh tại, nơi núi sông, mực tàu và chuyển động của rồng dẫn lối hành trình khám phá kiến thức.</p><div class="aurora-dragon-actions"><button type="button" class="aurora-dragon-action primary" data-aurora-dragon-view="studentLoginView">Bắt đầu học <span class="arrow" aria-hidden="true">↗</span></button><button type="button" class="aurora-dragon-action" data-aurora-dragon-view="guideView">Khám phá hướng dẫn <span class="arrow" aria-hidden="true">→</span></button></div></div>'+
+    '<div class="aurora-dragon-seal" aria-label="Sơn thủy">山<br>龍</div><div class="aurora-dragon-inkhint">Mực chuyển động theo hơi thở của cảnh</div><div class="aurora-dragon-footnote"><span>TRI THỨC · TĨNH TÂM · TIẾN BỘ</span><span class="line"></span><span>山水 · AURORA</span></div>';
+   home.appendChild(root);
+   root.querySelectorAll('[data-aurora-dragon-view]').forEach(btn=>btn.addEventListener('click',()=>{
+    const view=btn.dataset.auroraDragonView;
+    if(window.AuroraFutureSharedNavigation&&typeof window.AuroraFutureSharedNavigation.navigate==='function'){window.AuroraFutureSharedNavigation.navigate(view);return;}
+    if(typeof window.switchView==='function')window.switchView(view);
+   }));
+  }
+  canvas=$('auroraDragonInkCanvas');
+  if(canvas&&!ctx){ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});}
+  if(root&&!root.__auroraPointerBound){
+   root.__auroraPointerBound=true;
+   root.addEventListener('pointermove',e=>{
+    const rect=root.getBoundingClientRect();const sc=transform.scale||1;
+    pointer.x=(e.clientX-transform.ox)/sc;pointer.y=(e.clientY-transform.oy)/sc;pointer.active=true;
+    pointer.x=Math.max(-100,Math.min(1700,pointer.x));pointer.y=Math.max(-100,Math.min(1000,pointer.y));
+   },{passive:true});
+   root.addEventListener('pointerleave',()=>{pointer.active=false},{passive:true});
+  }
+  if(window.ResizeObserver&&!resizeObserver&&canvas){resizeObserver=new ResizeObserver(resize);resizeObserver.observe(root);}
+  resize();
+ }
+ function resize(){
+  if(!root||!canvas||!ctx)return;
+  const w=Math.max(1,root.clientWidth||window.innerWidth),h=Math.max(1,root.clientHeight||window.innerHeight);
+  const dpr=Math.min(1.6,window.devicePixelRatio||1),sc=(w/h<.78)?Math.min(w/1120,h/820):Math.max(w/1600,h/900);
+  transform.w=w;transform.h=h;transform.dpr=dpr;transform.scale=sc;
+  transform.ox=(w-1600*sc)/2;transform.oy=(h-900*sc)/2;
+  canvas.width=Math.max(1,Math.round(w*dpr));canvas.height=Math.max(1,Math.round(h*dpr));
+  canvas.style.width=w+'px';canvas.style.height=h+'px';
+ }
+ function drawMountain(c,base,amp,phase,fill,offset){
+  c.beginPath();c.moveTo(-80,base);
+  for(let x=-80;x<=1700;x+=14){const y=base-Math.sin((x+phase)/185)*amp-Math.sin((x+phase)/67)*amp*.23-Math.cos((x+phase)/420)*amp*.35;c.lineTo(x+offset,y);}
+  c.lineTo(1700,980);c.lineTo(-80,980);c.closePath();c.fillStyle=fill;c.fill();
+ }
+ function drawCloud(c,x,y,w,alpha){
+  c.save();c.globalAlpha=alpha;c.strokeStyle='#73877a';c.lineWidth=2.2;c.lineCap='round';
+  c.beginPath();c.moveTo(x-w/2,y);c.bezierCurveTo(x-w*.36,y-10,x-w*.25,y-18,x-w*.14,y-9);c.bezierCurveTo(x-w*.04,y-27,x+w*.11,y-20,x+w*.17,y-8);c.bezierCurveTo(x+w*.28,y-17,x+w*.39,y-6,x+w*.46,y-3);c.stroke();
+  c.lineWidth=.8;c.beginPath();c.moveTo(x-w*.3,y+7);c.quadraticCurveTo(x,y+15,x+w*.34,y+5);c.stroke();c.restore();
+ }
+ function dragonPath(c){
+  c.beginPath();c.moveTo(segments[0][0][0],segments[0][0][1]);
+  segments.forEach(s=>c.bezierCurveTo(s[1][0],s[1][1],s[2][0],s[2][1],s[3][0],s[3][1]));
+ }
+ function drawTail(c,t){
+  const p=segments[0][0];
+  c.save();c.translate(p[0],p[1]);c.rotate(-.16);
+  c.strokeStyle='rgba(31,43,37,.8)';c.fillStyle='rgba(38,52,44,.78)';c.lineWidth=2;
+  c.beginPath();c.moveTo(0,0);c.quadraticCurveTo(-26,-30,-61,-45);c.quadraticCurveTo(-54,-13,-3,4);c.fill();c.stroke();
+  c.beginPath();c.moveTo(-3,4);c.quadraticCurveTo(-33,12,-48,37);c.quadraticCurveTo(-14,34,3,5);c.fill();c.stroke();
+  c.beginPath();c.moveTo(-4,5);c.quadraticCurveTo(-31,28,-22,56);c.quadraticCurveTo(-4,30,3,5);c.fill();c.stroke();
+  c.strokeStyle='rgba(228,221,203,.36)';c.lineWidth=1;c.beginPath();c.moveTo(-6,3);c.quadraticCurveTo(-27,-16,-49,-29);c.moveTo(-4,8);c.quadraticCurveTo(-27,22,-35,31);c.stroke();
+  c.restore();
+ }
+ function drawBody(c,t){
+  c.save();c.lineCap='round';c.lineJoin='round';dragonPath(c);
+  c.save();c.strokeStyle='rgba(26,37,31,.17)';c.lineWidth=67;c.shadowColor='rgba(30,40,32,.22)';c.shadowBlur=30;c.stroke();c.restore();
+  const grad=c.createLinearGradient(270,660,1180,320);grad.addColorStop(0,'rgba(86,104,86,.82)');grad.addColorStop(.22,'rgba(32,47,39,.97)');grad.addColorStop(.55,'rgba(42,57,47,.98)');grad.addColorStop(.82,'rgba(25,38,33,.98)');grad.addColorStop(1,'rgba(48,59,48,.95)');
+  dragonPath(c);c.strokeStyle='rgba(20,31,26,.80)';c.lineWidth=43;c.stroke();
+  dragonPath(c);c.strokeStyle=grad;c.lineWidth=35;c.stroke();
+  dragonPath(c);c.strokeStyle='rgba(226,224,206,.19)';c.lineWidth=1.5;c.setLineDash([22,37]);c.lineDashOffset=-t*18;c.stroke();c.setLineDash([]);
+  /* Repeated brush-scale marks follow the spine's local tangent and normal. */
+  samples.forEach((p,i)=>{
+   if(i%4!==0)return;
+   const wave=Math.sin(i*1.61)*1.8;
+   const x=p.x+p.nx*wave,y=p.y+p.ny*wave,tx=p.tx,ty=p.ty,nx=p.nx,ny=p.ny;
+   c.strokeStyle=i%3===0?'rgba(224,224,206,.33)':'rgba(12,24,19,.39)';c.lineWidth=i%3===0?1.3:1.8;
+   c.beginPath();c.moveTo(x-tx*5-nx*8,y-ty*5-ny*8);c.quadraticCurveTo(x+nx*2,y+ny*2,x+tx*5+nx*9,y+ty*5+ny*9);c.stroke();
+   if(i%8===0){c.fillStyle='rgba(23,35,28,.74)';c.beginPath();c.moveTo(x-nx*14,y-ny*14);c.quadraticCurveTo(x+tx*3-nx*25,y+ty*3-ny*25,x+tx*9-nx*14,y+ty*9-ny*14);c.quadraticCurveTo(x+tx*3-nx*8,y+ty*3-ny*8,x-nx*14,y-ny*14);c.fill();}
+  });
+  /* Gentle ink current, visibly following the entire dragon instead of flashing. */
+  dragonPath(c);c.strokeStyle='rgba(215,221,201,.60)';c.lineWidth=2.2;c.setLineDash([54,780]);c.lineDashOffset=-(t*24)%834;c.stroke();c.setLineDash([]);
+  dragonPath(c);c.strokeStyle='rgba(164,185,163,.36)';c.lineWidth=1.1;c.setLineDash([13,31]);c.lineDashOffset=(t*10)%44;c.stroke();c.setLineDash([]);
+  /* Several slow ink drops separate from the body, then blend back into mist. */
+  [21,43,68,89,111,135].forEach((idx,j)=>{
+   const p=samples[idx],fall=reduced?2:((t*(5+j%3)+j*7)%24);
+   const x=p.x+p.nx*12+fall*.38,y=p.y+p.ny*12+fall;
+   c.globalAlpha=.34+Math.sin(t*.5+j)*.07;c.fillStyle='#263a2e';c.beginPath();c.ellipse(x,y,1.3+(j%2)*.5,3.3+fall*.05,.3,0,Math.PI*2);c.fill();
+   c.globalAlpha=.25;c.beginPath();c.moveTo(x,y+3);c.quadraticCurveTo(x+2,y+8,x-1,y+11);c.strokeStyle='#263a2e';c.lineWidth=1;c.stroke();
+  });
+  c.restore();
+ }
+ function drawDragonHead(c,t){
+  c.save();c.translate(1165+Math.sin(t*.35)*1.3,329+Math.sin(t*.4)*1.4);c.rotate(-.47);
+  /* swept mane behind the skull */
+  c.lineCap='round';c.strokeStyle='rgba(34,48,38,.85)';c.lineWidth=4;
+  for(let i=0;i<7;i++){c.beginPath();c.moveTo(-13,-9+i*3);c.quadraticCurveTo(-40,-19+i*6,-47-i*1.4, -34+i*10);c.stroke();}
+  /* antler-like horns in ink */
+  c.lineWidth=5;c.beginPath();c.moveTo(-3,-13);c.quadraticCurveTo(-20,-27,-18,-48);c.quadraticCurveTo(-1,-39,0,-30);c.moveTo(10,-14);c.quadraticCurveTo(24,-32,40,-35);c.quadraticCurveTo(30,-18,21,-12);c.stroke();
+  c.lineWidth=1.3;c.strokeStyle='rgba(222,222,204,.52)';c.beginPath();c.moveTo(-3,-18);c.quadraticCurveTo(-14,-30,-15,-42);c.moveTo(11,-18);c.quadraticCurveTo(22,-28,33,-31);c.stroke();
+  /* forehead, snout and jaw are brush-built shapes rather than emoji glyphs */
+  c.fillStyle='#26392e';c.beginPath();c.moveTo(-20,-12);c.quadraticCurveTo(-9,-27,10,-22);c.quadraticCurveTo(24,-21,34,-8);c.quadraticCurveTo(52,-5,56,7);c.quadraticCurveTo(41,13,28,10);c.quadraticCurveTo(16,22,-1,15);c.quadraticCurveTo(-18,11,-20,-12);c.closePath();c.fill();
+  c.strokeStyle='rgba(236,228,210,.5)';c.lineWidth=1.1;c.beginPath();c.moveTo(-11,-12);c.quadraticCurveTo(7,-18,20,-10);c.quadraticCurveTo(38,-2,50,4);c.stroke();
+  /* brow, eye and nostrils */
+  c.fillStyle='#a8493d';c.beginPath();c.ellipse(24,-7,3.8,2.7,.1,0,Math.PI*2);c.fill();
+  c.fillStyle='#e7dfce';c.beginPath();c.ellipse(25,-7,1.15,1.5,0,0,Math.PI*2);c.fill();
+  c.fillStyle='#141f1a';c.beginPath();c.arc(46,2,1.8,0,Math.PI*2);c.fill();
+  c.strokeStyle='#293b30';c.lineWidth=1.6;c.beginPath();c.moveTo(37,10);c.quadraticCurveTo(57,25,74,16);c.moveTo(32,11);c.quadraticCurveTo(46,35,65,34);c.moveTo(22,14);c.quadraticCurveTo(20,34,38,44);c.stroke();
+  c.strokeStyle='rgba(34,51,39,.78)';c.lineWidth=2.2;c.beginPath();c.moveTo(-12,8);c.quadraticCurveTo(-30,25,-32,42);c.moveTo(-7,12);c.quadraticCurveTo(-14,33,-3,46);c.stroke();
+  c.restore();
+ }
+ function drawMoth(c,t){
+  const x=500+Math.sin(t*.34)*90,y=245+Math.sin(t*.72)*22;
+  c.save();c.translate(x,y);c.rotate(Math.sin(t*.3)*.2);c.globalAlpha=.54;
+  c.fillStyle='#394b3e';c.strokeStyle='#394b3e';c.lineWidth=1.4;
+  const flap=reduced?.22:(.2+Math.abs(Math.sin(t*3.4))*.6);
+  c.beginPath();c.moveTo(0,0);c.quadraticCurveTo(-22,-24*flap,-30,-4);c.quadraticCurveTo(-24,8,-1,3);c.fill();
+  c.beginPath();c.moveTo(1,0);c.quadraticCurveTo(22,-22*flap,30,-3);c.quadraticCurveTo(23,9,1,3);c.fill();
+  c.beginPath();c.moveTo(0,0);c.lineTo(0,11);c.moveTo(0,1);c.quadraticCurveTo(-4,-7,-8,-9);c.moveTo(0,1);c.quadraticCurveTo(4,-7,8,-9);c.stroke();
+  c.restore();
+ }
+ function draw(t){
+  if(!ctx||!canvas||!root)return;
+  const w=transform.w||root.clientWidth||window.innerWidth,h=transform.h||root.clientHeight||window.innerHeight,sc=transform.scale,ox=transform.ox,oy=transform.oy,dpr=transform.dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  ctx.setTransform(dpr*sc,0,0,dpr*sc,dpr*(ox+Math.sin(t*.15)*3),dpr*(oy+Math.cos(t*.13)*2));
+  const bg=ctx.createLinearGradient(0,0,0,900);bg.addColorStop(0,'#efeadf');bg.addColorStop(.48,'#e5e2d5');bg.addColorStop(1,'#d6dfd4');ctx.fillStyle=bg;ctx.fillRect(-100,-100,1800,1100);
+  /* Far paper-washed ridges. */
+  drawMountain(ctx,440,82,0,'rgba(113,134,119,.12)',Math.sin(t*.08)*5);
+  drawMountain(ctx,520,91,210,'rgba(97,119,107,.15)',Math.cos(t*.06)*7);
+  drawMountain(ctx,598,122,480,'rgba(67,91,77,.15)',Math.sin(t*.07)*9);
+  drawMountain(ctx,694,72,770,'rgba(48,70,55,.18)',Math.cos(t*.05)*8);
+  /* moon / vermilion seal-sun and ink-clouds */
+  ctx.save();ctx.globalAlpha=.48;ctx.fillStyle='#b35c4a';ctx.beginPath();ctx.arc(1288,180,48,0,Math.PI*2);ctx.fill();ctx.globalAlpha=.24;ctx.strokeStyle='#f7f0e3';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(1288,180,61,0,Math.PI*2);ctx.stroke();ctx.restore();
+  drawCloud(ctx,940,208,112,.32);drawCloud(ctx,1340,287,78,.25);drawCloud(ctx,450,362,128,.26);
+  /* the ink dragon is the main illustration; its current slowly carries light across the spine */
+  drawTail(ctx,t);drawBody(ctx,t);drawDragonHead(ctx,t);
+  /* ink flecks drift with the mist and gently part around the pointer */
+  inkDust.forEach(p=>{
+   let x=(p.x+p.speed*t*0.36+p.drift*Math.sin(t*.22+p.phase)+1600)%1600;
+   let y=p.y+Math.sin(t*.28+p.phase)*10;
+   if(pointer.active){const dx=x-pointer.x,dy=y-pointer.y,d=Math.hypot(dx,dy);if(d<105&&d>1){const k=(105-d)/105;x+=dx/d*k*22;y+=dy/d*k*22;}}
+   const a=p.a*(.67+.33*Math.sin(t*.7+p.phase));
+   ctx.globalAlpha=a;ctx.fillStyle=p.seed%6===0?'#a84b3e':'#2c4536';ctx.beginPath();ctx.ellipse(x,y,p.r*(p.seed%5===0?1.7:1),p.r*1.9,Math.sin(t+p.phase),0,Math.PI*2);ctx.fill();
+  });
+  ctx.globalAlpha=1;
+  drawMoth(ctx,t);
+  if(pointer.active&&!reduced){
+   ctx.save();ctx.globalAlpha=.15+.06*Math.sin(t*2);ctx.strokeStyle='#7a9180';ctx.lineWidth=1;ctx.beginPath();ctx.arc(pointer.x,pointer.y,12+Math.sin(t*2)*3,0,Math.PI*2);ctx.arc(pointer.x,pointer.y,24+Math.cos(t*1.7)*4,0,Math.PI*2);ctx.stroke();ctx.restore();
+  }
+  /* One calm scan-light passes across the painting on entry, then disappears. */
+  if(!reduced&&t<4.2){
+   const px=-250+(t/4.2)*2100,alpha=Math.sin(Math.PI*Math.min(1,t/4.2))*.16;
+   const scan=ctx.createLinearGradient(px-90,0,px+90,0);scan.addColorStop(0,'rgba(244,245,225,0)');scan.addColorStop(.5,'rgba(248,249,230,'+alpha+')');scan.addColorStop(1,'rgba(244,245,225,0)');
+   ctx.fillStyle=scan;ctx.fillRect(px-90,0,180,900);
+  }
+  /* Soft paper grain (fixed seed positions, only a faint atmospheric finish). */
+  ctx.globalAlpha=.09;ctx.fillStyle='#5b6254';
+  for(let i=0;i<76;i++){const x=(i*197+43)%1600,y=(i*131+19)%900;ctx.fillRect(x,y,1.1,.7);}
+  ctx.globalAlpha=1;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+ }
+ function isActive(){return !!(document.body.classList.contains('aurora-interface-chunk-loadbox')&&!document.body.classList.contains('exam-active')&&$('homeView')&&$('homeView').classList.contains('active')&&!document.hidden);}
+ function frame(now){
+  raf=0;if(!running)return;
+  const t=reduced?0:Math.max(0,(now-startedAt)/1000);
+  draw(t);
+  if(!reduced&&isActive())raf=requestAnimationFrame(frame);
+  else running=false;
+ }
+ function start(){
+  ensureRoot();
+  if(!ctx)return;
+  if(!isActive()){stop();draw(0);return;}
+  if(running)return;
+  running=true;startedAt=performance.now();resize();raf=requestAnimationFrame(frame);
+ }
+ function stop(){
+  running=false;if(raf){cancelAnimationFrame(raf);raf=0;}
+ }
+ function refreshLifecycle(){
+  ensureRoot();
+  if(isActive())start();else{stop();if(ctx&&root)draw(0);}
+  try{window.AuroraFutureSharedNavigation&&window.AuroraFutureSharedNavigation.refresh();}catch(e){}
+ }
+ window.addEventListener('resize',()=>{resize();if(isActive()&&reduced)draw(0)},{passive:true});
+ document.addEventListener('visibilitychange',refreshLifecycle);
+ const lifecycleObserver=new MutationObserver(refreshLifecycle);
+ lifecycleObserver.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
+ window.addEventListener('aurora:interface-mode-changed',refreshLifecycle);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refreshLifecycle,{once:true});else refreshLifecycle();
+ window.AuroraChunkLoadbox={refresh:refreshLifecycle,renderStatic:()=>draw(0),destroy:()=>{stop();if(resizeObserver)resizeObserver.disconnect();lifecycleObserver.disconnect();}};
 })();
 </script>
 
