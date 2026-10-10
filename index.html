@@ -967,6 +967,7 @@ input,select,textarea{font-size:13px;padding:9px}
 #aiWebcamBtn{position:absolute;top:-6px;right:-6px;background:linear-gradient(135deg,#dc3545,#bb2d3b);color:#fff;border:2px solid #fff;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(220,53,69,.5);display:flex;align-items:center;justify-content:center;z-index:9;transition:all .25s;padding:0}
 #aiWebcamBtn:hover{transform:scale(1.12)}
 #aiWebcamBtn.active{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 0 15px #198754}
+#aiModelWidget #aiWebcamVideo{display:none!important}
 #aiWebcamVideo{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #dc3545;z-index:7;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3);pointer-events:none}
 #aiWebcamVideo.active{display:block}
 .ai-float-bubble{position:absolute;bottom:calc(100% + 8px);right:0;max-width:220px;background:#fff;color:#333;padding:10px 14px;border-radius:16px;font-size:12px;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:20;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;border:2px solid #1877f2;word-wrap:break-word}
@@ -1043,7 +1044,7 @@ input,select,textarea{font-size:13px;padding:9px}
 .screen-read-indicator.active{display:flex}
 .screen-read-indicator::before{content:'👁️';animation:eyeBlink 2s ease-in-out infinite}
 @keyframes eyeBlink{0%,90%,100%{opacity:1}95%{opacity:.3}}
-#aiScreenReadBtn{position:absolute;top:6px;left:6px;background:linear-gradient(135deg,#0d6efd,#0b5ed7);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(13,110,253,.4);z-index:9;display:flex;align-items:center;justify-content:center;transition:all .25s}
+#aiScreenReadBtn{position:absolute;top:auto;bottom:-4px;right:0;left:auto;background:linear-gradient(135deg,#0d6efd,#0b5ed7);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(13,110,253,.4);z-index:9;display:flex;align-items:center;justify-content:center;transition:all .25s}
 #aiScreenReadBtn:hover{transform:scale(1.1)}
 #aiScreenReadBtn.active{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 0 15px #198754}
 #deepAnalysisDropZone{background:linear-gradient(135deg,#f0ebff,#fffbe6);border:3px dashed #6f42c1;padding:20px;border-radius:14px;text-align:center;margin-top:12px;cursor:pointer;transition:all .25s}
@@ -3204,8 +3205,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
     </div>
     <div class="ai-model-badge" id="aiModelBadge">Auro</div>
     <button id="aiDoorBtn" onclick="hideAiModelWithAnimation()" title="Ẩn model">🚪</button>
-    <button id="aiWebcamBtn" onclick="toggleAiWebcam()" title="Bật webcam VTuber">📷</button>
-    <button id="aiScreenReadBtn" onclick="toggleAiScreenRead()" title="Cho AI đọc màn hình">👁️</button>
+    <button id="aiScreenReadBtn" onclick="toggleAiScreenRead()" title="Chia sẻ nội dung màn hình cho AI">👁️</button>
     <div class="ai-float-bubble" id="aiFloatBubble"></div>
     <div class="ai-chat-bubble" id="aiChatBubble">
       <div class="ai-chat-header">
@@ -6919,9 +6919,14 @@ function bindAiWidgetInteractions(){
     return false;
   }
   body.onpointerdown=(e)=>{
-    // A drag on the actual 3D canvas rotates the model; it must not also drag the whole widget.
-    if(e.target&&e.target.closest&&e.target.closest('#aiWidgetVrmCanvas canvas, .aurora-vrm-rotate-badge'))return;
-    if(!isVisibleAiModelHit(e))return;
+    // Allow dragging the widget from the visible model, including the 3D canvas.
+    // Interactive controls and chat remain excluded so their normal actions still work.
+    if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select,.ai-chat-bubble,.ai-float-bubble,.aurora-vrm-rotate-badge'))return;
+    const hit=isVisibleAiModelHit(e);
+    const content=document.getElementById('aiModelContent');
+    const contentRect=content&&content.getBoundingClientRect();
+    const insideContent=!!(contentRect&&e.clientX>=contentRect.left&&e.clientX<=contentRect.right&&e.clientY>=contentRect.top&&e.clientY<=contentRect.bottom);
+    if(!hit&&!insideContent)return;
     if(widget.classList.contains('ai-hidden'))return;
     aiWidgetDragState.dragging=true;
     aiWidgetDragState.startX=e.clientX;
@@ -6933,8 +6938,10 @@ function bindAiWidgetInteractions(){
     if(Date.now()-aiDragWindowStart>3000){aiDragCountInWindow=0;aiDragWindowStart=Date.now();}
     aiDragCountInWindow++;
     if(aiDragCountInWindow===6&&currentEquippedAiModel){showAiFloatBubbleByEvent('drag');}
-    try{body.setPointerCapture(e.pointerId);}catch(err){}
+    try{widget.setPointerCapture(e.pointerId);}catch(err){}
     body.style.cursor='grabbing';
+    widget.style.cursor='grabbing';
+    if(e.pointerType==='touch'&&e.cancelable)e.preventDefault();
   };
   body.onpointermove=(e)=>{
     if(!aiWidgetDragState.dragging)return;
@@ -6947,8 +6954,9 @@ function bindAiWidgetInteractions(){
   };
   const endDrag=(e)=>{
     aiWidgetDragState.dragging=false;
-    try{body.releasePointerCapture(e.pointerId);}catch(err){}
+    try{widget.releasePointerCapture(e.pointerId);}catch(err){}
     body.style.cursor='grab';
+    widget.style.cursor='';
   };
   body.onpointerup=endDrag;body.onpointercancel=endDrag;
   widget.onwheel=(e)=>{
@@ -7075,6 +7083,8 @@ function toggleAiChatSpeech(){
   else {setAiChatStatus('Đã bật đọc thành tiếng cho câu trả lời tiếp theo.',false);const lastAi=[...aiChatHistory].reverse().find(m=>m&&m.role==='ai'&&m.text);if(lastAi)speakAiChatText(lastAi.text);}
 }
 function speakAiChatText(text){
+  // Screen-reading is context sharing for the AI, never a command to speak aloud.
+  if(aiScreenReadActive)return;
   if(!aiChatSpeakReplies||!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window))return;
   const plain=String(text||'').replace(/```[\s\S]*?```/g,'Đoạn mã.').replace(/`([^`]+)`/g,'$1').replace(/https?:\/\/\S+/g,'đường liên kết').replace(/[*_>#~]/g,'').replace(/\n{3,}/g,'\n\n').trim();
   if(!plain)return;
@@ -7182,11 +7192,10 @@ function toggleAiScreenRead(){
   if(aiScreenReadActive){
     if(btn)btn.classList.add('active');
     if(ind)ind.classList.add('active');
-    showCenterSquareToast('👁️','AI đã bật đọc màn hình',(currentEquippedAiModel&&currentEquippedAiModel.modelData.name||'AI')+' sẽ đọc chữ đang hiển thị; ảnh/PDF có thể được OCR cục bộ để hỗ trợ trả lời.','success',3200);
+    showCenterSquareToast('👁️','Đã bật chia sẻ nội dung màn hình',(currentEquippedAiModel&&currentEquippedAiModel.modelData.name||'AI')+' sẽ nhận nội dung chữ đang hiển thị để hỗ trợ trả lời. Không phát âm thanh.','success',3200);
     addAiChatMessage('ai','👁️ Mình đã bật đọc màn hình. Bạn cứ hỏi bình thường về nội dung trang, câu hỏi, tài liệu hoặc hình/PDF đang mở nhé. Mình sẽ dùng phần chữ đọc được để trả lời và báo lại nếu có phần không đọc rõ.');
     const chatBubble=document.getElementById('aiChatBubble');if(chatBubble){chatBubble.classList.add('show');aiChatOpen=true;}
     setAiChatStatus('Đọc màn hình đang bật. Nội dung chữ và kết quả OCR sẽ được gửi kèm câu hỏi tới nhà cung cấp AI đã cấu hình.',false);
-    if(aiChatSpeakReplies)speakAiChatText('Đã bật đọc màn hình. Bạn có thể hỏi mình về nội dung đang mở trên trang.');
     // Nếu đang trong phòng thi → tự động đọc & trả lời đáp án
     if(isExamActive&&currentExamData){
       setTimeout(()=>autoAnalyzeExamForAi(),500);
