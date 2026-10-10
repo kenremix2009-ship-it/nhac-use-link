@@ -9991,9 +9991,22 @@ initEcCreatePanel();
   }
   async function giftPackage() {
     if (!loggedIn()) { requireUser('tặng gói nâng cấp'); return; }
-    if (!userHasSupremeAccess) { toast('Chỉ quản trị viên có quyền Tối Cao mới được tặng gói.', 'error'); return; }
+    const activeUser = (typeof currentUserFullData !== 'undefined' && currentUserFullData) || (typeof currentUser !== 'undefined' && currentUser) || {};
+    const aromPlusBypass = String(activeUser.membershipTier || 'basic').toLowerCase() === 'aromplus';
     const pass = (byId('auroraGiftPassword')?.value || '').trim();
-    if (typeof VUA_PASSWORD !== 'undefined' && pass !== VUA_PASSWORD) { toast('Sai mật khẩu VUA.', 'error'); return; }
+    // AROM+ bypasses the password prompt. Every other tier may use this admin action
+    // by supplying the configured VUA password; a membership label alone is not enough.
+    if (!aromPlusBypass) {
+      if (typeof VUA_PASSWORD === 'undefined' || !String(VUA_PASSWORD || '')) {
+        toast('Chưa cấu hình mật khẩu VUA; chưa thể xác minh quyền tặng gói.', 'error');
+        return;
+      }
+      if (pass !== VUA_PASSWORD) {
+        toast(pass ? 'Sai mật khẩu VUA.' : 'Nhập mật khẩu VUA hoặc sử dụng tài khoản AROM+.', 'error');
+        byId('auroraGiftPassword')?.focus();
+        return;
+      }
+    }
     const username = (byId('auroraGiftUsername')?.value || '').trim().replace(/^@/, '');
     const tier = (byId('auroraGiftTier')?.value || 'basic');
     if (!username) { toast('Nhập @ID người nhận.', 'error'); return; }
@@ -11156,6 +11169,52 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   async function set(path,value){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return window.dbSet(dbRefPath(path),value);}
   async function update(path,value){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return (window.dbUpdate||window.dbSet)(dbRefPath(path),value);}
   async function remove(path){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return window.dbRemove(dbRefPath(path));}
+
+  /* Global website presentation mode (functional behavior remains unchanged). */
+  let interfaceModeUnsub=null;
+  let interfaceModeCurrent='basic';
+  function normalizeInterfaceMode(value){return String(value||'basic').toLowerCase()==='modern'?'modern':'basic';}
+  function applyInterfaceMode(value){
+    const mode=normalizeInterfaceMode(value);
+    interfaceModeCurrent=mode;
+    if(document.body){
+      document.body.classList.toggle('aurora-interface-modern',mode==='modern');
+      document.body.dataset.auroraInterfaceMode=mode;
+    }
+    try{localStorage.setItem('aurora-interface-mode',mode);}catch(_){}
+    const select=$('auroraUCInterfaceMode');if(select&&select.value!==mode)select.value=mode;
+    const status=$('auroraUCInterfaceStatus');if(status)status.textContent=mode==='modern'?'Đang áp dụng giao diện Modern trên website.':'Đang áp dụng giao diện Basic (mặc định).';
+    try{window.dispatchEvent(new CustomEvent('aurora:interface-mode-changed',{detail:{mode}}));}catch(_){}
+    return mode;
+  }
+  async function saveInterfaceMode(){
+    if(!requireOperator())return;
+    const select=$('auroraUCInterfaceMode');const mode=normalizeInterfaceMode(select&&select.value);
+    const status=$('auroraUCInterfaceStatus');const old=interfaceModeCurrent;
+    const btn=$('auroraUCSaveInterfaceMode');if(btn)btn.disabled=true;
+    if(status)status.textContent='Đang lưu cấu hình giao diện…';
+    try{
+      await set(`${ROOT}/interface_mode`,mode);
+      applyInterfaceMode(mode);
+      if(status)status.textContent=mode==='modern'?'Đã lưu. Modern đang được áp dụng trên website.':'Đã lưu. Basic đang được áp dụng trên website.';
+      toast('Đã cập nhật giao diện '+(mode==='modern'?'Modern':'Basic')+'. Không cần tải lại trang.','success');
+    }catch(error){
+      applyInterfaceMode(old);
+      if(status)status.textContent='Không lưu được cấu hình giao diện: '+(error&&error.message||error);
+      toast('Không lưu được giao diện: '+(error&&error.message||error),'error');
+    }finally{if(btn)btn.disabled=false;}
+  }
+  function startInterfaceModeWatcher(){
+    if(interfaceModeUnsub||!dbReady()||typeof window.onValue!=='function')return !!interfaceModeUnsub;
+    try{
+      interfaceModeUnsub=window.onValue(dbRefPath(`${ROOT}/interface_mode`),snap=>{
+        const value=snap&&snap.exists?snap.exists()?snap.val():'basic':'basic';
+        applyInterfaceMode(value);
+      },error=>{console.warn('Aurora interface-mode listener:',error);});
+      return true;
+    }catch(error){interfaceModeUnsub=null;console.warn('Cannot subscribe to interface mode:',error);return false;}
+  }
+
   function childSafe(value){let s=String(value||'');try{s=btoa(unescape(encodeURIComponent(s)));}catch(e){s=btoa(String(s).replace(/[^\x00-\x7F]/g,'_'));}return 'k_'+s.replace(/[^a-zA-Z0-9_-]/g,'_').replace(/=+$/g,'');}
   let aromPlusAutoElevationApplied=false;
   function syncAromPlusUi(){
@@ -11250,6 +11309,50 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     #auroraPlusGifControls h4{font-size:13px;color:#6d28d9;margin-bottom:6px}
     @media(max-width:650px){#auroraChatFloatLayer{right:8px;bottom:8px}.aurora-chat-window{height:min(70vh,460px)}#auroraUltraControlPanel{padding:9px}.aurora-uc-grid{grid-template-columns:minmax(0,1fr)}.aurora-owner-command-window{max-height:min(68vh,420px)}}
     @media(prefers-reduced-motion:reduce){.aurora-maint-number{animation:none!important}#auroraMaintenanceOverlay *{transition:none!important}}
+
+    /* The Voice vui preference remains available in ULTRA CONTROL, but its floating corner button is hidden. */
+    #auroraTrollOptInFloatBtn{display:none!important;visibility:hidden!important;pointer-events:none!important}
+
+    /* InterFace: Modern — editorial, professional and restrained; no behavior selectors are changed. */
+    body.aurora-interface-modern{background:#f3f5f7!important;color:#202a36!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important;letter-spacing:normal}
+    body.aurora-interface-modern .navbar{background:#fff!important;color:#192432!important;border-bottom:1px solid #e2e7ed!important;box-shadow:0 3px 14px rgba(16,24,40,.055)!important}
+    body.aurora-interface-modern .logo{color:#182433!important;letter-spacing:.02em!important}
+    body.aurora-interface-modern .nav-tabs button{color:#475467!important;border-radius:9px!important;background:transparent!important;font-weight:700!important;transition:background .16s ease,color .16s ease!important}
+    body.aurora-interface-modern .nav-tabs button.active,body.aurora-interface-modern .nav-tabs button:hover{color:#173f68!important;background:#edf3f8!important}
+    body.aurora-interface-modern .nav-user{background:#f1f4f7!important;color:#263546!important;border:1px solid #e1e7ee!important}
+    body.aurora-interface-modern .container{max-width:1320px}
+    body.aurora-interface-modern .card,body.aurora-interface-modern .home-card,body.aurora-interface-modern .role-card,body.aurora-interface-modern .profile-box,body.aurora-interface-modern .modal-box,body.aurora-interface-modern .item-detail-box,body.aurora-interface-modern .doc-modal-box{border:1px solid #e1e7ed!important;border-radius:14px!important;box-shadow:0 5px 22px rgba(28,39,52,.055)!important}
+    body.aurora-interface-modern .section-title{background:#eef2f6!important;color:#243b53!important;border:1px solid #e0e6ec!important;border-left:4px solid #426782!important;border-radius:8px!important;font-weight:800!important}
+    body.aurora-interface-modern .btn:not(.btn-danger):not(.btn-success):not(.btn-warning){background:#284b63!important;color:#fff!important;border:1px solid #284b63!important;box-shadow:none!important}
+    body.aurora-interface-modern .btn.btn-secondary{background:#fff!important;color:#344054!important;border-color:#d0d8e1!important}
+    body.aurora-interface-modern .btn.btn-primary{background:#284b63!important;border-color:#284b63!important}
+    body.aurora-interface-modern input[type="text"],body.aurora-interface-modern input[type="number"],body.aurora-interface-modern input[type="password"],body.aurora-interface-modern input[type="email"],body.aurora-interface-modern input[type="datetime-local"],body.aurora-interface-modern input[type="url"],body.aurora-interface-modern input[type="date"],body.aurora-interface-modern input[type="time"],body.aurora-interface-modern select,body.aurora-interface-modern textarea{border-color:#d5dde5!important;border-radius:8px!important;background:#fff!important;box-shadow:none!important}
+    body.aurora-interface-modern input:focus,body.aurora-interface-modern select:focus,body.aurora-interface-modern textarea:focus{outline:2px solid rgba(66,103,130,.18)!important;border-color:#426782!important}
+    body.aurora-interface-modern table{border-collapse:separate!important;border-spacing:0!important;border:1px solid #e1e7ed!important;border-radius:10px!important;overflow:hidden}
+    body.aurora-interface-modern th{background:#eef2f6!important;color:#344054!important}
+    body.aurora-interface-modern th,body.aurora-interface-modern td{border-color:#e5eaf0!important}
+    body.aurora-interface-modern .aurora-showcase{border:1px solid #dce3ea!important;border-radius:20px!important;background:linear-gradient(125deg,#fff 0%,#f2f5f8 100%)!important;box-shadow:0 12px 32px rgba(28,39,52,.065)!important}
+    body.aurora-interface-modern .aurora-showcase::before,body.aurora-interface-modern .aurora-showcase::after{display:none!important}
+    body.aurora-interface-modern .aurora-showcase-kicker{color:#31546a!important;border-color:#d6e0e8!important;background:#f7f9fb!important;letter-spacing:.045em!important}
+    body.aurora-interface-modern .aurora-showcase-kicker-dot{background:#426782!important;box-shadow:none!important}
+    body.aurora-interface-modern .aurora-showcase-copy h1{color:#182433!important;letter-spacing:-.035em!important;font-weight:850!important}
+    body.aurora-interface-modern .aurora-showcase-copy p{color:#596777!important}
+    body.aurora-interface-modern .aurora-showcase-primary{background:#284b63!important;color:#fff!important;box-shadow:none!important;border-radius:9px!important}
+    body.aurora-interface-modern .aurora-showcase-secondary{background:#fff!important;color:#344054!important;border:1px solid #d7e0e8!important;box-shadow:none!important;border-radius:9px!important}
+    body.aurora-interface-modern .aurora-showcase-pills span{background:#fff!important;border-color:#e0e6ec!important;color:#4b5968!important;border-radius:8px!important}
+    body.aurora-interface-modern .aurora-showcase-media{border-radius:14px!important;box-shadow:0 14px 32px rgba(25,39,54,.17)!important}
+    body.aurora-interface-modern .aurora-showcase-art{background:linear-gradient(135deg,#253b4d 0%,#426782 58%,#93a6b3 100%)!important}
+    body.aurora-interface-modern .aurora-showcase-art::before{display:none!important;animation:none!important}
+    body.aurora-interface-modern .aurora-art-orb{animation:none!important;filter:none!important;opacity:.12!important}
+    body.aurora-interface-modern #auroraUltraControlPanel{background:#f7f9fb!important;border:1px solid #d9e1e8!important;border-radius:14px!important;box-shadow:0 5px 20px rgba(28,39,52,.05)!important}
+    body.aurora-interface-modern #auroraUltraControlHeader{border-color:#dce3e9!important}
+    body.aurora-interface-modern #auroraUltraControlHeader h2{color:#284b63!important}
+    body.aurora-interface-modern .aurora-uc-card{border:1px solid #e0e6eb!important;border-radius:10px!important;box-shadow:0 2px 7px rgba(24,36,48,.025)!important}
+    body.aurora-interface-modern .aurora-uc-card h3{color:#2d4558!important}
+    body.aurora-interface-modern .aurora-uc-out{background:#1b2835!important;color:#e5edf3!important}
+    body.aurora-interface-modern .aurora-tier-badge{box-shadow:none!important}
+    body.aurora-interface-modern .profile-header-bg{filter:saturate(.82)}
+    @media(max-width:760px){body.aurora-interface-modern .aurora-showcase{border-radius:14px!important;padding:18px!important;gap:20px!important}body.aurora-interface-modern .aurora-showcase-media{border-radius:12px!important}}
   `;document.head.appendChild(st);}
 
   /* Allow a long menu to be dragged by mouse; native overflow preserves touch swipe. */
@@ -11297,16 +11400,17 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
           <section class="aurora-uc-card"><h3>⌨️ Hộp lệnh riêng của chủ box</h3><label for="auroraUCCommandRoom">Box chat do bạn tạo</label><select id="auroraUCCommandRoom"><option value="">Chọn box chat</option></select><label for="auroraUCDefaultRoomCode">Mã phòng thi/bài luyện áp dụng cho lệnh phòng (nếu cần)</label><input id="auroraUCDefaultRoomCode" placeholder="Nhập mã đề hoặc để trống để tự nhận diện"><label for="auroraUCCommandInput">Lệnh (chỉ chủ box thực thi)</label><input id="auroraUCCommandInput" placeholder="/start" autocomplete="off"><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCCommandRunBtn">▶ Chạy lệnh</button><button type="button" class="btn btn-secondary" id="auroraUCCommandHelpBtn">/start</button></div><div id="auroraUCCommandOutput" class="aurora-uc-out" style="margin-top:8px">Kết quả lệnh chỉ hiển thị tại bảng điều khiển riêng này, không gửi vào nhóm chat.</div><p class="aurora-uc-muted">Lệnh quản trị có thể thay đổi dữ liệu bài thi hoặc tài khoản. Chỉ sử dụng với tài khoản và phòng thi bạn có quyền quản lý.</p><div style="margin-top:9px;border-top:1px solid #e2e8f0;padding-top:8px"><label><input type="checkbox" id="auroraUCTrollOptIn" style="width:auto;margin-right:5px"> Cho phép nhận voice vui/troll (tắt mặc định)</label><p class="aurora-uc-muted">Người nhận cần tự bật tùy chọn này để cho phép âm thanh vui phát trên thiết bị của họ.</p></div></section>
           <section class="aurora-uc-card"><h3>🛠️ Thao Túng · Quản trị dữ liệu bài thi</h3><label for="auroraUCManipSearch">Tìm theo mã hoặc tên bài</label><input id="auroraUCManipSearch" placeholder="Nhập mã bài thi hoặc tên"><div class="aurora-uc-row"><button type="button" class="btn btn-secondary" id="auroraUCLoadManipBtn">↻ Tải danh sách</button><button type="button" class="btn btn-secondary" id="auroraUCShowMoreBtn">⌄ Xem thêm</button></div><div id="auroraUCManipList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Bấm Tải danh sách để xem bài thi.</p></div><p class="aurora-uc-muted">Lần đầu chỉnh sửa sẽ lưu bản gốc trước khi thay đổi. Reset sẽ khôi phục bản sao lưu đó, không phải bản đã chỉnh sửa gần nhất.</p></section>
           <section class="aurora-uc-card"><h3>🐳 Bảo trì toàn hệ thống</h3><p class="aurora-uc-muted">Bấm bắt đầu để đếm ngược 10 giây. Trong thời gian đếm ngược, có thể hủy; người kích hoạt, CEO và AROM+ không bị khóa ở chế độ bảo trì.</p><div class="aurora-uc-row"><button type="button" class="btn btn-danger" id="auroraUCStartMaintenanceBtn">⏳ Bắt đầu bảo trì</button><button type="button" class="btn btn-secondary" id="auroraUCCancelMaintenanceBtn">✋ Ngưng / tạm hoãn</button></div><div id="auroraUCMaintenanceStatus" class="aurora-uc-muted" style="margin-top:9px">Chưa có lịch bảo trì.</div></section>
+          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện chung cho website. Basic là giao diện hiện tại; Modern dùng bố cục và màu sắc chuyên nghiệp, trung tính, giữ nguyên chức năng và cấu trúc nghiệp vụ.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option></select><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
         </div>
         <div class="aurora-uc-card" style="margin-top:12px;border-color:#f59e0b;background:#fffbeb"><b style="color:#92400e">⚠️ Lưu ý bảo mật triển khai</b><p class="aurora-uc-muted" style="margin-top:5px;color:#78350f">Aurora hiện dùng đăng nhập tùy chỉnh phía trình duyệt. Các lệnh quản trị, box chat, ban/kick, đáp án và chỉnh điểm trong module này chỉ được kiểm tra ở client; để ngăn người dùng kỹ thuật tự gọi Firebase bỏ qua giao diện, cần xác thực server/Firebase Authentication, Cloud Functions và Security Rules phù hợp trước khi dùng trên dữ liệu thật.</p></div>
       </div>`;
     const config=$('configPanel');if(config)config.appendChild(panel);else sup.appendChild(panel);
     $('auroraUltraCollapseBtn').addEventListener('click',()=>{const body=$('auroraUltraControlBody'),hidden=body.style.display==='none';body.style.display=hidden?'':'none';$('auroraUltraCollapseBtn').textContent=hidden?'^ Thu gọn ULTRA CONTROL':'⌄ Mở rộng ULTRA CONTROL';$('auroraUltraCollapseBtn').setAttribute('aria-expanded',hidden?'true':'false');});
-    $('auroraUCCreateChatBtn').addEventListener('click',createChatBox);$('auroraUCRefreshRoomsBtn').addEventListener('click',refreshChatMemberships);$('auroraUCCommandRunBtn').addEventListener('click',runOwnerCommand);$('auroraUCCommandHelpBtn').addEventListener('click',()=>writeCommandOutput(commandHelp()));$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});$('auroraUCLoadManipBtn').addEventListener('click',loadManipulationList);$('auroraUCShowMoreBtn').addEventListener('click',()=>{manipShowMore=!manipShowMore;renderManipulationList();$('auroraUCShowMoreBtn').textContent=manipShowMore?'⌃ Thu gọn danh sách':'⌄ Xem thêm';});$('auroraUCManipSearch').addEventListener('input',renderManipulationList);$('auroraUCStartMaintenanceBtn').addEventListener('click',startMaintenance);$('auroraUCCancelMaintenanceBtn').addEventListener('click',cancelMaintenance);
+    $('auroraUCCreateChatBtn').addEventListener('click',createChatBox);$('auroraUCRefreshRoomsBtn').addEventListener('click',refreshChatMemberships);$('auroraUCCommandRunBtn').addEventListener('click',runOwnerCommand);$('auroraUCCommandHelpBtn').addEventListener('click',()=>writeCommandOutput(commandHelp()));$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});$('auroraUCLoadManipBtn').addEventListener('click',loadManipulationList);$('auroraUCShowMoreBtn').addEventListener('click',()=>{manipShowMore=!manipShowMore;renderManipulationList();$('auroraUCShowMoreBtn').textContent=manipShowMore?'⌃ Thu gọn danh sách':'⌄ Xem thêm';});$('auroraUCManipSearch').addEventListener('input',renderManipulationList);$('auroraUCStartMaintenanceBtn').addEventListener('click',startMaintenance);$('auroraUCCancelMaintenanceBtn').addEventListener('click',cancelMaintenance);$('auroraUCSaveInterfaceMode').addEventListener('click',saveInterfaceMode);applyInterfaceMode(interfaceModeCurrent);
     $('auroraUCTrollOptIn').addEventListener('change',async e=>{if(!isLogged())return;try{trollOptInCache=!!e.target.checked;await set(`${ROOT}/troll_opt_in/${childSafe(uname())}`,trollOptInCache);renderChatFloatLayer();toast(e.target.checked?'Đã bật voice vui.':'Đã tắt voice vui.','success');}catch(err){e.target.checked=false;toast('Không lưu được tùy chọn: '+err.message,'error');}});
     renderOperatorState();
   }
-  function renderOperatorState(){if(isLogged()&&tier()==='aromplus'&&typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;const gate=$('auroraUltraGateNotice');if(!gate)return;if(isUltraOperator()){gate.textContent='Đã xác nhận quyền quản trị ULTRA CONTROL cho @'+uname()+'. Chat, lệnh và quản trị dữ liệu đều chạy trong phạm vi quyền này.';gate.style.borderLeft='4px solid #16a34a';gate.style.background='#f0fdf4';}else{gate.textContent='Khu vực quản trị nâng cao. Hãy đăng nhập và mở khóa TỐI CAO bằng VUA, hoặc dùng gói AROM+. Gói CEO chỉ có quyền Partner ở TỐI CAO, không mặc định có quyền ULTRA CONTROL.';gate.style.borderLeft='4px solid #d97706';gate.style.background='#fffbeb';}['auroraUCCreateChatBtn','auroraUCCommandRunBtn','auroraUCStartMaintenanceBtn','auroraUCLoadManipBtn'].forEach(id=>{const b=$(id);if(b)b.disabled=!isUltraOperator();});if($('auroraUCTrollOptIn'))loadTrollOptIn();renderOwnRoomList();renderCommandRoomOptions();}
+  function renderOperatorState(){if(isLogged()&&tier()==='aromplus'&&typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;const gate=$('auroraUltraGateNotice');if(!gate)return;if(isUltraOperator()){gate.textContent='Đã xác nhận quyền quản trị ULTRA CONTROL cho @'+uname()+'. Chat, lệnh và quản trị dữ liệu đều chạy trong phạm vi quyền này.';gate.style.borderLeft='4px solid #16a34a';gate.style.background='#f0fdf4';}else{gate.textContent='Khu vực quản trị nâng cao. Hãy đăng nhập và mở khóa TỐI CAO bằng VUA, hoặc dùng gói AROM+. Gói CEO chỉ có quyền Partner ở TỐI CAO, không mặc định có quyền ULTRA CONTROL.';gate.style.borderLeft='4px solid #d97706';gate.style.background='#fffbeb';}['auroraUCCreateChatBtn','auroraUCCommandRunBtn','auroraUCStartMaintenanceBtn','auroraUCLoadManipBtn','auroraUCSaveInterfaceMode'].forEach(id=>{const b=$(id);if(b)b.disabled=!isUltraOperator();});if($('auroraUCTrollOptIn'))loadTrollOptIn();renderOwnRoomList();renderCommandRoomOptions();}
   async function loadTrollOptIn(){try{trollOptInCache=!!(await get(`${ROOT}/troll_opt_in/${childSafe(uname())}`));if($('auroraUCTrollOptIn'))$('auroraUCTrollOptIn').checked=trollOptInCache;renderChatFloatLayer();}catch(e){}}
 
   /* Chat room realtime membership and floating Messenger-like bubbles. */
@@ -11478,15 +11582,16 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
 
   function decoratePlanCards(){const host=$('upgradesView');if(!host)return;const descriptions={basic:'Miễn phí mặc định. Quyền cơ bản của tài khoản.',plus:'Tất cả Basic + tải GIF làm nền avatar/profile.',pro:'Tất cả Plus + giáo viên tạo đề và bài luyện không cần mật khẩu bảo mật.',premium:'Tất cả Pro + sử dụng công cụ Giáo viên nâng cao không cần mật khẩu bảo mật.',ultra:'Tất cả Premium + mở khóa các model AI đã có trên hệ thống; không tự trang bị, người dùng tự chọn trong Profile.',ceo:'Tất cả Ultra + vào TỐI CAO bằng quyền Partner mà không nhập mật khẩu Partner.',aromplus:'Toàn quyền Aurora, bỏ các bước nhập mật khẩu VUA/partner trong các luồng đã tích hợp, không giới hạn lượt thi; thao tác quan trọng vẫn có cảnh báo.'};host.querySelectorAll('.aurora-tier-card').forEach(card=>{const h=card.querySelector('h3');const p=card.querySelector('p');if(!h||!p)return;const id=Object.keys(descriptions).find(k=>h.textContent.trim().toLowerCase().replace('+','plus').replace(/[^a-z]/g,'')===k.replace(/[^a-z]/g,''))||Object.keys(descriptions).find(k=>h.textContent.toLowerCase().includes(k==='aromplus'?'arom':k));if(id&&p.dataset.ucPlanDesc!=='1'){p.textContent=descriptions[id];p.dataset.ucPlanDesc='1';}});}
   function observePlanCards(){const host=$('upgradesView');if(!host||host.dataset.ucPlanObserver)return;host.dataset.ucPlanObserver='1';const mo=new MutationObserver(()=>decoratePlanCards());mo.observe(host,{childList:true,subtree:true});decoratePlanCards();}
-  function init(){installStyle();installNavHorizontalScroll();installHeroCollapse();mountUltraPanel();installPlanHooks();installBanAndJoinHooks();watchMaintenance();observePlanCards();
+  function init(){installStyle();applyInterfaceMode((()=>{try{return localStorage.getItem('aurora-interface-mode')||'basic';}catch(_){return 'basic';}})());startInterfaceModeWatcher();installNavHorizontalScroll();installHeroCollapse();mountUltraPanel();installPlanHooks();installBanAndJoinHooks();watchMaintenance();observePlanCards();
     if($('auroraUCCommandInput'))$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});
-    let ticks=0;const timer=setInterval(()=>{ticks++;const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;syncAromPlusUi();refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
-    syncAromPlusUi();startLiveMembershipWatcher();refreshChatMemberships();startTrollListener();
+    let ticks=0;const timer=setInterval(()=>{ticks++;if(!interfaceModeUnsub&&ticks%3===0)startInterfaceModeWatcher();const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;syncAromPlusUi();refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
+    syncAromPlusUi();startLiveMembershipWatcher();startInterfaceModeWatcher();refreshChatMemberships();startTrollListener();
   }
   Object.assign(window,{
     auroraUCOpenChat:id=>{if(!chatRooms[id])return;closedChatIds.delete(id);openChatRoom=id;renderChatFloatLayer();},auroraUCDeleteChat:deleteChat,
     auroraUCEditManip:editManipulation,auroraUCResetManip:resetManipulation,auroraUCCloseManip:()=>{const m=$('auroraUCManipModal');if(m)m.style.display='none';},auroraUCSaveManipStudent:saveManipStudent,
-    auroraUCRefreshChatRooms:refreshChatMemberships,auroraUCCancelMaintenance:cancelMaintenance,auroraUCStartMaintenance:startMaintenance
+    auroraUCRefreshChatRooms:refreshChatMemberships,auroraUCCancelMaintenance:cancelMaintenance,auroraUCStartMaintenance:startMaintenance,
+    auroraUCApplyInterfaceMode:applyInterfaceMode,auroraUCSaveInterfaceMode:saveInterfaceMode
   });
   // Arom+ direct-input VUA gates in legacy forms are autofilled only for this membership tier.
   function installAromPlusInputBypass(){const pairs=[['sendAdminEmail',['emailAdminVuaPass']],['unlockAccountManagement',['accMgmtVuaPass']],['addSecurityPassword',['newSecPassVua']],['grantAiModelToUser',['aiGrantVuaPass']],['revokeAiModelFromUser',['aiGrantVuaPass']]];pairs.forEach(([name,ids])=>{if(typeof window[name]!=='function'||window[name].__auroraAromBypass)return;const old=window[name];const wrap=function(){if(tier()==='aromplus'&&isLogged())ids.forEach(id=>{if($(id)&&typeof VUA_PASSWORD!=='undefined')$(id).value=VUA_PASSWORD;});return old.apply(this,arguments);};wrap.__auroraAromBypass=true;window[name]=wrap;});if(window.prompt&&!window.prompt.__auroraAromBypass){const oldPrompt=window.prompt;const pwrap=function(message,defaultValue){if(tier()==='aromplus'&&isLogged()&&/mật khẩu|mat khau|security password|password vua|partner|vua/i.test(String(message||'')))return typeof VUA_PASSWORD!=='undefined'?VUA_PASSWORD:'';return oldPrompt.call(this,message,defaultValue);};pwrap.__auroraAromBypass=true;window.prompt=pwrap;}if(window.confirm&&!window.confirm.__auroraAromBypass){const oldConfirm=window.confirm;const cwrap=function(message){if(tier()==='aromplus'&&isLogged()&&/xóa|xoa|reset|ban\b|kick\b|bảo trì|bao tri|sửa điểm|sua diem|chỉnh sửa|chinh sua|cấu hình|cau hinh/i.test(String(message||'')))message='⚠️ AROM+ · Hãy cân nhắc kỹ, hành động này có thể ảnh hưởng dữ liệu quan trọng.\n\n'+message;return oldConfirm.call(this,message);};cwrap.__auroraAromBypass=true;window.confirm=cwrap;}if(window.auroraGiftPackage&&!window.auroraGiftPackage.__auroraAromBypass){const old=window.auroraGiftPackage;const wrap=function(){if(tier()==='aromplus'&&isLogged()){userHasSupremeAccess=true;if($('auroraGiftPassword')&&typeof VUA_PASSWORD!=='undefined')$('auroraGiftPassword').value=VUA_PASSWORD;}return old.apply(this,arguments);};wrap.__auroraAromBypass=true;window.auroraGiftPackage=wrap;}}
