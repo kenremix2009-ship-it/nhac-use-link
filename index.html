@@ -3329,7 +3329,7 @@ let aiConfigListener=null;
 let currentEquippedAiModel=null;
 let currentAiModelFrame=null;
 let currentAiModelFrameAdjust={x:0,y:0,scale:1,rotation:0,opacity:1};
-let aiWidgetDragState={dragging:false,lastX:0,lastY:0,startX:0,startY:0,startLeft:0,startTop:0};
+let aiWidgetDragState={dragging:false,pointerId:null,lastX:0,lastY:0,startX:0,startY:0,startLeft:0,startTop:0};
 let aiWidgetScale=1;
 let aiPinchState=null;
 let aiWidgetVisible=false;
@@ -6821,9 +6821,9 @@ function hideAiWidget(){
     w.style.pointerEvents='none';
   }
   aiWidgetVisible=false;
-  aiWidgetDragState.dragging=false;
+  aiWidgetDragState.dragging=false;aiWidgetDragState.pointerId=null;
   const body=document.getElementById('aiModelBody');
-  if(body){body.onpointerdown=null;body.onpointermove=null;body.onpointerup=null;body.onpointercancel=null;}
+  if(body){body.style.cursor='';}
 }
 let auroraAiWidgetVrmRequest=0;
 async function updateAiWidgetContent(){
@@ -6908,57 +6908,62 @@ function bindAiWidgetInteractions(){
   const body=document.getElementById('aiModelBody');
   if(!widget||!body)return;
   function isVisibleAiModelHit(e){
-    if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select,.ai-chat-bubble,.ai-float-bubble'))return false;
+    if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select,.ai-chat-bubble,.ai-float-bubble,.aurora-vrm-rotate-badge'))return false;
     const content=document.getElementById('aiModelContent');if(!content)return false;
     const pointIn=(r,padX=0,padY=0)=>!!r&&e.clientX>=r.left-padX&&e.clientX<=r.right+padX&&e.clientY>=r.top-padY&&e.clientY<=r.bottom+padY;
+    const canvas=content.querySelector('#aiWidgetVrmCanvas canvas');
+    if(canvas){const r=canvas.getBoundingClientRect();if(r.width>2&&r.height>2&&pointIn(r))return true;}
     const media=content.querySelector('img,video');
-    if(media){const r=media.getBoundingClientRect();if(r.width>2&&r.height>2)return pointIn(r,5,5);}
-    const emoji=content.querySelector('.ai-model-emoji');if(emoji){const r=emoji.getBoundingClientRect();const insetX=r.width*.22,insetY=r.height*.12;if(r.width>2&&r.height>2)return e.clientX>=r.left+insetX&&e.clientX<=r.right-insetX&&e.clientY>=r.top+insetY&&e.clientY<=r.bottom-insetY;}
-    const canvas=content.querySelector('#aiWidgetVrmCanvas canvas');if(canvas){const r=canvas.getBoundingClientRect();return e.clientX>=r.left+r.width*.13&&e.clientX<=r.right-r.width*.13&&e.clientY>=r.top+r.height*.04&&e.clientY<=r.bottom-r.height*.04;}
-    const status=content.querySelector('.aurora-vrm-status');if(status&&e.target===status)return false;
+    if(media){const r=media.getBoundingClientRect();if(r.width>2&&r.height>2&&pointIn(r,5,5))return true;}
+    const emoji=content.querySelector('.ai-model-emoji');
+    if(emoji){const r=emoji.getBoundingClientRect();const insetX=r.width*.22,insetY=r.height*.12;if(r.width>2&&r.height>2&&e.clientX>=r.left+insetX&&e.clientX<=r.right-insetX&&e.clientY>=r.top+insetY&&e.clientY<=r.bottom-insetY)return true;}
     return false;
   }
-  body.onpointerdown=(e)=>{
-    // Allow dragging the widget from the visible model, including the 3D canvas.
-    // Interactive controls and chat remain excluded so their normal actions still work.
+  const onPointerDown=(e)=>{
+    // Drag starts only from the model, with the primary mouse button or a touch press held.
+    if(e.isPrimary===false||(e.pointerType==='mouse'&&e.button!==0))return;
+    if(widget.classList.contains('ai-hidden')||widget.classList.contains('ai-minimized'))return;
     if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select,.ai-chat-bubble,.ai-float-bubble,.aurora-vrm-rotate-badge'))return;
-    const hit=isVisibleAiModelHit(e);
-    const content=document.getElementById('aiModelContent');
-    const contentRect=content&&content.getBoundingClientRect();
-    const insideContent=!!(contentRect&&e.clientX>=contentRect.left&&e.clientX<=contentRect.right&&e.clientY>=contentRect.top&&e.clientY<=contentRect.bottom);
-    if(!hit&&!insideContent)return;
-    if(widget.classList.contains('ai-hidden'))return;
+    if(!isVisibleAiModelHit(e))return;
     aiWidgetDragState.dragging=true;
-    aiWidgetDragState.startX=e.clientX;
-    aiWidgetDragState.startY=e.clientY;
+    aiWidgetDragState.pointerId=e.pointerId;
+    aiWidgetDragState.startX=e.clientX;aiWidgetDragState.startY=e.clientY;
     const rect=widget.getBoundingClientRect();
-    aiWidgetDragState.startLeft=rect.left;
-    aiWidgetDragState.startTop=rect.top;
-    // drag count for random
+    aiWidgetDragState.startLeft=rect.left;aiWidgetDragState.startTop=rect.top;
     if(Date.now()-aiDragWindowStart>3000){aiDragCountInWindow=0;aiDragWindowStart=Date.now();}
     aiDragCountInWindow++;
-    if(aiDragCountInWindow===6&&currentEquippedAiModel){showAiFloatBubbleByEvent('drag');}
+    if(aiDragCountInWindow===6&&currentEquippedAiModel)showAiFloatBubbleByEvent('drag');
     try{widget.setPointerCapture(e.pointerId);}catch(err){}
-    body.style.cursor='grabbing';
-    widget.style.cursor='grabbing';
+    body.style.cursor='grabbing';widget.style.cursor='grabbing';
     if(e.pointerType==='touch'&&e.cancelable)e.preventDefault();
   };
-  body.onpointermove=(e)=>{
-    if(!aiWidgetDragState.dragging)return;
-    const dx=e.clientX-aiWidgetDragState.startX;
-    const dy=e.clientY-aiWidgetDragState.startY;
-    // Coordinates are viewport CSS pixels; transform-origin is top-left, preventing jump on first move.
-    aiWidgetPos.left=aiWidgetDragState.startLeft+dx;
-    aiWidgetPos.top=aiWidgetDragState.startTop+dy;
+  const onPointerMove=(e)=>{
+    if(!aiWidgetDragState.dragging||e.pointerId!==aiWidgetDragState.pointerId)return;
+    if(e.pointerType==='mouse'&&(e.buttons&1)!==1){onPointerUp(e);return;}
+    aiWidgetPos.left=aiWidgetDragState.startLeft+(e.clientX-aiWidgetDragState.startX);
+    aiWidgetPos.top=aiWidgetDragState.startTop+(e.clientY-aiWidgetDragState.startY);
     applyAiWidgetPosition();
+    if(e.cancelable)e.preventDefault();
   };
-  const endDrag=(e)=>{
-    aiWidgetDragState.dragging=false;
-    try{widget.releasePointerCapture(e.pointerId);}catch(err){}
-    body.style.cursor='grab';
-    widget.style.cursor='';
+  const onPointerUp=(e)=>{
+    if(!aiWidgetDragState.dragging)return;
+    if(e&&e.pointerId!==undefined&&e.pointerId!==aiWidgetDragState.pointerId)return;
+    const pointerId=aiWidgetDragState.pointerId;
+    aiWidgetDragState.dragging=false;aiWidgetDragState.pointerId=null;
+    try{if(pointerId!==null)widget.releasePointerCapture(pointerId);}catch(err){}
+    body.style.cursor='grab';widget.style.cursor='';
   };
-  body.onpointerup=endDrag;body.onpointercancel=endDrag;
+  // Keep stable handlers so restoring the hidden model never stacks duplicate listeners.
+  if(!widget.__auroraDragBound){
+    widget.__auroraDragBound=true;
+    widget.__auroraPointerDownHandler=onPointerDown;
+    widget.onpointerdown=onPointerDown;
+    document.addEventListener('pointermove',onPointerMove,{passive:false});
+    document.addEventListener('pointerup',onPointerUp,true);
+    document.addEventListener('pointercancel',onPointerUp,true);
+  }else{
+    widget.onpointerdown=widget.__auroraPointerDownHandler;
+  }
   widget.onwheel=(e)=>{
     if(e.target.closest('.ai-chat-bubble'))return;
     e.preventDefault();
