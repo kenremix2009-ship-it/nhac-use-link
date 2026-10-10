@@ -964,11 +964,6 @@ input,select,textarea{font-size:13px;padding:9px}
 .ai-model-badge{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:rgba(24,119,242,.9);color:#fff;font-size:10px;font-weight:900;padding:3px 10px;border-radius:12px;white-space:nowrap;pointer-events:none;z-index:6;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 #aiDoorBtn{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1877f2,#0d5fd6);color:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 6px 18px rgba(24,119,242,.5);display:flex;align-items:center;justify-content:center;z-index:8;transition:all .25s}
 #aiDoorBtn:hover{background:linear-gradient(135deg,#dc3545,#bb2d3b);transform:translateX(-50%) scale(1.12)}
-#aiWebcamBtn{position:absolute;top:-6px;right:-6px;background:linear-gradient(135deg,#dc3545,#bb2d3b);color:#fff;border:2px solid #fff;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(220,53,69,.5);display:flex;align-items:center;justify-content:center;z-index:9;transition:all .25s;padding:0}
-#aiWebcamBtn:hover{transform:scale(1.12)}
-#aiWebcamBtn.active{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 0 15px #198754}
-#aiWebcamVideo{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #dc3545;z-index:7;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3);pointer-events:none}
-#aiWebcamVideo.active{display:block}
 .ai-float-bubble{position:absolute;bottom:calc(100% + 8px);right:0;max-width:220px;background:#fff;color:#333;padding:10px 14px;border-radius:16px;font-size:12px;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:20;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;border:2px solid #1877f2;word-wrap:break-word}
 .ai-float-bubble::after{content:'';position:absolute;bottom:-8px;right:24px;width:14px;height:14px;background:#fff;border-right:2px solid #1877f2;border-bottom:2px solid #1877f2;transform:rotate(45deg)}
 .ai-float-bubble.show{opacity:1;transform:translateY(0);animation:aiBubbleFade 7s forwards}
@@ -1079,17 +1074,8 @@ input,select,textarea{font-size:13px;padding:9px}
 .ai-provider-badge.mixed{background:#e7f3ff;color:#004085}
 
 /* ============================================================
-   FIX: PROFILE WEB CAM + RANDOM CHAT (mới)
+   FIX: RANDOM CHAT + STUDENT DOCS (mới)
    ============================================================ */
-.profile-ai-webcam-wrap{position:absolute;top:8px;left:8px;z-index:25;display:flex;gap:6px;flex-direction:column}
-.profile-ai-webcam-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#dc3545,#bb2d3b);color:#fff;border:2px solid #fff;font-size:16px;cursor:pointer;box-shadow:0 4px 12px rgba(220,53,69,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;padding:0}
-.profile-ai-webcam-btn:hover{transform:scale(1.1)}
-.profile-ai-webcam-btn.active{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 0 15px #198754}
-#profileWebcamPreview{position:absolute;top:52px;left:8px;width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #dc3545;background:#000;z-index:24;display:none;box-shadow:0 4px 12px rgba(0,0,0,.4)}
-#profileWebcamPreview.active{display:block}
-#profileWebcamMouthIndicator{position:absolute;top:140px;left:8px;font-size:11px;background:rgba(0,0,0,.7);color:#fff;padding:3px 8px;border-radius:10px;z-index:24;display:none}
-#profileWebcamMouthIndicator.active{display:block}
-
 /* ============================================================
    FIX: STUDENT DOCS SECTION (mới)
    ============================================================ */
@@ -1555,11 +1541,6 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 <div id="profileModal"><div class="profile-box"><button type="button" id="profileModalCloseFab" aria-label="Đóng hồ sơ" title="Đóng hồ sơ" onclick="closeProfile()">×</button>
 <div id="profileFxLayer"><canvas id="profileFxCanvas"></canvas></div>
 <div class="profile-header-bg" id="profileHeaderBg">
-<div class="profile-ai-webcam-wrap" id="profileAiWebcamWrap" style="display:none">
-  <button class="profile-ai-webcam-btn" id="profileAiWebcamBtn" onclick="toggleProfileWebcam()" title="Bật webcam VTuber">📷</button>
-  <video id="profileWebcamPreview" autoplay muted playsinline></video>
-  <div id="profileWebcamMouthIndicator">😮 Đang theo dõi</div>
-</div>
 <button class="profile-bg-btn" id="profileBgUploadBtn" onclick="event.stopPropagation();document.getElementById('profileAvatarBgInput').click()" title="Đổi ảnh nền header">🖼️</button>
 <button class="profile-bg-btn" id="profileBgRemoveBtn" onclick="event.stopPropagation();removeProfileAvatarBg()" title="Xóa ảnh nền">🗑️</button>
 <input type="file" id="profileAvatarBgInput" accept="image/*" style="display:none" onchange="handleAvatarBgUpload(this)">
@@ -1965,7 +1946,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Đổi <b>Avatar</b> (có crop tròn), đổi <b>ảnh nền header</b> (🖼️) và gỡ (🗑️).</div></div>
 <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-content">Xem <b>vai trò</b>, <b>huy chương</b>, <b>cup</b>, <b>số bài đã làm</b>, <b>điểm TB</b>. Nếu có >4 vai trò, profile chỉ hiển thị 1 vai trò chính + 3 vai trò phụ, còn lại bấm <b>...</b> để xem tiếp.</div></div>
 <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-content">Nếu có nhiều vai trò, mở <b>🎯 Chọn vai trò hiển thị hiệu ứng</b> để chọn hiệu ứng avatar.</div></div>
-<div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-content">Nếu được Admin cấp model AI, dùng nút <b>🤖 Chọn Model</b> để trang bị (tối đa 1). Để chỉnh khung AI, bấm <b>🖼️ Chỉnh khung</b> trong profile hoặc vào <b>👑 TỐI CAO → 🎮 Trung Tâm Giải Trí → 🖼️ Chỉnh khung AI</b>. Khi có model, bấm nút <b>📷</b> để bật webcam VTuber (model sẽ theo biểu cảm khuôn mặt bạn).</div></div>
+<div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-content">Nếu được Admin cấp model AI, dùng nút <b>🤖 Chọn Model</b> để trang bị (tối đa 1). Để chỉnh khung AI, bấm <b>🖼️ Chỉnh khung</b> trong profile hoặc vào <b>👑 TỐI CAO → 🎮 Trung Tâm Giải Trí → 🖼️ Chỉnh khung AI</b>. </div></div>
 <div class="guide-step"><div class="guide-step-num">6</div><div class="guide-step-content">Viết <b>ghi chú</b> và bấm <b>💾 Lưu Profile</b>.</div></div>
 </div>
 
@@ -2010,8 +1991,6 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-content"><b>🖼️ Chỉnh khung AI:</b> Chỉ có thể vào từ <b>Tối Cao → Trung Tâm Giải Trí → 🖼️ Chỉnh khung AI</b> hoặc nút <b>🖼️ Chỉnh khung</b> trong profile. Chọn model bạn sở hữu từ danh sách, upload khung, kéo thả căn chỉnh (X/Y/Scale/Xoay/Opacity), lưu lại. Khung áp dụng <b>riêng cho từng model</b> khi model đó được trang bị.</div></div>
 <div class="guide-step"><div class="guide-step-num">6</div><div class="guide-step-content"><b>👁️ AI đọc màn hình:</b> Bấm nút 👁️ trên widget AI → AI có thể đọc nội dung trang web hiện tại (đề thi, profile, thông báo...) để trả lời câu hỏi chính xác hơn. <b style="color:#dc3545">Khi ở trong phòng thi, AI sẽ tự động nhận diện đáp án từ đề và trả lời (không cần API key).</b></div></div>
 <div class="guide-step"><div class="guide-step-num">7</div><div class="guide-step-content"><b>Setup AI:</b> Vào <b>Cấu hình → 🤖 Setup AI Model</b>. Chọn <b>nhà cung cấp</b> (OpenAI, Google AI Studio, Cerebras, Groq, Mistral, DeepSeek, Together, OpenRouter...). <b style="color:#198754">Chỉ cần nhập API key</b> — hệ thống tự động set endpoint + model. Bật <b>🧠 AI Vision</b> để dùng phân tích ảnh, bật <b>👁️ AI đọc màn hình</b> để AI đọc trang web. <b style="color:#dc3545">Hệ thống đã cài sẵn API key mặc định của Gemini — không cần nhập nếu bạn muốn dùng ngay.</b></div></div>
-<div class="guide-step"><div class="guide-step-num">8</div><div class="guide-step-content"><b>📷 Webcam VTuber:</b> Khi model đã được trang bị trong profile, bấm nút 📷 để bật webcam. Model sẽ phản ứng theo biểu cảm khuôn mặt bạn (miệng mở/đóng khi nói, mắt chớp, đầu nghiêng...). Bấm lần nữa để tắt. <b>Chỉ mình bạn thấy camera — dữ liệu không được lưu trữ.</b></div></div>
-
 <div style="font-weight:900;color:#6f42c1;margin:12px 0 8px 0">💬 8. Câu Chat AI Tương Tác (MỚI)</div>
 <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-content">Trong <b>Tối Cao → Trung Tâm Giải Trí → 💬 Câu Chat AI Tương Tác</b>. Thêm/sửa/xóa các câu chat mặc định mà model AI sẽ nói ngẫu nhiên (khoảng 1 phút/lần).</div></div>
 <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-content">Các sự kiện mặc định đã có sẵn: nhạc hay quá (khi có nhạc), đừng chọc tôi (khi kéo model liên tục), áaaa to quá rồi (khi phóng to quá mức), bé đói, buồn ngủ quá, không muốn học nữa, UwU, đẹp quá (khi vào profile người khác)...</div></div>
@@ -2752,7 +2731,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 <div class="collapse-body collapsed">
 <div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-bottom:12px">
   <div style="font-weight:900;color:#6f42c1;font-size:14px;margin-bottom:10px">🤖 TẠO MODEL AI MỚI (VTUBER-STYLE)</div>
-  <div class="ai-setup-note">📎 Hỗ trợ mọi định dạng: <b>.moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh (OSC/VMC)...</b> — Không giới hạn dung lượng. <b>Model sẽ có thể biểu cảm như VTuber khi bật webcam (xem trong Profile).</b></div>
+  <div class="ai-setup-note">📎 Hỗ trợ mọi định dạng: <b>.moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh (OSC/VMC)...</b> — Không giới hạn dung lượng. <b>Model có thể hiển thị hoạt ảnh trong khung AI.</b></div>
   <label>📝 Tên model (mặc định "Auro"):</label>
   <input type="text" id="aiNewModelName" placeholder="Auro">
   <label>🖼️ Ảnh chính cho AI Model (.png/.jpg/.gif/.webp — dùng làm hình đại diện hiển thị):</label>
@@ -2760,7 +2739,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
   <img id="aiNewModelMainImagePreview" class="ai-model-main-image" alt="">
   <label>📁 File model (có thể chọn nhiều file — textures, motion, v.v...):</label>
   <input type="file" id="aiNewModelFiles" multiple accept=".vrm,.glb,.gltf,.blend,.zip,.fbx,.obj,.pmx,.pmd,.moc3,.json,.psd,*/*" style="padding:6px;background:#fff;border-radius:8px" onchange="previewAiModelFileSelection(this)">
-  <div class="aurora-model-format-note">Hỗ trợ tải lên <b>.vrm</b> và <b>.glb</b> để dựng model 3D trong khung AI; tự động nháy mắt và mô phỏng miệng khi webcam cung cấp dữ liệu. Có thể tải <b>.zip</b> chứa file <b>.blend</b> cùng texture như gói model Blender đã gửi. Lưu ý: trình duyệt không dựng trực tiếp file <b>.blend</b>; cần xuất sang GLB/VRM trong Blender để xem 3D.</div>
+  <div class="aurora-model-format-note">Hỗ trợ tải lên <b>.vrm</b> và <b>.glb</b> để dựng model 3D trong khung AI; tự động nháy mắt và mô phỏng miệng khi model phát thoại. Có thể tải <b>.zip</b> chứa file <b>.blend</b> cùng texture như gói model Blender đã gửi. Lưu ý: trình duyệt không dựng trực tiếp file <b>.blend</b>; cần xuất sang GLB/VRM trong Blender để xem 3D.</div>
   <div id="aiNewModelVrmPreview" class="aurora-vrm-preview"><div id="aiNewModelVrmPreviewCanvas" style="width:100%;height:100%"></div><div id="aiNewModelVrmPreviewStatus" class="aurora-vrm-status">Chọn file VRM/GLB để xem trước.</div></div>
   <label>💬 Câu chào (mặc định):</label>
   <input type="text" id="aiNewModelGreeting" placeholder="Xin chào! Mình là Auro, rất vui được gặp bạn 👋">
@@ -3210,11 +3189,9 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
     <div class="ai-model-body" id="aiModelBody">
       <div id="aiModelContent"><div class="ai-model-emoji">🤖</div></div>
       <div class="ai-model-frame-layer" id="aiModelFrameLayer"></div>
-      <video id="aiWebcamVideo" autoplay muted playsinline></video>
     </div>
     <div class="ai-model-badge" id="aiModelBadge">Auro</div>
     <button id="aiDoorBtn" onclick="hideAiModelWithAnimation()" title="Ẩn model">🚪</button>
-    <button id="aiWebcamBtn" onclick="toggleAiWebcam()" title="Bật webcam VTuber">📷</button>
     <button id="aiScreenReadBtn" onclick="toggleAiScreenRead()" title="Cho AI đọc màn hình">👁️</button>
     <div class="ai-float-bubble" id="aiFloatBubble"></div>
     <div class="ai-chat-bubble" id="aiChatBubble">
@@ -3369,16 +3346,6 @@ let aiSpeechFinalTranscript='';
 let aiChatRequestPending=false;
 let aiChatLastApiError='';
 let aiScreenOcrCache=new WeakMap();
-
-/* AI Webcam */
-let aiWebcamStream=null;
-let aiWebcamActive=false;
-let aiWebcamRAF=null;
-let aiWebcamFaceDetector=null;
-let aiWebcamMouthOpenness=0;
-let aiWebcamHeadTilt=0;
-let aiWebcamEyeBlink=0;
-let aiWebcamLastExpr={mouth:0,tilt:0,blink:0,ts:0};
 
 /* Deep analysis */
 let deepAnalysisImageData='';
@@ -4669,7 +4636,7 @@ async function applyUserSession(u){
   await loadEquippedAiModel();
   startAiRandomChatTimer();
 }
-function handleLogout(){customConfirm('Bạn có chắc muốn đăng xuất?',{icon:'🚪',title:'Đăng xuất',okClass:'danger'}).then(ok=>{if(!ok)return;stopOnlineTracking();stopAiWebcam();stopAiRandomChatTimer();localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;userHasSupremeAccess=false;accMgmtUnlocked=false;configTabUnlocked=false;stopAllAnnouncementListeners();renderLoggedOutNav();document.getElementById('authOverlay').style.display='none';['loginPassword','studentName'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});clearLoginInlineError();aiWidgetAwaitingManualSummon=true;const aiLauncher=document.getElementById('aiRestoreBtn');if(aiLauncher)aiLauncher.remove();hideAiWidget();switchView('homeView');showToast('👋 Đã đăng xuất','info');});}
+function handleLogout(){customConfirm('Bạn có chắc muốn đăng xuất?',{icon:'🚪',title:'Đăng xuất',okClass:'danger'}).then(ok=>{if(!ok)return;stopOnlineTracking();stopAiRandomChatTimer();localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;userHasSupremeAccess=false;accMgmtUnlocked=false;configTabUnlocked=false;stopAllAnnouncementListeners();renderLoggedOutNav();document.getElementById('authOverlay').style.display='none';['loginPassword','studentName'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});clearLoginInlineError();aiWidgetAwaitingManualSummon=true;const aiLauncher=document.getElementById('aiRestoreBtn');if(aiLauncher)aiLauncher.remove();hideAiWidget();switchView('homeView');showToast('👋 Đã đăng xuất','info');});}
 function handleLogoutFromProfile(){closeProfile();setTimeout(handleLogout,200);}
 async function checkAuthOnLoad(){const s=localStorage.getItem('aurora_user');if(!s){document.getElementById('authOverlay').style.display='none';renderLoggedOutNav();switchView('homeView');return;}try{const user=JSON.parse(s);const snap=await window.dbGet(window.dbChild(window.dbRef,`users/${user.username}`));if(snap.exists()){await applyUserSession(snap.val());document.getElementById('authOverlay').style.display='none';}else{localStorage.removeItem('aurora_user');document.getElementById('authOverlay').style.display='none';renderLoggedOutNav();switchView('homeView');}}catch(e){document.getElementById('authOverlay').style.display='none';if(!currentUser)renderLoggedOutNav();switchView('homeView');}}
 function requireLogin(actionName){if(currentUser)return true;showToast('🔐 Vui lòng đăng nhập để '+ (actionName||'tiếp tục') +'!','warn');document.getElementById('authOverlay').style.display='flex';switchAuthTab('login');return false;}
@@ -4759,12 +4726,8 @@ async function openProfile(_,targetUser){
   if(isSelf&&typeof window.auroraChatProfileRefresh==='function'){Promise.resolve(window.auroraChatProfileRefresh()).catch(e=>console.warn('Profile chat restore list refresh failed:',e));}
   if(isSelf){
     showAiModelInProfile(u);
-    const wcWrap=document.getElementById('profileAiWebcamWrap');
-    if(wcWrap)wcWrap.style.display='flex';
   }else{
     hideAiWidget();
-    const wcWrap=document.getElementById('profileAiWebcamWrap');
-    if(wcWrap)wcWrap.style.display='none';
     // Hiện mini-bot của chủ profile (người A) trong khung profile — chỉ model + tên, không chat
     showOtherUserMiniBot(u);
     // Random chat "profile_other" từ model của mình (nếu có)
@@ -4892,7 +4855,7 @@ function removeOtherUserMiniBot(){
 function closeProfile(){
   document.getElementById('profileModal').classList.remove('show');
   stopProfileEffect();stopAvatarEffect();
-  stopAiWebcam();
+  
   removeOtherUserMiniBot();
   if(profileEffectCycleTimer){clearTimeout(profileEffectCycleTimer);clearInterval(profileEffectCycleTimer);profileEffectCycleTimer=null;}
   currentViewingUser=null;
@@ -6870,8 +6833,7 @@ async function updateAiWidgetContent(){
       if(request===auroraAiWidgetVrmRequest){const el=document.getElementById('aiModelContent');if(el)el.innerHTML='<div style="padding:12px;text-align:center;font-size:12px;color:#9a3412;background:#fff7ed;border-radius:10px">Không render được model 3D: '+(typeof escapeHtml==='function'?escapeHtml(error.message||String(error)):(error.message||String(error)))+'</div>';}
     }
   }else if(imgData){
-    const transform=`scale(${1+(aiWebcamMouthOpenness*0.06)}) translateY(${-aiWebcamMouthOpenness*3}px) rotate(${aiWebcamHeadTilt*0.15}deg)`;
-    content.innerHTML=`<img src="${imgData}" alt="" style="transform:${transform};transition:transform .1s">`;
+    content.innerHTML=`<img src="${imgData}" alt="">`;
     if(window.AuroraVRMViewer&&window.AuroraVRMViewer.stop)window.AuroraVRMViewer.stop('ai-widget');
   }else if(blenderSource){
     content.innerHTML='<div style="padding:12px;text-align:center;font-size:12px;line-height:1.55;color:#475467;background:#f8fafc;border-radius:10px">📦 Đã lưu model nguồn Blender (.blend). Để dựng nhân vật 3D tại đây, hãy xuất model sang .glb hoặc .vrm rồi tải lại.</div>';
@@ -6978,7 +6940,7 @@ function bindAiWidgetInteractions(){
     applyAiWidgetPosition();
   };
   body.ondblclick=(e)=>{
-    if(e.target.id==='aiDoorBtn'||e.target.id==='aiWebcamBtn'||e.target.id==='aiScreenReadBtn')return;
+    if(e.target.id==='aiDoorBtn'||e.target.id==='aiScreenReadBtn')return;
     if(e.target.closest('.ai-chat-bubble'))return;
     e.preventDefault();
     toggleAiChat();
@@ -7026,7 +6988,7 @@ function hideAiModelWithAnimation(){
     content.style.transition='';content.style.transform='';content.style.opacity='';
     if(bubble)bubble.classList.remove('show');
     aiWidgetVisible=false;
-    stopAiWebcam();
+    
     showAiRestoreButton();
   },1200);
 }
@@ -7505,127 +7467,6 @@ async function tryTriggerAiReaction(type){
   showAiFloatBubble(msg,7);
 }
 
-/* ============ AI WEBCAM (VTUBER) - CẢI TIẾN PHÂN TÍCH BIỂU CẢM ============ */
-async function toggleAiWebcam(){
-  if(aiWebcamActive){stopAiWebcam();return;}
-  try{
-    aiWebcamStream=await navigator.mediaDevices.getUserMedia({video:{width:320,height:240},audio:false});
-    aiWebcamActive=true;
-    const video=document.getElementById('aiWebcamVideo');
-    if(video){video.srcObject=aiWebcamStream;video.classList.add('active');}
-    const btn=document.getElementById('aiWebcamBtn');if(btn)btn.classList.add('active');
-    showCenterSquareToast('📷','Đã bật webcam','Model sẽ theo biểu cảm khuôn mặt bạn','success',2600);
-    startWebcamFaceTracking();
-  }catch(e){
-    showToast('❌ Không truy cập được camera: '+(e.message||e),'error');
-  }
-}
-function stopAiWebcam(){
-  if(aiWebcamStream){try{aiWebcamStream.getTracks().forEach(t=>t.stop());}catch(e){}aiWebcamStream=null;}
-  aiWebcamActive=false;
-  const video=document.getElementById('aiWebcamVideo');if(video){video.srcObject=null;video.classList.remove('active');}
-  const btn=document.getElementById('aiWebcamBtn');if(btn)btn.classList.remove('active');
-  if(aiWebcamRAF){cancelAnimationFrame(aiWebcamRAF);aiWebcamRAF=null;}
-  aiWebcamMouthOpenness=0;aiWebcamHeadTilt=0;aiWebcamEyeBlink=0;
-}
-function startWebcamFaceTracking(){
-  const video=document.getElementById('aiWebcamVideo');
-  if(!video)return;
-  const canvas=document.createElement('canvas');
-  const ctx=canvas.getContext('2d',{willReadFrequently:true});
-  let lastFrame=0;
-  let prevBrightness=null;
-  const loop=()=>{
-    if(!aiWebcamActive){return;}
-    const now=performance.now();
-    if(now-lastFrame>66&&video.readyState>=2&&video.videoWidth>0){
-      lastFrame=now;
-      try{
-        const w=100,h=75;
-        canvas.width=w;canvas.height=h;
-        ctx.drawImage(video,0,0,w,h);
-        const data=ctx.getImageData(0,0,w,h).data;
-        // Vùng miệng (giữa dưới)
-        let mouthB=0,mouthN=0;
-        for(let y=Math.floor(h*0.58);y<Math.floor(h*0.9);y++){
-          for(let x=Math.floor(w*0.32);x<Math.floor(w*0.68);x++){
-            const i=(y*w+x)*4;
-            mouthB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
-            mouthN++;
-          }
-        }
-        // Vùng mắt (giữa trên)
-        let eyeB=0,eyeN=0;
-        for(let y=Math.floor(h*0.2);y<Math.floor(h*0.4);y++){
-          for(let x=Math.floor(w*0.32);x<Math.floor(w*0.68);x++){
-            const i=(y*w+x)*4;
-            eyeB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
-            eyeN++;
-          }
-        }
-        // Vùng mũi/má (giữa)
-        let midB=0,midN=0;
-        for(let y=Math.floor(h*0.4);y<Math.floor(h*0.58);y++){
-          for(let x=Math.floor(w*0.32);x<Math.floor(w*0.68);x++){
-            const i=(y*w+x)*4;
-            midB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
-            midN++;
-          }
-        }
-        const mouthAvg=mouthB/Math.max(1,mouthN);
-        const eyeAvg=eyeB/Math.max(1,eyeN);
-        const midAvg=midB/Math.max(1,midN);
-        const totalAvg=(mouthAvg+eyeAvg+midAvg)/3;
-        // Miệng mở: vùng miệng tối hơn hẳn (lỗ miệng) hoặc sáng đột biến
-        const mouthContrast=totalAvg-mouthAvg;
-        let mouthVal=0;
-        if(mouthContrast>0)mouthVal=Math.min(10,mouthContrast/3.5);
-        else mouthVal=Math.min(5,Math.abs(mouthContrast)/5);
-        aiWebcamMouthOpenness=mouthVal*0.85+aiWebcamMouthOpenness*0.15;
-        // Chớp mắt: eyeAvg thay đổi đột ngột
-        if(prevBrightness!==null){
-          const eyeDiff=Math.abs(eyeAvg-prevBrightness);
-          aiWebcamEyeBlink=Math.min(1,eyeDiff/30);
-        }
-        prevBrightness=eyeAvg;
-        // Nghiêng đầu: so sánh trái/phải
-        let leftB=0,rightB=0;
-        for(let y=0;y<h;y++){
-          for(let x=0;x<Math.floor(w*0.32);x++){
-            const i=(y*w+x)*4;leftB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
-          }
-          for(let x=Math.floor(w*0.68);x<w;x++){
-            const i=(y*w+x)*4;rightB+=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
-          }
-        }
-        const tiltRaw=(rightB-leftB)/Math.max(1,h*w*0.32);
-        aiWebcamHeadTilt=aiWebcamHeadTilt*0.7+Math.max(-20,Math.min(20,tiltRaw*2.5))*0.3;
-        updateAiWidgetContent();
-        // Cập nhật preview webcam nhỏ trong profile
-        const preview=document.getElementById('profileWebcamPreview');
-        const indicator=document.getElementById('profileWebcamMouthIndicator');
-        if(indicator&&aiWebcamMouthOpenness>3){indicator.classList.add('active');indicator.innerText='😮 Đang nói ('+aiWebcamMouthOpenness.toFixed(1)+')';}
-        else if(indicator)indicator.classList.remove('active');
-      }catch(e){}
-    }
-    aiWebcamRAF=requestAnimationFrame(loop);
-  };
-  loop();
-}
-async function toggleProfileWebcam(){
-  if(aiWebcamActive){
-    stopAiWebcam();
-    const btn=document.getElementById('profileAiWebcamBtn');if(btn)btn.classList.remove('active');
-    const preview=document.getElementById('profileWebcamPreview');if(preview)preview.classList.remove('active');
-    return;
-  }
-  await toggleAiWebcam();
-  const preview=document.getElementById('profileWebcamPreview');
-  const video=document.getElementById('aiWebcamVideo');
-  if(preview&&aiWebcamStream){preview.srcObject=aiWebcamStream;preview.classList.add('active');}
-  const btn=document.getElementById('profileAiWebcamBtn');if(btn)btn.classList.add('active');
-}
-
 /* ============ RANDOM CHAT CONFIG (Supreme) ============ */
 function loadAiRandomChatConfigUI(){
   window.dbGet(window.dbChild(window.dbRef,'system/ai_random_chat')).then(s=>{
@@ -8056,7 +7897,7 @@ async function selectAiModelPick(modelId){
       currentEquippedAiModel=null;
       hideAiWidget();
       stopAiRandomChatTimer();
-      stopAiWebcam();
+      
       const rb=document.getElementById('aiRestoreBtn');if(rb)rb.remove();
       showCenterSquareToast('🚫','Đã tắt model','','info',2600);
     }
@@ -11030,10 +10871,10 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
       let blinkValue=0;
       if(now>=nextBlink){blinkEnds=now+125;nextBlink=now+2600+Math.random()*3500;}
       if(now<blinkEnds){const p=(blinkEnds-now)/125;blinkValue=Math.max(0,Math.sin((1-p)*Math.PI));}
-      const mouthRaw=Number(W.aiWebcamMouthOpenness||W.auroraAiMouthOpen||0);
-      const webcamMouth=Math.max(0,Math.min(1,Number.isFinite(mouthRaw)?mouthRaw:0));
+      const mouthRaw=Number(W.auroraAiMouthOpen||0);
+      const mouthInput=Math.max(0,Math.min(1,Number.isFinite(mouthRaw)?mouthRaw:0));
       const speaking=!!(W.speechSynthesis&&W.speechSynthesis.speaking);
-      const mouth=Math.max(webcamMouth,speaking?(0.12+Math.abs(Math.sin(now*0.021))*0.42):0);
+      const mouth=Math.max(mouthInput,speaking?(0.12+Math.abs(Math.sin(now*0.021))*0.42):0);
       if(em&&typeof em.setValue==='function'){
         try{em.setValue('blink',blinkValue);}catch(e){}
         try{em.setValue('aa',mouth);}catch(e){}
