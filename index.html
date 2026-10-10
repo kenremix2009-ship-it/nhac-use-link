@@ -948,14 +948,15 @@ input,select,textarea{font-size:13px;padding:9px}
 /* ============================================================
    AI MODEL — Widget, chat, khung, căn chỉnh (FIX ALL)
    ============================================================ */
-#aiModelWidget{position:fixed;bottom:20px;right:20px;width:240px;height:340px;z-index:2147483647!important;pointer-events:auto;touch-action:none;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;transform-origin:bottom right}
+#aiModelWidget{position:fixed;left:auto;top:auto;bottom:20px;right:20px;width:240px;height:340px;z-index:2147483647!important;pointer-events:auto;touch-action:none;transition:opacity .25s;transform-origin:top left;overflow:visible;will-change:left,top,transform}
+#aiModelContent{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:visible}#aiModelContent>img,#aiModelContent>video{max-width:100%;max-height:100%;object-fit:contain}#aiModelContent .aurora-vrm-preview{width:100%;height:100%;min-height:0;margin:0;border:0;border-radius:0}
 #aiModelWidget.ai-hidden{transform:translateY(200%) scale(.2) rotate(15deg);opacity:0;pointer-events:none!important;visibility:hidden}
 #aiModelWidget.ai-minimized{width:64px;height:64px;opacity:.55}
 #aiModelWidget.ai-minimized .ai-model-frame-layer,
 #aiModelWidget.ai-minimized #aiDoorBtn,
 #aiModelWidget.ai-minimized .ai-model-badge{display:none}
 .ai-model-container{position:relative;width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;pointer-events:auto}
-.ai-model-body{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;user-select:none}
+.ai-model-body{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;cursor:default;touch-action:none;user-select:none}.ai-model-body.ai-hit-active{cursor:grab}
 .ai-model-body:active{cursor:grabbing}
 .ai-model-body img,.ai-model-body video,.ai-model-body canvas{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
 .ai-model-emoji{font-size:120px;line-height:1;pointer-events:none;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
@@ -1288,7 +1289,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 
 <style id="aurora-final-70-percent-and-config-collapse">
   /* Site-wide display scale requested by the owner: equivalent to a 70% zoom level. */
-  html { zoom: 0.7; }
+  html { zoom: 1; }
   #auroraConfigCollapseBtn { min-width: 148px; font-weight: 800; }
   #auroraConfigCollapseBtn[aria-expanded="false"] { background: linear-gradient(135deg,#1877f2,#6f42c1); color: #fff; }
   #auroraConfigCollapseBtn .aurora-config-caret { display:inline-block; margin-right:4px; transition:transform .18s ease; }
@@ -6810,29 +6811,42 @@ async function updateAiWidgetContent(){
 }
 function applyAiWidgetPosition(){
   const w=document.getElementById('aiModelWidget');if(!w)return;
-  if(aiWidgetPos.left!==null&&aiWidgetPos.top!==null){
-    w.style.left=aiWidgetPos.left+'px';
-    w.style.top=aiWidgetPos.top+'px';
-    w.style.right='auto';w.style.bottom='auto';
-  }else{w.style.left='';w.style.top='';w.style.right='20px';w.style.bottom='20px';}
-  w.style.transform=`scale(${aiWidgetScale})`;
-  w.style.transformOrigin='top left';
+  const scale=Math.max(.4,Math.min(3,Number(aiWidgetScale)||1));
+  const width=w.offsetWidth||240,height=w.offsetHeight||340;
+  const vw=Math.max(320,window.innerWidth||window.document.documentElement.clientWidth||1024);
+  const vh=Math.max(320,window.innerHeight||window.document.documentElement.clientHeight||768);
+  let left=(aiWidgetPos.left!==null&&Number.isFinite(aiWidgetPos.left))?aiWidgetPos.left:(vw-width*scale-20);
+  let top=(aiWidgetPos.top!==null&&Number.isFinite(aiWidgetPos.top))?aiWidgetPos.top:(vh-height*scale-20);
+  left=Math.max(6,Math.min(Math.max(6,vw-width*scale-6),left));
+  top=Math.max(6,Math.min(Math.max(6,vh-height*scale-6),top));
+  if(aiWidgetPos.left!==null&&aiWidgetPos.top!==null){aiWidgetPos.left=left;aiWidgetPos.top=top;}
+  w.style.position='fixed';w.style.left=Math.round(left)+'px';w.style.top=Math.round(top)+'px';w.style.right='auto';w.style.bottom='auto';
+  w.style.transform=`scale(${scale})`;w.style.transformOrigin='top left';
 }
 function bindAiWidgetInteractions(){
   const widget=document.getElementById('aiModelWidget');
   const body=document.getElementById('aiModelBody');
   if(!widget||!body)return;
+  function isVisibleAiModelHit(e){
+    if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select,.ai-chat-bubble,.ai-float-bubble'))return false;
+    const content=document.getElementById('aiModelContent');if(!content)return false;
+    const pointIn=(r,padX=0,padY=0)=>!!r&&e.clientX>=r.left-padX&&e.clientX<=r.right+padX&&e.clientY>=r.top-padY&&e.clientY<=r.bottom+padY;
+    const media=content.querySelector('img,video');
+    if(media){const r=media.getBoundingClientRect();if(r.width>2&&r.height>2)return pointIn(r,5,5);}
+    const emoji=content.querySelector('.ai-model-emoji');if(emoji){const r=emoji.getBoundingClientRect();const insetX=r.width*.22,insetY=r.height*.12;if(r.width>2&&r.height>2)return e.clientX>=r.left+insetX&&e.clientX<=r.right-insetX&&e.clientY>=r.top+insetY&&e.clientY<=r.bottom-insetY;}
+    const canvas=content.querySelector('#aiWidgetVrmCanvas canvas');if(canvas){const r=canvas.getBoundingClientRect();return e.clientX>=r.left+r.width*.13&&e.clientX<=r.right-r.width*.13&&e.clientY>=r.top+r.height*.04&&e.clientY<=r.bottom-r.height*.04;}
+    const status=content.querySelector('.aurora-vrm-status');if(status&&e.target===status)return false;
+    return false;
+  }
   body.onpointerdown=(e)=>{
-    if(e.target.id==='aiDoorBtn'||e.target.id==='aiWebcamBtn'||e.target.id==='aiScreenReadBtn')return;
-    if(e.target.closest('.ai-chat-bubble')||e.target.closest('.ai-float-bubble'))return;
+    if(!isVisibleAiModelHit(e))return;
     if(widget.classList.contains('ai-hidden'))return;
     aiWidgetDragState.dragging=true;
     aiWidgetDragState.startX=e.clientX;
     aiWidgetDragState.startY=e.clientY;
     const rect=widget.getBoundingClientRect();
-    const parentRect=widget.offsetParent?widget.offsetParent.getBoundingClientRect():{left:0,top:0};
-    aiWidgetDragState.startLeft=rect.left-parentRect.left;
-    aiWidgetDragState.startTop=rect.top-parentRect.top;
+    aiWidgetDragState.startLeft=rect.left;
+    aiWidgetDragState.startTop=rect.top;
     // drag count for random
     if(Date.now()-aiDragWindowStart>3000){aiDragCountInWindow=0;aiDragWindowStart=Date.now();}
     aiDragCountInWindow++;
@@ -6844,7 +6858,7 @@ function bindAiWidgetInteractions(){
     if(!aiWidgetDragState.dragging)return;
     const dx=e.clientX-aiWidgetDragState.startX;
     const dy=e.clientY-aiWidgetDragState.startY;
-    // Adjust for scale since transform-origin is top-left
+    // Coordinates are viewport CSS pixels; transform-origin is top-left, preventing jump on first move.
     aiWidgetPos.left=aiWidgetDragState.startLeft+dx;
     aiWidgetPos.top=aiWidgetDragState.startTop+dy;
     applyAiWidgetPosition();
@@ -6920,6 +6934,7 @@ function hideAiModelWithAnimation(){
     showAiRestoreButton();
   },1200);
 }
+if(!window.__auroraAiViewportBound){window.__auroraAiViewportBound=true;window.addEventListener('resize',()=>{try{applyAiWidgetPosition();}catch(_){}});}
 function showAiRestoreButton(){
   if(document.getElementById('aiRestoreBtn'))return;
   const btn=document.createElement('button');
@@ -6927,7 +6942,7 @@ function showAiRestoreButton(){
   btn.style.cssText='position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#a55eea,#6f42c1);color:#fff;border:none;font-size:22px;cursor:pointer;box-shadow:0 6px 18px rgba(111,66,193,.5);z-index:2147483644;display:flex;align-items:center;justify-content:center';
   btn.innerText='🤖';
   btn.title='Triệu hồi AI';
-  btn.onclick=()=>{btn.remove();const w=document.getElementById('aiModelWidget');if(w)w.style.pointerEvents='auto';showAiWidget();aiWidgetScale=1;aiWidgetPos={left:null,top:null};applyAiWidgetPosition();bindAiWidgetInteractions();};
+  btn.onclick=()=>{btn.remove();const w=document.getElementById('aiModelWidget');if(w)w.style.pointerEvents='auto';showAiWidget();applyAiWidgetPosition();bindAiWidgetInteractions();};
   document.body.appendChild(btn);
 }
 function toggleAiChat(){
@@ -11032,6 +11047,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   async function update(path,value){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return (window.dbUpdate||window.dbSet)(dbRefPath(path),value);}
   async function remove(path){if(!dbReady())throw new Error('Firebase chưa sẵn sàng.');return window.dbRemove(dbRefPath(path));}
   function childSafe(value){let s=String(value||'');try{s=btoa(unescape(encodeURIComponent(s)));}catch(e){s=btoa(String(s).replace(/[^\x00-\x7F]/g,'_'));}return 'k_'+s.replace(/[^a-zA-Z0-9_-]/g,'_').replace(/=+$/g,'');}
+  function syncAromPlusUi(){const enabled=isLogged()&&tier()==='aromplus';if(document.body)document.body.classList.toggle('aurora-aromplus',enabled);const input=$('accMgmtVuaPass');if(input){const gate=input.parentElement?.parentElement;if(gate){gate.id='auroraAromAccountGate';gate.style.display=enabled?'none':'';}}if(enabled){if(typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;if(typeof accMgmtUnlocked!=='undefined')accMgmtUnlocked=true;const view=$('supremeView');if(view&&view.classList.contains('active')){const tab=$('supremeTabConfig');if(tab&&tab.style.display!=='none'){if(typeof configTabUnlocked!=='undefined')configTabUnlocked=true;if($('configGate'))$('configGate').style.display='none';if($('configPanel'))$('configPanel').style.display='block';}if($('supremeTabAccounts')&&$('supremeTabAccounts').style.display!=='none'){if($('accMgmtPanel'))$('accMgmtPanel').style.display='block';}}}return enabled;}
   function toast(message,type){if(typeof window.showToast==='function')window.showToast(message,type||'info');else console.log(message);}
   function activeView(){return document.querySelector('.view-section.active')?.id||'';}
   function requireOperator(){if(!isLogged()){toast('Hãy đăng nhập bằng tài khoản quản trị trước.','warn');return false;}if(!isUltraOperator()){toast('ULTRA CONTROL chỉ dành cho quản trị VUA hoặc AROM+.','error');return false;}return true;}
@@ -11043,11 +11059,16 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     #navTabsContainer>button,.nav-tabs>button{flex:0 0 auto!important;white-space:nowrap!important}
     #auroraShowcaseAdminPanel>h3{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .aurora-section-collapse{width:auto!important;flex:0 0 auto;padding:5px 10px!important;font-size:12px!important}
+
+    body.aurora-aromplus #supremePasswordModal,body.aurora-aromplus #passwordModal,body.aurora-aromplus #configGate{display:none!important}
+    body.aurora-aromplus #accMgmtVuaPass,body.aurora-aromplus #teacherPasswordInput,body.aurora-aromplus #supremePassInput,body.aurora-aromplus #configVuaPass,body.aurora-aromplus #deleteHistoryPass,body.aurora-aromplus #advLivePass,body.aurora-aromplus #studentExtraPass,body.aurora-aromplus #liveRoomPass,body.aurora-aromplus #qpPassword,body.aurora-aromplus #manageQpPass,body.aurora-aromplus #docLibraryPass,body.aurora-aromplus #newSecPassVua,body.aurora-aromplus #aiGrantVuaPass,body.aurora-aromplus #emailAdminVuaPass,body.aurora-aromplus #auroraGiftPassword{display:none!important}
+    body.aurora-aromplus label[for="accMgmtVuaPass"],body.aurora-aromplus label[for="newSecPassVua"],body.aurora-aromplus label[for="aiGrantVuaPass"],body.aurora-aromplus label[for="emailAdminVuaPass"],body.aurora-aromplus label[for="auroraGiftPassword"]{display:none!important}
+    body.aurora-aromplus #auroraAromAccountGate{display:none!important}
     #auroraUltraControlPanel{background:linear-gradient(145deg,#f8fbff,#f8f4ff);border:2px solid #8b5cf6;border-radius:16px;margin:18px 0;padding:14px;box-shadow:0 12px 32px rgba(65,50,130,.12)}
     #auroraUltraControlHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid #ded8f6}
     #auroraUltraControlHeader h2{margin:0;color:#5b35b3;font-size:18px;font-weight:950}
     #auroraUltraControlBody{padding-top:12px}
-    .aurora-uc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+    .aurora-uc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px;align-items:start}.aurora-uc-card{height:auto;align-self:start}
     .aurora-uc-card{background:#fff;border:1px solid #e1e7f0;border-radius:12px;padding:12px;min-width:0;box-shadow:0 3px 12px rgba(20,30,60,.04)}
     .aurora-uc-card h3{font-size:14px;color:#334155;margin-bottom:9px;font-weight:900}
     .aurora-uc-card label{display:block;font-size:12px;font-weight:750;margin:8px 0 3px;color:#475569}
@@ -11064,7 +11085,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     .aurora-chat-bubble,.aurora-chat-window{pointer-events:auto;box-shadow:0 12px 36px rgba(15,23,42,.25)}
     .aurora-chat-bubble{height:52px;min-width:52px;max-width:180px;border:0;border-radius:30px;background:linear-gradient(135deg,#5b5ce2,#d946ef);color:#fff;padding:0 14px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .aurora-chat-window{width:min(360px,calc(100vw - 24px));height:min(460px,calc(100vh - 100px));background:#fff;border:1px solid #e2e8f0;border-radius:16px;display:flex;flex-direction:column;overflow:hidden}
-    .aurora-owner-command-window{position:fixed;right:18px;bottom:82px;z-index:99999982;width:min(330px,calc(100vw - 24px));max-height:min(360px,calc(100vh - 110px));background:#fff;border:1px solid #c4b5fd;border-radius:14px;box-shadow:0 18px 55px rgba(15,23,42,.32);overflow:hidden;display:flex;flex-direction:column}
+    .aurora-owner-command-window{position:fixed;right:18px;bottom:82px;left:auto;top:auto;z-index:99999982;width:min(330px,calc(100vw - 24px));max-height:min(360px,calc(100vh - 110px));background:#fff;border:1px solid #c4b5fd;border-radius:14px;box-shadow:0 18px 55px rgba(15,23,42,.32);overflow:hidden;display:flex;flex-direction:column;will-change:left,top}.aurora-owner-command-header{touch-action:none;user-select:none;cursor:move}.aurora-owner-command-header button{cursor:pointer;touch-action:manipulation}.aurora-owner-command-window.is-collapsed{max-height:none;height:auto}.aurora-owner-command-window.is-collapsed .aurora-owner-command-body{display:none!important}
     .aurora-owner-command-header{background:linear-gradient(135deg,#111827,#6d28d9);color:#fff;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:900;font-size:12px}
     .aurora-owner-command-header button{background:#ffffff22;color:#fff;border:0;border-radius:7px;padding:4px 8px;cursor:pointer}
     .aurora-owner-command-body{padding:9px;display:flex;flex-direction:column;gap:7px;overflow:auto}
@@ -11091,7 +11112,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     #auroraBanOverlay .aurora-ban-card{width:min(520px,100%);padding:28px;background:#fff;color:#172033;border-radius:20px;box-shadow:0 25px 80px rgba(0,0,0,.35)}
     #auroraPlusGifControls{margin:14px 0;padding:12px;border:1px solid #c4b5fd;border-radius:12px;background:linear-gradient(135deg,#faf5ff,#eff6ff)}
     #auroraPlusGifControls h4{font-size:13px;color:#6d28d9;margin-bottom:6px}
-    @media(max-width:650px){#auroraChatFloatLayer{right:8px;bottom:8px}.aurora-chat-window{height:min(70vh,460px)}#auroraUltraControlPanel{padding:9px}}
+    @media(max-width:650px){#auroraChatFloatLayer{right:8px;bottom:8px}.aurora-chat-window{height:min(70vh,460px)}#auroraUltraControlPanel{padding:9px}.aurora-uc-grid{grid-template-columns:minmax(0,1fr)}.aurora-owner-command-window{max-height:min(68vh,420px)}}
     @media(prefers-reduced-motion:reduce){.aurora-maint-number{animation:none!important}#auroraMaintenanceOverlay *{transition:none!important}}
   `;document.head.appendChild(st);}
 
@@ -11143,7 +11164,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
         </div>
         <div class="aurora-uc-card" style="margin-top:12px;border-color:#f59e0b;background:#fffbeb"><b style="color:#92400e">⚠️ Lưu ý bảo mật triển khai</b><p class="aurora-uc-muted" style="margin-top:5px;color:#78350f">Aurora hiện dùng đăng nhập tùy chỉnh phía trình duyệt. Các lệnh quản trị, box chat, ban/kick, đáp án và chỉnh điểm trong module này chỉ được kiểm tra ở client; để ngăn người dùng kỹ thuật tự gọi Firebase bỏ qua giao diện, cần xác thực server/Firebase Authentication, Cloud Functions và Security Rules phù hợp trước khi dùng trên dữ liệu thật.</p></div>
       </div>`;
-    const config=$('configPanel');if(config&&config.parentElement)config.insertAdjacentElement('afterend',panel);else sup.appendChild(panel);
+    const config=$('configPanel');if(config)config.appendChild(panel);else sup.appendChild(panel);
     $('auroraUltraCollapseBtn').addEventListener('click',()=>{const body=$('auroraUltraControlBody'),hidden=body.style.display==='none';body.style.display=hidden?'':'none';$('auroraUltraCollapseBtn').textContent=hidden?'^ Thu gọn ULTRA CONTROL':'⌄ Mở rộng ULTRA CONTROL';$('auroraUltraCollapseBtn').setAttribute('aria-expanded',hidden?'true':'false');});
     $('auroraUCCreateChatBtn').addEventListener('click',createChatBox);$('auroraUCRefreshRoomsBtn').addEventListener('click',refreshChatMemberships);$('auroraUCCommandRunBtn').addEventListener('click',runOwnerCommand);$('auroraUCCommandHelpBtn').addEventListener('click',()=>writeCommandOutput(commandHelp()));$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});$('auroraUCLoadManipBtn').addEventListener('click',loadManipulationList);$('auroraUCShowMoreBtn').addEventListener('click',()=>{manipShowMore=!manipShowMore;renderManipulationList();$('auroraUCShowMoreBtn').textContent=manipShowMore?'⌃ Thu gọn danh sách':'⌄ Xem thêm';});$('auroraUCManipSearch').addEventListener('input',renderManipulationList);$('auroraUCStartMaintenanceBtn').addEventListener('click',startMaintenance);$('auroraUCCancelMaintenanceBtn').addEventListener('click',cancelMaintenance);
     $('auroraUCTrollOptIn').addEventListener('change',async e=>{if(!isLogged())return;try{trollOptInCache=!!e.target.checked;await set(`${ROOT}/troll_opt_in/${childSafe(uname())}`,trollOptInCache);renderChatFloatLayer();toast(e.target.checked?'Đã bật voice vui.':'Đã tắt voice vui.','success');}catch(err){e.target.checked=false;toast('Không lưu được tùy chọn: '+err.message,'error');}});
@@ -11154,8 +11175,13 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
 
   /* Chat room realtime membership and floating Messenger-like bubbles. */
   let chatRooms={},chatUnsubs={},chatMsgCache={},selectedChatRoom='',openChatRoom='',openOwnerCommandRoom='',closedChatIds=new Set(),lastUser='',roomRefreshBusy=false;
+  let chatUiPositions={};
+  function chatPositionKey(id){return 'aurora_chat_position_'+uname()+'_'+id;}
+  function readChatPosition(id){if(chatUiPositions[id])return chatUiPositions[id];try{const v=JSON.parse(localStorage.getItem(chatPositionKey(id))||'null');if(v&&Number.isFinite(v.left)&&Number.isFinite(v.top)){chatUiPositions[id]=v;return v;}}catch(_){}return null;}
+  function saveChatPosition(id,left,top){const p={left:Math.round(left),top:Math.round(top)};chatUiPositions[id]=p;try{localStorage.setItem(chatPositionKey(id),JSON.stringify(p));}catch(_){}return p;}
+  function applyChatPosition(el,id){const p=readChatPosition(id);if(!el||!p)return;const width=el.offsetWidth||300,height=el.offsetHeight||100;const left=Math.max(6,Math.min(window.innerWidth-width-6,p.left));const top=Math.max(6,Math.min(window.innerHeight-height-6,p.top));el.style.position='fixed';el.style.left=left+'px';el.style.top=top+'px';el.style.right='auto';el.style.bottom='auto';}
   function stopChatListeners(){Object.values(chatUnsubs).forEach(fn=>{try{fn();}catch(e){}});chatUnsubs={};chatRooms={};chatMsgCache={};openChatRoom='';openOwnerCommandRoom='';const ownerPanel=$('auroraOwnerCommandFloat');if(ownerPanel)ownerPanel.remove();}
-  async function refreshChatMemberships(){if(!isLogged()||!dbReady()){stopChatListeners();renderChatFloatLayer();renderOwnRoomList();renderCommandRoomOptions();return;}if(roomRefreshBusy)return;roomRefreshBusy=true;try{const me=uname(),key=childSafe(me);const [members,allRooms]=await Promise.all([get(`${ROOT}/chat_members/${key}`),get(`${ROOT}/chat_boxes`)]);const wanted=new Set(Object.keys(members||{}));Object.entries(allRooms||{}).forEach(([id,room])=>{if(room&&room.creator===me)wanted.add(id);});for(const [id,room] of Object.entries(allRooms||{})){if(!wanted.has(id)||!room||room.closed)continue;if(room.members&&room.members[key]!==true&&room.creator!==me)continue;chatRooms[id]={...room,id};if(!chatUnsubs[id]&&typeof window.onValue==='function'){chatUnsubs[id]=window.onValue(dbRefPath(`${ROOT}/chat_messages/${id}`),snap=>{const data=snap.val()||{};chatMsgCache[id]=Object.entries(data).map(([mid,m])=>({...m,id:mid})).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0)).slice(-100);if(openChatRoom===id)renderChatWindow(id);renderChatFloatLayer();});}}
+  async function refreshChatMemberships(){if(!isLogged()||!dbReady()){stopChatListeners();renderChatFloatLayer();renderOwnRoomList();renderCommandRoomOptions();return;}if(roomRefreshBusy)return;roomRefreshBusy=true;try{const me=uname(),key=childSafe(me);const [members,allRooms]=await Promise.all([get(`${ROOT}/chat_members/${key}`),get(`${ROOT}/chat_boxes`)]);const wanted=new Set(Object.keys(members||{}));Object.entries(allRooms||{}).forEach(([id,room])=>{if(room&&room.closed!==true&&room.creator===me)wanted.add(id);});for(const [id,room] of Object.entries(allRooms||{})){if(!wanted.has(id)||!room||room.closed)continue;if(room.members&&room.members[key]!==true&&room.creator!==me)continue;chatRooms[id]={...room,id};if(!chatUnsubs[id]&&typeof window.onValue==='function'){chatUnsubs[id]=window.onValue(dbRefPath(`${ROOT}/chat_messages/${id}`),snap=>{const data=snap.val()||{};chatMsgCache[id]=Object.entries(data).map(([mid,m])=>({...m,id:mid})).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0)).slice(-100);if(openChatRoom===id)renderChatWindow(id);renderChatFloatLayer();});}}
       Object.keys(chatRooms).forEach(id=>{if(!wanted.has(id)&&!(allRooms&&allRooms[id]?.creator===me)){delete chatRooms[id];if(chatUnsubs[id]){try{chatUnsubs[id]();}catch(e){}delete chatUnsubs[id];}if(openChatRoom===id)openChatRoom='';}});
       renderChatFloatLayer();renderOwnRoomList();renderCommandRoomOptions();renderOperatorState();
     }catch(e){console.warn('Aurora chat membership refresh failed:',e);}finally{roomRefreshBusy=false;}}
@@ -11180,7 +11206,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     list.forEach(room=>{
       if(closedChatIds.has(room.id))return;
       if(openChatRoom===room.id){
-        const win=document.createElement('div');win.className='aurora-chat-window';win.dataset.roomId=room.id;
+        const win=document.createElement('div');win.className='aurora-chat-window';win.dataset.roomId=room.id;applyChatPosition(win,room.id);
         const header=document.createElement('div');header.className='aurora-chat-header';header.innerHTML=`<span>💬 ${esc(room.title)}</span><span style="display:flex;gap:5px"><button type="button" aria-label="Thu nhỏ" title="Thu nhỏ">‹</button><button type="button" aria-label="Đóng" title="Đóng">×</button></span>`;
         const headButtons=header.querySelectorAll('button');
         headButtons[0].addEventListener('click',()=>{openChatRoom='';renderChatFloatLayer();});
@@ -11199,27 +11225,46 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
         const form=document.createElement('form');form.className='aurora-chat-compose';const input=document.createElement('input');input.maxLength=1500;input.placeholder='Nhắn tin…';input.setAttribute('aria-label','Tin nhắn');
         const send=document.createElement('button');send.type='submit';send.textContent='➤';form.append(input,send);form.addEventListener('submit',e=>{e.preventDefault();sendChatMessage(room.id,input);});win.appendChild(form);layer.appendChild(win);requestAnimationFrame(()=>renderChatWindow(room.id));
       }else{
-        const bubble=document.createElement('button');bubble.type='button';bubble.className='aurora-chat-bubble';bubble.innerHTML=`<span>💬</span><span>${esc(room.title)}</span>`;bubble.title='Bấm để mở box chat; kéo xuống sát đáy để ẩn bong bóng.';let pstart=null,moved=false;
-        bubble.addEventListener('pointerdown',e=>{pstart={x:e.clientX,y:e.clientY,id:e.pointerId};moved=false;try{bubble.setPointerCapture(e.pointerId);}catch(_){} });
-        bubble.addEventListener('pointermove',e=>{if(!pstart)return;if(Math.abs(e.clientX-pstart.x)>8||Math.abs(e.clientY-pstart.y)>8)moved=true;if(moved){showChatDropTarget();updateChatDropTarget(e.clientY);}});
-        bubble.addEventListener('pointerup',e=>{if(!pstart)return;const releaseY=e.clientY,wasMoved=moved;pstart=null;hideChatDropTarget();if(wasMoved&&releaseY>window.innerHeight-45){closedChatIds.add(room.id);openChatRoom='';renderChatFloatLayer();return;}if(wasMoved)return;openChatRoom=room.id;closedChatIds.delete(room.id);renderChatFloatLayer();});
+        const bubble=document.createElement('button');bubble.type='button';bubble.className='aurora-chat-bubble';bubble.innerHTML=`<span>💬</span><span>${esc(room.title)}</span>`;bubble.title='Bấm để mở box chat; kéo xuống sát đáy để ẩn bong bóng.';applyChatPosition(bubble,room.id);let pstart=null,moved=false;
+        bubble.addEventListener('pointerdown',e=>{const r=bubble.getBoundingClientRect();pstart={x:e.clientX,y:e.clientY,id:e.pointerId,left:r.left,top:r.top};moved=false;try{bubble.setPointerCapture(e.pointerId);}catch(_){} });
+        bubble.addEventListener('pointermove',e=>{if(!pstart)return;if(Math.abs(e.clientX-pstart.x)>8||Math.abs(e.clientY-pstart.y)>8)moved=true;if(moved){const left=Math.max(4,Math.min(window.innerWidth-bubble.offsetWidth-4,pstart.left+(e.clientX-pstart.x)));const top=Math.max(4,Math.min(window.innerHeight-bubble.offsetHeight-4,pstart.top+(e.clientY-pstart.y)));bubble.style.position='fixed';bubble.style.left=left+'px';bubble.style.top=top+'px';bubble.style.right='auto';bubble.style.bottom='auto';showChatDropTarget();updateChatDropTarget(e.clientY);}});
+        bubble.addEventListener('pointerup',e=>{if(!pstart)return;const releaseY=e.clientY,wasMoved=moved,start=pstart;pstart=null;hideChatDropTarget();if(wasMoved&&releaseY>window.innerHeight-45){closedChatIds.add(room.id);openChatRoom='';renderChatFloatLayer();return;}if(wasMoved){saveChatPosition(room.id,start.left+(e.clientX-start.x),start.top+(e.clientY-start.y));renderChatFloatLayer();return;}openChatRoom=room.id;closedChatIds.delete(room.id);renderChatFloatLayer();});
         layer.appendChild(bubble);
       }
     });
     if(openOwnerCommandRoom){const room=chatRooms[openOwnerCommandRoom];if(room&&room.creator===uname()&&!closedChatIds.has(room.id))renderOwnerCommandWindow(room);else{openOwnerCommandRoom='';const ownerPanel=$('auroraOwnerCommandFloat');if(ownerPanel)ownerPanel.remove();}}
   }
   function renderOwnerCommandWindow(room){
-    let panel=$('auroraOwnerCommandFloat');if(!panel){panel=document.createElement('section');panel.id='auroraOwnerCommandFloat';panel.className='aurora-owner-command-window';document.body.appendChild(panel);}
-    panel.innerHTML='';
-    const head=document.createElement('div');head.className='aurora-owner-command-header';const title=document.createElement('span');title.textContent='⌘ Lệnh riêng · '+room.title;const close=document.createElement('button');close.type='button';close.textContent='×';close.title='Đóng bảng lệnh';close.addEventListener('click',()=>{openOwnerCommandRoom='';panel.remove();renderChatFloatLayer();});head.append(title,close);panel.appendChild(head);
-    const body=document.createElement('div');body.className='aurora-owner-command-body';const hint=document.createElement('div');hint.className='aurora-uc-muted';hint.textContent='Chỉ chủ box sử dụng. Kết quả và câu lệnh không gửi vào nhóm chat.';const out=document.createElement('div');out.className='aurora-uc-out';out.textContent='Nhập /start để xem lệnh.';const form=document.createElement('form');const input=document.createElement('input');input.placeholder='/start';input.maxLength=250;input.autocomplete='off';input.setAttribute('aria-label','Lệnh riêng chủ box');const row=document.createElement('div');row.className='aurora-uc-row';const run=document.createElement('button');run.type='submit';run.className='btn btn-primary';run.textContent='▶ Chạy';const help=document.createElement('button');help.type='button';help.className='btn btn-secondary';help.textContent='/start';help.addEventListener('click',()=>{out.textContent=commandHelp();});row.append(run,help);form.append(input,row);form.addEventListener('submit',async e=>{e.preventDefault();if(!requireOperator())return;if(room.creator!==uname())return toast('Chỉ chủ box được chạy lệnh.','error');const raw=input.value.trim();if(!raw)return;input.value='';out.textContent='Đang chạy '+raw+' …';const parts=raw.split(/\s+/),cmd=parts.shift().toLowerCase();try{out.textContent=await executeOwnerCommand(room,cmd,parts);}catch(err){out.textContent='LỖI: '+(err?.message||err);}});body.append(hint,form,out);panel.appendChild(body);
+    let panel=$('auroraOwnerCommandFloat');if(!panel){panel=document.createElement('section');panel.id='auroraOwnerCommandFloat';panel.className='aurora-owner-command-window';document.body.appendChild(panel);try{const p=JSON.parse(localStorage.getItem('aurora_uc_cmd_pos_'+uname())||'null');if(p&&Number.isFinite(p.left)&&Number.isFinite(p.top)){panel.style.left=p.left+'px';panel.style.top=p.top+'px';panel.style.right='auto';panel.style.bottom='auto';}}catch(_){}}
+    const wasCollapsed=panel.dataset.collapsed==='1';
+    const priorInput=panel.querySelector('input')?.value||'';
+    const priorOutput=panel.querySelector('.aurora-uc-out')?.textContent||'Nhập /start để xem lệnh.';
+    panel.innerHTML='';panel.classList.toggle('is-collapsed',wasCollapsed);
+    const head=document.createElement('div');head.className='aurora-owner-command-header';
+    const title=document.createElement('span');title.textContent='⌘ Lệnh riêng · '+room.title;
+    const actions=document.createElement('span');actions.style.cssText='display:flex;gap:5px;align-items:center';
+    const collapse=document.createElement('button');collapse.type='button';collapse.textContent=wasCollapsed?'⌄':'^';collapse.title=wasCollapsed?'Mở rộng bảng lệnh':'Thu gọn bảng lệnh';collapse.setAttribute('aria-expanded',wasCollapsed?'false':'true');
+    const close=document.createElement('button');close.type='button';close.textContent='×';close.title='Đóng bảng lệnh';
+    actions.append(collapse,close);head.append(title,actions);panel.appendChild(head);
+    const body=document.createElement('div');body.className='aurora-owner-command-body';body.style.display=wasCollapsed?'none':'';
+    const hint=document.createElement('div');hint.className='aurora-uc-muted';hint.textContent='Chỉ chủ box sử dụng. Kết quả và câu lệnh không gửi vào nhóm chat.';
+    const out=document.createElement('div');out.className='aurora-uc-out';out.textContent=priorOutput;
+    const form=document.createElement('form');const input=document.createElement('input');input.placeholder='/start';input.maxLength=250;input.autocomplete='off';input.setAttribute('aria-label','Lệnh riêng chủ box');input.value=priorInput;
+    const row=document.createElement('div');row.className='aurora-uc-row';const run=document.createElement('button');run.type='submit';run.className='btn btn-primary';run.textContent='▶ Chạy';const help=document.createElement('button');help.type='button';help.className='btn btn-secondary';help.textContent='/start';help.addEventListener('click',()=>{out.textContent=commandHelp();});row.append(run,help);form.append(input,row);
+    form.addEventListener('submit',async e=>{e.preventDefault();if(!requireOperator())return;if(room.creator!==uname())return toast('Chỉ chủ box được chạy lệnh.','error');const raw=input.value.trim();if(!raw)return;input.value='';out.textContent='Đang chạy '+raw+' …';const parts=raw.split(/\s+/),cmd=parts.shift().toLowerCase();try{out.textContent=await executeOwnerCommand(room,cmd,parts);}catch(err){out.textContent='LỖI: '+(err?.message||err);}});
+    body.append(hint,form,out);panel.appendChild(body);
+    collapse.addEventListener('click',()=>{const hidden=panel.dataset.collapsed!=='1';panel.dataset.collapsed=hidden?'1':'0';panel.classList.toggle('is-collapsed',hidden);body.style.display=hidden?'none':'';collapse.textContent=hidden?'⌄':'^';collapse.title=hidden?'Mở rộng bảng lệnh':'Thu gọn bảng lệnh';collapse.setAttribute('aria-expanded',hidden?'false':'true');});
+    close.addEventListener('click',()=>{openOwnerCommandRoom='';try{localStorage.setItem('aurora_uc_cmd_pos_'+uname(),JSON.stringify({left:parseFloat(panel.style.left)||panel.getBoundingClientRect().left,top:parseFloat(panel.style.top)||panel.getBoundingClientRect().top}));}catch(_){}panel.remove();renderChatFloatLayer();});
+    let drag=null;head.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;const r=panel.getBoundingClientRect();drag={x:e.clientX,y:e.clientY,left:r.left,top:r.top,id:e.pointerId};try{head.setPointerCapture(e.pointerId);}catch(_){};});
+    head.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const left=Math.max(4,Math.min(window.innerWidth-panel.offsetWidth-4,drag.left+e.clientX-drag.x));const top=Math.max(4,Math.min(window.innerHeight-panel.offsetHeight-4,drag.top+e.clientY-drag.y));panel.style.left=left+'px';panel.style.top=top+'px';panel.style.right='auto';panel.style.bottom='auto';});
+    const endDrag=e=>{if(!drag)return;drag=null;try{localStorage.setItem('aurora_uc_cmd_pos_'+uname(),JSON.stringify({left:parseFloat(panel.style.left)||panel.getBoundingClientRect().left,top:parseFloat(panel.style.top)||panel.getBoundingClientRect().top}));}catch(_){};};head.addEventListener('pointerup',endDrag);head.addEventListener('pointercancel',endDrag);
   }
   function renderChatWindow(id){const el=$('auroraChatMessages_'+id);if(!el)return;const messages=chatMsgCache[id]||[];const wasBottom=el.scrollHeight-el.scrollTop-el.clientHeight<50;el.innerHTML='';if(!messages.length){const hint=document.createElement('div');hint.className='aurora-uc-muted';hint.textContent='Bắt đầu trò chuyện trong box này.';el.appendChild(hint);}messages.forEach(m=>{const row=document.createElement('div');row.className='aurora-chat-message'+(m.from===uname()?' mine':'');const meta=document.createElement('small');meta.textContent='@'+(m.from||'?')+' · '+new Date(Number(m.createdAt||Date.now())).toLocaleTimeString();const text=document.createElement('span');text.textContent=String(m.text||'');row.append(meta,text);el.appendChild(row);});if(wasBottom||messages.length)el.scrollTop=el.scrollHeight;}
   async function sendChatMessage(id,input){if(!isLogged()||!chatRooms[id]||!input)return;const room=chatRooms[id];const key=childSafe(uname());if(room.creator!==uname()&&(!room.members||room.members[key]!==true)){toast('Bạn không còn là thành viên của box này.','error');return;}const text=String(input.value||'').trim().slice(0,1500);if(!text)return;input.value='';try{const r=window.dbPush(dbRefPath(`${ROOT}/chat_messages/${id}`));await window.dbSet(r,{from:uname(),text,createdAt:Date.now()});}catch(e){toast('Gửi tin nhắn thất bại: '+(e.message||e),'error');}}
   async function addChatMember(id){const room=chatRooms[id];if(!room||room.creator!==uname())return toast('Chỉ chủ box được thêm thành viên.','error');const raw=prompt('Nhập @ID người cần thêm:');if(raw===null)return;const target=raw.trim().replace(/^@+/,'').toLowerCase();if(!target)return;if(target===uname()||room.members?.[childSafe(target)])return toast('Tài khoản đã có trong box.','warn');const user=await get(`users/${target}`).catch(()=>null);if(!user)return toast('Không tìm thấy tài khoản @'+target+'.','error');try{await update(`${ROOT}/chat_boxes/${id}/members`,{[childSafe(target)]:true});await set(`${ROOT}/chat_members/${childSafe(target)}/${id}`,true);await refreshChatMemberships();toast('Đã thêm @'+target+'.','success');}catch(e){toast('Không thêm được: '+e.message,'error');}}
   async function kickChatMember(id){const room=chatRooms[id];if(!room||room.creator!==uname())return toast('Chỉ chủ box được kick.','error');const raw=prompt('Nhập @ID thành viên muốn kick (không phải kick khỏi web):');if(raw===null)return;const target=raw.trim().replace(/^@+/,'').toLowerCase();if(!target||target===room.creator)return toast('Không thể kick chủ box.','error');if(!room.members?.[childSafe(target)])return toast('ID không nằm trong box.','warn');try{await remove(`${ROOT}/chat_boxes/${id}/members/${childSafe(target)}`);await remove(`${ROOT}/chat_members/${childSafe(target)}/${id}`);if(chatRooms[id])delete chatRooms[id].members[childSafe(target)];await refreshChatMemberships();toast('Đã kick @'+target+' khỏi box chat.','success');}catch(e){toast('Không kick được: '+e.message,'error');}}
-  async function deleteChat(id){const room=chatRooms[id];if(!room||room.creator!==uname())return toast('Chỉ chủ box được xóa.','error');if(!confirm('Xóa box chat này với toàn bộ thành viên?'))return;try{for(const key of Object.keys(room.members||{}))await remove(`${ROOT}/chat_members/${key}/${id}`);await update(`${ROOT}/chat_boxes/${id}`,{closed:true,closedAt:Date.now()});await refreshChatMemberships();toast('Đã xóa box chat.','success');}catch(e){toast('Không xóa được: '+e.message,'error');}}
-  function enableDragToDock(win,header,id){let start=null;header.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;start={x:e.clientX,y:e.clientY,rect:win.getBoundingClientRect(),id:e.pointerId};try{header.setPointerCapture(e.pointerId);}catch(_){} });header.addEventListener('pointermove',e=>{if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;showChatDropTarget();updateChatDropTarget(e.clientY);win.style.position='fixed';win.style.right='auto';win.style.bottom='auto';win.style.left=Math.max(4,Math.min(window.innerWidth-win.offsetWidth-4,start.rect.left+dx))+'px';win.style.top=Math.max(4,Math.min(window.innerHeight-win.offsetHeight-4,start.rect.top+dy))+'px';});header.addEventListener('pointerup',e=>{if(!start)return;const y=e.clientY;start=null;hideChatDropTarget();if(y>window.innerHeight-35){closedChatIds.add(id);openChatRoom='';renderChatFloatLayer();}});}
+  async function deleteChat(id){const room=chatRooms[id];if(!room||room.creator!==uname())return toast('Chỉ chủ box được xóa.','error');if(!confirm('Xóa box chat này với toàn bộ thành viên?'))return;const members=Object.keys(room.members||{});closedChatIds.add(id);if(openChatRoom===id)openChatRoom='';if(openOwnerCommandRoom===id)openOwnerCommandRoom='';if(chatUnsubs[id]){try{chatUnsubs[id]();}catch(_){}delete chatUnsubs[id];}delete chatRooms[id];delete chatMsgCache[id];renderChatFloatLayer();try{for(const key of members){await remove(`${ROOT}/chat_members/${key}/${id}`).catch(()=>{});}await remove(`${ROOT}/chat_messages/${id}`).catch(()=>{});await remove(`${ROOT}/chat_boxes/${id}`);await refreshChatMemberships();toast('Đã xóa box chat khỏi hệ thống và ẩn ngay trên giao diện.','success');}catch(e){toast('Không xóa được hoàn toàn trên Firebase: '+(e.message||e),'error');refreshChatMemberships();}}
+  function enableDragToDock(win,header,id){let start=null;header.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;const rect=win.getBoundingClientRect();start={x:e.clientX,y:e.clientY,rect,id:e.pointerId};try{header.setPointerCapture(e.pointerId);}catch(_){} });header.addEventListener('pointermove',e=>{if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;showChatDropTarget();updateChatDropTarget(e.clientY);win.style.position='fixed';win.style.right='auto';win.style.bottom='auto';win.style.left=Math.max(4,Math.min(window.innerWidth-win.offsetWidth-4,start.rect.left+dx))+'px';win.style.top=Math.max(4,Math.min(window.innerHeight-win.offsetHeight-4,start.rect.top+dy))+'px';});header.addEventListener('pointerup',e=>{if(!start)return;const y=e.clientY,left=parseFloat(win.style.left),top=parseFloat(win.style.top);if(Number.isFinite(left)&&Number.isFinite(top))saveChatPosition(id,left,top);start=null;hideChatDropTarget();if(y>window.innerHeight-35){closedChatIds.add(id);openChatRoom='';renderChatFloatLayer();}});header.addEventListener('pointercancel',()=>{start=null;hideChatDropTarget();});}
   async function cleanupRoomListenersForUser(){stopChatListeners();renderChatFloatLayer();}
 
   /* Private owner-command console: commands do not leak to the group conversation. */
@@ -11271,8 +11316,10 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   function installPlanHooks(){
     if(window.checkSecurityPassword&&!window.checkSecurityPassword.__auroraPlanHook){const old=window.checkSecurityPassword;const wrap=function(pass){const v=activeView();if(tier()==='aromplus')return true;if(v==='teacherView'&&tierAtLeast('pro'))return true;if(v==='advancedModelView'&&tierAtLeast('premium'))return true;return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.checkSecurityPassword=wrap;}
     if(window.checkSupremeAccess&&!window.checkSupremeAccess.__auroraPlanHook){const old=window.checkSupremeAccess;const wrap=function(){if(tierAtLeast('ceo')&&isLogged()){userHasSupremeAccess=tier()==='aromplus'?true:'partner';const modal=$('supremePasswordModal');if(modal)modal.style.display='none';if(typeof window.switchView==='function')window.switchView('supremeView');try{window.loadAllSupremeExams?.();window.loadSupremeAudioList?.();window.loadSecurityPassList?.();window.loadEmailJSConfigFromDB?.();window.loadConfigPanelContent?.();window.loadAiModelsForGrant?.();window.loadAiModelsList?.();window.loadSupremeAiFrameModelList?.();window.loadSystemDocs?.();}catch(e){}toast(tier()==='aromplus'?'AROM+ đã mở quyền quản trị VUA.':'CEO đã mở quyền Partner trong TỐI CAO.','success');return;}return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.checkSupremeAccess=wrap;}
-    if(window.verifyConfigAccess&&!window.verifyConfigAccess.__auroraPlanHook){const old=window.verifyConfigAccess;const wrap=async function(){if(tier()==='aromplus'&&isLogged()){if(typeof configTabUnlocked!=='undefined')configTabUnlocked=true;if($('configGate'))$('configGate').style.display='none';if($('configPanel'))$('configPanel').style.display='block';if($('configVuaPass'))$('configVuaPass').value='';await window.loadConfigPanelContent?.();toast('AROM+ đã mở cấu hình không cần mật khẩu VUA.','success');return;}return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.verifyConfigAccess=wrap;}
+    if(window.verifyConfigAccess&&!window.verifyConfigAccess.__auroraPlanHook){const old=window.verifyConfigAccess;const wrap=async function(){if(tier()==='aromplus'&&isLogged()){if(typeof configTabUnlocked!=='undefined')configTabUnlocked=true;if($('configGate'))$('configGate').style.display='none';if($('configPanel'))$('configPanel').style.display='block';if($('configVuaPass'))$('configVuaPass').value='';syncAromPlusUi();await window.loadConfigPanelContent?.();toast('AROM+ đã mở cấu hình không cần mật khẩu VUA.','success');return;}return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.verifyConfigAccess=wrap;}
     if(window.verifySupremePassword&&!window.verifySupremePassword.__auroraPlanHook){const old=window.verifySupremePassword;const wrap=async function(){if(tierAtLeast('ceo')&&isLogged()){return window.checkSupremeAccess?.();}return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.verifySupremePassword=wrap;}
+    if(window.switchSupremeTab&&!window.switchSupremeTab.__auroraAromPlanHook){const old=window.switchSupremeTab;const wrap=function(tab,el){const result=old.apply(this,arguments);syncAromPlusUi();if(tier()==='aromplus'&&isLogged()){if(tab==='accounts'){accMgmtUnlocked=true;if($('auroraAromAccountGate'))$('auroraAromAccountGate').style.display='none';if($('accMgmtPanel'))$('accMgmtPanel').style.display='block';Promise.resolve(window.loadAllUsers?.()).catch(e=>console.warn('Load users failed:',e));}else if(tab==='config'){if(typeof configTabUnlocked!=='undefined')configTabUnlocked=true;if($('configGate'))$('configGate').style.display='none';if($('configPanel'))$('configPanel').style.display='block';Promise.resolve(window.loadConfigPanelContent?.()).catch(e=>console.warn('Load config failed:',e));}}return result;};wrap.__auroraAromPlanHook=true;window.switchSupremeTab=wrap;}
+    if(window.applyUserSession&&!window.applyUserSession.__auroraAromUiHook){const old=window.applyUserSession;const wrap=async function(){const result=await old.apply(this,arguments);syncAromPlusUi();if(tier()==='aromplus'&&isLogged()&&typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;return result;};wrap.__auroraAromUiHook=true;window.applyUserSession=wrap;}
     if(window.openAiModelPicker&&!window.openAiModelPicker.__auroraPlanHook){const old=window.openAiModelPicker;const wrap=function(){if(tierAtLeast('ultra')&&isLogged()){const before=currentUserFullData?.aiModels;try{if(currentUserFullData)currentUserFullData.aiModels=Object.keys(typeof cachedAiModels!=='undefined'?cachedAiModels:{});return old.apply(this,arguments);}finally{if(currentUserFullData)currentUserFullData.aiModels=before||[];}}return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.openAiModelPicker=wrap;}
     if(window.checkUserAttempts&&!window.checkUserAttempts.__auroraPlanHook){const old=window.checkUserAttempts;const wrap=async function(code,username,type){if(tier()==='aromplus'&&isLogged()&&username===uname())return 0;return old.apply(this,arguments);};wrap.__auroraPlanHook=true;window.checkUserAttempts=wrap;}
     if(window.customConfirm&&!window.customConfirm.__auroraPlanWarning){const old=window.customConfirm;const wrap=async function(message,options){if(tier()==='aromplus'&&/xóa|xoa|reset|ban\b|kick\b|bảo trì|bao tri|sửa điểm|sua diem|chỉnh sửa|chinh sua|cấu hình|cau hinh/i.test(String(message)))message='⚠️ AROM+ · Hãy cân nhắc kỹ vì thao tác có thể ảnh hưởng dữ liệu quan trọng.\n\n'+message;return old.call(this,message,options);};wrap.__auroraPlanWarning=true;window.customConfirm=wrap;}
@@ -11296,8 +11343,8 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
   function observePlanCards(){const host=$('upgradesView');if(!host||host.dataset.ucPlanObserver)return;host.dataset.ucPlanObserver='1';const mo=new MutationObserver(()=>decoratePlanCards());mo.observe(host,{childList:true,subtree:true});decoratePlanCards();}
   function init(){installStyle();installNavHorizontalScroll();installHeroCollapse();mountUltraPanel();installPlanHooks();installBanAndJoinHooks();watchMaintenance();observePlanCards();
     if($('auroraUCCommandInput'))$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});
-    let ticks=0;const timer=setInterval(()=>{ticks++;const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
-    refreshChatMemberships();startTrollListener();
+    let ticks=0;const timer=setInterval(()=>{ticks++;const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;syncAromPlusUi();refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
+    syncAromPlusUi();refreshChatMemberships();startTrollListener();
   }
   Object.assign(window,{
     auroraUCOpenChat:id=>{if(!chatRooms[id])return;closedChatIds.delete(id);openChatRoom=id;renderChatFloatLayer();},auroraUCDeleteChat:deleteChat,
