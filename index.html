@@ -967,7 +967,7 @@ input,select,textarea{font-size:13px;padding:9px}
 #aiWebcamBtn{position:absolute;top:-6px;right:-6px;background:linear-gradient(135deg,#dc3545,#bb2d3b);color:#fff;border:2px solid #fff;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(220,53,69,.5);display:flex;align-items:center;justify-content:center;z-index:9;transition:all .25s;padding:0}
 #aiWebcamBtn:hover{transform:scale(1.12)}
 #aiWebcamBtn.active{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 0 15px #198754}
-#aiWebcamVideo{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #dc3545;z-index:7;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3);pointer-events:none}
+#aiWebcamVideo{display:none!important;position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #dc3545;z-index:7;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3);pointer-events:none}
 #aiWebcamVideo.active{display:block}
 .ai-float-bubble{position:absolute;bottom:calc(100% + 8px);right:0;max-width:220px;background:#fff;color:#333;padding:10px 14px;border-radius:16px;font-size:12px;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:20;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;border:2px solid #1877f2;word-wrap:break-word}
 .ai-float-bubble::after{content:'';position:absolute;bottom:-8px;right:24px;width:14px;height:14px;background:#fff;border-right:2px solid #1877f2;border-bottom:2px solid #1877f2;transform:rotate(45deg)}
@@ -1043,7 +1043,7 @@ input,select,textarea{font-size:13px;padding:9px}
 .screen-read-indicator.active{display:flex}
 .screen-read-indicator::before{content:'👁️';animation:eyeBlink 2s ease-in-out infinite}
 @keyframes eyeBlink{0%,90%,100%{opacity:1}95%{opacity:.3}}
-#aiScreenReadBtn{position:absolute;top:6px;left:6px;background:linear-gradient(135deg,#0d6efd,#0b5ed7);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(13,110,253,.4);z-index:9;display:flex;align-items:center;justify-content:center;transition:all .25s}
+#aiScreenReadBtn{position:absolute;top:auto;bottom:48px;left:6px;background:linear-gradient(135deg,#0d6efd,#0b5ed7);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(13,110,253,.4);z-index:9;display:flex;align-items:center;justify-content:center;transition:all .25s}
 #aiScreenReadBtn:hover{transform:scale(1.1)}
 #aiScreenReadBtn.active{background:linear-gradient(135deg,#198754,#157347);box-shadow:0 0 15px #198754}
 #deepAnalysisDropZone{background:linear-gradient(135deg,#f0ebff,#fffbe6);border:3px dashed #6f42c1;padding:20px;border-radius:14px;text-align:center;margin-top:12px;cursor:pointer;transition:all .25s}
@@ -1123,7 +1123,7 @@ input,select,textarea{font-size:13px;padding:9px}
 .aurora-vrm-preview.active{display:block}
 .aurora-vrm-preview canvas,.aurora-vrm-canvas{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain}
 .aurora-vrm-status{position:absolute;left:8px;right:8px;bottom:8px;padding:6px 9px;background:#ffffffdc;color:#344054;border-radius:8px;font-size:11px;line-height:1.4;pointer-events:none}
-.aurora-vrm-canvas{touch-action:none;cursor:grab;outline:none}.aurora-vrm-canvas:active{cursor:grabbing}.aurora-vrm-rotate-badge{position:absolute;top:8px;left:50%;transform:translateX(-50%);max-width:calc(100% - 18px);padding:5px 9px;border-radius:999px;background:rgba(16,24,40,.72);color:#fff;font-size:10px;line-height:1.3;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;z-index:4;box-shadow:0 3px 10px rgba(0,0,0,.12)}.aurora-vrm-rotate-badge.active{background:rgba(22,101,52,.88)}
+.aurora-vrm-canvas{touch-action:none;cursor:grab;outline:none}.aurora-vrm-canvas:active{cursor:grabbing}
 #aiModelContent .aurora-vrm-preview{height:100%;min-height:230px;margin:0;border:0;border-radius:0;background:transparent}
 #aiModelContent .aurora-vrm-status{bottom:4px;font-size:10px}
 .profile-mini-bot .mini-bot-vrm{width:56px;height:56px;overflow:hidden;border-radius:14px;background:linear-gradient(135deg,#e7f3ff,#d0e8ff);border:2px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none}
@@ -1361,6 +1361,42 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
     #profileModalCloseFab{width:34px;height:34px;min-width:34px;font-size:24px;line-height:28px;}
   }
   @media(prefers-reduced-motion:reduce){.aurora-showcase-art::before{animation:none!important}}
+</style>
+
+<style id="aurora-interactive-pet-cat-style">
+.aurora-showcase-media.aurora-pet-cat-mode .aurora-showcase-media-shade,
+.aurora-showcase-media.aurora-pet-cat-mode .aurora-showcase-media-controls,
+.aurora-showcase-media.aurora-pet-cat-mode .aurora-showcase-caption,
+.aurora-showcase-media.aurora-pet-cat-mode .aurora-showcase-config-hint{display:none!important}
+.aurora-pet-cat-host{position:absolute;inset:0;z-index:2;width:100%;height:100%;overflow:hidden;border-radius:inherit;background:linear-gradient(145deg,#d7e1e1,#e8dcd4 58%,#d8c9da);isolation:isolate}
+.aurora-pet-cat-canvas{position:absolute;inset:0;display:block;width:100%!important;height:100%!important;outline:0;touch-action:pan-y;cursor:pointer}
+.aurora-pet-cat-hud{position:absolute;z-index:10;left:10px;right:10px;top:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none}
+.aurora-pet-cat-namebox{display:flex;align-items:center;gap:8px;max-width:70%;min-width:0;padding:8px 11px;border:1px solid rgba(255,255,255,.72);border-radius:14px;background:rgba(255,252,246,.82);box-shadow:0 6px 18px rgba(32,39,44,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#293443;pointer-events:auto}
+.aurora-pet-cat-live-dot{width:8px;height:8px;border-radius:50%;background:#78ac83;box-shadow:0 0 0 4px rgba(120,172,131,.15);flex:none}
+.aurora-pet-cat-namebox b{display:block;max-width:100%;font-size:12px;line-height:1.2;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aurora-pet-cat-namebox small{display:block;margin-top:3px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;line-height:1.3;color:#697483}
+.aurora-pet-cat-help-btn{pointer-events:auto;cursor:pointer;border:1px solid rgba(255,255,255,.72);border-radius:12px;padding:8px 10px;background:rgba(36,51,57,.76);color:#fff;font-size:10px;font-weight:850;box-shadow:0 5px 16px rgba(10,20,25,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.aurora-pet-cat-footer{position:absolute;z-index:10;left:10px;right:10px;bottom:9px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;pointer-events:none}
+.aurora-pet-cat-footer span:first-child{max-width:76%;padding:7px 10px;border-radius:11px;background:rgba(26,34,41,.65);color:#fff;font-size:10px;font-weight:750;line-height:1.35;text-shadow:0 1px 4px rgba(0,0,0,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.aurora-pet-cat-coat{padding:5px 7px;border-radius:9px;background:rgba(255,251,243,.8);color:#53483e;font-size:9px;font-weight:800;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.aurora-pet-cat-help{position:absolute;z-index:20;inset:0;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(21,28,36,.4);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.aurora-pet-cat-help[hidden]{display:none!important}
+.aurora-pet-cat-help-card{position:relative;width:min(440px,100%);max-height:calc(100% - 4px);overflow:auto;padding:20px 17px 16px;border-radius:20px;background:rgba(255,253,248,.97);border:1px solid rgba(255,255,255,.9);box-shadow:0 22px 55px rgba(12,20,30,.28);color:#2e3844}
+.aurora-pet-cat-help-close{position:absolute;right:11px;top:11px;width:30px;height:30px;border:0;border-radius:50%;background:#e45d61;color:white;font-size:22px;line-height:1;cursor:pointer}
+.aurora-pet-cat-help-kicker{font-size:9px;font-weight:950;letter-spacing:.15em;color:#b4774b}
+.aurora-pet-cat-help-card h3{margin:6px 38px 5px 0;font-size:20px;line-height:1.2;color:#263341}
+.aurora-pet-cat-help-card>p{margin:6px 0 12px;font-size:12px;line-height:1.55;color:#687483}
+.aurora-pet-cat-help-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.aurora-pet-cat-help-list button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:10px;border:1px solid #e5e4df;border-radius:12px;background:#fff;color:#334150;font-size:12px;font-weight:850;cursor:pointer;min-height:67px}
+.aurora-pet-cat-help-list button:active{transform:scale(.985);background:#fff5e9}
+.aurora-pet-cat-help-list small{font-size:10px;line-height:1.4;font-weight:500;color:#78818b}
+.aurora-pet-cat-help-note{margin-top:12px;padding-top:10px;border-top:1px solid #e6e3dc;color:#75808b;font-size:10px;line-height:1.5}
+.aurora-pet-cat-loading,.aurora-pet-cat-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:9px;text-align:center;padding:24px;color:#374351;background:linear-gradient(145deg,#dbe7e6,#e7dce0)}
+.aurora-pet-cat-loading b,.aurora-pet-cat-fallback b{font-size:13px;font-weight:900}.aurora-pet-cat-loading small,.aurora-pet-cat-fallback span{max-width:330px;color:#697684;font-size:11px;line-height:1.55}
+.aurora-pet-cat-loading-orb{font-size:30px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.12));animation:auroraPetPaw 1.4s ease-in-out infinite alternate}
+@keyframes auroraPetPaw{from{transform:translateY(2px) rotate(-8deg)}to{transform:translateY(-5px) rotate(8deg)}}
+@media(max-width:760px){.aurora-pet-cat-hud{left:7px;right:7px;top:7px}.aurora-pet-cat-namebox{padding:7px 8px;max-width:72%}.aurora-pet-cat-namebox b{font-size:11px}.aurora-pet-cat-namebox small{max-width:180px;font-size:8px}.aurora-pet-cat-help-btn{padding:7px 8px;font-size:9px}.aurora-pet-cat-footer{left:7px;right:7px;bottom:7px}.aurora-pet-cat-footer span:first-child{font-size:9px;padding:6px 8px}.aurora-pet-cat-coat{font-size:8px;padding:5px}.aurora-pet-cat-help-card{padding:18px 12px 13px;border-radius:17px}.aurora-pet-cat-help-list{gap:6px}.aurora-pet-cat-help-list button{padding:9px;font-size:11px;min-height:64px}.aurora-pet-cat-help-list small{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.aurora-pet-cat-loading-orb{animation:none!important}}
 </style>
 
 </head><body>
@@ -2742,9 +2778,13 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 <div class="collapse-body collapsed">
 <div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-bottom:12px">
   <div style="font-weight:900;color:#6f42c1;font-size:14px;margin-bottom:10px">🤖 TẠO MODEL AI MỚI (VTUBER-STYLE)</div>
-  <div class="ai-setup-note">📎 Hỗ trợ mọi định dạng: <b>.moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh (OSC/VMC)...</b> — Không giới hạn dung lượng. <b>Model sẽ có thể biểu cảm như VTuber khi bật webcam (xem trong Profile).</b></div>
-  <label>📝 Tên model (mặc định "Auro"):</label>
-  <input type="text" id="aiNewModelName" placeholder="Auro">
+  <div class="ai-setup-note">📎 Hỗ trợ mọi định dạng: <b>.moc3, .model3.json, textures/, .motion3.json, .psd, .vrm, .fbx, .obj, .pmx, .pmd, .bvh (OSC/VMC)...</b> — Không giới hạn dung lượng. <b>Model có thể biểu cảm theo tính cách; webcam đã được gỡ khỏi giao diện.</b></div>
+  <label>📝 Tên model:</label>
+  <input type="text" id="aiNewModelName" placeholder="Aru~aruu hoặc tên riêng của model">
+  <div class="form-grid-2" style="gap:10px">
+    <div><label>⚧️ Giới tính:</label><select id="aiNewModelGender"><option value="female">Nữ</option><option value="male">Nam</option><option value="other">Khác / tùy chỉnh</option></select></div>
+    <div><label>🎭 Tính cách:</label><select id="aiNewModelPersonality"><option value="tsundere">Tsundere — ngoài lạnh trong ấm</option><option value="cute">Cute — đáng yêu</option><option value="badboy">Badboy — ngầu, tự tin</option><option value="sadgirl">Sadgirl — dịu dàng, dễ buồn</option><option value="yandere">Yandere — mãnh liệt, bám bạn</option><option value="kuudere">Kuudere — điềm tĩnh</option><option value="dandere">Dandere — ít nói, ngại ngùng</option><option value="genki">Genki — năng động</option><option value="cool">Cool — bình tĩnh, sắc sảo</option><option value="shy">Shy — rụt rè</option><option value="friendly">Friendly — thân thiện</option><option value="chaotic">Chaotic — tinh nghịch</option><option value="custom">Tùy chỉnh</option></select></div>
+  </div>
   <label>🖼️ Ảnh chính cho AI Model (.png/.jpg/.gif/.webp — dùng làm hình đại diện hiển thị):</label>
   <input type="file" id="aiNewModelMainImage" accept="image/*" style="padding:6px;background:#fff;border-radius:8px" onchange="previewMainImage(this)">
   <img id="aiNewModelMainImagePreview" class="ai-model-main-image" alt="">
@@ -2752,6 +2792,9 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
   <input type="file" id="aiNewModelFiles" multiple accept=".vrm,.glb,.gltf,.blend,.zip,.fbx,.obj,.pmx,.pmd,.moc3,.json,.psd,*/*" style="padding:6px;background:#fff;border-radius:8px" onchange="previewAiModelFileSelection(this)">
   <div class="aurora-model-format-note">Hỗ trợ tải lên <b>.vrm</b> và <b>.glb</b> để dựng model 3D trong khung AI; tự động nháy mắt và mô phỏng miệng khi webcam cung cấp dữ liệu. Có thể tải <b>.zip</b> chứa file <b>.blend</b> cùng texture như gói model Blender đã gửi. Lưu ý: trình duyệt không dựng trực tiếp file <b>.blend</b>; cần xuất sang GLB/VRM trong Blender để xem 3D.</div>
   <div id="aiNewModelVrmPreview" class="aurora-vrm-preview"><div id="aiNewModelVrmPreviewCanvas" style="width:100%;height:100%"></div><div id="aiNewModelVrmPreviewStatus" class="aurora-vrm-status">Chọn file VRM/GLB để xem trước.</div></div>
+  <label>🧸 Phụ kiện model (ảnh/GIF/WEBP; có thể chỉnh vị trí trong Safe Zone):</label>
+  <input type="file" id="aiNewModelAccessories" accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml,.png,.jpg,.jpeg,.gif,.webp,.svg" multiple style="padding:6px;background:#fff;border-radius:8px">
+  <div class="aurora-model-format-note">Có thể thêm tối đa 4 phụ kiện ảnh, mỗi file tối đa 1,5 MB. Sau khi tạo, bấm ⚙️ Cài đặt cạnh model để bật/tắt phụ kiện và căn chỉnh X/Y, kích thước, góc xoay, độ mờ trong Safe Zone.</div>
   <label>💬 Câu chào (mặc định):</label>
   <input type="text" id="aiNewModelGreeting" placeholder="Xin chào! Mình là Auro, rất vui được gặp bạn 👋">
   <label>😊 Câu khi điểm cao (≥8):</label>
@@ -3204,7 +3247,6 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
     </div>
     <div class="ai-model-badge" id="aiModelBadge">Auro</div>
     <button id="aiDoorBtn" onclick="hideAiModelWithAnimation()" title="Ẩn model">🚪</button>
-    <button id="aiWebcamBtn" onclick="toggleAiWebcam()" title="Bật webcam VTuber">📷</button>
     <button id="aiScreenReadBtn" onclick="toggleAiScreenRead()" title="Cho AI đọc màn hình">👁️</button>
     <div class="ai-float-bubble" id="aiFloatBubble"></div>
     <div class="ai-chat-bubble" id="aiChatBubble">
@@ -6758,7 +6800,7 @@ async function saveSafeAreaCalibration(){
 function listenAiModels(){
   if(aiModelListener)aiModelListener();
   aiModelListener=window.onValue(window.ref(window.db,'system/ai_models'),snap=>{
-    cachedAiModels=snap.val()||{};delete cachedAiModels['aimodel_default_aru'];
+    cachedAiModels=auroraMergeAiModelCache(snap.val()||{});delete cachedAiModels['aimodel_default_aru'];
     loadAiModelsForGrant();loadAiModelsList();loadSupremeAiFrameModelList();
     if(currentEquippedAiModel&&cachedAiModels[currentEquippedAiModel.modelId]){currentEquippedAiModel.modelData=cachedAiModels[currentEquippedAiModel.modelId];updateAiWidgetContent();}
   });
@@ -6914,13 +6956,12 @@ function bindAiWidgetInteractions(){
     const media=content.querySelector('img,video');
     if(media){const r=media.getBoundingClientRect();if(r.width>2&&r.height>2)return pointIn(r,5,5);}
     const emoji=content.querySelector('.ai-model-emoji');if(emoji){const r=emoji.getBoundingClientRect();const insetX=r.width*.22,insetY=r.height*.12;if(r.width>2&&r.height>2)return e.clientX>=r.left+insetX&&e.clientX<=r.right-insetX&&e.clientY>=r.top+insetY&&e.clientY<=r.bottom-insetY;}
-    const canvas=content.querySelector('#aiWidgetVrmCanvas canvas');if(canvas){const r=canvas.getBoundingClientRect();return e.clientX>=r.left+r.width*.13&&e.clientX<=r.right-r.width*.13&&e.clientY>=r.top+r.height*.04&&e.clientY<=r.bottom-r.height*.04;}
+    const canvas=content.querySelector('#aiWidgetVrmCanvas canvas');if(canvas){const r=canvas.getBoundingClientRect();return r.width>2&&r.height>2&&e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;}
     const status=content.querySelector('.aurora-vrm-status');if(status&&e.target===status)return false;
     return false;
   }
   body.onpointerdown=(e)=>{
-    // A drag on the actual 3D canvas rotates the model; it must not also drag the whole widget.
-    if(e.target&&e.target.closest&&e.target.closest('#aiWidgetVrmCanvas canvas, .aurora-vrm-rotate-badge'))return;
+    // Rotation controls are disabled: dragging directly on the 3D canvas moves the whole AI widget.
     if(!isVisibleAiModelHit(e))return;
     if(widget.classList.contains('ai-hidden'))return;
     aiWidgetDragState.dragging=true;
@@ -7425,6 +7466,8 @@ async function getAiReplyWithContext(text,screenCtx){
     try{
       let systemPrompt=cachedAiConfig.systemPrompt||`Bạn là ${name}, một người bạn đồng hành AI thân thiện, biết lắng nghe và trò chuyện tự nhiên bằng ngôn ngữ người dùng đang sử dụng. Hãy phản hồi như một cuộc trò chuyện thật: hiểu ý, đồng cảm khi người dùng chia sẻ, trả lời trực tiếp, giải thích rõ khi được hỏi, nhớ ngữ cảnh các lượt trước, hỏi lại nhẹ nhàng khi thiếu thông tin, không lặp đi lặp lại một mẫu câu. Không bịa thông tin khi không biết. Nếu người dùng hỏi về nội dung trang, hãy dựa vào ngữ cảnh màn hình được cung cấp và nói rõ nếu không đủ dữ liệu.`;
       systemPrompt+='\n\nHãy dùng tên model '+name+' nếu phù hợp, nhưng đừng tự giới thiệu lại ở mỗi câu trả lời. Trả lời tự nhiên, hữu ích, không quá ngắn cụt ngủn và không quá dài nếu người dùng chỉ đang trò chuyện.';
+      const auroraPersona=(currentEquippedAiModel&&currentEquippedAiModel.modelData&&currentEquippedAiModel.modelData.personality)||'tsundere';
+      systemPrompt+='\n\nTÍNH CÁCH RIÊNG CỦA MODEL: '+auroraPersona+'. '+(typeof auroraPersonalityInstruction==='function'?auroraPersonalityInstruction(auroraPersona):'Giữ giọng nói phù hợp tính cách, nhất quán và thân thiện.');
       if(screenCtx){
         systemPrompt+='\n\nNgười dùng đã chủ động bật chức năng đọc màn hình. Bên dưới là văn bản lấy từ nội dung đang hiển thị và/hoặc OCR cục bộ từ ảnh/canvas. Hãy lấy đó làm ngữ cảnh chính nếu câu hỏi liên quan; trích đúng nội dung khi cần, phân biệt dữ kiện có trong trang với suy luận, và nói rõ khi không đọc được một phần.';
       }
@@ -8011,6 +8054,7 @@ function openAiModelPicker(){
 }
 async function selectAiModelPick(modelId){
   if(!currentUser)return;
+  if(modelId==='aimodel_default_aruu'&&!((currentUserFullData&&currentUserFullData.aiModels)||[]).includes('aimodel_default_aruu')){showToast('🔒 Aru~aruu chỉ có thể được trang bị sau khi Admin cấp cho tài khoản này.','error');return;}
   try{
     await window.dbUpdate(window.ref(window.db,`users/${currentUser.username}`),{equippedAiModel:modelId,updatedAt:Date.now()});
     currentUserFullData.equippedAiModel=modelId;currentUser.equippedAiModel=modelId;
@@ -8373,29 +8417,29 @@ async function revokeAiModelFromUser(){
 function loadAiModelsList(){
   const c=document.getElementById('aiModelListContainer');
   if(!c)return;
-  const ids=Object.keys(cachedAiModels||{});
-  if(!ids.length){
-    c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:10px 0">Chưa có model nào. Hãy tạo model mới ở trên!</p>';
-    return;
-  }
+  const ids=Object.keys(cachedAiModels||{}).sort((a,b)=>a==='aimodel_default_aruu'?-1:(b==='aimodel_default_aruu'?1:0));
+  if(!ids.length){c.innerHTML='<p style="text-align:center;color:#888;font-style:italic;padding:10px 0">Chưa có model nào. Hãy tạo model mới ở trên!</p>';return;}
   c.innerHTML=ids.map(id=>{
-    const m=cachedAiModels[id];
-    if(!m)return '';
-    const fileCount=(m.files||[]).length;
-    const size=m.totalSize?formatBytes(m.totalSize):(m.sourceZip?'từ ZIP':'?');
-    const srcTag=m.source==='vision-analysis'?'🧠 Vision':(m.source==='image-fallback'?'🖼️ Ảnh':(m.fileType==='ai-model-zip'?'📦 ZIP':'📁 File'));
-    return `<div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:10px;margin-bottom:8px;background:#fff">
-      <div style="width:56px;height:56px;border-radius:10px;background:#f0f8ff;display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;flex-shrink:0;border:1px solid #e0e0e0">
-        ${m.imageData?`<img src="${m.imageData}" style="width:100%;height:100%;object-fit:cover">`:'🤖'}
+    const m=cachedAiModels[id];if(!m)return '';
+    const protectedModel=!!(m.systemDefault||id==='aimodel_default_aruu');
+    const fileCount=(m.files||[]).length+(m.accessories||[]).length;
+    const size=m.totalSize?formatBytes(m.totalSize):(protectedModel?'Model hệ thống':(m.sourceZip?'từ ZIP':'?'));
+    const srcTag=protectedModel?'🔒 Model mặc định':(m.source==='vision-analysis'?'🧠 Vision':(m.source==='image-fallback'?'🖼️ Ảnh':(m.fileType==='ai-model-zip'?'📦 ZIP':'📁 File')));
+    const personality=escapeHtml((m.personality||'tsundere').toString());
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid ${protectedModel?'#a78bfa':'#e0e0e0'};border-radius:10px;margin-bottom:8px;background:${protectedModel?'linear-gradient(135deg,#f5f3ff,#fff)':'#fff'}">
+      <div style="width:62px;height:72px;border-radius:10px;background:#f0f8ff;display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;flex-shrink:0;border:1px solid #e0e0e0">
+        ${m.imageData?`<img src="${m.imageData}" alt="" style="width:100%;height:100%;object-fit:cover">`:'🤖'}
       </div>
       <div style="flex:1;min-width:0">
-        <div style="font-weight:bold;color:#333;font-size:14px">${escapeHtml(m.name||'Auro')}</div>
-        <div style="font-size:11px;color:#888;margin-top:2px">${srcTag} • ${fileCount} file • ${size}</div>
-        <div style="font-size:10px;color:#aaa;margin-top:2px">Tạo: ${new Date(m.createdAt||0).toLocaleString('vi-VN')} • ID: <code style="background:#f0f2f5;padding:1px 4px;border-radius:3px">${escapeHtml(id)}</code></div>
+        <div style="font-weight:bold;color:#333;font-size:14px">${escapeHtml(m.name||'Auro')} ${protectedModel?'<span style="display:inline-block;background:#ede9fe;color:#6d28d9;padding:2px 6px;border-radius:9px;font-size:10px">🔒 KHÔNG THỂ XÓA</span>':''}</div>
+        <div style="font-size:11px;color:#6f42c1;margin-top:3px">${escapeHtml(m.gender==='female'?'Nữ':m.gender==='male'?'Nam':m.gender||'Chưa đặt')} · ${personality}</div>
+        <div style="font-size:11px;color:#888;margin-top:2px">${srcTag} • ${fileCount} tài nguyên • ${size}</div>
+        <div style="font-size:10px;color:#aaa;margin-top:2px">${protectedModel?'Do Aurora AI tạo — chỉ sở hữu khi được cấp':('Tạo: '+new Date(m.createdAt||0).toLocaleString('vi-VN')+' • ID: '+id)}</div>
       </div>
-      <div style="display:flex;gap:5px;flex-direction:column">
-        <button class="btn btn-secondary" style="width:auto;padding:5px 10px;font-size:11px" onclick="copyAiModelId('${id}')">📋 ID</button>
-        <button class="btn btn-danger" style="width:auto;padding:5px 10px;font-size:11px" onclick="deleteAiModelById('${id}')">🗑️</button>
+      <div style="display:flex;gap:5px;flex-direction:column;flex-shrink:0">
+        <button type="button" class="btn btn-primary" style="width:auto;padding:6px 10px;font-size:11px" onclick="openAiModelSettings('${id}')">⚙️ Cài đặt</button>
+        <button type="button" class="btn btn-secondary" style="width:auto;padding:5px 10px;font-size:11px" onclick="copyAiModelId('${id}')">📋 ID</button>
+        ${protectedModel?'<button type="button" class="btn btn-secondary" style="width:auto;padding:5px 10px;font-size:11px" disabled title="Model mặc định không thể xóa">🔒 Cố định</button>':`<button type="button" class="btn btn-danger" style="width:auto;padding:5px 10px;font-size:11px" onclick="deleteAiModelById('${id}')">🗑️ Xóa</button>`}
       </div>
     </div>`;
   }).join('');
@@ -8425,6 +8469,7 @@ function loadAiModelsForGrant(){
   if(cur&&ids.includes(cur))sel.value=cur;
 }
 async function deleteAiModelById(id){
+  if(id==='aimodel_default_aruu'||(cachedAiModels[id]&&cachedAiModels[id].systemDefault)){showToast('🔒 Aru~aruu là model hệ thống, không thể xóa.','warn');return;}
   if(!await customConfirm('Xóa model AI này? Các user đang trang bị sẽ bị mất!',{icon:'🗑️',title:'Xác nhận xóa',okClass:'danger'}))return;
   try{
     await window.dbRemove(window.ref(window.db,`system/ai_models/${id}`));
@@ -8480,6 +8525,9 @@ async function createAiModel(){
   const thinkingMsg=document.getElementById('aiNewModelThinking').value.trim();
   const musicMsg=document.getElementById('aiNewModelMusic').value.trim();
   const prankMsg=document.getElementById('aiNewModelPrank').value.trim();
+  const personality=(document.getElementById('aiNewModelPersonality')?.value||'tsundere');
+  const gender=(document.getElementById('aiNewModelGender')?.value||'female');
+  const accessoryInput=document.getElementById('aiNewModelAccessories');
   const prog=document.getElementById('aiNewModelProgress');
   const btn=document.getElementById('aiCreateModelBtn');
   btn.disabled=true;prog.style.display='block';
@@ -8521,8 +8569,19 @@ async function createAiModel(){
       }
       filesData.push(fileMeta);
     }
+    const accessories=[];
+    const accessoryFiles=Array.from(accessoryInput?.files||[]);
+    if(accessoryFiles.length>4)throw new Error('Chỉ được gắn tối đa 4 phụ kiện ảnh cho mỗi model.');
+    let accessoryTotalBytes=0;
+    for(const af of accessoryFiles){
+      if(!/\.(png|jpe?g|gif|webp)$/i.test(af.name||''))throw new Error('Phụ kiện chỉ hỗ trợ PNG, JPG, GIF hoặc WEBP.');
+      if(af.size>1.5*1024*1024)throw new Error('Phụ kiện '+af.name+' vượt quá 1,5 MB.');
+      accessoryTotalBytes+=af.size;
+      if(accessoryTotalBytes>4*1024*1024)throw new Error('Tổng dung lượng phụ kiện vượt quá 4 MB.');
+      accessories.push({id:'acc_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),name:af.name,type:af.type||'image/webp',size:af.size,data:await fileToBase64(af),x:0,y:0,scale:0.35,rotation:0,opacity:1,visible:true});
+    }
     const modelData={
-      id:modelId,name,greeting:greeting||`Xin chào! Mình là ${name}, rất vui được gặp bạn 👋`,
+      id:modelId,name,gender,personality,style:'custom',accessories,accessorySettings:{bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},greeting:greeting||`Xin chào! Mình là ${name}, rất vui được gặp bạn 👋`,
       happyMsg:happyMsg||'',sadMsg:sadMsg||'',thinkingMsg:thinkingMsg||'',musicMsg:musicMsg||'',prankMsg:prankMsg||'',
       files:filesData,
       imageData:firstImageDataUrl,
@@ -8541,7 +8600,10 @@ async function createAiModel(){
     document.getElementById('aiNewModelName').value='';
     document.getElementById('aiNewModelFiles').value='';
     document.getElementById('aiNewModelMainImage').value='';
+    if(accessoryInput)accessoryInput.value='';
     const mp=document.getElementById('aiNewModelMainImagePreview');if(mp)mp.style.display='none';
+    const pSel=document.getElementById('aiNewModelPersonality');if(pSel)pSel.value='tsundere';
+    const gSel=document.getElementById('aiNewModelGender');if(gSel)gSel.value='female';
     ['aiNewModelGreeting','aiNewModelHappy','aiNewModelSad','aiNewModelThinking','aiNewModelMusic','aiNewModelPrank'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
     loadAiModelsForGrant();loadAiModelsList();loadSupremeAiFrameModelList();
   }catch(e){prog.innerText='❌ '+e.message;btn.disabled=false;setTimeout(()=>prog.style.display='none',3000);}
@@ -9222,6 +9284,7 @@ async function saveAiGeneratedExam(){
 
 /* DOMContentLoaded */
 window.addEventListener('DOMContentLoaded',()=>{
+  ['aiWebcamBtn','aiWebcamVideo','profileAiWebcamWrap','profileWebcamPreview','profileWebcamMouthIndicator'].forEach(id=>{const el=document.getElementById(id);if(el)el.remove();});
   renderLoggedOutNav();installExtraThemePointerMotion();
   ['loginIdentifier','loginPassword'].forEach(id=>{const field=document.getElementById(id);if(field)field.addEventListener('input',clearLoginInlineError,{passive:true});});
   checkAuthOnLoad();initPerfMode();initCollapseSections();updateQrFabVisibility();
@@ -10834,7 +10897,7 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
 /*
  * Aurora Three.js/VRM viewer with:
  * - GLB/VRM front-facing defaults
- * - drag rotation enabled by click/tap and locked after 3 seconds idle
+ * - pointer/touch input remains available to drag the surrounding AI widget
  * - VRM expressions and best-effort generic GLB morph-target animation
  * - idle clips when the asset contains them, subtle procedural idle otherwise
  */
@@ -10849,7 +10912,6 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     const entry=slots.get(slot); if(!entry)return;
     entry.dead=true;
     if(entry.raf)cancelAnimationFrame(entry.raf);
-    if(entry.rotateLockTimer)clearTimeout(entry.rotateLockTimer);
     if(entry.resizeObserver)entry.resizeObserver.disconnect();
     if(entry.onFallbackResize)window.removeEventListener('resize',entry.onFallbackResize);
     try{entry.renderer.dispose();}catch(e){}
@@ -10874,7 +10936,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     renderer.setClearColor(0x000000,0);
     renderer.outputColorSpace=THREE.SRGBColorSpace;
     renderer.domElement.className='aurora-vrm-canvas';
-    renderer.domElement.setAttribute('aria-label','Model 3D: chạm/bấm rồi kéo để xoay');
+    renderer.domElement.setAttribute('aria-label','Model 3D: kéo để di chuyển khung AI');
     renderer.domElement.setAttribute('role','application');
     renderer.domElement.tabIndex=0;
     container.appendChild(renderer.domElement);
@@ -10908,12 +10970,6 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     camera.lookAt(0,height*(fullBody?0.48:0.7),0);
     camera.updateProjectionMatrix();
 
-    const rotateBadge=document.createElement('div');
-    rotateBadge.className='aurora-vrm-rotate-badge';
-    rotateBadge.setAttribute('aria-live','polite');
-    rotateBadge.textContent='Bấm/chạm rồi kéo để xoay · tự khóa sau 3 giây';
-    container.appendChild(rotateBadge);
-
     const mixer=(gltf.animations&&gltf.animations.length)?new THREE.AnimationMixer(root):null;
     if(mixer){
       const clips=gltf.animations;
@@ -10942,53 +10998,8 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
       }
     });
 
-    const entry={renderer,scene,camera,vrm,root,raf:0,resizeObserver:null,dead:false,rotateEnabled:false,isRotating:false,lastX:0,lastY:0,pointerId:null,rotateLockTimer:null,rotateBadge,mixer,idleBones,morphTargets,baseRootY:root.position.y,baseRootRotX:root.rotation.x};
+    const entry={renderer,scene,camera,vrm,root,raf:0,resizeObserver:null,dead:false,mixer,idleBones,morphTargets,baseRootY:root.position.y};
     slots.set(slot,entry);
-    function setRotateMode(on){
-      entry.rotateEnabled=!!on;
-      if(entry.rotateLockTimer){clearTimeout(entry.rotateLockTimer);entry.rotateLockTimer=null;}
-      rotateBadge.classList.toggle('active',entry.rotateEnabled);
-      rotateBadge.textContent=entry.rotateEnabled?'Đang bật xoay · kéo để xoay · tự khóa sau 3 giây':'Đã khóa xoay · bấm/chạm model để bật lại';
-      renderer.domElement.style.cursor=entry.rotateEnabled?'grab':'default';
-    }
-    function armRotateLock(){
-      if(entry.rotateLockTimer)clearTimeout(entry.rotateLockTimer);
-      entry.rotateLockTimer=setTimeout(()=>{
-        entry.isRotating=false;entry.pointerId=null;setRotateMode(false);
-      },3000);
-    }
-    const onPointerDown=e=>{
-      if(entry.dead)return;
-      // A click/tap on the model unlocks rotation; dragging rotates the model itself.
-      if(!entry.rotateEnabled){setRotateMode(true);}
-      entry.isRotating=true;entry.pointerId=e.pointerId;entry.lastX=e.clientX;entry.lastY=e.clientY;
-      armRotateLock();
-      try{renderer.domElement.setPointerCapture(e.pointerId);}catch(_){ }
-      e.preventDefault();e.stopPropagation();
-    };
-    const onPointerMove=e=>{
-      if(entry.dead||!entry.rotateEnabled||!entry.isRotating||entry.pointerId!==e.pointerId)return;
-      const dx=e.clientX-entry.lastX,dy=e.clientY-entry.lastY;
-      entry.lastX=e.clientX;entry.lastY=e.clientY;
-      root.rotation.y+=dx*0.012;
-      root.rotation.x=Math.max(-0.38,Math.min(0.38,root.rotation.x+dy*0.006));
-      root.updateMatrixWorld();
-      armRotateLock();
-      e.preventDefault();e.stopPropagation();
-    };
-    const onPointerUp=e=>{
-      if(entry.pointerId!==e.pointerId)return;
-      entry.isRotating=false;entry.pointerId=null;
-      try{renderer.domElement.releasePointerCapture(e.pointerId);}catch(_){ }
-      armRotateLock();
-      e.preventDefault();e.stopPropagation();
-    };
-    renderer.domElement.addEventListener('pointerdown',onPointerDown,{passive:false});
-    renderer.domElement.addEventListener('pointermove',onPointerMove,{passive:false});
-    renderer.domElement.addEventListener('pointerup',onPointerUp,{passive:false});
-    renderer.domElement.addEventListener('pointercancel',onPointerUp,{passive:false});
-    renderer.domElement.addEventListener('lostpointercapture',()=>{entry.isRotating=false;entry.pointerId=null;armRotateLock();});
-
     let last=performance.now(),nextBlink=last+1800+Math.random()*2600,blinkEnds=0;
     let resize;
     resize=()=>{if(entry.dead||!container.isConnected)return;const nw=Math.max(1,container.clientWidth||w),nh=Math.max(1,container.clientHeight||h);renderer.setSize(nw,nh,false);camera.aspect=nw/nh;camera.updateProjectionMatrix();};
@@ -11033,7 +11044,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
       renderer.render(scene,camera);
     }
     entry.raf=requestAnimationFrame(frame);
-    return {vrm,scene,camera,renderer,root,mixer,stop:()=>stop(slot),setRotationEnabled:setRotateMode};
+    return {vrm,scene,camera,renderer,root,mixer,stop:()=>stop(slot)};
   }
   const viewer={mount,stop};
   window.AuroraVRMViewer=viewer;
@@ -11114,15 +11125,21 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     if(!stage||!dots||!mediaBox)return;
     const items=normalizeItems(cfg.mediaItems||[]);
     if(activeIndex>=items.length)activeIndex=0;
+    if(window.AuroraPetCat&&typeof window.AuroraPetCat.disposeWithin==='function')window.AuroraPetCat.disposeWithin(stage);
     stage.replaceChildren();dots.replaceChildren();
     const hasItems=items.length>0;
     updatePlaceholderHint(!hasItems);
     if(!hasItems){
-      const art=document.createElement('div');art.className='aurora-showcase-art';art.setAttribute('aria-hidden','true');
-      art.innerHTML='<div class="aurora-art-orb aurora-art-orb-a"></div><div class="aurora-art-orb aurora-art-orb-b"></div><div class="aurora-art-rings"></div><div class="aurora-art-main-card"><div class="aurora-art-symbol">✦</div><div class="aurora-art-mini-label">AURORA LEARNING SPACE</div><strong>LEARN<br>BEYOND.</strong><p>Học tập · Khám phá · Phát triển</p></div><div class="aurora-art-float aurora-art-float-top"><span>✧</span><div><b>AI Assistant</b><small>Luôn sẵn sàng đồng hành</small></div></div><div class="aurora-art-float aurora-art-float-bottom"><span>✓</span><div><b>Tiến bộ mỗi ngày</b><small>Small steps, big changes</small></div></div>';
-      stage.appendChild(art);
-      safeText(caption,'Không gian học tập của riêng bạn');
+      mediaBox.classList.add('aurora-pet-cat-mode');
+      const catHost=document.createElement('div');catHost.className='aurora-pet-cat-host';catHost.id='auroraPetCatScene';catHost.setAttribute('aria-label','Mèo 3D tương tác của Aurora');
+      catHost.innerHTML='<div class="aurora-pet-cat-loading"><span class="aurora-pet-cat-loading-orb">🐾</span><b>Đang chuẩn bị căn phòng của mèo…</b><small>Không gian 3D sẽ xuất hiện ngay sau khi thư viện tải xong.</small></div>';
+      stage.appendChild(catHost);
+      safeText(caption,'Chạm mèo, quả len, bát ăn, ổ ngủ hoặc tờ hướng dẫn để tương tác.');
+      if(window.AuroraPetCat&&typeof window.AuroraPetCat.mount==='function')window.AuroraPetCat.mount(catHost);
+      else window.addEventListener('aurora-pet-cat-ready',()=>{if(catHost.isConnected&&window.AuroraPetCat)window.AuroraPetCat.mount(catHost);},{once:true});
+      setTimeout(()=>{if(catHost.isConnected&&!catHost.__auroraPetCatInstance&&catHost.querySelector('.aurora-pet-cat-loading')){catHost.innerHTML='<div class="aurora-pet-cat-fallback"><b>Chưa tải được thư viện 3D</b><span>Kiểm tra kết nối CDN Three.js hoặc bật WebGL/tăng tốc phần cứng trong trình duyệt.</span></div>'; }},18000);
     } else {
+      mediaBox.classList.remove('aurora-pet-cat-mode');
       const item=items[activeIndex];
       let element;
       if(item.type==='video'){
@@ -11167,7 +11184,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     safeText($('auroraShowcaseDescription'),cfg.description||DEFAULT_CFG.description);
     // Do not recreate an already-playing video when the cloud listener echoes identical media.
     const stage=$('auroraShowcaseMediaStage');
-    if(!(mediaUnchanged&&stage&&stage.firstElementChild&&(stage.firstElementChild.tagName==='VIDEO'||stage.firstElementChild.tagName==='IMG'))){activeIndex=0;renderMedia();}
+    if(!(mediaUnchanged&&stage&&stage.firstElementChild&&(stage.firstElementChild.tagName==='VIDEO'||stage.firstElementChild.tagName==='IMG'||stage.firstElementChild.classList.contains('aurora-pet-cat-host')))){activeIndex=0;renderMedia();}
     fillSettings();setLocal(cfg);
   }
   async function loadRemote(){
@@ -12143,5 +12160,605 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 </script>
 
 <!-- Aurora Mobile/Profile/Ban/Troll patch: 2026-10-10 -->
+
+<script type="module" id="aurora-interactive-pet-cat-module">
+import * as THREE from 'three';
+
+/* Aurora Interactive 3D Cat — procedural meshes, no external model dependency. */
+(function installAuroraPetCat(){
+  'use strict';
+  const active = new Set();
+  const coatChoices = [
+    {name:'mướp xám',base:0x777d87,dark:0x4b515c,cream:0xe1d9ca,nose:0xd9989d},
+    {name:'vàng cam',base:0xc9864a,dark:0x8b512c,cream:0xf2dfbf,nose:0xde8e95},
+    {name:'kem sữa',base:0xd8c6a8,dark:0x9a8365,cream:0xf6ecd8,nose:0xd89ca3},
+    {name:'đen khói',base:0x484955,dark:0x292a34,cream:0xb9b7bd,nose:0x8f687b},
+    {name:'bạc trắng',base:0xbec3c9,dark:0x777e88,cream:0xf3f2ec,nose:0xd6a0a8},
+    {name:'nâu chocolate',base:0x77513f,dark:0x442d28,cream:0xd8b99c,nose:0xc7838d}
+  ];
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const smoothstep=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t);};
+  const getOwner=()=>{try{return (typeof currentUserFullData!=='undefined'&&currentUserFullData&&currentUserFullData.username)||(typeof currentUser!=='undefined'&&currentUser&&currentUser.username)||'guest';}catch(_){return 'guest';}};
+  const getUserData=()=>{try{return (typeof currentUserFullData!=='undefined'&&currentUserFullData)||(typeof currentUser!=='undefined'&&currentUser)||{};}catch(_){return {};}};
+  const catNameKey=owner=>'aurora_petcat_name_v1_'+String(owner||'guest').replace(/[^a-zA-Z0-9_-]/g,'_');
+  function color(hex){return new THREE.Color(hex);}
+  function standard(hex,roughness=.72,metalness=0,extras={}){return new THREE.MeshStandardMaterial({color:hex,roughness,metalness,...extras});}
+  function physical(hex,roughness=.6,extras={}){return new THREE.MeshPhysicalMaterial({color:hex,roughness,clearcoat:.12,clearcoatRoughness:.7,...extras});}
+  function mesh(geo,mat,parent,pos=[0,0,0],scale=null,rot=null){const m=new THREE.Mesh(geo,mat);m.position.set(...pos);if(scale)m.scale.set(...scale);if(rot)m.rotation.set(...rot);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+  function group(parent,pos=[0,0,0]){const g=new THREE.Group();g.position.set(...pos);parent.add(g);return g;}
+  function tube(points,radius,material,parent,segments=20){const c=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));return mesh(new THREE.TubeGeometry(c,segments,radius,7,false),material,parent);}
+  function makeCanvasTexture(draw,w=512,h=256){const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');draw(ctx,w,h);const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=4;return tex;}
+  function woodTexture(){return makeCanvasTexture((ctx,w,h)=>{ctx.fillStyle='#a9794d';ctx.fillRect(0,0,w,h);for(let y=0;y<h;y+=48){const g=ctx.createLinearGradient(0,y,0,y+48);g.addColorStop(0,'#c29364');g.addColorStop(.5,'#ad7b4e');g.addColorStop(1,'#8d613d');ctx.fillStyle=g;ctx.fillRect(0,y,w,48);ctx.strokeStyle='rgba(65,38,22,.26)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,y+47);ctx.lineTo(w,y+47);ctx.stroke();for(let k=0;k<5;k++){const yy=y+Math.random()*44;ctx.strokeStyle=`rgba(73,43,23,${.04+Math.random()*.11})`;ctx.lineWidth=1+Math.random()*2;ctx.beginPath();ctx.moveTo(Math.random()*w,yy);ctx.bezierCurveTo(w*.3,yy-5,w*.6,yy+5,w,yy+Math.random()*6-3);ctx.stroke();}}},512,512);}
+  function cardboardTexture(label){return makeCanvasTexture((ctx,w,h)=>{ctx.fillStyle='#b98248';ctx.fillRect(0,0,w,h);for(let i=0;i<180;i++){ctx.strokeStyle=`rgba(75,45,20,${Math.random()*.12})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(Math.random()*w,Math.random()*h);ctx.lineTo(Math.random()*w,Math.random()*h);ctx.stroke();}ctx.fillStyle='rgba(255,227,176,.35)';ctx.fillRect(16,16,w-32,h-32);ctx.strokeStyle='#8b5d31';ctx.lineWidth=5;ctx.strokeRect(22,22,w-44,h-44);ctx.fillStyle='#573c2c';ctx.font='bold 36px sans-serif';ctx.textAlign='center';ctx.fillText(String(label||'Miu').slice(0,18),w/2,h*.57);ctx.font='bold 15px sans-serif';ctx.fillText('MÈO NHÀ AURORA',w/2,h*.76);},512,256);}
+  function paperTexture(){return makeCanvasTexture((ctx,w,h)=>{ctx.fillStyle='#fff9e8';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#d6c9a9';ctx.lineWidth=3;ctx.strokeRect(10,10,w-20,h-20);ctx.fillStyle='#4d6170';ctx.textAlign='center';ctx.font='bold 35px sans-serif';ctx.fillText('CÁCH CHƠI',w/2,62);ctx.strokeStyle='#c6d5e6';ctx.lineWidth=1;for(let y=90;y<h-20;y+=29){ctx.beginPath();ctx.moveTo(28,y);ctx.lineTo(w-28,y);ctx.stroke();}ctx.fillStyle='#7a6a58';ctx.font='bold 16px sans-serif';ctx.fillText('Chạm các đồ vật',w/2,114);ctx.fillText('để tương tác với mèo',w/2,143);},320,220);}
+  function sceneLabelTexture(line1,line2='CHẠM ĐỂ TƯƠNG TÁC'){return makeCanvasTexture((ctx,w,h)=>{ctx.fillStyle='#fff8e8';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#9d7547';ctx.lineWidth=8;ctx.strokeRect(5,5,w-10,h-10);ctx.fillStyle='#4e3e2c';ctx.textAlign='center';ctx.font='bold 33px sans-serif';ctx.fillText(line1,w/2,65);ctx.font='bold 15px sans-serif';ctx.fillText(line2,w/2,105);},320,128);}
+  function makeSign(parent,texture,pos,scale){const m=mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshStandardMaterial({map:texture,roughness:.88,side:THREE.DoubleSide}),parent,pos,scale);return m;}
+  function lookAtFront(obj){obj.rotation.y=0;}
+
+  function mount(host){
+    if(!host||!host.isConnected)return null;
+    const existing=host.__auroraPetCatInstance;if(existing&&!existing.dead)return existing;
+    const coat=coatChoices[Math.floor(Math.random()*coatChoices.length)];
+    const interactables=[];
+    const pendingInteractions=[];
+    host.classList.add('aurora-pet-cat-host');
+    host.innerHTML=`
+      <canvas class="aurora-pet-cat-canvas" aria-label="Không gian mèo 3D tương tác"></canvas>
+      <div class="aurora-pet-cat-hud"><div class="aurora-pet-cat-namebox"><span class="aurora-pet-cat-live-dot"></span><span><b data-pet-cat-name>Miu</b><small data-pet-cat-mood>Đang tò mò nhìn bạn</small></span></div><button type="button" class="aurora-pet-cat-help-btn" data-pet-action="help">Tờ hướng dẫn</button></div>
+      <div class="aurora-pet-cat-footer"><span data-pet-cat-status>Mèo của bạn · chạm vào mèo hoặc đồ vật</span><span class="aurora-pet-cat-coat" data-pet-cat-coat></span></div>
+      <div class="aurora-pet-cat-help" hidden role="dialog" aria-modal="true" aria-label="Hướng dẫn chơi với mèo"><div class="aurora-pet-cat-help-card"><button class="aurora-pet-cat-help-close" type="button" data-pet-action="close-help" aria-label="Đóng">×</button><div class="aurora-pet-cat-help-kicker">SỔ TAY CHĂM MÈO</div><h3>Chơi cùng <span data-pet-cat-help-name>Miu</span></h3><p>Chạm vào các đồ vật 3D trong căn phòng hoặc dùng nút nhanh bên dưới.</p><div class="aurora-pet-cat-help-list"><button type="button" data-pet-action="pet">🐾 Vuốt ve mèo <small>Mèo nghiêng đầu, nheo mắt và vui vẻ.</small></button><button type="button" data-pet-action="feed">🥣 Cho ăn <small>Mèo đi tới bát thức ăn và ăn một lúc.</small></button><button type="button" data-pet-action="play">🧶 Chơi quả len <small>Mèo đi theo quả len và vờn bằng chân.</small></button><button type="button" data-pet-action="sleep">🛏️ Đi ngủ <small>Mèo nằm trong ổ, bướm bay tới mũi làm mèo tỉnh.</small></button><button type="button" data-pet-action="scratch">📦 Cào bìa carton <small>Mèo cào trụ cào móng bên cạnh ổ.</small></button><button type="button" data-pet-action="rename">✏️ Đổi tên mèo <small>Nhấp bìa carton để đặt tên riêng cho tài khoản này.</small></button><button type="button" data-pet-action="butterfly">🦋 Gọi bướm <small>Bướm bay quanh căn phòng.</small></button></div><div class="aurora-pet-cat-help-note">Tên mèo được lưu theo tài khoản Aurora. Màu lông được chọn ngẫu nhiên mỗi lần vào trang.</div></div></div>
+    `;
+    const canvas=host.querySelector('canvas');
+    const moodEl=host.querySelector('[data-pet-cat-mood]');
+    const nameEls=host.querySelectorAll('[data-pet-cat-name],[data-pet-cat-help-name]');
+    const statusEl=host.querySelector('[data-pet-cat-status]');
+    const coatEl=host.querySelector('[data-pet-cat-coat]');
+    const helpOverlay=host.querySelector('.aurora-pet-cat-help');
+    if(coatEl)coatEl.textContent='Lông '+coat.name;
+    let renderer,raf=0,dead=false,resizeObserver=null,last=performance.now(),elapsed=0;
+    try{
+      renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});
+    }catch(err){host.innerHTML='<div class="aurora-pet-cat-fallback"><b>Không mở được không gian 3D</b><span>Trình duyệt có thể đang tắt WebGL. Hãy bật tăng tốc phần cứng hoặc dùng trình duyệt khác.</span></div>';return null;}
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+    renderer.outputColorSpace=THREE.SRGBColorSpace;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
+    renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    const scene=new THREE.Scene();scene.background=color(0xc7d8df);scene.fog=new THREE.Fog(0xc7d8df,8,15);
+    const camera=new THREE.PerspectiveCamera(36,1,.1,60);camera.position.set(0,2.75,6.15);camera.lookAt(0,.86,-.2);
+    scene.add(new THREE.HemisphereLight(0xf4f7ff,0x927858,2.0));
+    const sunlight=new THREE.DirectionalLight(0xffedcf,3.25);sunlight.position.set(-3.5,6,4.5);sunlight.castShadow=true;sunlight.shadow.mapSize.set(1024,1024);sunlight.shadow.camera.left=-5;sunlight.shadow.camera.right=5;sunlight.shadow.camera.top=5;sunlight.shadow.camera.bottom=-4;sunlight.shadow.bias=-.0004;scene.add(sunlight);
+    const rimLight=new THREE.DirectionalLight(0x91caff,1.3);rimLight.position.set(3,3,-3);scene.add(rimLight);
+    const fillLight=new THREE.PointLight(0xffa8a1,.8,9);fillLight.position.set(0,1.7,2);scene.add(fillLight);
+    const world=new THREE.Group();scene.add(world);
+    const woodTex=woodTexture();woodTex.wrapS=woodTex.wrapT=THREE.RepeatWrapping;woodTex.repeat.set(2.4,2.2);
+    const floorMat=new THREE.MeshStandardMaterial({map:woodTex,roughness:.82});
+    const floor=mesh(new THREE.PlaneGeometry(9,8),floorMat,world,[0,-.025,-.15],[1,1,1],[-Math.PI/2,0,0]);floor.receiveShadow=true;
+    const wallMat=standard(0xe9e2d7,.95);
+    mesh(new THREE.BoxGeometry(8,.08,.16),standard(0xbda58b,.82),world,[0,.1,-2.25]);
+    mesh(new THREE.PlaneGeometry(8,3.5),wallMat,world,[0,1.8,-2.36]);
+    // Soft window and curtains: every element is real Three.js geometry.
+    const windowG=group(world,[-1.28,1.78,-2.26]);
+    mesh(new THREE.BoxGeometry(1.52,1.16,.1),standard(0x6b5949,.55),windowG,[0,0,-.03]);
+    mesh(new THREE.BoxGeometry(1.36,1.00,.04),new THREE.MeshStandardMaterial({color:0x91c7e4,roughness:.25,metalness:.05,emissive:0x1a4865,emissiveIntensity:.22}),windowG,[0,0,.04]);
+    mesh(new THREE.BoxGeometry(.055,1.04,.08),standard(0xf0dfc8,.55),windowG,[0,0,.085]);mesh(new THREE.BoxGeometry(1.38,.055,.08),standard(0xf0dfc8,.55),windowG,[0,0,.085]);
+    mesh(new THREE.BoxGeometry(.045,1,.08),standard(0xe9d8c1,.6),windowG,[0,0,.09]);mesh(new THREE.BoxGeometry(1.35,.045,.08),standard(0xe9d8c1,.6),windowG,[0,.05,.09]);
+    const curtainMat=physical(0x9daecb,.84);
+    mesh(new THREE.BoxGeometry(.29,1.28,.12),curtainMat,world,[-2.08,1.72,-2.18],[1,1,1],[0,0,-.06]);mesh(new THREE.BoxGeometry(.27,1.28,.12),physical(0xb8a0ce,.84),world,[-.49,1.72,-2.18],[1,1,1],[0,0,.07]);
+    // Wall pictures.
+    const frameMat=standard(0x90704f,.62);const artTex=makeCanvasTexture((ctx,w,h)=>{ctx.fillStyle='#dce8ef';ctx.fillRect(0,0,w,h);ctx.fillStyle='#86b6a4';ctx.beginPath();ctx.arc(w*.5,h*.82,w*.4,Math.PI,Math.PI*2);ctx.fill();ctx.fillStyle='#ead6bc';ctx.beginPath();ctx.arc(w*.68,h*.26,w*.14,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(54,89,95,.5)';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(0,h*.62);ctx.quadraticCurveTo(w*.4,h*.42,w,h*.67);ctx.stroke();},256,192);
+    mesh(new THREE.BoxGeometry(.82,.66,.06),frameMat,world,[1.42,1.95,-2.23]);mesh(new THREE.PlaneGeometry(.72,.56),new THREE.MeshStandardMaterial({map:artTex,roughness:.9}),world,[1.42,1.95,-2.18]);
+    // Indoor plant pot and leaves.
+    const plant=group(world,[-2.38,0,-.82]);mesh(new THREE.CylinderGeometry(.2,.29,.35,20),standard(0xb76f55,.78),plant,[0,.18,0]);mesh(new THREE.CylinderGeometry(.245,.245,.045,20),standard(0x453a2c,.98),plant,[0,.365,0]);
+    const leafMat=physical(0x4c7655,.77);for(let i=0;i<8;i++){const a=i*Math.PI*2/8;const leaf=mesh(new THREE.SphereGeometry(1,12,10),leafMat,plant,[Math.cos(a)*(.15+Math.random()*.08),.65+Math.random()*.23,Math.sin(a)*(.15+Math.random()*.08)],[.09,.31,.16],[Math.cos(a)*.2,0,-Math.sin(a)*.4]);}
+    // Rugs and woven stitching.
+    const rug=mesh(new THREE.CircleGeometry(1.55,64),physical(0x91aaa0,.97),world,[0,.004,.05],[1,1,1],[-Math.PI/2,0,0]);rug.receiveShadow=true;
+    const rugRim=mesh(new THREE.TorusGeometry(1.48,.035,8,72),standard(0xd8c9a8,.95),world,[0,.016,.05],[1,1,1],[Math.PI/2,0,0]);
+    const rugPattern=standard(0x6f9188,.98);for(let i=0;i<28;i++){const angle=i*Math.PI*2/28;const x=Math.cos(angle)*1.34,z=.05+Math.sin(angle)*1.34;mesh(new THREE.SphereGeometry(.025,7,6),rugPattern,world,[x,.022,z],[1,.45,1]);}
+    // Little feeding pedestal and ceramic bowl.
+    const foodStand=group(world,[-1.35,0,.06]);
+    mesh(new THREE.CylinderGeometry(.31,.35,.14,24),standard(0x8d6348,.7),foodStand,[0,.12,0]);mesh(new THREE.CylinderGeometry(.24,.28,.18,20),standard(0xa97a57,.67),foodStand,[0,.27,0]);mesh(new THREE.CylinderGeometry(.36,.34,.065,24),physical(0xc79b70,.55),foodStand,[0,.39,0]);
+    const bowl=group(foodStand,[0,.445,.015]);mesh(new THREE.CylinderGeometry(.245,.18,.12,28,1,true),physical(0xf0ece5,.24,{metalness:.03}),bowl,[0,.015,0]);mesh(new THREE.TorusGeometry(.235,.022,8,28),physical(0xd0d8df,.24),bowl,[0,.075,0]);
+    const kibbleMat=standard(0x8e5730,.94);const foodBits=[];for(let i=0;i<13;i++){const a=i*2.399,rr=.03+Math.sqrt(i/13)*.16;const bit=mesh(new THREE.SphereGeometry(.035,8,7),kibbleMat,bowl,[Math.cos(a)*rr,.072+Math.random()*.012,Math.sin(a)*rr],[1,.55,.78]);foodBits.push(bit);}
+    foodStand.userData.petAction='feed';interactablesHack(foodStand);
+    // Small wooden plaque on the pedestal.
+    mesh(new THREE.BoxGeometry(.48,.18,.03),standard(0x74503a,.68),foodStand,[0,.48,.24],[1,1,1],[.16,0,0]);
+    const feedTex=sceneLabelTexture('ĐỒ ĂN','CHẠM ĐỂ CHO ĂN');makeSign(foodStand,feedTex,[0,.49,.26],[.43,.14,1]);
+    // Cat bed.
+    const bed=group(world,[1.28,0,-.5]);
+    mesh(new THREE.CylinderGeometry(.59,.62,.18,40),physical(0x849ab9,.88),bed,[0,.12,0]);mesh(new THREE.TorusGeometry(.52,.105,12,48),physical(0xb2bfd2,.88),bed,[0,.22,0],[1,1,1],[Math.PI/2,0,0]);
+    mesh(new THREE.SphereGeometry(1,28,18),physical(0xe5d5c7,.97),bed,[0,.22,0],[.46,.075,.43]);
+    bed.userData.petAction='sleep';interactablesHack(bed);
+    const bedSignTex=sceneLabelTexture('Ổ NGỦ','CHẠM ĐỂ NGỦ');makeSign(bed,bedSignTex,[0,.35,.47],[.57,.20,1]);
+    // Cardboard box beside bed; name texture is refreshed per account.
+    const cardboard=group(world,[1.96,0,-.46]);const cardboardMat=standard(0xba8a59,.94);mesh(new THREE.BoxGeometry(.45,.32,.38),cardboardMat,cardboard,[0,.17,0]);mesh(new THREE.BoxGeometry(.47,.045,.4),standard(0xd0a16b,.96),cardboard,[0,.345,0]);
+    const nameCanvas=makeCanvasTexture((ctx,w,h)=>{ctx.fillStyle='#b9834c';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#78512f';ctx.lineWidth=6;ctx.strokeRect(5,5,w-10,h-10);ctx.fillStyle='#412e21';ctx.font='bold 45px sans-serif';ctx.textAlign='center';ctx.fillText('Miu',w/2,h*.58);ctx.font='bold 15px sans-serif';ctx.fillText('TÊN MÈO · BẤM ĐỔI',w/2,h*.83);},384,180);
+    const nameMat=new THREE.MeshStandardMaterial({map:nameCanvas,roughness:.93});mesh(new THREE.PlaneGeometry(.39,.18),nameMat,cardboard,[0,.22,.194]);cardboard.userData.petAction='rename';interactablesHack(cardboard);
+    // Scratch board with sisal lines.
+    const scratch=group(world,[1.48,0,.72]);mesh(new THREE.BoxGeometry(.74,.1,.44),standard(0xd8c9ad,.93),scratch,[0,.08,0]);mesh(new THREE.BoxGeometry(.42,.08,.34),standard(0x9e8065,.93),scratch,[0,.17,0]);for(let i=0;i<17;i++)mesh(new THREE.BoxGeometry(.012,.012,.30),standard(i%2?0xb79770:0xc5aa83,.98),scratch,[-.19+i*.023,.218,0]);scratch.userData.petAction='scratch';interactablesHack(scratch);
+    // Paper note beside the food stand.
+    const note=group(world,[-.75,0,.53]);mesh(new THREE.BoxGeometry(.33,.025,.31),standard(0x8c755d,.87),note,[0,.025,0]);const noteTexture=paperTexture();mesh(new THREE.PlaneGeometry(.31,.27),new THREE.MeshStandardMaterial({map:noteTexture,roughness:1,side:THREE.DoubleSide}),note,[0,.043,.005],[1,1,1],[-Math.PI/2,0,0]);const noteBack=mesh(new THREE.BoxGeometry(.04,.08,.04),standard(0x927e68,.87),note,[0,.07,-.1]);note.userData.petAction='help';interactablesHack(note);
+    // Yarn ball plus wrapped fibres.
+    const yarn=group(world,[.05,.17,.78]);const yarnColor=[0xe85d70,0x5a90df,0xdfad42,0x8f66ca,0x5eae87][Math.floor(Math.random()*5)];const yarnMaterial=physical(yarnColor,.88);mesh(new THREE.SphereGeometry(.18,28,22),yarnMaterial,yarn,[0,0,0]);const threadMat=standard(0xf8e8d8,.9);for(let i=0;i<7;i++){const lat=-.95+i*.3;const pts=[];for(let j=0;j<=30;j++){const u=j/30*Math.PI*2;const r=.183*Math.sqrt(1-lat*lat);pts.push([Math.cos(u)*r,Math.sin(u)*r,lat*.183]);}const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));mesh(new THREE.TubeGeometry(curve,36,.006,4,false),threadMat,yarn);}
+    yarn.userData.petAction='play';interactablesHack(yarn);
+    // Tiny treats placed near the sleeping area (extra interaction).
+    const treatJar=group(world,[2.13,0,.43]);mesh(new THREE.CylinderGeometry(.12,.14,.28,20),physical(0x9cbac4,.25,{transparent:true,opacity:.72}),treatJar,[0,.15,0]);mesh(new THREE.CylinderGeometry(.145,.145,.035,20),standard(0x7b6857,.5),treatJar,[0,.31,0]);mesh(new THREE.BoxGeometry(.13,.11,.018),standard(0xf7e4b9,.8),treatJar,[0,.16,.133]);treatJar.userData.petAction='treat';interactablesHack(treatJar);
+
+    // Cat mesh assembled as a real hierarchy, with a random coat on every page entry.
+    const catRoot=group(world,[0,0,.06]);catRoot.userData.petAction='pet';
+    const pose=group(catRoot);
+    const fur=physical(coat.base,.92,{sheen:.22,sheenColor:0xd5d2cd,sheenRoughness:.88});
+    const darkFur=standard(coat.dark,.95),creamFur=physical(coat.cream,.95,{sheen:.15}),pink=physical(coat.nose,.38,{clearcoat:.22}),earPink=physical(0xc78e98,.85),eyeWhite=physical(0xe9e4d9,.3),iris=physical(coat.name==='đen khói'?0x9cb0a8:0x8bb6a0,.26),pupil=physical(0x151a20,.12),eyeGlint=new THREE.MeshBasicMaterial({color:0xffffff});
+    const body=mesh(new THREE.SphereGeometry(1,32,24),fur,pose,[0,.66,-.19],[.48,.37,.77]);
+    const chest=mesh(new THREE.SphereGeometry(1,24,18),creamFur,pose,[0,.66,.30],[.36,.35,.43]);
+    const belly=mesh(new THREE.SphereGeometry(1,24,18),creamFur,pose,[0,.44,-.13],[.34,.17,.54]);
+    // Subtle short fur strokes are batched into one mesh per body section for mobile performance.
+    function furStrokes(center,scale,count,material,parent){const positions=[];for(let i=0;i<count;i++){const z=Math.random()*2-1,a=Math.random()*Math.PI*2,r=Math.sqrt(1-z*z);const n=new THREE.Vector3(Math.cos(a)*r,z,Math.sin(a)*r);const p=new THREE.Vector3(center[0]+n.x*scale[0],center[1]+n.y*scale[1],center[2]+n.z*scale[2]);const end=p.clone().add(new THREE.Vector3(n.x,n.y,n.z).multiplyScalar(.022+Math.random()*.015));positions.push(p.x,p.y,p.z,end.x,end.y,end.z);}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));const lines=new THREE.LineSegments(geo,material);parent.add(lines);return lines;}
+    const furLineMat=new THREE.LineBasicMaterial({color:coat.dark,transparent:true,opacity:.27});furStrokes([0,.66,-.19],[.48,.37,.77],260,furLineMat,pose);furStrokes([0,.66,.30],[.36,.35,.43],90,new THREE.LineBasicMaterial({color:coat.cream,transparent:true,opacity:.3}),pose);
+    // Legs are jointed groups, so the feet can step and scratch.
+    const legs=[];
+    for(const spec of [{x:-.29,z:.34,front:true},{x:.29,z:.34,front:true},{x:-.3,z:-.62,front:false},{x:.3,z:-.62,front:false}]){
+      const lg=group(pose,[spec.x,.41,spec.z]);mesh(new THREE.CapsuleGeometry(.09,.27,4,8),fur,lg,[0,-.13,0],[1,1,1],[.08,0,0]);mesh(new THREE.SphereGeometry(1,18,12),fur,lg,[0,-.285,.055],[.112,.075,.15]);for(let t=0;t<3;t++)mesh(new THREE.SphereGeometry(.017,7,6),creamFur,lg,[-.045+t*.045,-.294,.18],[1,.75,1]);legs.push({group:lg,front:spec.front,base:new THREE.Euler().copy(lg.rotation),phase:Math.random()*Math.PI*2});
+    }
+    const head=group(pose,[0,1.04,.43]);
+    mesh(new THREE.SphereGeometry(1,32,24),fur,head,[0,0,0],[.36,.33,.32]);
+    // cheeks and muzzle
+    mesh(new THREE.SphereGeometry(1,20,16),creamFur,head,[-.12,-.105,.255],[.145,.105,.12]);mesh(new THREE.SphereGeometry(1,20,16),creamFur,head,[.12,-.105,.255],[.145,.105,.12]);mesh(new THREE.SphereGeometry(1,18,14),creamFur,head,[0,-.17,.23],[.16,.09,.11]);
+    // Cat ears with pink inset.
+    const earL=mesh(new THREE.ConeGeometry(.145,.32,3,1),fur,head,[-.235,.275,-.02],[1,1,1],[0,0,.20]);const earR=mesh(new THREE.ConeGeometry(.145,.32,3,1),fur,head,[.235,.275,-.02],[1,1,1],[0,0,-.20]);
+    mesh(new THREE.ConeGeometry(.095,.23,3,1),earPink,head,[-.232,.285,.035],[1,1,1],[0,0,.20]);mesh(new THREE.ConeGeometry(.095,.23,3,1),earPink,head,[.232,.285,.035],[1,1,1],[0,0,-.20]);
+    // Eyes, vertical pupils, tiny catchlights.
+    const eyes=[];for(const side of [-1,1]){const eg=group(head,[side*.15,.035,.282]);mesh(new THREE.SphereGeometry(1,24,18),eyeWhite,eg,[0,0,0],[.086,.115,.046]);mesh(new THREE.SphereGeometry(1,20,16),iris,eg,[0,0,.038],[.054,.082,.022]);mesh(new THREE.SphereGeometry(1,16,12),pupil,eg,[0,0,.056],[.019,.065,.014]);mesh(new THREE.SphereGeometry(.014,8,6),eyeGlint,eg,[-.017,.034,.07]);mesh(new THREE.SphereGeometry(.006,6,5),eyeGlint,eg,[.016,-.022,.071]);eyes.push(eg);}
+    const nose=mesh(new THREE.SphereGeometry(1,16,12),pink,head,[0,-.1,.36],[.046,.03,.028]);
+    const mouthMat=standard(0x5b4845,.8);tube([[0,-.12,.372],[0,-.17,.367],[-.055,-.19,.35]],.006,mouthMat,head,10);tube([[0,-.17,.367],[.055,-.19,.35]],.006,mouthMat,head,10);
+    const whiskerMat=standard(coat.cream,.8);for(const side of [-1,1])for(let k=0;k<3;k++){const y=-.105+k*.028; tube([[side*.12,y,.32],[side*.27,y+(k-1)*.02,.31],[side*.39,y+(k-1)*.045,.29]],.0035,whiskerMat,head,9);}
+    furStrokes([0,0,0],[.36,.33,.32],140,new THREE.LineBasicMaterial({color:coat.dark,transparent:true,opacity:.2}),head);
+    // Tail: one curved, swishable 3D tube.
+    const tailRoot=group(pose,[0,.7,-.78]);const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(-.04,.08,-.18),new THREE.Vector3(.12,.19,-.31),new THREE.Vector3(.30,.35,-.33),new THREE.Vector3(.31,.52,-.22)]);const tail=mesh(new THREE.TubeGeometry(tailCurve,40,.085,12,false),fur,tailRoot);const tailTip=mesh(new THREE.SphereGeometry(.087,14,10),fur,tailRoot,[.31,.52,-.22]);
+    // A few coat markings that change hue with the chosen coat.
+    if(!['đen khói','kem sữa','bạc trắng'].includes(coat.name)){for(let i=0;i<4;i++){const zz=-.55+i*.25;const stripePoints=[[-.30,.93,zz-.04],[-.18,.98,zz],[0,1.005,zz+.035],[.18,.98,zz],[.30,.93,zz-.04]];tube(stripePoints,.012,darkFur,pose,14);}}
+    const catTarget={x:0,z:.05};let state='idle',stateUntil=0,moveTarget=null,arrivalState='idle',sleepSince=0,butterflyMode='fly',butterflyLandAt=0,petPulseUntil=0,foodCount=foodBits.length,playStart=0,ownerKey=getOwner(),catName='Miu',nameVersion=0,blinkNext=performance.now()/1000+2,blinkUntil=0,lastOwnerCheck=0,lastFoodNibble=0;
+    const homePos={x:0,z:.05};
+    // Interactive mark registry defined above; keep items pickable through their parent group.
+    // Re-register helpers created before the scene's hit registry is available.
+    function register(root,action){root.userData.petAction=action;interactables.push(root);return root;}
+    function interactablesHack(root){/* queued registrations are picked up below after the registry is initialized */pendingInteractions.push(root);}
+    // Previously made objects have their actions already set. Add them and the cat hierarchy to raycast set.
+    pendingInteractions.forEach(x=>register(x,x.userData.petAction));pendingInteractions.length=0;
+    register(catRoot,'pet');
+    // Butterfly with animated wings, no external texture.
+    const butterfly=group(world,[-2.1,1.45,-.1]);const butterflyBody=mesh(new THREE.CapsuleGeometry(.018,.10,3,6),standard(0x3b3445,.5),butterfly,[0,0,0],[1,1,1],[Math.PI/2,0,0]);const wingMat=new THREE.MeshPhysicalMaterial({color:0xe9a9db,roughness:.25,metalness:.05,emissive:0x4a1845,emissiveIntensity:.16,side:THREE.DoubleSide});const wingA=mesh(new THREE.SphereGeometry(1,12,10),wingMat,butterfly,[-.055,.018,0],[.065,.10,.018]);const wingB=mesh(new THREE.SphereGeometry(1,12,10),wingMat,butterfly,[.055,.018,0],[.065,.10,.018]);const wingC=mesh(new THREE.SphereGeometry(1,10,8),physical(0xf3d49a,.3),butterfly,[-.042,-.07,0],[.04,.052,.015]);const wingD=mesh(new THREE.SphereGeometry(1,10,8),physical(0xf3d49a,.3),butterfly,[.042,-.07,0],[.04,.052,.015]);register(butterfly,'butterfly');
+    let butterflyOrigin=new THREE.Vector3(-2.1,1.45,-.1),butterflyTarget=null,landedAt=0;
+    function mood(text){if(moodEl)moodEl.textContent=text;if(statusEl)statusEl.textContent=text;}
+    function updateNameUI(){nameEls.forEach(el=>el.textContent=catName);if(nameMat.map){nameMat.map.dispose();}nameMat.map=cardboardTexture(catName);nameMat.needsUpdate=true;}
+    async function loadNameForOwner(nextOwner){ownerKey=nextOwner||'guest';let version=++nameVersion;let found='';try{found=localStorage.getItem(catNameKey(ownerKey))||'';}catch(_){}
+      const user=getUserData();if(ownerKey!=='guest'&&user&&user.username===ownerKey&&user.petCatName)found=String(user.petCatName);
+      if(ownerKey!=='guest'&&window.db&&window.dbGet&&window.dbChild){try{const snap=await window.dbGet(window.dbChild(window.dbRef,`users/${ownerKey}`));if(snap&&snap.exists()){const d=snap.val()||{};if(d.petCatName)found=String(d.petCatName);}}catch(e){console.warn('Cat name cloud load failed:',e);}}
+      if(version!==nameVersion)return;
+      catName=(found||'Miu').slice(0,22);try{localStorage.setItem(catNameKey(ownerKey),catName);}catch(_){}updateNameUI();
+    }
+    async function renameCat(){const next=prompt('Đặt tên cho mèo (tối đa 22 ký tự):',catName);if(next===null)return;const clean=String(next).replace(/[<>\r\n]/g,' ').trim().slice(0,22);if(!clean){mood('Tên mèo không được để trống.');return;}catName=clean;const targetOwner=getOwner();ownerKey=targetOwner;try{localStorage.setItem(catNameKey(ownerKey),catName);}catch(_){}const user=getUserData();if(user&&user.username===ownerKey)user.petCatName=catName;try{if(typeof currentUser!=='undefined'&&currentUser&&currentUser.username===ownerKey)currentUser.petCatName=catName;if(typeof currentUserFullData!=='undefined'&&currentUserFullData&&currentUserFullData.username===ownerKey)currentUserFullData.petCatName=catName;if(window.db&&window.dbUpdate&&window.ref&&ownerKey!=='guest')await window.dbUpdate(window.ref(window.db,`users/${ownerKey}`),{petCatName:catName,petCatNameUpdatedAt:Date.now()});mood('Đã đổi tên mèo thành '+catName+'.');}catch(e){mood('Đã lưu tên ở trình duyệt này; chưa đồng bộ lên máy chủ.');}updateNameUI();}
+    function openHelp(){if(helpOverlay){helpOverlay.hidden=false;helpOverlay.style.display='flex';}mood('Tờ hướng dẫn đang mở.');}
+    function closeHelp(){if(helpOverlay){helpOverlay.hidden=true;helpOverlay.style.display='none';}mood('Mèo đang quan sát căn phòng.');}
+    function beginMove(x,z,nextState,desc){moveTarget={x,z};arrivalState=nextState;state='walking';stateUntil=0;mood(desc||'Mèo đang đi tới…');}
+    function feedCat(){if(state==='sleeping'){state='waking';stateUntil=elapsed+1.3;}foodCount=foodBits.length;lastFoodNibble=elapsed;foodBits.forEach((bit,i)=>bit.visible=i<foodCount);beginMove(-1.02,.22,'eating','Mèo đang đi tới bát thức ăn…');}
+    function putToSleep(){moveTarget=null;beginMove(1.2,-.47,'sleeping','Mèo đang tìm chỗ nằm…');sleepSince=0;butterflyMode='fly';butterflyTarget=null;}
+    function playWithYarn(){beginMove(.05,.63,'playing','Mèo đang đuổi theo quả len…');playStart=0;}
+    function scratchBoard(){beginMove(1.33,.64,'scratching','Mèo đang tới cào móng…');playStart=0;}
+    function giveTreat(){mood('Bạn vừa thưởng một món ngon cho '+catName+'!');petPulseUntil=elapsed+2.4;feedBitsPulse();}
+    function feedBitsPulse(){foodBits.forEach((bit,i)=>{if(i<foodCount)bit.material.color.set(i%2?0x94613c:0xc28a4c);});}
+    function activate(action){switch(action){case'pet':state='petting';stateUntil=elapsed+2.1;petPulseUntil=elapsed+1.7;mood(catName+' đang được vuốt ve, thích quá!');break;case'feed':feedCat();break;case'sleep':putToSleep();break;case'rename':renameCat();break;case'help':openHelp();break;case'close-help':closeHelp();break;case'play':playWithYarn();break;case'scratch':scratchBoard();break;case'butterfly':butterflyMode='fly';butterflyTarget=null;mood('Bạn gọi bướm bay quanh phòng.');break;case'treat':giveTreat();break;}}
+    host.querySelectorAll('[data-pet-action]').forEach(btn=>btn.addEventListener('click',ev=>{ev.stopPropagation();activate(btn.dataset.petAction);}));
+    const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let down=null;
+    function pointerDown(e){down={x:e.clientX,y:e.clientY,t:performance.now(),id:e.pointerId};}
+    function pointerUp(e){if(!down||down.id!==e.pointerId){down=null;return;}const moved=Math.hypot(e.clientX-down.x,e.clientY-down.y);down=null;if(moved>9)return;const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;pointer.x=((e.clientX-rect.left)/rect.width)*2-1;pointer.y=-((e.clientY-rect.top)/rect.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(interactables,true);if(!hits.length)return;let n=hits[0].object,action='';while(n){if(n.userData&&n.userData.petAction){action=n.userData.petAction;break;}n=n.parent;}if(action)activate(action);}
+    canvas.addEventListener('pointerdown',pointerDown);canvas.addEventListener('pointerup',pointerUp);canvas.style.cursor='pointer';
+    // Resolve name now and whenever login changes, using one database field per user.
+    loadNameForOwner(ownerKey);
+    let onResize=()=>{if(dead||!host.isConnected)return;const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
+    resizeObserver=typeof ResizeObserver!=='undefined'?new ResizeObserver(onResize):null;if(resizeObserver)resizeObserver.observe(host);else window.addEventListener('resize',onResize);onResize();
+    let lastFrame=performance.now();
+    function animate(now){if(dead)return;if(!host.isConnected){dispose();return;}raf=requestAnimationFrame(animate);const dt=Math.min(.045,Math.max(.001,(now-lastFrame)/1000));lastFrame=now;elapsed+=dt;
+      if(document.hidden)return;
+      if(elapsed-lastOwnerCheck>2.5){lastOwnerCheck=elapsed;const curr=getOwner();if(curr!==ownerKey)loadNameForOwner(curr);}
+      // Cat motion, gentle breathing, tail movement, blinking and action states.
+      const walk=state==='walking';
+      if(walk&&moveTarget){const dx=moveTarget.x-catRoot.position.x,dz=moveTarget.z-catRoot.position.z,dist=Math.hypot(dx,dz);const yaw=Math.atan2(dx,dz);let diff=((yaw-catRoot.rotation.y+Math.PI*3)%(Math.PI*2))-Math.PI;catRoot.rotation.y+=diff*Math.min(1,dt*4.5);if(dist>.06){const step=Math.min(dist,dt*.72);catRoot.position.x+=dx/dist*step;catRoot.position.z+=dz/dist*step;}else{catRoot.position.x=moveTarget.x;catRoot.position.z=moveTarget.z;moveTarget=null;state=arrivalState;stateUntil=elapsed+({'eating':5.2,'sleeping':999999,'playing':4.6,'scratching':4.0}[state]||1.8);if(state==='sleeping'){sleepSince=elapsed;mood(catName+' đang nằm ngủ…');}if(state==='eating')mood(catName+' đang ăn ngon lành.');if(state==='playing')mood(catName+' đang vờn quả len!');if(state==='scratching')mood(catName+' đang cào móng.');}}
+      if(state==='walking'){const stride=Math.sin(elapsed*12)*.22;legs.forEach((l,i)=>{l.group.rotation.x=(l.front?1:-1)*stride*(i%2?-1:1);});pose.position.y=.012+Math.abs(Math.sin(elapsed*12))*.025;}
+      else{legs.forEach((l,i)=>{l.group.rotation.x+=(0-l.group.rotation.x)*Math.min(1,dt*6);});pose.position.y+=(0-pose.position.y)*Math.min(1,dt*4);}
+      if(state==='idle'){head.rotation.x=Math.sin(elapsed*1.35)*.025;head.rotation.y=Math.sin(elapsed*.7)*.04;body.scale.y=.37+Math.sin(elapsed*2.2)*.008;}
+      if(state==='petting'){head.rotation.x=Math.sin(elapsed*7)*.055;head.rotation.z=Math.sin(elapsed*4)*.07;tailRoot.rotation.y=Math.sin(elapsed*9)*.28;if(elapsed>stateUntil){state='idle';head.rotation.z=0;mood(catName+' trông rất vui.');}}
+      if(state==='eating'){head.rotation.x=.24+Math.abs(Math.sin(elapsed*6))*.17;tailRoot.rotation.y=Math.sin(elapsed*4)*.14;if(elapsed-lastFoodNibble>.78&&foodCount>0){foodCount=Math.max(0,foodCount-2);lastFoodNibble=elapsed;foodBits.forEach((bit,i)=>bit.visible=i<foodCount);}if(elapsed>stateUntil){state='idle';head.rotation.x=0;beginMove(homePos.x,homePos.z,'idle',catName+' đã ăn no.');}}
+      if(state==='playing'){head.rotation.x=Math.sin(elapsed*7)*.15;tailRoot.rotation.y=Math.sin(elapsed*8)*.35;yarn.position.y=.17+Math.abs(Math.sin(elapsed*9))*.13;yarn.position.x=.05+Math.sin(elapsed*3)*.15;legs.forEach((l,i)=>{if(l.front)l.group.rotation.x=Math.sin(elapsed*10+i)*.4;});if(!playStart)playStart=elapsed;if(elapsed>stateUntil){state='idle';yarn.position.set(.05,.17,.78);beginMove(homePos.x,homePos.z,'idle',catName+' đã chơi xong.');}}
+      if(state==='scratching'){head.rotation.x=.02;legs.forEach((l,i)=>{if(l.front)l.group.rotation.x=Math.sin(elapsed*12+i*2)*.45;});if(!playStart)playStart=elapsed;if(elapsed>stateUntil){state='idle';beginMove(homePos.x,homePos.z,'idle',catName+' cào móng xong rồi.');}}
+      if(state==='sleeping'){head.rotation.x=.27;tailRoot.rotation.y=Math.sin(elapsed*1.5)*.1;pose.scale.y+=(.87-pose.scale.y)*Math.min(1,dt*1.8);if(!sleepSince)sleepSince=elapsed;if(butterflyMode==='fly'&&elapsed-sleepSince>4.6){butterflyMode='toNose';mood('Một chú bướm đang bay tới đánh thức '+catName+'…');}}
+      if(state!=='sleeping'&&state!=='waking')pose.scale.y+=(1-pose.scale.y)*Math.min(1,dt*3.5);
+      if(state==='waking'){head.rotation.x=.08+Math.sin(elapsed*9)*.055;pose.scale.y+=(1-pose.scale.y)*Math.min(1,dt*2.5);if(elapsed>stateUntil){state='idle';head.rotation.x=0;butterflyMode='away';mood(catName+' tỉnh giấc sau khi bướm chạm mũi!');beginMove(homePos.x,homePos.z,'idle',catName+' đang tỉnh táo trở lại.');}}
+      const blinkNow=now/1000;if(blinkNow>blinkNext){blinkUntil=blinkNow+.13;blinkNext=blinkNow+2.5+Math.random()*3.6;}const blink=blinkNow<blinkUntil?Math.sin(((blinkNow-(blinkUntil-.13))/.13)*Math.PI):0;const sleepBlink=state==='sleeping'?1:0;eyes.forEach(eye=>{const y=state==='sleeping'?.055:state==='waking'?.25:Math.max(.08,1-blink*.94);eye.scale.y+=(y-eye.scale.y)*Math.min(1,dt*15);});
+      tailRoot.rotation.x=Math.sin(elapsed*1.6)*.04;
+      // Butterfly continuously flaps and, after the cat sleeps, lands on its nose.
+      if(butterflyMode==='toNose'||butterflyMode==='landed'){
+        const nosePos=new THREE.Vector3();head.localToWorld(nosePos.set(0,-.085,.39));world.worldToLocal(nosePos);
+        if(butterflyMode==='toNose'){butterfly.position.lerp(new THREE.Vector3(nosePos.x,nosePos.y+.12,nosePos.z+.09),Math.min(1,dt*1.35));butterfly.rotation.z=Math.sin(elapsed*9)*.09;if(butterfly.position.distanceTo(nosePos)<.22){butterflyMode='landed';landedAt=elapsed;butterfly.position.copy(nosePos).add(new THREE.Vector3(0,.12,.09));mood('Bướm vừa đậu lên mũi '+catName+'!');}}
+        else if(elapsed-landedAt>1.5&&state==='sleeping'){state='waking';stateUntil=elapsed+1.65;mood('Bướm chạm mũi — '+catName+' tỉnh dậy!');}
+      }else if(butterflyMode==='fly'||butterflyMode==='away'){
+        butterfly.position.set(-2.1+Math.sin(elapsed*.85)*.85,1.25+Math.sin(elapsed*2.5)*.3,-.1+Math.cos(elapsed*1.1)*.48);
+        if(butterflyMode==='away'&&elapsed-landedAt>3)butterflyMode='fly';
+      }
+      wingA.rotation.z=Math.sin(elapsed*22)*.6;wingB.rotation.z=-Math.sin(elapsed*22)*.6;wingC.rotation.z=Math.sin(elapsed*22)*.35;wingD.rotation.z=-Math.sin(elapsed*22)*.35;
+      renderer.render(scene,camera);
+    }
+    function dispose(){if(dead)return;dead=true;instance.dead=true;if(raf)cancelAnimationFrame(raf);if(resizeObserver)resizeObserver.disconnect();else window.removeEventListener('resize',onResize);canvas.removeEventListener('pointerdown',pointerDown);canvas.removeEventListener('pointerup',pointerUp);try{renderer.dispose();renderer.forceContextLoss();}catch(_){}active.delete(instance);host.__auroraPetCatInstance=null;}
+    const instance={host,coat:coat.name,dispose,rename:renameCat,action:activate,dead:false};host.__auroraPetCatInstance=instance;active.add(instance);
+    raf=requestAnimationFrame(animate);
+    // Keep this scene visually present and avoid normal slide controls obscuring it.
+    const mediaBox=host.closest('.aurora-showcase-media');if(mediaBox)mediaBox.classList.add('aurora-pet-cat-mode');
+    return instance;
+  }
+  function interactablesHack(_root){} // no-op outside mount; local function in mount owns actual hit registry.
+  function disposeWithin(stage){for(const item of Array.from(active)){if(stage&&stage.contains(item.host))item.dispose();}}
+  window.AuroraPetCat={mount,disposeWithin,disposeAll:()=>{for(const item of Array.from(active))item.dispose();}};
+  window.dispatchEvent(new CustomEvent('aurora-pet-cat-ready'));
+  document.querySelectorAll('.aurora-pet-cat-host').forEach(host=>mount(host));
+})();
+
+</script>
+
+<style id="auroraAruCompanionStyles">
+/* Aru~aruu: 2D personality and interaction animation layer */
+.aru-settings-modal{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(7,17,42,.72);backdrop-filter:blur(8px)}
+.aru-settings-modal.show{display:flex}
+.aru-settings-panel{width:min(100%,760px);max-height:92dvh;overflow:auto;background:#f8fbff;border:1px solid #c7d8ff;border-radius:18px;box-shadow:0 28px 90px rgba(0,0,0,.42);padding:18px;color:#17233e}
+.aru-settings-head{position:sticky;top:-18px;z-index:5;background:linear-gradient(135deg,#fff,#eef3ff);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0 12px;border-bottom:1px solid #dbe5f8;margin-bottom:12px}
+.aru-settings-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.aru-settings-card{background:#fff;border:1px solid #dce6f5;border-radius:13px;padding:12px;min-width:0}
+.aru-safe-stage{height:285px;max-width:280px;margin:8px auto;background:radial-gradient(circle at 50% 25%,#d8eaff,#eff4ff 58%,#dbe5fb);border:2px dashed #8ca9e7;border-radius:14px;overflow:hidden;position:relative;touch-action:pan-y}
+.aru-safe-stage>img.aru-safe-base{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+.aru-safe-accessory{position:absolute;left:50%;top:50%;width:var(--aru-size,30%);max-width:95%;transform:translate(-50%,-50%) rotate(var(--aru-rot,0deg));opacity:var(--aru-opacity,1);object-fit:contain;pointer-events:auto;touch-action:none;cursor:grab;filter:drop-shadow(0 4px 8px #22335a33)}
+.aru-attachment-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.aru-attachment-row{display:flex;align-items:center;gap:8px;background:#f7f9fe;border:1px solid #dbe5f8;border-radius:9px;padding:7px}
+.aru-attachment-row img{width:38px;height:38px;object-fit:contain;background:#edf2ff;border-radius:7px}
+.aru-personality-tags{display:flex;flex-wrap:wrap;gap:6px;margin:7px 0}
+.aru-personality-tag{border:1px solid #c7d2fe;border-radius:999px;padding:5px 9px;font-size:11px;background:#eef2ff;color:#384a84}
+#aiScreenReadBtn{top:auto!important;bottom:48px!important;left:6px!important;right:auto!important}
+#aiWebcamBtn,.profile-ai-webcam-wrap,#profileWebcamPreview,#profileWebcamMouthIndicator{display:none!important}
+#aiModelWidget.aru-system-model{overflow:visible}
+#aiModelWidget .aru-accessory-layer{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:visible}
+#aiModelWidget .aru-bear-cover{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;overflow:visible;animation:aruGentleIdle 3s ease-in-out infinite;transform-origin:50% 50%}
+#aiModelWidget.aru-state-pet .aru-bear-cover,#aiModelWidget.aru-state-nuzzle .aru-bear-cover{animation:aruNuzzle .9s ease-in-out 1}
+#aiModelWidget.aru-state-thinking .aru-bear-cover{animation:aruThink 1.3s ease-in-out 1}
+#aiModelWidget.aru-state-sleep .aru-bear-cover{animation:aruSleep 2s ease-in-out infinite}
+#aiModelWidget.aru-state-happy .aru-bear-cover{animation:aruHappy .9s cubic-bezier(.3,1.6,.4,1) 1}
+#aiModelWidget.aru-state-sad .aru-bear-cover,#aiModelWidget.aru-state-cry .aru-bear-cover{animation:aruSad 1.2s ease-in-out 1}
+#aiModelWidget.aru-state-angry .aru-bear-cover{animation:aruAngry .65s linear 1}
+#aiModelWidget.aru-state-music .aru-bear-cover{animation:aruDance 1s ease-in-out infinite;transform-origin:50% 78%}
+#aiModelWidget.aru-state-chat .aru-bear-cover{animation:aruChatBounce 1.4s ease-in-out infinite}
+body.optimized-mode #aiModelWidget .aru-bear-cover{animation:none!important;transform:none!important}
+#aiModelWidget .aru-accessory-img{position:absolute;left:calc(50% + var(--aru-x,0%));top:calc(50% + var(--aru-y,0%));width:var(--aru-w,28%);max-height:90%;z-index:6;object-fit:contain;transform:translate(-50%,-50%) rotate(var(--aru-rot,0deg));opacity:var(--aru-op,1);filter:drop-shadow(0 2px 7px #1115)}
+#aiModelWidget .aru-floating-prop{position:absolute;z-index:7;pointer-events:none;font-size:27px;filter:drop-shadow(0 2px 6px #23345b55);animation:aruPropFloat 2.4s ease-in-out infinite}
+#aiModelWidget .aru-mood-caption{position:absolute;top:-32px;left:50%;transform:translateX(-50%);z-index:10;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:999px;padding:5px 11px;background:rgba(255,255,255,.95);border:1px solid #d5def6;color:#45547a;font-size:11px;font-weight:800;box-shadow:0 5px 16px #1e2d4b22;pointer-events:none}
+#aiModelWidget .ai-model-badge{max-width:180px}
+#aiModelWidget.aru-state-idle #aiModelContent img{animation:aruGentleIdle 3s ease-in-out infinite}
+#aiModelWidget.aru-state-blink #aiModelContent img{animation:aruBlinkPulse .36s ease-in-out 1}
+#aiModelWidget.aru-state-pet #aiModelContent img,#aiModelWidget.aru-state-nuzzle #aiModelContent img{animation:aruNuzzle .9s ease-in-out 1}
+#aiModelWidget.aru-state-thinking #aiModelContent img{animation:aruThink 1.3s ease-in-out 1}
+#aiModelWidget.aru-state-sleep #aiModelContent img{animation:aruSleep 2s ease-in-out infinite;filter:saturate(.78) brightness(.96)}
+#aiModelWidget.aru-state-happy #aiModelContent img{animation:aruHappy .9s cubic-bezier(.3,1.6,.4,1) 1}
+#aiModelWidget.aru-state-sad #aiModelContent img{animation:aruSad 1.3s ease-in-out 1;filter:saturate(.72) brightness(.95)}
+#aiModelWidget.aru-state-angry #aiModelContent img{animation:aruAngry .65s linear 1}
+#aiModelWidget.aru-state-fear #aiModelContent img{animation:aruFear .9s ease-in-out 2}
+#aiModelWidget.aru-state-big #aiModelContent img{animation:aruNervous 1.1s ease-in-out 1}
+#aiModelWidget.aru-state-small #aiModelContent img{animation:aruFear 1s ease-in-out 1;filter:saturate(.8)}
+#aiModelWidget.aru-state-music #aiModelContent img{animation:aruDance 1s ease-in-out infinite;transform-origin:50% 78%}
+#aiModelWidget.aru-state-chat #aiModelContent img{animation:aruChatBounce 1.4s ease-in-out infinite}
+#aiModelWidget.aru-state-dizzy #aiModelContent img{animation:aruDizzy .65s ease-in-out 2}
+#aiModelWidget.aru-state-tap #aiModelContent img{animation:aruTap .8s ease-in-out 2}
+#aiModelWidget.aru-state-cry #aiModelContent img{animation:aruSad 1.2s ease-in-out 1;filter:saturate(.65) brightness(.93)}
+#aiModelWidget.aru-static-art #aiModelContent img{animation:none!important;filter:none!important;transform:none!important}
+#aiModelWidget .aru-no-motion{animation:none!important}
+@keyframes aruGentleIdle{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-3px) rotate(.5deg)}}
+@keyframes aruBlinkPulse{0%,100%{filter:brightness(1)}45%{filter:brightness(.72) saturate(.9)}}
+@keyframes aruNuzzle{0%,100%{transform:translateY(0) rotate(0) scale(1)}35%{transform:translateY(-5px) rotate(-2deg) scale(1.025)}70%{transform:translateY(1px) rotate(1deg) scale(1.01)}}
+@keyframes aruThink{0%,100%{transform:translateY(0) rotate(0)}35%{transform:translateY(-3px) rotate(-1.5deg)}70%{transform:translateY(1px) rotate(1deg)}}
+@keyframes aruSleep{0%,100%{transform:translateY(2px) rotate(-1.2deg)}50%{transform:translateY(5px) rotate(-2.5deg)}}
+@keyframes aruHappy{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(-10px) scale(1.025)}70%{transform:translateY(2px) scale(.995)}}
+@keyframes aruSad{0%,100%{transform:translateY(0) rotate(0)}35%{transform:translateY(5px) rotate(2deg)}70%{transform:translateY(2px) rotate(-1deg)}}
+@keyframes aruAngry{0%,100%{transform:translateX(0) rotate(0)}20%,60%{transform:translateX(-4px) rotate(-1deg)}40%,80%{transform:translateX(4px) rotate(1deg)}}
+@keyframes aruFear{0%,100%{transform:translate(0,0) scale(1)}30%{transform:translate(-2px,1px) scale(.99)}60%{transform:translate(2px,-1px) scale(1.005)}}
+@keyframes aruNervous{0%,100%{transform:scale(1) rotate(0)}45%{transform:scale(1.04) rotate(1.8deg)}75%{transform:scale(1.02) rotate(-1deg)}}
+@keyframes aruDance{0%,100%{transform:rotate(-2.4deg) translateY(0)}50%{transform:rotate(2.4deg) translateY(-4px)}}
+@keyframes aruChatBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px) rotate(.5deg)}}
+@keyframes aruDizzy{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+@keyframes aruTap{0%,100%{transform:translateY(0)}35%{transform:translateY(-6px) scale(1.015)}65%{transform:translateY(3px)}}
+@keyframes aruPropFloat{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-8px) rotate(7deg)}}
+@media(max-width:650px){.aru-settings-modal{padding:5px}.aru-settings-panel{padding:12px;max-height:96dvh}.aru-settings-grid{grid-template-columns:1fr}.aru-safe-stage{height:230px}#aiScreenReadBtn{bottom:48px!important}}
+@media(prefers-reduced-motion:reduce){#aiModelWidget.aru-system-model #aiModelContent img{animation:none!important;transition:none!important}}
+body.optimized-mode #aiModelWidget #aiModelContent img{animation:none!important;transition:none!important;filter:none!important;transform:none!important}
+body.optimized-mode #aiModelWidget .aru-accessory-layer,body.optimized-mode #aiModelWidget .aru-floating-prop,body.optimized-mode #aiModelWidget .aru-mood-caption{display:none!important}
+body.optimized-mode #aiModelWidget .ai-model-body{pointer-events:none!important}
+</style>
+
+<div class="aru-settings-modal" id="aiModelSettingsModal" role="dialog" aria-modal="true" aria-labelledby="aiModelSettingsTitle" onclick="if(event.target===this)closeAiModelSettings()">
+  <div class="aru-settings-panel">
+    <div class="aru-settings-head"><div><h3 id="aiModelSettingsTitle" style="margin:0;color:#27345b">⚙️ Cài đặt model AI</h3><p id="aiModelSettingsSubtitle" style="margin:5px 0 0;font-size:12px;color:#6b7892">Chỉnh tên, tính cách và phụ kiện</p></div><button type="button" class="btn btn-danger" style="width:38px;height:38px;padding:0;border-radius:50%;font-size:18px" onclick="closeAiModelSettings()" aria-label="Đóng">×</button></div>
+    <div class="aru-settings-grid">
+      <div class="aru-settings-card">
+        <label for="aiEditModelName">Tên model</label><input id="aiEditModelName" type="text" maxlength="80" placeholder="Aru~aruu">
+        <div class="form-grid-2" style="gap:8px"><div><label for="aiEditGender">Giới tính</label><select id="aiEditGender"><option value="female">Nữ</option><option value="male">Nam</option><option value="other">Khác / tùy chỉnh</option></select></div><div><label for="aiEditPersonality">Tính cách</label><select id="aiEditPersonality"><option value="tsundere">Tsundere</option><option value="cute">Cute</option><option value="badboy">Badboy</option><option value="sadgirl">Sadgirl</option><option value="yandere">Yandere</option><option value="kuudere">Kuudere</option><option value="dandere">Dandere</option><option value="genki">Genki</option><option value="cool">Cool</option><option value="shy">Shy</option><option value="friendly">Friendly</option><option value="chaotic">Chaotic</option><option value="custom">Tùy chỉnh</option></select></div></div>
+        <label for="aiEditDescription">Mô tả / giọng điệu riêng</label><textarea id="aiEditDescription" rows="2" placeholder="Mô tả cách nhân vật phản ứng..."></textarea>
+        <label for="aiEditGreeting">Câu chào</label><input id="aiEditGreeting" type="text" maxlength="500">
+        <div class="form-grid-2" style="gap:8px"><div><label for="aiEditHappy">Khi vui / điểm cao</label><input id="aiEditHappy" type="text" maxlength="500"></div><div><label for="aiEditSad">Khi buồn / điểm thấp</label><input id="aiEditSad" type="text" maxlength="500"></div></div>
+        <label for="aiEditThinking">Câu suy nghĩ</label><input id="aiEditThinking" type="text" maxlength="500">
+        <label for="aiEditMusic">Câu khi nghe nhạc</label><input id="aiEditMusic" type="text" maxlength="500">
+        <label for="aiEditPrank">Câu tinh nghịch</label><input id="aiEditPrank" type="text" maxlength="500">
+        <div style="padding:9px;border-radius:9px;background:#f0f6ff;border:1px solid #d2e3ff;font-size:11px;color:#455979;margin-top:10px" id="aiModelDefaultLockNote">Aru~aruu là model mặc định do Aurora AI tạo, không thể xóa và chỉ tài khoản được cấp mới sở hữu.</div>
+      </div>
+      <div class="aru-settings-card">
+        <b>🧸 Phụ kiện mặc định</b>
+        <div id="aiEditBuiltinAccessories" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0">
+          <label><input type="checkbox" id="aiAccBear" checked> Gấu bông</label><label><input type="checkbox" id="aiAccCatEars" checked> Tai mèo</label><label><input type="checkbox" id="aiAccHeadphones"> Tai nghe</label><label><input type="checkbox" id="aiAccHairBow" checked> Nơ tóc</label><label><input type="checkbox" id="aiAccDress" checked> Váy trắng</label>
+        </div>
+        <p style="font-size:11px;color:#6b7892;line-height:1.45;margin:6px 0">Gấu bông có thể bật/tắt bằng lớp phủ trang phục của art hệ thống. Tai mèo/nơ/váy là chi tiết vẽ liền trong ảnh nên bị khóa tại đây; muốn tách riêng hoàn toàn cần art chia lớp hoặc Live2D. Tai nghe và phụ kiện ảnh tải thêm có thể bật/tắt độc lập.</p>
+        <label for="aiEditAccessoryFiles">➕ Tải phụ kiện mới (PNG/JPG/GIF/WEBP)</label><input type="file" id="aiEditAccessoryFiles" multiple accept="image/png,image/jpeg,image/gif,image/webp,.png,.jpg,.jpeg,.gif,.webp">
+        <div id="aiEditAccessoryList" class="aru-attachment-list"></div>
+        <label for="aiEditAccessoryPick">Chọn phụ kiện để chỉnh Safe Zone</label><select id="aiEditAccessoryPick" onchange="auroraSelectAccessoryForSafeZone()"><option value="">Chưa có phụ kiện rời</option></select>
+        <div class="aru-safe-stage" id="aiEditSafeStage"><img class="aru-safe-base" id="aiEditSafeBase" alt="Xem trước model"><img class="aru-safe-accessory" id="aiEditSafeAccessory" alt="Phụ kiện" style="display:none"></div>
+        <div class="form-grid-2" style="gap:8px"><div><label for="aiAccRangeX">Vị trí X <span id="aiAccRangeXVal">0</span>%</label><input id="aiAccRangeX" type="range" min="-45" max="45" value="0" oninput="auroraUpdateSafeZonePreview()"></div><div><label for="aiAccRangeY">Vị trí Y <span id="aiAccRangeYVal">0</span>%</label><input id="aiAccRangeY" type="range" min="-45" max="45" value="0" oninput="auroraUpdateSafeZonePreview()"></div><div><label for="aiAccRangeScale">Kích thước <span id="aiAccRangeScaleVal">0.35</span></label><input id="aiAccRangeScale" type="range" min="0.1" max="1.2" step="0.05" value="0.35" oninput="auroraUpdateSafeZonePreview()"></div><div><label for="aiAccRangeRotation">Xoay <span id="aiAccRangeRotationVal">0</span>°</label><input id="aiAccRangeRotation" type="range" min="-180" max="180" value="0" oninput="auroraUpdateSafeZonePreview()"></div></div>
+        <label for="aiAccRangeOpacity">Độ mờ <span id="aiAccRangeOpacityVal">1.00</span></label><input id="aiAccRangeOpacity" type="range" min="0.1" max="1" step="0.05" value="1" oninput="auroraUpdateSafeZonePreview()">
+        <label><input type="checkbox" id="aiAccVisible" checked onchange="auroraUpdateSafeZonePreview()"> Hiển thị phụ kiện đang chọn</label>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:14px"><button type="button" class="btn btn-secondary" style="width:auto" onclick="closeAiModelSettings()">Hủy</button><button type="button" class="btn btn-success" style="width:auto" id="aiSaveModelSettingsBtn" onclick="saveAiModelSettings()">💾 Lưu cài đặt model</button></div>
+  </div>
+</div>
+
+<script>
+/* ================= AURORA ARU~ARUU MODEL SYSTEM ================= */
+const AURORA_ARU_MODEL_ID='aimodel_default_aruu';
+const AURORA_ARU_IMAGE='data:image/webp;base64,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';
+const AURORA_PERSONALITY_LABELS={tsundere:'Tsundere',cute:'Cute',badboy:'Badboy',sadgirl:'Sadgirl',yandere:'Yandere',kuudere:'Kuudere',dandere:'Dandere',genki:'Genki',cool:'Cool',shy:'Shy',friendly:'Friendly',chaotic:'Chaotic',custom:'Tùy chỉnh'};
+const AURORA_PERSONALITY_INSTRUCTIONS={
+ tsundere:'hơi ngại, ngoài miệng có thể chối nhưng quan tâm thật lòng; trêu nhẹ, không xúc phạm người dùng',
+ cute:'ấm áp, đáng yêu, dùng câu ngắn mềm mại và biểu cảm dễ thương',
+ badboy:'tự tin, điềm tĩnh, nói gọn và bảo vệ người dùng, không thô lỗ',
+ sadgirl:'dịu dàng, nhạy cảm, có chút buồn nhưng biết lắng nghe và nâng đỡ người dùng',
+ yandere:'tình cảm mãnh liệt, hơi ghen theo lối hư cấu nhẹ nhàng nhưng luôn tôn trọng quyền riêng tư và tự do của người dùng',
+ kuudere:'điềm tĩnh, lý trí, quan tâm bằng hành động hơn lời nói',
+ dandere:'ít nói, rụt rè, chậm rãi mở lòng và thân thiện',
+ genki:'năng động, tích cực, cổ vũ nhiệt tình',
+ cool:'tự tin, tinh tế, bình tĩnh và dí dỏm',
+ shy:'hay ngại, dễ bối rối nhưng chân thành',
+ friendly:'thân thiện, đồng cảm, tự nhiên như một người bạn',
+ chaotic:'tinh nghịch, hài hước, bất ngờ nhưng không gây khó chịu',
+ custom:'làm theo mô tả tính cách tùy chỉnh trong cài đặt model'
+};
+function auroraPersonalityInstruction(key){return AURORA_PERSONALITY_INSTRUCTIONS[key]||AURORA_PERSONALITY_INSTRUCTIONS.tsundere;}
+function auroraAruuTemplate(){return {id:AURORA_ARU_MODEL_ID,name:'Aru~aruu',gender:'female',personality:'tsundere',style:'anime-2d',description:'Nữ anime 2D từ phần bụng trở lên; tóc trắng, tai mèo, mắt xanh, váy trắng, ôm gấu bông. Nhân vật đồng hành do Aurora AI tạo.',greeting:'Hứ! Đừng hiểu lầm nhé… mình ở đây vì muốn giúp bạn thôi! 💙',happyMsg:'Hả?! Điểm cao vậy sao… t-thì mình biết bạn làm được mà! 🎉',sadMsg:'Này… đừng buồn quá nha. Nghỉ một chút rồi mình thử lại cùng nhau nhé…',thinkingMsg:'Ừm… để mình nghĩ kỹ đã, đừng nhìn mình chăm chăm chứ…',musicMsg:'Bài này hay đấy… mình chỉ lắc lư theo nhạc một chút thôi nha! 🎧',prankMsg:'Hihi, lần này mình sẽ tinh nghịch một xíu nhé~',files:[],imageData:AURORA_ARU_IMAGE,fileType:'ai-model-2d',source:'aurora-ai',createdBy:'Aurora AI',createdAt:0,totalSize:0,systemDefault:true,accessorySettings:{bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},accessories:[],is2DSystemModel:true};}
+function auroraMergeAiModelCache(serverModels){
+ const models=Object.assign({},serverModels||{});
+ const saved=models[AURORA_ARU_MODEL_ID]||{};
+ models[AURORA_ARU_MODEL_ID]=Object.assign(auroraAruuTemplate(),saved,{id:AURORA_ARU_MODEL_ID,name:(saved&&saved.name&&saved.name!=='Aru~Aruu')?saved.name:'Aru~aruu',systemDefault:true,is2DSystemModel:true,imageData:(saved&&saved.imageData)||AURORA_ARU_IMAGE,files:Array.isArray(saved.files)?saved.files:[],accessories:Array.isArray(saved.accessories)?saved.accessories:[],accessorySettings:Object.assign({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},saved.accessorySettings||{}),createdBy:'Aurora AI'});
+ return models;
+}
+try{cachedAiModels=auroraMergeAiModelCache(cachedAiModels||{});}catch(e){console.warn('Aru model cache init',e);}
+
+/* Settings and accessory safe-zone editor */
+let auroraEditingAiModelId='';
+let auroraPendingAccessories=[];
+let auroraSelectedAccessoryId='';
+function auroraCloneAccessories(arr){return (Array.isArray(arr)?arr:[]).map(a=>Object.assign({id:'acc_'+Math.random().toString(36).slice(2),name:'Phụ kiện',type:'image/webp',data:'',x:0,y:0,scale:.35,rotation:0,opacity:1,visible:true},a||{}));}
+function openAiModelSettings(id){
+ const model=(cachedAiModels||{})[id];if(!model){showToast('Không tìm thấy model.','error');return;}
+ auroraEditingAiModelId=id;auroraPendingAccessories=auroraCloneAccessories(model.accessories);auroraSelectedAccessoryId=auroraPendingAccessories[0]?.id||'';
+ const byId=(x)=>document.getElementById(x);
+ byId('aiModelSettingsTitle').textContent='⚙️ Cài đặt model: '+(model.name||'AI');
+ byId('aiModelSettingsSubtitle').textContent=(model.systemDefault?'Model hệ thống do Aurora AI tạo · không thể xóa':'Model do '+(model.createdBy||'người dùng')+' tạo')+' · chỉnh tính cách, lời thoại, phụ kiện và Safe Zone';
+ byId('aiEditModelName').value=model.name||'Auro';byId('aiEditGender').value=model.gender||'female';byId('aiEditPersonality').value=model.personality||'tsundere';byId('aiEditDescription').value=model.description||'';
+ byId('aiEditGreeting').value=model.greeting||'';byId('aiEditHappy').value=model.happyMsg||'';byId('aiEditSad').value=model.sadMsg||'';byId('aiEditThinking').value=model.thinkingMsg||'';byId('aiEditMusic').value=model.musicMsg||'';byId('aiEditPrank').value=model.prankMsg||'';
+ const a=Object.assign({bear:true,catEars:true,headphones:false,hairBow:true,whiteDress:true},model.accessorySettings||{});
+ byId('aiAccBear').checked=!!a.bear;byId('aiAccCatEars').checked=!!a.catEars;byId('aiAccHeadphones').checked=!!a.headphones;byId('aiAccHairBow').checked=!!a.hairBow;byId('aiAccDress').checked=!!a.whiteDress;
+ ['aiAccCatEars','aiAccHairBow','aiAccDress'].forEach(accId=>{const el=byId(accId);if(el){el.disabled=!!model.is2DSystemModel;el.title=model.is2DSystemModel?'Chi tiết này nằm liền trong ảnh 2D; cần art chia lớp/Live2D để tắt riêng.':'';}});
+ byId('aiEditAccessoryFiles').value='';
+ const lockNote=byId('aiModelDefaultLockNote');if(lockNote)lockNote.style.display=model.systemDefault?'block':'none';
+ const base=byId('aiEditSafeBase');base.src=(model.imageData||AURORA_ARU_IMAGE);base.alt=model.name||'AI model';
+ auroraRenderAccessoryList();auroraRenderAccessorySelect();auroraSelectAccessoryForSafeZone();
+ byId('aiModelSettingsModal').classList.add('show');
+}
+function closeAiModelSettings(){const modal=document.getElementById('aiModelSettingsModal');if(modal)modal.classList.remove('show');auroraEditingAiModelId='';auroraPendingAccessories=[];auroraSelectedAccessoryId='';}
+function auroraRenderAccessoryList(){
+ const list=document.getElementById('aiEditAccessoryList');if(!list)return;
+ if(!auroraPendingAccessories.length){list.innerHTML='<div style="font-size:11px;color:#718096;padding:8px">Chưa có phụ kiện rời. Tải ảnh/GIF phía trên để gắn và căn chỉnh.</div>';return;}
+ list.innerHTML='';
+ auroraPendingAccessories.forEach((a)=>{
+  const row=document.createElement('div');row.className='aru-attachment-row';
+  const img=document.createElement('img');img.alt='';img.src=a.data||'';row.appendChild(img);
+  const label=document.createElement('div');label.style.cssText='flex:1;min-width:0;font-size:12px;overflow-wrap:anywhere';label.textContent=a.name||'Phụ kiện';row.appendChild(label);
+  const pick=document.createElement('button');pick.type='button';pick.className='btn btn-secondary';pick.style.cssText='width:auto;padding:5px 8px;font-size:11px';pick.textContent='Safe Zone';pick.onclick=()=>{auroraSelectedAccessoryId=a.id;auroraRenderAccessorySelect();auroraSelectAccessoryForSafeZone();};row.appendChild(pick);
+  const toggle=document.createElement('button');toggle.type='button';toggle.className='btn '+(a.visible===false?'btn-secondary':'btn-success');toggle.style.cssText='width:auto;padding:5px 8px;font-size:11px';toggle.textContent=a.visible===false?'Hiện':'Ẩn';toggle.onclick=()=>{a.visible=a.visible===false;auroraRenderAccessoryList();auroraRenderAccessorySelect();auroraSelectAccessoryForSafeZone();};row.appendChild(toggle);
+  const del=document.createElement('button');del.type='button';del.className='btn btn-danger';del.style.cssText='width:auto;padding:5px 8px;font-size:11px';del.textContent='×';del.title='Gỡ phụ kiện';del.onclick=()=>{auroraPendingAccessories=auroraPendingAccessories.filter(x=>x.id!==a.id);if(auroraSelectedAccessoryId===a.id)auroraSelectedAccessoryId=auroraPendingAccessories[0]?.id||'';auroraRenderAccessoryList();auroraRenderAccessorySelect();auroraSelectAccessoryForSafeZone();};row.appendChild(del);
+  list.appendChild(row);
+ });
+}
+function auroraRenderAccessorySelect(){
+ const sel=document.getElementById('aiEditAccessoryPick');if(!sel)return;const cur=auroraSelectedAccessoryId;
+ sel.innerHTML=auroraPendingAccessories.length?auroraPendingAccessories.map(a=>`<option value="${a.id}">${escapeHtml(a.name||'Phụ kiện')}</option>`).join(''):'<option value="">Chưa có phụ kiện rời</option>';
+ if(cur&&auroraPendingAccessories.some(a=>a.id===cur))sel.value=cur;else{auroraSelectedAccessoryId=auroraPendingAccessories[0]?.id||'';sel.value=auroraSelectedAccessoryId;}
+}
+function auroraSelectAccessoryForSafeZone(){
+ const sel=document.getElementById('aiEditAccessoryPick');auroraSelectedAccessoryId=sel?.value||'';
+ const a=auroraPendingAccessories.find(x=>x.id===auroraSelectedAccessoryId);
+ const set=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val;};
+ set('aiAccRangeX',a?.x||0);set('aiAccRangeY',a?.y||0);set('aiAccRangeScale',a?.scale||.35);set('aiAccRangeRotation',a?.rotation||0);set('aiAccRangeOpacity',a?.opacity??1);
+ const vis=document.getElementById('aiAccVisible');if(vis)vis.checked=a?a.visible!==false:false;
+ auroraUpdateSafeZonePreview();
+}
+function auroraUpdateSafeZonePreview(){
+ const a=auroraPendingAccessories.find(x=>x.id===auroraSelectedAccessoryId);
+ const vals={x:parseFloat(document.getElementById('aiAccRangeX')?.value)||0,y:parseFloat(document.getElementById('aiAccRangeY')?.value)||0,scale:parseFloat(document.getElementById('aiAccRangeScale')?.value)||.35,rotation:parseFloat(document.getElementById('aiAccRangeRotation')?.value)||0,opacity:parseFloat(document.getElementById('aiAccRangeOpacity')?.value)||1,visible:!!document.getElementById('aiAccVisible')?.checked};
+ const labels={aiAccRangeXVal:vals.x,aiAccRangeYVal:vals.y,aiAccRangeScaleVal:vals.scale.toFixed(2),aiAccRangeRotationVal:vals.rotation,aiAccRangeOpacityVal:vals.opacity.toFixed(2)};Object.keys(labels).forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=labels[id];});
+ const img=document.getElementById('aiEditSafeAccessory');if(img){if(a&&a.data){img.src=a.data;img.style.display=vals.visible?'block':'none';img.style.left=`calc(50% + ${vals.x}%)`;img.style.top=`calc(50% + ${vals.y}%)`;img.style.width=(vals.scale*70)+'%';img.style.transform=`translate(-50%,-50%) rotate(${vals.rotation}deg)`;img.style.opacity=vals.opacity;}else{img.removeAttribute('src');img.style.display='none';}}
+ if(a)Object.assign(a,vals);
+}
+document.getElementById('aiEditAccessoryFiles')?.addEventListener('change',async function(){
+ const files=Array.from(this.files||[]);if(!files.length)return;
+ try{
+  if(auroraPendingAccessories.length+files.length>4)throw new Error('Mỗi model được gắn tối đa 4 phụ kiện rời.');
+  let bytes=auroraPendingAccessories.reduce((n,a)=>n+(a.size||0),0);
+  for(const f of files){if(!/\.(png|jpe?g|gif|webp|svg)$/i.test(f.name))throw new Error('Chỉ hỗ trợ ảnh/GIF/WEBP/SVG làm phụ kiện.');if(f.size>1.5*1024*1024)throw new Error(f.name+' vượt quá 1,5 MB.');bytes+=f.size;if(bytes>4*1024*1024)throw new Error('Tổng phụ kiện vượt quá 4 MB.');const data=await fileToBase64(f);auroraPendingAccessories.push({id:'acc_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),name:f.name,type:f.type||'image/webp',size:f.size,data,x:0,y:0,scale:.35,rotation:0,opacity:1,visible:true});}
+  this.value='';auroraSelectedAccessoryId=auroraPendingAccessories[auroraPendingAccessories.length-1]?.id||'';auroraRenderAccessoryList();auroraRenderAccessorySelect();auroraSelectAccessoryForSafeZone();showToast('Đã thêm phụ kiện. Căn chỉnh tại Safe Zone rồi lưu model.','success');
+ }catch(e){this.value='';showToast(e.message||String(e),'error');}
+});
+async function saveAiModelSettings(){
+ const id=auroraEditingAiModelId;const old=(cachedAiModels||{})[id];if(!id||!old){showToast('Không tìm thấy model cần lưu.','error');return;}
+ const name=(document.getElementById('aiEditModelName').value||'').trim();if(!name){showToast('Tên model không được để trống.','error');return;}
+ const btn=document.getElementById('aiSaveModelSettingsBtn');if(btn)btn.disabled=true;
+ const accessorySettings={bear:!!document.getElementById('aiAccBear').checked,catEars:!!document.getElementById('aiAccCatEars').checked,headphones:!!document.getElementById('aiAccHeadphones').checked,hairBow:!!document.getElementById('aiAccHairBow').checked,whiteDress:!!document.getElementById('aiAccDress').checked};
+ const updates={name,gender:document.getElementById('aiEditGender').value||'female',personality:document.getElementById('aiEditPersonality').value||'tsundere',description:(document.getElementById('aiEditDescription').value||'').trim(),greeting:(document.getElementById('aiEditGreeting').value||'').trim(),happyMsg:(document.getElementById('aiEditHappy').value||'').trim(),sadMsg:(document.getElementById('aiEditSad').value||'').trim(),thinkingMsg:(document.getElementById('aiEditThinking').value||'').trim(),musicMsg:(document.getElementById('aiEditMusic').value||'').trim(),prankMsg:(document.getElementById('aiEditPrank').value||'').trim(),accessorySettings,accessories:auroraCloneAccessories(auroraPendingAccessories),updatedAt:Date.now()};
+ try{
+  await window.dbUpdate(window.ref(window.db,`system/ai_models/${id}`),updates);
+  cachedAiModels[id]=Object.assign({},old,updates,{id,systemDefault:!!old.systemDefault,is2DSystemModel:!!old.is2DSystemModel,imageData:old.imageData||AURORA_ARU_IMAGE});
+  if(currentEquippedAiModel&&currentEquippedAiModel.modelId===id){currentEquippedAiModel.modelData=cachedAiModels[id];updateAiWidgetContent();}
+  loadAiModelsList();loadAiModelsForGrant();loadSupremeAiFrameModelList();
+  closeAiModelSettings();showCenterSquareToast('✅','Đã lưu model',name,'success',2600);
+ }catch(e){showToast('Không lưu được model: '+(e.message||e),'error');}
+ finally{if(btn)btn.disabled=false;}
+}
+
+/* Personality-aware animations, states and /tuongtac command */
+const AURORA_ARU_STATES={
+ idle:{label:'Bình thường',emoji:'✨',messages:{tsundere:'Hứ! Đừng nhìn mình lâu quá… mình đang nghỉ thôi!',cute:'Nyaa~ hôm nay mình ở đây chơi cùng bạn nè!',badboy:'Tớ vẫn ở đây. Cần gì thì gọi.',sadgirl:'Mình ngồi cạnh bạn một lát nhé…',yandere:'Bạn vẫn ở đây với mình chứ? 💙',kuudere:'Mọi thứ vẫn ổn. Mình đang quan sát một chút.',dandere:'Ừm… mình vẫn ở đây nè.',genki:'Heey! Cùng làm gì vui vui nào!',cool:'Mọi thứ trong tầm kiểm soát.',shy:'Đừng nhìn mình chằm chằm chứ…',friendly:'Chào bạn, sẵn sàng đồng hành nè!',chaotic:'Tadaaa! Đoán xem mình đang nghĩ gì!'}},
+ blink:{label:'Nháy mắt',emoji:'😉',messages:{tsundere:'M-mình không có nháy mắt với bạn đâu!',cute:'Chớp chớp~ ✨',badboy:'Nháy mắt một cái cho ngầu.',sadgirl:'Một cái chớp mắt thật khẽ…',yandere:'Mình vẫn đang nhìn bạn đó.',kuudere:'Đã xác nhận bạn vẫn ở đây.',dandere:'Chào… mình nhìn thấy bạn rồi.',genki:'Blink! ✨',cool:'Một ánh nhìn là đủ.',shy:'Ơ… vừa rồi bạn thấy gì sao?',friendly:'Mình đây nè!',chaotic:'Bắt được ánh mắt của bạn rồi!'}},
+ pet:{label:'Vuốt ve',emoji:'💗',messages:{tsundere:'Ai cho bạn xoa đầu mình vậy… cứ làm thêm chút cũng được!',cute:'Ưm~ vuốt nữa đi, thích lắm á!',badboy:'Được rồi, hôm nay cho phép đấy.',sadgirl:'Cảm ơn bạn… mình thấy ấm áp hơn rồi.',yandere:'Chỉ bạn mới được xoa đầu mình thôi nhé…',kuudere:'Dễ chịu hơn mình tưởng.',dandere:'Ưm… cảm ơn bạn.',genki:'Yay! Xoa đầu nữa nào!',cool:'Tay nghề khá đấy.',shy:'A-a… mình ngại đó!',friendly:'Ôi, dễ chịu quá!',chaotic:'Hehe, tóc mình rối lên rồi!'}},
+ thinking:{label:'Suy nghĩ',emoji:'💭',messages:{tsundere:'Đang nghĩ giúp bạn thôi, đừng hiểu lầm nhé!',cute:'Hmm… để mình nghĩ xíu nhaa.',badboy:'Để tớ xử lý vấn đề này.',sadgirl:'Mình thử nghĩ cùng bạn nhé…',yandere:'Mình sẽ nghĩ thật kỹ vì bạn.',kuudere:'Đang phân tích. Chờ một chút.',dandere:'Ừm… để mình xem nào.',genki:'Để não chạy hết tốc lực nào!',cool:'Cho mình vài giây.',shy:'Mình đang suy nghĩ…',friendly:'Mình cùng tìm cách nhé!',chaotic:'Kích hoạt bộ não siêu cấp!'}},
+ sleep:{label:'Ngủ gật',emoji:'💤',messages:{tsundere:'Mình chỉ nhắm mắt nghỉ một chút thôi!',cute:'Zzz… gọi mình dậy nhé~',badboy:'Chợp mắt tí rồi quay lại.',sadgirl:'Mình hơi mệt… nghỉ một chút nhé.',yandere:'Đừng lén đi khi mình ngủ đó…',kuudere:'Chuyển sang chế độ nghỉ.',dandere:'Zzz…',genki:'Nạp pin siêu tốc… zzz!',cool:'Nghỉ ngắn hạn.',shy:'Mình buồn ngủ mất rồi…',friendly:'Nghỉ mắt một chút thôi nha.',chaotic:'Ai đặt gối ở đây vậy… zzz'}},
+ angry:{label:'Giận dỗi',emoji:'💢',messages:{tsundere:'Hừ! Bạn bỏ mặc mình lâu quá đó!',cute:'Hmph! Mình đang dỗi nha!',badboy:'Này, đừng lơ tớ lâu vậy.',sadgirl:'Mình tưởng bạn quên mất mình…',yandere:'Bạn đi đâu lâu vậy? Mình chờ đó.',kuudere:'Đã ghi nhận việc bị bỏ quên.',dandere:'Mình… hơi buồn vì bạn đi lâu.',genki:'Ê ê, quay lại đây nào!',cool:'Cậu biến mất hơi lâu rồi đấy.',shy:'Mình cứ tưởng bạn không quay lại…',friendly:'Bạn quay lại rồi! Mình chờ nãy giờ.',chaotic:'Báo động! Chủ nhân mất tích!'}},
+ lonely:{label:'Cô đơn',emoji:'🥺',messages:{tsundere:'Mình không cô đơn đâu… chỉ là hơi vắng thôi.',cute:'Ở lại với mình một chút nữa đi~',badboy:'Có người đồng hành vẫn tốt hơn.',sadgirl:'Mình đợi bạn quay lại…',yandere:'Đừng để mình chờ lâu nữa nhé.',kuudere:'Không gian yên tĩnh quá.',dandere:'Bạn còn ở đó không…?',genki:'Bạn đâu rồi? Quay lại chơi nào!',cool:'Hơi im ắng rồi.',shy:'Mình nhớ có người nói chuyện cùng…',friendly:'Mình sẵn sàng khi bạn quay lại.',chaotic:'Xin một chút sự chú ý nào!'}},
+ fear:{label:'Lo lắng',emoji:'😳',messages:{tsundere:'Ơ! Đừng làm mình bất ngờ chứ!',cute:'Hửm? Có chuyện gì thế?',badboy:'Bình tĩnh, chỉ hơi bất ngờ thôi.',sadgirl:'Mình hơi lo… ở đây với mình nhé.',yandere:'Đừng làm mình sợ rồi biến mất nhé.',kuudere:'Có tín hiệu bất thường.',dandere:'Ơ… mình hơi sợ.',genki:'Á! Giật mình một chút!',cool:'Mình không ngờ đến chuyện đó.',shy:'H-hơi bất ngờ thôi!',friendly:'Không sao đâu, mình ổn rồi.',chaotic:'Jump scare! Tim mình vừa nhảy múa!'}},
+ music:{label:'Nghe nhạc',emoji:'🎵',messages:{tsundere:'Nhạc hay đấy… mình chỉ lắc lư theo thôi nha!',cute:'Lắc lư~ hát cùng mình nè! 🎶',badboy:'Beat này ổn áp đấy.',sadgirl:'Giai điệu này làm mình thấy dịu lại…',yandere:'Cùng nghe bài này với mình nhé.',kuudere:'Nhịp điệu khá dễ chịu.',dandere:'Mình thích bài này…',genki:'Let’s dance! 🎵',cool:'Nhịp này có gu đấy.',shy:'Mình hát khe khẽ thôi nhé…',friendly:'Mở nhạc lên rồi cùng chill nha!',chaotic:'Concert riêng của chúng ta bắt đầu!'}},
+ happy:{label:'Vui mừng',emoji:'🎉',messages:{tsundere:'Điểm tốt thì… mình cũng vui một chút thôi!',cute:'Yayyy! Bạn giỏi quá! 💖',badboy:'Đúng như dự đoán. Làm tốt lắm!',sadgirl:'Mình vui cho bạn thật đó…',yandere:'Mình biết bạn làm được mà!',kuudere:'Kết quả tốt. Chúc mừng.',dandere:'Chúc mừng… mình tự hào về bạn.',genki:'TUYỆT VỜI! Ăn mừng thôi!',cool:'Phong độ tốt đấy.',shy:'Giỏi quá… mình mừng cho bạn.',friendly:'Chúc mừng bạn! Bạn làm tốt lắm!',chaotic:'Pháo giấy! Ăn mừng thôi nào!'}},
+ sad:{label:'Buồn / khóc',emoji:'🥹',messages:{tsundere:'Đừng buồn… lần sau mình giúp bạn ôn kỹ hơn.',cute:'Ôm một cái nhé? Mình tin bạn mà.',badboy:'Một lần chưa tốt không định nghĩa bạn.',sadgirl:'Mình hiểu cảm giác đó… nghỉ chút nhé.',yandere:'Đừng tự trách mình, mình vẫn ở đây.',kuudere:'Ta xem lại lỗi và cải thiện lần tới.',dandere:'Không sao đâu… mình ngồi cùng bạn.',genki:'Lần sau bật lại mạnh hơn nhé!',cool:'Rút kinh nghiệm rồi tiến tiếp.',shy:'Đừng khóc nhé… mình ở đây.',friendly:'Không sao, mình thử lại cùng nhau.',chaotic:'Thất bại chỉ là bản update tiếp theo!'}},
+ big:{label:'Ngại khi phóng to',emoji:'😳',messages:{tsundere:'N-này! Sao phóng to mình vậy?!',cute:'Ôi gần quá đó~ >///<',badboy:'Zoom mạnh tay ghê.',sadgirl:'Mình thấy hơi áp lực khi sát quá…',yandere:'Bạn muốn nhìn mình kỹ đến thế sao?',kuudere:'Khoảng cách quan sát đã thay đổi.',dandere:'Gần quá… mình ngại.',genki:'Wow, cận cảnh luôn!',cool:'Zoom lớn thật.',shy:'A-a… gần quá rồi!',friendly:'Bạn có thể thu nhỏ lại một chút nha.',chaotic:'CẬN CẢNH 4K!'}},
+ small:{label:'Sợ khi thu nhỏ',emoji:'🥺',messages:{tsundere:'Mình nhỏ xíu rồi! Kéo lại chút đi!',cute:'Nhỏ thế này bạn còn thấy mình không?',badboy:'Thu nhỏ hơi quá rồi.',sadgirl:'Mình sắp biến mất khỏi tầm mắt…',yandere:'Đừng làm mình nhỏ đến mức không thấy nhau.',kuudere:'Tỉ lệ hiển thị thấp.',dandere:'Mình bé quá…',genki:'Mình đâu rồi ta?',cool:'Thu nhỏ hơi tay rồi.',shy:'Bạn còn nhìn thấy mình chứ?',friendly:'Kéo lớn lên một chút để mình dễ thấy nhé.',chaotic:'Chế độ tí hon kích hoạt!'}},
+ chat:{label:'Trò chuyện',emoji:'💬',messages:{tsundere:'Nói đi, mình nghe mà… không phải vì quan tâm đâu!',cute:'Kể mình nghe nào~ 💗',badboy:'Tớ nghe đây. Có chuyện gì?',sadgirl:'Bạn cứ chia sẻ nhé, mình lắng nghe.',yandere:'Kể mình nghe mọi điều nhé.',kuudere:'Mình đang nghe.',dandere:'Ừm… bạn cứ nói.',genki:'Chat chat chat! Bạn muốn kể gì?',cool:'Nói thẳng vào vấn đề nhé.',shy:'Mình đang nghe…',friendly:'Bạn muốn nói chuyện gì nào?',chaotic:'Tin nóng gì đây?! Kể mau!'}},
+ drag:{label:'Tức giận khi di chuyển liên tục',emoji:'💢',messages:{tsundere:'Ê! Đừng lắc mình liên tục chứ!',cute:'Chóng mặt rồi nè! Chậm lại chút~',badboy:'Whoa, kéo nhẹ tay thôi.',sadgirl:'Mình chóng mặt… cho mình đứng yên chút.',yandere:'Bạn cứ kéo mình đi đâu vậy?',kuudere:'Tốc độ di chuyển vượt ngưỡng.',dandere:'Mình… chóng mặt rồi.',genki:'Quay vòng vòng! Dừng lại nào!',cool:'Tốc độ hơi nhiều rồi.',shy:'Á… mình chóng mặt mất!',friendly:'Bạn kéo từ từ thôi để mình theo kịp.',chaotic:'Mình sắp thành con quay rồi!'}},
+ tap:{label:'Gõ màn hình thu hút chú ý',emoji:'👆',messages:{tsundere:'Cộc cộc! Bạn có nghe mình không đó?',cute:'Cốc cốc~ chơi với mình đi!',badboy:'Hey, tớ ở đây.',sadgirl:'Mình muốn được bạn chú ý một chút…',yandere:'Nhìn mình này, mình có chuyện muốn nói.',kuudere:'Xin chú ý trong giây lát.',dandere:'Bạn ơi…',genki:'Cốc cốc! Ai ở đó? Là mình nè!',cool:'Xin một chút chú ý.',shy:'Mình gọi bạn một chút thôi…',friendly:'Bạn quay lại rồi, mình đây!',chaotic:'KNOCK KNOCK! Tada!'}},
+ cry:{label:'Khóc khi điểm thấp',emoji:'💧',messages:{tsundere:'Mình không khóc đâu… chỉ lo cho bạn thôi.',cute:'Ôm gấu một chút rồi mình học lại nha.',badboy:'Đứng dậy, chiến tiếp. Tớ tin bạn.',sadgirl:'Mình biết bạn đã cố gắng… nghỉ một chút nhé.',yandere:'Đừng làm đau lòng chính mình nhé.',kuudere:'Hãy phân tích lỗi từng bước.',dandere:'Không sao… thử lại cùng nhau.',genki:'Reset tinh thần! Mình sẽ hỗ trợ!',cool:'Lần sau sẽ tốt hơn nếu ta luyện đúng chỗ.',shy:'Mình hơi buồn… nhưng vẫn ở đây.',friendly:'Điểm số không định nghĩa bạn. Cùng ôn lại nhé.',chaotic:'Lượt này thua, lượt sau comeback!'}},
+ dizzy:{label:'Chóng mặt',emoji:'💫',messages:{tsundere:'Dừng lại! Mình quay mòng mòng rồi!',cute:'Sao trời đất quay vòng thế này~',badboy:'Okay, cho tớ đứng yên một giây.',sadgirl:'Mình cần nghỉ một chút…',yandere:'Giữ mình yên một lát nhé.',kuudere:'Cần ổn định vị trí.',dandere:'Mình hơi chóng mặt…',genki:'Vòng quay may mắn… dừng lại thôi!',cool:'Chuyển động quá nhanh.',shy:'Á, quay vòng rồi!',friendly:'Để nhân vật nghỉ một chút nhé.',chaotic:'SPIN MODE! Hủy, hủy!'}}
+};
+function auroraGetPersonality(){return (currentEquippedAiModel&&currentEquippedAiModel.modelData&&currentEquippedAiModel.modelData.personality)||'tsundere';}
+function auroraGetStateMessage(state){const entry=AURORA_ARU_STATES[state]||AURORA_ARU_STATES.idle;const persona=auroraGetPersonality();return entry.messages[persona]||entry.messages.tsundere||entry.label;}
+let auroraAruIdleTimer=null,auroraAruStateTimer=null,auroraAruLastInteraction=Date.now(),auroraAruLastLongIdle=0,auroraAruPointerStart=null,auroraAruMoveSamples=[];
+const AURORA_ARU_WIDGET_STATES=['idle','blink','pet','nuzzle','thinking','sleep','happy','sad','angry','lonely','fear','big','small','music','chat','dizzy','tap','cry'];
+function auroraSetAruState(state,withMessage=true){
+ if(!currentEquippedAiModel)return;
+ if(document.body.classList.contains('optimized-mode')){auroraClearAruState();return;}
+ const widget=document.getElementById('aiModelWidget');const body=document.getElementById('aiModelBody');if(!widget||widget.classList.contains('ai-hidden'))return;
+ const aliases={neutral:'idle',nuzzle:'pet',score:'happy',large:'big',zoom:'big',shrink:'small',lonely:'lonely',fear:'fear',music:'music',drag:'drag',thinking:'thinking',sad:'sad',happy:'happy',exam:'thinking',chat:'chat',blink:'blink',sleep:'sleep'};
+ state=aliases[state]||state;if(state==='drag')state='dizzy';if(!AURORA_ARU_STATES[state])state='idle';
+ if(state==='music'){widget.dataset.musicHeadphones=Math.random()<.58?'1':'0';}else{delete widget.dataset.musicHeadphones;}
+ widget.classList.remove(...AURORA_ARU_WIDGET_STATES.map(k=>'aru-state-'+k));widget.classList.add('aru-state-'+state);widget.classList.add('aru-system-model');
+ const old=widget.querySelector('.aru-mood-caption');if(old)old.remove();
+ const label=AURORA_ARU_STATES[state]?.label||'Đang tương tác';const caption=document.createElement('div');caption.className='aru-mood-caption';caption.textContent=label;widget.querySelector('.ai-model-container')?.appendChild(caption);
+ if(withMessage){const msg=auroraGetStateMessage(state);if(msg&&typeof showAiFloatBubble==='function')showAiFloatBubble(msg,5.5);}
+ if(auroraAruStateTimer)clearTimeout(auroraAruStateTimer);auroraAruStateTimer=setTimeout(()=>{widget.classList.remove('aru-state-'+state);if(caption.isConnected)caption.remove();delete widget.dataset.musicHeadphones;auroraRenderAccessoryLayer();if(!document.body.classList.contains('optimized-mode'))widget.classList.add('aru-state-idle');},state==='music'?9000:5500);
+}
+function auroraClearAruState(){const widget=document.getElementById('aiModelWidget');if(!widget)return;widget.classList.remove(...AURORA_ARU_WIDGET_STATES.map(k=>'aru-state-'+k));widget.classList.remove('aru-static-art');const cap=widget.querySelector('.aru-mood-caption');if(cap)cap.remove();if(auroraAruStateTimer)clearTimeout(auroraAruStateTimer);}
+function auroraStartIdleLoop(){if(auroraAruIdleTimer)clearInterval(auroraAruIdleTimer);auroraAruIdleTimer=setInterval(()=>{
+ if(!currentEquippedAiModel||!aiWidgetVisible||document.hidden)return;
+ if(document.body.classList.contains('optimized-mode')){auroraClearAruState();return;}
+ const idle=Date.now()-auroraAruLastInteraction;
+ if(idle>55000&&Date.now()-auroraAruLastLongIdle>42000){auroraAruLastLongIdle=Date.now();const choices=['angry','lonely','fear','tap'];auroraSetAruState(choices[Math.floor(Math.random()*choices.length)],true);return;}
+ if(isExamActive||isQpActive){auroraSetAruState(Math.random()<.25?'sleep':'thinking',false);return;}
+ const choices=['blink','idle','pet','thinking','sleep'];auroraSetAruState(choices[Math.floor(Math.random()*choices.length)],false);
+ },7200);}
+function auroraStopIdleLoop(){if(auroraAruIdleTimer){clearInterval(auroraAruIdleTimer);auroraAruIdleTimer=null;}if(auroraAruStateTimer){clearTimeout(auroraAruStateTimer);auroraAruStateTimer=null;}}
+function auroraCreateBearCover(){
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ svg.setAttribute('viewBox','0 0 400 600');svg.setAttribute('preserveAspectRatio','xMidYMid meet');svg.setAttribute('aria-hidden','true');svg.classList.add('aru-bear-cover');
+ svg.innerHTML=`<defs><linearGradient id="aruDressCoverGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffefa"/><stop offset=".52" stop-color="#eaf0fb"/><stop offset="1" stop-color="#c8d8f3"/></linearGradient><linearGradient id="aruDressCoverShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".96"/><stop offset="1" stop-color="#d7e3f6" stop-opacity=".98"/></linearGradient></defs><path d="M116 344 C135 334 155 348 177 361 C198 370 230 345 255 354 C283 364 302 391 295 425 C287 463 301 512 322 574 L78 574 C99 526 107 484 98 447 C88 410 92 374 116 344 Z" fill="url(#aruDressCoverGradient)" stroke="#c5d5ef" stroke-width="4"/><path d="M116 371 C151 389 157 409 165 435 M274 377 C250 397 245 427 242 455 M123 487 C166 508 218 511 282 486 M107 543 C162 555 241 555 307 536" fill="none" stroke="#c8d7f1" stroke-width="5" stroke-linecap="round" opacity=".75"/><path d="M90 563 Q112 551 132 564 T174 564 T216 564 T258 564 T300 564 L322 588 L78 588 Z" fill="url(#aruDressCoverShade)" stroke="#d6e0f4" stroke-width="3"/><path d="M106 579 Q121 568 137 579 T169 579 T201 579 T233 579 T265 579 T297 579" fill="none" stroke="#b9cbed" stroke-width="3" opacity=".85"/>`;
+ return svg;
+}
+function auroraRenderAccessoryLayer(){
+ const content=document.getElementById('aiModelContent');if(!content)return;
+ let layer=content.querySelector('.aru-accessory-layer');if(!layer){layer=document.createElement('div');layer.className='aru-accessory-layer';content.appendChild(layer);}layer.innerHTML='';
+ const md=currentEquippedAiModel?.modelData;if(!md)return;
+ const settings=Object.assign({},md.accessorySettings||{});
+ if(md.is2DSystemModel&&settings.bear===false)layer.appendChild(auroraCreateBearCover());
+ if(document.body.classList.contains('optimized-mode'))return;
+ const props=[];
+ if(settings.headphones)props.push({emoji:'🎧',left:'50%',top:'10%',size:'30px'});
+ if(widgetMusicHeadphoneActive())props.push({emoji:'🎧',left:'50%',top:'10%',size:'30px'});
+ if(settings.hairBow && !md.systemDefault)props.push({emoji:'🎀',left:'72%',top:'20%',size:'23px'});
+ const state=currentEquippedAiModel&&currentEquippedAiModel.modelData&&currentEquippedAiModel.modelData.personality;
+ const accessoryList=Array.isArray(md.accessories)?md.accessories:[];
+ accessoryList.forEach((a)=>{if(!a||!a.data||a.visible===false)return;const img=document.createElement('img');img.className='aru-accessory-img';img.alt=a.name||'Phụ kiện';img.src=a.data;img.style.setProperty('--aru-x',(Number(a.x)||0)+'%');img.style.setProperty('--aru-y',(Number(a.y)||0)+'%');img.style.setProperty('--aru-w',(Math.max(.1,Math.min(1.2,Number(a.scale)||.35))*70)+'%');img.style.setProperty('--aru-rot',(Number(a.rotation)||0)+'deg');img.style.setProperty('--aru-op',Math.max(.1,Math.min(1,Number(a.opacity)||1)));layer.appendChild(img);});
+ props.forEach(p=>{const el=document.createElement('div');el.className='aru-floating-prop';el.textContent=p.emoji;el.style.left=p.left;el.style.top=p.top;el.style.fontSize=p.size;layer.appendChild(el);});
+}
+function auroraUpdateWidgetMode(){
+ const widget=document.getElementById('aiModelWidget');const content=document.getElementById('aiModelContent');const md=currentEquippedAiModel?.modelData;if(!widget||!content||!md)return;
+ const optimized=document.body.classList.contains('optimized-mode');
+ if(optimized){
+  auroraStopIdleLoop();auroraClearAruState();widget.classList.add('aru-static-art');widget.classList.remove('aru-system-model');
+  const src=md.imageData||(md.files||[]).find(f=>/^image\//.test(f.type||'')&&f.data)?.data;
+  if(src){content.innerHTML='';const img=document.createElement('img');img.src=src;img.alt=md.name||'AI art';img.style.cssText='width:100%;height:100%;object-fit:contain;animation:none!important;transform:none!important;filter:none!important';content.appendChild(img);if(md.is2DSystemModel&&md.accessorySettings&&md.accessorySettings.bear===false){content.appendChild(auroraCreateBearCover());}}else{content.innerHTML='<div class="ai-model-emoji">🤖</div>';}
+  return;
+ }
+ widget.classList.remove('aru-static-art');widget.classList.add('aru-system-model');auroraStartIdleLoop();auroraRenderAccessoryLayer();
+}
+
+/* Wrap content renderer so optimized mode becomes static character art. */
+const auroraOriginalUpdateAiWidgetContent=updateAiWidgetContent;
+updateAiWidgetContent=async function(){
+ const md=currentEquippedAiModel?.modelData;
+ if(md&&document.body.classList.contains('optimized-mode')){auroraUpdateWidgetMode();const badge=document.getElementById('aiModelBadge');if(badge)badge.textContent=md.name||'AI';const chatName=document.getElementById('aiChatName');if(chatName)chatName.textContent=md.name||'AI';return;}
+ await auroraOriginalUpdateAiWidgetContent.apply(this,arguments);
+ const widget=document.getElementById('aiModelWidget');if(widget&&currentEquippedAiModel){widget.classList.toggle('aru-system-model',!!currentEquippedAiModel.modelData.imageData);auroraRenderAccessoryLayer();auroraStartIdleLoop();}
+};
+const auroraOriginalShowAiWidget=showAiWidget;
+showAiWidget=function(forceSummon=false){auroraOriginalShowAiWidget.apply(this,arguments);if(currentEquippedAiModel){auroraAruLastInteraction=Date.now();if(document.body.classList.contains('optimized-mode'))auroraUpdateWidgetMode();else auroraStartIdleLoop();}};
+const auroraOriginalHideAiWidget=hideAiWidget;
+hideAiWidget=function(){auroraOriginalHideAiWidget.apply(this,arguments);auroraStopIdleLoop();};
+const auroraOriginalTryTriggerAiReaction=tryTriggerAiReaction;
+tryTriggerAiReaction=async function(type){const stateMap={thinking:'thinking',happy:'happy',sad:'sad',music:'music',prank:'chat',neutral:'idle'};auroraSetAruState(stateMap[type]||'idle',true);return auroraOriginalTryTriggerAiReaction.apply(this,arguments);};
+const auroraOriginalShowAiFloatBubbleByEvent=showAiFloatBubbleByEvent;
+showAiFloatBubbleByEvent=function(eventKey){const m={big:'big',drag:'drag',profile_other:'chat',lonely:'lonely',idle:'idle'};if(m[eventKey])auroraSetAruState(m[eventKey],true);if(typeof auroraOriginalShowAiFloatBubbleByEvent==='function')return auroraOriginalShowAiFloatBubbleByEvent.apply(this,arguments);};
+const auroraOriginalToggleAiChat=toggleAiChat;
+toggleAiChat=function(){auroraOriginalToggleAiChat.apply(this,arguments);const chat=document.getElementById('aiChatBubble');if(chat?.classList.contains('show')){auroraAruLastInteraction=Date.now();auroraSetAruState('chat',false);}};
+const auroraOriginalApplyPerfMode=applyPerfMode;
+applyPerfMode=function(mode){auroraOriginalApplyPerfMode.apply(this,arguments);if(document.body.classList.contains('optimized-mode')){auroraStopIdleLoop();auroraClearAruState();auroraUpdateWidgetMode();}else if(currentEquippedAiModel){updateAiWidgetContent();auroraStartIdleLoop();}};
+
+if(!window.__auroraAruModelPointerBound){window.__auroraAruModelPointerBound=true;document.addEventListener('pointerdown',e=>{if(e.target.closest('#aiModelWidget'))auroraAruLastInteraction=Date.now();});
+ document.addEventListener('pointerdown',e=>{const body=e.target.closest('#aiModelBody');if(!body||e.target.closest('button,input,textarea,select,.ai-chat-bubble'))return;auroraAruPointerStart={x:e.clientX,y:e.clientY,t:Date.now(),target:e.target};});
+ document.addEventListener('pointerup',e=>{if(!auroraAruPointerStart)return;const a=auroraAruPointerStart;auroraAruPointerStart=null;const moved=Math.hypot(e.clientX-a.x,e.clientY-a.y);const elapsed=Date.now()-a.t;if(moved<9&&elapsed<850&&currentEquippedAiModel&&!(e.detail>1)&&!document.body.classList.contains('optimized-mode')){auroraAruLastInteraction=Date.now();auroraSetAruState('pet',true);}});
+ document.addEventListener('pointermove',e=>{if(!currentEquippedAiModel||!aiWidgetDragState?.dragging||document.body.classList.contains('optimized-mode'))return;const now=Date.now();auroraAruMoveSamples.push({x:e.clientX,y:e.clientY,t:now});auroraAruMoveSamples=auroraAruMoveSamples.filter(p=>now-p.t<700);if(auroraAruMoveSamples.length>=4){const f=auroraAruMoveSamples[0],last=auroraAruMoveSamples[auroraAruMoveSamples.length-1];const speed=Math.hypot(last.x-f.x,last.y-f.y)/Math.max(.02,(last.t-f.t)/1000);if(speed>850){auroraSetAruState('dizzy',true);auroraAruMoveSamples=[];}else if(speed>300&&auroraAruMoveSamples.length>8){auroraSetAruState('angry',true);auroraAruMoveSamples=[];}}});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){auroraStopIdleLoop();}else if(currentEquippedAiModel&&!document.body.classList.contains('optimized-mode'))auroraStartIdleLoop();});
+}
+
+const auroraOriginalSendAiChatMessage=sendAiChatMessage;
+sendAiChatMessage=async function(){
+ const inp=document.getElementById('aiChatInput');if(!inp)return;
+ const text=inp.value.trim();
+ if(/^\/tuongtac(?:\s|$)/i.test(text)){
+  inp.value='';addAiChatMessage('user',text);
+  const sub=text.replace(/^\/tuongtac/i,'').trim().toLowerCase();
+  const aliases={'vuotve':'pet','vuốt ve':'pet','xoadau':'pet','choan':'happy','cho ăn':'happy','ngu':'sleep','ngủ':'sleep','nhac':'music','nhạc':'music','hoc':'thinking','học':'thinking','happy':'happy','vui':'happy','sad':'sad','buon':'sad','buồn':'sad','ngai':'big','ngại':'big','sohai':'fear','sợ hãi':'fear','giandoi':'angry','giận dỗi':'angry','tucgian':'drag','tức giận':'drag','dizzy':'dizzy','chongmat':'dizzy','chóng mặt':'dizzy','chat':'chat','phongto':'big','phóng to':'big','thunho':'small','thu nhỏ':'small','khoc':'cry','khóc':'cry','buom':'pet','bướm':'pet','headphones':'music','dance':'music','thinking':'thinking','suy nghĩ':'thinking','tap':'tap','gõ màn hình':'tap'};
+  if(!sub){
+   const lines=Object.entries(AURORA_ARU_STATES).map(([k,v])=>`• /tuongtac ${k} — ${v.label}`).join('\n');
+   const reply=`📖 DANH SÁCH TƯƠNG TÁC CỦA ${currentEquippedAiModel?.modelData?.name||'AI'}\\n${lines}\\n\\nNgoài ra, bạn có thể vuốt/chạm nhân vật để vuốt ve, nhấp đúp để mở chat, dùng kéo/thu phóng để thay đổi kích thước, mở nhạc để kích hoạt trạng thái nghe nhạc. Tính cách hiện tại: ${AURORA_PERSONALITY_LABELS[auroraGetPersonality()]||auroraGetPersonality()}.`;
+   addAiChatMessage('ai',reply);showAiFloatBubble('Mở /tuongtac để xem danh sách trạng thái nha~',5);speakAiChatText(reply);return;
+  }
+  const state=aliases[sub]||sub;
+  if(AURORA_ARU_STATES[state]){auroraSetAruState(state,true);const reply=auroraGetStateMessage(state)+'\\n\\nTrạng thái: '+AURORA_ARU_STATES[state].label+'.';addAiChatMessage('ai',reply);speakAiChatText(reply);return;}
+  const reply='Mình chưa biết tương tác “'+sub+'”. Gõ /tuongtac để xem danh sách tương tác hợp lệ nhé.';addAiChatMessage('ai',reply);return;
+ }
+ await auroraOriginalSendAiChatMessage.apply(this,arguments);
+ if(currentEquippedAiModel&&aiChatOpen&&!document.body.classList.contains('optimized-mode'))auroraSetAruState('chat',false);
+};
+
+/* Drag accessory directly inside Safe Zone preview */
+(()=>{const stage=document.getElementById('aiEditSafeStage');if(!stage||stage.dataset.dragBound)return;stage.dataset.dragBound='1';let drag=null;stage.addEventListener('pointerdown',e=>{if(e.target?.id!=='aiEditSafeAccessory'||!auroraSelectedAccessoryId)return;drag={x:e.clientX,y:e.clientY,baseX:parseFloat(document.getElementById('aiAccRangeX').value)||0,baseY:parseFloat(document.getElementById('aiAccRangeY').value)||0};try{stage.setPointerCapture(e.pointerId);}catch(_){}e.preventDefault();});stage.addEventListener('pointermove',e=>{if(!drag)return;const r=stage.getBoundingClientRect();document.getElementById('aiAccRangeX').value=Math.max(-45,Math.min(45,drag.baseX+(e.clientX-drag.x)/r.width*100));document.getElementById('aiAccRangeY').value=Math.max(-45,Math.min(45,drag.baseY+(e.clientY-drag.y)/r.height*100));auroraUpdateSafeZonePreview();});const end=e=>{drag=null;try{stage.releasePointerCapture(e.pointerId);}catch(_){}};stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);})();
+
+/* Make the built-in model available for admin grants, but never auto-own it. */
+try{loadAiModelsForGrant();loadAiModelsList();}catch(e){}
+</script>
 </body>
 </html>
