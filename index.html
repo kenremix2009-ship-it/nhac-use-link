@@ -1285,6 +1285,15 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
   }
 }
 </script>
+
+<style id="aurora-final-70-percent-and-config-collapse">
+  /* Site-wide display scale requested by the owner: equivalent to a 70% zoom level. */
+  html { zoom: 0.7; }
+  #auroraConfigCollapseBtn { min-width: 148px; font-weight: 800; }
+  #auroraConfigCollapseBtn[aria-expanded="false"] { background: linear-gradient(135deg,#1877f2,#6f42c1); color: #fff; }
+  #auroraConfigCollapseBtn .aurora-config-caret { display:inline-block; margin-right:4px; transition:transform .18s ease; }
+</style>
+
 </head><body>
 
 <div id="customAlertOverlay"><div class="custom-alert-box" id="customAlertBox"><span class="ca-icon" id="caIcon">ℹ️</span><div class="ca-title" id="caTitle">Thông báo</div><div class="ca-msg" id="caMsg"></div><input type="text" class="ca-input" id="caInput" style="display:none"><div class="ca-actions" id="caActions"><button class="ca-btn-cancel" id="caCancelBtn" onclick="closeCustomAlert(false)">Hủy</button><button class="ca-btn-ok" id="caOkBtn" onclick="closeCustomAlert(true)">OK</button></div></div></div>
@@ -2130,9 +2139,12 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
 </div>
 
 <div id="configPanel" style="display:none">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+<div id="auroraConfigPanelHeader" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
   <div style="font-weight:900;color:#1877f2;font-size:16px">🔧 Bảng Điều Khiển Cấu Hình</div>
-  <button class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="lockConfigPanel()">🔒 Khóa Lại</button>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <button type="button" id="auroraConfigCollapseBtn" class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" aria-expanded="true" onclick="toggleAuroraConfigPanelCollapse()">^ Thu gọn cấu hình</button>
+    <button type="button" class="btn btn-secondary" style="width:auto;padding:6px 12px;font-size:12px" onclick="lockConfigPanel()">🔒 Khóa Lại</button>
+  </div>
 </div>
 
 <div class="aurora-showcase-admin" id="auroraShowcaseAdminPanel">
@@ -2153,7 +2165,7 @@ body[data-theme="gacha"] .nav-user:not(.nav-login-cta){background:rgba(255,255,2
   </div>
   <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(120,100,160,.18)">
     <label for="auroraShowcaseUpload">Hoặc tải nhiều file trực tiếp lên Firebase Storage</label>
-    <input id="auroraShowcaseUpload" type="file" multiple accept="image/gif,image/*,video/mp4,video/webm,video/ogg" style="width:100%;margin:6px 0 8px">
+    <input id="auroraShowcaseUpload" type="file" multiple accept=".gif,.png,.jpg,.jpeg,.webp,.avif,.mp4,.webm,.ogg,.mov,image/gif,image/png,image/jpeg,image/webp,image/avif,video/mp4,video/webm,video/ogg,video/quicktime" style="width:100%;margin:6px 0 8px">
     <div class="aurora-field-help">Hỗ trợ GIF/ảnh/MP4/WebM/OGG. Giới hạn 50 MB mỗi file, tối đa 8 media. Tính năng tải file cần Firebase Storage được bật và quy tắc lưu trữ cho phép quản trị viên ghi file.</div>
     <button type="button" class="btn btn-secondary" style="width:auto" onclick="uploadAuroraShowcaseFiles()">⬆️ Tải media lên và thêm vào danh sách</button>
     <div id="auroraShowcaseUploadStatus" class="aurora-upload-status" role="status"></div>
@@ -3148,7 +3160,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebas
 import { getDatabase, ref, set, get, child, remove, push, onValue, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 const firebaseConfig={apiKey:"AIzaSyC33ENu7xxo8Z9YXz_t3J8NZkfsShuuzKM",authDomain:"kho-du-lieu-de.firebaseapp.com",databaseURL:"https://kho-du-lieu-de-default-rtdb.firebaseio.com",projectId:"kho-du-lieu-de",storageBucket:"kho-du-lieu-de.firebasestorage.app",messagingSenderId:"420574558880",appId:"1:420574558880:web:f9c5037be3e34a6674a7c5"};
 const app=initializeApp(firebaseConfig);const db=getDatabase(app);
-window.db=db;window.ref=ref;window.dbRef=ref(db);window.dbSet=set;window.dbGet=get;window.dbChild=child;window.dbRemove=remove;window.dbPush=push;window.onValue=onValue;window.dbUpdate=update;
+window.firebaseApp=app;window.db=db;window.ref=ref;window.dbRef=ref(db);window.dbSet=set;window.dbGet=get;window.dbChild=child;window.dbRemove=remove;window.dbPush=push;window.onValue=onValue;window.dbUpdate=update;
 </script>
 
 <script>
@@ -9540,11 +9552,30 @@ initEcCreatePanel();
     try { return el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden'; }
     catch (_) { return true; }
   }
+  const AURORA_ADMIN_AUTHORED_TRANSLATION_SELECTOR = [
+    '#globalBroadcastBanner','#currentCloudNotice','#welcomeModal','#welcomeModalTitle','#welcomeModalContent',
+    '#customAlertOverlay','#resultPopup','#bigNotifyOverlay','#bigNotifyTitle','#bigNotifyMsg',
+    '#centerSquareToast','#cstTitle','#cstMsg','#systemToast','#globalBroadcastBanner',
+    '#homeHeroTitle','#homeHeroSub','#homeCdTitle','#homeCdSubtitle',
+    '#homeIntroContent','#homeTargetContent','#homeTrendContent','#homeUpdateContent',
+    '#auroraShowcaseBadgeText','#auroraShowcaseTitle','#auroraShowcaseDescription','#auroraShowcaseCaption'
+  ].join(',');
+  function auroraIsAdminAuthoredTranslationTarget(el) {
+    try { return !!(el && el.closest && el.closest(AURORA_ADMIN_AUTHORED_TRANSLATION_SELECTOR)); }
+    catch (_) { return false; }
+  }
   function auroraShouldUseAITranslation(text, el) {
     const value=String(text||'').trim();
-    if (!value || value.length < 4 || value.length > 3500 || !auroraHasVietnameseMarks(value)) return false;
+    const forceAdminContent=auroraIsAdminAuthoredTranslationTarget(el);
+    const minLength=forceAdminContent?2:4;
+    const maxLength=forceAdminContent?8000:3500;
+    if (!value || value.length < minLength || value.length > maxLength) return false;
     if (/^(https?:\/\/|www\.|[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|#[0-9a-f]{3,8}|\d+[.,]?\d*[%]?|[\W_]+)$/i.test(value)) return false;
-    if (el && el.closest('script,style,textarea,input,select,option,code,pre,kbd,samp,[contenteditable="true"],[data-no-translate],.no-translate,.katex,.math,.role-users-box,.profile-name,.profile-username,.acc-name,.acc-email,.nav-user,.user-display-name,.username,.user-name,.doc-name,.student-name,.ai-chat-message,.chat-message')) return false;
+    if (!forceAdminContent && !auroraHasVietnameseMarks(value)) return false;
+    // Explicitly translatable admin-controlled displays override general exclusions such as
+    // transient toast wrappers. Editable fields and executable/code regions are never translated.
+    if (el && el.closest('script,style,textarea,input,select,option,code,pre,kbd,samp,[contenteditable="true"],[data-no-translate],.no-translate,.katex,.math')) return false;
+    if (!forceAdminContent && el && el.closest('.role-users-box,.profile-name,.profile-username,.acc-name,.acc-email,.nav-user,.user-display-name,.username,.user-name,.doc-name,.student-name,.ai-chat-message,.chat-message')) return false;
     return true;
   }
   function auroraTranslateTargetNow(target, translation, lang) {
@@ -9614,7 +9645,9 @@ initEcCreatePanel();
         const batch=[]; let totalChars=0;
         for (const [key, rec] of auroraAutoTranslationPending) {
           if (rec.lang !== lang) continue;
+          const adminLong=rec.source.length>3500 && rec.source.length<=8000;
           if (batch.length >= 22 || (batch.length && totalChars + rec.source.length > 6500)) break;
+          if (!batch.length && adminLong) { batch.push(rec); totalChars += rec.source.length; break; }
           batch.push(rec); totalChars += rec.source.length;
         }
         if (!batch.length) { auroraAutoTranslationPending.delete(first.key); continue; }
@@ -9623,11 +9656,11 @@ initEcCreatePanel();
           if (typeof callAiApi !== 'function' || !cachedAiConfig) throw new Error('Chưa cấu hình API AI. Vào Cấu hình → Setup AI Model.');
           const languageName=AURORA_TRANSLATION_LANGUAGE_NAMES[lang] || lang;
           const input=batch.map(rec=>rec.source);
-          const systemPrompt='You are a professional UI and website translator. Translate Vietnamese text to '+languageName+'. Translate every item faithfully and naturally. Preserve facts, names, emojis, numbers, URLs, placeholders, code-like tokens and formatting intent. Do not summarize or answer the content. Return ONLY a valid JSON array of strings in the same order and exactly the same length as the input. Do not wrap it in markdown.';
+          const systemPrompt='You are a professional UI and website translator. Translate each Vietnamese or source-language UI text item into '+languageName+'. If an item is already in the requested language, return it unchanged. Translate admin-authored notices, announcements, welcome messages, homepage intro/update copy, and visible labels with no exceptions. Preserve proper names, brands, emojis, numbers, URLs, placeholders, identifiers and code-like tokens. Do not summarize or answer the content. Return ONLY a valid JSON array of strings in the same order and exactly the same length as the input. Do not wrap it in markdown.';
           const raw=await callAiApi([
             {role:'system',content:systemPrompt},
             {role:'user',content:JSON.stringify(input)}
-          ],{temperature:0.1,max_tokens:Math.min(7000,Math.max(1800,batch.length*180))});
+          ],{temperature:0.1,max_tokens:Math.min(7000,Math.max(1800,batch.length*180, batch.reduce((sum,rec)=>sum+Math.ceil(rec.source.length/3),0)))});
           const translations=auroraParseTranslationArray(raw,batch.length);
           batch.forEach((rec,index)=>{
             let translated=String(translations[index]||'').trim();
@@ -9640,7 +9673,8 @@ initEcCreatePanel();
           });
         } catch (error) {
           console.warn('Aurora dynamic translation skipped:',error);
-          auroraTranslationBlockedLanguages.add(lang);
+          // Discard only the failed batch remainder to avoid a retry loop. Do not block this
+          // language permanently: newly-rendered admin notices/pages may retry after config recovery.
           [...auroraAutoTranslationPending.entries()].forEach(([k,v])=>{if(v.lang===lang)auroraAutoTranslationPending.delete(k);});
           if ((extConfig.language||'vi')===lang && !auroraTranslationBlockedLanguages.has(lang+'-warned')) {
             auroraTranslationBlockedLanguages.add(lang+'-warned');
@@ -9669,7 +9703,8 @@ initEcCreatePanel();
     auroraLanguageObserver=new MutationObserver(records=>{
       const relevant=records.some(r=>
         (r.type==='childList' && r.addedNodes && r.addedNodes.length) ||
-        (r.type==='attributes' && r.target && ((r.attributeName==='class' && (r.target.classList?.contains('view-section') || r.target.classList?.contains('collapse-body') || r.target.classList?.contains('guide-panel') || r.target.classList?.contains('student-docs-panel') || r.target.classList?.contains('guide-tab') || r.target.classList?.contains('student-docs-tab'))) || r.target.id==='homeView' || r.target.id==='navTabsContainer'))
+        (r.type==='characterData' && r.target && r.target.parentElement) ||
+        (r.type==='attributes' && r.target && ((r.attributeName==='class' && (r.target.classList?.contains('view-section') || r.target.classList?.contains('collapse-body') || r.target.classList?.contains('guide-panel') || r.target.classList?.contains('student-docs-panel') || r.target.classList?.contains('guide-tab') || r.target.classList?.contains('student-docs-tab'))) || r.target.id==='homeView' || r.target.id==='navTabsContainer' || auroraIsAdminAuthoredTranslationTarget(r.target)))
       );
       if(auroraLanguageMutationScheduled||!relevant)return;
       auroraLanguageMutationScheduled=true;
@@ -9678,7 +9713,7 @@ initEcCreatePanel();
         try{translateKnownTextNodes();}catch(e){console.warn('Aurora language refresh failed',e);}
       });
     });
-    auroraLanguageObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style','hidden']});
+    auroraLanguageObserver.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','style','hidden']});
   }
   function translateKnownTextNodes(){
     const lang=extConfig.language||'vi';
@@ -10844,36 +10879,78 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     catch(err){setLocal(next);if(typeof window.showToast==='function')window.showToast('⚠️ Khôi phục cục bộ; Firebase chưa đồng bộ.','warn');}
     applyConfig(next);if(typeof window.showToast==='function')window.showToast('Đã khôi phục showcase mặc định.','success');
   };
+  function auroraInferMediaMime(file){
+    const declared=String(file&&file.type||'').trim().toLowerCase();
+    if(declared && /^(image\/(gif|png|jpeg|webp|avif)|video\/(mp4|webm|ogg|quicktime))$/i.test(declared))return declared;
+    const name=String(file&&file.name||'').toLowerCase();
+    const byExt={'.gif':'image/gif','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.avif':'image/avif','.mp4':'video/mp4','.webm':'video/webm','.ogg':'video/ogg','.ogv':'video/ogg','.mov':'video/quicktime'};
+    const ext=Object.keys(byExt).find(e=>name.endsWith(e));
+    return ext?byExt[ext]:'';
+  }
   window.uploadAuroraShowcaseFiles=async function(){
-    const input=$('auroraShowcaseUpload'),status=$('auroraShowcaseUploadStatus');if(!input||!input.files||!input.files.length){if(status)status.textContent='Hãy chọn ít nhất một file.';return;}
-    const files=Array.from(input.files);if(files.length>8){if(status)status.textContent='Tối đa 8 file trong một lần tải.';return;}
-    const currentlyEntered=parseMediaLines($('auroraShowcaseAdminMedia')?.value||'');
+    const input=$('auroraShowcaseUpload'),status=$('auroraShowcaseUploadStatus');
+    if(!input||!input.files||!input.files.length){if(status)status.textContent='Hãy chọn ít nhất một file GIF, ảnh hoặc video.';return;}
+    const files=Array.from(input.files);
+    if(files.length>8){if(status)status.textContent='Tối đa 8 file trong một lần tải.';return;}
+    const mediaField=$('auroraShowcaseAdminMedia');
+    const currentlyEntered=parseMediaLines(mediaField?.value||'');
     if(currentlyEntered.length+files.length>8){if(status)status.textContent='Danh sách hiện có gần đủ 8 mục. Hãy xóa bớt URL trước khi tải thêm.';return;}
-    const allowed=/^(image\/(gif|png|jpeg|webp|avif)|video\/(mp4|webm|ogg|quicktime))$/i;
-    for(const file of files){if(file.size>50*1024*1024){if(status)status.textContent=`${file.name}: vượt giới hạn 50 MB.`;return;}if(!allowed.test(file.type)){if(status)status.textContent=`${file.name}: định dạng chưa được hỗ trợ.`;return;}}
-    if(status)status.textContent='Đang chuẩn bị tải media lên Firebase Storage…';
+    const typed=files.map(file=>({file,mime:auroraInferMediaMime(file)}));
+    for(const {file,mime} of typed){
+      if(file.size<=0){if(status)status.textContent=`${file.name}: file rỗng, hãy chọn lại file.`;return;}
+      if(file.size>50*1024*1024){if(status)status.textContent=`${file.name}: vượt giới hạn 50 MB.`;return;}
+      if(!mime){if(status)status.textContent=`${file.name}: định dạng chưa hỗ trợ. Hãy dùng GIF, PNG, JPG, WebP, AVIF, MP4, WebM, OGG hoặc MOV.`;return;}
+    }
+    const button=document.querySelector('button[onclick="uploadAuroraShowcaseFiles()"]');
+    if(button){button.disabled=true;button.dataset.originalLabel=button.textContent;button.textContent='⏳ Đang tải…';}
+    if(status)status.textContent='Đang kết nối Firebase Storage…';
     try{
       const appMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js');
       const storageMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js');
-      const app=appMod.getApp();const storage=storageMod.getStorage(app);const added=[];
-      for(let i=0;i<files.length;i++){
-        const file=files[i];if(status)status.textContent=`Đang tải ${i+1}/${files.length}: ${file.name}`;
+      let app=window.firebaseApp||null;
+      if(!app){try{app=appMod.getApp();}catch(_){throw new Error('Firebase App chưa khởi tạo. Tải lại trang rồi thử lại.');}}
+      let storage;
+      try{storage=storageMod.getStorage(app);}catch(storageInitError){
+        const bucket=app.options&&app.options.storageBucket;
+        if(!bucket)throw new Error('Firebase chưa cấu hình storageBucket. Hãy thêm Storage bucket trong Firebase Console.');
+        storage=storageMod.getStorage(app,'gs://'+String(bucket).replace(/^gs:\/\//,''));
+      }
+      const added=[];
+      for(let i=0;i<typed.length;i++){
+        const {file,mime}=typed[i];
         const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'_').slice(-100)||('media_'+i);
         const path=`aurora_showcase/${Date.now()}_${Math.random().toString(36).slice(2,9)}_${clean}`;
         const storageRef=storageMod.ref(storage,path);
-        const snapshot=await storageMod.uploadBytes(storageRef,file,{contentType:file.type,cacheControl:'public,max-age=3600'});
+        const metadata={contentType:mime,cacheControl:'public,max-age=3600',customMetadata:{originalName:file.name}};
+        const task=storageMod.uploadBytesResumable(storageRef,file,metadata);
+        const snapshot=await new Promise((resolve,reject)=>{
+          task.on('state_changed',snap=>{
+            const percent=snap.totalBytes?Math.round((snap.bytesTransferred/snap.totalBytes)*100):0;
+            if(status)status.textContent=`Đang tải ${i+1}/${typed.length}: ${file.name} (${percent}%)`;
+          },reject,()=>resolve(task.snapshot));
+        });
         const url=await storageMod.getDownloadURL(snapshot.ref);
-        const type=file.type.startsWith('video/')?'video':'image';added.push({url,type,caption:file.name});
+        if(!/^https:\/\//i.test(url))throw new Error('Firebase Storage không trả về URL HTTPS hợp lệ cho '+file.name);
+        const type=mime.startsWith('video/')?'video':'image';
+        added.push({url,type,caption:file.name});
       }
       const combined=normalizeItems([...currentlyEntered,...added]);
+      if(combined.length!==currentlyEntered.length+added.length)throw new Error('Một số URL trả về không hợp lệ; danh sách media chưa được cập nhật.');
       cfg={...cfg,mediaItems:combined};
-      const mediaField=$('auroraShowcaseAdminMedia');if(mediaField)mediaField.value=mediaLines(combined);
+      if(mediaField)mediaField.value=mediaLines(combined);
       activeIndex=Math.max(0,combined.length-added.length);
-      if(status)status.textContent='Tải lên thành công. Bấm “Lưu cấu hình showcase” để công bố cho toàn hệ thống.';
-      renderMedia();resetAutoplay();input.value='';
+      renderMedia();resetAutoplay();setLocal(cfg);
+      if(status)status.textContent='Tải lên thành công. Đã thêm '+added.length+' file; bấm “Lưu cấu hình showcase” để công bố cho toàn hệ thống.';
+      input.value='';
     }catch(err){
       console.error('Aurora showcase upload failed:',err);
-      if(status)status.textContent='Không tải lên được. Cần bật Firebase Storage và cấp quyền ghi phù hợp; bạn có thể dùng URL HTTPS trực tiếp. Chi tiết: '+(err&&err.message||err);
+      const code=String(err&&err.code||'');
+      let hint='';
+      if(/unauthorized|permission-denied/i.test(code+' '+(err&&err.message||'')))hint=' Firebase Storage đang từ chối quyền ghi. Cần cấu hình Storage Security Rules cho tài khoản quản trị đã xác thực; tài khoản Aurora tự tạo không tự động là Firebase Auth.';
+      else if(/bucket|storage\/no-default-bucket/i.test(code+' '+(err&&err.message||'')))hint=' Kiểm tra Storage bucket trong Firebase Console và đối chiếu firebaseConfig.storageBucket.';
+      if(status)status.textContent='Không tải được media. '+(err&&err.message||String(err))+hint+' Bạn vẫn có thể dán URL HTTPS trực tiếp vào danh sách media.';
+    }finally{
+      if(button){button.disabled=false;button.textContent=button.dataset.originalLabel||'⬆️ Tải media lên và thêm vào danh sách';delete button.dataset.originalLabel;}
     }
   };
   function installSettings(){
@@ -10889,6 +10966,40 @@ window.AuroraVRMViewerReady = new Promise(resolve => {
     const mediaBox=$('auroraShowcaseMedia');if(mediaBox){mediaBox.addEventListener('mouseenter',()=>{if(autoplayTimer){clearInterval(autoplayTimer);autoplayTimer=null;}});mediaBox.addEventListener('mouseleave',resetAutoplay);}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();
+})();
+</script>
+
+
+<script id="aurora-config-collapse-70-zoom-fixes">
+(function(){
+  'use strict';
+  let configIsCollapsed=false;
+  let displayState=[];
+  window.toggleAuroraConfigPanelCollapse=function(){
+    const panel=document.getElementById('configPanel');
+    const header=document.getElementById('auroraConfigPanelHeader');
+    const button=document.getElementById('auroraConfigCollapseBtn');
+    if(!panel||!header||!button)return;
+    const children=Array.from(panel.children).filter(node=>node!==header);
+    configIsCollapsed=!configIsCollapsed;
+    if(configIsCollapsed){
+      displayState=children.map(node=>({node,display:node.style.display,hidden:node.hidden}));
+      children.forEach(node=>{node.style.display='none';});
+      button.setAttribute('aria-expanded','false');
+      button.innerHTML='<span class="aurora-config-caret">⌄</span> Mở cấu hình';
+      button.title='Mở rộng lại toàn bộ bảng cấu hình';
+    }else{
+      displayState.forEach(state=>{
+        if(!state.node||!state.node.isConnected)return;
+        state.node.style.display=state.display;
+        state.node.hidden=state.hidden;
+      });
+      displayState=[];
+      button.setAttribute('aria-expanded','true');
+      button.innerHTML='<span class="aurora-config-caret">^</span> Thu gọn cấu hình';
+      button.title='Thu gọn toàn bộ bảng cấu hình';
+    }
+  };
 })();
 </script>
 
