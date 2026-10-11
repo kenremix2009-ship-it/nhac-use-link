@@ -2371,6 +2371,56 @@ body.optimized-mode.aurora-interface-aria-blue #auroraShowcaseMediaStage:before{
   </div>
 </div>
 
+<!-- Aurora configuration hub: shared settings + social sign-in provider metadata -->
+<section id="auroraConfigHub" aria-label="Cấu hình tập trung và đăng nhập" style="margin:14px 0 18px">
+  <div class="aurora-config-hub-heading">
+    <div>
+      <h3>⚙️ Cấu hình tập trung</h3>
+      <p>Truy cập nhanh các cấu hình dùng chung và thiết lập thông tin nhà cung cấp đăng nhập.</p>
+    </div>
+    <span class="aurora-config-hub-badge">ULTRA CONTROL</span>
+  </div>
+  <div class="aurora-config-hub-grid">
+    <section class="aurora-config-hub-card aurora-config-common-card">
+      <div class="aurora-config-card-title"><span class="aurora-config-card-icon">⚙️</span><div><h4>Cấu hình tập trung</h4><p>Email, API key và cấu hình AI hiện có</p></div></div>
+      <div class="aurora-config-shortcuts">
+        <button type="button" class="aurora-config-shortcut" onclick="auroraOpenConfigSection('email')"><span>📧</span><span><b>Cấu hình gửi email</b><small>EmailJS · mã xác nhận / quên mật khẩu</small></span><span aria-hidden="true">↗</span></button>
+        <button type="button" class="aurora-config-shortcut" onclick="auroraOpenConfigSection('ai')"><span>🤖</span><span><b>Setup AI Model</b><small>Nhà cung cấp · model · API key</small></span><span aria-hidden="true">↗</span></button>
+      </div>
+      <p class="aurora-config-safe-note">Các biểu mẫu email và AI đang dùng được giữ nguyên ở phần cấu hình bên dưới; các nút trên sẽ mở đúng phần cài đặt đó.</p>
+    </section>
+
+    <section class="aurora-config-hub-card" id="auroraGoogleLoginConfigCard">
+      <div class="aurora-config-card-title"><span class="aurora-config-card-icon aurora-google-g">G</span><div><h4>Cấu hình login (Google)</h4><p>OAuth Web Client và URL cho phép</p></div></div>
+      <label class="aurora-config-enable"><input type="checkbox" id="auroraGoogleLoginEnabled"> Cho phép dùng đăng nhập Google</label>
+      <label for="auroraGoogleLoginClientId">Google OAuth Client ID</label>
+      <input type="text" id="auroraGoogleLoginClientId" autocomplete="off" placeholder="xxxx.apps.googleusercontent.com">
+      <label for="auroraGoogleLoginOrigin">Authorized JavaScript origin</label>
+      <input type="url" id="auroraGoogleLoginOrigin" autocomplete="url" placeholder="https://ten-mien-cua-ban">
+      <label for="auroraGoogleLoginCallback">Redirect / callback URI</label>
+      <input type="url" id="auroraGoogleLoginCallback" autocomplete="url" placeholder="https://.../__/auth/handler">
+      <div class="aurora-config-provider-actions"><button type="button" onclick="auroraSaveOAuthProviderConfig('google')">💾 Lưu Google</button><button type="button" class="aurora-config-ghost-btn" onclick="auroraClearOAuthProviderConfig('google')">Xóa</button></div>
+      <p class="aurora-config-provider-status" id="auroraGoogleLoginStatus" role="status">Chưa tải cấu hình.</p>
+      <p class="aurora-config-safe-note">Client ID là thông tin công khai. Không dán Client Secret vào HTML hoặc cơ sở dữ liệu client.</p>
+    </section>
+
+    <section class="aurora-config-hub-card" id="auroraGithubLoginConfigCard">
+      <div class="aurora-config-card-title"><span class="aurora-config-card-icon aurora-github-g"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.67-3.76-1.32-3.76-1.32-.5-1.29-1.24-1.64-1.24-1.64-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.59 1.21 3.22.93.1-.72.39-1.21.7-1.49-2.48-.28-5.09-1.24-5.09-5.51 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.11-1.44 3.05-1.14 3.05-1.14.61 1.54.23 2.68.11 2.96.72.78 1.15 1.77 1.15 2.99 0 4.28-2.61 5.23-5.1 5.5.4.35.75 1.02.75 2.06v3.08c0 .29.2.63.77.52A11.1 11.1 0 0 0 12 .9Z"/></svg></span><div><h4>Cấu hình login (GitHub)</h4><p>OAuth App Client ID và callback</p></div></div>
+      <label class="aurora-config-enable"><input type="checkbox" id="auroraGithubLoginEnabled"> Cho phép dùng đăng nhập GitHub</label>
+      <label for="auroraGithubLoginClientId">GitHub OAuth App Client ID</label>
+      <input type="text" id="auroraGithubLoginClientId" autocomplete="off" placeholder="Iv1.xxxxxxxxxxxxxxxx">
+      <label for="auroraGithubLoginOrigin">Website origin</label>
+      <input type="url" id="auroraGithubLoginOrigin" autocomplete="url" placeholder="https://ten-mien-cua-ban">
+      <label for="auroraGithubLoginCallback">Authorization callback URL</label>
+      <input type="url" id="auroraGithubLoginCallback" autocomplete="url" placeholder="https://.../__/auth/handler">
+      <div class="aurora-config-provider-actions"><button type="button" onclick="auroraSaveOAuthProviderConfig('github')">💾 Lưu GitHub</button><button type="button" class="aurora-config-ghost-btn" onclick="auroraClearOAuthProviderConfig('github')">Xóa</button></div>
+      <p class="aurora-config-provider-status" id="auroraGithubLoginStatus" role="status">Chưa tải cấu hình.</p>
+      <p class="aurora-config-safe-note">GitHub Client Secret phải được cấu hình tại Firebase Authentication / backend Secret; không lưu secret trong HTML hoặc Realtime Database.</p>
+    </section>
+  </div>
+  <p class="aurora-config-oauth-disclaimer">Lưu Client ID và callback giúp quản lý cấu hình. Để xác thực thực tế, cần bật đúng nhà cung cấp trong Firebase Authentication và cấu hình callback tương ứng; màn hình cài đặt này không giả lập đăng nhập thành công.</p>
+</section>
+
 <div class="aurora-showcase-admin" id="auroraShowcaseAdminPanel">
   <h3>🎬 HERO VIDEO / GIF · Giao diện trang chủ</h3>
   <div class="aurora-field-help">Thêm tối đa 8 mục media công khai. Mỗi dòng theo dạng <b>image|URL|Chú thích</b> hoặc <b>video|URL|Chú thích</b>. Có thể chỉ nhập URL; GIF/ảnh tự nhận diện, video nên là MP4/WebM trực tiếp. Cấu hình lưu chung trên Firebase để người dùng khác cũng thấy. Không dán link trang xem video; hãy dùng URL file media trực tiếp.</div>
@@ -2513,7 +2563,7 @@ body.optimized-mode.aurora-interface-aria-blue #auroraShowcaseMediaStage:before{
 </div>
 </div>
 
-<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>📧 CẤU HÌNH GỬI EMAIL (QUÊN MẬT KHẨU)</span><span class="collapse-arrow">▼</span></div>
+<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true" data-aurora-config-key="email"><span>📧 CẤU HÌNH GỬI EMAIL (QUÊN MẬT KHẨU)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed"><div style="background:#f0f8ff;border:1px dashed #1877f2;padding:12px;border-radius:8px;margin-bottom:10px">
 <p style="font-size:12px;color:#666;margin-bottom:10px">Cấu hình EmailJS để gửi mã đặt lại mật khẩu. Nếu để trống, hệ thống dùng chế độ demo.</p>
 <label>🌐 Public Key:</label>
@@ -2547,7 +2597,7 @@ body.optimized-mode.aurora-interface-aria-blue #auroraShowcaseMediaStage:before{
 </div></div>
 
 <!-- === SETUP AI MODEL === -->
-<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true"><span>🤖 SETUP AI MODEL (API KEY & CẤU HÌNH)</span><span class="collapse-arrow">▼</span></div>
+<div class="collapse-header collapsed" onclick="toggleCollapseSection(this)" data-collapsed="true" data-aurora-config-key="ai"><span>🤖 SETUP AI MODEL (API KEY & CẤU HÌNH)</span><span class="collapse-arrow">▼</span></div>
 <div class="collapse-body collapsed">
 <div style="background:linear-gradient(135deg,#f0ebff,#fffbe6);border:2px dashed #6f42c1;padding:14px;border-radius:10px;margin-bottom:20px">
   <div class="ai-setup-note">
@@ -14659,6 +14709,195 @@ document.querySelectorAll('.view-section').forEach(el=>{const ob=new MutationObs
 window.addEventListener('aurora:interface-mode-changed',refresh);window.addEventListener('aurora:performance-mode-changed',refresh);
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
 window.Aurora52Hz={refresh,pause:()=>{stop();if(ctx)drawScene(0,true);},destroy:()=>{stop();if(resizeObserver)resizeObserver.disconnect();bodyObserver.disconnect();viewObservers.forEach(o=>o.disconnect());}};
+})();
+</script>
+
+
+<style id="aurora-config-hub-and-classic-social-fix">
+#auroraConfigHub{color:#263445;font-family:inherit}
+#auroraConfigHub .aurora-config-hub-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;padding:14px 16px;margin-bottom:12px;border:1px solid #dce6f3;border-radius:14px;background:linear-gradient(135deg,#f3f8ff,#fff 62%,#f5f7ff)}
+#auroraConfigHub .aurora-config-hub-heading h3{margin:0 0 4px;color:#233a59;font-size:17px;font-weight:850}
+#auroraConfigHub .aurora-config-hub-heading p{margin:0;color:#64748b;font-size:12px;line-height:1.5}
+#auroraConfigHub .aurora-config-hub-badge{padding:5px 9px;border:1px solid #c9dafa;border-radius:999px;background:#fff;color:#315d9b;font-size:10px;font-weight:800;letter-spacing:.08em}
+#auroraConfigHub .aurora-config-hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));align-items:start;gap:12px}
+#auroraConfigHub .aurora-config-hub-card{min-width:0;padding:14px;border:1px solid #dfe7f0;border-radius:14px;background:#fff;box-shadow:0 5px 16px rgba(30,56,88,.055)}
+#auroraConfigHub .aurora-config-card-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+#auroraConfigHub .aurora-config-card-title h4{margin:0 0 3px;color:#24364c;font-size:14px;font-weight:850}
+#auroraConfigHub .aurora-config-card-title p{margin:0;color:#738095;font-size:11px;line-height:1.35}
+#auroraConfigHub .aurora-config-card-icon{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:11px;background:#edf5ff;color:#2763aa;font-size:19px;font-weight:800}
+#auroraConfigHub .aurora-google-g{font-family:Arial,sans-serif;font-weight:900;color:#4285f4;background:#f2f6ff;border:1px solid #e0eaff}
+#auroraConfigHub .aurora-github-g{background:#20252e;color:#fff}
+#auroraConfigHub .aurora-github-g svg{width:19px;height:19px;fill:currentColor}
+#auroraConfigHub label{display:block;margin:10px 0 5px;color:#344358;font-size:11px;font-weight:750}
+#auroraConfigHub input[type="text"],#auroraConfigHub input[type="url"]{display:block;width:100%;min-width:0;min-height:37px;padding:8px 10px;border:1px solid #d6e0ed;border-radius:8px;background:#fbfdff;color:#1e293b;font:inherit;font-size:12px;line-height:1.4;outline:none}
+#auroraConfigHub input:focus{border-color:#6b9ef1;box-shadow:0 0 0 3px rgba(63,130,224,.12)}
+#auroraConfigHub .aurora-config-enable{display:flex;align-items:center;gap:8px;padding:9px 10px;margin:0 0 10px;border-radius:9px;background:#f3f7fd;color:#2f4056;font-size:11px}
+#auroraConfigHub .aurora-config-enable input{width:15px;height:15px;margin:0;accent-color:#2874d8}
+#auroraConfigHub .aurora-config-shortcuts{display:grid;gap:8px}
+#auroraConfigHub .aurora-config-shortcut{width:100%;display:flex;align-items:center;gap:10px;padding:11px;border:1px solid #e0e9f5;border-radius:10px;background:#f8fbff;color:#263c56;text-align:left;cursor:pointer}
+#auroraConfigHub .aurora-config-shortcut:hover{background:#eef5ff;border-color:#bdd4f6}
+#auroraConfigHub .aurora-config-shortcut>span:first-child{font-size:19px;flex:0 0 22px;text-align:center}
+#auroraConfigHub .aurora-config-shortcut>span:nth-child(2){display:grid;gap:3px;min-width:0;flex:1}
+#auroraConfigHub .aurora-config-shortcut b{font-size:12px}
+#auroraConfigHub .aurora-config-shortcut small{font-size:10px;color:#738095;line-height:1.35}
+#auroraConfigHub .aurora-config-shortcut>span:last-child{font-size:16px;color:#5284c5}
+#auroraConfigHub .aurora-config-provider-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+#auroraConfigHub .aurora-config-provider-actions button{border:1px solid #2267c8;border-radius:8px;background:#2674dc;color:#fff;padding:8px 11px;font-size:11px;font-weight:800;cursor:pointer}
+#auroraConfigHub .aurora-config-provider-actions button:hover{filter:brightness(.96)}
+#auroraConfigHub .aurora-config-provider-actions .aurora-config-ghost-btn{border-color:#d6e0ed;background:#fff;color:#46566c}
+#auroraConfigHub .aurora-config-provider-status{margin:9px 0 0;padding:8px 9px;border-radius:8px;background:#f4f7fb;color:#627289;font-size:10px;line-height:1.45;overflow-wrap:anywhere}
+#auroraConfigHub .aurora-config-safe-note{margin:10px 0 0;color:#768398;font-size:10px;line-height:1.5}
+#auroraConfigHub .aurora-config-oauth-disclaimer{margin:12px 0 0;padding:10px 12px;border:1px solid #e6eaf1;border-radius:9px;background:#f9fafc;color:#667085;font-size:11px;line-height:1.55}
+@media(max-width:600px){#auroraConfigHub .aurora-config-hub-heading{padding:12px}#auroraConfigHub .aurora-config-hub-card{padding:12px}}
+
+/* Classic authentication: compact social providers below the login/register tabs. */
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-social-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;margin:10px 0 9px;align-items:stretch}
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-social-button{appearance:none!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important;min-width:0!important;height:38px!important;min-height:38px!important;max-height:38px!important;padding:7px 10px!important;margin:0!important;border:1px solid #d9e1ec!important;border-radius:9px!important;background:#fff!important;color:#27364a!important;box-shadow:0 1px 2px rgba(22,40,65,.06)!important;font:600 12px/1.2 'Segoe UI',Arial,sans-serif!important;text-align:center!important;cursor:pointer!important;overflow:hidden!important}
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-social-button:hover{background:#f4f8ff!important;border-color:#b8cde9!important}
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-social-button svg{display:block!important;position:static!important;width:17px!important;height:17px!important;min-width:17px!important;min-height:17px!important;max-width:17px!important;max-height:17px!important;flex:0 0 17px!important;fill:currentColor!important;stroke:none!important}
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-google-icon{display:grid!important;place-items:center!important;width:17px!important;height:17px!important;min-width:17px!important;flex:0 0 17px!important;border-radius:50%!important;background:#f4f7fb!important;color:#4285f4!important;font:bold 15px/17px Arial,sans-serif!important}
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-divider{display:flex;align-items:center;gap:10px;margin:0 0 10px;color:#8490a0;font-size:10px;line-height:1}
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-divider:before,body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-divider:after{content:'';height:1px;background:#e5eaf1;flex:1}
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-footer{display:none!important}
+@media(max-width:420px){body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-social-button{font-size:11px!important;gap:6px!important;padding-inline:6px!important}}
+</style>
+<script id="aurora-config-hub-and-classic-social-behavior">
+(function(){
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const providerLocalKey='aurora-oauth-public-config-v1';
+ const providerCache={google:null,github:null};
+ function notice(message,type){try{if(typeof window.showToast==='function')window.showToast(message,type||'info');else alert(message);}catch(_){alert(message);}}
+ function callbackDefault(){return (location.origin||'')+'/__/auth/handler';}
+ function defaultOrigin(){return location.origin||'';}
+ function setValue(id,value){const el=$(id);if(el&&document.activeElement!==el)el.value=value==null?'':String(value);}
+ function setChecked(id,value){const el=$(id);if(el)el.checked=!!value;}
+ function localConfig(){try{return JSON.parse(localStorage.getItem(providerLocalKey)||'{}')||{};}catch(_){return {};}}
+ function setLocalConfig(provider,cfg){try{const all=localConfig();all[provider]=cfg;localStorage.setItem(providerLocalKey,JSON.stringify(all));}catch(_){}}
+ function readFields(provider){
+   const prefix=provider==='google'?'auroraGoogleLogin':'auroraGithubLogin';
+   return {enabled:!!($(prefix+'Enabled')&&$(prefix+'Enabled').checked),clientId:(($(prefix+'ClientId')||{}).value||'').trim(),origin:(($(prefix+'Origin')||{}).value||'').trim(),callbackUri:(($(prefix+'Callback')||{}).value||'').trim()};
+ }
+ function writeFields(provider,cfg){
+   const prefix=provider==='google'?'auroraGoogleLogin':'auroraGithubLogin';
+   cfg=cfg||{};
+   setChecked(prefix+'Enabled',cfg.enabled===true);
+   setValue(prefix+'ClientId',cfg.clientId||'');
+   setValue(prefix+'Origin',cfg.origin||defaultOrigin());
+   setValue(prefix+'Callback',cfg.callbackUri||'https://kho-du-lieu-de.firebaseapp.com/__/auth/handler');
+   updateStatus(provider,cfg);
+ }
+ function updateStatus(provider,cfg,message){
+   const el=$(provider==='google'?'auroraGoogleLoginStatus':'auroraGithubLoginStatus');if(!el)return;
+   if(message){el.textContent=message;return;}
+   if(cfg&&cfg.enabled&&cfg.clientId){el.textContent='Đã lưu Client ID và cấu hình được bật. Cần bật nhà cung cấp tương ứng trong Firebase Authentication để đăng nhập OAuth hoạt động.';el.style.background='#effaf3';el.style.color='#166534';}
+   else if(cfg&&cfg.clientId){el.textContent='Đã lưu Client ID nhưng nút đăng nhập đang tắt.';el.style.background='#f4f7fb';el.style.color='#627289';}
+   else {el.textContent='Chưa có Client ID. Nút đăng nhập xã hội vẫn chưa được kết nối.';el.style.background='#fff7ed';el.style.color='#9a3412';}
+ }
+ async function dbRead(provider){
+   try{
+     if(!window.db||typeof window.ref!=='function'||typeof window.dbGet!=='function')throw new Error('Firebase chưa sẵn sàng');
+     const snap=await window.dbGet(window.ref(window.db,'system/oauth_login/'+provider));
+     if(snap&&typeof snap.exists==='function'&&snap.exists())return snap.val()||{};
+   }catch(e){/* use saved local public config only as a display fallback */}
+   return localConfig()[provider]||{};
+ }
+ window.auroraLoadOAuthProviderConfigs=async function(){
+   for(const provider of ['google','github']){
+     const cfg=await dbRead(provider);providerCache[provider]=cfg;writeFields(provider,cfg);
+   }
+   return providerCache;
+ };
+ window.auroraSaveOAuthProviderConfig=async function(provider){
+   provider=String(provider||'').toLowerCase();if(!['google','github'].includes(provider))return;
+   try{if(typeof configTabUnlocked!=='undefined'&&!configTabUnlocked){notice('Hãy mở khóa Cấu hình trước khi lưu.','error');return;}}catch(_){ }
+   const cfg=readFields(provider);
+   if(cfg.enabled&&(!cfg.clientId||!cfg.origin||!cfg.callbackUri)){
+     updateStatus(provider,null,'Không thể bật: hãy nhập Client ID, website origin và callback URI.');notice('Điền đủ Client ID, origin và callback URI trước khi bật.','error');return;
+   }
+   if(cfg.origin&&!/^https?:\/\//i.test(cfg.origin)){notice('Origin cần là URL bắt đầu bằng http:// hoặc https://.','error');return;}
+   if(cfg.callbackUri&&!/^https?:\/\//i.test(cfg.callbackUri)){notice('Callback URI cần là URL bắt đầu bằng http:// hoặc https://.','error');return;}
+   cfg.updatedAt=Date.now();
+   try{cfg.updatedBy=(typeof currentUser!=='undefined'&&currentUser&&(currentUser.username||currentUser.email))||'administrator';}catch(_){cfg.updatedBy='administrator';}
+   setLocalConfig(provider,cfg);
+   try{
+     if(!window.db||typeof window.ref!=='function'||typeof window.dbSet!=='function')throw new Error('Firebase chưa sẵn sàng');
+     await window.dbSet(window.ref(window.db,'system/oauth_login/'+provider),cfg);
+     providerCache[provider]=cfg;updateStatus(provider,cfg,'Đã lưu cấu hình '+provider.toUpperCase()+' lên Firebase. Cần bật provider/callback trong Firebase Authentication để đăng nhập thực tế.');
+     notice('Đã lưu cấu hình login '+provider.toUpperCase()+'.','success');
+   }catch(e){
+     providerCache[provider]=cfg;updateStatus(provider,cfg,'Đã lưu bản cục bộ trên trình duyệt này, nhưng chưa đồng bộ Firebase: '+(e&&e.message||e));
+     notice('Không đồng bộ được Firebase; cấu hình chỉ lưu cục bộ trên trình duyệt này.','error');
+   }
+ };
+ window.auroraClearOAuthProviderConfig=async function(provider){
+   provider=String(provider||'').toLowerCase();if(!['google','github'].includes(provider))return;
+   try{if(typeof configTabUnlocked!=='undefined'&&!configTabUnlocked){notice('Hãy mở khóa Cấu hình trước khi xóa.','error');return;}}catch(_){ }
+   const cfg={enabled:false,clientId:'',origin:defaultOrigin(),callbackUri:'https://kho-du-lieu-de.firebaseapp.com/__/auth/handler',updatedAt:Date.now()};
+   try{
+     if(!window.db||typeof window.ref!=='function'||typeof window.dbSet!=='function')throw new Error('Firebase chưa sẵn sàng');
+     await window.dbSet(window.ref(window.db,'system/oauth_login/'+provider),cfg);
+     providerCache[provider]=cfg;setLocalConfig(provider,cfg);writeFields(provider,cfg);updateStatus(provider,cfg,'Đã xóa Client ID và tắt cấu hình '+provider.toUpperCase()+'.');notice('Đã xóa cấu hình '+provider.toUpperCase()+'.','success');
+   }catch(e){setLocalConfig(provider,cfg);providerCache[provider]=cfg;writeFields(provider,cfg);updateStatus(provider,cfg,'Đã xóa bản cục bộ; Firebase chưa cập nhật: '+(e&&e.message||e));notice('Firebase không cập nhật được; chỉ xóa trên trình duyệt này.','error');}
+ };
+ window.auroraOpenConfigSection=function(which){
+   const key=which==='ai'?'ai':which==='email'?'email':null;if(!key)return;
+   const header=document.querySelector('#configPanel .collapse-header[data-aurora-config-key="'+key+'"]');
+   if(!header){notice('Không tìm thấy mục cấu hình '+key+'.','error');return;}
+   try{if(header.classList.contains('collapsed')&&typeof window.toggleCollapseSection==='function')window.toggleCollapseSection(header);}catch(_){ }
+   setTimeout(()=>{try{header.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}catch(_){header.scrollIntoView();}},50);
+ };
+ window.auroraAuthSocialNotice=async function(provider){
+   const key=String(provider||'').toLowerCase()==='github'?'github':'google';
+   const label=key==='google'?'Google':'GitHub';
+   let cfg=providerCache[key];
+   if(!cfg||!cfg.updatedAt)cfg=await dbRead(key);
+   if(!cfg||cfg.enabled!==true||!cfg.clientId){
+     notice('Đăng nhập '+label+' chưa được bật hoặc chưa có Client ID. Mở Cấu hình → Cấu hình login ('+label+') để thiết lập.','info');
+     return;
+   }
+   notice('Đã lưu Client ID '+label+'. Để đăng nhập thực tế, cần bật provider và xác nhận callback trong Firebase Authentication; Aurora hiện chưa tự xác thực người dùng chỉ từ Client ID.','info');
+ };
+
+
+ // The classic auth view shows compact Google/GitHub buttons below the Login/Register tabs.
+ // Marker comments preserve the original markup order when Aurora Sign Up is selected.
+ let socialMarker=null,dividerMarker=null,authObserver=null;
+ function syncClassicSocialPosition(){
+   const overlay=$('authOverlay');if(!overlay)return;
+   const social=$('auroraAuthSocialButtons'),divider=overlay.querySelector('.aurora-auth-divider'),tabs=overlay.querySelector('.auth-tabs');
+   if(!social||!divider||!tabs)return;
+   if(!socialMarker&&social.parentNode){socialMarker=document.createComment('original social button position');social.parentNode.insertBefore(socialMarker,social);}
+   if(!dividerMarker&&divider.parentNode){dividerMarker=document.createComment('original social divider position');divider.parentNode.insertBefore(dividerMarker,divider);}
+   const custom=document.body.classList.contains('interbodylogin-aurora-signup');
+   if(custom){
+     if(socialMarker&&socialMarker.parentNode)socialMarker.parentNode.insertBefore(social,socialMarker.nextSibling);
+     if(dividerMarker&&dividerMarker.parentNode)dividerMarker.parentNode.insertBefore(divider,dividerMarker.nextSibling);
+     const footer=$('auroraAuthFooter');if(footer)footer.style.removeProperty('display');
+   }else{
+     tabs.insertAdjacentElement('afterend',social);social.insertAdjacentElement('afterend',divider);
+     const footer=$('auroraAuthFooter');if(footer)footer.style.setProperty('display','none','important');
+     // Preserve the active tab's intended show/hide state (forgot password hides provider actions).
+     const forgot=$('authViewForgot');const isForgot=!!(forgot&&forgot.classList.contains('active'));
+     social.style.display=isForgot?'none':'grid';divider.style.display=isForgot?'none':'flex';
+   }
+ }
+ function install(){
+   syncClassicSocialPosition();
+   // Keep the social row hidden on the forgot-password subview in classic mode.
+   if(typeof window.switchAuthTab==='function'&&!window.switchAuthTab.__auroraClassicSocialWrapped){
+     const originalSwitchAuthTab=window.switchAuthTab;
+     const wrappedSwitchAuthTab=function(tab){const result=originalSwitchAuthTab.apply(this,arguments);setTimeout(syncClassicSocialPosition,0);return result;};
+     wrappedSwitchAuthTab.__auroraClassicSocialWrapped=true;
+     window.switchAuthTab=wrappedSwitchAuthTab;
+   }
+   window.auroraLoadOAuthProviderConfigs();
+   window.addEventListener('aurora:interbodylogin-mode-changed',syncClassicSocialPosition);
+   if(!authObserver&&window.MutationObserver){authObserver=new MutationObserver(()=>{syncClassicSocialPosition();});const overlay=$('authOverlay');if(overlay)authObserver.observe(overlay,{attributes:true,attributeFilter:['class','style','data-auth-tab']});}
+   // Open settings on first reveal of the protected config panel.
+   const panel=$('configPanel');if(panel&&window.MutationObserver){let wasVisible=getComputedStyle(panel).display!=='none';const po=new MutationObserver(()=>{const now=getComputedStyle(panel).display!=='none';if(now&&!wasVisible)window.auroraLoadOAuthProviderConfigs();wasVisible=now;});po.observe(panel,{attributes:true,attributeFilter:['style','class']});}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
 </script>
 
