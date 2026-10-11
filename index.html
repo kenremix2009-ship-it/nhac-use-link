@@ -161,7 +161,7 @@ body.exam-active #studentLoginView::before,body.exam-active #studentLoginView .f
 .perf-title{font-size:16px;font-weight:900;color:#1877f2;margin-bottom:4px}
 .perf-sub{font-size:12px;color:#666;line-height:1.5}
 .perf-badge{display:inline-block;background:linear-gradient(135deg,#ffc107,#e0a800);color:#000;font-size:10px;font-weight:900;padding:3px 8px;border-radius:20px;margin-left:6px}
-body.optimized-mode *{animation-duration:.001s!important;transition-duration:.05s!important;backdrop-filter:none!important}
+body.optimized-mode *{animation-play-state:paused!important;transition-duration:.01s!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .mode-dropdown{position:relative;margin-bottom:15px}
 .mode-dropdown-toggle{width:100%;background:linear-gradient(135deg,#fff,#eef6ff);border:2px solid #d0e0f0;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;font-size:14px;font-weight:700;color:#333;text-align:left}
 .mode-dd-icon{font-size:26px}
@@ -11582,18 +11582,26 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     return globalInterfaceMode;
   }
   function applyInterfaceMode(value){
-    const mode=normalizeInterfaceMode(value);
-    interfaceModeCurrent=mode;
+    /* Store the user's selected theme separately from the temporary visual mode.
+       Performance mode always renders Basic, but never overwrites a saved theme. */
+    const requestedMode=normalizeInterfaceMode(value);
+    interfaceModeCurrent=requestedMode;
+    const optimized=!!(document.body&&document.body.classList.contains('optimized-mode'));
+    const mode=optimized?'basic':requestedMode;
     if(document.body){
+      document.body.dataset.auroraPreferredInterfaceMode=requestedMode;
+      window.__auroraPreferredInterfaceMode=requestedMode;
       document.body.classList.toggle('aurora-interface-modern',mode==='modern');
       document.body.classList.toggle('aurora-interface-future',mode==='future');
       document.body.classList.toggle('aurora-interface-chunk-loadbox',mode==='chunk-loadbox');
       document.body.dataset.auroraInterfaceMode=mode;
     }
-    const select=$('auroraUCInterfaceMode');if(select&&select.value!==mode)select.value=mode;
+    const select=$('auroraUCInterfaceMode');if(select&&select.value!==requestedMode)select.value=requestedMode;
     const status=$('auroraUCInterfaceStatus');
-    if(status)status.textContent='Đang áp dụng giao diện '+modeLabel(mode)+'.';
-    try{window.dispatchEvent(new CustomEvent('aurora:interface-mode-changed',{detail:{mode}}));}catch(_){}
+    if(status)status.textContent=optimized
+      ?'Đang dùng Basic vì chế độ Tối ưu đang bật. Khi tắt Tối ưu, giao diện '+modeLabel(requestedMode)+' sẽ được khôi phục.'
+      :'Đang áp dụng giao diện '+modeLabel(mode)+'.';
+    try{window.dispatchEvent(new CustomEvent('aurora:interface-mode-changed',{detail:{mode,preferredMode:requestedMode,forcedByPerformance:optimized}}));}catch(_){}
     return mode;
   }
   function refreshEffectiveInterfaceMode(){return applyInterfaceMode(getEffectiveInterfaceMode());}
@@ -13812,6 +13820,103 @@ body.aurora-interface-chunk-loadbox #advancedModelView>.card{position:relative;z
 /* Sync is explicitly opt-in, with no checked state inherited from the old panel. */
 #auroraUCInterfaceSync{accent-color:#31483a}
 </style>
+
+
+
+<!-- Aurora performance-mode stability patch: opt into low-cost Basic rendering without changing learning functionality. -->
+<style id="aurora-optimized-stability">
+/* Pause infinite decorative CSS animations rather than forcing them to cycle every 1ms. */
+body.optimized-mode #auroraDragonInkRoot,
+body.optimized-mode #advancedModelView > .aurora-chunk-dragon-backdrop,
+body.optimized-mode #advancedModelView > .aurora-chunk-dragon-backdrop::after,
+body.optimized-mode #welcomeFxCanvas,
+body.optimized-mode #avatarFxCanvas,
+body.optimized-mode #roleFxPreviewCanvas{display:none!important}
+body.optimized-mode #auroraDragonInkRoot{visibility:hidden!important;pointer-events:none!important}
+body.optimized-mode .aurora-future-global-nav,
+body.optimized-mode #auroraFutureGlobalNav:before{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.optimized-mode .view-section,body.optimized-mode .container{scroll-behavior:auto!important}
+</style>
+<script id="aurora-optimized-basic-switch">
+(function(){
+  'use strict';
+  const MODE_KEY='aurora-interface-mode';
+  function normalizeMode(v){const s=String(v||'basic').toLowerCase().trim();return ['modern','future','chunk-loadbox'].includes(s)?s:'basic';}
+  function preferredMode(){
+    const v=window.__auroraPreferredInterfaceMode||document.body?.dataset?.auroraPreferredInterfaceMode||document.body?.dataset?.auroraInterfaceMode;
+    if(v)return normalizeMode(v);
+    try{return normalizeMode(localStorage.getItem(MODE_KEY)||'basic');}catch(e){return 'basic';}
+  }
+  function syncInterface(forceBasic){
+    const requested=window.__auroraPreferredInterfaceMode||document.body?.dataset?.auroraPreferredInterfaceMode||preferredMode();
+    if(forceBasic){
+      if(typeof window.auroraUCApplyInterfaceMode==='function')window.auroraUCApplyInterfaceMode(requested);
+      else {
+        document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox');
+        document.body.dataset.auroraInterfaceMode='basic';
+      }
+    }else{
+      const target=normalizeMode(requested);
+      if(typeof window.auroraUCApplyInterfaceMode==='function')window.auroraUCApplyInterfaceMode(target);
+      else {
+        document.body.classList.toggle('aurora-interface-modern',target==='modern');
+        document.body.classList.toggle('aurora-interface-future',target==='future');
+        document.body.classList.toggle('aurora-interface-chunk-loadbox',target==='chunk-loadbox');
+        document.body.dataset.auroraInterfaceMode=target;
+      }
+    }
+  }
+  function stopDecorativeLoops(){
+    const stops=['stopWelcomeFx','stopEntertainmentEffect','stopProfileEffect','stopAvatarEffect','stopRoleFxPreviewLoop'];
+    for(const name of stops){try{if(typeof window[name]==='function')window[name]();else if(typeof globalThis[name]==='function')globalThis[name]();}catch(e){console.warn('Aurora optimized cleanup:',name,e);}}
+    /* Defensive cancellation for loops whose owners have already initialized. */
+    for(const key of ['welcomeFxRAF','profileFxRAF','avatarFxRAF','roleFxPreviewRAF']){
+      try{const id=globalThis[key];if(typeof id==='number'&&id)cancelAnimationFrame(id);}catch(e){}
+    }
+    try{if(window.AuroraChunkLoadbox&&typeof window.AuroraChunkLoadbox.refresh==='function')window.AuroraChunkLoadbox.refresh();}catch(e){}
+    try{const c=document.getElementById('welcomeFxCanvas');if(c){const x=c.getContext('2d');if(x)x.clearRect(0,0,c.width,c.height);}}catch(e){}
+    try{const f=document.getElementById('fxContainer');if(f)f.replaceChildren();}catch(e){}
+  }
+  const baseApplyPerfMode=applyPerfMode;
+  applyPerfMode=function(mode){
+    const optimize=String(mode).toLowerCase()==='optimized';
+    /* Capture the visual preference before base logic adds .optimized-mode. */
+    const wanted=preferredMode();
+    if(wanted)window.__auroraPreferredInterfaceMode=wanted;
+    const result=baseApplyPerfMode.apply(this,arguments);
+    if(optimize){
+      document.body.classList.add('optimized-mode');
+      document.body.dataset.auroraPerfMode='optimized';
+      syncInterface(true);
+      stopDecorativeLoops();
+      /* Existing AI model optimization hook has already disabled its animated layer. */
+      try{if(typeof auroraStopIdleLoop==='function')auroraStopIdleLoop();}catch(e){}
+      try{if(typeof auroraClearAruState==='function')auroraClearAruState();}catch(e){}
+      try{if(typeof auroraUpdateWidgetMode==='function')auroraUpdateWidgetMode();}catch(e){}
+    }else{
+      document.body.classList.remove('optimized-mode');
+      document.body.dataset.auroraPerfMode='full';
+      syncInterface(false);
+      try{if(window.AuroraChunkLoadbox&&typeof window.AuroraChunkLoadbox.refresh==='function')window.AuroraChunkLoadbox.refresh();}catch(e){}
+      try{if(typeof currentEquippedAiModel!=='undefined'&&currentEquippedAiModel&&typeof auroraStartIdleLoop==='function')auroraStartIdleLoop();}catch(e){}
+    }
+    return result;
+  };
+  /* If any Firebase watcher re-applies a theme after optimization, the interface
+     controller clamps the visible theme to Basic while remembering the preference. */
+  document.addEventListener('aurora:interface-mode-changed',function(){
+    if(document.body.classList.contains('optimized-mode')&&document.body.dataset.auroraInterfaceMode!=='basic')syncInterface(true);
+  });
+  if(document.body&&document.body.classList.contains('optimized-mode')){
+    syncInterface(true);stopDecorativeLoops();
+  }
+  window.AuroraOptimizedMode={
+    apply:function(mode){applyPerfMode(mode);},
+    getPreferredInterface:function(){return preferredMode();},
+    isEnabled:function(){return document.body.classList.contains('optimized-mode');}
+  };
+})();
+</script>
 
 </body>
 </html>
