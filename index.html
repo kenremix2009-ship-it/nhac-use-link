@@ -13229,7 +13229,7 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
  let root=null,canvas=null,ctx=null,raf=0,running=false,startedAt=0,resizeObserver=null;
  const reduced=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
  const pointer={x:800,y:450,lastX:800,lastY:450,active:false,lastWaterRippleAt:0,lastWindAt:0};
- const transform={scale:1,ox:0,oy:0,w:0,h:0,dpr:1};
+ const transform={scale:1,scaleX:1,scaleY:1,ox:0,oy:0,w:0,h:0,dpr:1,portrait:false};
  const waterRipples=[];
  const windStrokes=[];
  let sceneTime=0,advancedBackdrop=null;
@@ -13306,8 +13306,8 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
   if(root&&!root.__auroraPointerBound){
    root.__auroraPointerBound=true;
    root.addEventListener('pointermove',e=>{
-    const rect=root.getBoundingClientRect(),sc=transform.scale||1;
-    const nextX=(e.clientX-rect.left-transform.ox)/sc,nextY=(e.clientY-rect.top-transform.oy)/sc;
+    const rect=root.getBoundingClientRect(),sx=transform.scaleX||transform.scale||1,sy=transform.scaleY||transform.scale||1;
+    const nextX=(e.clientX-rect.left-transform.ox)/sx,nextY=(e.clientY-rect.top-transform.oy)/sy;
     const dx=nextX-pointer.x,dy=nextY-pointer.y,travel=Math.hypot(dx,dy),now=performance.now(),wasActive=pointer.active;
     pointer.lastX=pointer.x;pointer.lastY=pointer.y;
     pointer.x=Math.max(-100,Math.min(1700,nextX));pointer.y=Math.max(-100,Math.min(1000,nextY));pointer.active=true;
@@ -13331,16 +13331,22 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
   if(!root||!canvas||!ctx)return;
   const w=Math.max(1,root.clientWidth||window.innerWidth),h=Math.max(1,root.clientHeight||window.innerHeight);
   const dpr=Math.min(1.6,window.devicePixelRatio||1),portrait=w/h<.78;
-  /* Fit the authored 16:9 stage instead of cropping the dragon/phoenix. On portrait screens, keep the entire ink plate visible as a compact panorama below the copy. */
-  const sc=portrait ? Math.min(w/1600,0.31) : Math.min(w/1600,h/900);
-  const aspect=w/Math.max(1,h);
-  /* On ultrawide desktop viewports, shift the painting right to establish a
-     dedicated copy column. Keep it unshifted on tablet/portrait so the full
-     dragon, phoenix, boat and scholar remain inside the viewport. */
-  const artShift=portrait?0:Math.max(0,Math.min(145,(aspect-1.72)*255));
-  transform.w=w;transform.h=h;transform.dpr=dpr;transform.scale=sc;
-  transform.ox=(w-1600*sc)/2+artShift;
-  transform.oy=portrait ? Math.max(330,Math.min(h*.54,h-900*sc-10)) : (h-900*sc)/2;
+  /* Treat the whole actual viewport as the design frame. In landscape, use
+     independent axis scales so the ink painting reaches all four edges at
+     normal browser zoom, 67% zoom, and ultrawide sizes without a blank gutter.
+     The source plate is already close to 16:9, so the stretch is restrained.
+     On portrait screens, preserve the original artwork proportions and place
+     a complete compact panorama below the copy. */
+  const sc=portrait ? Math.min(w/1600,0.31) : 1;
+  transform.w=w;transform.h=h;transform.dpr=dpr;transform.scale=sc;transform.portrait=portrait;
+  if(portrait){
+    transform.scaleX=sc;transform.scaleY=sc;
+    transform.ox=(w-1600*sc)/2;
+    transform.oy=Math.max(330,Math.min(h*.54,h-900*sc-10));
+  }else{
+    transform.scaleX=w/1600;transform.scaleY=h/900;
+    transform.ox=0;transform.oy=0;
+  }
   canvas.width=Math.max(1,Math.round(w*dpr));canvas.height=Math.max(1,Math.round(h*dpr));
   canvas.style.width=w+'px';canvas.style.height=h+'px';
  }
@@ -13479,8 +13485,8 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
   const w=INK_MASK_SIZE.w,h=INK_MASK_SIZE.h;
   if(!sourceArtCanvas){sourceArtCanvas=document.createElement('canvas');sourceArtCanvas.width=w;sourceArtCanvas.height=h;sourceArtCtx=sourceArtCanvas.getContext('2d',{willReadFrequently:true});flowCanvas=document.createElement('canvas');flowCanvas.width=w;flowCanvas.height=h;flowCtx=flowCanvas.getContext('2d');}
   sourceArtCtx.clearRect(0,0,w,h);
-  const iw=sceneArtwork.naturalWidth,ih=sceneArtwork.naturalHeight,fit=Math.min(1500/iw,844/ih),dw=iw*fit,dh=ih*fit;
-  sourceArtCtx.drawImage(sceneArtwork,(1600-dw)/4,(900-dh)/4,dw/2,dh/2);
+  const iw=sceneArtwork.naturalWidth,ih=sceneArtwork.naturalHeight,fit=Math.min(800/iw,450/ih),dw=iw*fit,dh=ih*fit;
+  sourceArtCtx.drawImage(sceneArtwork,(800-dw)/2,(450-dh)/2,dw,dh);
   const source=sourceArtCtx.getImageData(0,0,w,h).data;
   const shapeCanvas=document.createElement('canvas');shapeCanvas.width=w;shapeCanvas.height=h;
   const shapeCtx=shapeCanvas.getContext('2d');drawShape(shapeCtx);
@@ -13561,13 +13567,13 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
  function draw(t){
   if(!ctx||!canvas||!root)return;
   sceneTime=t;
-  const w=transform.w||root.clientWidth||window.innerWidth,h=transform.h||root.clientHeight||window.innerHeight,sc=transform.scale,ox=transform.ox,oy=transform.oy,dpr=transform.dpr;
+  const w=transform.w||root.clientWidth||window.innerWidth,h=transform.h||root.clientHeight||window.innerHeight,sx=transform.scaleX||transform.scale,sy=transform.scaleY||transform.scale,ox=transform.ox,oy=transform.oy,dpr=transform.dpr;
   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);ctx.fillStyle='#e9e3d5';ctx.fillRect(0,0,w,h);
-  ctx.setTransform(dpr*sc,0,0,dpr*sc,dpr*(ox+Math.sin(t*.11)*1.0),dpr*(oy+Math.cos(t*.1)*.8));
+  ctx.setTransform(dpr*sx,0,0,dpr*sy,dpr*(ox+Math.sin(t*.11)*sx),dpr*(oy+Math.cos(t*.1)*sy));
   /* Canonical local watercolor plate: dragon, phoenix, distant peaks, lake, boat, and the scholar. */
   if(sceneArtwork&&sceneArtwork.complete&&sceneArtwork.naturalWidth){
-   const iw=sceneArtwork.naturalWidth,ih=sceneArtwork.naturalHeight,fit=Math.min(1500/iw,844/ih),dw=iw*fit,dh=ih*fit;
-   // Contain the full illustration: keep both dragon head/tail, phoenix, boat, scholar and lake visible.
+   const iw=sceneArtwork.naturalWidth,ih=sceneArtwork.naturalHeight,fit=Math.min(1600/iw,900/ih),dw=iw*fit,dh=ih*fit;
+   // The ink plate now fills the complete 1600×900 design frame; no 50px paper gutter remains.
    ctx.drawImage(sceneArtwork,(1600-dw)/2,(900-dh)/2,dw,dh);
    const wash=ctx.createLinearGradient(0,0,0,900);wash.addColorStop(0,'rgba(246,241,226,.06)');wash.addColorStop(.52,'rgba(236,231,216,.015)');wash.addColorStop(1,'rgba(62,83,72,.07)');ctx.fillStyle=wash;ctx.fillRect(0,0,1600,900);
   }else{
