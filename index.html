@@ -5725,7 +5725,37 @@ function switchView(viewId,btn=null){if(viewId!=='studentExamView'){document.bod
 function setExamActiveClass(a){document.body.classList.toggle('exam-active',a);}
 function detectLowEndDevice(){try{const mem=navigator.deviceMemory||8,cpu=navigator.hardwareConcurrency||8,ua=navigator.userAgent||'';const isMobile=/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|CriOS|FxiOS/i.test(ua)||(navigator.maxTouchPoints&&navigator.maxTouchPoints>1)||window.innerWidth<1024;return (mem<=4)||(cpu<=4)||isMobile;}catch(e){return false;}}
 function applyPerfMode(mode){perfMode=mode==='optimized'?'optimized':'full';document.body.classList.toggle('optimized-mode',perfMode==='optimized');const t=document.getElementById('currentPerfModeText');if(t){t.innerText=perfMode==='optimized'?'⚡ Tối ưu':'✨ Đầy đủ';t.style.color=perfMode==='optimized'?'#e0a800':'#198754';}}
-function choosePerfMode(mode){applyPerfMode(mode);document.getElementById('perfModeModal').style.display='none';showToast(mode==='optimized'?'⚡ Đã bật Tối ưu!':'✨ Đã bật Đầy đủ!','success');updateQrFabVisibility();}
+function choosePerfMode(mode){
+  const optimized=String(mode).toLowerCase()==='optimized';
+  const modal=document.getElementById('perfModeModal');
+  /* Close the blocking modal first and allow the browser one paint before cleanup. */
+  if(modal)modal.style.display='none';
+  if(window.__auroraPerfModeSwitchPending)return;
+  window.__auroraPerfModeSwitchPending=true;
+  const commitMode=()=>{
+    try{
+      applyPerfMode(optimized?'optimized':'full');
+    }catch(error){
+      console.error('[Aurora] Không thể hoàn tất chuyển chế độ hiển thị:',error);
+      /* Safe fallback: keep the app usable in Basic, never leave an opaque modal over the page. */
+      try{
+        document.body.classList.toggle('optimized-mode',optimized);
+        document.body.dataset.auroraPerfMode=optimized?'optimized':'full';
+        if(optimized){
+          document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox');
+          document.body.dataset.auroraInterfaceMode='basic';
+          if(window.AuroraChunkLoadbox&&typeof window.AuroraChunkLoadbox.pause==='function')window.AuroraChunkLoadbox.pause();
+        }
+      }catch(fallbackError){console.error('[Aurora] Fallback chế độ hiển thị:',fallbackError);}
+    }finally{
+      window.__auroraPerfModeSwitchPending=false;
+    }
+    try{showToast(optimized?'⚡ Đã bật Tối ưu!':'✨ Đã bật Đầy đủ!','success');}catch(e){}
+    try{updateQrFabVisibility();}catch(e){}
+  };
+  /* Separate the expensive style/lifecycle update from the click event so it can paint first. */
+  setTimeout(commitMode,40);
+}
 function openPerfModeModal(){document.getElementById('perfModeModal').style.display='flex';}
 function initPerfMode(){const r=document.getElementById('perfRecommendBadge');if(r)r.style.display=detectLowEndDevice()?'inline-block':'none';document.getElementById('perfModeModal').style.display='flex';}
 function updateQrFabVisibility(){const f=document.getElementById('qrScanFab'),l=document.getElementById('studentLoginView');if(!f||!l)return;f.classList.toggle('show',l.classList.contains('active')&&!isExamActive&&!isQpActive);}
@@ -12873,7 +12903,7 @@ try{loadAiModelsForGrant();loadAiModelsList();}catch(e){}
       });
     }
   });
-  if(document.body) modeObserver.observe(document.body,{attributes:true,attributeFilter:['class'],childList:true,subtree:true});
+  if(document.body) modeObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
 
   // Ensure an accessible interaction catalogue is always available through /tuongtac.
   // Existing command handling and personality-specific dialogue remain authoritative.
@@ -13106,7 +13136,7 @@ body.aurora-interface-future.exam-active .container{padding-top:0!important}
  const navUser=byId('navUserInfo');if(navUser){new MutationObserver(()=>setTimeout(sendAuthState,30)).observe(navUser,{childList:true,subtree:true,attributes:true,characterData:true});}
  const languageTarget=byId('auroraLanguage');if(languageTarget)languageTarget.addEventListener('change',()=>{const select=byId('auroraFutureGlobalLanguage');if(select)select.value=languageTarget.value;});
  const observer=new MutationObserver(()=>{updateNav()});observer.observe(document.body,{attributes:true,attributeFilter:['class'],subtree:false});
- const viewObserver=new MutationObserver(()=>updateNav());const container=document.querySelector('.container');if(container)viewObserver.observe(container,{attributes:true,subtree:true,attributeFilter:['class']});
+ const viewObserver=new MutationObserver(()=>updateNav());document.querySelectorAll('.view-section').forEach(view=>viewObserver.observe(view,{attributes:true,attributeFilter:['class']}));
  window.addEventListener('message',function(event){if(!event.data)return;if(event.data.type==='aurora-future-language-request'){const lang=byId('auroraLanguage');const frame=document.querySelector('.aurora-mengto-sketchbook-root iframe');try{frame&&frame.contentWindow.postMessage({type:'aurora-future-set-language',language:lang&&lang.value||'vi'},'*')}catch(e){}sendAuthState();return;}if(event.data.type==='aurora-future-profile'){if(userState().loggedIn&&typeof window.openProfile==='function')window.openProfile();else if(typeof window.openAuthModal==='function')window.openAuthModal('login');return;}if(event.data.type==='aurora-future-language'){const lang=byId('auroraLanguage');if(lang&&['vi','en','ru','zh','ja'].includes(event.data.language)&&lang.value!==event.data.language){lang.value=event.data.language;lang.dispatchEvent(new Event('change',{bubbles:true}));}}});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',updateNav,{once:true});else updateNav();
  window.addEventListener('load',()=>setTimeout(updateNav,40),{once:true});window.addEventListener('focus',updateNav);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateNav()});
@@ -13656,10 +13686,10 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
  window.addEventListener('resize',()=>{resize();if(isActive()&&reduced)draw(0)},{passive:true});
  document.addEventListener('visibilitychange',refreshLifecycle);
  const lifecycleObserver=new MutationObserver(refreshLifecycle);
- lifecycleObserver.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
+ lifecycleObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
  window.addEventListener('aurora:interface-mode-changed',refreshLifecycle);
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refreshLifecycle,{once:true});else refreshLifecycle();
- window.AuroraChunkLoadbox={refresh:refreshLifecycle,renderStatic:()=>draw(0),destroy:()=>{stop();if(resizeObserver)resizeObserver.disconnect();lifecycleObserver.disconnect();}};
+ window.AuroraChunkLoadbox={refresh:refreshLifecycle,renderStatic:()=>draw(0),pause:()=>{stop();if(ctx&&root)draw(0);},destroy:()=>{stop();if(resizeObserver)resizeObserver.disconnect();lifecycleObserver.disconnect();}};
 })();
 </script>
 
@@ -13873,30 +13903,31 @@ body.optimized-mode .view-section,body.optimized-mode .container{scroll-behavior
     for(const key of ['welcomeFxRAF','profileFxRAF','avatarFxRAF','roleFxPreviewRAF']){
       try{const id=globalThis[key];if(typeof id==='number'&&id)cancelAnimationFrame(id);}catch(e){}
     }
-    try{if(window.AuroraChunkLoadbox&&typeof window.AuroraChunkLoadbox.refresh==='function')window.AuroraChunkLoadbox.refresh();}catch(e){}
+    try{if(window.AuroraChunkLoadbox){if(typeof window.AuroraChunkLoadbox.pause==='function')window.AuroraChunkLoadbox.pause();else if(typeof window.AuroraChunkLoadbox.renderStatic==='function')window.AuroraChunkLoadbox.renderStatic();}}catch(e){}
     try{const c=document.getElementById('welcomeFxCanvas');if(c){const x=c.getContext('2d');if(x)x.clearRect(0,0,c.width,c.height);}}catch(e){}
     try{const f=document.getElementById('fxContainer');if(f)f.replaceChildren();}catch(e){}
   }
   const baseApplyPerfMode=applyPerfMode;
   applyPerfMode=function(mode){
     const optimize=String(mode).toLowerCase()==='optimized';
-    /* Capture the visual preference before base logic adds .optimized-mode. */
+    /* Capture the preferred theme, but render a lightweight Basic shell in optimization mode. */
     const wanted=preferredMode();
     if(wanted)window.__auroraPreferredInterfaceMode=wanted;
-    const result=baseApplyPerfMode.apply(this,arguments);
+    const result=baseApplyPerfMode.apply(this,[optimize?'optimized':'full']);
+    document.body.dataset.auroraPerfMode=optimize?'optimized':'full';
     if(optimize){
-      document.body.classList.add('optimized-mode');
-      document.body.dataset.auroraPerfMode='optimized';
-      syncInterface(true);
-      stopDecorativeLoops();
-      /* Existing AI model optimization hook has already disabled its animated layer. */
+      /* Basic first; cleanup is deliberately isolated so one broken effect cannot block the UI. */
+      try{syncInterface(true);}catch(e){
+        console.error('[Aurora] Interface fallback:',e);
+        document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox');
+        document.body.dataset.auroraInterfaceMode='basic';
+      }
+      try{stopDecorativeLoops();}catch(e){console.warn('[Aurora] Effects cleanup:',e);}
       try{if(typeof auroraStopIdleLoop==='function')auroraStopIdleLoop();}catch(e){}
       try{if(typeof auroraClearAruState==='function')auroraClearAruState();}catch(e){}
       try{if(typeof auroraUpdateWidgetMode==='function')auroraUpdateWidgetMode();}catch(e){}
     }else{
-      document.body.classList.remove('optimized-mode');
-      document.body.dataset.auroraPerfMode='full';
-      syncInterface(false);
+      try{syncInterface(false);}catch(e){console.warn('[Aurora] Restore interface:',e);}
       try{if(window.AuroraChunkLoadbox&&typeof window.AuroraChunkLoadbox.refresh==='function')window.AuroraChunkLoadbox.refresh();}catch(e){}
       try{if(typeof currentEquippedAiModel!=='undefined'&&currentEquippedAiModel&&typeof auroraStartIdleLoop==='function')auroraStartIdleLoop();}catch(e){}
     }
