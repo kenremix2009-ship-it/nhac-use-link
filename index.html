@@ -9457,6 +9457,8 @@ initEcCreatePanel();
   let extConfig = clone(EXT_DEFAULTS);
   let extConfigLoaded = false;
   let extLanguageChangeSerial = 0;
+  let extMenuConfigListenerUnsubscribe = null;
+  let extMenuConfigLastSeenAt = 0;
   let teacherDocsCache = null;
   let teacherDocsListener = null;
   let frameObjectURLs = Object.create(null);
@@ -9521,10 +9523,79 @@ initEcCreatePanel();
       return false;
     }
   }
+  // Save only the shared menu branch. The general config can include large media metadata;
+  // writing the whole object has caused avoidable failures for a tiny menu edit.
+  async function persistGlobalMenuConfig() {
+    const stamp = Math.max(Date.now(), Number(extConfig.updatedAt || 0) + 1, Number((extConfig.menu && extConfig.menu.updatedAt) || 0) + 1);
+    extConfig.version = 1;
+    extConfig.updatedAt = stamp;
+    extConfig.menu.updatedAt = stamp;
+    persistLocal();
+    if (!dbReady()) return false;
+    try {
+      const menuPayload = clone(extConfig.menu);
+      if (typeof window.dbUpdate === 'function') {
+        await window.dbUpdate(dbRef(`${EXT_PATH}/config`), { menu: menuPayload, updatedAt: stamp, version: 1 });
+      } else {
+        await window.dbSet(dbRef(`${EXT_PATH}/config/menu`), menuPayload);
+        await window.dbSet(dbRef(`${EXT_PATH}/config/updatedAt`), stamp);
+        await window.dbSet(dbRef(`${EXT_PATH}/config/version`), 1);
+      }
+      extMenuConfigLastSeenAt = Math.max(extMenuConfigLastSeenAt, stamp);
+      return true;
+    } catch (error) {
+      console.warn('Global Aurora menu save failed', error);
+      return false;
+    }
+  }
+
+  function startGlobalMenuConfigListener(attempt) {
+    attempt = Number(attempt || 0);
+    if (extMenuConfigListenerUnsubscribe) return;
+    if (!dbReady() || typeof window.onValue !== 'function') {
+      // Firebase is initialized by a module script; retry briefly if it is not ready yet.
+      if (attempt < 12) setTimeout(() => startGlobalMenuConfigListener(attempt + 1), 500);
+      return;
+    }
+    extMenuConfigLastSeenAt = Math.max(extMenuConfigLastSeenAt, Number((extConfig.menu && extConfig.menu.updatedAt) || 0));
+    try {
+      extMenuConfigListenerUnsubscribe = window.onValue(dbRef(`${EXT_PATH}/config`), snapshot => {
+        if (!snapshot || !snapshot.exists()) return;
+        const raw = snapshot.val() || {};
+        const rawMenu = raw.menu || {};
+        const menuStamp = Number(rawMenu.updatedAt || 0);
+        // Only react to explicitly versioned menu saves, so unrelated settings writes do not
+        // replace unsaved local edits or cause menu-editor flicker.
+        if (!menuStamp || menuStamp <= extMenuConfigLastSeenAt) return;
+        extMenuConfigLastSeenAt = menuStamp;
+        const remote = mergeConfig(raw);
+        extConfig.menu = remote.menu;
+        extConfig.updatedAt = Math.max(Number(extConfig.updatedAt || 0), Number(raw.updatedAt || 0), menuStamp);
+        persistLocal();
+        applyMenuConfig();
+        const configPanel = byId('configPanel');
+        if (configPanel && configPanel.style.display !== 'none') {
+          const mode = byId('auroraMenuMode');
+          const emoji = byId('auroraMenuEmojiEnabled');
+          if (mode) mode.value = extConfig.menu.mode || 'default';
+          if (emoji) emoji.checked = extConfig.menu.emojiEnabled !== false;
+          renderMenuEditor();
+        }
+      }, error => {
+        console.warn('Global Aurora menu listener unavailable', error);
+        extMenuConfigListenerUnsubscribe = null;
+      });
+    } catch (error) {
+      console.warn('Could not start global Aurora menu listener', error);
+      extMenuConfigListenerUnsubscribe = null;
+    }
+  }
+
   function mergeConfig(data) {
     const d = data && typeof data === 'object' ? data : {};
     const merged = clone(EXT_DEFAULTS);
     merged.version = d.version || 1;
+    merged.updatedAt = Number(d.updatedAt || 0);
     merged.language = d.language || merged.language;
     merged.menu = { ...merged.menu, ...(d.menu || {}) };
     const ent = new Map(((d.menu && d.menu.entries) || []).map(x => [x.id, x]));
@@ -9572,6 +9643,7 @@ initEcCreatePanel();
     applyLanguage();
     refreshAllExtensionPages();
     renderProfileBorderCatalog();
+    startGlobalMenuConfigListener();
     return extConfig;
   }
   function requireConfig() {
@@ -10282,18 +10354,31 @@ initEcCreatePanel();
     extConfig.menu.emojiEnabled = !!byId('auroraMenuEmojiEnabled')?.checked;
     const entries = effectiveEntries();
     entries.forEach(item => {
+      const safeId = String(item.id).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
       const emoji = document.querySelector(`[data-menu-emoji="${CSS.escape(item.id)}"]`);
       const label = document.querySelector(`[data-menu-label="${CSS.escape(item.id)}"]`);
       const visible = document.querySelector(`[data-menu-visible="${CSS.escape(item.id)}"]`);
-      if (emoji) item.emoji = emoji.value.trim(); if (label) item.label = label.value.trim() || item.label; if (visible) item.visible = visible.value === 'true';
+      if (emoji) item.emoji = emoji.value.trim();
+      if (label) item.label = label.value.trim() || item.label;
+      if (visible) item.visible = visible.value === 'true';
     });
     extConfig.menu.entries = MENU_DEFAULTS.map(d => ({ ...d, ...(entries.find(x => x.id === d.id) || {}) }));
     extConfig.menu.customItems = entries.filter(x => x.kind === 'custom');
-    await persistConfig(false); applyMenuConfig(); renderMenuEditor(); toast('Đã lưu định dạng menu.', 'success');
+    // Apply in this browser immediately, before waiting for the network.
+    applyMenuConfig();
+    renderMenuEditor();
+    const saved = await persistGlobalMenuConfig();
+    if (saved) toast('Đã lưu định dạng menu và đồng bộ cho mọi người.', 'success');
+    else toast('Menu đã đổi ngay trên trình duyệt này, nhưng chưa đồng bộ toàn hệ thống. Hãy kiểm tra kết nối hoặc quyền ghi Firebase.', 'warn');
   }
   async function resetMenuSettings() {
     if (!requireConfig()) return;
-    extConfig.menu = clone(EXT_DEFAULTS.menu); await persistConfig(false); mountSettingsValues(); applyMenuConfig(); toast('Đã reset menu về mặc định.', 'success');
+    extConfig.menu = clone(EXT_DEFAULTS.menu);
+    applyMenuConfig();
+    mountSettingsValues();
+    const saved = await persistGlobalMenuConfig();
+    if (saved) toast('Đã khôi phục menu mặc định và đồng bộ cho mọi người.', 'success');
+    else toast('Menu mặc định đã áp dụng cục bộ nhưng chưa đồng bộ Firebase.', 'warn');
   }
   function openCustomMenuDestination(item, button) {
     if (!item) return;
@@ -10309,18 +10394,26 @@ initEcCreatePanel();
   }
   async function addCustomMenu() {
     if (!requireConfig()) return;
-    const label = (byId('auroraCustomMenuName')?.value || '').trim(); const emoji = (byId('auroraCustomMenuEmoji')?.value || '').trim(); const url = (byId('auroraCustomMenuURL')?.value || '').trim();
+    const label = (byId('auroraCustomMenuName')?.value || '').trim();
+    const emoji = (byId('auroraCustomMenuEmoji')?.value || '').trim();
+    const url = (byId('auroraCustomMenuURL')?.value || '').trim();
     if (!label) { toast('Nhập tên mục menu.', 'error'); byId('auroraCustomMenuName')?.focus(); return; }
     if (url && !/^https?:\/\//i.test(url)) { toast('URL phải bắt đầu bằng http:// hoặc https://', 'error'); return; }
     extConfig.menu.customItems = Array.isArray(extConfig.menu.customItems) ? extConfig.menu.customItems : [];
-    const id='custom_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);
-    extConfig.menu.customItems.push({ id, label:label.slice(0,60), emoji:emoji.slice(0,12), url, visible:true, kind:'custom' });
-    const saved=await persistConfig(false);
+    const id = 'custom_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+    extConfig.menu.customItems.push({ id, label: label.slice(0, 60), emoji: emoji.slice(0, 12), url, visible: true, kind: 'custom' });
     mountDynamicMenuItems(); applyMenuConfig(); renderMenuEditor(); renderDrawerButtons();
     setValSafe('auroraCustomMenuName', ''); setValSafe('auroraCustomMenuEmoji', ''); setValSafe('auroraCustomMenuURL', '');
-    toast(saved?'Đã thêm mục menu và lưu cấu hình.':'Đã thêm mục menu trên trình duyệt này; Firebase chưa đồng bộ, mục có thể chưa xuất hiện trên thiết bị khác.',saved?'success':'warn');
+    const saved = await persistGlobalMenuConfig();
+    toast(saved ? 'Đã thêm mục menu và đồng bộ cho mọi người.' : 'Đã thêm mục menu trên trình duyệt này; Firebase chưa đồng bộ sang thiết bị khác.', saved ? 'success' : 'warn');
   }
-  async function removeCustomMenu(id) { if (!requireConfig()) return; extConfig.menu.customItems = (extConfig.menu.customItems || []).filter(x => x.id !== id); const saved=await persistConfig(false); mountDynamicMenuItems(); applyMenuConfig(); renderMenuEditor(); renderDrawerButtons(); if(!saved)toast('Đã xóa mục cục bộ nhưng Firebase chưa đồng bộ.','warn'); }
+  async function removeCustomMenu(id) {
+    if (!requireConfig()) return;
+    extConfig.menu.customItems = (extConfig.menu.customItems || []).filter(x => x.id !== id);
+    mountDynamicMenuItems(); applyMenuConfig(); renderMenuEditor(); renderDrawerButtons();
+    const saved = await persistGlobalMenuConfig();
+    if (!saved) toast('Đã xóa mục cục bộ nhưng Firebase chưa đồng bộ.', 'warn');
+  }
   function mountDynamicMenuItems() {
     const nav = byId('navTabsContainer'); if (!nav) return;
     [...nav.querySelectorAll(':scope > button[data-menu-id^="custom_"]')].forEach(b => b.remove());
