@@ -14340,7 +14340,9 @@ body.optimized-mode .view-section,body.optimized-mode .container{scroll-behavior
 <style id="aurora-interbodylogin-style">
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 /* InterBodyLogin is independent from InterFace. These enhancements are opt-in. */
-.aurora-login-hero,.aurora-login-form-shell,.aurora-auth-brand,.aurora-auth-intro,.aurora-auth-social-row,.aurora-auth-divider,.aurora-auth-footer{display:none}
+/* Keep the classic authentication flow intact. The form shell is a structural wrapper only in classic mode. */
+.aurora-login-hero,.aurora-auth-brand,.aurora-auth-intro,.aurora-auth-social-row,.aurora-auth-divider,.aurora-auth-footer{display:none}
+body:not(.interbodylogin-aurora-signup) .aurora-login-form-shell{display:contents!important}
 .aurora-password-wrap{display:contents}
 .aurora-password-eye,.aurora-password-help{display:none}
 body.interbodylogin-aurora-signup{--aurora-auth-ink:#f6f8fb;--aurora-auth-muted:rgba(255,255,255,.42);font-family:Inter,"Helvetica Neue",Arial,sans-serif!important}
@@ -14490,6 +14492,15 @@ body.interbodylogin-aurora-signup #authViewRegister.active,body.interbodylogin-a
 })();
 </script>
 
+
+
+<style id="aurora-interbodylogin-classic-compat-fix">
+/* In classic mode, restore the existing auth box and its original layout. */
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-login-form-shell{display:contents!important}
+body:not(.interbodylogin-aurora-signup) #authOverlay .auth-box{display:block;position:relative;margin:auto;width:100%;max-width:450px;box-sizing:border-box;background:#fff;color:#222;border-radius:20px;padding:32px 28px 24px;box-shadow:0 25px 70px rgba(0,0,0,.5)}
+body:not(.interbodylogin-aurora-signup) #authOverlay .auth-box>h2,body:not(.interbodylogin-aurora-signup) #authOverlay .auth-box>.auth-sub{display:block!important}
+body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-login-hero{display:none!important}
+</style>
 
 <!-- Aurora 52Hz interface: moonlit ocean, a solitary whale, quiet waves and study navigation. -->
 <style id="aurora-interface-52hz-style">
