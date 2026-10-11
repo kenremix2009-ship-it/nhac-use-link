@@ -11896,11 +11896,12 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
           <section class="aurora-uc-card aurora-uc-troll-card"><h3>🔊 Troll · Quản lý âm thanh vui</h3><p class="aurora-uc-muted">Tải file âm thanh để dùng bằng lệnh <code>/trollvoice số @id</code>. Voice có sẵn #1–#5; file tải lên bắt đầu từ #6 theo thứ tự thời gian. Trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó sẽ hiện nút nghe.</p><label for="auroraUCTrollAudioFiles">Chọn file âm thanh (MP3, WAV, OGG, M4A, AAC, WEBM; tối đa 20 MB/file)</label><input id="auroraUCTrollAudioFiles" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.webm" multiple><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCTrollUploadBtn">⬆️ Tải âm thanh</button><button type="button" class="btn btn-secondary" id="auroraUCTrollRefreshBtn">↻ Làm mới danh sách</button></div><div id="auroraUCTrollUploadStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Chưa tải file nào trong phiên này.</div><div id="auroraUCTrollAudioList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Đang tải danh sách âm thanh…</p></div></section>
           <section class="aurora-uc-card"><h3>🛠️ Thao Túng · Quản trị dữ liệu bài thi</h3><label for="auroraUCManipSearch">Tìm theo mã hoặc tên bài</label><input id="auroraUCManipSearch" placeholder="Nhập mã bài thi hoặc tên"><div class="aurora-uc-row"><button type="button" class="btn btn-secondary" id="auroraUCLoadManipBtn">↻ Tải danh sách</button><button type="button" class="btn btn-secondary" id="auroraUCShowMoreBtn">⌄ Xem thêm</button></div><div id="auroraUCManipList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Bấm Tải danh sách để xem bài thi.</p></div><p class="aurora-uc-muted">Lần đầu chỉnh sửa sẽ lưu bản gốc trước khi thay đổi. Reset sẽ khôi phục bản sao lưu đó, không phải bản đã chỉnh sửa gần nhất.</p></section>
           <section class="aurora-uc-card"><h3>🐳 Bảo trì toàn hệ thống</h3><p class="aurora-uc-muted">Bấm bắt đầu để đếm ngược 10 giây. Trong thời gian đếm ngược, có thể hủy; người kích hoạt, CEO và AROM+ không bị khóa ở chế độ bảo trì.</p><div class="aurora-uc-row"><button type="button" class="btn btn-danger" id="auroraUCStartMaintenanceBtn">⏳ Bắt đầu bảo trì</button><button type="button" class="btn btn-secondary" id="auroraUCCancelMaintenanceBtn">✋ Ngưng / tạm hoãn</button></div><div id="auroraUCMaintenanceStatus" class="aurora-uc-muted" style="margin-top:9px">Chưa có lịch bảo trì.</div></section>
-          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện website. Chunk Loadbox dùng tranh sơn thủy bằng nét mực rồng, sương núi, hiệu ứng mực chảy và tương tác con trỏ; toàn bộ phần dựng hình chạy nội bộ, không cần ThreeUI.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Sổ tay tri thức tương tác</option><option value="chunk-loadbox">Chunk Loadbox — Tranh sơn thủy mực rồng</option></select><div class="aurora-uc-interface-options" style="display:grid;gap:8px;margin-top:10px"><label for="auroraUCInterfaceSync" style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="auroraUCInterfaceSync" checked style="width:17px;height:17px"> Đồng bộ giao diện cho tất cả mọi người</label><p class="aurora-uc-muted" style="margin:0">Bật đồng bộ và để trống ID: thay đổi áp dụng toàn website. Tắt đồng bộ: chỉ đổi giao diện tài khoản đang đăng nhập. Nhập @ID bên dưới để đổi riêng cho một tài khoản; khi có @ID, thao tác này chỉ ảnh hưởng tài khoản đó.</p><label for="auroraUCInterfaceTarget">Đổi riêng cho @ID (không bắt buộc)</label><input id="auroraUCInterfaceTarget" type="text" autocomplete="off" spellcheck="false" placeholder="Ví dụ: @ten_tai_khoan" style="width:100%"></div><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
+          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện website. Chunk Loadbox dùng tranh sơn thủy bằng nét mực rồng, sương núi, hiệu ứng mực chảy và tương tác con trỏ; toàn bộ phần dựng hình chạy nội bộ, không cần ThreeUI.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Sổ tay tri thức tương tác</option><option value="chunk-loadbox">Chunk Loadbox — Tranh sơn thủy mực rồng</option></select><div class="aurora-uc-interface-options" style="display:grid;gap:8px;margin-top:10px"><label for="auroraUCInterfaceSync" style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="auroraUCInterfaceSync" style="width:17px;height:17px"> Đồng bộ giao diện cho tất cả mọi người</label><p class="aurora-uc-muted" style="margin:0">Bật đồng bộ và để trống ID: thay đổi áp dụng toàn website. Tắt đồng bộ: chỉ đổi giao diện tài khoản đang đăng nhập. Nhập @ID bên dưới để đổi riêng cho một tài khoản; khi có @ID, thao tác này chỉ ảnh hưởng tài khoản đó.</p><label for="auroraUCInterfaceTarget">Đổi riêng cho @ID (không bắt buộc)</label><input id="auroraUCInterfaceTarget" type="text" autocomplete="off" spellcheck="false" placeholder="Ví dụ: @ten_tai_khoan" style="width:100%"></div><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
         </div>
         <div class="aurora-uc-card" style="margin-top:12px;border-color:#f59e0b;background:#fffbeb"><b style="color:#92400e">⚠️ Lưu ý bảo mật triển khai</b><p class="aurora-uc-muted" style="margin-top:5px;color:#78350f">Aurora hiện dùng đăng nhập tùy chỉnh phía trình duyệt. Các lệnh quản trị, box chat, ban/kick, đáp án và chỉnh điểm trong module này chỉ được kiểm tra ở client; để ngăn người dùng kỹ thuật tự gọi Firebase bỏ qua giao diện, cần xác thực server/Firebase Authentication, Cloud Functions và Security Rules phù hợp trước khi dùng trên dữ liệu thật.</p></div>
       </div>`;
     const config=$('configPanel');if(config)config.appendChild(panel);else sup.appendChild(panel);
+    const interfaceSyncToggle=$('auroraUCInterfaceSync');if(interfaceSyncToggle){interfaceSyncToggle.defaultChecked=false;interfaceSyncToggle.checked=false;interfaceSyncToggle.removeAttribute('checked');}
     $('auroraUltraCollapseBtn').addEventListener('click',()=>{const body=$('auroraUltraControlBody'),hidden=body.style.display==='none';body.style.display=hidden?'':'none';$('auroraUltraCollapseBtn').textContent=hidden?'^ Thu gọn ULTRA CONTROL':'⌄ Mở rộng ULTRA CONTROL';$('auroraUltraCollapseBtn').setAttribute('aria-expanded',hidden?'true':'false');});
     $('auroraUCCreateChatBtn').addEventListener('click',createChatBox);$('auroraUCRefreshRoomsBtn').addEventListener('click',refreshChatMemberships);$('auroraUCCommandRunBtn').addEventListener('click',runOwnerCommand);$('auroraUCCommandHelpBtn').addEventListener('click',()=>writeCommandOutput(commandHelp()));$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});$('auroraUCLoadManipBtn').addEventListener('click',loadManipulationList);$('auroraUCShowMoreBtn').addEventListener('click',()=>{manipShowMore=!manipShowMore;renderManipulationList();$('auroraUCShowMoreBtn').textContent=manipShowMore?'⌃ Thu gọn danh sách':'⌄ Xem thêm';});$('auroraUCManipSearch').addEventListener('input',renderManipulationList);$('auroraUCStartMaintenanceBtn').addEventListener('click',startMaintenance);$('auroraUCCancelMaintenanceBtn').addEventListener('click',cancelMaintenance);$('auroraUCSaveInterfaceMode').addEventListener('click',saveInterfaceMode);$('auroraUCTrollUploadBtn')?.addEventListener('click',uploadTrollAudioFiles);$('auroraUCTrollRefreshBtn')?.addEventListener('click',loadTrollAudioList);applyInterfaceMode(interfaceModeCurrent);loadTrollAudioList();
     /* The old opt-in switch was removed; Troll audio is managed in the dedicated Troll section. */
@@ -13332,8 +13333,13 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
   const dpr=Math.min(1.6,window.devicePixelRatio||1),portrait=w/h<.78;
   /* Fit the authored 16:9 stage instead of cropping the dragon/phoenix. On portrait screens, keep the entire ink plate visible as a compact panorama below the copy. */
   const sc=portrait ? Math.min(w/1600,0.31) : Math.min(w/1600,h/900);
+  const aspect=w/Math.max(1,h);
+  /* On ultrawide desktop viewports, shift the painting right to establish a
+     dedicated copy column. Keep it unshifted on tablet/portrait so the full
+     dragon, phoenix, boat and scholar remain inside the viewport. */
+  const artShift=portrait?0:Math.max(0,Math.min(145,(aspect-1.72)*255));
   transform.w=w;transform.h=h;transform.dpr=dpr;transform.scale=sc;
-  transform.ox=(w-1600*sc)/2;
+  transform.ox=(w-1600*sc)/2+artShift;
   transform.oy=portrait ? Math.max(330,Math.min(h*.54,h-900*sc-10)) : (h-900*sc)/2;
   canvas.width=Math.max(1,Math.round(w*dpr));canvas.height=Math.max(1,Math.round(h*dpr));
   canvas.style.width=w+'px';canvas.style.height=h+'px';
@@ -13747,6 +13753,58 @@ body.aurora-interface-chunk-loadbox #advancedModelView>.card{position:relative;z
  body.aurora-interface-chunk-loadbox #advancedModelView>.aurora-chunk-dragon-backdrop,
  body.aurora-interface-chunk-loadbox #advancedModelView>.aurora-chunk-dragon-backdrop::after{animation:none!important}
 }
+</style>
+
+
+<style id="aurora-chunk-alignment-final-fix">
+/* Desktop composition: a legible paper column at left, full ink landscape at right. */
+@media (min-width:1250px){
+  #auroraDragonInkRoot:before{
+    background:
+      linear-gradient(90deg,
+        rgba(239,234,221,.985) 0%,
+        rgba(239,234,221,.95) 19%,
+        rgba(239,234,221,.83) 30%,
+        rgba(239,234,221,.58) 39%,
+        rgba(239,234,221,.24) 49%,
+        rgba(239,234,221,.055) 60%,
+        rgba(239,234,221,0) 72%),
+      linear-gradient(0deg,rgba(231,225,211,.22),transparent 25%,transparent 77%,rgba(237,232,220,.22));
+  }
+  #auroraDragonInkRoot .aurora-dragon-copy{
+    left:clamp(44px,8vw,132px);
+    top:clamp(130px,20.5vh,200px);
+    width:min(452px,37vw);
+  }
+  #auroraDragonInkRoot .aurora-dragon-kicker{
+    margin-bottom:18px;
+    letter-spacing:.205em;
+    max-width:100%;
+  }
+  #auroraDragonInkRoot h1{
+    font-size:clamp(48px,4.25vw,68px);
+    line-height:1.015;
+    letter-spacing:-.042em;
+    margin-bottom:19px;
+    max-width:100%;
+  }
+  #auroraDragonInkRoot .aurora-dragon-lede{
+    max-width:390px;
+    font-size:clamp(15px,1.08vw,17px);
+    line-height:1.76;
+  }
+  #auroraDragonInkRoot .aurora-dragon-actions{margin-top:21px}
+  #auroraDragonInkRoot .aurora-dragon-action{min-height:43px;padding-inline:17px}
+  #auroraDragonInkRoot .aurora-dragon-footnote{bottom:clamp(14px,2.4vh,26px)}
+}
+/* Keep the artwork naturally framed on wide tablets and small laptops. */
+@media (min-width:761px) and (max-width:1249px){
+  #auroraDragonInkRoot .aurora-dragon-copy{width:min(470px,48vw);top:clamp(128px,18vh,185px)}
+  #auroraDragonInkRoot h1{font-size:clamp(43px,5.4vw,64px)}
+  #auroraDragonInkRoot .aurora-dragon-lede{max-width:360px;font-size:15px}
+}
+/* Sync is explicitly opt-in, with no checked state inherited from the old panel. */
+#auroraUCInterfaceSync{accent-color:#31483a}
 </style>
 
 </body>
