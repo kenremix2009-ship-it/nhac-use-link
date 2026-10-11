@@ -9689,29 +9689,118 @@ initEcCreatePanel();
   }
   function mountMainMenu() {
     const nav = byId('navTabsContainer');
-    if (!nav || byId('auroraHamburger')) return;
-    const mapping = ['home','student','teacher','advanced','guide','leaderboard','supreme'];
-    [...nav.querySelectorAll(':scope > button')].forEach((button, i) => { if (mapping[i]) button.dataset.menuId = mapping[i]; });
-    const navbar = nav.parentElement;
-    const burger = createElement('button', { id: 'auroraHamburger', type: 'button', title: 'Mở menu', text: '☰' });
-    burger.addEventListener('click', openMenuDrawer);
-    navbar.insertBefore(burger, nav);
-    const langWrap = createElement('div', { id: 'auroraLanguageWrap' });
-    langWrap.innerHTML = '<span>🌐</span><select id="auroraLanguage" aria-label="Ngôn ngữ"><option value="vi">Tiếng Việt</option><option value="en">ENG</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option></select>';
-    nav.insertAdjacentElement('beforebegin', langWrap);
-    byId('auroraLanguage').addEventListener('change', async e => { const selected=(e.target.value||'vi'); extLanguageChangeSerial++; extConfig.language=selected; document.documentElement.lang=selected==='zh'?'zh-CN':selected; refreshAllExtensionPages(); mountSettingsValues(); applyLanguage(); applyMenuConfig(); syncLanguageControls(); const ok=await persistConfig(false); if(!ok) toast('Ngôn ngữ đã đổi và lưu trên trình duyệt này; đồng bộ máy chủ chưa thành công.', 'warn'); });
-    const drawer = createElement('div', { id: 'auroraMenuDrawer' });
-    drawer.innerHTML = '<div id="auroraMenuDrawerPanel"><div style="display:flex;align-items:center;justify-content:space-between"><div class="aurora-drawer-title">✨ Aurora</div><button type="button" id="auroraDrawerClose" style="width:auto;margin:0 0 10px;padding:6px 12px">✕</button></div><div id="auroraDrawerItems"></div></div>';
-    drawer.addEventListener('click', e => { if (e.target === drawer) closeMenuDrawer(); });
-    document.body.appendChild(drawer);
-    byId('auroraDrawerClose').addEventListener('click', closeMenuDrawer);
-    // Add all public feature entries; their default state is hidden.
-    MENU_DEFAULTS.filter(x => ['donate','ads','presentations','upgrades'].includes(x.id)).forEach(item => {
-      const b = createElement('button', { type: 'button', 'data-menu-id': item.id, text: item.emoji + ' ' + item.label });
-      b.addEventListener('click', () => { if (item.auth && !requireUser('vào mục ' + item.label)) { closeMenuDrawer(); return; } window.switchView(item.view, b); closeMenuDrawer(); });
-      nav.appendChild(b);
+    if (!nav) return;
+
+    // Idempotent setup: do not abort just because another module already created
+    // the hamburger. The old early return skipped menu IDs and optional entries,
+    // which made the editor save successfully while the visible nav stayed fixed.
+    const coreIds = ['home','student','teacher','advanced','guide','leaderboard','supreme'];
+    const currentButtons = [...nav.querySelectorAll(':scope > button')];
+    currentButtons.forEach(button => {
+      if (button.dataset.menuId) return;
+      const text = String(button.textContent || '').toLocaleUpperCase('vi');
+      const match = MENU_DEFAULTS.find(item => coreIds.includes(item.id) && text.includes(item.label));
+      if (match) button.dataset.menuId = match.id;
     });
+    const untagged = [...nav.querySelectorAll(':scope > button')].filter(button => !button.dataset.menuId);
+    const boundIds = new Set([...nav.querySelectorAll(':scope > button[data-menu-id]')].map(button => button.dataset.menuId));
+    coreIds.filter(id => !boundIds.has(id)).forEach(id => {
+      const button = untagged.shift();
+      if (button) { button.dataset.menuId = id; boundIds.add(id); }
+    });
+
+    const navbar = nav.parentElement;
+    let burger = byId('auroraHamburger');
+    if (!burger) {
+      burger = createElement('button', { id: 'auroraHamburger', type: 'button', title: 'Mở menu', text: '☰' });
+      burger.addEventListener('click', openMenuDrawer);
+      navbar.insertBefore(burger, nav);
+    } else if (burger.dataset.auroraMenuBound !== '1') {
+      burger.addEventListener('click', openMenuDrawer);
+      burger.dataset.auroraMenuBound = '1';
+    }
+
+    let langWrap = byId('auroraLanguageWrap');
+    if (!langWrap) {
+      langWrap = createElement('div', { id: 'auroraLanguageWrap' });
+      langWrap.innerHTML = '<span>🌐</span><select id="auroraLanguage" aria-label="Ngôn ngữ"><option value="vi">Tiếng Việt</option><option value="en">ENG</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option></select>';
+      nav.insertAdjacentElement('beforebegin', langWrap);
+    }
+    const langSelect = byId('auroraLanguage');
+    if (langSelect && langSelect.dataset.auroraMenuBound !== '1') {
+      langSelect.addEventListener('change', async e => {
+        const selected = e.target.value || 'vi';
+        extLanguageChangeSerial++;
+        extConfig.language = selected;
+        document.documentElement.lang = selected === 'zh' ? 'zh-CN' : selected;
+        refreshAllExtensionPages(); mountSettingsValues(); applyLanguage(); applyMenuConfig(); syncLanguageControls();
+        const ok = await persistConfig(false);
+        if (!ok) toast('Ngôn ngữ đã đổi và lưu trên trình duyệt này; đồng bộ máy chủ chưa thành công.', 'warn');
+      });
+      langSelect.dataset.auroraMenuBound = '1';
+    }
+
+    let drawer = byId('auroraMenuDrawer');
+    if (!drawer) {
+      drawer = createElement('div', { id: 'auroraMenuDrawer' });
+      drawer.innerHTML = '<div id="auroraMenuDrawerPanel"><div style="display:flex;align-items:center;justify-content:space-between"><div class="aurora-drawer-title">✨ Aurora</div><button type="button" id="auroraDrawerClose" style="width:auto;margin:0 0 10px;padding:6px 12px">✕</button></div><div id="auroraDrawerItems"></div></div>';
+      document.body.appendChild(drawer);
+    }
+    if (drawer.dataset.auroraMenuBound !== '1') {
+      drawer.addEventListener('click', e => { if (e.target === drawer) closeMenuDrawer(); });
+      drawer.dataset.auroraMenuBound = '1';
+    }
+    const closeButton = byId('auroraDrawerClose');
+    if (closeButton && closeButton.dataset.auroraMenuBound !== '1') {
+      closeButton.addEventListener('click', closeMenuDrawer);
+      closeButton.dataset.auroraMenuBound = '1';
+    }
     applyMenuConfig();
+  }
+
+  function bindGeneratedMenuAction(button, itemId) {
+    if (button.dataset.auroraMenuActionBound === '1') return;
+    button.dataset.auroraMenuActionBound = '1';
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      const item = effectiveEntries().find(entry => entry.id === itemId);
+      if (!item || item.visible === false) return;
+      if (item.kind === 'custom') { openCustomMenuDestination(item, button); closeMenuDrawer(); return; }
+      if (item.kind === 'supreme') { if (typeof window.checkSupremeAccess === 'function') window.checkSupremeAccess(button); closeMenuDrawer(); return; }
+      if (item.auth && !requireUser('vào mục ' + item.label)) { closeMenuDrawer(); return; }
+      if (item.view && typeof window.switchView === 'function') window.switchView(item.view, button);
+      closeMenuDrawer();
+    });
+  }
+
+  function ensureMenuEntryButtons(nav) {
+    const coreIds = ['home','student','teacher','advanced','guide','leaderboard','supreme'];
+    let buttons = [...nav.querySelectorAll(':scope > button')];
+
+    // Recover IDs from labels first; the positional fallback handles localized or
+    // previously translated labels when another script mounted the navbar first.
+    buttons.forEach(button => {
+      if (button.dataset.menuId) return;
+      const text = String(button.textContent || '').toLocaleUpperCase('vi');
+      const match = MENU_DEFAULTS.find(item => coreIds.includes(item.id) && text.includes(item.label));
+      if (match) button.dataset.menuId = match.id;
+    });
+    let idSet = new Set(buttons.map(button => button.dataset.menuId).filter(Boolean));
+    const untagged = buttons.filter(button => !button.dataset.menuId);
+    coreIds.filter(id => !idSet.has(id)).forEach(id => {
+      const button = untagged.shift();
+      if (button) { button.dataset.menuId = id; idSet.add(id); }
+    });
+
+    // Ensure every built-in entry has a real navbar button. Previously only the
+    // seven original items and custom links were guaranteed to have DOM nodes.
+    MENU_DEFAULTS.forEach(item => {
+      let button = nav.querySelector(`:scope > button[data-menu-id="${CSS.escape(item.id)}"]`);
+      if (button) return;
+      button = createElement('button', { type: 'button', 'data-menu-id': item.id });
+      bindGeneratedMenuAction(button, item.id);
+      nav.appendChild(button);
+    });
   }
   function openMenuDrawer() { const d = byId('auroraMenuDrawer'); if (!d) return; renderDrawerButtons(); d.classList.add('open'); }
   function closeMenuDrawer() { const d = byId('auroraMenuDrawer'); if (d) d.classList.remove('open'); }
@@ -9737,8 +9826,10 @@ initEcCreatePanel();
   }
   function applyMenuConfig() {
     const nav = byId('navTabsContainer'); if (!nav) return;
+    ensureMenuEntryButtons(nav);
     const entries = effectiveEntries();
-    // Create/remove custom links deterministically so changes persist without duplicate buttons.
+
+    // Remove deleted custom links, and create every configured custom link once.
     const customEntries = entries.filter(x => x.kind === 'custom');
     const customIds = new Set(customEntries.map(x => x.id));
     [...nav.querySelectorAll(':scope > button[data-menu-id^="custom_"]')].forEach(b => {
@@ -9748,14 +9839,13 @@ initEcCreatePanel();
       let b = nav.querySelector(`:scope > button[data-menu-id="${CSS.escape(item.id)}"]`);
       if (!b) {
         b = createElement('button', { type: 'button', 'data-menu-id': item.id });
-        b.addEventListener('click', () => {
-          const current = effectiveEntries().find(x => x.id === item.id);
-          if (!current || current.visible === false) return;
-          openCustomMenuDestination(current,b);
-        });
+        bindGeneratedMenuAction(b, item.id);
         nav.appendChild(b);
+      } else if (b.dataset.auroraMenuActionBound !== '1' && !b.getAttribute('onclick')) {
+        bindGeneratedMenuAction(b, item.id);
       }
     });
+
     const entryMap = new Map(entries.map(x => [x.id, x]));
     [...nav.querySelectorAll(':scope > button')].forEach(button => {
       const id = button.dataset.menuId;
@@ -9763,6 +9853,8 @@ initEcCreatePanel();
       const entry = entryMap.get(id);
       if (!entry) { button.style.display = 'none'; return; }
       button.style.display = entry.visible === false ? 'none' : '';
+      button.setAttribute('aria-hidden', entry.visible === false ? 'true' : 'false');
+      button.tabIndex = entry.visible === false ? -1 : 0;
       const emoji = extConfig.menu.emojiEnabled === false ? '' : ((entry.emoji || '') + (entry.emoji ? ' ' : ''));
       const original = MENU_DEFAULTS.find(x => x.id === id);
       const authoredLabel = entry.label || 'Mục';
@@ -9770,6 +9862,7 @@ initEcCreatePanel();
       button.textContent = emoji + visibleLabel;
       if (entry.kind === 'custom') button.title = entry.url || 'Mục tùy chỉnh';
     });
+
     const mode = (extConfig.menu && extConfig.menu.mode) || 'default';
     nav.classList.toggle('menu-modern', mode === 'modern');
     nav.classList.toggle('menu-hamburger', mode === 'hamburger');
@@ -10419,7 +10512,7 @@ initEcCreatePanel();
     [...nav.querySelectorAll(':scope > button[data-menu-id^="custom_"]')].forEach(b => b.remove());
     (extConfig.menu.customItems || []).forEach(item => {
       const b = createElement('button', { type: 'button', 'data-menu-id': item.id });
-      b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); const live=(extConfig.menu.customItems||[]).find(x=>x.id===item.id); if(!live||live.visible===false)return; openCustomMenuDestination(live,b); }); nav.appendChild(b);
+      b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); const live=(extConfig.menu.customItems||[]).find(x=>x.id===item.id); if(!live||live.visible===false)return; openCustomMenuDestination(live,b); }); b.dataset.auroraMenuActionBound = '1'; nav.appendChild(b);
     });
   }
   function renderAudioSettings() {
