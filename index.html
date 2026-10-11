@@ -2418,7 +2418,7 @@ body.optimized-mode.aurora-interface-aria-blue #auroraShowcaseMediaStage:before{
       <p class="aurora-config-safe-note">GitHub Client Secret phải được cấu hình tại Firebase Authentication / backend Secret; không lưu secret trong HTML hoặc Realtime Database.</p>
     </section>
   </div>
-  <p class="aurora-config-oauth-disclaimer">Lưu Client ID và callback giúp quản lý cấu hình. Để xác thực thực tế, cần bật đúng nhà cung cấp trong Firebase Authentication và cấu hình callback tương ứng; màn hình cài đặt này không giả lập đăng nhập thành công.</p>
+  <p class="aurora-config-oauth-disclaimer">Client ID/origin/callback dùng để quản lý cấu hình. Nút Google/GitHub gọi Firebase Authentication; hãy bật provider và đăng ký đúng credentials/callback trong Firebase Console và trang nhà cung cấp.</p>
 </section>
 
 <div class="aurora-showcase-admin" id="auroraShowcaseAdminPanel">
@@ -14823,7 +14823,7 @@ body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-footer{display
    try{
      if(!window.db||typeof window.ref!=='function'||typeof window.dbSet!=='function')throw new Error('Firebase chưa sẵn sàng');
      await window.dbSet(window.ref(window.db,'system/oauth_login/'+provider),cfg);
-     providerCache[provider]=cfg;updateStatus(provider,cfg,'Đã lưu cấu hình '+provider.toUpperCase()+' lên Firebase. Cần bật provider/callback trong Firebase Authentication để đăng nhập thực tế.');
+     providerCache[provider]=cfg;updateStatus(provider,cfg,'Đã lưu cấu hình '+provider.toUpperCase()+'. Nút xã hội đã gọi Firebase Authentication; hãy bật provider và dùng đúng OAuth credentials trong Firebase Console.');
      notice('Đã lưu cấu hình login '+provider.toUpperCase()+'.','success');
    }catch(e){
      providerCache[provider]=cfg;updateStatus(provider,cfg,'Đã lưu bản cục bộ trên trình duyệt này, nhưng chưa đồng bộ Firebase: '+(e&&e.message||e));
@@ -14848,15 +14848,8 @@ body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-footer{display
    setTimeout(()=>{try{header.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}catch(_){header.scrollIntoView();}},50);
  };
  window.auroraAuthSocialNotice=async function(provider){
-   const key=String(provider||'').toLowerCase()==='github'?'github':'google';
-   const label=key==='google'?'Google':'GitHub';
-   let cfg=providerCache[key];
-   if(!cfg||!cfg.updatedAt)cfg=await dbRead(key);
-   if(!cfg||cfg.enabled!==true||!cfg.clientId){
-     notice('Đăng nhập '+label+' chưa được bật hoặc chưa có Client ID. Mở Cấu hình → Cấu hình login ('+label+') để thiết lập.','info');
-     return;
-   }
-   notice('Đã lưu Client ID '+label+'. Để đăng nhập thực tế, cần bật provider và xác nhận callback trong Firebase Authentication; Aurora hiện chưa tự xác thực người dùng chỉ từ Client ID.','info');
+   if(typeof window.auroraOAuthSignIn==='function')return window.auroraOAuthSignIn(provider);
+   notice('Đang khởi tạo đăng nhập xã hội. Vui lòng thử lại sau giây lát.','info');
  };
 
 
@@ -14898,6 +14891,213 @@ body:not(.interbodylogin-aurora-signup) #authOverlay .aurora-auth-footer{display
    const panel=$('configPanel');if(panel&&window.MutationObserver){let wasVisible=getComputedStyle(panel).display!=='none';const po=new MutationObserver(()=>{const now=getComputedStyle(panel).display!=='none';if(now&&!wasVisible)window.auroraLoadOAuthProviderConfigs();wasVisible=now;});po.observe(panel,{attributes:true,attributeFilter:['style','class']});}
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script>
+
+
+<!-- Aurora OAuth bridge: Firebase Authentication -> existing Aurora profile/session -->
+<script id="aurora-oauth-authentication-bridge">
+(function(){
+ 'use strict';
+ const AUTH_SDK='https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
+ let authModulePromise=null, authInstancePromise=null, signinLock=false;
+ const $=id=>document.getElementById(id);
+ const notify=(message,type)=>{try{if(typeof window.showToast==='function')window.showToast(message,type||'info');else alert(message);}catch(_){}};
+ const emailKeySafe=email=>String(email||'').trim().toLowerCase().replace(/[.@]/g,'_');
+ const waitForApp=async(timeout=12000)=>{
+   const start=Date.now();
+   while(Date.now()-start<timeout){
+     if(window.firebaseApp&&window.db&&typeof window.ref==='function'&&typeof window.dbGet==='function'&&typeof window.dbSet==='function')return window.firebaseApp;
+     await new Promise(resolve=>setTimeout(resolve,100));
+   }
+   throw new Error('Firebase chưa sẵn sàng. Hãy tải lại trang sau khi kiểm tra kết nối.');
+ };
+ const getAuthTools=async()=>{
+   if(!authModulePromise)authModulePromise=import(AUTH_SDK);
+   const mod=await authModulePromise;
+   const app=await waitForApp();
+   if(!authInstancePromise)authInstancePromise=Promise.resolve(mod.getAuth(app));
+   return {mod,auth:await authInstancePromise};
+ };
+ async function readProviderConfig(key){
+   key=key==='github'?'github':'google';
+   // The Firebase RTDB settings drive whether the social buttons are exposed.
+   try{
+     await waitForApp(6000);
+     const snap=await window.dbGet(window.ref(window.db,'system/oauth_login/'+key));
+     if(snap&&snap.exists&&snap.exists())return snap.val()||{};
+   }catch(_){}
+   try{
+     const all=JSON.parse(localStorage.getItem('aurora-oauth-public-config-v1')||'{}');
+     return all[key]||{};
+   }catch(_){return {};}
+ }
+ function safeUsernamePart(value){
+   let v=String(value||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+   v=v.replace(/[^a-z0-9_.]+/g,'_').replace(/^[^a-z0-9]+/,'').replace(/_{2,}/g,'_').replace(/\.{2,}/g,'.').replace(/[_.]+$/,'');
+   return v;
+ }
+ async function findOrCreateAuroraProfile(firebaseUser,provider){
+   const email=String(firebaseUser.email||'').trim().toLowerCase();
+   if(!email||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+     throw new Error(provider==='github'
+       ?'GitHub chưa trả email cho tài khoản này. Hãy cấp quyền user:email trong provider và đặt email chính trong GitHub, rồi thử lại.'
+       :'Tài khoản Google chưa trả về email hợp lệ. Hãy kiểm tra quyền email của provider.');
+   }
+   const db=window.db, ref=window.ref;
+   // Reuse the user's current Aurora account by verified provider email to avoid duplicate profiles.
+   const indexSnap=await window.dbGet(ref(db,'email_index/'+emailKeySafe(email)));
+   let username=indexSnap&&indexSnap.exists&&indexSnap.exists()?String(indexSnap.val()||''):'';
+   let userData=null;
+   if(username){
+     const existing=await window.dbGet(ref(db,'users/'+username));
+     if(existing&&existing.exists&&existing.exists())userData=existing.val();
+   }
+   if(userData){
+     // Preserve all Aurora profile fields and permissions; only refresh safe identity metadata.
+     const update={lastSocialProvider:provider,lastSocialLoginAt:Date.now()};
+     if(!userData.avatar&&firebaseUser.photoURL)update.avatar=String(firebaseUser.photoURL);
+     if(!userData.email)update.email=email;
+     try{await window.dbUpdate(ref(db,'users/'+username),update);userData=Object.assign({},userData,update);}catch(_){/* profile remains usable if optional metadata write is denied */}
+   }else{
+     const localPart=email.split('@')[0]||String(firebaseUser.displayName||'learner');
+     const clean=safeUsernamePart(localPart)||safeUsernamePart(firebaseUser.displayName)||'learner';
+     const prefix=provider==='google'?'g_':'gh_';
+     let base=(prefix+clean).slice(0,17).replace(/[_.]+$/,'');
+     if(base.length<3)base=prefix+'user';
+     username=username&&/^[a-z0-9_.]{3,20}$/.test(username)?username:base;
+     let selected='';
+     for(let n=0;n<40;n++){
+       const suffix=n===0?'':'_'+n.toString(36);
+       const candidate=(base.slice(0,20-suffix.length)+suffix).slice(0,20);
+       const taken=await window.dbGet(ref(db,'users/'+candidate));
+       if(!taken||!taken.exists||!taken.exists()){selected=candidate;break;}
+       const old=taken.val()||{};
+       if(String(old.email||'').trim().toLowerCase()===email){selected=candidate;userData=old;break;}
+     }
+     if(!selected)throw new Error('Không tạo được tên tài khoản Aurora tự động. Hãy liên hệ quản trị viên.');
+     username=selected;
+     if(!userData){
+       const now=Date.now();
+       userData={
+         username,email,passwordHash:'',role:'student',nickname:String(firebaseUser.displayName||username).trim().slice(0,60)||username,
+         avatar:String(firebaseUser.photoURL||''),avatarBg:'',note:'',medals:[],ownedMedals:[],ownedCup:'',ownedCups:[],customRoleIds:[],pinnedRoleId:'',
+         textColor:'#333333',fontStyle:'normal',textEffect:'none',nameTag:null,aiModels:[],equippedAiModel:'',membershipTier:'basic',membershipPurchased:false,
+         aiModelFrame:'',aiModelFrameAdjust:{x:0,y:0,scale:1,rotation:0,opacity:1},createdAt:now,authProvider:provider,authProviderUid:String(firebaseUser.uid||''),lastSocialProvider:provider,lastSocialLoginAt:now
+       };
+       // If the email_index points to a stale username, do not silently steal it.
+       await window.dbSet(ref(db,'users/'+username),userData);
+       await window.dbSet(ref(db,'email_index/'+emailKeySafe(email)),username);
+     }else{
+       await window.dbSet(ref(db,'email_index/'+emailKeySafe(email)),username);
+     }
+   }
+   // Respect Aurora's existing ban records before opening a session.
+   try{
+     const banSnap=await window.dbGet(ref(db,'bans/'+username));
+     if(banSnap&&banSnap.exists&&banSnap.exists()){
+       const ban=banSnap.val()||{};const expires=Number(ban.expiresAt||0);
+       if(!expires||Date.now()<expires)throw new Error('Tài khoản Aurora này đang bị cấm truy cập. Vui lòng liên hệ quản trị viên.');
+       try{await window.dbRemove(ref(db,'bans/'+username));}catch(_){}
+     }
+   }catch(e){if(e&&/đang bị cấm/.test(e.message||''))throw e;}
+   return {username,userData};
+ }
+ async function finishAuroraOAuth(result,provider){
+   if(!result||!result.user)return;
+   const user=result.user;
+   const resolvedProvider=provider||((result.providerId||'').indexOf('github')>=0?'github':(result.providerId||'').indexOf('google')>=0?'google':'google');
+   try{
+     const profile=await findOrCreateAuroraProfile(user,resolvedProvider);
+     // Persist the same lightweight session format used by password login.
+     localStorage.setItem('aurora_user',JSON.stringify({username:profile.username}));
+     if(typeof window.applyUserSession!=='function')throw new Error('Không tìm thấy hàm khởi tạo phiên Aurora.');
+     await window.applyUserSession(profile.userData);
+     const overlay=$('authOverlay');if(overlay)overlay.style.display='none';
+     const pass=$('loginPassword');if(pass)pass.value='';
+     if(typeof window.clearLoginInlineError==='function')window.clearLoginInlineError();
+     if(typeof window.switchView==='function')window.switchView('homeView');
+     notify('Đăng nhập '+(resolvedProvider==='google'?'Google':'GitHub')+' thành công. Chào mừng '+(profile.userData.nickname||profile.username)+'!','success');
+   }catch(error){
+     // Do not leave a half-established Firebase Auth session when Aurora profile linking fails.
+     try{const tools=await getAuthTools();await tools.mod.signOut(tools.auth);}catch(_){}
+     throw error;
+   }
+ }
+ function friendlyAuthError(error,provider){
+   const code=String(error&&error.code||'');
+   if(code==='auth/operation-not-allowed')return 'Provider '+(provider==='google'?'Google':'GitHub')+' chưa được bật trong Firebase Console → Authentication → Sign-in method.';
+   if(code==='auth/unauthorized-domain')return 'Tên miền này chưa được thêm vào Firebase Authentication → Settings → Authorized domains.';
+   if(code==='auth/popup-closed-by-user')return 'Bạn đã đóng cửa sổ đăng nhập trước khi hoàn tất.';
+   if(code==='auth/account-exists-with-different-credential')return 'Email này đã được dùng với phương thức đăng nhập khác. Hãy đăng nhập bằng phương thức cũ trước.';
+   if(code==='auth/invalid-credential'||code==='auth/invalid-oauth-client-id')return 'OAuth Client ID/credential chưa khớp cấu hình provider trong Firebase Console.';
+   if(code==='auth/popup-blocked')return 'Trình duyệt đã chặn popup đăng nhập. Đang chuyển sang đăng nhập bằng chuyển hướng…';
+   if(code==='auth/network-request-failed')return 'Không kết nối được dịch vụ đăng nhập. Hãy kiểm tra mạng và thử lại.';
+   return String(error&&error.message||'Đăng nhập OAuth thất bại. Kiểm tra cấu hình Firebase Authentication.');
+ }
+ window.auroraOAuthSignIn=async function(provider){
+   provider=String(provider||'').toLowerCase()==='github'?'github':'google';
+   if(signinLock)return;
+   signinLock=true;
+   if(typeof window.clearLoginInlineError==='function')window.clearLoginInlineError();
+   const socialButtons=document.querySelectorAll('#auroraAuthSocialButtons button');socialButtons.forEach(b=>{b.disabled=true;b.setAttribute('aria-busy','true');});
+   try{
+     const cfg=await readProviderConfig(provider);
+     if(cfg.enabled!==true||!String(cfg.clientId||'').trim()){
+       throw new Error('Đăng nhập '+(provider==='google'?'Google':'GitHub')+' chưa được bật trong Cấu hình. Hãy bật provider và lưu Client ID.');
+     }
+     const {mod,auth}=await getAuthTools();
+     let providerObject;
+     if(provider==='google'){
+       providerObject=new mod.GoogleAuthProvider();
+       providerObject.setCustomParameters({prompt:'select_account'});
+     }else{
+       providerObject=new mod.GithubAuthProvider();
+       providerObject.addScope('user:email');
+     }
+     notify('Đang mở đăng nhập '+(provider==='google'?'Google':'GitHub')+'…','info');
+     try{
+       const result=await mod.signInWithPopup(auth,providerObject);
+       await finishAuroraOAuth(result,provider);
+     }catch(error){
+       if(String(error&&error.code||'')==='auth/popup-blocked'){
+         sessionStorage.setItem('aurora-oauth-pending-provider',provider);
+         await mod.signInWithRedirect(auth,providerObject);
+         return;
+       }
+       throw error;
+     }
+   }catch(error){
+     const message=friendlyAuthError(error,provider);
+     notify(message,'error');
+     const target=$('loginErrorMessage');
+     if(target){target.textContent=message;target.style.display='block';}
+   }finally{
+     signinLock=false;
+     socialButtons.forEach(b=>{b.disabled=false;b.removeAttribute('aria-busy');});
+   }
+ };
+ // Process the result when Firebase redirects back from Google/GitHub.
+ async function processRedirectResult(){
+   try{
+     const {mod,auth}=await getAuthTools();
+     const result=await mod.getRedirectResult(auth);
+     if(!result||!result.user)return;
+     let provider=sessionStorage.getItem('aurora-oauth-pending-provider')||'';
+     if(!provider){const pid=String(result.providerId||'');provider=pid.indexOf('github')>=0?'github':'google';}
+     sessionStorage.removeItem('aurora-oauth-pending-provider');
+     await finishAuroraOAuth(result,provider);
+   }catch(error){
+     // getRedirectResult returns null when this page did not come from OAuth; only show known provider errors.
+     const code=String(error&&error.code||'');
+     if(code&&code!=='auth/no-auth-event')notify(friendlyAuthError(error,sessionStorage.getItem('aurora-oauth-pending-provider')||'google'),'error');
+     sessionStorage.removeItem('aurora-oauth-pending-provider');
+   }
+ }
+ // Preload Firebase Auth SDK before the first click, reducing popup-blocking risk.
+ function preload(){getAuthTools().catch(()=>{});}
+ if(document.readyState==='complete')setTimeout(preload,0);else window.addEventListener('load',preload,{once:true});
+ window.addEventListener('load',()=>setTimeout(processRedirectResult,100),{once:true});
 })();
 </script>
 
