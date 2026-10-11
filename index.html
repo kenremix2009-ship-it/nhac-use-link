@@ -13227,9 +13227,11 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
  const $=id=>document.getElementById(id);
  let root=null,canvas=null,ctx=null,raf=0,running=false,startedAt=0,resizeObserver=null;
  const reduced=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
- const pointer={x:800,y:450,lastX:800,lastY:450,active:false,lastWaterRippleAt:0};
+ const pointer={x:800,y:450,lastX:800,lastY:450,active:false,lastWaterRippleAt:0,lastWindAt:0};
  const transform={scale:1,ox:0,oy:0,w:0,h:0,dpr:1};
  const waterRipples=[];
+ const windStrokes=[];
+ let sceneTime=0,advancedBackdrop=null;
  const sceneArtwork=new Image();
  const sceneArtworkData=document.getElementById('auroraDragonInkArtworkData');
  sceneArtwork.onload=()=>{if(isActive())start();else if(ctx&&root)draw(0);};
@@ -13257,6 +13259,30 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
  let rngState=0x4a3354;
  function rand(){rngState=(rngState*1664525+1013904223)>>>0;return rngState/4294967296;}
  const inkDust=Array.from({length:112},(_,i)=>({x:rand()*1600,y:rand()*900,r:.35+rand()*1.45,a:.12+rand()*.35,speed:5+rand()*19,phase:rand()*6.28,drift:(rand()-.5)*13,seed:i}));
+ // Shoreline points in the 1600×900 artwork coordinate system. All water responses clip to this lake polygon.
+ const lakeEdge=[[0,725],[190,720],[360,731],[520,735],[700,719],[875,718],[1010,734],[1115,756],[1200,784],[1270,818],[1330,862],[1378,900]];
+ function waterTopAt(x){
+  if(x<lakeEdge[0][0]||x>lakeEdge[lakeEdge.length-1][0])return 901;
+  for(let i=1;i<lakeEdge.length;i++){if(x<=lakeEdge[i][0]){const a=lakeEdge[i-1],b=lakeEdge[i],k=(x-a[0])/(b[0]-a[0]);return a[1]+(b[1]-a[1])*k;}}
+  return 901;
+ }
+ function isWaterPoint(x,y){return x>=0&&x<=1378&&y>=waterTopAt(x)+1&&y<900;}
+ function traceLake(c){
+  c.beginPath();c.moveTo(lakeEdge[0][0],lakeEdge[0][1]);
+  for(let i=1;i<lakeEdge.length;i++){const p=lakeEdge[i],prev=lakeEdge[i-1],mx=(prev[0]+p[0])/2,my=(prev[1]+p[1])/2;c.quadraticCurveTo(prev[0]+(p[0]-prev[0])*.72,prev[1]+(p[1]-prev[1])*.32,mx,my);}
+  c.lineTo(1378,900);c.lineTo(0,900);c.closePath();
+ }
+ function ensureDragonBackdrop(){
+  const view=$('advancedModelView');if(!view)return;
+  if(!advancedBackdrop||!advancedBackdrop.isConnected){
+   advancedBackdrop=document.createElement('div');advancedBackdrop.className='aurora-chunk-dragon-backdrop';advancedBackdrop.setAttribute('aria-hidden','true');advancedBackdrop.dataset.auroraDragonBackdrop='1';
+   view.insertBefore(advancedBackdrop,view.firstChild);
+  }
+  if(sceneArtworkData&&!advancedBackdrop.dataset.imageAttached){
+   const payload=sceneArtworkData.textContent.trim();
+   if(payload){advancedBackdrop.style.backgroundImage='url("data:image/webp;base64,'+payload+'")';advancedBackdrop.dataset.imageAttached='1';}
+  }
+ }
  function ensureRoot(){
   if(root&&root.isConnected)return;
   const home=$('homeView');if(!home)return;
@@ -13264,8 +13290,8 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
   if(!root){
    root=document.createElement('section');root.id='auroraDragonInkRoot';root.setAttribute('aria-label','Aurora — Chunk Loadbox, tranh sơn thủy long phụng bên hồ');
    root.innerHTML='<canvas class="aurora-dragon-canvas" id="auroraDragonInkCanvas" aria-hidden="true"></canvas>'+
-    '<div class="aurora-dragon-copy"><p class="aurora-dragon-kicker">AURORA · CHUNK LOADBOX · LONG PHỤNG SƠN THỦY</p><h1>Nét mực mở ra<br><em>chân trời tri thức.</em></h1><p class="aurora-dragon-lede">Một không gian học tập tĩnh tại giữa sơn thủy mực tàu: long ảnh lướt qua tầng mây, phượng bay trong sương, mặt hồ gợn sóng bên con thuyền và bóng công tử đứng lặng nhìn xa.</p><div class="aurora-dragon-actions"><button type="button" class="aurora-dragon-action primary" data-aurora-dragon-view="studentLoginView">Bắt đầu học <span class="arrow" aria-hidden="true">↗</span></button><button type="button" class="aurora-dragon-action" data-aurora-dragon-view="guideView">Khám phá hướng dẫn <span class="arrow" aria-hidden="true">→</span></button></div></div>'+
-    '<div class="aurora-dragon-seal" aria-label="Sơn thủy">山<br>龍</div><div class="aurora-dragon-inkhint">Mực khẽ trôi · sóng lay theo bước chuột</div><div class="aurora-dragon-footnote"><span>TRI THỨC · TĨNH TÂM · TIẾN BỘ</span><span class="line"></span><span>山水 · AURORA</span></div>';
+    '<div class="aurora-dragon-copy"><p class="aurora-dragon-kicker">AURORA · CHUNK LOADBOX · LONG PHỤNG SƠN THỦY</p><h1>Nét mực mở ra<br><em>chân trời tri thức.</em></h1><p class="aurora-dragon-lede">Một không gian học tập tĩnh tại giữa sơn thủy mực tàu: long ảnh lướt qua tầng mây, phượng bay trong sương, mặt hồ gợn sóng bên con thuyền và bóng công tử đứng lặng nhìn xa.</p><div class="aurora-dragon-actions"><button type="button" class="aurora-dragon-action primary" data-aurora-dragon-view="studentLoginView">Bắt đầu học <span class="arrow" aria-hidden="true">↗</span></button></div></div>'+
+    '<div class="aurora-dragon-footnote"><span>TRI THỨC · TĨNH TÂM · TIẾN BỘ</span></div>';
    home.appendChild(root);
    root.querySelectorAll('[data-aurora-dragon-view]').forEach(btn=>btn.addEventListener('click',()=>{
     const view=btn.dataset.auroraDragonView;
@@ -13280,13 +13306,18 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
    root.addEventListener('pointermove',e=>{
     const rect=root.getBoundingClientRect(),sc=transform.scale||1;
     const nextX=(e.clientX-rect.left-transform.ox)/sc,nextY=(e.clientY-rect.top-transform.oy)/sc;
-    const dx=nextX-pointer.x,dy=nextY-pointer.y,travel=Math.hypot(dx,dy),now=performance.now();
+    const dx=nextX-pointer.x,dy=nextY-pointer.y,travel=Math.hypot(dx,dy),now=performance.now(),wasActive=pointer.active;
     pointer.lastX=pointer.x;pointer.lastY=pointer.y;
     pointer.x=Math.max(-100,Math.min(1700,nextX));pointer.y=Math.max(-100,Math.min(1000,nextY));pointer.active=true;
-    /* Water occupies the lower quarter of the plate. Store cursor direction in each ripple. */
-    if(pointer.y>605&&pointer.y<940&&pointer.x>10&&pointer.x<1590&&travel>2.2&&now-pointer.lastWaterRippleAt>52){
-      waterRipples.push({x:pointer.x,y:pointer.y,dx:Math.max(-1.4,Math.min(1.4,dx)),dy:Math.max(-1.4,Math.min(1.4,dy)),angle:Math.atan2(dy,dx),energy:Math.min(1,travel/23),bornAt:now});
-      pointer.lastWaterRippleAt=now;if(waterRipples.length>36)waterRipples.splice(0,waterRipples.length-36);
+    // Water reacts only inside the lake polygon. Waves spread and travel left/right, never rotate freely or drift vertically.
+    if(wasActive&&isWaterPoint(pointer.x,pointer.y)&&travel>2.2&&now-pointer.lastWaterRippleAt>65){
+      waterRipples.push({x:pointer.x,y:pointer.y,dir:dx>=0?1:-1,energy:Math.min(1,travel/26),bornAt:sceneTime});
+      pointer.lastWaterRippleAt=now;if(waterRipples.length>42)waterRipples.splice(0,waterRipples.length-42);
+    }
+    // In the sky, pointer movement stirs small horizontal brush-winds. A separate ambient gust system runs even when the pointer is idle.
+    if(wasActive&&pointer.y>28&&pointer.y<Math.min(680,waterTopAt(pointer.x)-28)&&travel>3&&now-pointer.lastWindAt>72){
+      const dir=dx>=0?1:-1;for(let i=0;i<2;i++)windStrokes.push({x:pointer.x-dir*i*18,y:pointer.y+(i?9:-7),dir,len:42+Math.min(75,travel*1.5)+i*17,speed:38+i*11,alpha:.15+Math.min(.13,travel*.003),bornAt:sceneTime,phase:rand()*6.28});
+      pointer.lastWindAt=now;if(windStrokes.length>52)windStrokes.splice(0,windStrokes.length-52);
     }
    },{passive:true});
    root.addEventListener('pointerleave',()=>{pointer.active=false},{passive:true});
@@ -13297,10 +13328,12 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
  function resize(){
   if(!root||!canvas||!ctx)return;
   const w=Math.max(1,root.clientWidth||window.innerWidth),h=Math.max(1,root.clientHeight||window.innerHeight);
-  const dpr=Math.min(1.6,window.devicePixelRatio||1),portrait=w/h<.78,sc=Math.max(w/1600,h/900);
+  const dpr=Math.min(1.6,window.devicePixelRatio||1),portrait=w/h<.78;
+  /* Fit the authored 16:9 stage instead of cropping the dragon/phoenix. On portrait screens, keep the entire ink plate visible as a compact panorama below the copy. */
+  const sc=portrait ? Math.min(w/1600,0.31) : Math.min(w/1600,h/900);
   transform.w=w;transform.h=h;transform.dpr=dpr;transform.scale=sc;
-  /* Cover the full viewport; on portrait screens bias the crop toward the dragon, boat and scholar. */
-  transform.ox=(w-1600*sc)*(portrait?.72:.5);transform.oy=(h-900*sc)/2;
+  transform.ox=(w-1600*sc)/2;
+  transform.oy=portrait ? Math.max(330,Math.min(h*.54,h-900*sc-10)) : (h-900*sc)/2;
   canvas.width=Math.max(1,Math.round(w*dpr));canvas.height=Math.max(1,Math.round(h*dpr));
   canvas.style.width=w+'px';canvas.style.height=h+'px';
  }
@@ -13385,14 +13418,86 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
   c.beginPath();c.moveTo(0,0);c.lineTo(0,11);c.moveTo(0,1);c.quadraticCurveTo(-4,-7,-8,-9);c.moveTo(0,1);c.quadraticCurveTo(4,-7,8,-9);c.stroke();
   c.restore();
  }
+ const inkFlowTracks=[
+  // dragon body currents: thin, broken brush strokes following the coil
+  {p:[[630,128],[746,66],[828,86],[894,141]],c:'#26372d',w:2.1,d:34,g:98,s:31,o:.48,ph:0},
+  {p:[[824,110],[899,153],[969,213],[1067,217]],c:'#26372d',w:1.7,d:29,g:112,s:25,o:.40,ph:32},
+  {p:[[968,208],[1052,238],[1125,208],[1191,164]],c:'#26372d',w:1.9,d:28,g:106,s:28,o:.43,ph:67},
+  {p:[[1165,174],[1230,145],[1281,156],[1321,210]],c:'#293a30',w:1.55,d:22,g:82,s:34,o:.42,ph:98},
+  {p:[[1265,225],[1316,246],[1370,250],[1438,220]],c:'#25352b',w:1.3,d:42,g:93,s:23,o:.35,ph:24},
+  // dragon whiskers and mane: long tapered curves that flow in the sky
+  {p:[[1300,224],[1363,187],[1445,183],[1512,205]],c:'#202d25',w:1.65,d:27,g:60,s:38,o:.5,ph:14},
+  {p:[[1315,239],[1389,263],[1460,250],[1525,233]],c:'#28372c',w:1.1,d:38,g:76,s:29,o:.42,ph:53},
+  {p:[[1277,244],[1288,285],[1340,309],[1391,315]],c:'#293a30',w:1.35,d:23,g:74,s:24,o:.4,ph:87},
+  {p:[[1288,211],[1263,177],[1235,162],[1218,137]],c:'#2c3b31',w:1.2,d:22,g:64,s:27,o:.37,ph:39},
+  // phoenix flight feathers, tail plumes and wing filaments
+  {p:[[282,301],[345,250],[395,236],[451,266]],c:'#314235',w:1.8,d:29,g:83,s:28,o:.43,ph:16},
+  {p:[[325,326],[380,293],[444,281],[499,296]],c:'#3d5142',w:1.35,d:25,g:74,s:32,o:.42,ph:47},
+  {p:[[392,292],[434,252],[474,218],[502,176]],c:'#6f5142',w:1.15,d:22,g:66,s:26,o:.42,ph:72},
+  {p:[[409,291],[449,270],[492,252],[532,250]],c:'#263a30',w:1.4,d:31,g:90,s:22,o:.4,ph:103},
+  {p:[[363,316],[391,353],[431,366],[466,352]],c:'#536f5d',w:1.05,d:20,g:70,s:19,o:.32,ph:61},
+  {p:[[445,271],[464,232],[491,208],[518,199]],c:'#974b3d',w:1.0,d:18,g:72,s:24,o:.35,ph:21}
+ ];
+ function strokeBezier(c,p){c.beginPath();c.moveTo(p[0][0],p[0][1]);c.bezierCurveTo(p[1][0],p[1][1],p[2][0],p[2][1],p[3][0],p[3][1]);}
+ function drawLivingInk(t){
+  const c=ctx;c.save();c.lineCap='round';c.lineJoin='round';
+  // Flowing pigment runs along both creatures. Strokes are faint on purpose so the original painting remains dominant.
+  for(const q of inkFlowTracks){
+   const breath=.78+.22*Math.sin(t*.48+q.ph*.07);c.globalAlpha=q.o*breath;
+   strokeBezier(c,q.p);c.strokeStyle=q.c;c.lineWidth=q.w+Math.sin(t*.8+q.ph)*.18;c.setLineDash([q.d,q.g]);c.lineDashOffset=-(t*q.s+q.ph);c.stroke();
+   c.globalAlpha=q.o*.20;strokeBezier(c,q.p);c.strokeStyle=q.c;c.lineWidth=q.w*2.4;c.setLineDash([]);c.stroke();
+  }
+  c.setLineDash([]);
+  // Small beads of diluted ink descend from several dragon mane/scale points, then fade into the paper.
+  for(let i=0;i<9;i++){
+   const phase=(t*(4.2+(i%3)*1.25)+i*6.7)%35;
+   const anchors=[[782,131],[838,148],[910,184],[976,214],[1039,225],[1110,202],[1177,174],[1250,177],[1300,220]];
+   const a=anchors[i],x=a[0]+Math.sin(t*.65+i)*2+phase*.13,y=a[1]+phase*.72;
+   c.globalAlpha=(1-phase/39)*(.11+(i%3)*.018);c.fillStyle=i%4===0?'#984d3e':'#25372d';
+   c.beginPath();c.ellipse(x,y,1.2+(i%2)*.45,2.8+phase*.035,.18,0,Math.PI*2);c.fill();
+   c.beginPath();c.moveTo(x,y+2);c.quadraticCurveTo(x+1.8,y+6,x-.8,y+10+phase*.04);c.strokeStyle=c.fillStyle;c.lineWidth=.8;c.stroke();
+  }
+  // Loose wing tips and long phoenix tail feathers flutter slowly in the same direction as the breeze.
+  c.globalAlpha=.24;c.strokeStyle='#374a3a';c.lineWidth=1.15;
+  for(let i=0;i<7;i++){
+   const sway=Math.sin(t*.78+i*.72)*5, x=423+i*10, y=275+i*2;
+   c.beginPath();c.moveTo(x,y);c.bezierCurveTo(x-18+sway,y-18,x-48+sway,y-35-i*2,x-75+sway,y-28-i*4);c.stroke();
+  }
+  c.restore();
+ }
+ function drawSkyWind(t){
+  const c=ctx;c.save();c.beginPath();c.rect(0,0,1600,690);c.clip();c.lineCap='round';c.lineJoin='round';
+  // Pointer-summoned wind: travels horizontally in the direction of cursor movement and fades without lingering.
+  for(let i=windStrokes.length-1;i>=0;i--){
+   const q=windStrokes[i],age=t-q.bornAt;if(age>3.25){windStrokes.splice(i,1);continue;}
+   const fade=Math.min(1,age/.24)*(1-age/3.25),x=q.x+q.dir*age*q.speed,y=q.y+Math.sin(age*2.1+q.phase)*2.2;
+   if(x< -q.len-40||x>1640+q.len)continue;
+   c.globalAlpha=q.alpha*fade;c.strokeStyle='#f8f5e9';c.lineWidth=.75+(q.len/260);c.beginPath();
+   c.moveTo(x,y);c.bezierCurveTo(x+q.dir*q.len*.32,y-1.8,x+q.dir*q.len*.68,y+2.2,x+q.dir*q.len,y+.4);c.stroke();
+   c.globalAlpha=q.alpha*fade*.44;c.strokeStyle='#425b4a';c.lineWidth=.55;c.beginPath();c.moveTo(x+q.dir*6,y+4.2);c.quadraticCurveTo(x+q.dir*q.len*.42,y+2,x+q.dir*q.len*.78,y+4);c.stroke();
+  }
+  // Natural intermittent wind gusts, independent from pointer input.
+  for(let i=0;i<8;i++){
+   const cycle=((t+i*1.73)%11.5);if(cycle>2.25)continue;
+   const pulse=Math.sin(Math.PI*cycle/2.25),dir=i%3===0?-1:1;
+   const travel=(t* (25+i*4)+i*277)%(1900),x=dir>0?travel-170:1770-travel;
+   const y=78+i*71+Math.sin(t*.4+i*1.8)*12,len=42+(i%4)*17;
+   c.globalAlpha=.035+pulse*.055;c.strokeStyle=i%3===0?'#a24f3f':'#fdf8e9';c.lineWidth=.65+(i%3)*.2;
+   c.beginPath();c.moveTo(x,y);c.bezierCurveTo(x+dir*len*.32,y-2,x+dir*len*.7,y+2,x+dir*len,y);c.stroke();
+   if(i%2===0){c.globalAlpha*=.58;c.beginPath();c.moveTo(x-dir*5,y+5);c.quadraticCurveTo(x+dir*len*.45,y+3,x+dir*len*.8,y+5);c.stroke();}
+  }
+  c.restore();c.globalAlpha=1;
+ }
  function draw(t){
   if(!ctx||!canvas||!root)return;
+  sceneTime=t;
   const w=transform.w||root.clientWidth||window.innerWidth,h=transform.h||root.clientHeight||window.innerHeight,sc=transform.scale,ox=transform.ox,oy=transform.oy,dpr=transform.dpr;
-  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-  ctx.setTransform(dpr*sc,0,0,dpr*sc,dpr*(ox+Math.sin(t*.11)*1.6),dpr*(oy+Math.cos(t*.1)*1.3));
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);ctx.fillStyle='#e9e3d5';ctx.fillRect(0,0,w,h);
+  ctx.setTransform(dpr*sc,0,0,dpr*sc,dpr*(ox+Math.sin(t*.11)*1.0),dpr*(oy+Math.cos(t*.1)*.8));
   /* Canonical local watercolor plate: dragon, phoenix, distant peaks, lake, boat, and the scholar. */
   if(sceneArtwork&&sceneArtwork.complete&&sceneArtwork.naturalWidth){
-   const iw=sceneArtwork.naturalWidth,ih=sceneArtwork.naturalHeight,cover=Math.max(1600/iw,900/ih),dw=iw*cover,dh=ih*cover;
+   const iw=sceneArtwork.naturalWidth,ih=sceneArtwork.naturalHeight,fit=Math.min(1600/iw,900/ih),dw=iw*fit,dh=ih*fit;
+   // Contain the full illustration: keep both dragon head/tail, phoenix, boat, scholar and lake visible.
    ctx.drawImage(sceneArtwork,(1600-dw)/2,(900-dh)/2,dw,dh);
    const wash=ctx.createLinearGradient(0,0,0,900);wash.addColorStop(0,'rgba(246,241,226,.06)');wash.addColorStop(.52,'rgba(236,231,216,.015)');wash.addColorStop(1,'rgba(62,83,72,.07)');ctx.fillStyle=wash;ctx.fillRect(0,0,1600,900);
   }else{
@@ -13400,27 +13505,7 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
    drawMountain(ctx,440,82,0,'rgba(113,134,119,.12)',Math.sin(t*.08)*5);drawMountain(ctx,520,91,210,'rgba(97,119,107,.15)',Math.cos(t*.06)*7);drawMountain(ctx,598,122,480,'rgba(67,91,77,.15)',Math.sin(t*.07)*9);drawMountain(ctx,694,72,770,'rgba(48,70,55,.18)',Math.cos(t*.05)*8);
    drawTail(ctx,t);drawBody(ctx,t);drawDragonHead(ctx,t);
   }
-  /* Very subtle moving brush fibres follow the dragon's spine, like diluted ink being pulled by water. */
-  if(!reduced){
-   const strokes=[
-    [[710,18],[770,22],[814,98],[870,140]],
-    [[866,138],[923,205],[1006,236],[1082,209]],
-    [[1078,210],[1151,177],[1207,135],[1288,82]],
-    [[831,104],[895,170],[953,206],[1024,218]]
-   ];
-   strokes.forEach((p,i)=>{
-    const fade=.12+Math.sin(t*.52+i*1.4)*.035;
-    ctx.save();ctx.lineCap='round';ctx.lineJoin='round';ctx.globalAlpha=fade;
-    ctx.strokeStyle=i===2?'#8a4e3e':'#1e2c25';ctx.lineWidth=i===1?2.1:1.35;ctx.setLineDash([17+i*3,76+i*8]);ctx.lineDashOffset=-(t*(13+i*2)+i*19);
-    ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);ctx.bezierCurveTo(p[1][0],p[1][1],p[2][0],p[2][1],p[3][0],p[3][1]);ctx.stroke();ctx.restore();
-   });
-   /* Tiny ink runs bloom and fall at low opacity; they never flash or obscure the painting. */
-   for(let i=0;i<9;i++){
-    const phase=(t*(5+i%4)+i*19)%52,x=780+i*48+Math.sin(t*.4+i)*4,y=46+(i%4)*37+phase*.55;
-    ctx.save();ctx.globalAlpha=(1-phase/58)*.13;ctx.strokeStyle='#26352d';ctx.fillStyle='#26352d';ctx.lineWidth=.8;
-    ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x-2,y+4,x+2,y+8,x-1,y+12+phase*.04);ctx.stroke();ctx.beginPath();ctx.ellipse(x-1,y+13+phase*.04,1.2,2.4,.15,0,Math.PI*2);ctx.fill();ctx.restore();
-   }
-  }
+  if(!reduced){drawLivingInk(t);drawSkyWind(t);}
   /* Drifted pigment flecks gather around the dragon and phoenix, then fade into the mist. */
   inkDust.forEach(p=>{
    let x=(p.x+p.speed*t*.22+p.drift*Math.sin(t*.19+p.phase)+1600)%1600;
@@ -13428,31 +13513,30 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
    if(pointer.active){const dx=x-pointer.x,dy=y-pointer.y,d=Math.hypot(dx,dy);if(d<95&&d>1){const k=(95-d)/95;x+=dx/d*k*12;y+=dy/d*k*12;}}
    const a=p.a*(.5+.5*Math.sin(t*.42+p.phase));ctx.globalAlpha=a*.62;ctx.fillStyle=p.seed%7===0?'#a84b3e':'#263a30';ctx.beginPath();ctx.ellipse(x,y,p.r*(p.seed%5===0?1.8:1),p.r*2.2,Math.sin(t*.6+p.phase),0,Math.PI*2);ctx.fill();
   });ctx.globalAlpha=1;
-  /* Water reflections: fine horizontal ink strokes make the lake feel alive, not glossy. */
-  ctx.save();ctx.lineCap='round';
-  for(let i=0;i<24;i++){
-   const y=612+i*11.2,base=(i*89+(t*(8+i%4)*5))%1600,x=base-80,len=18+(i*37)%88;
-   ctx.globalAlpha=(.045+(i%5)*.009)*(1-i/35);ctx.strokeStyle=i%7===0?'#9b5945':'#536f63';ctx.lineWidth=i%4===0?1.4:.65;
-   ctx.beginPath();ctx.moveTo(x,y+Math.sin(t*.6+i)*1.7);ctx.quadraticCurveTo(x+len*.45,y-1.5*Math.sin(t*.4+i),x+len,y+Math.cos(t*.5+i)*1.3);ctx.stroke();
+  /* Lake-only reflections and horizontal ripples, clipped to the shoreline so they never wash over land, the boat or the scholar. */
+  ctx.save();traceLake(ctx);ctx.clip();ctx.lineCap='round';
+  for(let i=0;i<34;i++){
+   const raw=((i*131+t*(13+(i%5)*7))%1580),dir=i%3===0?-1:1,x=dir>0?raw-100:1700-raw;
+   const y=waterTopAt(Math.max(0,Math.min(1370,x)))+14+(i%6)*10;
+   if(y>895)continue;
+   const len=16+(i*31)%92;
+   ctx.globalAlpha=(.055+(i%5)*.008)*(1-i/46);ctx.strokeStyle=i%8===0?'#a24f3f':'#536e61';ctx.lineWidth=i%4===0?1.05:.58;
+   ctx.beginPath();ctx.moveTo(x,y+Math.sin(t*.5+i)*.28);ctx.quadraticCurveTo(x+dir*len*.48,y-1.1,x+dir*len,y+Math.cos(t*.4+i)*.24);ctx.stroke();
+  }
+  const nowScene=t;
+  for(let i=waterRipples.length-1;i>=0;i--){
+   const r=waterRipples[i],age=nowScene-r.bornAt;
+   if(age>2.45){waterRipples.splice(i,1);continue;}
+   const progress=age/2.45,shift=r.dir*age*(25+r.energy*17),rad=7+age*43,alpha=(1-progress)*(.19+r.energy*.17);
+   ctx.save();ctx.translate(r.x+shift,r.y);ctx.globalAlpha=alpha;ctx.strokeStyle='#557e72';ctx.lineWidth=.7+(1-progress)*.55;
+   ctx.beginPath();ctx.ellipse(0,0,rad,Math.max(2.3,rad*.105),0,Math.PI*.04,Math.PI*1.96);ctx.stroke();
+   ctx.globalAlpha=alpha*.68;ctx.beginPath();ctx.ellipse(-r.dir*rad*.22,1.7,rad*.68,Math.max(1.7,rad*.07),0,Math.PI*.08,Math.PI*1.92);ctx.stroke();
+   ctx.globalAlpha=alpha*.5;ctx.beginPath();ctx.moveTo(-r.dir*rad*.8,-3.3);ctx.quadraticCurveTo(-r.dir*rad*.32,-4.3,r.dir*rad*.34,-2.2);ctx.stroke();ctx.restore();
+  }
+  if(pointer.active&&isWaterPoint(pointer.x,pointer.y)&&!reduced){
+   ctx.globalAlpha=.10;ctx.strokeStyle='#6c8b7e';ctx.lineWidth=.8;ctx.beginPath();ctx.ellipse(pointer.x,pointer.y,20+Math.sin(t*2)*2,3.8+Math.cos(t*1.8)*.5,0,0,Math.PI*2);ctx.stroke();
   }
   ctx.restore();ctx.globalAlpha=1;
-  /* Cursor leaves moving, direction-aware ripples only while travelling over the water. */
-  if(waterRipples.length){
-   const now=performance.now();
-   for(let i=waterRipples.length-1;i>=0;i--){
-    const r=waterRipples[i],age=(now-r.bornAt)/1000;
-    if(age>2.25){waterRipples.splice(i,1);continue;}
-    const progress=age/2.25,rad=5+age*34,alpha=(1-progress)*(.16+r.energy*.18);
-    ctx.save();ctx.translate(r.x,r.y);ctx.rotate(r.angle);ctx.globalAlpha=alpha;ctx.strokeStyle='#537f75';ctx.lineWidth=.85+(1-progress)*.55;
-    ctx.beginPath();ctx.ellipse(0,0,rad*1.45,rad*.43,0,Math.PI*.08,Math.PI*1.92);ctx.stroke();
-    ctx.globalAlpha=alpha*.66;ctx.beginPath();ctx.ellipse(-r.dx*1.8,-r.dy*1.8,rad*.96,rad*.28,0,Math.PI*.1,Math.PI*1.9);ctx.stroke();
-    ctx.globalAlpha=alpha*.45;ctx.beginPath();ctx.moveTo(-r.dx*2.2,-r.dy*2.2);ctx.quadraticCurveTo(-r.dx*1.1+rad*.1,-r.dy*1.1+rad*.18,rad*.8,rad*.04);ctx.stroke();ctx.restore();
-   }
-  }
-  /* Pointer aura is restrained: it reads like disturbed water or ink, not a neon cursor. */
-  if(pointer.active&&!reduced&&pointer.y>600){
-   ctx.save();ctx.globalAlpha=.10;ctx.strokeStyle='#6c8b7e';ctx.lineWidth=.9;ctx.beginPath();ctx.ellipse(pointer.x,pointer.y,18+Math.sin(t*2)*2,7+Math.cos(t*1.8),-.12,0,Math.PI*2);ctx.stroke();ctx.restore();
-  }
   /* Initial scan across the painting, disabled for reduced-motion preference. */
   if(!reduced&&t<4.2){
    const px=-250+(t/4.2)*2100,alpha=Math.sin(Math.PI*Math.min(1,t/4.2))*.105;
@@ -13475,13 +13559,13 @@ body.aurora-interface-chunk-loadbox .view-section:not(#homeView) th{background:#
   if(!ctx)return;
   if(!isActive()){stop();draw(0);return;}
   if(running)return;
-  running=true;startedAt=performance.now();resize();raf=requestAnimationFrame(frame);
+  running=true;startedAt=performance.now();sceneTime=0;windStrokes.length=0;waterRipples.length=0;resize();raf=requestAnimationFrame(frame);
  }
  function stop(){
   running=false;if(raf){cancelAnimationFrame(raf);raf=0;}
  }
  function refreshLifecycle(){
-  ensureRoot();
+  ensureRoot();ensureDragonBackdrop();
   if(isActive())start();else{stop();if(ctx&&root)draw(0);}
   try{window.AuroraFutureSharedNavigation&&window.AuroraFutureSharedNavigation.refresh();}catch(e){}
  }
@@ -13562,6 +13646,42 @@ body.aurora-interface-chunk-loadbox:not(:has(#homeView.active)):not(.exam-active
  body.aurora-interface-chunk-loadbox:not(:has(#homeView.active)):not(.exam-active) .container{padding-top:166px!important}
  body.aurora-interface-future:not(:has(#homeView.active)):not(.exam-active) #navTabsContainer,
  body.aurora-interface-chunk-loadbox:not(:has(#homeView.active)):not(.exam-active) #navTabsContainer{gap:6px;margin-bottom:13px!important}
+}
+</style>
+
+
+<style id="aurora-chunk-dragon-phoenix-fixes-v2">
+/* The panoramic plate is contained, not cropped. Use only one primary hero action; other destinations stay in the global navigation. */
+#auroraDragonInkRoot .aurora-dragon-seal,
+#auroraDragonInkRoot .aurora-dragon-inkhint{display:none!important}
+#auroraDragonInkRoot .aurora-dragon-footnote{left:clamp(25px,6vw,92px);right:auto;bottom:clamp(12px,2vh,24px);justify-content:flex-start;pointer-events:none}
+#auroraDragonInkRoot .aurora-dragon-footnote .line,
+#auroraDragonInkRoot .aurora-dragon-footnote span:nth-child(n+2){display:none!important}
+#auroraDragonInkRoot .aurora-dragon-copy{width:min(440px,72vw);top:clamp(132px,22vh,205px)}
+#auroraDragonInkRoot h1{font-size:clamp(42px,4.6vw,70px);line-height:1.02}
+#auroraDragonInkRoot .aurora-dragon-actions{margin-top:22px}
+#auroraDragonInkRoot .aurora-dragon-action{min-height:42px;padding-inline:17px}
+/* Advanced Teacher receives its own low-contrast full-dragon backdrop behind the working UI. */
+body.aurora-interface-chunk-loadbox #advancedModelView{position:relative;isolation:isolate;min-height:calc(100vh - 145px);overflow:hidden;background-color:#eee7d8!important}
+body.aurora-interface-chunk-loadbox #advancedModelView>.aurora-chunk-dragon-backdrop{position:absolute;inset:0;z-index:0;display:block;pointer-events:none;overflow:hidden;opacity:.34;background-repeat:no-repeat;background-position:92% center;background-size:auto 100%;animation:auroraChunkDragonBackwater 38s ease-in-out infinite alternate}
+body.aurora-interface-chunk-loadbox #advancedModelView>.aurora-chunk-dragon-backdrop::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(240,234,220,.70),rgba(240,234,220,.15) 48%,rgba(240,234,220,.54)),repeating-linear-gradient(164deg,transparent 0 120px,rgba(35,52,41,.14) 121px,transparent 123px 176px);background-size:100% 100%,240% 240%;mix-blend-mode:multiply;animation:auroraChunkInkCurrent 26s linear infinite alternate}
+body.aurora-interface-chunk-loadbox #advancedModelView>.card{position:relative;z-index:1;background:rgba(248,245,236,.80)!important;border-color:rgba(65,82,68,.20)!important;backdrop-filter:blur(1.3px)}
+@keyframes auroraChunkDragonBackwater{0%{background-position:84% 50%}100%{background-position:96% 49%}}
+@keyframes auroraChunkInkCurrent{0%{background-position:0 0,0 0}100%{background-position:0 0,100% 45%}}
+@media(max-width:760px){
+ #auroraDragonInkRoot{min-height:580px}
+ #auroraDragonInkRoot .aurora-dragon-copy{left:22px;right:22px;top:clamp(108px,14vh,145px);width:auto}
+ #auroraDragonInkRoot .aurora-dragon-kicker{font-size:8px;letter-spacing:.14em;margin-bottom:12px}
+ #auroraDragonInkRoot h1{font-size:clamp(34px,8.4vw,48px);line-height:1.03;max-width:490px;margin-bottom:12px}
+ #auroraDragonInkRoot .aurora-dragon-lede{display:none!important}
+ #auroraDragonInkRoot .aurora-dragon-actions{margin-top:14px}
+ #auroraDragonInkRoot .aurora-dragon-action{min-height:38px;padding-inline:14px;font-size:11px}
+ #auroraDragonInkRoot .aurora-dragon-footnote{bottom:9px;left:20px;font-size:7px;letter-spacing:.1em}
+ body.aurora-interface-chunk-loadbox #advancedModelView>.aurora-chunk-dragon-backdrop{opacity:.16;background-size:auto 56%;background-position:center 88%}
+}
+@media(prefers-reduced-motion:reduce){
+ body.aurora-interface-chunk-loadbox #advancedModelView>.aurora-chunk-dragon-backdrop,
+ body.aurora-interface-chunk-loadbox #advancedModelView>.aurora-chunk-dragon-backdrop::after{animation:none!important}
 }
 </style>
 
