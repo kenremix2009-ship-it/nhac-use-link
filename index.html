@@ -1695,7 +1695,46 @@ body.optimized-mode.aurora-interface-aria-blue #auroraShowcaseMediaStage:before{
 </div>
 </div></div>
 
-<div id="authOverlay"><div class="auth-box"><h2>✨ AURORA</h2><p class="auth-sub">🔐 Hệ thống kiểm tra trực tuyến</p><div class="auth-tabs"><button class="active" id="authTabLogin" onclick="switchAuthTab('login')">🔓 Đăng Nhập</button><button id="authTabRegister" onclick="switchAuthTab('register')">📝 Đăng Ký</button></div><div id="authViewLogin" class="auth-view active"><label>Tên đăng nhập hoặc Email:</label><input type="text" id="loginIdentifier" placeholder="Username hoặc email..." autocomplete="username"><label>Mật khẩu:</label><input type="password" id="loginPassword" placeholder="Mật khẩu..." autocomplete="current-password"><a class="link" onclick="switchAuthTab('forgot')">🤔 Quên mật khẩu?</a><div id="loginErrorMessage" class="auth-inline-error" role="alert" aria-live="polite" style="display:none"></div><button class="btn btn-success" id="loginSubmitBtn" onclick="handleLogin()">🔓 Đăng Nhập</button></div><div id="authViewRegister" class="auth-view"><label>Vai trò:</label><select id="regRole" style="margin-bottom:12px"><option value="student">🧑‍🎓 Học sinh</option><option value="teacher">👨‍🏫 Giáo viên</option><option value="other">👤 Khác</option></select><label>Tên đăng nhập (tên thật):</label><input type="text" id="regUsername" placeholder="3-20 ký tự a-z, 0-9, _ . (không dùng từ ngữ không phù hợp)"><label>Email:</label><input type="email" id="regEmail" placeholder="user@gmail.com"><label>Mật khẩu:</label><input type="password" id="regPassword" placeholder="Ít nhất 6 ký tự..."><label>Xác nhận mật khẩu:</label><input type="password" id="regPassword2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleRegister()">✅ Đăng Ký</button></div><div id="authViewForgot" class="auth-view"><div id="forgotStep1"><label>📧 Email đã đăng ký:</label><input type="email" id="forgotEmail" placeholder="user@gmail.com"><div id="forgotEmailStatus" class="email-status-badge demo">⏳ Đang kiểm tra trạng thái email...</div><button class="btn btn-warning" id="forgotSendBtn" onclick="handleSendResetCode(this)">📨 Gửi Mã</button><a class="link center" onclick="switchAuthTab('login')">← Quay lại</a></div><div id="forgotStep2" style="display:none"><div class="email-locked-info" id="forgotEmailLockedInfo" style="display:none">✅ Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (kể cả thư mục Spam/Quảng cáo).</div><div class="code-display" id="forgotCodeDisplay">------</div><p id="forgotCodeLabel" style="font-size:12px;color:#856404;text-align:center;margin-bottom:12px">Mã đã gửi:</p><label>Mã xác nhận:</label><input type="text" id="forgotCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:bold"><button class="btn btn-success" onclick="handleVerifyResetCode()">✓ Xác Nhận</button><a class="link center" onclick="switchAuthTab('forgot')">← Gửi lại</a></div><div id="forgotStep3" style="display:none"><label>🔐 Mật khẩu mới:</label><input type="password" id="forgotNewPass" placeholder="Ít nhất 6 ký tự..."><label>🔐 Xác nhận:</label><input type="password" id="forgotNewPass2" placeholder="Nhập lại..."><button class="btn btn-success" onclick="handleResetPassword()">🔐 Đặt Lại</button></div></div></div></div>
+<div id="authOverlay">
+<section class="aurora-login-hero" aria-label="Aurora introduction">
+  <video id="auroraLoginBackgroundVideo" class="aurora-login-background-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260506_081238_406ed0e3-5d83-436e-a512-0bbff7ec5b95.mp4" type="video/mp4">
+  </video>
+  <div class="aurora-login-hero-content">
+    <div class="aurora-login-hero-brand aurora-login-reveal" style="--login-delay:0ms">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="currentColor" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3.1" fill="#111"/></svg>
+      <span>Aurora</span><b>✳︎</b>
+    </div>
+    <div class="aurora-login-hero-copy aurora-login-reveal" style="--login-delay:100ms">
+      <h2>Join Aurora</h2>
+      <p class="aurora-login-hero-description">Follow these 3 quick phases to activate your space.</p>
+    </div>
+    <div class="aurora-login-steps aurora-login-reveal" style="--login-delay:200ms">
+      <div class="aurora-login-step is-active"><span class="aurora-login-step-number">1</span><span>Register your identity</span><span class="aurora-login-step-check">●</span></div>
+      <div class="aurora-login-step"><span class="aurora-login-step-number">2</span><span>Configure your studio</span></div>
+      <div class="aurora-login-step"><span class="aurora-login-step-number">3</span><span>Finalize your profile</span></div>
+    </div>
+    <p class="aurora-login-intro-blur aurora-login-reveal" style="--login-delay:300ms">Hey there, meet A.R.I.A.,<br>Aurora's Adaptive Learning Companion</p>
+    <p class="aurora-login-typewriter aurora-login-reveal" style="--login-delay:350ms"><span id="auroraAuthTypewriter"></span><span id="auroraAuthTypeCursor" class="aurora-login-type-cursor" aria-hidden="true"> </span></p>
+    <div class="aurora-login-hero-actions aurora-login-reveal" style="--login-delay:400ms">
+      <button type="button" class="aurora-login-pill" onclick="auroraAuthStartRegister('other')">Pitch us an idea</button>
+      <button type="button" class="aurora-login-pill" onclick="auroraAuthStartRegister('teacher')">Come work here</button>
+      <button type="button" class="aurora-login-pill" onclick="auroraAuthStartEmail()">Send a brief hello</button>
+      <button type="button" class="aurora-login-pill" onclick="auroraAuthSeeGuide()">See how we operate</button>
+      <button type="button" class="aurora-login-pill aurora-login-pill-outline" onclick="auroraAuthContactNotice()">Reach the Aurora team <span aria-hidden="true">↗</span></button>
+    </div>
+  </div>
+</section>
+<div class="aurora-login-form-shell">
+<div class="auth-box">
+  <div class="aurora-auth-brand"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="currentColor"/><circle cx="12" cy="12" r="3.1" fill="#111"/></svg><span>Aurora</span></div>
+  <div class="aurora-auth-intro"><h3 id="auroraAuthHeadline">Create New Profile</h3><p id="auroraAuthSubline">Input your basic details to begin the journey.</p></div>
+  <div class="aurora-auth-social-row" id="auroraAuthSocialButtons">
+    <button type="button" class="aurora-auth-social-button" onclick="auroraAuthSocialNotice('Google')"><span class="aurora-auth-google-icon">G</span> Google</button>
+    <button type="button" class="aurora-auth-social-button" onclick="auroraAuthSocialNotice('GitHub')"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.67-3.76-1.32-3.76-1.32-.5-1.29-1.24-1.64-1.24-1.64-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.59 1.21 3.22.93.1-.72.39-1.21.7-1.49-2.48-.28-5.09-1.24-5.09-5.51 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.11-1.44 3.05-1.14 3.05-1.14.61 1.54.23 2.68.11 2.96.72.78 1.15 1.77 1.15 2.99 0 4.28-2.61 5.23-5.1 5.5.4.35.75 1.02.75 2.06v3.08c0 .29.2.63.77.52A11.1 11.1 0 0 0 12 .9Z"/></svg> GitHub</button>
+  </div>
+  <div class="aurora-auth-divider"><span>Or</span></div>
+  <h2>✨ AURORA</h2><p class="auth-sub">🔐 Hệ thống kiểm tra trực tuyến</p><div class="auth-tabs"><button class="active" id="authTabLogin" onclick="switchAuthTab('login')">🔓 Đăng Nhập</button><button id="authTabRegister" onclick="switchAuthTab('register')">📝 Đăng Ký</button></div><div id="authViewLogin" class="auth-view active"><label>Tên đăng nhập hoặc Email:</label><input type="text" id="loginIdentifier" placeholder="Username hoặc email..." autocomplete="username"><label>Mật khẩu:</label><div class="aurora-password-wrap"><input type="password" id="loginPassword" placeholder="Mật khẩu..." autocomplete="current-password"><button type="button" class="aurora-password-eye" aria-label="Hiện mật khẩu" onclick="toggleAuroraAuthPassword('loginPassword',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div><a class="link" onclick="switchAuthTab('forgot')">🤔 Quên mật khẩu?</a><div id="loginErrorMessage" class="auth-inline-error" role="alert" aria-live="polite" style="display:none"></div><button class="btn btn-success" id="loginSubmitBtn" onclick="handleLogin()">🔓 Đăng Nhập</button></div><div id="authViewRegister" class="auth-view"><div class="aurora-auth-field-grid"><div class="aurora-auth-field"><label>Vai trò:</label><select id="regRole" style="margin-bottom:12px"><option value="student">🧑‍🎓 Học sinh</option><option value="teacher">👨‍🏫 Giáo viên</option><option value="other">👤 Khác</option></select></div><div class="aurora-auth-field"><label>Tên đăng nhập (tên thật):</label><input type="text" id="regUsername" placeholder="3-20 ký tự a-z, 0-9, _ . (không dùng từ ngữ không phù hợp)"></div></div><label>Email:</label><input type="email" id="regEmail" placeholder="user@gmail.com"><label>Mật khẩu:</label><div class="aurora-password-wrap"><input type="password" id="regPassword" placeholder="Ít nhất 6 ký tự..."><button type="button" class="aurora-password-eye" aria-label="Hiện mật khẩu" onclick="toggleAuroraAuthPassword('regPassword',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div><p class="aurora-password-help">Mật khẩu phải có ít nhất 6 ký tự theo quy tắc hiện tại.</p><label>Xác nhận mật khẩu:</label><div class="aurora-password-wrap"><input type="password" id="regPassword2" placeholder="Nhập lại..."><button type="button" class="aurora-password-eye" aria-label="Hiện mật khẩu xác nhận" onclick="toggleAuroraAuthPassword('regPassword2',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div><button class="btn btn-success" onclick="handleRegister()">✅ Đăng Ký</button></div><div id="authViewForgot" class="auth-view"><div id="forgotStep1"><label>📧 Email đã đăng ký:</label><input type="email" id="forgotEmail" placeholder="user@gmail.com"><div id="forgotEmailStatus" class="email-status-badge demo">⏳ Đang kiểm tra trạng thái email...</div><button class="btn btn-warning" id="forgotSendBtn" onclick="handleSendResetCode(this)">📨 Gửi Mã</button><a class="link center" onclick="switchAuthTab('login')">← Quay lại</a></div><div id="forgotStep2" style="display:none"><div class="email-locked-info" id="forgotEmailLockedInfo" style="display:none">✅ Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (kể cả thư mục Spam/Quảng cáo).</div><div class="code-display" id="forgotCodeDisplay">------</div><p id="forgotCodeLabel" style="font-size:12px;color:#856404;text-align:center;margin-bottom:12px">Mã đã gửi:</p><label>Mã xác nhận:</label><input type="text" id="forgotCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:bold"><button class="btn btn-success" onclick="handleVerifyResetCode()">✓ Xác Nhận</button><a class="link center" onclick="switchAuthTab('forgot')">← Gửi lại</a></div><div id="forgotStep3" style="display:none"><label>🔐 Mật khẩu mới:</label><div class="aurora-password-wrap"><input type="password" id="forgotNewPass" placeholder="Ít nhất 6 ký tự..."><button type="button" class="aurora-password-eye" aria-label="Hiện mật khẩu mới" onclick="toggleAuroraAuthPassword('forgotNewPass',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div><label>🔐 Xác nhận:</label><div class="aurora-password-wrap"><input type="password" id="forgotNewPass2" placeholder="Nhập lại..."><button type="button" class="aurora-password-eye" aria-label="Hiện xác nhận mật khẩu mới" onclick="toggleAuroraAuthPassword('forgotNewPass2',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div><button class="btn btn-success" onclick="handleResetPassword()">🔐 Đặt Lại</button></div></div><div class="aurora-auth-footer" id="auroraAuthFooter">Chưa có tài khoản? <button type="button" onclick="switchAuthTab('register')">Đăng ký</button></div></div></div></div></div>
 
 <div id="perfModeModal" style="display:none"><div class="perf-box"><div style="font-size:56px;line-height:1;margin-bottom:10px">⚙️</div><h3>CHỌN CHẾ ĐỘ HIỂN THỊ</h3><p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Chọn chế độ phù hợp thiết bị.</p><div class="perf-option" onclick="choosePerfMode('full')"><span class="perf-icon">✨</span><div class="perf-text"><div class="perf-title">1. Đầy đủ</div><div class="perf-sub">Bật tất cả hiệu ứng.</div></div></div><div class="perf-option" onclick="choosePerfMode('optimized')"><span class="perf-icon">⚡</span><div class="perf-text"><div class="perf-title">2. Tối ưu <span class="perf-badge" id="perfRecommendBadge">💡</span></div><div class="perf-sub">Tắt hiệu ứng nặng.</div></div></div></div></div>
 
@@ -11920,6 +11959,61 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
   }
   function refreshEffectiveInterfaceMode(){return applyInterfaceMode(getEffectiveInterfaceMode());}
 
+  /* InterBodyLogin: auth-screen appearance is independent from the website theme. */
+  const INTER_BODY_LOGIN_LOCAL_KEY='aurora-interbodylogin-mode';
+  let interBodyLoginUnsub=null;
+  let interBodyLoginModeCurrent='classic';
+  let interBodyLoginUpdatedAt=0;
+  function normalizeInterBodyLoginMode(value){
+    const v=value&&typeof value==='object'&&!Array.isArray(value)?value.mode:value;
+    return String(v||'classic').trim().toLowerCase()==='aurora-signup'?'aurora-signup':'classic';
+  }
+  function readInterBodyLoginLocal(){try{return normalizeInterBodyLoginMode(localStorage.getItem(INTER_BODY_LOGIN_LOCAL_KEY)||'classic');}catch(e){return 'classic';}}
+  function applyInterBodyLoginMode(value, options){
+    const mode=normalizeInterBodyLoginMode(value);
+    interBodyLoginModeCurrent=mode;
+    try{localStorage.setItem(INTER_BODY_LOGIN_LOCAL_KEY,mode);}catch(e){}
+    if(document.body)document.body.classList.toggle('interbodylogin-aurora-signup',mode==='aurora-signup');
+    const select=$('auroraUCInterBodyLoginMode');if(select&&select.value!==mode)select.value=mode;
+    const status=$('auroraUCInterBodyLoginStatus');
+    if(status)status.textContent=mode==='aurora-signup'?'Đang dùng Aurora Sign Up cho cửa sổ đăng nhập/đăng ký.':'Đang dùng giao diện đăng nhập cổ điển.';
+    try{window.dispatchEvent(new CustomEvent('aurora:interbodylogin-mode-changed',{detail:{mode,source:options&&options.source||'local'}}));}catch(e){}
+    try{if(typeof window.auroraInterBodyLoginRefresh==='function')window.auroraInterBodyLoginRefresh();}catch(e){}
+    return mode;
+  }
+  async function saveInterBodyLoginMode(){
+    if(!requireOperator())return;
+    const select=$('auroraUCInterBodyLoginMode');
+    const mode=normalizeInterBodyLoginMode(select&&select.value);
+    const status=$('auroraUCInterBodyLoginStatus');
+    const button=$('auroraUCSaveInterBodyLoginMode');
+    if(button)button.disabled=true;
+    if(status)status.textContent='Đang lưu cấu hình giao diện đăng nhập chung…';
+    try{
+      if(!dbReady())throw new Error('Firebase chưa sẵn sàng; không thể lưu giao diện đăng nhập chung.');
+      const updatedAt=Math.max(Date.now(),interBodyLoginUpdatedAt+1);
+      const record={mode,updatedAt,updatedBy:uname()||'operator'};
+      await set(`${ROOT}/interbodylogin_mode`,record);
+      interBodyLoginUpdatedAt=updatedAt;
+      applyInterBodyLoginMode(record,{source:'save'});
+      if(status)status.textContent='Đã lưu và áp dụng '+(mode==='aurora-signup'?'Aurora Sign Up':'giao diện cổ điển')+' cho cửa sổ đăng nhập/đăng ký trên toàn website.';
+      toast('Đã cập nhật InterBodyLogin cho toàn website.','success');
+    }catch(error){
+      if(status)status.textContent='Không lưu được InterBodyLogin: '+(error&&error.message||error);
+      toast('Không lưu được giao diện đăng nhập: '+(error&&error.message||error),'error');
+    }finally{if(button)button.disabled=false;}
+  }
+  function startInterBodyLoginWatcher(){
+    if(interBodyLoginUnsub||!dbReady()||typeof window.onValue!=='function')return;
+    try{
+      interBodyLoginUnsub=window.onValue(dbRefPath(`${ROOT}/interbodylogin_mode`),snap=>{
+        const value=snap&&snap.exists&&snap.exists()?snap.val():null;
+        if(value&&typeof value==='object')interBodyLoginUpdatedAt=Math.max(0,Number(value.updatedAt)||0);
+        applyInterBodyLoginMode(value==null?readInterBodyLoginLocal():value,{source:'firebase'});
+      },error=>console.warn('Aurora InterBodyLogin watcher:',error));
+    }catch(error){interBodyLoginUnsub=null;console.warn('Cannot subscribe to InterBodyLogin:',error);}
+  }
+
   async function saveInterfaceMode(){
     if(!requireOperator())return;
     const select=$('auroraUCInterfaceMode');
@@ -12219,17 +12313,18 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
           <section class="aurora-uc-card"><h3>🛠️ Thao Túng · Quản trị dữ liệu bài thi</h3><label for="auroraUCManipSearch">Tìm theo mã hoặc tên bài</label><input id="auroraUCManipSearch" placeholder="Nhập mã bài thi hoặc tên"><div class="aurora-uc-row"><button type="button" class="btn btn-secondary" id="auroraUCLoadManipBtn">↻ Tải danh sách</button><button type="button" class="btn btn-secondary" id="auroraUCShowMoreBtn">⌄ Xem thêm</button></div><div id="auroraUCManipList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Bấm Tải danh sách để xem bài thi.</p></div><p class="aurora-uc-muted">Lần đầu chỉnh sửa sẽ lưu bản gốc trước khi thay đổi. Reset sẽ khôi phục bản sao lưu đó, không phải bản đã chỉnh sửa gần nhất.</p></section>
           <section class="aurora-uc-card"><h3>🐳 Bảo trì toàn hệ thống</h3><p class="aurora-uc-muted">Bấm bắt đầu để đếm ngược 10 giây. Trong thời gian đếm ngược, có thể hủy; người kích hoạt, CEO và AROM+ không bị khóa ở chế độ bảo trì.</p><div class="aurora-uc-row"><button type="button" class="btn btn-danger" id="auroraUCStartMaintenanceBtn">⏳ Bắt đầu bảo trì</button><button type="button" class="btn btn-secondary" id="auroraUCCancelMaintenanceBtn">✋ Ngưng / tạm hoãn</button></div><div id="auroraUCMaintenanceStatus" class="aurora-uc-muted" style="margin-top:9px">Chưa có lịch bảo trì.</div></section>
           <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện website. Chunk Loadbox dùng tranh sơn thủy long phụng; A.R.I.A. dùng giao diện xanh trắng với nhân vật anime. Các giao diện chỉ đổi lớp trình bày, giữ nguyên cấu trúc và chức năng học tập.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Sổ tay tri thức tương tác</option><option value="chunk-loadbox">Chunk Loadbox — Tranh sơn thủy mực rồng</option><option value="aria-blue">A.R.I.A. — Xanh trắng, nhân vật AI</option></select><div class="aurora-uc-interface-options" style="display:grid;gap:8px;margin-top:10px"><label for="auroraUCInterfaceSync" style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="auroraUCInterfaceSync" style="width:17px;height:17px"> Đồng bộ giao diện cho tất cả mọi người</label><p class="aurora-uc-muted" style="margin:0">Bật đồng bộ và để trống ID: thay đổi áp dụng toàn website. Tắt đồng bộ: chỉ đổi giao diện tài khoản đang đăng nhập. Nhập @ID bên dưới để đổi riêng cho một tài khoản; khi có @ID, thao tác này chỉ ảnh hưởng tài khoản đó.</p><label for="auroraUCInterfaceTarget">Đổi riêng cho @ID (không bắt buộc)</label><input id="auroraUCInterfaceTarget" type="text" autocomplete="off" spellcheck="false" placeholder="Ví dụ: @ten_tai_khoan" style="width:100%"></div><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
+          <section class="aurora-uc-card aurora-uc-interbodylogin-card"><h3>InterBodyLogin · Giao diện đăng nhập</h3><p class="aurora-uc-muted">Thiết lập riêng cho cửa sổ đăng nhập/đăng ký. Không thay đổi InterFace hoặc bố cục các trang học tập. Bản Aurora Sign Up sử dụng bố cục hai cột, video nền, các bước giới thiệu và vẫn gọi đúng bộ xử lý đăng nhập/đăng ký hiện có.</p><label for="auroraUCInterBodyLoginMode">Kiểu giao diện đăng nhập</label><select id="auroraUCInterBodyLoginMode"><option value="classic">Cổ điển — giao diện đăng nhập hiện tại</option><option value="aurora-signup">Aurora Sign Up — video hero hai cột</option></select><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterBodyLoginMode">Lưu và áp dụng</button></div><div id="auroraUCInterBodyLoginStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện đăng nhập cổ điển.</div></section>
         </div>
         <div class="aurora-uc-card" style="margin-top:12px;border-color:#f59e0b;background:#fffbeb"><b style="color:#92400e">⚠️ Lưu ý bảo mật triển khai</b><p class="aurora-uc-muted" style="margin-top:5px;color:#78350f">Aurora hiện dùng đăng nhập tùy chỉnh phía trình duyệt. Các lệnh quản trị, box chat, ban/kick, đáp án và chỉnh điểm trong module này chỉ được kiểm tra ở client; để ngăn người dùng kỹ thuật tự gọi Firebase bỏ qua giao diện, cần xác thực server/Firebase Authentication, Cloud Functions và Security Rules phù hợp trước khi dùng trên dữ liệu thật.</p></div>
       </div>`;
     const config=$('configPanel');if(config)config.appendChild(panel);else sup.appendChild(panel);
     const interfaceSyncToggle=$('auroraUCInterfaceSync');if(interfaceSyncToggle){interfaceSyncToggle.defaultChecked=false;interfaceSyncToggle.checked=false;interfaceSyncToggle.removeAttribute('checked');}
     $('auroraUltraCollapseBtn').addEventListener('click',()=>{const body=$('auroraUltraControlBody'),hidden=body.style.display==='none';body.style.display=hidden?'':'none';$('auroraUltraCollapseBtn').textContent=hidden?'^ Thu gọn ULTRA CONTROL':'⌄ Mở rộng ULTRA CONTROL';$('auroraUltraCollapseBtn').setAttribute('aria-expanded',hidden?'true':'false');});
-    $('auroraUCCreateChatBtn').addEventListener('click',createChatBox);$('auroraUCRefreshRoomsBtn').addEventListener('click',refreshChatMemberships);$('auroraUCCommandRunBtn').addEventListener('click',runOwnerCommand);$('auroraUCCommandHelpBtn').addEventListener('click',()=>writeCommandOutput(commandHelp()));$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});$('auroraUCLoadManipBtn').addEventListener('click',loadManipulationList);$('auroraUCShowMoreBtn').addEventListener('click',()=>{manipShowMore=!manipShowMore;renderManipulationList();$('auroraUCShowMoreBtn').textContent=manipShowMore?'⌃ Thu gọn danh sách':'⌄ Xem thêm';});$('auroraUCManipSearch').addEventListener('input',renderManipulationList);$('auroraUCStartMaintenanceBtn').addEventListener('click',startMaintenance);$('auroraUCCancelMaintenanceBtn').addEventListener('click',cancelMaintenance);$('auroraUCSaveInterfaceMode').addEventListener('click',saveInterfaceMode);$('auroraUCTrollUploadBtn')?.addEventListener('click',uploadTrollAudioFiles);$('auroraUCTrollRefreshBtn')?.addEventListener('click',loadTrollAudioList);applyInterfaceMode(interfaceModeCurrent);loadTrollAudioList();
+    $('auroraUCCreateChatBtn').addEventListener('click',createChatBox);$('auroraUCRefreshRoomsBtn').addEventListener('click',refreshChatMemberships);$('auroraUCCommandRunBtn').addEventListener('click',runOwnerCommand);$('auroraUCCommandHelpBtn').addEventListener('click',()=>writeCommandOutput(commandHelp()));$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});$('auroraUCLoadManipBtn').addEventListener('click',loadManipulationList);$('auroraUCShowMoreBtn').addEventListener('click',()=>{manipShowMore=!manipShowMore;renderManipulationList();$('auroraUCShowMoreBtn').textContent=manipShowMore?'⌃ Thu gọn danh sách':'⌄ Xem thêm';});$('auroraUCManipSearch').addEventListener('input',renderManipulationList);$('auroraUCStartMaintenanceBtn').addEventListener('click',startMaintenance);$('auroraUCCancelMaintenanceBtn').addEventListener('click',cancelMaintenance);$('auroraUCSaveInterfaceMode').addEventListener('click',saveInterfaceMode);$('auroraUCSaveInterBodyLoginMode')?.addEventListener('click',saveInterBodyLoginMode);$('auroraUCTrollUploadBtn')?.addEventListener('click',uploadTrollAudioFiles);$('auroraUCTrollRefreshBtn')?.addEventListener('click',loadTrollAudioList);applyInterfaceMode(interfaceModeCurrent);loadTrollAudioList();
     /* The old opt-in switch was removed; Troll audio is managed in the dedicated Troll section. */
     renderOperatorState();
   }
-  function renderOperatorState(){if(isLogged()&&tier()==='aromplus'&&typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;const gate=$('auroraUltraGateNotice');if(!gate)return;if(isUltraOperator()){gate.textContent='Đã xác nhận quyền quản trị ULTRA CONTROL cho @'+uname()+'. Chat, lệnh và quản trị dữ liệu đều chạy trong phạm vi quyền này.';gate.style.borderLeft='4px solid #16a34a';gate.style.background='#f0fdf4';}else{gate.textContent='Khu vực quản trị nâng cao. Hãy đăng nhập và mở khóa TỐI CAO bằng VUA, hoặc dùng gói AROM+. Gói CEO chỉ có quyền Partner ở TỐI CAO, không mặc định có quyền ULTRA CONTROL.';gate.style.borderLeft='4px solid #d97706';gate.style.background='#fffbeb';}['auroraUCCreateChatBtn','auroraUCCommandRunBtn','auroraUCStartMaintenanceBtn','auroraUCLoadManipBtn','auroraUCSaveInterfaceMode','auroraUCTrollUploadBtn','auroraUCTrollRefreshBtn'].forEach(id=>{const b=$(id);if(b)b.disabled=!isUltraOperator();});if(isUltraOperator())loadTrollAudioList();renderOwnRoomList();renderCommandRoomOptions();}
+  function renderOperatorState(){if(isLogged()&&tier()==='aromplus'&&typeof userHasSupremeAccess!=='undefined')userHasSupremeAccess=true;const gate=$('auroraUltraGateNotice');if(!gate)return;if(isUltraOperator()){gate.textContent='Đã xác nhận quyền quản trị ULTRA CONTROL cho @'+uname()+'. Chat, lệnh và quản trị dữ liệu đều chạy trong phạm vi quyền này.';gate.style.borderLeft='4px solid #16a34a';gate.style.background='#f0fdf4';}else{gate.textContent='Khu vực quản trị nâng cao. Hãy đăng nhập và mở khóa TỐI CAO bằng VUA, hoặc dùng gói AROM+. Gói CEO chỉ có quyền Partner ở TỐI CAO, không mặc định có quyền ULTRA CONTROL.';gate.style.borderLeft='4px solid #d97706';gate.style.background='#fffbeb';}['auroraUCCreateChatBtn','auroraUCCommandRunBtn','auroraUCStartMaintenanceBtn','auroraUCLoadManipBtn','auroraUCSaveInterfaceMode','auroraUCSaveInterBodyLoginMode','auroraUCTrollUploadBtn','auroraUCTrollRefreshBtn'].forEach(id=>{const b=$(id);if(b)b.disabled=!isUltraOperator();});if(isUltraOperator())loadTrollAudioList();renderOwnRoomList();renderCommandRoomOptions();}
   async function loadTrollOptIn(){try{trollOptInCache=!!(await get(`${ROOT}/troll_opt_in/${childSafe(uname())}`));if($('auroraUCTrollOptIn'))$('auroraUCTrollOptIn').checked=trollOptInCache;renderChatFloatLayer();}catch(e){}}
 
   /* Chat room realtime membership and floating Messenger-like bubbles. */
@@ -12642,9 +12737,9 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     try{await remove(`${ROOT}/troll_audio_list/${key}`);if(item.storagePath){try{const storageMod=await import('https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js');const app=window.firebaseApp;const storage=storageMod.getStorage(app);await storageMod.deleteObject(storageMod.ref(storage,item.storagePath));}catch(e){console.warn('Metadata removed; Storage cleanup failed:',e);}}await loadTrollAudioList();toast('Đã xóa file âm thanh.','success');}catch(e){toast('Xóa audio thất bại: '+(e.message||e),'error');}
   }
 
-  function init(){installStyle();applyInterfaceMode((()=>{try{return localStorage.getItem('aurora-interface-mode')||'basic';}catch(_){return 'basic';}})());startInterfaceModeWatcher();installNavHorizontalScroll();installHeroCollapse();mountUltraPanel();installPlanHooks();installBanAndJoinHooks();watchMaintenance();observePlanCards();
+  function init(){installStyle();applyInterfaceMode((()=>{try{return localStorage.getItem('aurora-interface-mode')||'basic';}catch(_){return 'basic';}})());applyInterBodyLoginMode(readInterBodyLoginLocal(),{source:'init'});startInterBodyLoginWatcher();startInterfaceModeWatcher();installNavHorizontalScroll();installHeroCollapse();mountUltraPanel();installPlanHooks();installBanAndJoinHooks();watchMaintenance();observePlanCards();
     if($('auroraUCCommandInput'))$('auroraUCCommandInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runOwnerCommand();}});
-    let ticks=0;const timer=setInterval(()=>{ticks++;if(!interfaceModeUnsub&&ticks%3===0)startInterfaceModeWatcher();const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;syncPersonalInterfaceModeWatcher();syncAromPlusUi();refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
+    let ticks=0;const timer=setInterval(()=>{ticks++;if(!interfaceModeUnsub&&ticks%3===0)startInterfaceModeWatcher();if(!interBodyLoginUnsub&&ticks%3===0)startInterBodyLoginWatcher();const name=isLogged()?uname():'';if(name!==lastUser){lastUser=name;syncPersonalInterfaceModeWatcher();syncAromPlusUi();refreshChatMemberships();startTrollListener();renderOperatorState();mountPlusGifControls();}else if(isLogged()&&!Object.keys(chatRooms).length)refreshChatMemberships();if(isLogged()){checkBan(uname()).then(b=>{if(b){localStorage.removeItem('aurora_user');currentUser=null;currentUserFullData=null;showBannedMessage(b);}}).catch(()=>{});}if($('profileModal')?.classList.contains('show'))mountPlusGifControls();if(ticks>3600)clearInterval(timer);},2000);
     syncAromPlusUi();startLiveMembershipWatcher();startInterfaceModeWatcher();refreshChatMemberships();startTrollListener();
   }
   Object.assign(window,{
@@ -12654,7 +12749,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
     auroraUCOpenChat:id=>{if(!chatRooms[id])return;closedChatIds.delete(id);openChatRoom=id;renderChatFloatLayer();},auroraUCDeleteChat:deleteChat,
     auroraUCEditManip:editManipulation,auroraUCResetManip:resetManipulation,auroraUCCloseManip:()=>{const m=$('auroraUCManipModal');if(m)m.style.display='none';},auroraUCSaveManipStudent:saveManipStudent,
     auroraUCRefreshChatRooms:refreshChatMemberships,auroraUCCancelMaintenance:cancelMaintenance,auroraUCStartMaintenance:startMaintenance,
-    auroraUCApplyInterfaceMode:applyInterfaceMode,auroraUCSaveInterfaceMode:saveInterfaceMode
+    auroraUCApplyInterfaceMode:applyInterfaceMode,auroraUCSaveInterfaceMode:saveInterfaceMode,auroraUCApplyInterBodyLoginMode:applyInterBodyLoginMode,auroraUCSaveInterBodyLoginMode:saveInterBodyLoginMode
   });
   // Arom+ direct-input VUA gates in legacy forms are autofilled only for this membership tier.
   function installAromPlusInputBypass(){const pairs=[['sendAdminEmail',['emailAdminVuaPass']],['unlockAccountManagement',['accMgmtVuaPass']],['addSecurityPassword',['newSecPassVua']],['grantAiModelToUser',['aiGrantVuaPass']],['revokeAiModelFromUser',['aiGrantVuaPass']]];pairs.forEach(([name,ids])=>{if(typeof window[name]!=='function'||window[name].__auroraAromBypass)return;const old=window[name];const wrap=function(){if(tier()==='aromplus'&&isLogged())ids.forEach(id=>{if($(id)&&typeof VUA_PASSWORD!=='undefined')$(id).value=VUA_PASSWORD;});return old.apply(this,arguments);};wrap.__auroraAromBypass=true;window[name]=wrap;});if(window.prompt&&!window.prompt.__auroraAromBypass){const oldPrompt=window.prompt;const pwrap=function(message,defaultValue){if(tier()==='aromplus'&&isLogged()&&/mật khẩu|mat khau|security password|password vua|partner|vua/i.test(String(message||'')))return typeof VUA_PASSWORD!=='undefined'?VUA_PASSWORD:'';return oldPrompt.call(this,message,defaultValue);};pwrap.__auroraAromBypass=true;window.prompt=pwrap;}if(window.confirm&&!window.confirm.__auroraAromBypass){const oldConfirm=window.confirm;const cwrap=function(message){if(tier()==='aromplus'&&isLogged()&&/xóa|xoa|reset|ban\b|kick\b|bảo trì|bao tri|sửa điểm|sua diem|chỉnh sửa|chinh sua|cấu hình|cau hinh/i.test(String(message||'')))message='⚠️ AROM+ · Hãy cân nhắc kỹ, hành động này có thể ảnh hưởng dữ liệu quan trọng.\n\n'+message;return oldConfirm.call(this,message);};cwrap.__auroraAromBypass=true;window.confirm=cwrap;}if(window.auroraGiftPackage&&!window.auroraGiftPackage.__auroraAromBypass){const old=window.auroraGiftPackage;const wrap=function(){if(tier()==='aromplus'&&isLogged()){userHasSupremeAccess=true;if($('auroraGiftPassword')&&typeof VUA_PASSWORD!=='undefined')$('auroraGiftPassword').value=VUA_PASSWORD;}return old.apply(this,arguments);};wrap.__auroraAromBypass=true;window.auroraGiftPackage=wrap;}}
@@ -14240,5 +14335,159 @@ body.optimized-mode .view-section,body.optimized-mode .container{scroll-behavior
 #auroraFutureGlobalNav .aurora-future-global-menu .future-supreme { display:inline-flex !important; order:999999 !important; flex-shrink:0; }
 #auroraMenuDrawerPanel button[data-menu-id="supreme"] { display:block !important; order:999999 !important; }
 </style>
+
+<style id="aurora-interbodylogin-style">
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+/* InterBodyLogin is independent from InterFace. These enhancements are opt-in. */
+.aurora-login-hero,.aurora-login-form-shell,.aurora-auth-brand,.aurora-auth-intro,.aurora-auth-social-row,.aurora-auth-divider,.aurora-auth-footer{display:none}
+.aurora-password-wrap{display:contents}
+.aurora-password-eye,.aurora-password-help{display:none}
+body.interbodylogin-aurora-signup{--aurora-auth-ink:#f6f8fb;--aurora-auth-muted:rgba(255,255,255,.42);font-family:Inter,"Helvetica Neue",Arial,sans-serif!important}
+body.interbodylogin-aurora-signup #authOverlay{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;box-sizing:border-box!important;padding:8px!important;display:flex;align-items:stretch;justify-content:stretch;gap:0;background:#000!important;color:#fff!important;overflow:auto!important;isolation:isolate}
+body.interbodylogin-aurora-signup .aurora-login-hero{display:flex;position:relative;flex:0 0 52%;width:52%;min-width:0;min-height:0;height:auto;align-self:stretch;flex-direction:column;align-items:center;justify-content:flex-end;padding:clamp(44px,7vh,120px) clamp(20px,3vw,48px) clamp(48px,10vh,128px);border-radius:24px;overflow:hidden;isolation:isolate;box-shadow:0 24px 70px rgba(0,0,0,.32);color:#fff}
+body.interbodylogin-aurora-signup .aurora-login-background-video{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;object-position:70% center;background:#080808;pointer-events:none}
+/* Deliberately no overlay, gradient, or tint is placed over the video. */
+body.interbodylogin-aurora-signup .aurora-login-hero-content{position:relative;z-index:1;width:100%;max-width:390px;margin:auto 0 0;display:flex;flex-direction:column;gap:22px;color:#fff}
+body.interbodylogin-aurora-signup .aurora-login-hero-brand{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:650;letter-spacing:-.045em;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.2)}
+body.interbodylogin-aurora-signup .aurora-login-hero-brand svg{width:24px;height:24px;flex:none;color:#fff}.aurora-login-hero-brand b{font-size:28px;font-weight:300;opacity:.92;line-height:1}
+body.interbodylogin-aurora-signup .aurora-login-hero-copy h2{margin:0 0 10px;font-size:clamp(34px,3vw,48px);line-height:1.02;letter-spacing:-.055em;font-weight:550;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.23)}
+body.interbodylogin-aurora-signup .aurora-login-hero-description{padding:0 4px;font-size:14px;line-height:1.65;color:rgba(255,255,255,.88);max-width:300px;text-shadow:0 1px 10px rgba(0,0,0,.24)}
+body.interbodylogin-aurora-signup .aurora-login-steps{display:flex;flex-direction:column;gap:8px;width:100%}
+body.interbodylogin-aurora-signup .aurora-login-step{display:flex;align-items:center;gap:12px;min-height:48px;padding:9px 12px;border:1px solid rgba(255,255,255,.22);border-radius:13px;background:rgba(10,12,17,.16);color:rgba(255,255,255,.91);font-size:13px;font-weight:500;text-shadow:0 1px 8px rgba(0,0,0,.2)}
+body.interbodylogin-aurora-signup .aurora-login-step-number{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:12px;font-weight:750;flex:none}
+body.interbodylogin-aurora-signup .aurora-login-step.is-active{background:#fff;color:#101113;border-color:#fff;text-shadow:none}.aurora-login-step.is-active .aurora-login-step-number{background:#111;color:#fff}.aurora-login-step-check{margin-left:auto;font-size:11px;color:#111}
+body.interbodylogin-aurora-signup .aurora-login-intro-blur{font-size:clamp(18px,2vw,24px);line-height:1.3;font-weight:400;color:#fff;filter:blur(4px);user-select:none;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.28)}
+body.interbodylogin-aurora-signup .aurora-login-typewriter{min-height:58px;font-size:clamp(18px,2vw,24px);line-height:1.38;font-weight:400;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.36)}
+body.interbodylogin-aurora-signup .aurora-login-type-cursor{display:inline-block;width:2px;height:1.1em;background:#fff;vertical-align:middle;margin-left:2px;animation:auroraLoginBlink 1s step-end infinite}
+@keyframes auroraLoginBlink{0%,100%{opacity:1}50%{opacity:0}}
+body.interbodylogin-aurora-signup .aurora-login-hero-actions{display:flex;flex-wrap:wrap;gap:5px 0;opacity:0;transform:translateY(8px)}
+body.interbodylogin-aurora-signup .aurora-login-hero.auth-motion-run .aurora-login-hero-actions{animation:auroraLoginActionsIn .4s ease .4s forwards}
+@keyframes auroraLoginActionsIn{to{opacity:1;transform:translateY(0)}}
+body.interbodylogin-aurora-signup .aurora-login-pill{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;margin:0 .2em .4em;padding:.55em 1.08em;border:1px solid rgba(255,255,255,.9);border-radius:999px;background:#fff;color:#111;font:500 12px/1.25 Inter,"Helvetica Neue",Arial,sans-serif;cursor:pointer;transition:background .2s,color .2s,border-color .2s,transform .2s}
+body.interbodylogin-aurora-signup .aurora-login-pill:hover{background:#111;color:#fff;border-color:#111;transform:translateY(-1px)}
+body.interbodylogin-aurora-signup .aurora-login-pill-outline{gap:12px;color:#fff;background:transparent;border-color:#fff}
+body.interbodylogin-aurora-signup .aurora-login-pill-outline:hover{background:#fff;color:#111;border-color:#fff}
+body.interbodylogin-aurora-signup .aurora-login-form-shell{display:flex;flex:1 1 48%;min-width:0;align-items:center;justify-content:center;padding:clamp(22px,4vh,52px) clamp(16px,4vw,72px);overflow-y:auto;overscroll-behavior:contain;background:#000;color:#fff}
+body.interbodylogin-aurora-signup #authOverlay .auth-box{display:block;position:relative;margin:auto;width:100%;max-width:590px;max-height:none;overflow:visible;padding:0;background:transparent!important;border:0!important;border-radius:0;box-shadow:none!important;color:#fff!important}
+body.interbodylogin-aurora-signup #authOverlay .auth-box>h2,body.interbodylogin-aurora-signup #authOverlay .auth-box>.auth-sub{display:none!important}
+body.interbodylogin-aurora-signup .aurora-auth-brand{display:flex;align-items:center;gap:9px;margin-bottom:30px;font-size:20px;font-weight:650;letter-spacing:-.04em;color:#fff}
+body.interbodylogin-aurora-signup .aurora-auth-brand svg{width:22px;height:22px;color:#fff;flex:none}
+body.interbodylogin-aurora-signup .aurora-auth-intro{display:block;margin-bottom:26px}
+body.interbodylogin-aurora-signup .aurora-auth-intro h3{margin:0 0 8px;color:#fff;font:500 clamp(26px,2.5vw,34px)/1.15 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.045em}
+body.interbodylogin-aurora-signup .aurora-auth-intro p{margin:0;color:rgba(255,255,255,.46);font-size:13px;line-height:1.6}
+body.interbodylogin-aurora-signup .aurora-auth-social-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:21px}
+body.interbodylogin-aurora-signup .aurora-auth-social-button{display:flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#1a1a1a;color:#fff;font:500 13px Inter,"Helvetica Neue",Arial,sans-serif;cursor:pointer;transition:background .2s,border-color .2s}
+body.interbodylogin-aurora-signup .aurora-auth-social-button:hover{background:#242424;border-color:rgba(255,255,255,.26)}
+body.interbodylogin-aurora-signup .aurora-auth-google-icon{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#fff;color:#4285f4;font-weight:800;font-size:14px}
+body.interbodylogin-aurora-signup .aurora-auth-social-button svg{width:19px;height:19px}
+body.interbodylogin-aurora-signup .aurora-auth-divider{display:flex;align-items:center;gap:14px;margin:0 0 22px;color:rgba(255,255,255,.4);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.22em}
+body.interbodylogin-aurora-signup .aurora-auth-divider:before,body.interbodylogin-aurora-signup .aurora-auth-divider:after{content:"";height:1px;flex:1;background:rgba(255,255,255,.10)}
+body.interbodylogin-aurora-signup .auth-tabs{display:flex;gap:5px;padding:4px;margin:0 0 24px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:#111}
+body.interbodylogin-aurora-signup .auth-tabs button{flex:1;padding:11px 12px;border:1px solid transparent;border-radius:9px;background:transparent;color:rgba(255,255,255,.5);font:600 12px Inter,"Helvetica Neue",Arial,sans-serif;box-shadow:none}
+body.interbodylogin-aurora-signup .auth-tabs button.active{background:#fff;color:#111;box-shadow:none}
+body.interbodylogin-aurora-signup .auth-view label{display:block;margin:0 0 7px;color:#fff;font:500 12px Inter,"Helvetica Neue",Arial,sans-serif}
+body.interbodylogin-aurora-signup .auth-view input,body.interbodylogin-aurora-signup .auth-view select{width:100%;height:44px;margin:0 0 17px;padding:0 14px;border:1px solid transparent;border-radius:11px;background:#1a1a1a;color:#fff;font:400 13px Inter,"Helvetica Neue",Arial,sans-serif;box-shadow:none}
+body.interbodylogin-aurora-signup .auth-view input::placeholder{color:rgba(255,255,255,.22)}
+body.interbodylogin-aurora-signup .auth-view input:focus,body.interbodylogin-aurora-signup .auth-view select:focus{outline:none;border-color:rgba(255,255,255,.23);box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+body.interbodylogin-aurora-signup .aurora-auth-field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+body.interbodylogin-aurora-signup .aurora-auth-field{min-width:0}
+body.interbodylogin-aurora-signup .aurora-password-wrap{display:block;position:relative;width:100%}
+body.interbodylogin-aurora-signup .aurora-password-wrap input{padding-right:46px}
+body.interbodylogin-aurora-signup .aurora-password-eye{display:grid;place-items:center;position:absolute;right:12px;top:10px;width:24px;height:24px;padding:0;border:0;background:transparent;color:rgba(255,255,255,.5);cursor:pointer}
+body.interbodylogin-aurora-signup .aurora-password-eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+body.interbodylogin-aurora-signup .aurora-password-help{display:block;margin:-11px 0 16px;font-size:10px;color:rgba(255,255,255,.38)}
+body.interbodylogin-aurora-signup .auth-view .link{color:rgba(255,255,255,.68);font-size:12px;font-weight:500;text-decoration:underline;text-underline-offset:3px}
+body.interbodylogin-aurora-signup .auth-view .btn{width:100%;min-height:54px;margin-top:10px;border:0;border-radius:12px;background:#fff!important;color:#111!important;font:650 13px Inter,"Helvetica Neue",Arial,sans-serif;transition:transform .15s,background .2s}
+body.interbodylogin-aurora-signup .auth-view .btn:hover{background:#eaeaea!important}
+body.interbodylogin-aurora-signup .auth-view .btn:active{transform:scale(.985)}
+body.interbodylogin-aurora-signup .auth-inline-error{color:#ffaaaa!important;background:#301414!important;border:1px solid #632222!important;border-radius:9px;padding:10px;margin-bottom:10px;font-size:12px}
+body.interbodylogin-aurora-signup .code-display{background:#1a1a1a;border-color:#555;color:#fff}
+body.interbodylogin-aurora-signup .aurora-auth-footer{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:25px;padding-top:20px;border-top:1px solid rgba(255,255,255,.09);font-size:12px;color:rgba(255,255,255,.42)}
+body.interbodylogin-aurora-signup .aurora-auth-footer button{padding:0;border:0;background:transparent;color:#fff;font:600 12px Inter,"Helvetica Neue",Arial,sans-serif;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+body.interbodylogin-aurora-signup #authViewForgot.active~.aurora-auth-footer{display:none}
+body.interbodylogin-aurora-signup .aurora-login-reveal{opacity:0;transform:translateY(10px)}
+body.interbodylogin-aurora-signup .aurora-login-hero.auth-motion-run .aurora-login-reveal{animation:auroraLoginReveal .5s ease-out var(--login-delay,0ms) both}
+@keyframes auroraLoginReveal{to{opacity:1;transform:translateY(0)}}
+body.interbodylogin-aurora-signup #authViewRegister.active,body.interbodylogin-aurora-signup #authViewLogin.active{animation:auroraAuthFormIn .35s ease-out both}
+@keyframes auroraAuthFormIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1023px){body.interbodylogin-aurora-signup #authOverlay{padding:0!important;align-items:stretch}body.interbodylogin-aurora-signup .aurora-login-hero{display:none!important}body.interbodylogin-aurora-signup .aurora-login-form-shell{flex:1 1 100%;width:100%;padding:28px clamp(18px,6vw,52px);min-height:100%;overflow-y:auto}body.interbodylogin-aurora-signup #authOverlay .auth-box{max-width:540px}}
+@media(max-width:520px){body.interbodylogin-aurora-signup .aurora-auth-field-grid{grid-template-columns:1fr;gap:0}body.interbodylogin-aurora-signup .aurora-auth-social-row{gap:8px}body.interbodylogin-aurora-signup .aurora-auth-social-button{font-size:12px;padding:9px 8px}body.interbodylogin-aurora-signup .aurora-auth-intro{margin-bottom:20px}body.interbodylogin-aurora-signup .aurora-auth-footer{margin-top:18px;padding-top:15px}}
+@media(prefers-reduced-motion:reduce){body.interbodylogin-aurora-signup .aurora-login-reveal,body.interbodylogin-aurora-signup .aurora-login-hero-actions,body.interbodylogin-aurora-signup .auth-view.active{animation:none!important;opacity:1!important;transform:none!important}body.interbodylogin-aurora-signup .aurora-login-type-cursor{animation:none!important}}
+</style>
+
+
+<script id="aurora-interbodylogin-behavior">
+(function(){
+ 'use strict';
+ const typingText='Glad you stopped in. Good taste tends to find us. Now, what are we building?';
+ let typingTimer=null, typingStartTimer=null, overlayObserver=null, bodyObserver=null;
+ function isCustom(){return !!(document.body&&document.body.classList.contains('interbodylogin-aurora-signup'));}
+ function visible(){const overlay=document.getElementById('authOverlay');return !!(overlay&&getComputedStyle(overlay).display!=='none'&&overlay.getClientRects().length);}
+ function updateHeadings(tab){
+   const overlay=document.getElementById('authOverlay');if(!overlay)return;
+   const login=document.getElementById('auroraAuthHeadline'),sub=document.getElementById('auroraAuthSubline'),footer=document.getElementById('auroraAuthFooter');
+   const social=document.getElementById('auroraAuthSocialButtons'),divider=document.querySelector('#authOverlay .aurora-auth-divider');
+   const activeTab=tab||(document.getElementById('authViewRegister')?.classList.contains('active')?'register':document.getElementById('authViewForgot')?.classList.contains('active')?'forgot':'login');
+   overlay.dataset.authTab=activeTab;
+   const copy={login:['Welcome back','Sign in to continue your learning journey.'],register:['Create New Profile','Input your basic details to begin the journey.'],forgot:['Recover your account','Follow the steps to safely reset your password.']};
+   if(login)login.textContent=(copy[activeTab]||copy.login)[0];if(sub)sub.textContent=(copy[activeTab]||copy.login)[1];
+   if(social)social.style.display=activeTab==='forgot'?'none':'grid';if(divider)divider.style.display=activeTab==='forgot'?'none':'flex';
+   if(footer){footer.style.display=activeTab==='forgot'?'none':'flex';footer.innerHTML=activeTab==='register'?"Already a member? <button type='button' onclick=\"switchAuthTab('login')\">Log in</button>":"New to Aurora? <button type='button' onclick=\"switchAuthTab('register')\">Create an account</button>";}
+ }
+ function resetTypewriter(){
+   const textEl=document.getElementById('auroraAuthTypewriter'),cursor=document.getElementById('auroraAuthTypeCursor');
+   clearInterval(typingTimer);clearTimeout(typingStartTimer);
+   if(!textEl)return;
+   textEl.textContent='';if(cursor)cursor.style.display='inline-block';
+   if(!isCustom())return;
+   let index=0;
+   typingStartTimer=setTimeout(()=>{
+     typingTimer=setInterval(()=>{
+       if(!isCustom()){clearInterval(typingTimer);return;}
+       textEl.textContent=typingText.slice(0,++index);
+       if(index>=typingText.length){clearInterval(typingTimer);typingTimer=null;if(cursor)cursor.style.display='none';}
+     },38);
+   },600);
+ }
+ function animateHero(){const hero=document.querySelector('#authOverlay .aurora-login-hero');if(!hero)return;hero.classList.remove('auth-motion-run');void hero.offsetWidth;hero.classList.add('auth-motion-run');}
+ function syncVideo(){const video=document.getElementById('auroraLoginBackgroundVideo');if(!video)return;const source=video.querySelector('source[data-src]');const shouldPlay=isCustom()&&visible()&&!(document.body&&document.body.classList.contains('optimized-mode'));
+   if(shouldPlay){try{if(source&&!source.getAttribute('src')){source.setAttribute('src',source.dataset.src);video.preload='auto';video.load();}const p=video.play();if(p&&typeof p.catch==='function')p.catch(()=>{});}catch(e){}}
+   else {try{video.pause();if(source&&source.hasAttribute('src')){source.removeAttribute('src');video.load();}}catch(e){}}
+ }
+ function refresh(){
+   if(!isCustom()){clearInterval(typingTimer);clearTimeout(typingStartTimer);syncVideo();return;}
+   updateHeadings();if(visible()){animateHero();resetTypewriter();}syncVideo();
+ }
+ window.auroraInterBodyLoginRefresh=refresh;
+ window.auroraAuthSocialNotice=function(provider){
+   const message='Đăng nhập '+String(provider||'mạng xã hội')+' chưa được cấu hình OAuth trong Aurora. Hãy dùng tên đăng nhập/email và mật khẩu hiện có.';
+   if(typeof window.showToast==='function')window.showToast(message,'info');else alert(message);
+ };
+ window.toggleAuroraAuthPassword=function(id,button){const input=document.getElementById(id);if(!input)return;const show=input.type==='password';input.type=show?'text':'password';if(button){button.setAttribute('aria-label',show?'Ẩn mật khẩu':'Hiện mật khẩu');button.style.color=show?'#fff':'rgba(255,255,255,.5)';}};
+ window.auroraAuthStartRegister=function(role){
+   if(typeof window.switchAuthTab==='function')window.switchAuthTab('register');
+   const select=document.getElementById('regRole');if(select&&role)select.value=role;
+   const overlay=document.getElementById('authOverlay');if(overlay)overlay.style.display='flex';refresh();
+   setTimeout(()=>document.getElementById('regUsername')?.focus(),90);
+ };
+ window.auroraAuthStartEmail=function(){window.auroraAuthStartRegister('student');setTimeout(()=>document.getElementById('regEmail')?.focus(),110);};
+ window.auroraAuthSeeGuide=function(){const overlay=document.getElementById('authOverlay');if(overlay)overlay.style.display='none';syncVideo();if(typeof window.switchView==='function')window.switchView('guideView');};
+ window.auroraAuthContactNotice=function(){if(typeof window.showToast==='function')window.showToast('Hãy liên hệ quản trị viên hoặc giáo viên của bạn để được hỗ trợ.','info');};
+ function wrapGlobal(name,after){const old=window[name];if(typeof old!=='function'||old.__auroraInterBodyLoginWrapped)return;const wrapped=function(){const result=old.apply(this,arguments);try{after.apply(this,arguments);}catch(e){}return result;};wrapped.__auroraInterBodyLoginWrapped=true;window[name]=wrapped;}
+ function install(){
+   const oldSwitch=window.switchAuthTab;
+   if(typeof oldSwitch==='function'&&!oldSwitch.__auroraInterBodyLoginWrapped){const wrapped=function(tab){const result=oldSwitch.apply(this,arguments);try{updateHeadings(tab);if(isCustom()&&visible()){resetTypewriter();animateHero();syncVideo();}}catch(e){}return result;};wrapped.__auroraInterBodyLoginWrapped=true;window.switchAuthTab=wrapped;}
+   wrapGlobal('openAuthModal',function(tab){updateHeadings(tab||'login');refresh();});
+   wrapGlobal('requireLogin',function(action){if(visible()){updateHeadings('login');refresh();}});
+   const overlay=document.getElementById('authOverlay');if(overlay&&window.MutationObserver&&!overlayObserver){overlayObserver=new MutationObserver(()=>{if(visible()&&isCustom()){updateHeadings();}syncVideo();});overlayObserver.observe(overlay,{attributes:true,attributeFilter:['style','class']});}
+   const modeSelect=document.getElementById('auroraUCInterBodyLoginMode');if(modeSelect){modeSelect.value=(document.body&&document.body.classList.contains('interbodylogin-aurora-signup'))?'aurora-signup':'classic';}
+   updateHeadings();syncVideo();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+ document.addEventListener('visibilitychange',syncVideo);
+ window.addEventListener('aurora:interbodylogin-mode-changed',()=>{refresh();});
+})();
+</script>
+
 </body>
 </html>
