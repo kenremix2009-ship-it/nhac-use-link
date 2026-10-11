@@ -5849,7 +5849,7 @@ function choosePerfMode(mode){
         document.body.classList.toggle('optimized-mode',optimized);
         document.body.dataset.auroraPerfMode=optimized?'optimized':'full';
         if(optimized){
-          document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox','aurora-interface-aria-blue');
+          document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox','aurora-interface-aria-blue','aurora-interface-52hz');
           document.body.dataset.auroraInterfaceMode='basic';
           if(window.AuroraChunkLoadbox&&typeof window.AuroraChunkLoadbox.pause==='function')window.AuroraChunkLoadbox.pause();
         }
@@ -11887,10 +11887,10 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
   function normalizeInterfaceMode(value){
     const raw=(value&&typeof value==='object')?value.mode:value;
     const v=String(raw||'basic').toLowerCase().trim();
-    return ['modern','future','chunk-loadbox','aria-blue'].includes(v)?v:'basic';
+    return ['modern','future','chunk-loadbox','aria-blue','52hz'].includes(v)?v:'basic';
   }
   function modeLabel(mode){
-    return ({basic:'Basic',modern:'Modern',future:'Tương lai','chunk-loadbox':'Chunk Loadbox','aria-blue':'A.R.I.A. — Xanh băng'})[normalizeInterfaceMode(mode)]||'Basic';
+    return ({basic:'Basic',modern:'Modern',future:'Tương lai','chunk-loadbox':'Chunk Loadbox','aria-blue':'A.R.I.A. — Xanh băng','52hz':'52Hz — Cá voi cô đơn'})[normalizeInterfaceMode(mode)]||'Basic';
   }
   function parseInterfaceModeRecord(value){
     if(value==null||value==='')return null;
@@ -11947,6 +11947,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
       document.body.classList.toggle('aurora-interface-future',mode==='future');
       document.body.classList.toggle('aurora-interface-chunk-loadbox',mode==='chunk-loadbox');
       document.body.classList.toggle('aurora-interface-aria-blue',mode==='aria-blue');
+      document.body.classList.toggle('aurora-interface-52hz',mode==='52hz');
       document.body.dataset.auroraInterfaceMode=mode;
     }
     const select=$('auroraUCInterfaceMode');if(select&&select.value!==requestedMode)select.value=requestedMode;
@@ -12312,7 +12313,7 @@ import { VRMLoaderPlugin } from '@pixiv/three-vrm';
           <section class="aurora-uc-card aurora-uc-troll-card"><h3>🔊 Troll · Quản lý âm thanh vui</h3><p class="aurora-uc-muted">Tải file âm thanh để dùng bằng lệnh <code>/trollvoice số @id</code>. Voice có sẵn #1–#5; file tải lên bắt đầu từ #6 theo thứ tự thời gian. Trình duyệt người nhận có thể chặn tự phát âm thanh; khi đó sẽ hiện nút nghe.</p><label for="auroraUCTrollAudioFiles">Chọn file âm thanh (MP3, WAV, OGG, M4A, AAC, WEBM; tối đa 20 MB/file)</label><input id="auroraUCTrollAudioFiles" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.webm" multiple><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCTrollUploadBtn">⬆️ Tải âm thanh</button><button type="button" class="btn btn-secondary" id="auroraUCTrollRefreshBtn">↻ Làm mới danh sách</button></div><div id="auroraUCTrollUploadStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Chưa tải file nào trong phiên này.</div><div id="auroraUCTrollAudioList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Đang tải danh sách âm thanh…</p></div></section>
           <section class="aurora-uc-card"><h3>🛠️ Thao Túng · Quản trị dữ liệu bài thi</h3><label for="auroraUCManipSearch">Tìm theo mã hoặc tên bài</label><input id="auroraUCManipSearch" placeholder="Nhập mã bài thi hoặc tên"><div class="aurora-uc-row"><button type="button" class="btn btn-secondary" id="auroraUCLoadManipBtn">↻ Tải danh sách</button><button type="button" class="btn btn-secondary" id="auroraUCShowMoreBtn">⌄ Xem thêm</button></div><div id="auroraUCManipList" class="aurora-uc-list" style="margin-top:8px"><p class="aurora-uc-muted">Bấm Tải danh sách để xem bài thi.</p></div><p class="aurora-uc-muted">Lần đầu chỉnh sửa sẽ lưu bản gốc trước khi thay đổi. Reset sẽ khôi phục bản sao lưu đó, không phải bản đã chỉnh sửa gần nhất.</p></section>
           <section class="aurora-uc-card"><h3>🐳 Bảo trì toàn hệ thống</h3><p class="aurora-uc-muted">Bấm bắt đầu để đếm ngược 10 giây. Trong thời gian đếm ngược, có thể hủy; người kích hoạt, CEO và AROM+ không bị khóa ở chế độ bảo trì.</p><div class="aurora-uc-row"><button type="button" class="btn btn-danger" id="auroraUCStartMaintenanceBtn">⏳ Bắt đầu bảo trì</button><button type="button" class="btn btn-secondary" id="auroraUCCancelMaintenanceBtn">✋ Ngưng / tạm hoãn</button></div><div id="auroraUCMaintenanceStatus" class="aurora-uc-muted" style="margin-top:9px">Chưa có lịch bảo trì.</div></section>
-          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện website. Chunk Loadbox dùng tranh sơn thủy long phụng; A.R.I.A. dùng giao diện xanh trắng với nhân vật anime. Các giao diện chỉ đổi lớp trình bày, giữ nguyên cấu trúc và chức năng học tập.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Sổ tay tri thức tương tác</option><option value="chunk-loadbox">Chunk Loadbox — Tranh sơn thủy mực rồng</option><option value="aria-blue">A.R.I.A. — Xanh trắng, nhân vật AI</option></select><div class="aurora-uc-interface-options" style="display:grid;gap:8px;margin-top:10px"><label for="auroraUCInterfaceSync" style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="auroraUCInterfaceSync" style="width:17px;height:17px"> Đồng bộ giao diện cho tất cả mọi người</label><p class="aurora-uc-muted" style="margin:0">Bật đồng bộ và để trống ID: thay đổi áp dụng toàn website. Tắt đồng bộ: chỉ đổi giao diện tài khoản đang đăng nhập. Nhập @ID bên dưới để đổi riêng cho một tài khoản; khi có @ID, thao tác này chỉ ảnh hưởng tài khoản đó.</p><label for="auroraUCInterfaceTarget">Đổi riêng cho @ID (không bắt buộc)</label><input id="auroraUCInterfaceTarget" type="text" autocomplete="off" spellcheck="false" placeholder="Ví dụ: @ten_tai_khoan" style="width:100%"></div><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
+          <section class="aurora-uc-card aurora-uc-interface-card"><h3>InterFace · Giao diện web</h3><p class="aurora-uc-muted">Chọn giao diện website. Chunk Loadbox dùng tranh sơn thủy long phụng; A.R.I.A. dùng giao diện xanh trắng với nhân vật anime. Các giao diện chỉ đổi lớp trình bày, giữ nguyên cấu trúc và chức năng học tập.</p><label for="auroraUCInterfaceMode">Chế độ giao diện</label><select id="auroraUCInterfaceMode"><option value="basic">Basic — Giao diện hiện tại (mặc định)</option><option value="modern">Modern — Giao diện hiện đại</option><option value="future">Tương lai — Sổ tay tri thức tương tác</option><option value="chunk-loadbox">Chunk Loadbox — Tranh sơn thủy mực rồng</option><option value="aria-blue">A.R.I.A. — Xanh trắng, nhân vật AI</option><option value="52hz">52Hz — Cá voi cô đơn giữa đại dương</option></select><div class="aurora-uc-interface-options" style="display:grid;gap:8px;margin-top:10px"><label for="auroraUCInterfaceSync" style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="auroraUCInterfaceSync" style="width:17px;height:17px"> Đồng bộ giao diện cho tất cả mọi người</label><p class="aurora-uc-muted" style="margin:0">Bật đồng bộ và để trống ID: thay đổi áp dụng toàn website. Tắt đồng bộ: chỉ đổi giao diện tài khoản đang đăng nhập. Nhập @ID bên dưới để đổi riêng cho một tài khoản; khi có @ID, thao tác này chỉ ảnh hưởng tài khoản đó.</p><label for="auroraUCInterfaceTarget">Đổi riêng cho @ID (không bắt buộc)</label><input id="auroraUCInterfaceTarget" type="text" autocomplete="off" spellcheck="false" placeholder="Ví dụ: @ten_tai_khoan" style="width:100%"></div><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterfaceMode">Lưu và áp dụng</button></div><div id="auroraUCInterfaceStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện Basic.</div></section>
           <section class="aurora-uc-card aurora-uc-interbodylogin-card"><h3>InterBodyLogin · Giao diện đăng nhập</h3><p class="aurora-uc-muted">Thiết lập riêng cho cửa sổ đăng nhập/đăng ký. Không thay đổi InterFace hoặc bố cục các trang học tập. Bản Aurora Sign Up sử dụng bố cục hai cột, video nền, các bước giới thiệu và vẫn gọi đúng bộ xử lý đăng nhập/đăng ký hiện có.</p><label for="auroraUCInterBodyLoginMode">Kiểu giao diện đăng nhập</label><select id="auroraUCInterBodyLoginMode"><option value="classic">Cổ điển — giao diện đăng nhập hiện tại</option><option value="aurora-signup">Aurora Sign Up — video hero hai cột</option></select><div class="aurora-uc-row"><button type="button" class="btn btn-primary" id="auroraUCSaveInterBodyLoginMode">Lưu và áp dụng</button></div><div id="auroraUCInterBodyLoginStatus" class="aurora-uc-muted" role="status" aria-live="polite" style="margin-top:8px">Đang dùng giao diện đăng nhập cổ điển.</div></section>
         </div>
         <div class="aurora-uc-card" style="margin-top:12px;border-color:#f59e0b;background:#fffbeb"><b style="color:#92400e">⚠️ Lưu ý bảo mật triển khai</b><p class="aurora-uc-muted" style="margin-top:5px;color:#78350f">Aurora hiện dùng đăng nhập tùy chỉnh phía trình duyệt. Các lệnh quản trị, box chat, ban/kick, đáp án và chỉnh điểm trong module này chỉ được kiểm tra ở client; để ngăn người dùng kỹ thuật tự gọi Firebase bỏ qua giao diện, cần xác thực server/Firebase Authentication, Cloud Functions và Security Rules phù hợp trước khi dùng trên dữ liệu thật.</p></div>
@@ -13502,7 +13503,7 @@ body.aurora-interface-future.exam-active .container{padding-top:0!important}
  function updateNav(){
    navMarkup();const nav=byId('auroraFutureGlobalNav');if(!nav)return;
    const home=byId('homeView');const homeActive=!!(home&&home.classList.contains('active'));
-   const isFuture=document.body.classList.contains('aurora-interface-future');const isDragon=document.body.classList.contains('aurora-interface-chunk-loadbox');const isAria=document.body.classList.contains('aurora-interface-aria-blue');const isExam=document.body.classList.contains('exam-active');nav.style.display=((isFuture&&!homeActive&&!isExam)||(isDragon&&!isExam)||(isAria&&!isExam))?'grid':'none';nav.classList.toggle('aurora-nav-chunk-loadbox',isDragon);nav.classList.toggle('aurora-nav-aria-blue',isAria);
+   const isFuture=document.body.classList.contains('aurora-interface-future');const isDragon=document.body.classList.contains('aurora-interface-chunk-loadbox');const isAria=document.body.classList.contains('aurora-interface-aria-blue');const is52hz=document.body.classList.contains('aurora-interface-52hz');const isExam=document.body.classList.contains('exam-active');nav.style.display=((isFuture&&!homeActive&&!isExam)||(isDragon&&!isExam)||(isAria&&!isExam)||(is52hz&&!isExam))?'grid':'none';nav.classList.toggle('aurora-nav-chunk-loadbox',isDragon);nav.classList.toggle('aurora-nav-aria-blue',isAria);nav.classList.toggle('aurora-nav-52hz',is52hz);
    const active=(document.querySelector('.view-section.active')||{}).id||'homeView';
    nav.querySelectorAll('[data-future-view]').forEach(b=>{b.classList.toggle('active',b.dataset.futureView===active);b.setAttribute('aria-current',b.dataset.futureView===active?'page':'false')});
    const legacyLang=byId('auroraLanguage'),select=byId('auroraFutureGlobalLanguage');if(legacyLang&&select&&select.value!==legacyLang.value)select.value=legacyLang.value;
@@ -14261,7 +14262,7 @@ body.optimized-mode .view-section,body.optimized-mode .container{scroll-behavior
     if(forceBasic){
       if(typeof window.auroraUCApplyInterfaceMode==='function')window.auroraUCApplyInterfaceMode(requested);
       else {
-        document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox','aurora-interface-aria-blue');
+        document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox','aurora-interface-aria-blue','aurora-interface-52hz');
         document.body.dataset.auroraInterfaceMode='basic';
       }
     }else{
@@ -14298,7 +14299,7 @@ body.optimized-mode .view-section,body.optimized-mode .container{scroll-behavior
       /* Basic first; cleanup is deliberately isolated so one broken effect cannot block the UI. */
       try{syncInterface(true);}catch(e){
         console.error('[Aurora] Interface fallback:',e);
-        document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox','aurora-interface-aria-blue');
+        document.body.classList.remove('aurora-interface-modern','aurora-interface-future','aurora-interface-chunk-loadbox','aurora-interface-aria-blue','aurora-interface-52hz');
         document.body.dataset.auroraInterfaceMode='basic';
       }
       try{stopDecorativeLoops();}catch(e){console.warn('[Aurora] Effects cleanup:',e);}
@@ -14486,6 +14487,167 @@ body.interbodylogin-aurora-signup #authViewRegister.active,body.interbodylogin-a
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
  document.addEventListener('visibilitychange',syncVideo);
  window.addEventListener('aurora:interbodylogin-mode-changed',()=>{refresh();});
+})();
+</script>
+
+
+<!-- Aurora 52Hz interface: moonlit ocean, a solitary whale, quiet waves and study navigation. -->
+<style id="aurora-interface-52hz-style">
+:root{--a52-ink:#e8f5ff;--a52-muted:#9fc3e4;--a52-blue:#62c7ff;--a52-deep:#06152c;--a52-card:rgba(6,28,56,.73);--a52-border:rgba(109,192,255,.25)}
+body.aurora-interface-52hz{background:#020a18!important;color:var(--a52-ink)!important;background-image:radial-gradient(ellipse at 74% 0%,rgba(35,119,201,.17),transparent 42%),linear-gradient(160deg,#020813 0%,#071b35 52%,#020a19 100%)!important;background-attachment:fixed!important;color-scheme:dark}
+body.aurora-interface-52hz .navbar{display:none!important}
+body.aurora-interface-52hz .view-section:not(#homeView){background-color:transparent!important;color:#e5f3ff!important}
+body.aurora-interface-52hz #studentLoginView .floating-shape{display:none!important}
+body.aurora-interface-52hz #studentLoginView::before{background:radial-gradient(ellipse at 78% 13%,rgba(55,155,235,.22),transparent 34%),radial-gradient(ellipse at 12% 86%,rgba(29,109,176,.18),transparent 42%),linear-gradient(150deg,#06172e,#0a2441 55%,#041226)!important;opacity:1!important;box-shadow:none!important}
+body.aurora-interface-52hz .student-card,body.aurora-interface-52hz .teacher-card,body.aurora-interface-52hz .teacher-panel,body.aurora-interface-52hz .role-card,body.aurora-interface-52hz .profile-card,body.aurora-interface-52hz .lesson-card,body.aurora-interface-52hz .panel,body.aurora-interface-52hz .section-card,body.aurora-interface-52hz .dashboard-card,body.aurora-interface-52hz .profile-box,body.aurora-interface-52hz .modal-box,body.aurora-interface-52hz .doc-modal-box,body.aurora-interface-52hz .item-detail-box{background:linear-gradient(145deg,rgba(8,34,65,.94),rgba(4,20,41,.96))!important;color:#e5f3ff!important;border:1px solid rgba(93,177,239,.25)!important;box-shadow:0 14px 48px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.035)!important}
+body.aurora-interface-52hz .student-card h1,body.aurora-interface-52hz .student-card h2,body.aurora-interface-52hz .teacher-card h1,body.aurora-interface-52hz .teacher-card h2,body.aurora-interface-52hz .section-title{color:#b9e3ff!important}
+body.aurora-interface-52hz input:not([type=checkbox]):not([type=radio]),body.aurora-interface-52hz select,body.aurora-interface-52hz textarea{background:rgba(1,14,30,.84)!important;color:#eaf6ff!important;border-color:rgba(110,186,238,.3)!important}
+body.aurora-interface-52hz input::placeholder,body.aurora-interface-52hz textarea::placeholder{color:rgba(190,221,247,.48)!important}
+body.aurora-interface-52hz .btn-primary,body.aurora-interface-52hz .btn-success{background:linear-gradient(135deg,#1c78bf,#16518e)!important;border-color:#51b8ff!important;color:#fff!important}
+body.aurora-interface-52hz .btn-info{background:#145079!important;border-color:#3d9bd3!important;color:#f2faff!important}
+body.aurora-interface-52hz .btn-warning{background:#805f9f!important;border-color:#bd9fe3!important;color:#fff!important}
+body.aurora-interface-52hz .view-section:not(#homeView) a:not(.btn){color:#8ed6ff}
+body.aurora-interface-52hz .view-section:not(#homeView) hr{border-color:rgba(100,175,230,.22)}
+body.aurora-interface-52hz #auroraFutureGlobalNav{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);color:#eaf6ff;padding:14px clamp(12px,3vw,42px) 40px}
+body.aurora-interface-52hz #auroraFutureGlobalNav:before{background:linear-gradient(180deg,rgba(2,10,24,.94),rgba(4,19,40,.79) 58%,rgba(4,19,40,0));backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);-webkit-mask-image:linear-gradient(180deg,#000 58%,transparent);mask-image:linear-gradient(180deg,#000 58%,transparent)}
+body.aurora-interface-52hz #auroraFutureGlobalNav .aurora-future-global-brand{color:#f0f8ff;text-shadow:0 0 22px rgba(77,183,255,.35);font-weight:750;letter-spacing:-.045em}
+body.aurora-interface-52hz #auroraFutureGlobalNav .aurora-future-global-brand span{color:#7ed5ff}
+body.aurora-interface-52hz #auroraFutureGlobalNav .aurora-future-language-mark{border-color:rgba(121,202,255,.28);background:rgba(7,30,57,.78);color:#92d9ff}
+body.aurora-interface-52hz #auroraFutureGlobalLanguage{background:rgba(4,24,47,.86);border-color:rgba(118,199,247,.3);color:#daefff}
+body.aurora-interface-52hz #auroraFutureGlobalNav .future-nav-btn{border:1px solid transparent;border-radius:999px;background:rgba(3,22,45,.38);color:#b6d5ef;transition:background .2s,color .2s,border-color .2s,transform .2s}
+body.aurora-interface-52hz #auroraFutureGlobalNav .future-nav-btn:hover{background:rgba(45,136,199,.2);border-color:rgba(95,188,246,.35);color:#fff;transform:translateY(-1px)}
+body.aurora-interface-52hz #auroraFutureGlobalNav .future-nav-btn.active{background:linear-gradient(135deg,#1769a8,#0d3c6f);border-color:rgba(111,205,255,.56);color:#fff;box-shadow:0 5px 22px rgba(0,109,198,.22)}
+body.aurora-interface-52hz #auroraFutureGlobalNav .future-nav-btn.future-supreme{background:linear-gradient(135deg,#3197e6,#175ab0);border-color:rgba(179,226,255,.45);color:white}
+body.aurora-interface-52hz #auroraFutureGlobalNav .future-auth-btn{background:rgba(4,23,45,.8);border:1px solid rgba(106,194,250,.3);color:#d8efff;border-radius:999px}
+body.aurora-interface-52hz #auroraFutureGlobalNav .future-auth-register,body.aurora-interface-52hz #auroraFutureGlobalNav .future-user-btn{background:linear-gradient(135deg,#1b75b8,#103f77);color:#fff;border-color:rgba(110,202,255,.48);border-radius:999px}
+#aurora52HzRoot{display:none;position:fixed;inset:0;z-index:2000;overflow:hidden;width:100vw;height:100svh;min-height:520px;background:#020b1b;color:#edf8ff;isolation:isolate;contain:layout paint style;}
+body.aurora-interface-52hz:not(.exam-active) #homeView.active>#aurora52HzRoot{display:block}
+body.aurora-interface-52hz:not(.exam-active) #homeView.active>:not(#aurora52HzRoot){display:none!important}
+#aurora52HzRoot .a52-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none}
+#aurora52HzRoot:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(2,10,25,.89) 0%,rgba(2,13,31,.70) 22%,rgba(2,15,37,.27) 44%,rgba(2,12,29,.03) 72%),linear-gradient(0deg,rgba(1,8,20,.75),transparent 37%,rgba(1,10,25,.12));}
+#aurora52HzRoot .a52-copy{position:absolute;z-index:2;left:clamp(22px,7.5vw,120px);top:clamp(135px,25vh,225px);width:min(465px,43vw);pointer-events:auto}
+#aurora52HzRoot .a52-kicker{display:flex;align-items:center;gap:10px;margin:0 0 22px;color:#8fd9ff;font:650 10px/1.45 "Segoe UI",Arial,sans-serif;letter-spacing:.26em;text-transform:uppercase}
+#aurora52HzRoot .a52-kicker:before{content:"";display:inline-block;width:35px;height:1px;background:linear-gradient(90deg,#55c5ff,rgba(85,197,255,.12))}
+#aurora52HzRoot h1{margin:0 0 19px;color:#eff8ff;font:400 clamp(40px,4.8vw,70px)/.99 "Iowan Old Style",Georgia,"Times New Roman",serif;letter-spacing:-.047em;text-wrap:balance;text-shadow:0 5px 30px rgba(0,0,0,.32)}
+#aurora52HzRoot h1 em{font-style:italic;color:#7dcfff;font-weight:400}
+#aurora52HzRoot .a52-lede{max-width:410px;margin:0;color:rgba(213,237,255,.82);font:400 clamp(14px,1.18vw,17px)/1.8 "Segoe UI",Arial,sans-serif}
+#aurora52HzRoot .a52-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+#aurora52HzRoot .a52-action{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 19px;border:1px solid rgba(114,204,255,.5);border-radius:999px;background:rgba(7,42,79,.68);color:#eff9ff;font:650 12px/1 "Segoe UI",Arial,sans-serif;letter-spacing:.015em;cursor:pointer;box-shadow:0 7px 24px rgba(0,0,0,.16),inset 0 1px rgba(255,255,255,.08);transition:transform .22s ease,background .22s ease,box-shadow .22s ease}
+#aurora52HzRoot .a52-action:hover{transform:translateY(-2px);background:rgba(23,98,155,.75);box-shadow:0 12px 28px rgba(15,143,232,.22)}
+#aurora52HzRoot .a52-action.primary{background:linear-gradient(110deg,#1465a7,#198dd0);border-color:rgba(171,230,255,.75);box-shadow:0 0 0 4px rgba(71,176,242,.07),0 9px 28px rgba(0,124,216,.25)}
+#aurora52HzRoot .a52-whale-note{position:absolute;z-index:2;right:clamp(22px,5.5vw,88px);top:clamp(235px,40vh,365px);width:112px;text-align:center;color:#a6dfff;font:500 10px/1.7 "Segoe UI",Arial,sans-serif;letter-spacing:.08em;text-shadow:0 2px 12px #001126;pointer-events:none}
+#aurora52HzRoot .a52-whale-note strong{display:block;font:400 28px/1.2 Georgia,serif;letter-spacing:.05em;color:#d9f2ff;text-shadow:0 0 18px rgba(88,198,255,.55)}
+#aurora52HzRoot .a52-whale-note .a52-wave-mark{display:block;margin:9px auto 8px;width:78px;height:18px;opacity:.83;background:linear-gradient(180deg,transparent 46%,rgba(109,208,255,.9) 47%,rgba(109,208,255,.9) 53%,transparent 54%);position:relative}
+#aurora52HzRoot .a52-whale-note .a52-wave-mark:after{content:"〰〰〰";position:absolute;inset:-8px 0 auto;color:#7cceff;font-size:22px;letter-spacing:-5px}
+#aurora52HzRoot .a52-bottom{position:absolute;z-index:3;left:clamp(22px,6.5vw,104px);right:clamp(22px,6.5vw,104px);bottom:clamp(22px,4vh,42px);display:grid;grid-template-columns:minmax(170px,.88fr) repeat(3,minmax(0,1fr));gap:10px;padding:10px;border:1px solid rgba(83,173,231,.3);border-radius:22px;background:linear-gradient(115deg,rgba(5,29,57,.83),rgba(3,19,41,.65));box-shadow:0 18px 50px rgba(0,0,0,.2),inset 0 1px rgba(220,246,255,.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#aurora52HzRoot .a52-frequency{display:flex;flex-direction:column;justify-content:center;gap:7px;padding:10px 18px;border-right:1px solid rgba(115,190,239,.2)}
+#aurora52HzRoot .a52-frequency strong{font:italic 28px/1 Georgia,serif;color:#87d7ff;letter-spacing:-.04em}
+#aurora52HzRoot .a52-frequency span{font:400 11px/1.45 "Segoe UI",Arial,sans-serif;color:#b4cee3}
+#aurora52HzRoot .a52-link-card{display:flex;align-items:center;gap:11px;min-width:0;text-align:left;padding:12px 13px;border:1px solid transparent;border-radius:15px;background:rgba(18,57,95,.42);color:#e8f6ff;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+#aurora52HzRoot .a52-link-card:hover{background:rgba(32,100,155,.34);border-color:rgba(100,198,255,.3);transform:translateY(-2px)}
+#aurora52HzRoot .a52-link-icon{display:grid;place-items:center;flex:none;width:34px;height:34px;border:1px solid rgba(103,193,255,.36);border-radius:12px;background:linear-gradient(145deg,rgba(53,147,218,.42),rgba(10,43,80,.72));color:#92dcff;font-size:17px}
+#aurora52HzRoot .a52-link-text{display:block;min-width:0;font:650 11px/1.4 "Segoe UI",Arial,sans-serif}
+#aurora52HzRoot .a52-link-text small{display:block;margin-top:4px;font-weight:400;color:#9dbbd4;font-size:10px;line-height:1.4}
+#aurora52HzRoot .a52-link-arrow{margin-left:auto;flex:none;color:#8dd8ff;font-size:17px}
+#aurora52HzRoot .a52-footnote{position:absolute;z-index:2;left:clamp(24px,6.5vw,104px);bottom:10px;color:rgba(163,202,231,.53);font:600 8px/1.4 "Segoe UI",Arial,sans-serif;letter-spacing:.23em;text-transform:uppercase;pointer-events:none}
+@media(max-width:850px){#aurora52HzRoot .a52-copy{top:clamp(125px,20vh,185px);width:min(500px,70vw)}#aurora52HzRoot h1{font-size:clamp(38px,7vw,58px)}#aurora52HzRoot .a52-whale-note{right:18px;top:48%;width:80px}#aurora52HzRoot .a52-bottom{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;bottom:18px;padding:7px}#aurora52HzRoot .a52-frequency{grid-column:1/-1;border-right:0;border-bottom:1px solid rgba(115,190,239,.2);padding:7px 9px;flex-direction:row;align-items:center;justify-content:space-between}#aurora52HzRoot .a52-frequency strong{font-size:21px}#aurora52HzRoot .a52-link-card{padding:9px 7px;flex-direction:column;align-items:flex-start;gap:7px}#aurora52HzRoot .a52-link-arrow{display:none}#aurora52HzRoot .a52-link-text{font-size:10px}#aurora52HzRoot .a52-link-text small{font-size:9px}}
+@media(max-width:560px){#aurora52HzRoot{min-height:600px}#aurora52HzRoot:before{background:linear-gradient(180deg,rgba(2,10,25,.68),rgba(2,13,31,.52) 40%,rgba(1,9,22,.84) 100%)}#aurora52HzRoot .a52-copy{left:22px;right:20px;top:clamp(122px,18vh,165px);width:auto;max-width:480px}#aurora52HzRoot .a52-kicker{font-size:9px;letter-spacing:.17em;margin-bottom:17px}#aurora52HzRoot h1{font-size:clamp(36px,9.3vw,52px);max-width:440px;margin-bottom:14px}#aurora52HzRoot .a52-lede{font-size:13px;line-height:1.65;max-width:340px}#aurora52HzRoot .a52-actions{margin-top:18px}#aurora52HzRoot .a52-action{min-height:40px;padding:0 15px;font-size:11px}#aurora52HzRoot .a52-whale-note{top:auto;right:18px;bottom:185px;width:74px}#aurora52HzRoot .a52-whale-note strong{font-size:23px}#aurora52HzRoot .a52-bottom{left:12px;right:12px;bottom:17px;border-radius:17px}#aurora52HzRoot .a52-link-icon{width:29px;height:29px;border-radius:10px}#aurora52HzRoot .a52-frequency span{font-size:10px}#aurora52HzRoot .a52-footnote{display:none}}
+@media(prefers-reduced-motion:reduce){#aurora52HzRoot *{scroll-behavior:auto!important;transition:none!important}}
+</style>
+<script id="aurora-52hz-ocean-runtime">
+(function(){
+'use strict';
+if(window.__Aurora52HzV1)return;window.__Aurora52HzV1=true;
+const $=id=>document.getElementById(id);
+let root=null,canvas=null,ctx=null,raf=0,running=false,lastPaint=0,lastTime=0,resizeObserver=null,viewObservers=[];
+const reduced=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+let W=0,H=0,DPR=1,t=0,mouse={x:0,y:0,px:0,py:0,seen:false,lastRipple:0};
+let particles=[],ripples=[],currents=[];
+const rand=(a,b)=>a+Math.random()*(b-a);
+function active(){const home=$('homeView');return !!(document.body&&document.body.classList.contains('aurora-interface-52hz')&&!document.body.classList.contains('optimized-mode')&&!document.body.classList.contains('exam-active')&&home&&home.classList.contains('active')&&!document.hidden);}
+function createRoot(){
+ const home=$('homeView');if(!home)return;
+ root=$('aurora52HzRoot');
+ if(!root){root=document.createElement('section');root.id='aurora52HzRoot';root.setAttribute('aria-label','Aurora 52Hz — cá voi đơn độc dưới ánh trăng');root.innerHTML='<canvas class="a52-canvas" id="aurora52HzCanvas" aria-hidden="true"></canvas>'+ 
+ '<div class="a52-copy"><p class="a52-kicker">52HZ · CÁ VOI CÔ ĐƠN GIỮA ĐẠI DƯƠNG</p><h1>Có những tâm hồn<br><em>sinh ra để lắng nghe.</em></h1><p class="a52-lede">Như chú cá voi 52Hz — một bản thể đặc biệt giữa đại dương bao la. Dù bơi một mình, hành trình vẫn có thể dẫn đến tri thức, sự thấu hiểu và những chân trời mới.</p><div class="a52-actions"><button type="button" class="a52-action primary" data-aurora-52hz-view="studentLoginView">Bắt đầu học <span aria-hidden="true">↗</span></button><button type="button" class="a52-action" data-aurora-52hz-view="guideView">Khám phá hướng dẫn <span aria-hidden="true">→</span></button></div></div>'+ 
+ '<aside class="a52-whale-note" aria-label="Thông điệp cá voi 52Hz"><strong>52Hz</strong><span class="a52-wave-mark" aria-hidden="true"></span><span>Bơi một mình,<br>vẫn hướng về ánh sáng.</span></aside>'+ 
+ '<div class="a52-bottom"><div class="a52-frequency"><strong>52Hz</strong><span>Kẻ lạc nhịp giữa đại dương<br>và vẫn tiếp tục cất tiếng.</span></div>'+ 
+ '<button type="button" class="a52-link-card" data-aurora-52hz-view="guideView"><span class="a52-link-icon" aria-hidden="true">⌘</span><span class="a52-link-text">Khám phá tri thức<small>Hướng dẫn và cách sử dụng Aurora</small></span><span class="a52-link-arrow" aria-hidden="true">→</span></button>'+ 
+ '<button type="button" class="a52-link-card" data-aurora-52hz-view="studentLoginView"><span class="a52-link-icon" aria-hidden="true">✧</span><span class="a52-link-text">Bắt đầu học<small>Bài thi, bài luyện và tài liệu</small></span><span class="a52-link-arrow" aria-hidden="true">→</span></button>'+ 
+ '<button type="button" class="a52-link-card" data-aurora-52hz-view="leaderboardView"><span class="a52-link-icon" aria-hidden="true">☆</span><span class="a52-link-text">Cùng tiến bộ<small>Bảng xếp hạng và thành tựu</small></span><span class="a52-link-arrow" aria-hidden="true">→</span></button></div>'+ 
+ '<div class="a52-footnote">TRI THỨC · TĨNH TÂM · TIẾN BỘ</div>';
+ home.appendChild(root);
+ root.querySelectorAll('[data-aurora-52hz-view]').forEach(btn=>btn.addEventListener('click',()=>{const destination=btn.getAttribute('data-aurora-52hz-view')||'';if(window.AuroraFutureSharedNavigation&&typeof window.AuroraFutureSharedNavigation.navigate==='function')window.AuroraFutureSharedNavigation.navigate(destination);else if(typeof window.switchView==='function')window.switchView(destination);}));
+ }
+ canvas=$('aurora52HzCanvas');if(canvas&&!ctx){try{ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});}catch(e){ctx=null;}}
+ if(root&&!root.__a52PointerBound){root.__a52PointerBound=true;root.addEventListener('pointermove',onPointerMove,{passive:true});root.addEventListener('pointerleave',()=>{mouse.seen=false;},{passive:true});}
+ if(window.ResizeObserver&&!resizeObserver&&root){resizeObserver=new ResizeObserver(resize);resizeObserver.observe(root);}
+ resize();
+}
+function resize(){if(!root||!canvas||!ctx)return;W=Math.max(1,root.clientWidth||innerWidth);H=Math.max(1,root.clientHeight||innerHeight);DPR=Math.min(1.35,window.devicePixelRatio||1);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);canvas.style.width=W+'px';canvas.style.height=H+'px';initParticles();drawScene(0,true);}
+function initParticles(){const count=Math.max(26,Math.min(70,Math.round(W*H/26000)));particles=Array.from({length:count},()=>({x:rand(0,W),y:rand(0,H),r:rand(.7,2.2),vy:rand(4,15),vx:rand(-3,4),phase:rand(0,6.28),a:rand(.12,.58),bubble:Math.random()<.28}));currents=Array.from({length:12},()=>({x:rand(-W,W),y:rand(H*.27,H*.95),len:rand(45,180),speed:rand(7,25),a:rand(.025,.12),phase:rand(0,6.28)}));}
+function path(ctx,commands){ctx.beginPath();for(const [type,...v] of commands){if(type==='M')ctx.moveTo(...v);else if(type==='L')ctx.lineTo(...v);else if(type==='C')ctx.bezierCurveTo(...v);else if(type==='Q')ctx.quadraticCurveTo(...v);else if(type==='Z')ctx.closePath();}}
+function drawWhale(c,cx,cy,scale,time){
+ c.save();c.translate(cx+Math.sin(time*.19)*13,cy+Math.sin(time*.48)*7);c.rotate(Math.sin(time*.27)*.018);c.scale(scale,scale);
+ const body=[['M',-350,4],['C',-375,-20,-404,-48,-438,-69],['C',-433,-38,-415,-8,-391,11],['C',-418,28,-435,53,-445,78],['C',-410,59,-374,43,-337,41],['C',-288,8,-240,-22,-181,-49],['C',-80,-96,22,-146,123,-166],['C',220,-186,295,-172,341,-139],['C',371,-118,385,-94,411,-81],['C',431,-71,450,-72,465,-60],['C',444,-42,416,-35,389,-44],['C',359,12,308,56,249,87],['C',190,118,111,145,39,130],['C',-14,119,-55,92,-82,62],['C',-113,89,-149,143,-196,172],['C',-193,119,-169,72,-132,43],['C',-207,56,-279,57,-336,43],['C',-343,27,-350,15,-350,4],['Z']];
+ c.save();c.shadowColor='rgba(24,152,255,.54)';c.shadowBlur=28;
+ path(c,body);const skin=c.createLinearGradient(-180,-190,210,190);skin.addColorStop(0,'#0a3261');skin.addColorStop(.32,'#0a5a9b');skin.addColorStop(.54,'#146fb4');skin.addColorStop(.73,'#b8eaff');skin.addColorStop(.9,'#357fb6');skin.addColorStop(1,'#0b2e5a');c.fillStyle=skin;c.fill();c.restore();
+ path(c,body);c.strokeStyle='rgba(154,226,255,.92)';c.lineWidth=1.45;c.shadowColor='rgba(57,184,255,.9)';c.shadowBlur=13;c.stroke();c.shadowBlur=0;
+ // Pale lower jaw / throat plate is part of the whale silhouette, not a floating decoration.
+ c.save();c.beginPath();c.moveTo(155,-77);c.bezierCurveTo(220,-92,285,-110,340,-119);c.bezierCurveTo(360,-81,378,-57,390,-45);c.bezierCurveTo(358,17,309,55,248,86);c.bezierCurveTo(189,115,110,139,40,126);c.bezierCurveTo(72,93,95,40,111,-7);c.bezierCurveTo(126,-38,140,-61,155,-77);c.closePath();const belly=c.createLinearGradient(140,-70,200,145);belly.addColorStop(0,'rgba(214,246,255,.85)');belly.addColorStop(.5,'rgba(107,199,244,.62)');belly.addColorStop(1,'rgba(20,90,151,.18)');c.fillStyle=belly;c.fill();c.restore();
+ // Flipper folds and ventral grooves flow with the body.
+ c.save();c.strokeStyle='rgba(177,231,255,.56)';c.lineWidth=2;c.lineCap='round';
+ for(let i=0;i<12;i++){const x=164+i*12;c.beginPath();c.moveTo(x,-66+i*1.8);c.bezierCurveTo(x+10,-21+i*2,x+8,28+i*2,x-14,72+i*1.7);c.stroke();}
+ const shine=c.createLinearGradient(-250,-30,250,40);shine.addColorStop(0,'rgba(115,211,255,0)');shine.addColorStop(.32,'rgba(126,219,255,.55)');shine.addColorStop(.55,'rgba(238,251,255,.93)');shine.addColorStop(.77,'rgba(100,208,255,.42)');shine.addColorStop(1,'rgba(100,208,255,0)');
+ c.lineWidth=3;c.strokeStyle=shine;c.beginPath();c.moveTo(-330,29);c.bezierCurveTo(-222,12,-135,-25,-38,-67);c.bezierCurveTo(76,-120,215,-167,319,-144);c.stroke();
+ // Eye and a tiny highlight
+ c.fillStyle='#02172c';c.beginPath();c.arc(337,-101,5.2,0,Math.PI*2);c.fill();c.strokeStyle='#c7f1ff';c.lineWidth=1.5;c.beginPath();c.arc(337,-101,7.5,0,Math.PI*2);c.stroke();c.fillStyle='#e8fbff';c.beginPath();c.arc(339,-103,1.6,0,Math.PI*2);c.fill();
+ // Animated light ribbons track the body curvature, restrained enough to read as bioluminescence.
+ c.globalAlpha=.36+Math.sin(time*1.35)*.12;c.lineWidth=2.2;c.strokeStyle='#8ae0ff';c.beginPath();c.moveTo(-315,32);c.bezierCurveTo(-215,20,-159,-18,-74,-53);c.bezierCurveTo(42,-103,175,-162,300,-153);c.stroke();
+ c.globalAlpha=.25+Math.sin(time*.9+1.7)*.11;c.lineWidth=1.2;c.beginPath();c.moveTo(-365,4);c.bezierCurveTo(-327,3,-290,11,-260,3);c.stroke();c.restore();
+ // A broad, translucent pectoral fin sweeps back gently.
+ c.save();c.globalAlpha=.82;c.beginPath();c.moveTo(40,51);c.bezierCurveTo(8,83,-5,132,-35,197);c.bezierCurveTo(28,184,82,146,117,96);c.bezierCurveTo(105,72,77,57,40,51);c.closePath();const fin=c.createLinearGradient(-15,65,95,190);fin.addColorStop(0,'rgba(128,216,255,.75)');fin.addColorStop(.48,'rgba(35,127,196,.75)');fin.addColorStop(1,'rgba(4,45,87,.18)');c.fillStyle=fin;c.fill();c.strokeStyle='rgba(156,231,255,.74)';c.lineWidth=1.4;c.stroke();for(let k=0;k<5;k++){c.beginPath();c.moveTo(40+k*8,75+k*2);c.quadraticCurveTo(46+k*6,120+k*7,16+k*17,171-k*4);c.strokeStyle='rgba(165,230,255,.22)';c.lineWidth=1;c.stroke();}c.restore();
+ // Tail lobe accent and tiny water beads
+ c.save();c.strokeStyle='rgba(102,201,255,.82)';c.lineWidth=1.4;c.beginPath();c.moveTo(-402,-31);c.quadraticCurveTo(-425,-75,-438,-69);c.moveTo(-404,31);c.quadraticCurveTo(-438,43,-445,78);c.stroke();
+ for(let i=0;i<22;i++){const x=-310+((i*71)%620),y=-100+((i*47)%175);c.globalAlpha=.1+((i%4)*.05);c.fillStyle='#bbf1ff';c.beginPath();c.arc(x,y,1+(i%3)*.55,0,Math.PI*2);c.fill();}c.restore();c.restore();
+}
+function drawScene(time,staticOnly){if(!ctx||!canvas)return;const c=ctx;c.setTransform(DPR,0,0,DPR,0,0);const w=W,h=H,sec=time;
+ const bg=c.createLinearGradient(0,0,w,h);bg.addColorStop(0,'#020916');bg.addColorStop(.35,'#052448');bg.addColorStop(.68,'#031a34');bg.addColorStop(1,'#010713');c.fillStyle=bg;c.fillRect(0,0,w,h);
+ const glow=c.createRadialGradient(w*.73,h*.2,3,w*.73,h*.2,Math.max(w,h)*.67);glow.addColorStop(0,'rgba(53,160,255,.28)');glow.addColorStop(.33,'rgba(18,99,182,.13)');glow.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=glow;c.fillRect(0,0,w,h);
+ // Sparse stars and suspended bubbles.
+ for(const p of particles){const pulse=.55+.45*Math.sin(sec*.9+p.phase);c.save();c.globalAlpha=p.a*pulse;c.strokeStyle=p.bubble?'rgba(121,211,255,.62)':'rgba(189,231,255,.8)';c.fillStyle='rgba(141,210,255,.38)';if(p.bubble){c.lineWidth=.8;c.beginPath();c.arc(p.x,p.y,p.r*2.1,0,Math.PI*2);c.stroke();c.beginPath();c.arc(p.x-p.r*.6,p.y-p.r*.6,Math.max(.5,p.r*.35),0,Math.PI*2);c.fill();if(!staticOnly){p.y-=p.vy*.25;p.x+=p.vx*.25;if(p.y< -12){p.y=h+12;p.x=rand(0,w);}}}else{c.beginPath();c.arc(p.x,p.y,p.r,0,Math.PI*2);c.fill();if(!staticOnly){p.y+=p.vy*.07;if(p.y>h+4){p.y=-4;p.x=rand(0,w);}}}c.restore();}
+ // Full moon with glow, textured lunar seas and a bright water path.
+ const mx=w*.745,my=h*.16,mr=Math.min(62,Math.max(35,Math.min(w,h)*.073));const moonGlow=c.createRadialGradient(mx,my,mr*.45,mx,my,mr*3.7);moonGlow.addColorStop(0,'rgba(205,242,255,.72)');moonGlow.addColorStop(.28,'rgba(88,187,255,.23)');moonGlow.addColorStop(1,'rgba(52,154,255,0)');c.fillStyle=moonGlow;c.fillRect(mx-mr*4,my-mr*4,mr*8,mr*8);
+ const moon=c.createRadialGradient(mx-mr*.26,my-mr*.3,mr*.08,mx,my,mr);moon.addColorStop(0,'#ffffff');moon.addColorStop(.42,'#dff5ff');moon.addColorStop(.8,'#a9dcfb');moon.addColorStop(1,'#6aaedc');c.fillStyle=moon;c.beginPath();c.arc(mx,my,mr,0,Math.PI*2);c.fill();c.save();c.beginPath();c.arc(mx,my,mr*.95,0,Math.PI*2);c.clip();for(let j=0;j<18;j++){const ox=Math.sin(j*12.71)*mr*.65,oy=Math.cos(j*6.19)*mr*.63,r=mr*(.035+(j%4)*.022);c.fillStyle=`rgba(93,151,192,${.08+(j%3)*.035})`;c.beginPath();c.arc(mx+ox,my+oy,r,0,Math.PI*2);c.fill();}c.restore();
+ // Slanted moon shafts fade into the ocean.
+ for(let i=-4;i<=4;i++){const rx=mx+i*mr*.33,spread=mr*(.05+Math.abs(i)*.055);const g=c.createLinearGradient(rx,my+mr,rx+spread*4,h*.82);g.addColorStop(0,`rgba(100,193,255,${.105-Math.abs(i)*.012})`);g.addColorStop(1,'rgba(35,139,222,0)');c.fillStyle=g;c.beginPath();c.moveTo(rx-spread,my+mr*.8);c.lineTo(rx+spread,my+mr*.8);c.lineTo(rx+spread*6,h*.84);c.lineTo(rx-spread*2,h*.84);c.closePath();c.fill();}
+ // Moving sea surface: broad rolling curves with layered specular edges.
+ const surface=h*.225;for(let layer=0;layer<9;layer++){const y=surface+layer*5,phase=sec*(.45+layer*.035)+layer*.91;c.beginPath();for(let x=-20;x<=w+20;x+=8){const yy=y+Math.sin(x/(w*.09||1)+phase)*(.8+layer*.35)+Math.sin(x/(w*.035||1)-phase*.55)*(.4+layer*.14);if(x===-20)c.moveTo(x,yy);else c.lineTo(x,yy);}c.strokeStyle=layer<2?`rgba(160,224,255,${.27-layer*.07})`:`rgba(73,164,227,${.13-layer*.009})`;c.lineWidth=layer<2?1.65:.8;c.stroke();}
+ // Underwater rays and currents drift side-to-side.
+ c.save();c.globalCompositeOperation='screen';for(const current of currents){const x=((current.x+sec*current.speed)%(w+current.len*2))-current.len;c.globalAlpha=current.a;c.strokeStyle='#45baff';c.lineWidth=1;c.beginPath();c.moveTo(x,current.y);c.bezierCurveTo(x+current.len*.25,current.y-4,x+current.len*.68,current.y+3,x+current.len,current.y-1);c.stroke();}c.restore();
+ // The whale stays beneath the moon, alone in the water, and swims with gentle buoyancy.
+ const narrow=w<560,tablet=w<850;const whaleScale=narrow?Math.min(w*.72/840,h*.30/390,.45):tablet?Math.min(w*.48/840,h*.34/390,.52):Math.min(w*.52/840,h*.48/390,.95);const whaleX=w*(narrow?.67:tablet?.68:.64),whaleY=h*(narrow?.63:tablet?.60:.565);drawWhale(c,whaleX,whaleY,whaleScale,sec);
+ // Mouse-triggered, horizontal ripples stay strictly below the moving waterline.
+ c.save();c.beginPath();c.moveTo(0,surface+9);for(let x=0;x<=w;x+=12)c.lineTo(x,surface+9+Math.sin(x/(w*.08||1)+sec*.55)*2.5);c.lineTo(w,h);c.lineTo(0,h);c.closePath();c.clip();
+ if(!staticOnly){ripples=ripples.filter(r=>sec-r.born<2.1);}
+ for(const r of ripples){const age=staticOnly?0:sec-r.born,progress=age/2.1,alpha=Math.max(0,1-progress);for(let k=0;k<3;k++){const rx=7+progress*78+k*14,ry=2.1+progress*5+k*1.3;c.beginPath();c.ellipse(r.x+r.dir*age*21,r.y,rx,ry,0,0,Math.PI*2);c.strokeStyle=`rgba(120,214,255,${alpha*.42})`;c.lineWidth=1.1;c.stroke();}}
+ // Scattered suspended particles and reflected horizontal streaks.
+ for(let i=0;i<22;i++){const x=((i*97+sec*(i%2?18:-11))%(w+30)+w+30)%(w+30)-15,y=surface+70+((i*53+Math.sin(sec+i)*24)%(Math.max(90,h-surface-90)));c.globalAlpha=.08+(i%4)*.025;c.fillStyle='#77d4ff';c.fillRect(x,y,9+(i%5)*4,.7);}
+ c.restore();
+ // Surface glints move in shallow horizontal directions, not as unrestricted rings.
+ for(let i=0;i<13;i++){const x=((i*139+sec*(12+i%3*4))%(w+70))-35;const y=surface-5+Math.sin(i*2+sec*.6)*4;c.globalAlpha=.15+((i%4)*.045);c.fillStyle='#ddf8ff';c.fillRect(x,y,20+(i%3)*18,1.2);}c.globalAlpha=1;
+}
+function onPointerMove(e){if(!root)return;const rect=root.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top,now=performance.now();const dx=x-mouse.x;mouse.px=mouse.x;mouse.py=mouse.y;mouse.x=x;mouse.y=y;mouse.seen=true;if(y>H*.235&&now-mouse.lastRipple>130&&Math.abs(dx)>4){ripples.push({x,y,dir:dx>=0?1:-1,born:t});mouse.lastRipple=now;if(ripples.length>18)ripples.splice(0,ripples.length-18);}}
+function frame(now){raf=0;if(!active()){stop();if(root&&ctx){t=0;drawScene(0,true);}return;}if(now-lastPaint<33){raf=requestAnimationFrame(frame);return;}const dt=lastTime?Math.min(.06,(now-lastTime)/1000):.033;lastTime=now;lastPaint=now;t+=dt;drawScene(t,false);raf=requestAnimationFrame(frame);}
+function start(){if(running||!ctx||reduced||!active())return;running=true;lastTime=0;lastPaint=0;raf=requestAnimationFrame(frame);}
+function stop(){running=false;if(raf){cancelAnimationFrame(raf);raf=0;}lastTime=0;}
+function refresh(){createRoot();if(!root||!ctx)return;if(active()){if(reduced)drawScene(0,true);else start();}else{stop();drawScene(0,true);}try{window.AuroraFutureSharedNavigation&&window.AuroraFutureSharedNavigation.refresh();}catch(e){}}
+window.addEventListener('resize',()=>{resize();refresh();},{passive:true});document.addEventListener('visibilitychange',refresh);
+const bodyObserver=new MutationObserver(refresh);bodyObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
+document.querySelectorAll('.view-section').forEach(el=>{const ob=new MutationObserver(refresh);ob.observe(el,{attributes:true,attributeFilter:['class']});viewObservers.push(ob);});
+window.addEventListener('aurora:interface-mode-changed',refresh);window.addEventListener('aurora:performance-mode-changed',refresh);
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
+window.Aurora52Hz={refresh,pause:()=>{stop();if(ctx)drawScene(0,true);},destroy:()=>{stop();if(resizeObserver)resizeObserver.disconnect();bodyObserver.disconnect();viewObservers.forEach(o=>o.disconnect());}};
 })();
 </script>
 
