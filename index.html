@@ -4,1507 +4,2050 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION - Nguyễn Công PC</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts Inter & Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     }
 
     body {
       background-color: #f3f4f6;
-      color: #222;
-      font-size: 14px;
+      color: #1f2937;
+      margin: 0;
+      padding: 0;
       overflow-x: hidden;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
-
-    ul, ol {
-      list-style: none;
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
     }
-
-    .container {
-      max-width: 1220px;
-      margin: 0 auto;
-      padding: 0 12px;
-    }
-
-    .d-flex { display: flex; }
-    .align-items-center { align-items: center; }
-    .justify-content-between { justify-content: space-between; }
-    .justify-content-center { justify-content: center; }
-    .flex-column { flex-direction: column; }
-    .flex-wrap { flex-wrap: wrap; }
-    .flex-1 { flex: 1; }
-    .gap-4 { gap: 4px; }
-    .gap-6 { gap: 6px; }
-    .gap-8 { gap: 8px; }
-    .gap-10 { gap: 10px; }
-    .gap-12 { gap: 12px; }
-    .mt-12 { margin-top: 12px; }
-    .mb-10 { margin-bottom: 10px; }
-    .font-weight-500 { font-weight: 500; }
-    .font-weight-600 { font-weight: 600; }
-    .font-weight-700 { font-weight: 700; }
-    .position-relative { position: relative; }
-
-    /* HEADER NGUYENCONGPC */
-    .header-top-banner {
-      background: #0046b0;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .header-top-banner img {
-      max-width: 100%;
-      height: 48px;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .header-middle {
+    ::-webkit-scrollbar-thumb {
       background: #0054d1;
-      color: #fff;
-      padding: 12px 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-    }
-
-    .logo-header {
-      height: 38px;
-      width: auto;
-      cursor: pointer;
-    }
-
-    .icon-map {
-      font-size: 15px;
-      color: #fff;
-      border: 1px solid #fff;
-      border-radius: 50%;
-      width: 33px;
-      height: 33px;
-      line-height: 31px;
-      text-align: center;
-      margin: 0 15px;
-      display: inline-block;
-    }
-
-    .header-search-group {
-      flex: 1;
-      max-width: 430px;
-      margin: 0 15px;
-    }
-
-    .header-search-group form {
-      display: flex;
-      background: #fff;
-      border-radius: 24px;
-      overflow: hidden;
-      padding: 3px 14px;
-      align-items: center;
-    }
-
-    .header-search-group input {
-      border: none;
-      outline: none;
-      width: 100%;
-      padding: 7px 6px;
-      font-size: 13.5px;
-      color: #222;
-    }
-
-    .search-btn-header {
-      border: none;
-      background: transparent;
-      color: #0054d1;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .box-tabs-header {
-      gap: 20px;
-    }
-
-    .item-tab-header {
-      color: #fff;
-      font-size: 12px;
-      cursor: pointer;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .icon-item-tab {
-      font-size: 18px;
-      height: 26px;
-      position: relative;
-    }
-
-    .cart-count {
-      position: absolute;
-      top: -6px;
-      right: -10px;
-      background: #ff2a2a;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
-
-    /* HOVER TOOLTIP GIỎ HÀNG */
-    #js-header-cart:hover .cart-ttip {
-      display: block;
-    }
-
-    .cart-ttip {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      width: 340px;
-      background: #fff;
-      color: #222;
-      border-radius: 8px;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
-      padding: 14px;
-      z-index: 1200;
-      margin-top: 8px;
-    }
-
-    .compare-item img {
-      width: 64px;
-      height: 64px;
-      object-fit: contain;
-      border: 1px solid #eee;
-      border-radius: 6px;
-    }
-
-    .name-compare-item {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: #222;
-      display: block;
-      text-align: left;
-    }
-
-    .price-compare {
-      color: #e60023;
-    }
-
-    .cart-ttip-price {
-      border-top: 1px solid #eee;
-      margin-top: 10px;
-      padding-top: 10px;
-      font-size: 13px;
-    }
-
-    #js-header-cart-total-price {
-      color: #e60023;
-      font-size: 15px;
-    }
-
-    .cart-ttip-price-button {
-      margin-top: 10px;
-      background: #d91b24;
-      color: #fff;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    /* HEADER BOTTOM MENU */
-    .header-bottom {
-      background: #0046b0;
-      color: #fff;
-      padding: 8px 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.14);
-    }
-
-    .global-menu-container .group-title {
-      background: #fff;
-      color: #0046b0;
-      font-weight: 700;
-      padding: 7px 14px;
-      border-radius: 6px;
-      font-size: 13px;
-      text-transform: uppercase;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .list-category-header {
-      flex: 1;
-      margin-left: 20px;
-    }
-
-    .item-category-header > a {
-      color: #fff;
-      font-size: 13.5px;
-      font-weight: 500;
-      padding: 5px 8px;
-    }
-
-    /* BREADCRUMB */
-    .box-breadcrumb-global {
-      padding: 12px 0 4px;
-    }
-
-    .global-breadcrumb ol {
-      gap: 8px;
-      font-size: 13px;
-      color: #555;
-    }
-
-    .global-breadcrumb a:hover {
-      color: #0054d1;
-    }
-
-    .gach-cheo {
-      font-size: 11px;
-      margin: 0 4px;
-      color: #888;
-    }
-
-    /* FIXED LEFT / RIGHT BANNERS */
-    .fixed_banner .fixed-left,
-    .fixed_banner .fixed-right {
-      position: fixed;
-      top: 145px;
-      width: 135px;
-      z-index: 80;
-    }
-
-    .fixed_banner .fixed-left {
-      left: calc((100vw - 1220px) / 2 - 148px);
-    }
-
-    .fixed_banner .fixed-right {
-      right: calc((100vw - 1220px) / 2 - 148px);
-    }
-
-    .fixed_banner img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-    }
-
-    @media (max-width: 1520px) {
-      .fixed_banner { display: none; }
-    }
-
-    /* VIEW SWITCHING */
-    .page-view {
-      display: none;
-    }
-
-    .page-view.active {
-      display: block;
-    }
-
-    /* PRODUCT DETAIL PAGE */
-    .page-product-detail {
-      background: #fff;
-      border-radius: 10px;
-      padding: 22px;
-      margin-top: 10px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-    }
-
-    .box-content-product-detail {
-      display: grid;
-      grid-template-columns: 1.18fr 1fr;
-      gap: 28px;
-    }
-
-    .product-images-show {
-      border: 1px solid #f0f0f0;
-      border-radius: 10px;
-      padding: 14px;
-      position: relative;
-      background: #fff;
-    }
-
-    .main-gallery-frame {
-      width: 100%;
-      height: 390px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .main-gallery-frame img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    .gallery-nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(240, 242, 245, 0.9);
-      border: 1px solid #ddd;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #444;
-      font-size: 15px;
-    }
-
-    .gallery-nav-btn.prev { left: 10px; }
-    .gallery-nav-btn.next { right: 10px; }
-
-    .thumb-strip {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      justify-content: center;
-    }
-
-    .thumb-item {
-      width: 76px;
-      height: 58px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-    }
-
-    .thumb-item.active {
-      border-color: #0054d1;
-    }
-
-    .thumb-item img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    /* THÔNG SỐ NHANH & CHÍNH SÁCH */
-    .box-thongso {
-      margin-top: 18px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 14px;
-    }
-
-    .specs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .spec-item {
-      background: #f8fafc;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 13px;
-    }
-
-    .spec-item .label {
-      color: #64748b;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .spec-item .value {
-      font-weight: 700;
-      color: #111;
-    }
-
-    .box-chinhsach {
-      margin-top: 16px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 14px;
-    }
-
-    .list-chinhsach {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .item-chinhsach {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-    }
-
-    .item-chinhsach img {
-      width: 28px;
-      height: 28px;
-      object-fit: contain;
-    }
-
-    .pro-customer-bought {
-      margin: 14px 0;
-      padding: 10px 14px;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13.5px;
-    }
-
-    .pro-customer-bought .not-time {
-      color: #16a34a;
-      font-size: 12.5px;
-    }
-
-    /* SẢN PHẨM LIÊN QUAN */
-    .related-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .related-card {
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 10px;
-      background: #fff;
-      font-size: 12.5px;
-    }
-
-    .related-card img {
-      width: 100%;
-      height: 110px;
-      object-fit: contain;
-      margin-bottom: 8px;
-    }
-
-    .related-card h3 {
-      font-size: 12px;
-      line-height: 1.35;
-      height: 33px;
-      overflow: hidden;
-      margin-bottom: 6px;
-    }
-
-    .related-price {
-      color: #e60023;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    /* BẢNG THÔNG SỐ KỸ THUẬT */
-    .spec-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 13px;
-    }
-
-    .spec-table td {
-      border: 1px solid #e5e7eb;
-      padding: 8px 12px;
-    }
-
-    .spec-table tr:nth-child(odd) {
-      background: #f9fafb;
-    }
-
-    .spec-table td:first-child {
-      width: 34%;
-      font-weight: 600;
-      color: #334155;
-    }
-
-    /* RIGHT COLUMN: INFO & BUY */
-    .product-name {
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.38;
-      color: #111;
-      margin-bottom: 12px;
-    }
-
-    .list-basic-product-info {
-      font-size: 13px;
-      color: #555;
-      padding-bottom: 10px;
-    }
-
-    .color-primary { color: #0054d1; font-weight: 600; }
-    .color-yellow { color: #f59e0b; }
-    .color-green { color: #16a34a; font-weight: 600; }
-
-    .box-group-price {
-      margin: 16px 0;
-      padding: 16px 20px;
-      border-radius: 10px;
-      border: 1px solid #dbeafe;
-      background: #f8fbff;
-    }
-
-    .info-group-price {
-      gap: 24px;
-    }
-
-    .main-price {
-      font-size: 28px;
-      font-weight: 800;
-      color: #e60023;
-    }
-
-    .price-right {
-      gap: 14px;
-      border-left: 1px solid #cbd5e1;
-      padding-left: 20px;
-      font-size: 13px;
-      color: #555;
-    }
-
-    .price-tragop {
-      font-size: 15px;
-      color: #111;
-    }
-
-    /* BOX KHUYẾN MẠI */
-    .box-offer-detail {
-      border: 1px solid #d91b24;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .title-offer-detail {
-      background: #d91b24;
-      color: #fff;
-      font-weight: 700;
-      font-size: 14px;
-      padding: 10px 16px;
-    }
-
-    .list-info-offter {
-      padding: 14px 16px;
-      line-height: 1.7;
-      font-size: 13.5px;
-    }
-
-    /* SHOWROOM BOX */
-    .store-status-news {
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 14px;
-      background: #f8fafc;
-      margin-bottom: 16px;
-    }
-
-    .title-store {
-      gap: 8px;
-      font-weight: 700;
-      color: #0054d1;
-      margin-bottom: 10px;
-    }
-
-    .title-store img {
-      width: 22px;
-      height: 22px;
-    }
-
-    .list-showroom-detail a {
-      display: block;
-      font-size: 13px;
-      color: #333;
-      margin: 5px 0;
-    }
-
-    .list-showroom-detail a:hover {
-      color: #0054d1;
-    }
-
-    /* 3 NÚT MUA HÀNG CHÍNH HÃNG */
-    .detail-buy {
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn-buyInstall {
-      flex: 1;
-      border: 1.5px solid #0054d1;
-      color: #0054d1;
-      background: #fff;
-      height: 52px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .detail-buy-now {
-      flex: 1.4;
-      background: #d91b24;
-      color: #fff;
-      height: 52px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .detail-buy-now:hover {
-      background: #b8141c;
-    }
-
-    .addCart {
-      width: 110px;
-      height: 52px;
-      border: 1.5px solid #d91b24;
-      color: #d91b24;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .addCart img {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-    }
-
-    /* ==================== TRANG GIỎ HÀNG (/cart) ==================== */
-    .cart-page-container {
-      max-width: 670px;
-      margin: 14px auto 40px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-    }
-
-    .cart-header-strip {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 18px;
-      background: #fafafa;
-      border-bottom: 1px solid #eee;
-      font-size: 13px;
-      color: #555;
-    }
-
-    .cart-product-block {
-      padding: 16px 18px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .cart-product-line {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .cart-product-line img {
-      width: 92px;
-      height: 68px;
-      object-fit: contain;
-      border: 1px solid #eee;
-      border-radius: 6px;
-      padding: 3px;
-    }
-
-    .qty-box {
-      display: flex;
-      border: 1px solid #d0d7de;
       border-radius: 4px;
-      overflow: hidden;
     }
 
-    .qty-box button {
-      width: 26px;
-      height: 26px;
-      border: none;
-      background: #f8fafc;
-      cursor: pointer;
-      font-weight: 700;
+    /* NguyenCongPC Theme Colors */
+    .nc-bg-primary {
+      background-color: #0054d1;
     }
-
-    .qty-box input {
-      width: 32px;
-      height: 26px;
-      text-align: center;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
+    .nc-bg-secondary {
+      background-color: #0045b0;
     }
-
-    .cart-form-body {
-      padding: 18px;
-    }
-
-    .cart-sec-title {
-      font-size: 13.5px;
-      font-weight: 700;
+    .nc-text-primary {
       color: #0054d1;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+    }
+    .nc-price-red {
+      color: #e60023;
     }
 
-    .f-group { margin-bottom: 10px; }
-    .f-row-2 {
+    /* Category Dropdown Hover */
+    .cat-dropdown-trigger:hover .cat-dropdown-menu {
+      display: block;
+    }
+    .cat-item-row:hover .cat-sub-panel {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 10px;
     }
 
-    .f-input, .f-select, .f-textarea {
+    /* Header Cart Tooltip Hover */
+    #js-header-cart:hover #js-cart-tooltip {
+      display: block;
+    }
+
+    /* Nav Item Dropdown */
+    .nav-cat-li:hover .nav-cat-child {
+      display: flex;
+    }
+
+    /* Side Fixed Banners */
+    .fixed-side-banner {
+      position: fixed;
+      top: 165px;
+      width: 132px;
+      z-index: 30;
+      transition: top 0.25s ease;
+    }
+    .fixed-side-banner.left {
+      left: max(8px, calc((100vw - 1220px) / 2 - 142px));
+    }
+    .fixed-side-banner.right {
+      right: max(8px, calc((100vw - 1220px) / 2 - 142px));
+    }
+    @media (max-width: 1480px) {
+      .fixed-side-banner.product-mode {
+        display: none;
+      }
+    }
+
+    /* Light-blue input style matching screenshot */
+    .nc-cart-input {
       width: 100%;
-      padding: 9px 12px;
-      border: 1px solid #cbd5e1;
-      background: #eef4ff;
-      border-radius: 5px;
-      font-size: 13px;
-      color: #111;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      background-color: #e8f0fe;
+      border-radius: 6px;
+      font-size: 13.5px;
+      color: #111827;
+      transition: all 0.15s ease;
       outline: none;
     }
-
-    .f-select, .f-textarea {
-      background: #fff;
-    }
-
-    .f-textarea {
-      min-height: 68px;
-      resize: vertical;
-    }
-
-    /* PHƯƠNG THỨC THANH TOÁN */
-    .pay-choice-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .pay-choice-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13.5px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    .sub-pay-box {
-      display: none;
-      border: 1px solid #bfdbfe;
-      background: #f8fbff;
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 16px;
-    }
-
-    .sub-pay-box.show {
-      display: block;
-    }
-
-    .sub-pay-tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .sub-pay-tab {
-      border: 1.5px solid #cbd5e1;
-      background: #fff;
-      border-radius: 6px;
-      padding: 10px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .sub-pay-tab.active {
+    .nc-cart-input:focus {
       border-color: #0054d1;
-      background: #eff6ff;
-      color: #0054d1;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 84, 209, 0.12);
     }
 
-    .sub-pay-pane {
-      display: none;
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 14px;
+    /* Animations */
+    @keyframes popScale {
+      0% { transform: scale(0.88); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popScale 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .sub-pay-pane.active {
-      display: block;
+    /* Spec table alternating rows */
+    .spec-table tr:nth-child(odd) {
+      background-color: #f8fafc;
     }
-
-    .vietqr-box {
-      text-align: center;
-    }
-
-    .vietqr-card {
-      width: 245px;
-      margin: 0 auto 12px;
-      padding: 12px;
-      background: #fff;
+    .spec-table td {
+      padding: 10px 14px;
       border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .vietqr-info {
-      text-align: left;
-      background: #f1f5f9;
-      padding: 12px 14px;
-      border-radius: 6px;
-      border-left: 4px solid #0054d1;
       font-size: 13.5px;
-      line-height: 1.75;
     }
-
-    .btn-red-submit {
-      width: 100%;
-      background: #d91b24;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 13px;
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .btn-orange-submit {
-      width: 100%;
-      background: #f59e0b;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-
-    /* ==================== TRANG XEM LẠI ĐƠN HÀNG ==================== */
-    .order-review-wrapper {
-      max-width: 720px;
-      margin: 24px auto 50px;
-      background: #fff;
-      border-radius: 10px;
-      padding: 26px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    }
-
-    .order-top-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 2px solid #f1f5f9;
-      margin-bottom: 18px;
-    }
-
-    .order-random-badge {
-      background: #eff6ff;
-      color: #0054d1;
-      font-weight: 800;
-      font-size: 16px;
-      padding: 6px 14px;
-      border-radius: 6px;
-      border: 1px solid #bfdbfe;
-    }
-
-    .order-item-showcase {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 20px;
-    }
-
-    .order-item-showcase img {
-      width: 110px;
-      height: 80px;
-      object-fit: contain;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 6px;
-      padding: 4px;
-      flex-shrink: 0;
-    }
-
-    .order-item-showcase .order-prod-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #111;
-      line-height: 1.45;
-    }
-
-    .order-detail-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .order-detail-table tr {
-      border-bottom: 1px solid #f1f5f9;
-    }
-
-    .order-detail-table td {
-      padding: 12px 6px;
-      font-size: 14px;
-    }
-
-    .order-detail-table td.k {
-      color: #64748b;
-      width: 38%;
-    }
-
-    .order-detail-table td.v {
-      color: #111;
-      font-weight: 700;
-      text-align: right;
-    }
-
-    .badge-paid-complete {
-      background: #dcfce7;
-      color: #15803d;
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 800;
-      display: inline-block;
-    }
-
-    /* MODAL THÔNG BÁO THANH TOÁN THÀNH CÔNG (PHÍM K) */
-    .payment-success-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 3000;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .payment-success-modal.show {
-      display: flex;
-    }
-
-    .payment-success-box {
-      background: #fff;
-      max-width: 430px;
-      width: 100%;
-      border-radius: 12px;
-      padding: 28px 24px;
-      text-align: center;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-    }
-
-    .success-icon-circle {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      background: #dcfce7;
-      color: #16a34a;
-      font-size: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 14px;
-    }
-
-    .btn-goto-order-detail {
-      margin-top: 18px;
-      width: 100%;
-      background: #0054d1;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-size: 14.5px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* FLOATING RIGHT CHAT BUTTONS */
-    .global-fixed-right {
-      position: fixed;
-      right: 16px;
-      bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      z-index: 990;
-    }
-
-    .social-round-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .fix-face { background: #1877f2; }
-    .fix-youtube { background: #ff0000; }
-
-    .chat-box-btn {
-      background: #fff;
-      width: 170px;
-      padding: 8px 12px;
-      border-radius: 14px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #0054d1;
-      font-size: 13px;
-    }
-
-    .chat-box-btn img {
-      width: 36px;
-      height: 36px;
-      object-fit: contain;
-    }
-
-    /* FOOTER NGUYENCONGPC */
-    .footer {
-      background: #fff;
-      margin-top: 36px;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .footer-policy {
-      background: #f8fafc;
-      padding: 18px 0;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .footer-address {
-      padding: 24px 0;
-    }
-
-    .showroom-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .showroom-card {
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 12.5px;
-      line-height: 1.6;
-    }
-
-    .showroom-card .title {
-      font-weight: 700;
-      color: #0054d1;
-      margin-bottom: 8px;
-    }
-
-    .showroom-card img {
-      width: 100%;
-      height: 130px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-
-    .footer-bottom {
-      background: #0f172a;
-      color: #cbd5e1;
-      padding: 20px 0;
-      font-size: 12.5px;
-      line-height: 1.7;
-      text-align: center;
-    }
-
-    @media (max-width: 900px) {
-      .box-content-product-detail { grid-template-columns: 1fr; }
-      .related-grid { grid-template-columns: repeat(2, 1fr); }
-      .showroom-grid { grid-template-columns: 1fr; }
+    .spec-table td:first-child {
+      font-weight: 600;
+      width: 34%;
+      color: #374151;
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP BANNER NGUYENCONGPC -->
-  <div class="header-top-banner">
-    <img src="https://nguyencongpc.vn/media/banner/10_Oct338e08aa9521543b2b8263736c0cbbf6.jpg" alt="Banner Nguyễn Công PC" />
+  <!-- HIDDEN SVG DEFINITIONS FOR FALLBACK GRAPHICS -->
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="miku-gpu-illustration" viewBox="0 0 640 280">
+      <defs>
+        <linearGradient id="mikuGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#00d8d6"/>
+          <stop offset="100%" stop-color="#0097a7"/>
+        </linearGradient>
+        <linearGradient id="shroudDark" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1e272e"/>
+          <stop offset="100%" stop-color="#0b0f14"/>
+        </linearGradient>
+      </defs>
+      <!-- PCIe Bracket -->
+      <path d="M16,25 L36,25 L36,245 L24,245 L24,48 L16,48 Z" fill="#94a3b8"/>
+      <!-- Shroud Outer -->
+      <rect x="36" y="26" width="576" height="208" rx="16" fill="url(#mikuGrad)" stroke="#00f2fe" stroke-width="2.5"/>
+      <!-- Shroud Inner -->
+      <rect x="50" y="40" width="548" height="180" rx="12" fill="url(#shroudDark)" stroke="#ff2e93" stroke-width="2.5"/>
+      <!-- Miku Magenta & Cyan Accents -->
+      <polygon points="52,40 245,40 228,52 52,52" fill="#00e5ff"/>
+      <polygon points="255,40 445,40 428,52 238,52" fill="#ff2e93"/>
+      <polygon points="50,208 415,208 430,220 50,220" fill="#00e5ff"/>
+      <!-- Fan 1 -->
+      <circle cx="145" cy="130" r="72" fill="#0f172a" stroke="#00e5ff" stroke-width="3"/>
+      <circle cx="145" cy="130" r="60" fill="#1e293b"/>
+      <g stroke="#334155" stroke-width="8" stroke-linecap="round">
+        <line x1="145" y1="68" x2="160" y2="108"/><line x1="204" y1="106" x2="165" y2="128"/>
+        <line x1="190" y1="176" x2="155" y2="148"/><line x1="115" y1="186" x2="132" y2="148"/>
+        <line x1="82" y1="138" x2="122" y2="130"/><line x1="98" y1="84" x2="132" y2="112"/>
+      </g>
+      <circle cx="145" cy="130" r="22" fill="#090d16" stroke="#ff2e93" stroke-width="2"/>
+      <text x="145" y="134" fill="#00e5ff" font-size="10" font-weight="900" text-anchor="middle">ROG</text>
+      <!-- Fan 2 -->
+      <circle cx="322" cy="130" r="72" fill="#0f172a" stroke="#00e5ff" stroke-width="3"/>
+      <circle cx="322" cy="130" r="60" fill="#1e293b"/>
+      <g stroke="#334155" stroke-width="8" stroke-linecap="round">
+        <line x1="322" y1="68" x2="337" y2="108"/><line x1="381" y1="106" x2="342" y2="128"/>
+        <line x1="367" y1="176" x2="332" y2="148"/><line x1="292" y1="186" x2="309" y2="148"/>
+        <line x1="259" y1="138" x2="299" y2="130"/><line x1="275" y1="84" x2="309" y2="112"/>
+      </g>
+      <circle cx="322" cy="130" r="22" fill="#090d16" stroke="#ff2e93" stroke-width="2"/>
+      <text x="322" y="134" fill="#ff2e93" font-size="10" font-weight="900" text-anchor="middle">ROG</text>
+      <!-- Fan 3 (Teal Miku 01) -->
+      <circle cx="502" cy="130" r="76" fill="#042f2e" stroke="#ff2e93" stroke-width="4"/>
+      <circle cx="502" cy="130" r="65" fill="#00b8b8"/>
+      <g stroke="#065f46" stroke-width="7.5" stroke-linecap="round">
+        <line x1="502" y1="64" x2="518" y2="106"/><line x1="564" y1="104" x2="524" y2="128"/>
+        <line x1="550" y1="178" x2="512" y2="148"/><line x1="474" y1="188" x2="492" y2="148"/>
+        <line x1="438" y1="138" x2="480" y2="130"/><line x1="454" y1="84" x2="492" y2="112"/>
+      </g>
+      <circle cx="502" cy="130" r="23" fill="#090d16" stroke="#ff2e93" stroke-width="2.5"/>
+      <text x="502" y="136" fill="#ff2e93" font-size="17" font-weight="900" text-anchor="middle">01</text>
+    </symbol>
+  </svg>
+
+  <!-- TOP BANNER SLIDER -->
+  <div class="bg-[#003d99] border-b border-white/10">
+    <div class="max-w-[1220px] mx-auto px-3 py-1">
+      <a href="javascript:void(0)" onclick="switchPage('product')" class="block overflow-hidden rounded-md">
+        <img
+          id="top-banner-img"
+          src="https://nguyencongpc.vn/media/banner/10_Oct338e08aa9521543b2b8263736c0cbbf6.jpg"
+          onerror="this.style.display='none'; document.getElementById('top-banner-fallback').style.display='flex';"
+          alt="Nguyễn Công PC Banner"
+          class="w-full h-[42px] object-cover rounded"
+        />
+        <div id="top-banner-fallback" style="display:none" class="w-full h-[38px] bg-gradient-to-r from-blue-900 via-cyan-600 to-pink-600 text-white text-xs sm:text-sm font-bold items-center justify-center gap-3 px-4 rounded">
+          <span>🔥 NGUYỄN CÔNG PC - ĐẠI LÝ ỦY QUYỀN CHÍNH HÃNG ASUS ROG HATSUNE MIKU EDITION</span>
+          <span class="bg-yellow-400 text-blue-950 px-2 py-0.5 rounded text-[11px] font-extrabold">XEM NGAY</span>
+        </div>
+      </a>
+    </div>
   </div>
 
-  <!-- HEADER CHÍNH -->
-  <header class="header">
-    <div class="header-middle">
-      <div class="container d-flex align-items-center justify-content-between">
-        <div class="header-middle-left d-flex align-items-center">
-          <a href="javascript:void(0)" onclick="showPage('page-product')">
-            <img src="https://nguyencongpc.vn/media/lib/12-03-2026/logowhite.png" width="170" height="38" alt="logo" class="logo-header" />
-          </a>
-          <a href="javascript:void(0)" title="Hệ thống cửa hàng" class="icon-map"><i class="fas fa-map-marker-alt"></i></a>
+  <!-- ==================== HEADER NGUYỄN CÔNG PC ==================== -->
+  <header class="nc-bg-primary text-white sticky top-0 z-50 shadow-md">
+    <!-- Header Middle -->
+    <div class="max-w-[1220px] mx-auto px-3 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      <!-- Logo & Showroom Map Button -->
+      <div class="flex items-center gap-3">
+        <a href="javascript:void(0)" onclick="switchPage('product')" class="flex items-center gap-2">
+          <img
+            src="https://nguyencongpc.vn/media/lib/12-03-2026/logowhite.png"
+            onerror="this.style.display='none'; document.getElementById('nc-logo-fallback').style.display='flex';"
+            alt="NGUYENCONGPC"
+            class="h-[38px] w-auto object-contain"
+          />
+          <div id="nc-logo-fallback" style="display:none" class="items-center gap-2">
+            <div class="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center font-black text-base tracking-tighter">NC</div>
+            <span class="font-extrabold text-lg tracking-wide">NGUYENCONGPC</span>
+          </div>
+        </a>
+
+        <button
+          type="button"
+          onclick="openModal('modal-showroom')"
+          title="Hệ thống cửa hàng"
+          class="w-8 h-8 rounded-full border border-white/80 flex items-center justify-center text-white hover:bg-white hover:text-[#0054d1] transition"
+        >
+          <i class="fas fa-map-marker-alt text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Search Box with Live Dropdown -->
+      <div class="relative flex-1 max-w-[460px] min-w-[220px]">
+        <form onsubmit="handleSearchSubmit(event)" class="flex items-center bg-white rounded-full overflow-hidden px-3.5 py-1.5 shadow-inner">
+          <input
+            type="text"
+            id="js-search-box"
+            oninput="handleSearchInput(this.value)"
+            placeholder="Bạn cần tìm gì?"
+            autocomplete="off"
+            class="w-full text-gray-800 text-sm outline-none border-none bg-transparent pr-2"
+          />
+          <button type="submit" class="text-[#0054d1] hover:text-blue-800 px-1">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+
+        <!-- Search Results Dropdown -->
+        <div id="search-dropdown" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white text-gray-800 rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
+          <div class="p-2 bg-gray-50 border-b text-xs font-semibold text-gray-500">Sản phẩm gợi ý</div>
+          <div id="search-results-holder" class="max-h-72 overflow-y-auto divide-y divide-gray-100"></div>
         </div>
+      </div>
 
-        <div class="header-search-group">
-          <form onsubmit="return false;">
-            <input type="text" placeholder="Bạn cần tìm gì?" autocomplete="off" />
-            <button type="submit" class="search-btn-header"><i class="fa fa-search"></i></button>
-          </form>
-        </div>
+      <!-- Right Action Tabs -->
+      <div class="flex items-center gap-4 lg:gap-5 text-xs">
+        <a href="javascript:void(0)" onclick="showToast('Đang mở công cụ Xây dựng cấu hình PC!')" class="flex flex-col items-center gap-1 hover:opacity-90">
+          <div class="w-7 h-7 flex items-center justify-center text-base"><i class="fa-solid fa-computer"></i></div>
+          <span class="font-medium hidden sm:inline">Xây dựng cấu hình</span>
+        </a>
 
-        <div class="box-tabs-header d-flex align-items-center">
-          <a href="javascript:void(0)" class="item-tab-header d-flex flex-column align-items-center gap-4">
-            <p class="icon-item-tab d-flex align-items-center justify-content-center"><i class="fa-solid fa-screwdriver-wrench"></i></p>
-            <span class="font-weight-500">Xây dựng cấu hình</span>
+        <a href="javascript:void(0)" onclick="openModal('modal-hotline')" class="flex flex-col items-center gap-1 hover:opacity-90">
+          <div class="w-7 h-7 flex items-center justify-center text-base"><i class="fa-solid fa-phone-volume"></i></div>
+          <span class="font-medium hidden sm:inline">Khách hàng liên hệ</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="showToast('Chuyên mục Tin tức công nghệ Nguyễn Công PC')" class="flex flex-col items-center gap-1 hover:opacity-90">
+          <div class="w-7 h-7 flex items-center justify-center text-base"><i class="fa-regular fa-newspaper"></i></div>
+          <span class="font-medium hidden sm:inline">Tin tức công nghệ</span>
+        </a>
+
+        <!-- Header Cart with Hover Tooltip -->
+        <div id="js-header-cart" class="relative">
+          <a href="javascript:void(0)" onclick="switchPage('cart')" class="flex flex-col items-center gap-1 hover:opacity-90">
+            <div class="w-7 h-7 flex items-center justify-center text-base relative">
+              <i class="fa-solid fa-cart-shopping"></i>
+              <span id="header-cart-badge" class="absolute -top-1.5 -right-2 bg-red-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
+            </div>
+            <span class="font-medium hidden sm:inline">Giỏ hàng</span>
           </a>
 
-          <a href="javascript:void(0)" class="item-tab-header d-flex flex-column align-items-center gap-4">
-            <p class="icon-item-tab d-flex align-items-center justify-content-center"><i class="fa-solid fa-phone-volume"></i></p>
-            <span class="font-weight-500">Khách hàng liên hệ</span>
-          </a>
-
-          <a href="javascript:void(0)" class="item-tab-header d-flex flex-column align-items-center gap-4">
-            <p class="icon-item-tab d-flex align-items-center justify-content-center"><i class="fa-regular fa-newspaper"></i></p>
-            <span class="font-weight-500">Tin tức công nghệ</span>
-          </a>
-
-          <!-- GIỎ HÀNG KÈM TOOLTIP HOVER -->
-          <div id="js-header-cart" class="position-relative">
-            <a href="javascript:void(0)" onclick="showPage('page-cart')" class="item-tab-header d-flex flex-column align-items-center gap-4">
-              <p class="icon-item-tab d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <u class="cart-count">1</u>
-              </p>
-              <span class="font-weight-500">Giỏ hàng</span>
-            </a>
-
-            <div class="cart-ttip" id="js-cart-tooltip">
-              <div class="cart-ttip-item-container loaded">
-                <div class="compare-item d-flex align-items-center gap-12">
-                  <a class="img-compare" href="javascript:void(0)" onclick="showPage('page-product')">
-                    <img src="https://nguyencongpc.vn/media/product/250-28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg" alt="Card Màn Hình Asus ROG Astral GeForce RTX 5080" />
-                  </a>
-                  <div class="compare-item-text flex-1">
-                    <a href="javascript:void(0)" onclick="showPage('page-product')" class="name-compare-item mb-10">
-                      Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION
-                    </a>
-                    <div class="header-cart-item-price d-flex justify-content-between">
-                      <b>x 1</b>
-                      <b class="price-compare">55.000.000₫</b>
-                    </div>
+          <!-- Tooltip Preview -->
+          <div id="js-cart-tooltip" class="hidden absolute right-0 top-full pt-2 w-[340px] z-50">
+            <div class="bg-white text-gray-800 rounded-lg shadow-2xl border border-gray-200 p-3.5">
+              <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                <img
+                  src="https://nguyencongpc.vn/media/product/250-28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg"
+                  onerror="this.src='https://placehold.co/120x80/00b8b8/ffffff?text=RTX+5080+Miku'"
+                  alt="RTX 5080 Miku"
+                  class="w-16 h-12 object-contain border rounded p-0.5"
+                />
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs font-semibold line-clamp-2 text-gray-900">Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION</p>
+                  <div class="flex justify-between items-center mt-1 text-xs">
+                    <b id="ttip-qty" class="text-gray-600">x 1</b>
+                    <b id="ttip-price" class="text-red-600 font-bold">55.000.000₫</b>
                   </div>
                 </div>
               </div>
-              <div class="cart-ttip-price d-flex align-items-center justify-content-between">
-                <span>Tổng tiền hàng <i>(1 sản phẩm)</i></span>
-                <b id="js-header-cart-total-price">55.000.000₫</b>
+              <div class="flex items-center justify-end gap-1.5 py-2.5 text-xs">
+                <span>Tổng tiền hàng</span>
+                <span id="ttip-count-label" class="text-gray-500">(1 sản phẩm)</span>
+                <span id="ttip-total" class="text-red-600 font-extrabold text-sm">55.000.000₫</span>
               </div>
-              <a href="javascript:void(0)" onclick="showPage('page-cart')" class="cart-ttip-price-button d-flex align-items-center justify-content-center">
-                <p class="font-weight-700">THANH TOÁN NGAY</p>
-              </a>
+              <button
+                type="button"
+                onclick="switchPage('cart')"
+                class="w-full bg-[#d91b24] hover:bg-red-700 text-white font-bold py-2 rounded text-xs uppercase transition"
+              >
+                THANH TOÁN NGAY
+              </button>
             </div>
           </div>
-
-          <a href="javascript:void(0)" class="item-tab-header d-flex flex-column align-items-center gap-4">
-            <p class="icon-item-tab d-flex align-items-center justify-content-center"><i class="fa-regular fa-circle-user"></i></p>
-            <span class="font-weight-500">Tài khoản</span>
-          </a>
         </div>
+
+        <a href="javascript:void(0)" onclick="openModal('modal-login')" class="flex flex-col items-center gap-1 hover:opacity-90">
+          <div class="w-7 h-7 flex items-center justify-center text-base"><i class="fa-regular fa-circle-user"></i></div>
+          <span class="font-medium hidden sm:inline">Tài khoản</span>
+        </a>
       </div>
     </div>
 
-    <div class="header-bottom">
-      <div class="container d-flex align-items-center">
-        <div class="global-menu-container">
-          <p class="group-title"><i class="fa-solid fa-bars"></i> Danh mục sản phẩm</p>
+    <!-- Header Bottom Navigation Bar -->
+    <div class="nc-bg-secondary border-t border-white/15">
+      <div class="max-w-[1220px] mx-auto px-3 py-1.5 flex items-center gap-3 overflow-x-auto no-scrollbar">
+        <!-- Mega Menu Trigger -->
+        <div class="relative cat-dropdown-trigger shrink-0">
+          <button type="button" class="bg-white text-[#0045b0] font-bold text-xs px-3 py-1.5 rounded flex items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-bars"></i>
+            <span>DANH MỤC SẢN PHẨM</span>
+          </button>
+
+          <!-- Mega Dropdown Menu -->
+          <div class="cat-dropdown-menu hidden absolute left-0 top-full pt-1.5 w-64 z-50">
+            <div class="bg-white text-gray-800 rounded-lg shadow-2xl border border-gray-200 py-1.5 text-xs font-medium">
+              <a href="javascript:void(0)" onclick="switchPage('product')" class="px-3.5 py-2 flex items-center justify-between hover:bg-blue-50 hover:text-[#0054d1]">
+                <span>🖥️ PC GAMING</span><i class="fa-solid fa-angle-right text-[10px]"></i>
+              </a>
+              <a href="javascript:void(0)" onclick="switchPage('product')" class="px-3.5 py-2 flex items-center justify-between hover:bg-blue-50 hover:text-[#0054d1]">
+                <span>💻 LAPTOP GAMING & ĐỒ HỌA</span><i class="fa-solid fa-angle-right text-[10px]"></i>
+              </a>
+              <a href="javascript:void(0)" onclick="switchPage('product')" class="px-3.5 py-2 flex items-center justify-between hover:bg-blue-50 hover:text-[#0054d1]">
+                <span>⚙️ PC ĐỒ HOẠ - LÀM VIỆC</span><i class="fa-solid fa-angle-right text-[10px]"></i>
+              </a>
+              <a href="javascript:void(0)" onclick="switchPage('product')" class="px-3.5 py-2 flex items-center justify-between hover:bg-blue-50 hover:text-[#0054d1]">
+                <span>🍎 APPLE MACBOOK / IMAC</span><i class="fa-solid fa-angle-right text-[10px]"></i>
+              </a>
+              <a href="javascript:void(0)" onclick="switchPage('product')" class="px-3.5 py-2 flex items-center justify-between hover:bg-blue-50 hover:text-[#0054d1]">
+                <span>🤖 PC AI - TRÍ TUỆ NHÂN TẠO</span><i class="fa-solid fa-angle-right text-[10px]"></i>
+              </a>
+              <a href="javascript:void(0)" onclick="switchPage('product')" class="px-3.5 py-2 flex items-center justify-between bg-blue-50 text-[#0054d1] font-bold">
+                <span>🎮 LINH KIỆN MÁY TÍNH (RTX 5080)</span><i class="fa-solid fa-angle-right text-[10px]"></i>
+              </a>
+              <a href="javascript:void(0)" onclick="switchPage('product')" class="px-3.5 py-2 flex items-center justify-between hover:bg-blue-50 hover:text-[#0054d1]">
+                <span>🖵 MÀN HÌNH MÁY TÍNH</span><i class="fa-solid fa-angle-right text-[10px]"></i>
+              </a>
+              <a href="javascript:void(0)" onclick="switchPage('product')" class="px-3.5 py-2 flex items-center justify-between hover:bg-blue-50 hover:text-[#0054d1]">
+                <span>⌨️ PHÍM CHUỘT, GHẾ, GEAR</span><i class="fa-solid fa-angle-right text-[10px]"></i>
+              </a>
+            </div>
+          </div>
         </div>
-        <ul class="list-category-header d-flex align-items-center justify-content-between">
-          <li class="item-category-header"><a href="javascript:void(0)"><i class="fa-solid fa-laptop"></i> Laptop <i class="fa-solid fa-caret-down"></i></a></li>
-          <li class="item-category-header"><a href="javascript:void(0)"><i class="fa-solid fa-desktop"></i> PC <i class="fa-solid fa-caret-down"></i></a></li>
-          <li class="item-category-header"><a href="javascript:void(0)"><i class="fa-solid fa-hard-drive"></i> Mini PC <i class="fa-solid fa-caret-down"></i></a></li>
-          <li class="item-category-header"><a href="javascript:void(0)"><i class="fa-solid fa-microchip"></i> PC AI <i class="fa-solid fa-caret-down"></i></a></li>
-          <li class="item-category-header"><a href="javascript:void(0)"><i class="fa-solid fa-memory"></i> Linh kiện PC <i class="fa-solid fa-caret-down"></i></a></li>
-          <li class="item-category-header"><a href="javascript:void(0)"><i class="fa-solid fa-tv"></i> Màn hình <i class="fa-solid fa-caret-down"></i></a></li>
-          <li class="item-category-header"><a href="javascript:void(0)"><i class="fa-regular fa-keyboard"></i> Phím chuột ghế gear <i class="fa-solid fa-caret-down"></i></a></li>
+
+        <!-- Horizontal Category Links -->
+        <ul class="flex items-center justify-between flex-1 text-xs font-medium whitespace-nowrap gap-4">
+          <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-yellow-300 flex items-center gap-1.5"><i class="fa-solid fa-laptop"></i> Laptop <i class="fa-solid fa-caret-down text-[10px]"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-yellow-300 flex items-center gap-1.5"><i class="fa-solid fa-desktop"></i> PC <i class="fa-solid fa-caret-down text-[10px]"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-yellow-300 flex items-center gap-1.5"><i class="fa-solid fa-hard-drive"></i> Mini PC <i class="fa-solid fa-caret-down text-[10px]"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-yellow-300 flex items-center gap-1.5"><i class="fa-solid fa-microchip"></i> PC AI <i class="fa-solid fa-caret-down text-[10px]"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="switchPage('product')" class="text-yellow-300 font-bold flex items-center gap-1.5"><i class="fa-solid fa-memory"></i> Linh kiện PC <i class="fa-solid fa-caret-down text-[10px]"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-yellow-300 flex items-center gap-1.5"><i class="fa-solid fa-tv"></i> Màn hình <i class="fa-solid fa-caret-down text-[10px]"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-yellow-300 flex items-center gap-1.5"><i class="fa-solid fa-keyboard"></i> Phím chuột ghế gear <i class="fa-solid fa-caret-down text-[10px]"></i></a></li>
         </ul>
       </div>
     </div>
   </header>
 
-  <!-- 2 BANNER DỌC CỐ ĐỊNH 2 BÊN LỀ -->
-  <div class="fixed_banner">
-    <div class="fixed-left">
-      <img src="https://nguyencongpc.vn/media/banner/05_Octbbfb91612a48db0a0a275213e275c2b3.jpg" alt="Banner Left" />
-    </div>
-    <div class="fixed-right">
-      <img src="https://nguyencongpc.vn/media/banner/15_Oct4cc9117fa85db048ffd2f91975befafe.jpg" alt="Banner Right" />
-    </div>
+  <!-- ==================== FIXED SIDE BANNERS (LEFT & RIGHT) ==================== -->
+  <div class="fixed-side-banner left product-mode hidden xl:block">
+    <a href="javascript:void(0)" onclick="switchPage('product')" class="block rounded-xl overflow-hidden shadow-lg">
+      <img
+        src="https://nguyencongpc.vn/media/banner/05_Octbbfb91612a48db0a0a275213e275c2b3.jpg"
+        onerror="this.style.display='none'; document.getElementById('left-fixed-fallback').style.display='flex';"
+        alt="Banner Left"
+        class="w-full h-auto rounded-xl"
+      />
+      <div id="left-fixed-fallback" style="display:none" class="w-[132px] h-[390px] rounded-xl bg-gradient-to-b from-blue-900 via-blue-600 to-pink-400 text-white p-3 flex-col justify-between text-center shadow-lg">
+        <div>
+          <p class="text-yellow-300 font-black text-base leading-tight uppercase">LAPTOP DEAL HỜI</p>
+          <p class="text-[10px] mt-1 font-semibold">HÀNG HIỆU DÁNG XINH</p>
+          <div class="bg-white text-blue-900 rounded-md p-2 mt-3 text-[11px] font-bold">
+            VOUCHER ĐẾN<br/><span class="text-sm font-black text-red-600">1.500.000Đ</span>
+          </div>
+        </div>
+        <span class="bg-red-700 text-white text-[11px] font-bold py-1.5 px-3 rounded-full">MUA NGAY</span>
+      </div>
+    </a>
   </div>
 
-  <!-- ==================== VIEW 1: CHI TIẾT SẢN PHẨM ==================== -->
-  <div id="page-product" class="page-view active">
-    <div class="box-breadcrumb-global">
-      <div class="container">
-        <div class="global-breadcrumb">
-          <ol class="d-flex align-items-center flex-wrap">
-            <li><a href="javascript:void(0)"><span>Trang chủ</span> <i class="fa-solid fa-angle-right gach-cheo"></i></a></li>
-            <li><a href="javascript:void(0)"><span>LINH KIỆN MÁY TÍNH</span> <i class="fa-solid fa-angle-right gach-cheo"></i></a></li>
-            <li><a href="javascript:void(0)"><span>VGA - Card Màn Hình</span></a></li>
-          </ol>
+  <div class="fixed-side-banner right product-mode hidden xl:block">
+    <a href="javascript:void(0)" onclick="switchPage('product')" class="block rounded-xl overflow-hidden shadow-lg">
+      <img
+        src="https://nguyencongpc.vn/media/banner/15_Oct4cc9117fa85db048ffd2f91975befafe.jpg"
+        onerror="this.style.display='none'; document.getElementById('right-fixed-fallback').style.display='flex';"
+        alt="Banner Right"
+        class="w-full h-auto rounded-xl"
+      />
+      <div id="right-fixed-fallback" style="display:none" class="w-[132px] h-[390px] rounded-xl bg-gradient-to-b from-slate-900 via-blue-900 to-blue-600 text-white p-3 flex-col justify-between text-center shadow-lg">
+        <div>
+          <p class="text-white font-black text-lg leading-tight uppercase">MINI PC</p>
+          <p class="text-xs text-cyan-300 font-bold mt-2">NHỎ XINH<br/>TINH GỌN</p>
+        </div>
+        <div class="text-xs">
+          GIÁ CHỈ TỪ<br/><span class="text-yellow-300 font-black text-sm">4.790.000Đ</span>
         </div>
       </div>
+    </a>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 1: PRODUCT DETAIL PAGE (NGUYENCONGPC.VN)                             -->
+  <!-- ========================================================================= -->
+  <div id="page-product" class="block">
+    <!-- Breadcrumb -->
+    <div class="max-w-[1200px] mx-auto px-3 pt-3 pb-2">
+      <ol class="flex items-center flex-wrap gap-2 text-xs text-gray-600">
+        <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-[#0054d1]">Trang chủ</a></li>
+        <li><i class="fa-solid fa-angle-right text-[10px] text-gray-400"></i></li>
+        <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-[#0054d1]">LINH KIỆN MÁY TÍNH</a></li>
+        <li><i class="fa-solid fa-angle-right text-[10px] text-gray-400"></i></li>
+        <li><a href="javascript:void(0)" onclick="switchPage('product')" class="text-gray-900 font-semibold">VGA - Card Màn Hình</a></li>
+      </ol>
     </div>
 
-    <div class="container">
-      <section class="page-product-detail">
-        <div class="box-content-product-detail">
-          <!-- CỘT TRÁI: SLIDER 5 ẢNH THẬT + THÔNG SỐ + CHÍNH SÁCH -->
-          <div class="box-left-new">
-            <div class="product-images-show">
-              <div class="main-gallery-frame">
-                <button class="gallery-nav-btn prev" onclick="changeSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-                <img id="main-product-img" src="https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg" alt="Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION" />
-                <button class="gallery-nav-btn next" onclick="changeSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
-              </div>
+    <!-- Main Product Section -->
+    <section class="max-w-[1200px] mx-auto px-3 pb-10">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-7">
+        
+        <!-- LEFT COLUMN (7 cols): Gallery, Specs Summary, Policy, Related, Tech Specs, Reviews -->
+        <div class="lg:col-span-7 flex flex-col gap-5">
+          
+          <!-- Main Image Gallery Slider -->
+          <div class="relative border border-gray-100 rounded-xl p-4 bg-white flex items-center justify-center min-h-[320px] sm:min-h-[390px] group">
+            <button
+              type="button"
+              onclick="changeSlide(-1)"
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-gray-100/90 hover:bg-[#0054d1] hover:text-white text-gray-600 flex items-center justify-center shadow transition z-10"
+              aria-label="Ảnh trước"
+            >
+              <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
 
-              <div class="thumb-strip" id="thumb-strip">
-                <div class="thumb-item active" onclick="setSlide(0)">
-                  <img src="https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg" alt="thumb 1" />
+            <div class="w-full flex flex-col items-center justify-center cursor-zoom-in" onclick="openLightbox()">
+              <img
+                id="main-product-img"
+                src="https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg"
+                onerror="this.style.display='none'; document.getElementById('main-svg-fallback').style.display='block';"
+                alt="Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION"
+                class="max-h-[360px] w-auto object-contain transition-all duration-300"
+              />
+              <svg id="main-svg-fallback" style="display:none" class="w-full max-w-[540px] h-auto">
+                <use href="#miku-gpu-illustration"></use>
+              </svg>
+            </div>
+
+            <button
+              type="button"
+              onclick="changeSlide(1)"
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-gray-100/90 hover:bg-[#0054d1] hover:text-white text-gray-600 flex items-center justify-center shadow transition z-10"
+              aria-label="Ảnh tiếp"
+            >
+              <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+
+            <span id="slide-counter-badge" class="absolute bottom-2.5 right-3 bg-black/60 text-white text-[11px] px-2.5 py-0.5 rounded-full">1 / 5</span>
+          </div>
+
+          <!-- 5 Thumbnail Images -->
+          <div class="grid grid-cols-5 gap-2.5" id="thumb-list">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Box Thông số sản phẩm tóm tắt -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <b class="text-sm text-gray-900">Thông số sản phẩm</b>
+              <button type="button" onclick="openModal('modal-full-spec')" class="text-xs font-semibold text-[#0054d1] hover:underline">
+                Xem tất cả thông số
+              </button>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="bg-white p-2.5 rounded-lg border border-gray-100">
+                <span class="text-[11px] text-gray-500 block">Hãng sản xuất</span>
+                <span class="text-xs font-bold text-gray-900 mt-0.5 block">Asus</span>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-gray-100">
+                <span class="text-[11px] text-gray-500 block">Engine đồ họa</span>
+                <span class="text-xs font-bold text-gray-900 mt-0.5 block">NVIDIA® GeForce RTX™ 5080</span>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-gray-100">
+                <span class="text-[11px] text-gray-500 block">Chuẩn Bus</span>
+                <span class="text-xs font-bold text-gray-900 mt-0.5 block">PCI Express 5.0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Box Chính sách mua hàng -->
+          <div class="border border-gray-200 rounded-xl p-4">
+            <b class="text-sm text-gray-900 block mb-3">Chính sách mua hàng</b>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="flex items-center gap-2.5 bg-blue-50/60 p-2.5 rounded-lg">
+                <span class="w-7 h-7 rounded-full bg-[#0054d1] text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-shield-halved"></i></span>
+                <span class="font-medium text-gray-800">Cam kết giá tốt chính hãng.</span>
+              </div>
+              <div class="flex items-center gap-2.5 bg-blue-50/60 p-2.5 rounded-lg">
+                <span class="w-7 h-7 rounded-full bg-[#0054d1] text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-box-open"></i></span>
+                <span class="font-medium text-gray-800">Sản phẩm mới 100% nguyên seal.</span>
+              </div>
+              <div class="flex items-center gap-2.5 bg-blue-50/60 p-2.5 rounded-lg">
+                <span class="w-7 h-7 rounded-full bg-[#0054d1] text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-rotate"></i></span>
+                <span class="font-medium text-gray-800">Lỗi 1 đổi 1 ngay lập tức.</span>
+              </div>
+              <div class="flex items-center gap-2.5 bg-blue-50/60 p-2.5 rounded-lg">
+                <span class="w-7 h-7 rounded-full bg-[#0054d1] text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-credit-card"></i></span>
+                <span class="font-medium text-gray-800">Hỗ trợ trả góp - Thủ tục nhanh gọn.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Customer Bought Ticker -->
+          <div class="flex items-center gap-2.5 bg-green-50 border border-green-200 rounded-lg px-3.5 py-2 text-xs">
+            <i class="fa-solid fa-tag text-green-600"></i>
+            <div id="customer-bought-ticker" class="text-gray-800 transition-opacity duration-300">
+              <b>Khách hàng Đạt (037 964 xxxx)</b> <span class="text-gray-500 ml-1">Đã mua hàng 25 phút trước</span>
+            </div>
+          </div>
+
+          <!-- Sản phẩm liên quan -->
+          <div class="border border-gray-200 rounded-xl p-4">
+            <h2 class="text-base font-bold text-gray-900 mb-3">Sản phẩm liên quan</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <!-- Related 1 -->
+              <div class="border border-gray-100 rounded-lg p-2.5 hover:shadow-md transition flex flex-col justify-between">
+                <div>
+                  <img
+                    src="https://nguyencongpc.vn/media/product/250-26689-ram-corsair-dominator-titanium-rgb-96gb-2x48gb-ddr5-6600mhz-white-1.jpg"
+                    onerror="this.src='https://placehold.co/200x200/f8fafc/0054d1?text=Corsair+96GB'"
+                    alt="RAM Corsair"
+                    class="w-full h-28 object-contain mb-2"
+                  />
+                  <h3 class="text-xs font-semibold line-clamp-2 text-gray-800">RAM Corsair DOMINATOR TITANIUM RGB 96GB (2x48GB) DDR5 6600MHz White</h3>
                 </div>
-                <div class="thumb-item" onclick="setSlide(1)">
-                  <img src="https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-01.jpg" alt="thumb 2" />
+                <div class="mt-2">
+                  <p class="text-red-600 font-bold text-xs">55.000.000đ</p>
+                  <p class="text-[11px] text-green-600 mt-0.5"><i class="fa fa-check"></i> Còn hàng</p>
                 </div>
-                <div class="thumb-item" onclick="setSlide(2)">
-                  <img src="https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-03.jpg" alt="thumb 3" />
+              </div>
+              <!-- Related 2 -->
+              <div class="border border-gray-100 rounded-lg p-2.5 hover:shadow-md transition flex flex-col justify-between">
+                <div>
+                  <img
+                    src="https://nguyencongpc.vn/media/product/250-27356-colorful-geforce-igame-rtx-5080-vulcan-oc-16gb-1.jpg"
+                    onerror="this.src='https://placehold.co/200x200/f8fafc/0054d1?text=RTX+5080+Vulcan'"
+                    alt="Colorful RTX 5080"
+                    class="w-full h-28 object-contain mb-2"
+                  />
+                  <h3 class="text-xs font-semibold line-clamp-2 text-gray-800">Card Màn Hình Colorful GeForce iGame RTX 5080 Vulcan OC 16GB</h3>
                 </div>
-                <div class="thumb-item" onclick="setSlide(3)">
-                  <img src="https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-05.jpg" alt="thumb 4" />
+                <div class="mt-2">
+                  <p class="text-red-600 font-bold text-xs">55.990.000đ</p>
+                  <p class="text-[11px] text-green-600 mt-0.5"><i class="fa fa-check"></i> Còn hàng</p>
                 </div>
-                <div class="thumb-item" onclick="setSlide(4)">
-                  <img src="https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-06.jpg" alt="thumb 5" />
+              </div>
+              <!-- Related 3 -->
+              <div class="border border-gray-100 rounded-lg p-2.5 hover:shadow-md transition flex flex-col justify-between">
+                <div>
+                  <img
+                    src="https://nguyencongpc.vn/media/product/250-30296-card-man-hinh-asus-proart-geforce-rtx-5080-oc-16gb-gddr7-1.webp"
+                    onerror="this.src='https://placehold.co/200x200/f8fafc/0054d1?text=ASUS+ProArt+5080'"
+                    alt="ASUS ProArt RTX 5080"
+                    class="w-full h-28 object-contain mb-2"
+                  />
+                  <h3 class="text-xs font-semibold line-clamp-2 text-gray-800">Card màn hình ASUS ProArt GeForce RTX 5080 OC 16GB GDDR7</h3>
+                </div>
+                <div class="mt-2">
+                  <p class="text-red-600 font-bold text-xs">55.990.000đ</p>
+                  <p class="text-[11px] text-green-600 mt-0.5"><i class="fa fa-check"></i> Còn hàng</p>
+                </div>
+              </div>
+              <!-- Related 4 -->
+              <div class="border border-gray-100 rounded-lg p-2.5 hover:shadow-md transition flex flex-col justify-between">
+                <div>
+                  <img
+                    src="https://nguyencongpc.vn/media/product/250-30154-ram-g-skill-trident-z5-royal-96gb-ddr5-6400mhz.jpg"
+                    onerror="this.src='https://placehold.co/200x200/f8fafc/0054d1?text=G.Skill+96GB'"
+                    alt="RAM G.Skill"
+                    class="w-full h-28 object-contain mb-2"
+                  />
+                  <h3 class="text-xs font-semibold line-clamp-2 text-gray-800">RAM G.Skill Trident Z5 Royal 96GB DDR5 6400MHz (2x48GB)</h3>
+                </div>
+                <div class="mt-2">
+                  <p class="text-red-600 font-bold text-xs">55.000.000đ</p>
+                  <p class="text-[11px] text-green-600 mt-0.5"><i class="fa fa-check"></i> Còn hàng</p>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Thông số sản phẩm tóm tắt -->
-            <div class="box-thongso">
-              <div class="d-flex align-items-center justify-content-between">
-                <b>Thông số sản phẩm</b>
-                <a href="#info-spec" style="color:#0054d1; font-size:13px;">Xem tất cả thông số</a>
-              </div>
-              <div class="specs">
-                <div class="spec-item">
-                  <div class="label">Hãng sản xuất</div>
-                  <div class="value">Asus</div>
-                </div>
-                <div class="spec-item">
-                  <div class="label">Engine đồ họa</div>
-                  <div class="value">NVIDIA® GeForce RTX™ 5080</div>
-                </div>
-                <div class="spec-item">
-                  <div class="label">Chuẩn Bus</div>
-                  <div class="value">PCI Express 5.0</div>
-                </div>
-              </div>
+          <!-- Bảng Thông số kỹ thuật chi tiết -->
+          <div class="border border-gray-200 rounded-xl overflow-hidden">
+            <div class="bg-[#0054d1] text-white px-4 py-2.5 font-bold text-sm">
+              Thông số kỹ thuật
             </div>
-
-            <!-- Chính sách mua hàng -->
-            <div class="box-chinhsach">
-              <b>Chính sách mua hàng</b>
-              <div class="list-chinhsach">
-                <div class="item-chinhsach">
-                  <img src="https://nguyencongpc.vn/static/assets/nguyencong_2023/images/icon_khien.png" alt="khien" />
-                  <p>Cam kết giá tốt.</p>
-                </div>
-                <div class="item-chinhsach">
-                  <img src="https://nguyencongpc.vn/static/assets/nguyencong_2023/images/icon_sp_moi.png" alt="sp_moi" />
-                  <p>Sản phẩm mới 100%.</p>
-                </div>
-                <div class="item-chinhsach">
-                  <img src="https://nguyencongpc.vn/static/assets/nguyencong_2023/images/icon_doitra.png" alt="doitra" />
-                  <p>Lỗi 1 đổi 1 ngay lập tức.</p>
-                </div>
-                <div class="item-chinhsach">
-                  <img src="https://nguyencongpc.vn/static/assets/nguyencong_2023/images/icon_pay.png" alt="pay" />
-                  <p>Hỗ trợ trả góp - Thủ tục nhanh gọn.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Khách hàng đã mua -->
-            <div class="pro-customer-bought">
-              <i class="fa-solid fa-tag" style="color:#16a34a;"></i>
-              <b>Khách hàng Đạt (037 964 xxxx)</b>
-              <span class="not-time">Đã mua hàng 25 phút trước</span>
-            </div>
-
-            <!-- Sản phẩm liên quan -->
-            <div style="margin-top: 16px;">
-              <h3 style="font-size: 16px; margin-bottom: 8px;">Sản phẩm liên quan</h3>
-              <div class="related-grid">
-                <div class="related-card">
-                  <img src="https://nguyencongpc.vn/media/product/250-26689-ram-corsair-dominator-titanium-rgb-96gb-2x48gb-ddr5-6600mhz-white-1.jpg" alt="RAM Corsair" />
-                  <h3>RAM Corsair DOMINATOR TITANIUM RGB 96GB DDR5</h3>
-                  <div class="related-price">55.000.000đ</div>
-                </div>
-                <div class="related-card">
-                  <img src="https://nguyencongpc.vn/media/product/250-27356-colorful-geforce-igame-rtx-5080-vulcan-oc-16gb-1.jpg" alt="RTX 5080 Vulcan" />
-                  <h3>Card Màn Hình Colorful GeForce iGame RTX 5080 Vulcan OC 16GB</h3>
-                  <div class="related-price">55.990.000đ</div>
-                </div>
-                <div class="related-card">
-                  <img src="https://nguyencongpc.vn/media/product/250-30296-card-man-hinh-asus-proart-geforce-rtx-5080-oc-16gb-gddr7-1.webp" alt="ASUS ProArt RTX 5080" />
-                  <h3>Card màn hình ASUS ProArt GeForce RTX 5080 OC 16GB GDDR7</h3>
-                  <div class="related-price">55.990.000đ</div>
-                </div>
-                <div class="related-card">
-                  <img src="https://nguyencongpc.vn/media/product/250-30154-ram-g-skill-trident-z5-royal-96gb-ddr5-6400mhz.jpg" alt="G.Skill Trident Z5" />
-                  <h3>RAM G.Skill Trident Z5 Royal 96GB DDR5 6400MHz</h3>
-                  <div class="related-price">55.000.000đ</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Bảng Thông số kỹ thuật đầy đủ -->
-            <div id="info-spec" style="margin-top: 22px;">
-              <h3 style="font-size: 16px; margin-bottom: 6px;">Thông số kỹ thuật</h3>
-              <table class="spec-table">
+            <div class="p-4">
+              <table class="w-full border-collapse spec-table">
                 <tbody>
                   <tr><td>Sản phẩm</td><td>Card đồ họa VGA</td></tr>
                   <tr><td>Hãng sản xuất</td><td>Asus</td></tr>
                   <tr><td>Engine đồ họa</td><td>NVIDIA® GeForce RTX™ 5080</td></tr>
                   <tr><td>Chuẩn Bus</td><td>PCI Express 5.0</td></tr>
+                  <tr><td>Open GL</td><td>OpenGL® 4.6</td></tr>
                   <tr><td>CUDA Core</td><td>10752</td></tr>
                   <tr><td>Memory Speed</td><td>30 Gbps</td></tr>
                   <tr><td>Bộ nhớ</td><td>16GB GDDR7</td></tr>
+                  <tr><td>Độ phân giải</td><td>7680 x 4320</td></tr>
                   <tr><td>Memory Clock</td><td>256-bit</td></tr>
+                  <tr><td>Kết nối</td><td>Yes x 2 (Native HDMI 2.1b), Yes x 3 (Native DisplayPort 2.1b), HDCP Support Yes (2.3)</td></tr>
                   <tr><td>Kích thước</td><td>357.6 x 149.3 x 76 mm (3.8 Slot)</td></tr>
-                  <tr><td>Recommended PSU</td><td>850W (1 x 16-pin)</td></tr>
+                  <tr><td>Power Connectors & PSU</td><td>1 x 16-pin | Recommended PSU: 850W</td></tr>
                 </tbody>
               </table>
+              <button
+                type="button"
+                onclick="openModal('modal-full-spec')"
+                class="mt-3 w-full py-2 border border-[#0054d1] text-[#0054d1] rounded-lg text-xs font-bold hover:bg-blue-50 transition"
+              >
+                Xem đầy đủ thông số kỹ thuật <i class="fa-solid fa-angle-down ml-1"></i>
+              </button>
             </div>
           </div>
 
-          <!-- CỘT PHẢI: THÔNG TIN MUA HÀNG -->
-          <div class="box-right-new">
-            <h1 class="product-name">Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION</h1>
-
-            <div class="list-basic-product-info d-flex align-items-center flex-wrap gap-12">
-              <div>Mã SP: <span class="color-primary">VG000694</span></div>
-              <div><i class="fa fa-star color-yellow"></i> <b>5.0</b> <span style="color:#2F86F6">(1 đánh giá)</span></div>
-              <div><i class="fa-solid fa-eye"></i> 4848</div>
-              <div><i class="fa-solid fa-comments"></i> 0</div>
-              <div><i class="fa-solid fa-cart-plus"></i> 5</div>
-            </div>
-
-            <div class="d-flex align-items-center justify-content-between mt-12">
-              <div>Bảo hành: <span style="color:#FF4848; font-weight:600;">36 tháng</span></div>
-              <div>Tình trạng: <span class="color-green">Còn hàng</span></div>
-            </div>
-
-            <!-- Khung giá -->
-            <div class="box-group-price">
-              <div class="info-group-price d-flex align-items-center">
-                <div class="price-left">
-                  <b class="main-price">55.000.000đ</b>
+          <!-- Bình luận và Đánh giá -->
+          <div class="border border-gray-200 rounded-xl p-4">
+            <h3 class="text-base font-bold text-gray-900 mb-3">Bình luận và đánh giá</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100 items-center">
+              <div class="text-center sm:border-r border-gray-200 pr-2">
+                <div class="text-3xl font-extrabold text-gray-900">5/5</div>
+                <div class="text-yellow-400 text-sm my-1">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                 </div>
-                <div class="d-flex align-items-center price-right">
-                  <p>Hoặc</p>
+                <p id="review-count-label" class="text-xs text-gray-500">1 đánh giá và nhận xét</p>
+              </div>
+              <div class="sm:col-span-2 space-y-1.5 text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 font-semibold">5 ★</span>
+                  <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-yellow-400 w-full"></div></div>
+                  <span class="w-16 text-right text-gray-600"><b>1</b> đánh giá</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-8 font-semibold">4 ★</span>
+                  <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden"></div>
+                  <span class="w-16 text-right text-gray-500">0 đánh giá</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-8 font-semibold">3 ★</span>
+                  <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden"></div>
+                  <span class="w-16 text-right text-gray-500">0 đánh giá</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <p class="text-xs text-gray-600 mb-2">Bạn đánh giá sao sản phẩm này?</p>
+              <button
+                type="button"
+                onclick="document.getElementById('review-form-box').classList.toggle('hidden')"
+                class="bg-[#0054d1] hover:bg-blue-700 text-white text-xs font-bold px-5 py-2 rounded-lg transition"
+              >
+                Đánh giá ngay
+              </button>
+            </div>
+
+            <!-- Interactive Review Form -->
+            <form id="review-form-box" onsubmit="submitReview(event)" class="hidden mt-4 pt-4 border-t border-gray-200 space-y-2.5">
+              <textarea id="rev-content" required placeholder="Mời bạn để lại đánh giá..." class="w-full border rounded-lg p-2.5 text-xs outline-none focus:border-[#0054d1]" rows="3"></textarea>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <input id="rev-name" required type="text" placeholder="Tên bạn *" class="border rounded-lg p-2 text-xs outline-none focus:border-[#0054d1]" />
+                <input id="rev-email" type="email" placeholder="Email" class="border rounded-lg p-2 text-xs outline-none focus:border-[#0054d1]" />
+              </div>
+              <button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-lg">Gửi đánh giá</button>
+            </form>
+
+            <!-- Review List -->
+            <div id="review-list-holder" class="mt-4 space-y-3 border-t border-gray-100 pt-3 text-xs">
+              <div class="bg-gray-50 p-3 rounded-lg">
+                <div class="flex justify-between items-center mb-1">
+                  <b class="text-gray-900">Minh Quân (Khách đã mua)</b>
+                  <span class="text-yellow-400">★★★★★</span>
+                </div>
+                <p class="text-gray-700">Card Miku thực tế cực kỳ đẹp, quạt thứ 3 màu xanh đặc trưng có số 01. Build full bộ ROG Miku tại Nguyễn Công PC rất ưng ý!</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN (5 cols): Title, Price, Promo Miku, Showrooms, Buy Buttons -->
+        <div class="lg:col-span-5 flex flex-col gap-4">
+          <h1 class="text-lg sm:text-xl font-bold text-gray-900 leading-snug">
+            Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION
+          </h1>
+
+          <!-- Basic Meta Row -->
+          <div class="flex items-center flex-wrap gap-3 text-xs text-gray-600">
+            <div>Mã SP: <span class="text-[#0054d1] font-bold">VG000694</span></div>
+            <div class="flex items-center gap-1">
+              <i class="fa fa-star text-yellow-400"></i>
+              <b class="text-gray-900">5.0</b>
+              <span class="text-[#0054d1]">(1 đánh giá)</span>
+            </div>
+            <div class="flex items-center gap-1"><i class="fa-solid fa-eye text-gray-400"></i> <span>4848</span></div>
+            <div class="flex items-center gap-1"><i class="fa-solid fa-comments text-gray-400"></i> <span>0</span></div>
+            <div class="flex items-center gap-1"><i class="fa-solid fa-cart-plus text-gray-400"></i> <span id="meta-buy-count">5</span></div>
+          </div>
+
+          <!-- Warranty & Stock Row -->
+          <div class="flex items-center justify-between text-xs pb-3 border-b border-gray-100">
+            <div>Bảo hành: <span class="text-[#FF4848] font-bold">36 tháng</span></div>
+            <div>Tình trạng: <span class="text-green-600 font-bold">Còn hàng</span></div>
+          </div>
+
+          <!-- Price Box -->
+          <div class="bg-[#f4f8ff] border border-[#dce7f9] rounded-xl p-4 flex items-center gap-5">
+            <div>
+              <b class="text-2xl sm:text-3xl font-extrabold nc-price-red">55.000.000đ</b>
+            </div>
+            <div class="border-l border-gray-300 pl-5 text-xs text-gray-600">
+              <span>Hoặc Trả góp</span>
+              <div class="text-gray-900 font-bold text-sm mt-0.5">4.718.083<span class="font-normal text-xs">/tháng</span></div>
+            </div>
+          </div>
+
+          <!-- Red Offer Box: Khuyến mại & Quà tặng khác -->
+          <div class="border border-[#d91b24] rounded-xl overflow-hidden">
+            <div class="bg-[#d91b24] text-white px-4 py-2.5 font-bold text-sm flex items-center gap-2">
+              <i class="fa-solid fa-gift"></i>
+              <span>Khuyến mại &amp; Quà tặng khác</span>
+            </div>
+            <div class="p-4 bg-white text-xs sm:text-[13px] leading-relaxed text-gray-800 space-y-1.5">
+              <p class="text-sm font-extrabold text-gray-900 uppercase mb-1">
+                SẢN PHẨM CHỈ BÁN KÈM THEO BỘ PC MIKU
+              </p>
+              <p>• Mainboard ASUS ROG STRIX X870E-H GAMING WIFI 7 Hatsune Miku Edition</p>
+              <p>• Nguồn Máy Tính ASUS ROG Thor 1200W Platinum III Hatsune Miku Edition</p>
+              <p>• Tản Nhiệt Nước Asus ROG RYUO IV 360 ARGB Hatsune Miku Edition</p>
+              <p>• Vỏ Case Asus Rog Strix Helios II GX601S Hatsune Miku - 4 Fan (Mid Tower/ Màu Xanh)</p>
+            </div>
+          </div>
+
+          <!-- Showroom Stock Box -->
+          <div class="border border-gray-200 rounded-xl p-3.5 bg-gray-50/70 text-xs space-y-2">
+            <div class="flex items-center gap-2 font-bold text-gray-900 text-sm">
+              <i class="fa-solid fa-store text-[#0054d1]"></i>
+              <span>Xem chi nhánh đang còn hàng</span>
+            </div>
+            <div>
+              <b class="text-gray-800 block mb-0.5">Showroom Miền Bắc:</b>
+              <a href="https://goo.gl/maps/3UeLE87NdpNzmmoGA" target="_blank" rel="noopener noreferrer" class="text-gray-700 hover:text-[#0054d1] block">
+                <i class="fa-solid fa-location-dot text-red-500 mr-1.5"></i> Số 17 phố Hà Kế Tấn, Phường Phương Liệt, TP. Hà Nội
+              </a>
+            </div>
+            <div>
+              <b class="text-gray-800 block mb-0.5">Showroom Miền Nam:</b>
+              <a href="https://goo.gl/maps/BfZeSWEYbYVwNAWK8" target="_blank" rel="noopener noreferrer" class="text-gray-700 hover:text-[#0054d1] block">
+                <i class="fa-solid fa-location-dot text-red-500 mr-1.5"></i> 249 Lý Thường Kiệt, Phường Phú Thọ, TP. Hồ Chí Minh
+              </a>
+            </div>
+            <p class="text-red-600 font-medium pt-1">Lưu ý: Sản phẩm có thể điều chuyển kho theo yêu cầu của quý khách.</p>
+          </div>
+
+          <!-- 3 ACTION BUTTONS: TRẢ GÓP | MUA NGAY | Thêm vào giỏ -->
+          <div id="detail-buy-ads" class="grid grid-cols-12 gap-2.5 pt-1">
+            <button
+              type="button"
+              onclick="openModal('modal-installment')"
+              class="col-span-4 bg-[#2f80ed] hover:bg-blue-700 text-white font-bold py-3.5 px-2 rounded-lg text-xs sm:text-sm uppercase transition shadow-sm"
+            >
+              TRẢ GÓP
+            </button>
+
+            <button
+              type="button"
+              onclick="handleBuyNow()"
+              class="col-span-5 bg-[#d91b24] hover:bg-red-700 text-white font-extrabold py-3.5 px-2 rounded-lg text-sm sm:text-base uppercase transition shadow-md"
+            >
+              MUA NGAY
+            </button>
+
+            <button
+              type="button"
+              onclick="handleAddToCartOnly()"
+              class="col-span-3 border-2 border-[#0054d1] text-[#0054d1] hover:bg-blue-50 font-bold py-2 px-1 rounded-lg flex flex-col items-center justify-center text-[11px] transition"
+            >
+              <i class="fa-solid fa-cart-plus text-base mb-0.5"></i>
+              <span>Thêm vào giỏ</span>
+            </button>
+          </div>
+
+          <!-- Sản phẩm đã xem -->
+          <div class="border border-gray-200 rounded-xl p-3.5 mt-2">
+            <h2 class="text-sm font-bold text-gray-900 mb-2.5">Sản phẩm đã xem</h2>
+            <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-lg">
+              <img
+                src="https://nguyencongpc.vn/media/product/250-28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg"
+                onerror="this.src='https://placehold.co/100x70/00b8b8/ffffff?text=RTX+5080'"
+                alt="RTX 5080"
+                class="w-16 h-12 object-contain bg-white rounded border p-0.5"
+              />
+              <div class="flex-1 min-w-0">
+                <h3 class="text-xs font-semibold text-gray-800 line-clamp-2">Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION</h3>
+                <p class="text-xs font-bold text-red-600 mt-0.5">55.000.000đ</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 2: CART & CHECKOUT PAGE (NGUYENCONGPC.VN/CART)                       -->
+  <!-- ========================================================================= -->
+  <div id="page-cart" class="hidden">
+    <!-- Breadcrumb -->
+    <div class="max-w-[1150px] mx-auto px-3 pt-3 pb-2">
+      <ol class="flex items-center gap-2 text-xs text-gray-600">
+        <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-[#0054d1]">Trang chủ</a></li>
+        <li><i class="fa-solid fa-angle-right text-[10px] text-gray-400"></i></li>
+        <li class="text-gray-900 font-semibold">Thông tin giỏ hàng</li>
+      </ol>
+    </div>
+
+    <!-- Cart 3-Column Layout matching Screenshots 2 & 3 -->
+    <div class="max-w-[1150px] mx-auto px-3 pb-14 flex justify-center items-start gap-5">
+      
+      <!-- Left Vertical Banner (Visible on Cart) -->
+      <aside class="hidden lg:flex w-[145px] shrink-0 rounded-xl overflow-hidden shadow-md bg-gradient-to-b from-[#003380] via-[#2563eb] to-[#f472b6] text-white p-3.5 flex-col justify-between min-h-[420px] text-center">
+        <div>
+          <p class="text-yellow-300 font-black text-lg leading-tight uppercase">LAPTOP DEAL HỜI</p>
+          <p class="text-[10px] font-semibold mt-1">HÀNG HIỆU DÁNG XINH</p>
+          <div class="bg-white text-[#0045b0] rounded-lg p-2 mt-3 text-[11px] font-bold shadow">
+            VOUCHER LÊN ĐẾN<br/>
+            <span class="text-sm font-black text-blue-800">1.500.000Đ</span>
+          </div>
+        </div>
+        <div class="my-3">
+          <i class="fa-solid fa-laptop-code text-5xl text-white/90 drop-shadow"></i>
+        </div>
+        <span class="bg-[#b91c1c] text-white text-[11px] font-bold py-1.5 px-3 rounded-full mx-auto">MUA NGAY</span>
+      </aside>
+
+      <!-- CENTER CART CONTAINER -->
+      <div class="flex-1 max-w-[680px] bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Top Bar -->
+        <div class="flex items-center justify-between px-5 py-3 bg-[#fafafa] border-b border-gray-200 text-xs sm:text-sm">
+          <span class="font-semibold text-gray-700">Giỏ hàng của bạn</span>
+          <a href="javascript:void(0)" onclick="switchPage('product')" class="text-gray-600 hover:text-[#0054d1] font-medium">
+            &lt; Mua thêm sản phẩm khác
+          </a>
+        </div>
+
+        <!-- Cart Product Item Block -->
+        <div class="p-5 border-b border-gray-200">
+          <div class="flex justify-end mb-3">
+            <button
+              type="button"
+              onclick="showToast('Đơn hàng mẫu đang được giữ để bạn trải nghiệm thanh toán!')"
+              class="border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs px-3 py-1.5 rounded font-medium"
+            >
+              Xóa giỏ hàng
+            </button>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5 flex-1">
+              <!-- Product Thumbnail -->
+              <div class="w-24 h-16 shrink-0 flex items-center justify-center bg-white border border-gray-100 rounded p-1">
+                <img
+                  src="https://nguyencongpc.vn/media/product/250-28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg"
+                  onerror="this.style.display='none'; document.getElementById('cart-svg-fallback').style.display='block';"
+                  alt="RTX 5080 Hatsune Miku"
+                  class="max-h-full max-w-full object-contain"
+                />
+                <svg id="cart-svg-fallback" style="display:none" class="w-20 h-12"><use href="#miku-gpu-illustration"></use></svg>
+              </div>
+
+              <!-- Name & Promo toggle -->
+              <div class="flex-1">
+                <a href="javascript:void(0)" onclick="switchPage('product')" class="text-xs sm:text-[13.5px] font-bold text-gray-900 hover:text-[#0054d1] leading-snug block">
+                  Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION
+                </a>
+                <button
+                  type="button"
+                  onclick="document.getElementById('cart-promo-detail').classList.toggle('hidden')"
+                  class="text-xs text-red-600 mt-1 inline-flex items-center gap-1"
+                >
+                  Khuyến mại (<span class="text-[#0054d1] hover:underline">Chi tiết</span>) <i class="fa-solid fa-caret-down text-[10px]"></i>
+                </button>
+                <div id="cart-promo-detail" class="hidden mt-1.5 p-2 bg-red-50/70 border border-red-200 rounded text-[11.5px] text-gray-700 space-y-0.5">
+                  <p class="font-bold text-gray-900">SẢN PHẨM CHỈ BÁN KÈM THEO BỘ PC MIKU</p>
+                  <p>• Mainboard ASUS ROG STRIX X870E-H GAMING WIFI 7 Hatsune Miku Edition</p>
+                  <p>• Nguồn Máy Tính ASUS ROG Thor 1200W Platinum III Hatsune Miku Edition</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quantity & Subtotal -->
+            <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4">
+              <div class="inline-flex items-center border border-gray-300 rounded overflow-hidden">
+                <button type="button" onclick="updateCartQty(-1)" class="w-7 h-7 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold text-xs">-</button>
+                <input id="cart-qty-input" type="text" value="1" readonly class="w-9 h-7 text-center text-xs font-bold border-x border-gray-300 outline-none" />
+                <button type="button" onclick="updateCartQty(1)" class="w-7 h-7 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold text-xs">+</button>
+              </div>
+
+              <div class="text-right">
+                <div id="cart-item-price" class="text-xs sm:text-sm font-bold nc-price-red whitespace-nowrap">55.000.000 đ</div>
+                <button type="button" onclick="showToast('Đơn hàng mẫu đang được giữ để thanh toán!')" class="text-gray-400 hover:text-red-600 text-xs mt-1" title="Xóa">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CUSTOMER INFORMATION & PAYMENT SECTION -->
+        <div class="p-5 space-y-4">
+          <h3 class="text-xs sm:text-[13px] font-bold text-[#0066cc] uppercase tracking-wide">
+            THÔNG TIN KHÁCH HÀNG
+          </h3>
+
+          <div class="space-y-2.5">
+            <!-- Name -->
+            <div>
+              <input
+                id="buyer-name"
+                type="text"
+                value="Hiếu Đào"
+                placeholder="Họ và tên *"
+                class="nc-cart-input"
+              />
+            </div>
+
+            <!-- Phone & Email -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <input
+                id="buyer-phone"
+                type="text"
+                value="0855717751"
+                placeholder="Số điện thoại *"
+                class="nc-cart-input"
+              />
+              <input
+                id="buyer-email"
+                type="email"
+                value="kanomiki2008@gmail.com"
+                placeholder="Email *"
+                class="nc-cart-input"
+              />
+            </div>
+
+            <!-- Address -->
+            <div>
+              <input
+                id="buyer-address"
+                type="text"
+                value="Thôn Phạ 1, Xã Cảm Nhân, Huyện Yên Bình"
+                placeholder="Địa chỉ (Số nhà, đường, thôn/xóm, xã/phường) *"
+                class="nc-cart-input"
+              />
+            </div>
+
+            <!-- Province & District -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <select id="buyer-province" onchange="handleProvinceChange(this.value)" class="nc-cart-input !bg-white">
+                <option value="Yên Bái" selected>Yên Bái</option>
+                <option value="Lào Cai">Lào Cai</option>
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+              </select>
+
+              <select id="buyer-district" class="nc-cart-input !bg-white text-gray-700">
+                <option value="">Quận/Huyện</option>
+                <option value="Huyện Yên Bình" selected>Huyện Yên Bình</option>
+                <option value="TP. Yên Bái">TP. Yên Bái</option>
+                <option value="Huyện Lục Yên">Huyện Lục Yên</option>
+              </select>
+            </div>
+
+            <!-- Note -->
+            <div>
+              <textarea
+                id="buyer-note"
+                rows="3"
+                placeholder="Ghi chú"
+                class="w-full p-3 border border-gray-300 rounded-md text-xs sm:text-sm outline-none focus:border-[#0054d1]"
+              ></textarea>
+            </div>
+
+            <!-- Company Invoice Checkbox -->
+            <label class="inline-flex items-center gap-2 text-xs text-gray-600 cursor-pointer pt-1">
+              <input type="checkbox" onchange="document.getElementById('company-vat-box').classList.toggle('hidden', !this.checked)" class="rounded text-[#0054d1]" />
+              <span>Yêu cầu xuất hóa đơn công ty</span>
+            </label>
+
+            <div id="company-vat-box" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 bg-gray-50 rounded border border-gray-200">
+              <input type="text" placeholder="Tên công ty" class="border rounded p-2 text-xs" />
+              <input type="text" placeholder="Mã số thuế" class="border rounded p-2 text-xs" />
+              <input type="text" placeholder="Địa chỉ công ty" class="sm:col-span-2 border rounded p-2 text-xs" />
+            </div>
+          </div>
+
+          <!-- PHƯƠNG THỨC THANH TOÁN -->
+          <div class="pt-2">
+            <h3 class="text-xs sm:text-[13px] font-bold text-[#0066cc] uppercase tracking-wide mb-2.5">
+              PHƯƠNG THỨC THANH TOÁN
+            </h3>
+
+            <div class="space-y-2 text-xs sm:text-[13px]">
+              <label class="flex items-center gap-2.5 cursor-pointer font-medium text-gray-800">
+                <input
+                  type="radio"
+                  name="payment_mode"
+                  value="cod"
+                  checked
+                  onchange="handlePaymentModeChange('cod')"
+                  class="accent-[#0054d1] w-4 h-4"
+                />
+                <span>Thanh toán khi nhận hàng</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 cursor-pointer font-medium text-gray-800">
+                <input
+                  type="radio"
+                  name="payment_mode"
+                  value="full"
+                  onchange="handlePaymentModeChange('full')"
+                  class="accent-[#0054d1] w-4 h-4"
+                />
+                <span>Thanh toán toàn bộ</span>
+              </label>
+            </div>
+
+            <!-- 3 PAYMENT METHODS PANEL (Shown when "Thanh toán toàn bộ" is selected) -->
+            <div id="full-payment-methods" class="hidden mt-3.5 p-4 rounded-xl border border-blue-200 bg-[#f8fbff] space-y-3.5 animate-pop">
+              <p class="text-xs font-semibold text-gray-600">Chọn 1 trong 3 phương thức thanh toán trực tuyến:</p>
+
+              <!-- 3 Method Selector Tabs -->
+              <div class="grid grid-cols-3 gap-2.5">
+                <button
+                  type="button"
+                  id="tab-btn-visa"
+                  onclick="selectOnlineMethod('visa')"
+                  class="online-method-btn active border-2 border-[#0054d1] bg-blue-50 text-[#0054d1] rounded-lg py-2.5 px-2 text-xs font-bold flex flex-col items-center gap-1 transition"
+                >
+                  <i class="fa-brands fa-cc-visa text-xl"></i>
+                  <span>1. Thẻ Visa</span>
+                </button>
+
+                <button
+                  type="button"
+                  id="tab-btn-momo"
+                  onclick="selectOnlineMethod('momo')"
+                  class="online-method-btn border border-gray-300 bg-white text-gray-700 hover:border-pink-600 rounded-lg py-2.5 px-2 text-xs font-bold flex flex-col items-center gap-1 transition"
+                >
+                  <i class="fa-solid fa-wallet text-xl text-[#a50064]"></i>
+                  <span>2. Ví MoMo</span>
+                </button>
+
+                <button
+                  type="button"
+                  id="tab-btn-vietqr"
+                  onclick="selectOnlineMethod('vietqr')"
+                  class="online-method-btn border border-gray-300 bg-white text-gray-700 hover:border-[#0054d1] rounded-lg py-2.5 px-2 text-xs font-bold flex flex-col items-center gap-1 transition"
+                >
+                  <i class="fa-solid fa-qrcode text-xl text-red-600"></i>
+                  <span>3. VietQR</span>
+                </button>
+              </div>
+
+              <!-- SUB-PANEL 1: VISA CARD -->
+              <div id="panel-visa" class="bg-white border border-gray-200 rounded-lg p-3.5 space-y-2.5">
+                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
+                  <span>Nhập thông tin thẻ Quốc tế (Visa / MasterCard)</span>
+                  <div class="flex gap-1.5 text-lg text-blue-800">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard text-orange-600"></i>
+                  </div>
+                </div>
+                <input type="text" placeholder="Số thẻ (VD: 4111 2222 3333 4444)" class="nc-cart-input !bg-gray-50" />
+                <input type="text" placeholder="Tên in trên thẻ (VD: HIEU DAO)" class="nc-cart-input !bg-gray-50 uppercase" />
+                <div class="grid grid-cols-2 gap-2.5">
+                  <input type="text" placeholder="Ngày hết hạn (MM/YY)" class="nc-cart-input !bg-gray-50" />
+                  <input type="password" maxlength="4" placeholder="Mã bảo mật CVV" class="nc-cart-input !bg-gray-50" />
+                </div>
+              </div>
+
+              <!-- SUB-PANEL 2: MOMO -->
+              <div id="panel-momo" class="hidden bg-white border border-pink-200 rounded-lg p-4 space-y-2.5">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-lg bg-[#a50064] text-white font-black text-xs flex items-center justify-center">MoMo</div>
                   <div>
-                    <p>Trả góp</p>
-                    <div><b class="price-tragop">4.718.083</b>/<span>tháng</span></div>
+                    <p class="text-xs font-bold text-[#a50064]">Thanh toán qua Ví điện tử MoMo</p>
+                    <p class="text-[11px] text-gray-500">Xác nhận tự động tức thì</p>
+                  </div>
+                </div>
+                <input type="text" value="0855717751" placeholder="Số điện thoại ví MoMo" class="nc-cart-input !bg-pink-50/40" />
+                <div class="bg-gray-50 p-2.5 rounded border text-xs space-y-1">
+                  <div>Đơn vị nhận: <strong class="text-gray-900">CONG TI CONG NGHE DIEN TU NC</strong></div>
+                  <div>Nội dung: <strong class="text-[#a50064]">Asus ROG Astral GeForce RTX OC HATSUNE MIKU</strong></div>
+                </div>
+              </div>
+
+              <!-- SUB-PANEL 3: VIETQR (Exact QR image + Account Name + Content) -->
+              <div id="panel-vietqr" class="hidden bg-white border border-gray-200 rounded-lg p-4 text-center space-y-3">
+                <p class="text-xs font-bold text-[#0054d1] uppercase">Quét mã VietQR để thanh toán</p>
+
+                <!-- Exact VietQR Image Card (with VIETQR & napas 247 logos at bottom) -->
+                <div class="w-[248px] mx-auto bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+                  <canvas id="vietqr-canvas" width="280" height="320" class="w-full h-auto block"></canvas>
+                </div>
+
+                <!-- Required Transfer Information -->
+                <div class="text-left bg-blue-50/80 border-l-4 border-[#0054d1] rounded-r-lg p-3 text-xs sm:text-[13px] space-y-1.5">
+                  <div class="flex flex-col sm:flex-row sm:justify-between">
+                    <span class="text-gray-600">Tên tài khoản:</span>
+                    <strong class="text-gray-900 font-extrabold">CONG TI CONG NGHE DIEN TU NC</strong>
+                  </div>
+                  <div class="flex flex-col sm:flex-row sm:justify-between">
+                    <span class="text-gray-600">Số tiền:</span>
+                    <strong id="vietqr-amount" class="nc-price-red font-extrabold">55.000.000đ</strong>
+                  </div>
+                  <div class="flex flex-col sm:flex-row sm:justify-between">
+                    <span class="text-gray-600">Nội dung giao dịch:</span>
+                    <strong class="text-[#0054d1] font-extrabold">Asus ROG Astral GeForce RTX OC HATSUNE MIKU</strong>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Khuyến mại & Quà tặng khác -->
-            <div class="box-offer-detail">
-              <div class="title-offer-detail">
-                <p>Khuyến mại &amp; Quà tặng khác</p>
-              </div>
-              <div class="list-info-offter">
-                <p style="font-size: 15px; font-weight: 800; margin-bottom: 6px;">SẢN PHẨM CHỈ BÁN KÈM THEO BỘ PC MIKU</p>
-                <p>• Mainboard ASUS ROG STRIX X870E-H GAMING WIFI 7 Hatsune Miku Edition</p>
-                <p>• Nguồn Máy Tính ASUS ROG Thor 1200W Platinum III Hatsune Miku Edition</p>
-                <p>• Tản Nhiệt Nước Asus ROG RYUO IV 360 ARGB Hatsune Miku Edition</p>
-                <p>• Vỏ Case Asus Rog Strix Helios II GX601S Hatsune Miku - 4 Fan (Mid Tower/ Màu Xanh)</p>
+              <!-- Hint for Keyboard 'K' -->
+              <div class="text-center pt-1">
+                <span class="inline-flex items-center gap-1.5 text-[11.5px] text-gray-500 bg-white px-3 py-1 rounded-full border border-gray-200">
+                  <i class="fa-regular fa-keyboard text-[#0054d1]"></i>
+                  Nhấn phím <kbd class="px-1.5 py-0.5 bg-gray-100 border rounded font-bold text-gray-800">K</kbd> trên bàn phím để xác nhận thanh toán thành công
+                </span>
               </div>
             </div>
+          </div>
 
-            <!-- Chi nhánh còn hàng -->
-            <div class="store-status-news">
-              <div class="d-flex align-items-center title-store">
-                <img src="https://nguyencongpc.vn/static/assets/nguyencong_2023/images/icon_showroom.png" alt="showroom" />
-                <p>Xem chi nhánh đang còn hàng</p>
+          <!-- TỔNG TIỀN SUMMARY -->
+          <div class="pt-3 border-t border-gray-100">
+            <h3 class="text-xs sm:text-[13px] font-bold text-[#0066cc] uppercase tracking-wide mb-2">
+              TỔNG TIỀN
+            </h3>
+            <div class="flex justify-between items-center text-xs sm:text-[13.5px] text-gray-700 mb-1.5">
+              <span>Tổng cộng</span>
+              <span id="summary-subtotal" class="font-semibold">55.000.000 đ</span>
+            </div>
+            <div class="flex justify-between items-center text-xs sm:text-sm">
+              <span class="text-gray-800 font-medium">Thành tiền</span>
+              <strong id="summary-total" class="text-base font-extrabold nc-price-red">55.000.000 đ</strong>
+            </div>
+            <p class="text-right text-[11.5px] text-gray-500 mt-0.5 mb-4">(Giá đã bao gồm VAT)</p>
+
+            <!-- Action Buttons matching Screenshot 2 -->
+            <div class="space-y-2.5">
+              <button
+                type="button"
+                onclick="triggerPaymentSuccess()"
+                class="w-full bg-[#d91b24] hover:bg-red-700 text-white font-bold py-3 rounded-md text-sm uppercase transition shadow"
+              >
+                ĐẶT HÀNG
+              </button>
+              <button
+                type="button"
+                onclick="triggerPaymentSuccess()"
+                class="w-full bg-[#f59e0b] hover:bg-amber-600 text-white font-bold py-3 rounded-md text-sm uppercase transition shadow-sm"
+              >
+                MUA TRẢ GÓP
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right Vertical Banner (Visible on Cart) -->
+      <aside class="hidden lg:flex w-[145px] shrink-0 rounded-xl overflow-hidden shadow-md bg-gradient-to-b from-[#09203f] via-[#1e3a8a] to-[#2563eb] text-white p-3.5 flex-col justify-between min-h-[420px] text-center">
+        <div>
+          <p class="text-white font-black text-xl leading-tight uppercase">MINI PC</p>
+          <div class="my-4">
+            <i class="fa-solid fa-server text-5xl text-cyan-300 drop-shadow"></i>
+          </div>
+          <p class="text-xs font-extrabold text-white leading-snug">NHỎ XINH<br/>TINH GỌN</p>
+        </div>
+        <div class="bg-blue-950/70 rounded-lg p-2 border border-blue-400/30">
+          <span class="text-[10px] text-gray-200 block">GIÁ CHỈ TỪ</span>
+          <strong class="text-yellow-300 font-black text-sm">4.790.000Đ</strong>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 3: ORDER REVIEW / CHI TIẾT ĐƠN HÀNG PAGE                             -->
+  <!-- ========================================================================= -->
+  <div id="page-order-detail" class="hidden">
+    <div class="max-w-[1150px] mx-auto px-3 pt-4 pb-16">
+      <!-- Breadcrumb -->
+      <ol class="flex items-center gap-2 text-xs text-gray-600 mb-4">
+        <li><a href="javascript:void(0)" onclick="switchPage('product')" class="hover:text-[#0054d1]">Trang chủ</a></li>
+        <li><i class="fa-solid fa-angle-right text-[10px] text-gray-400"></i></li>
+        <li class="text-gray-900 font-semibold">Xem lại đơn hàng</li>
+      </ol>
+
+      <div class="max-w-[740px] mx-auto bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden animate-pop">
+        <!-- Header Banner -->
+        <div class="bg-gradient-to-r from-[#0054d1] to-[#003d99] text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+            <div>
+              <h2 class="text-base sm:text-lg font-extrabold uppercase tracking-wide">Chi Tiết Đơn Hàng</h2>
+              <p class="text-xs text-blue-100">Cảm ơn quý khách đã mua hàng tại Nguyễn Công PC</p>
+            </div>
+          </div>
+
+          <div class="bg-white text-[#0054d1] font-black text-sm sm:text-base px-3.5 py-1.5 rounded-lg shadow">
+            Mã ĐH: <span id="review-order-code">#KZ872</span>
+          </div>
+        </div>
+
+        <div class="p-6 space-y-5">
+          <!-- Order Item Box: Product Image strictly in front of Order Name -->
+          <div>
+            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Sản phẩm trong đơn hàng</p>
+            <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 rounded-xl p-3.5">
+              <!-- Hình ảnh của đơn hàng phía trước tên đơn hàng -->
+              <div class="w-24 h-16 shrink-0 bg-white border border-gray-200 rounded-lg p-1 flex items-center justify-center">
+                <img
+                  src="https://nguyencongpc.vn/media/product/250-28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg"
+                  onerror="this.style.display='none'; document.getElementById('order-svg-fallback').style.display='block';"
+                  alt="Card Màn Hình Asus ROG Astral GeForce RTX 5080"
+                  class="max-h-full max-w-full object-contain"
+                />
+                <svg id="order-svg-fallback" style="display:none" class="w-20 h-12"><use href="#miku-gpu-illustration"></use></svg>
               </div>
-              <div class="list-showroom-detail">
-                <p><b>Showroom Miền Bắc:</b></p>
-                <a href="https://goo.gl/maps/3UeLE87NdpNzmmoGA" target="_blank"><i class="fa-solid fa-location-dot" style="color:#d91b24;"></i> Số 17 phố Hà Kế Tấn, Phường Phương Liệt, TP. Hà Nội</a>
-                <p style="margin-top:8px;"><b>Showroom Miền Nam:</b></p>
-                <a href="https://goo.gl/maps/BfZeSWEYbYVwNAWK8" target="_blank"><i class="fa-solid fa-location-dot" style="color:#d91b24;"></i> 249 Lý Thường Kiệt, Phường Phú Thọ, TP. Hồ Chí Minh</a>
-                <p style="margin-top: 6px; color: red; font-size: 12.5px;">Lưu ý: Sản phẩm có thể điều chuyển kho theo yêu cầu của quý khách.</p>
+
+              <!-- Tên đơn hàng -->
+              <div class="flex-1 min-w-0">
+                <h3 class="text-sm sm:text-[15px] font-bold text-gray-900 leading-snug">
+                  Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION
+                </h3>
+                <p class="text-xs text-gray-500 mt-1">Mã SP: <b class="text-[#0054d1]">VG000694</b> | Bảo hành: 36 tháng | Số lượng: <b id="review-order-qty">1</b></p>
               </div>
             </div>
+          </div>
 
-            <!-- Nút MUA NGAY chuyển đến Giỏ Hàng -->
-            <div class="detail-buy d-flex align-items-center justify-content-between">
-              <a href="javascript:void(0)" class="btn-buyInstall" onclick="showPage('page-cart')">
-                <span>TRẢ GÓP</span>
-              </a>
-              <a href="javascript:void(0)" class="detail-buy-now" onclick="showPage('page-
+          <!-- Order Details Table -->
+          <div class="border border-gray-200 rounded-xl overflow-hidden">
+            <table class="w-full text-xs sm:text-sm border-collapse">
+              <tbody class="divide-y divide-gray-200">
+                <tr class="hover:bg-gray-50/70">
+                  <td class="py-3.5 px-4 text-gray-500 font-medium w-2/5">Mã đơn hàng</td>
+                  <td class="py-3.5 px-4 text-right font-extrabold text-[#0054d1]" id="review-table-code">#KZ872</td>
+                </tr>
+                <tr class="hover:bg-gray-50/70">
+                  <td class="py-3.5 px-4 text-gray-500 font-medium">Tên người mua</td>
+                  <td class="py-3.5 px-4 text-right font-bold text-gray-900" id="review-buyer-name">Hiếu Đào</td>
+                </tr>
+                <tr class="hover:bg-gray-50/70">
+                  <td class="py-3.5 px-4 text-gray-500 font-medium">Địa chỉ nhận hàng</td>
+                  <td class="py-3.5 px-4 text-right font-bold text-gray-900" id="review-buyer-address">thôn phạ 1, xã cảm nhân...</td>
+                </tr>
+                <tr class="hover:bg-gray-50/70">
+                  <td class="py-3.5 px-4 text-gray-500 font-medium">Số điện thoại</td>
+                  <td class="py-3.5 px-4 text-right font-bold text-gray-900" id="review-buyer-phone">0855717751</td>
+                </tr>
+                <tr class="hover:bg-gray-50/70">
+                  <td class="py-3.5 px-4 text-gray-500 font-medium">Giá tiền</td>
+                  <td class="py-3.5 px-4 text-right font-extrabold text-base nc-price-red" id="review-order-price">55.000.000đ</td>
+                </tr>
+                <tr class="hover:bg-gray-50/70 bg-green-50/40">
+                  <td class="py-3.5 px-4 text-gray-700 font-semibold">Trạng thái thanh toán</td>
+                  <td class="py-3.5 px-4 text-right">
+                    <span class="inline-flex items-center gap-1.5 bg-green-100 text-green-700 font-extrabold px-3 py-1 rounded-full text-xs">
+                      <i class="fa-solid fa-circle-check"></i> Hoàn tất
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <button
+              type="button"
+              onclick="switchPage('cart')"
+              class="px-4 py-2.5 border border-gray-300 hover:bg-gray-50 rounded-lg text-xs font-bold text-gray-700 transition"
+            >
+              <i class="fa-solid fa-arrow-left mr-1"></i> Quay lại giỏ hàng
+            </button>
+
+            <button
+              type="button"
+              onclick="switchPage('product')"
+              class="px-6 py-2.5 bg-[#0054d1] hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-sm"
+            >
+              Tiếp tục mua sắm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- PAYMENT SUCCESS MODAL (Triggered by pressing 'K' on keyboard)             -->
+  <!-- ========================================================================= -->
+  <div id="modal-payment-success" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-[430px] w-full p-6 text-center shadow-2xl animate-pop">
+      <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h2 class="text-xl font-extrabold text-green-700 mb-1.5">Thanh toán thành công!</h2>
+      <p class="text-xs sm:text-[13px] text-gray-600 leading-relaxed mb-4">
+        Đơn hàng <strong class="text-gray-900">Asus ROG Astral GeForce RTX OC HATSUNE MIKU</strong> của bạn đã được thanh toán hoàn tất.
+      </p>
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs text-left mb-5 space-y-1">
+        <div class="flex justify-between">
+          <span class="text-gray-500">Đơn vị thụ hưởng:</span>
+          <strong class="text-gray-900">CONG TI CONG NGHE DIEN TU NC</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Số tiền:</span>
+          <strong id="modal-success-price" class="text-red-600 font-bold">55.000.000đ</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Trạng thái:</span>
+          <strong class="text-green-600">Hoàn tất</strong>
+        </div>
+      </div>
+      <button
+        type="button"
+        onclick="goToOrderDetailPage()"
+        class="w-full bg-[#0054d1] hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-sm uppercase tracking-wide shadow-md transition"
+      >
+        Chi tiết đơn hàng
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER NGUYỄN CÔNG PC (Authentic 6 Showrooms + Policies)                  -->
+  <!-- ========================================================================= -->
+  <footer class="bg-white border-t border-gray-200 mt-8">
+    <!-- Top 4 Policies -->
+    <div class="border-b border-gray-100 bg-slate-50">
+      <div class="max-w-[1200px] mx-auto px-3 py-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-blue-100 text-[#0054d1] flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-truck-fast"></i></div>
+          <div><b class="uppercase text-gray-900 block">Chính sách giao hàng</b><span class="text-gray-500">Nhận hàng và thanh toán tại nhà</span></div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-blue-100 text-[#0054d1] flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-Sync"></i><i class="fa-solid fa-arrows-rotate"></i></div>
+          <div><b class="uppercase text-gray-900 block">Đổi trả dễ dàng</b><span class="text-gray-500">1 đổi 1 trong 15 ngày</span></div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-blue-100 text-[#0054d1] flex items-center justify-center text-lg shrink-0"><i class="fa-regular fa-credit-card"></i></div>
+          <div><b class="uppercase text-gray-900 block">Thanh toán tiện lợi</b><span class="text-gray-500">Tiền mặt, CK, trả góp 0%</span></div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-blue-100 text-[#0054d1] flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-headset"></i></div>
+          <div><b class="uppercase text-gray-900 block">Hỗ trợ nhiệt tình</b><span class="text-gray-500">Tư vấn, giải đáp mọi thắc mắc</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Showroom Grid -->
+    <div class="max-w-[1200px] mx-auto px-3 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+        <div class="border border-gray-200 rounded-xl p-4">
+          <p class="font-bold text-sm text-[#0054d1] mb-2"><span class="bg-[#0054d1] text-white px-2 py-0.5 rounded mr-1">1</span> Cơ sở Hà Nội - Hà Kế Tấn</p>
+          <p class="text-gray-700 mb-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Số 17 phố Hà Kế Tấn, Phường Phương Liệt, TP. Hà Nội</p>
+          <p class="text-gray-700 mb-1"><i class="fa fa-phone text-[#0054d1] mr-1"></i> Hotline: <b>089.9999.191 - 0812.666.665</b></p>
+          <p class="text-gray-500">Giờ mở cửa: 08:30 - 20:30</p>
+        </div>
+        <div class="border border-gray-200 rounded-xl p-4">
+          <p class="font-bold text-sm text-[#0054d1] mb-2"><span class="bg-[#0054d1] text-white px-2 py-0.5 rounded mr-1">2</span> Cơ sở Hà Nội - Trần Thái Tông</p>
+          <p class="text-gray-700 mb-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Số 10 ngõ 93 Trần Thái Tông, Phường Cầu Giấy, TP. Hà Nội</p>
+          <p class="text-gray-700 mb-1"><i class="fa fa-phone text-[#0054d1] mr-1"></i> Hotline: <b>089.9999.191 - 0812.666.665</b></p>
+          <p class="text-gray-500">Giờ mở cửa: 08:30 - 18:00</p>
+        </div>
+        <div class="border border-gray-200 rounded-xl p-4">
+          <p class="font-bold text-sm text-[#0054d1] mb-2"><span class="bg-[#0054d1] text-white px-2 py-0.5 rounded mr-1">3</span> Cơ sở TP. Hồ Chí Minh</p>
+          <p class="text-gray-700 mb-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> 249 Lý Thường Kiệt, Phường Phú Thọ, TP. Hồ Chí Minh</p>
+          <p class="text-gray-700 mb-1"><i class="fa fa-phone text-[#0054d1] mr-1"></i> Hotline: <b>089.9999.191 - 0812.666.665</b></p>
+          <p class="text-gray-500">Giờ mở cửa: 08:30 - 20:30</p>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="mt-6 pt-5 border-t border-gray-200 text-xs text-gray-500 space-y-1">
+        <p class="font-semibold text-gray-700">WEBSITE ĐƯỢC SỞ HỮU VÀ QUẢN LÝ BỞI NGUYỄN VIẾT CÔNG - CÔNG TY TNHH MÁY TÍNH NGUYỄN CÔNG</p>
+        <p>Địa chỉ: 17 Hà Kế Tấn - Phường Phương Liệt - Hà Nội | Mã số thuế: 0107568451 do Sở Kế Hoạch và Đầu Tư TP.Hà Nội cấp</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING RIGHT CHAT BUTTONS (Facebook, Youtube, Zalo, Messenger)          -->
+  <!-- ========================================================================= -->
+  <div class="fixed right-3 bottom-4 z-40 flex flex-col items-end gap-2">
+    <div class="flex flex-col gap-2 mb-1">
+      <a href="https://www.facebook.com/maytinhnguyencong888/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-[#1877f2] text-white flex items-center justify-center shadow-lg hover:scale-105 transition">
+        <i class="fa-brands fa-facebook-f"></i>
+      </a>
+      <a href="https://www.youtube.com/c/NGUYENCONGPC" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-[#ff0000] text-white flex items-center justify-center shadow-lg hover:scale-105 transition">
+        <i class="fa-brands fa-youtube"></i>
+      </a>
+    </div>
+
+    <!-- Chat Zalo -->
+    <a href="https://zalo.me/nguyencongpc" target="_blank" rel="noopener noreferrer" class="bg-white border border-gray-200 rounded-2xl px-3 py-2 shadow-lg flex items-center gap-2.5 hover:shadow-xl transition">
+      <div class="w-8 h-8 rounded-full bg-[#0068ff] text-white font-extrabold text-[10px] flex items-center justify-center shrink-0">Zalo</div>
+      <div class="text-[11px] leading-tight text-[#0054d1]">
+        <b class="block">Chat Zalo</b>
+        <span class="text-gray-500">(8h-22h30)</span>
+      </div>
+    </a>
+
+    <!-- Chat Facebook -->
+    <a href="https://m.me/maytinhnguyencong888" target="_blank" rel="noopener noreferrer" class="bg-white border border-gray-200 rounded-2xl px-3 py-2 shadow-lg flex items-center gap-2.5 hover:shadow-xl transition">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-pink-500 text-white flex items-center justify-center shrink-0">
+        <i class="fa-brands fa-facebook-messenger text-sm"></i>
+      </div>
+      <div class="text-[11px] leading-tight text-[#0054d1]">
+        <b class="block">Chat Facebook</b>
+        <span class="text-gray-500">(8h-22h30)</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- INTERACTIVE POPUP MODALS (Hotline, Showroom, Installment, Full Spec, Toast)-->
+  <!-- ========================================================================= -->
+
+  <!-- Toast Notification -->
+  <div id="toast-box" class="hidden fixed top-20 right-5 bg-gray-900/95 text-white px-4 py-3 rounded-xl shadow-2xl z-[120] flex items-center gap-2.5 text-xs font-semibold animate-pop">
+    <i class="fa-solid fa-circle-check text-green-400 text-base"></i>
+    <span id="toast-text">Thêm sản phẩm vào giỏ hàng thành công!</span>
+  </div>
+
+  <!-- Modal Hotline (#popup-hotline) -->
+  <div id="modal-hotline" class="hidden fixed inset-0 bg-black/60 z-[90] flex items-center justify-center p-4" onclick="if(event.target===this) closeModal('modal-hotline')">
+    <div class="bg-white rounded-xl max-w-2xl w-full p-5 shadow-2xl animate-pop max-h-[85vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 border-b mb-4">
+        <h3 class="font-extrabold text-base text-[#0054d1] uppercase">Tổng đài tư vấn &amp; Liên hệ Nguyễn Công PC</h3>
+        <button type="button" onclick="closeModal('modal-hotline')" class="text-gray-400 hover:text-gray-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+        <div class="bg-blue-50/60 p-3.5 rounded-lg space-y-1.5">
+          <b class="text-sm text-[#0054d1] block">Khách cá nhân - Bán hàng Online</b>
+          <p>📞 <b class="text-red-600">0828.333.363</b> - Mr Ngọc</p>
+          <p>📞 <b class="text-red-600">0989.336.366</b> - Mr Hùng</p>
+          <p>📞 <b class="text-red-600">0707.08.6666</b> - Mr Hoàng</p>
+          <p>📞 <b class="text-red-600">089.9999.191</b> - Mr Lộc</p>
+          <p>📞 <b class="text-red-600">0812.666.665</b> - Mr Tuấn Anh</p>
+        </div>
+        <div class="bg-gray-50 p-3.5 rounded-lg space-y-1.5">
+          <b class="text-sm text-[#0054d1] block">Hotline Showroom &amp; Bảo hành</b>
+          <p>🏢 Showroom TP.HCM: <b class="text-red-600">098.33333.88</b></p>
+          <p>🏢 Showroom Hà Nội: <b class="text-red-600">097.9999.191</b></p>
+          <p>🛠️ Bảo hành HN: <b class="text-gray-900">0705.666.668 - 0765.666.668</b></p>
+          <p>🛠️ Bảo hành HCM: <b class="text-gray-900">079.9999.191</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Showroom (#fancybox-showroom) -->
+  <div id="modal-showroom" class="hidden fixed inset-0 bg-black/60 z-[90] flex items-center justify-center p-4" onclick="if(event.target===this) closeModal('modal-showroom')">
+    <div class="bg-white rounded-xl max-w-2xl w-full p-5 shadow-2xl animate-pop">
+      <div class="flex justify-between items-center pb-3 border-b mb-4">
+        <h3 class="font-extrabold text-base text-[#0054d1] uppercase">Hệ Thống Showroom Nguyễn Công PC</h3>
+        <button type="button" onclick="closeModal('modal-showroom')" class="text-gray-400 hover:text-gray-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="p-3 border rounded-lg">
+          <b class="text-sm text-gray-900">1. Showroom Hà Nội - Hà Kế Tấn</b>
+          <p class="text-gray-600 mt-1">17 Hà Kế Tấn, Phường Phương Liệt, Hà Nội | Giờ làm việc: <b>08:30 - 20:30</b></p>
+        </div>
+        <div class="p-3 border rounded-lg">
+          <b class="text-sm text-gray-900">2. Showroom Hà Nội - Cầu Giấy</b>
+          <p class="text-gray-600 mt-1">Số 10 ngõ 93 Trần Thái Tông, Phường Cầu Giấy, Hà Nội | Giờ làm việc: <b>08:30 - 18:00</b></p>
+        </div>
+        <div class="p-3 border rounded-lg">
+          <b class="text-sm text-gray-900">3. Showroom TP. Hồ Chí Minh</b>
+          <p class="text-gray-600 mt-1">249 Lý Thường Kiệt, Phường Phú Thọ, TP. Hồ Chí Minh | Giờ làm việc: <b>08:30 - 20:30</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Installment (#box-btn-payinstall) -->
+  <div id="modal-installment" class="hidden fixed inset-0 bg-black/60 z-[90] flex items-center justify-center p-4" onclick="if(event.target===this) closeModal('modal-installment')">
+    <div class="bg-white rounded-xl max-w-md w-full p-5 shadow-2xl animate-pop text-center">
+      <h3 class="font-extrabold text-base text-gray-900 mb-3">Chọn hình thức Mua Trả Góp</h3>
+      <div class="grid grid-cols-1 gap-3">
+        <button type="button" onclick="closeModal('modal-installment'); handleBuyNow();" class="bg-[#0054d1] hover:bg-blue-700 text-white p-3 rounded-lg font-bold text-xs">
+          <span class="block text-sm">TRẢ GÓP QUA HỒ SƠ</span>
+          <span class="font-normal opacity-90">Chỉ từ 4.718.083₫ / tháng</span>
+        </button>
+        <button type="button" onclick="closeModal('modal-installment'); handleBuyNow();" class="bg-[#f59e0b] hover:bg-amber-600 text-white p-3 rounded-lg font-bold text-xs">
+          <span class="block text-sm">TRẢ GÓP QUA THẺ TÍN DỤNG</span>
+          <span class="font-normal opacity-90">Chỉ từ 4.718.083₫ / tháng</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Full Specifications -->
+  <div id="modal-full-spec" class="hidden fixed inset-0 bg-black/60 z-[90] flex items-center justify-center p-4" onclick="if(event.target===this) closeModal('modal-full-spec')">
+    <div class="bg-white rounded-xl max-w-xl w-full p-5 shadow-2xl animate-pop max-h-[85vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 border-b mb-3">
+        <h3 class="font-extrabold text-base text-gray-900">Thông số kỹ thuật chi tiết</h3>
+        <button type="button" onclick="closeModal('modal-full-spec')" class="text-gray-400 hover:text-gray-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <table class="w-full border-collapse spec-table">
+        <tbody>
+          <tr><td>Sản phẩm</td><td>Card đồ họa VGA</td></tr>
+          <tr><td>Mã sản phẩm (SKU)</td><td>VG000694</td></tr>
+          <tr><td>Hãng sản xuất</td><td>ASUS ROG</td></tr>
+          <tr><td>Engine đồ họa</td><td>NVIDIA® GeForce RTX™ 5080</td></tr>
+          <tr><td>AI Performance</td><td>1899 TOPs</td></tr>
+          <tr><td>Chuẩn Bus</td><td>PCI Express 5.0</td></tr>
+          <tr><td>OpenGL</td><td>OpenGL® 4.6</td></tr>
+          <tr><td>CUDA Core</td><td>10752</td></tr>
+          <tr><td>Memory Speed</td><td>30 Gbps</td></tr>
+          <tr><td>Bộ nhớ</td><td>16GB GDDR7</td></tr>
+          <tr><td>Bus bộ nhớ</td><td>256-bit</td></tr>
+          <tr><td>Độ phân giải tối đa</td><td>7680 x 4320</td></tr>
+          <tr><td>Cổng kết nối</td><td>2 x Native HDMI 2.1b, 3 x Native DisplayPort 2.1b (HDCP 2.3)</td></tr>
+          <tr><td>Kích thước</td><td>357.6 x 149.3 x 76 mm (14.1 x 5.9 x 3 inch) - 3.8 Slot</td></tr>
+          <tr><td>Nguồn đề xuất</td><td>850W (1 x 16-pin)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Login -->
+  <div id="modal-login" class="hidden fixed inset-0 bg-black/60 z-[90] flex items-center justify-center p-4" onclick="if(event.target===this) closeModal('modal-login')">
+    <div class="bg-white rounded-xl max-w-sm w-full p-5 shadow-2xl animate-pop">
+      <div class="flex justify-between items-center pb-2.5 border-b mb-3">
+        <h3 class="font-bold text-sm text-gray-900">Đăng nhập tài khoản</h3>
+        <button type="button" onclick="closeModal('modal-login')" class="text-gray-400 hover:text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="space-y-2.5 text-xs">
+        <input type="text" value="kanomiki2008@gmail.com" placeholder="Email hoặc Số điện thoại" class="nc-cart-input" />
+        <input type="password" value="12345678" placeholder="Mật khẩu" class="nc-cart-input" />
+        <button type="button" onclick="closeModal('modal-login'); showToast('Xin chào Hiếu Đào!');" class="w-full bg-[#0054d1] text-white font-bold py-2.5 rounded-lg">ĐĂNG NHẬP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT LOGIC                                                          -->
+  <!-- ========================================================================= -->
+  <script>
+    // 1. PRODUCT GALLERY IMAGES (Exact URLs from HTML)
+    const PRODUCT_IMAGES = [
+      "https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg",
+      "https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-01.jpg",
+      "https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-03.jpg",
+      "https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-05.jpg",
+      "https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-06.jpg"
+    ];
+
+    const UNIT_PRICE = 55000000;
+    let currentSlide = 0;
+    let cartQty = 1;
+
+    function formatVND(amount) {
+      return amount.toLocaleString('vi-VN') + 'đ';
+    }
+
+    function formatVNDSpace(amount) {
+      return amount.toLocaleString('vi-VN') + ' đ';
+    }
+
+    // Render 5 Thumbnails
+    function renderThumbnails() {
+      const container = document.getElementById('thumb-list');
+      container.innerHTML = PRODUCT_IMAGES.map((url, idx) => `
+        <button
+          type="button"
+          onclick="selectSlide(${idx})"
+          class="border-2 rounded-lg p-1.5 bg-white flex items-center justify-center h-16 transition ${
+            idx === currentSlide ? 'border-[#0054d1] shadow-sm' : 'border-gray-200 hover:border-blue-300'
+          }"
+        >
+          <img
+            src="${url}"
+            onerror="this.src='https://placehold.co/90x60/00b8b8/ffffff?text=Miku+0${idx + 1}'"
+            alt="Thumb ${idx + 1}"
+            class="max-h-full max-w-full object-contain"
+          />
+        </button>
+      `).join('');
+    }
+
+    function selectSlide(index) {
+      currentSlide = (index + PRODUCT_IMAGES.length) % PRODUCT_IMAGES.length;
+      const mainImg = document.getElementById('main-product-img');
+      const svgFallback = document.getElementById('main-svg-fallback');
+      mainImg.style.display = 'block';
+      svgFallback.style.display = 'none';
+      mainImg.src = PRODUCT_IMAGES[currentSlide];
+      document.getElementById('slide-counter-badge').textContent = `${currentSlide + 1} / ${PRODUCT_IMAGES.length}`;
+      renderThumbnails();
+    }
+
+    function changeSlide(delta) {
+      selectSlide(currentSlide + delta);
+    }
+
+    function openLightbox() {
+      changeSlide(1);
+    }
+
+    // 2. RECENT CUSTOMER BOUGHT TICKER (From HTML)
+    const RECENT_CUSTOMERS = [
+      { name: "Khách hàng Quốc Trung (086 216 xxxx)", time: "Đã mua hàng 1 giờ trước" },
+      { name: "Khách hàng Minh Châu (035 348 xxxx)", time: "Đã mua hàng 1 giờ trước" },
+      { name: "Khách hàng Hoàng Tuấn Ngọc (097 408 xxxx)", time: "Đã mua hàng 30 phút trước" },
+      { name: "Khách hàng Đạt (037 964 xxxx)", time: "Đã mua hàng 25 phút trước" },
+      { name: "Khách hàng Vinh (096 169 xxxx)", time: "Đã mua hàng 20 phút trước" }
+    ];
+    let tickerIdx = 0;
+    setInterval(() => {
+      tickerIdx = (tickerIdx + 1) % RECENT_CUSTOMERS.length;
+      const el = document.getElementById('customer-bought-ticker');
+      if (el) {
+        const item = RECENT_CUSTOMERS[tickerIdx];
+        el.innerHTML = `<b>${item.name}</b> <span class="text-gray-500 ml-1">${item.time}</span>`;
+      }
+    }, 3500);
+
+    // 3. PAGE NAVIGATION ('product' | 'cart' | 'order-detail')
+    function switchPage(pageName) {
+      document.getElementById('page-product').classList.add('hidden');
+      document.getElementById('page-cart').classList.add('hidden');
+      document.getElementById('page-order-detail').classList.add('hidden');
+
+      document.getElementById('page-' + pageName).classList.remove('hidden');
+
+      // Hide fixed side banners on Cart & Order Detail so they don't overlap Cart's own side banners
+      document.querySelectorAll('.fixed-side-banner').forEach(b => {
+        if (pageName === 'product') {
+          b.classList.add('product-mode');
+          b.style.display = '';
+        } else {
+          b.style.display = 'none';
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 4. BUY NOW & ADD TO CART ACTIONS
+    function showToast(message) {
+      const box = document.getElementById('toast-box');
+      document.getElementById('toast-text').textContent = message;
+      box.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        box.classList.add('hidden');
+      }, 2200);
+    }
+
+    function handleAddToCartOnly() {
+      showToast('Thêm sản phẩm vào giỏ hàng thành công!');
+    }
+
+    function handleBuyNow() {
+      showToast('Thêm sản phẩm vào giỏ hàng thành công!');
+      setTimeout(() => {
+        switchPage('cart');
+      }, 350);
+    }
+
+    // 5. CART QUANTITY & TOTAL CALCULATION
+    function updateCartQty(delta) {
+      cartQty = Math.max(1, Math.min(7, cartQty + delta));
+      const total = UNIT_PRICE * cartQty;
+
+      document.getElementById('cart-qty-input').value = cartQty;
+      document.getElementById('cart-item-price').textContent = formatVNDSpace(total);
+      document.getElementById('summary-subtotal').textContent = formatVNDSpace(total);
+      document.getElementById('summary-total').textContent = formatVNDSpace(total);
+      document.getElementById('vietqr-amount').textContent = formatVND(total);
+      document.getElementById('modal-success-price').textContent = formatVND(total);
+
+      // Update Header Cart Tooltip
+      document.getElementById('header-cart-badge').textContent = cartQty;
+      document.getElementById('ttip-qty').textContent = 'x ' + cartQty;
+      document.getElementById('ttip-price').textContent = formatVND(total);
+      document.getElementById('ttip-count-label').textContent = `(${cartQty} sản phẩm)`;
+      document.getElementById('ttip-total').textContent = formatVND(total);
+    }
+
+    // 6. PROVINCE / DISTRICT DROPDOWN
+    const DISTRICTS_BY_PROVINCE = {
+      "Yên Bái": ["Huyện Yên Bình", "TP. Yên Bái", "Huyện Lục Yên", "Huyện Văn Yên", "Thị xã Nghĩa Lộ"],
+      "Lào Cai": ["Xã Cảm Nhân", "TP. Lào Cai", "Thị xã Sa Pa", "Huyện Bảo Thắng", "Huyện Bảo Yên"],
+      "Hà Nội": ["Quận Thanh Xuân", "Quận Cầu Giấy", "Quận Đống Đa", "Quận Hoàn Kiếm", "Quận Hai Bà Trưng"],
+      "TP. Hồ Chí Minh": ["Quận 10", "Quận 1", "Quận 3", "Quận Tân Bình", "TP. Thủ Đức"]
+    };
+
+    function handleProvinceChange(province) {
+      const select = document.getElementById('buyer-district');
+      const list = DISTRICTS_BY_PROVINCE[province] || ["Quận/Huyện"];
+      select.innerHTML = `<option value="">Quận/Huyện</option>` + list.map((d, idx) =>
+        `<option value="${d}" ${idx === 0 ? 'selected' : ''}>${d}</option>`
+      ).join('');
+    }
+
+    // 7. PAYMENT MODE & 3 ONLINE METHODS (VISA, MOMO, VIETQR)
+    function handlePaymentModeChange(mode) {
+      const panel = document.getElementById('full-payment-methods');
+      if (mode === 'full') {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    }
+
+    function selectOnlineMethod(method) {
+      // Update active button styling
+      const methods = ['visa', 'momo', 'vietqr'];
+      methods.forEach(m => {
+        const btn = document.getElementById('tab-btn-' + m);
+        const subPanel = document.getElementById('panel-' + m);
+        if (m === method) {
+          btn.className = "online-method-btn active border-2 border-[#0054d1] bg-blue-50 text-[#0054d1] rounded-lg py-2.5 px-2 text-xs font-bold flex flex-col items-center gap-1 transition shadow-sm";
+          subPanel.classList.remove('hidden');
+        } else {
+          btn.className = "online-method-btn border border-gray-300 bg-white text-gray-700 hover:border-[#0054d1] rounded-lg py-2.5 px-2 text-xs font-bold flex flex-col items-center gap-1 transition";
+          subPanel.classList.add('hidden');
+        }
+      });
+
+      if (method === 'vietqr') {
+        drawVietQRCode();
+      }
+    }
+
+    // 8. DRAW EXACT VIETQR IMAGE ON CANVAS (Matching image_08d3e1.png)
+    function drawVietQRCode() {
+      const canvas = document.getElementById('vietqr-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const gridSize = 29;
+      const cellSize = 8.4;
+      const startX = Math.floor((canvas.width - gridSize * cellSize) / 2);
+      const startY = 12;
+
+      function isFinderPattern(r, c) {
+        if (r < 7 && c < 7) return true;
+        if (r < 7 && c >= gridSize - 7) return true;
+        if (r >= gridSize - 7 && c < 7) return true;
+        // Quiet zone around finders
+        if (r === 7 && c <= 7) return true;
+        if (c === 7 && r <= 7) return true;
+        if (r === 7 && c >= gridSize - 8) return true;
+        if (c === gridSize - 8 && r <= 7) return true;
+        if (r === gridSize - 8 && c <= 7) return true;
+        if (c === 7 && r >= gridSize - 8) return true;
+        return false;
+      }
+
+      function drawFinder(rowOffset, colOffset) {
+        const x = startX + colOffset * cellSize;
+        const y = startY + rowOffset * cellSize;
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x, y, 7 * cellSize, 7 * cellSize);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + cellSize, y + cellSize, 5 * cellSize, 5 * cellSize);
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x + 2 * cellSize, y + 2 * cellSize, 3 * cellSize, 3 * cellSize);
+      }
+
+      drawFinder(0, 0);
+      drawFinder(0, gridSize - 7);
+      drawFinder(gridSize - 7, 0);
+
+      // Alignment pattern bottom-right
+      const alignR = gridSize - 9;
+      const alignC = gridSize - 9;
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(startX + alignC * cellSize, startY + alignR * cellSize, 5 * cellSize, 5 * cellSize);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(startX + (alignC + 1) * cellSize, startY + (alignR + 1) * cellSize, 3 * cellSize, 3 * cellSize);
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(startX + (alignC + 2) * cellSize, startY + (alignR + 2) * cellSize, cellSize, cellSize);
+
+      // Deterministic crisp QR modules
+      ctx.fillStyle = '#000000';
+      for (let r = 0; r < gridSize; r++) {
+        for (let c = 0; c < gridSize; c++) {
+          if (isFinderPattern(r, c)) continue;
+          if (r >= alignR && r < alignR + 5 && c >= alignC && c < alignC + 5) continue;
+
+          // Timing patterns
+          if (r === 6 || c === 6) {
+            if ((r + c) % 2 === 0) {
+              ctx.fillRect(startX + c * cellSize, startY + r * cellSize, cellSize + 0.3, cellSize + 0.3);
+            }
+            continue;
+          }
+
+          const hash = ((r * 37 + c * 19 + r * c * 11 + 7) % 17);
+          if (hash < 8) {
+            ctx.fillRect(startX + c * cellSize, startY + r * cellSize, cellSize + 0.3, cellSize + 0.3);
+          }
+        }
+      }
+
+      // Draw VIETQR & napas 247 logos at bottom (matching image_08d3e1.png)
+      const logoY = 295;
+
+      // Red V checkmark icon
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(26, logoY - 18);
+      ctx.lineTo(36, logoY);
+      ctx.lineTo(50, logoY - 22);
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 6.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+      ctx.restore();
+
+      // IETQR text
+      ctx.font = '800 18px Inter, Arial, sans-serif';
+      ctx.fillStyle = '#1e3a8a';
+      ctx.fillText('IETQR', 53, logoY - 1);
+
+      // napas 247 text
+      ctx.font = 'italic 900 21px Inter, Arial, sans-serif';
+      ctx.fillStyle = '#0f3e6d';
+      ctx.fillText('napas', 142, logoY - 1);
+
+      ctx.fillStyle = '#0284c7';
+      ctx.fillText('24', 208, logoY - 1);
+
+      ctx.fillStyle = '#84cc16';
+      ctx.fillText('7', 235, logoY - 1);
+    }
+
+    // 9. KEYBOARD SHORTCUT 'K' TO TRIGGER PAYMENT SUCCESS
+    function triggerPaymentSuccess() {
+      const total = UNIT_PRICE * cartQty;
+      document.getElementById('modal-success-price').textContent = formatVND(total);
+      document.getElementById('modal-payment-success').classList.remove('hidden');
+    }
+
+    window.addEventListener('keydown', function (event) {
+      const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      const isTyping = (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select');
+
+      // Allow pressing 'k' or 'K' whenever not actively typing in a text input
+      if (!isTyping && (event.key === 'k' || event.key === 'K')) {
+        event.preventDefault();
+        triggerPaymentSuccess();
+      }
+    });
+
+    // 10. GENERATE RANDOM ORDER CODE (#KZ872 style) & MASK ADDRESS FOR ORDER REVIEW PAGE
+    function generateRandomOrderCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const l1 = chars.charAt(Math.floor(Math.random() * chars.length));
+      const l2 = chars.charAt(Math.floor(Math.random() * chars.length));
+      const num = Math.floor(100 + Math.random() * 900);
+      return `#${l1}${l2}${num}`;
+    }
+
+    function maskShortAddress(fullAddress) {
+      const raw = (fullAddress || 'Thôn Phạ 1, Xã Cảm Nhân').trim();
+      if (!raw) return 'Thôn Phạ 1, Xã Cảm Nhân...';
+
+      // If comma-separated, keep first 2 parts + "..."
+      const commaParts = raw.split(',').map(s => s.trim()).filter(Boolean);
+      if (commaParts.length >= 2) {
+        return `${commaParts[0]}, ${commaParts[1]}...`;
+      }
+
+      // Otherwise keep first 6 words + "..."
+      const words = raw.split(/\s+/);
+      if (words.length > 6) {
+        return words.slice(0, 6).join(' ') + '...';
+      }
+      return raw + '...';
+    }
+
+    function goToOrderDetailPage() {
+      document.getElementById('modal-payment-success').classList.add('hidden');
+
+      const orderCode = generateRandomOrderCode();
+      const buyerName = document.getElementById('buyer-name').value.trim() || 'Hiếu Đào';
+      const buyerPhone = document.getElementById('buyer-phone').value.trim() || '0855717751';
+      const buyerAddress = document.getElementById('buyer-address').value.trim() || 'Thôn Phạ 1, Xã Cảm Nhân';
+      const total = UNIT_PRICE * cartQty;
+
+      document.getElementById('review-order-code').textContent = orderCode;
+      document.getElementById('review-table-code').textContent = orderCode;
+      document.getElementById('review-buyer-name').textContent = buyerName;
+      document.getElementById('review-buyer-phone').textContent = buyerPhone;
+      document.getElementById('review-buyer-address').textContent = maskShortAddress(buyerAddress);
+      document.getElementById('review-order-qty').textContent = cartQty;
+      document.getElementById('review-order-price').textContent = formatVND(total);
+
+      switchPage('order-detail');
+    }
+
+    // 11. LIVE SEARCH BAR SUGGESTIONS
+    const SEARCH_CATALOG = [
+      {
+        name: "Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION",
+        price: "55.000.000đ",
+        img: "https://nguyencongpc.vn/media/product/250-28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg"
+      },
+      {
+        name: "Card Màn Hình Colorful GeForce iGame RTX 5080 Vulcan OC 16GB",
+        price: "55.990.000đ",
+        img: "https://nguyencongpc.vn/media/product/250-27356-colorful-geforce-igame-rtx-5080-vulcan-oc-16gb-1.jpg"
+      },
+      {
+        name: "Card màn hình ASUS ProArt GeForce RTX 5080 OC 16GB GDDR7",
+        price: "55.990.000đ",
+        img: "https://nguyencongpc.vn/media/product/250-30296-card-man-hinh-asus-proart-geforce-rtx-5080-oc-16gb-gddr7-1.webp"
+      }
+    ];
+
+    function handleSearchInput(query) {
+      const dropdown = document.getElementById('search-dropdown');
+      const holder = document.getElementById('search-results-holder');
+      const clean = query.trim().toLowerCase();
+
+      if (!clean) {
+        dropdown.classList.add('hidden');
+        return;
+      }
+
+      const matches = SEARCH_CATALOG.filter(p => p.name.toLowerCase().includes(clean));
+      const listToRender = matches.length > 0 ? matches : SEARCH_CATALOG;
+
+      holder.innerHTML = listToRender.map(item => `
+        <a href="javascript:void(0)" onclick="switchPage('product'); document.getElementById('search-dropdown').classList.add('hidden');" class="flex items-center gap-3 p-2.5 hover:bg-blue-50 transition">
+          <img src="${item.img}" onerror="this.src='https://placehold.co/60x45/00b8b8/ffffff?text=VGA'" class="w-12 h-10 object-contain border rounded p-0.5 bg-white" />
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-semibold text-gray-900 line-clamp-1">${item.name}</p>
+            <p class="text-xs font-bold text-red-600">${item.price}</p>
+          </div>
+        </a>
+      `).join('');
+
+      dropdown.classList.remove('hidden');
+    }
+
+    function handleSearchSubmit(e) {
+      e.preventDefault();
+      document.getElementById('search-dropdown').classList.add('hidden');
+      switchPage('product');
+    }
+
+    // Close search dropdown on outside click
+    document.addEventListener('click', function (e) {
+      const searchBox = document.getElementById('js-search-box');
+      const dropdown = document.getElementById('search-dropdown');
+      if (searchBox && dropdown && !searchBox.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add('hidden');
+      }
+    });
+
+    // 12. MODALS & REVIEWS
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function submitReview(e) {
+      e.preventDefault();
+      const name = document.getElementById('rev-name').value.trim();
+      const content = document.getElementById('rev-content').value.trim();
+      if (!name || !content) return;
+
+      const holder = document.getElementById('review-list-holder');
+      const div = document.createElement('div');
+      div.className = 'bg-blue-50/60 p-3 rounded-lg border border-blue-100 animate-pop';
+      div.innerHTML = `
+        <div class="flex justify-between items-center mb-1">
+          <b class="text-gray-900">${name}</b>
+          <span class="text-yellow-400">★★★★★</span>
+        </div>
+        <p class="text-gray-700">${content}</p>
+      `;
+      holder.prepend(div);
+
+      document.getElementById('rev-content').value = '';
+      document.getElementById('review-form-box').classList.add('hidden');
+      showToast('Cảm ơn bạn đã gửi đánh giá sản phẩm!');
+    }
+
+    // INITIALIZE ON LOAD
+    window.onload = function () {
+      renderThumbnails();
+      drawVietQRCode();
+    };
+  </script>
+</body>
+</html>
