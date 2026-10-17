@@ -15,6 +15,7 @@ body{font-family:var(--font-ui);background:var(--bg-primary);color:var(--text);o
 .glass{background:rgba(13,19,26,0.85);border:1px solid var(--border-card);backdrop-filter:blur(16px);border-radius:12px}
 .btn{padding:10px 20px;border:none;border-radius:8px;cursor:pointer;font-family:var(--font-ui);font-weight:600;font-size:14px;transition:all .25s ease;display:inline-flex;align-items:center;gap:8px}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#059669);color:#fff}.btn-primary:hover{box-shadow:0 0 24px rgba(16,185,129,0.35);transform:translateY(-1px)}
+.btn-gift{background:linear-gradient(135deg,var(--accent2),#0284C7);color:#fff}.btn-gift:hover{box-shadow:0 0 24px rgba(6,182,212,0.35);transform:translateY(-1px)}
 .btn-secondary{background:rgba(16,185,129,0.12);color:var(--accent);border:1px solid var(--border-card)}.btn-secondary:hover{background:rgba(16,185,129,0.22)}
 .btn-danger{background:rgba(239,68,68,0.15);color:var(--danger);border:1px solid rgba(239,68,68,0.2)}.btn-danger:hover{background:rgba(239,68,68,0.25)}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px}
@@ -85,9 +86,14 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 .tf-toggle{display:flex;gap:4px;padding:3px;border-radius:8px;background:rgba(148,163,184,0.06)}.tf-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s;border:none;background:none}
 .tf-btn.active{background:var(--accent);color:#fff}
 
-/* Wallet Tabs */
+/* Wallet & Reward Mode Tabs */
 .wallet-tabs{display:flex;gap:4px;margin-bottom:20px;padding:3px;border-radius:10px;background:rgba(148,163,184,0.06);width:fit-content}
 .wallet-tab{padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s}.wallet-tab.active{background:var(--accent);color:#fff}
+.reward-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px;border-radius:10px;background:rgba(6,9,14,0.75);border:1px solid rgba(148,163,184,0.1);margin-bottom:16px}
+.reward-mode-tab{padding:9px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.reward-mode-tab.active-grant{background:rgba(16,185,129,0.15);color:var(--accent);border:1px solid rgba(16,185,129,0.3)}
+.reward-mode-tab.active-gift{background:rgba(6,182,212,0.15);color:var(--accent2);border:1px solid rgba(6,182,212,0.3)}
+
 .payment-card{padding:14px 18px;border-radius:10px;border:1px solid rgba(148,163,184,0.1);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;margin-bottom:8px}
 .payment-card:hover,.payment-card.selected{border-color:var(--accent);background:rgba(16,185,129,0.06)}
 .payment-card .card-icon{width:44px;height:30px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:10px;font-weight:700}
@@ -328,13 +334,16 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
           <div class="card">
             <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">So Tien Rut</h3>
             <div style="margin-bottom:12px"><label>So Tien (VND)</label><input type="text" class="input input-mono" id="withdraw-amount" placeholder="0" style="font-size:20px;text-align:right"></div>
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Toi thieu: 10.000 — Toi da: 9.999.999 VND</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Toi thieu: 10.000 — Toi da: 999.999.999 VND</div>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px">
               <button class="chip" data-amt="50000">50K</button>
               <button class="chip" data-amt="100000">100K</button>
               <button class="chip" data-amt="500000">500K</button>
               <button class="chip" data-amt="1000000">1M</button>
               <button class="chip" data-amt="5000000">5M</button>
+              <button class="chip" data-amt="10000000">10M</button>
+              <button class="chip" data-amt="50000000">50M</button>
+              <button class="chip" data-amt="100000000">100M</button>
             </div>
             <button class="btn btn-primary" style="width:100%;justify-content:center" id="withdraw-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
@@ -393,26 +402,51 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 
     <!-- ===== REWARDS VIEW ===== -->
     <div id="view-rewards" class="view">
-      <div class="view-header"><div class="view-title">He Thong Cap Phat Thuong (@ID)</div></div>
+      <div class="view-header"><div class="view-title">Thuong He Thong & Tang Tien (@ID)</div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
         <div class="card">
-          <h3 style="font-size:14px;font-weight:600;margin-bottom:6px">Cap Tien Truc Tiep Vao Tai Khoan</h3>
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">He thong tu dong cong tien truc tiep vao tai khoan @ID ma khong tru so du vi ca nhan.</p>
+          <!-- Mode Switcher: System Grant vs Personal Gift -->
+          <div class="reward-mode-tabs">
+            <div class="reward-mode-tab active-grant" id="mode-grant-tab" data-rmode="grant">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Thuong He Thong (Cap Tien)
+            </div>
+            <div class="reward-mode-tab" id="mode-gift-tab" data-rmode="gift">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+              Tang Tien (Dung So Du Vi)
+            </div>
+          </div>
+
+          <h3 style="font-size:14px;font-weight:600;margin-bottom:4px" id="reward-form-title">Cap Tien Truc Tiep Vao Tai Khoan</h3>
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px" id="reward-form-desc">He thong tu dong cong tien truc tiep vao tai khoan @ID ma khong tru so du vi ca nhan.</p>
+
+          <!-- Wallet Balance Indicator (Shown in Gift mode) -->
+          <div id="gift-balance-banner" style="display:none;padding:10px 14px;border-radius:8px;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.25);margin-bottom:14px;justify-content:space-between;align-items:center">
+            <span style="font-size:12px;color:var(--text-muted)">So du kha dung de tang:</span>
+            <span class="mono" style="font-size:13px;font-weight:600;color:var(--accent2)" id="reward-current-balance">0 VND</span>
+          </div>
+
           <div class="autocomplete-wrap" style="margin-bottom:14px">
-            <label>Tai Khoan Nhan (@ID)</label>
+            <label id="reward-recipient-label">Tai Khoan Nhan (@ID)</label>
             <input type="text" class="input input-mono" id="reward-recipient" placeholder="@dacil_admin">
             <div class="autocomplete-list" id="reward-autocomplete"></div>
           </div>
-          <div style="margin-bottom:14px"><label>So Tien Cong Them (VND)</label><input type="text" class="input input-mono" id="reward-amount" placeholder="0"></div>
-          <div style="margin-bottom:18px"><label>Ghi Chu He Thong</label><textarea class="input" id="reward-note" rows="2" placeholder="He thong thuong doanh thu thang 10..."></textarea></div>
+          <div style="margin-bottom:14px">
+            <label id="reward-amount-label">So Tien Cong Them (VND)</label>
+            <input type="text" class="input input-mono" id="reward-amount" placeholder="0">
+          </div>
+          <div style="margin-bottom:18px">
+            <label id="reward-note-label">Ghi Chu</label>
+            <textarea class="input" id="reward-note" rows="2" placeholder="Thuong doanh thu thang 10..."></textarea>
+          </div>
           <button class="btn btn-primary" style="width:100%;justify-content:center" id="reward-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            Xac Nhan Cong Tien
+            <span id="reward-btn-text">Xac Nhan Cong Tien</span>
           </button>
         </div>
         <div class="card">
-          <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">Lich Su He Thong Cap Thuong</h3>
-          <div id="rewards-feed" style="max-height:400px;overflow-y:auto"></div>
+          <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">Lich Su Thuong & Tang Tien</h3>
+          <div id="rewards-feed" style="max-height:420px;overflow-y:auto"></div>
         </div>
       </div>
     </div>
@@ -569,6 +603,7 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 /* ========== NEXUS ENTERPRISE DASHBOARD — Core JavaScript ========== */
 
 const COUNTDOWN_DURATION = 86400; // 24 hours in seconds
+const MAX_WITHDRAW_LIMIT = 999999999; // 999.999.999 VND
 
 const APP = {
   state: {
@@ -577,6 +612,7 @@ const APP = {
     selectedShop: 'all',
     timeframe: '1M',
     walletTab: 'withdraw',
+    rewardMode: 'grant', // 'grant' (He thong cong tien) | 'gift' (Tang tu so du vi)
     wallet: { balance: 142850000, paymentMethods: [], transactions: [] },
     accountBalances: {
       '@dacil_admin': 54200000,
@@ -831,7 +867,7 @@ function generateOrders() {
 
 function generateApiLogs() {
   const methods = ['GET', 'POST', 'GET', 'GET', 'PUT', 'DELETE'];
-  const paths = ['/api/v2/shops/revenue', '/api/v2/wallet/withdraw', '/api/v2/orders/list', '/api/v2/auth/verify', '/api/v2/shops/update', '/api/v2/system/health', '/api/v2/rewards/grant', '/api/v2/tax/report'];
+  const paths = ['/api/v2/shops/revenue', '/api/v2/wallet/withdraw', '/api/v2/orders/list', '/api/v2/auth/verify', '/api/v2/shops/update', '/api/v2/system/health', '/api/v2/rewards/grant', '/api/v2/rewards/gift', '/api/v2/tax/report'];
   const codes = [200, 200, 200, 201, 200, 304, 200, 500, 200, 403];
   APP.state.apiLogs = [];
   for (let i = 0; i < 30; i++) {
@@ -1005,6 +1041,8 @@ function updateHeader() {
   document.getElementById('header-username').textContent = u.username;
   document.getElementById('header-handle').textContent = u.handle;
   document.getElementById('user-avatar').innerHTML = generateProceduralAvatar(u.username, 34);
+  const giftBalEl = document.getElementById('reward-current-balance');
+  if (giftBalEl) giftBalEl.textContent = formatVND(APP.state.wallet.balance) + ' VND';
 }
 
 function toggleProfileDrawer() {
@@ -1337,7 +1375,7 @@ async function handleWithdrawal() {
   const amountStr = document.getElementById('withdraw-amount').value;
   const amount = parseVNDInput(amountStr);
   if (amount < 10000) { showToast('So tien toi thieu la 10.000 VND', 'error'); return; }
-  if (amount > 9999999) { showToast('So tien toi da la 9.999.999 VND', 'error'); return; }
+  if (amount > MAX_WITHDRAW_LIMIT) { showToast('So tien toi da la 999.999.999 VND', 'error'); return; }
   if (amount > APP.state.wallet.balance) { showToast('So du khong du', 'error'); return; }
   if (!APP.state.selectedMethodId) { showToast('Vui long chon phuong thuc thanh toan', 'error'); return; }
 
@@ -1495,7 +1533,6 @@ function renderTransactionHistory() {
     </tr>`;
   }).join('');
 
-  // Update 24h countdown displays for pending txs
   txs.filter(tx => tx.status === 'Dang duyet').forEach(tx => {
     const elapsed = (Date.now() - tx.createdAt) / 1000;
     const remaining = Math.max(0, COUNTDOWN_DURATION - elapsed);
@@ -1590,7 +1627,6 @@ function updateTransactionStatus(txId, newStatus) {
     return;
   }
 
-  // Handle balance refund if a withdrawal is rejected ("Tu choi"), or re-deduct if un-rejected
   if (tx.amount < 0) {
     if (newStatus === 'Tu choi' && oldStatus !== 'Tu choi') {
       APP.state.wallet.balance += Math.abs(tx.amount);
@@ -1749,9 +1785,43 @@ function autoCalibrate() {
   showToast('Da tu dong can chinh so lieu hop ly', 'info');
 }
 
-/* ===== REWARDS (Direct System Grant to @ID without deducting sender balance) ===== */
+/* ===== REWARDS: 2 MODES (1. System Grant | 2. Gift from Current Wallet Balance) ===== */
+
+function switchRewardMode(mode) {
+  APP.state.rewardMode = mode;
+  const grantTab = document.getElementById('mode-grant-tab');
+  const giftTab = document.getElementById('mode-gift-tab');
+  const titleEl = document.getElementById('reward-form-title');
+  const descEl = document.getElementById('reward-form-desc');
+  const bannerEl = document.getElementById('gift-balance-banner');
+  const amtLabel = document.getElementById('reward-amount-label');
+  const btn = document.getElementById('reward-btn');
+  const btnText = document.getElementById('reward-btn-text');
+
+  if (mode === 'grant') {
+    grantTab.className = 'reward-mode-tab active-grant';
+    giftTab.className = 'reward-mode-tab';
+    titleEl.textContent = 'Cap Tien Truc Tiep Vao Tai Khoan';
+    descEl.textContent = 'He thong tu dong cong tien truc tiep vao tai khoan @ID ma khong tru so du vi ca nhan.';
+    bannerEl.style.display = 'none';
+    amtLabel.textContent = 'So Tien Cong Them (VND)';
+    btn.className = 'btn btn-primary';
+    btnText.textContent = 'Xac Nhan Cong Tien';
+  } else {
+    grantTab.className = 'reward-mode-tab';
+    giftTab.className = 'reward-mode-tab active-gift';
+    titleEl.textContent = 'Tang Tien Tu So Du Tai Khoan';
+    descEl.textContent = 'Su dung so tien hien co trong vi ca nhan cua ban de tang truc tiep cho mot tai khoan @ID.';
+    bannerEl.style.display = 'flex';
+    document.getElementById('reward-current-balance').textContent = formatVND(APP.state.wallet.balance) + ' VND';
+    amtLabel.textContent = 'So Tien Tang (VND)';
+    btn.className = 'btn btn-gift';
+    btnText.textContent = 'Xac Nhan Tang Tien';
+  }
+}
 
 function renderRewards() {
+  switchRewardMode(APP.state.rewardMode);
   renderRewardsFeed();
 }
 
@@ -1760,72 +1830,129 @@ function handleReward() {
   const amountStr = document.getElementById('reward-amount').value;
   const note = document.getElementById('reward-note').value.trim();
   const amount = parseVNDInput(amountStr);
+  const mode = APP.state.rewardMode;
 
   if (!recipientId) { showToast('Vui long nhap @id tai khoan nhan', 'error'); return; }
   if (!recipientId.startsWith('@')) recipientId = '@' + recipientId;
-  if (amount < 1000) { showToast('So tien cong them toi thieu 1.000 VND', 'error'); return; }
+  if (amount < 1000) { showToast('So tien toi thieu la 1.000 VND', 'error'); return; }
 
-  // Direct System Grant: Add funds directly to target @ID without deducting from current wallet
-  APP.state.accountBalances[recipientId] = (APP.state.accountBalances[recipientId] || 0) + amount;
+  const currentHandle = APP.state.auth.user?.handle || '@admin';
 
-  const currentHandle = APP.state.auth.user?.handle;
-  if (currentHandle && recipientId.toLowerCase() === currentHandle.toLowerCase()) {
-    APP.state.wallet.balance += amount;
+  if (mode === 'gift') {
+    // Mode 2: Gift from current wallet balance
+    if (amount > APP.state.wallet.balance) {
+      showToast('So du trong tai khoan khong du de tang', 'error');
+      return;
+    }
+
+    APP.state.wallet.balance -= amount;
+    APP.state.accountBalances[recipientId] = (APP.state.accountBalances[recipientId] || 0) + amount;
+
+    // If user gifts to their own @handle, add it back
+    if (recipientId.toLowerCase() === currentHandle.toLowerCase()) {
+      APP.state.wallet.balance += amount;
+    }
+
+    const txHash = generateHash();
+    const tx = {
+      id: 'tx_' + Date.now(),
+      hash: txHash,
+      type: 'Tang tien',
+      amount: -amount,
+      method: 'Gift @ID',
+      methodDetail: recipientId,
+      timestamp: getTimestamp(),
+      createdAt: Date.now(),
+      status: 'Hoan thanh',
+      shopName: null
+    };
+    APP.state.wallet.transactions.unshift(tx);
+
+    const reward = {
+      id: 'rw_' + Date.now(),
+      mode: 'gift',
+      from: currentHandle,
+      to: recipientId,
+      amount,
+      newBalance: APP.state.accountBalances[recipientId],
+      note: note || 'Tang tien tu so du tai khoan',
+      timestamp: getTimestamp()
+    };
+    APP.state.rewards.unshift(reward);
+    saveState();
+    updateHeader();
+    renderRewardsFeed();
+    document.getElementById('reward-recipient').value = '';
+    document.getElementById('reward-amount').value = '';
+    document.getElementById('reward-note').value = '';
+    showToast(`Da tang ${formatVND(amount)} VND tu vi cho ${recipientId}`, 'success', tx.id);
+  } else {
+    // Mode 1: Direct System Grant (does not deduct sender balance)
+    APP.state.accountBalances[recipientId] = (APP.state.accountBalances[recipientId] || 0) + amount;
+
+    if (recipientId.toLowerCase() === currentHandle.toLowerCase()) {
+      APP.state.wallet.balance += amount;
+    }
+
+    const txHash = generateHash();
+    const tx = {
+      id: 'tx_' + Date.now(),
+      hash: txHash,
+      type: 'He thong cong tien',
+      amount: +amount,
+      method: 'System Grant',
+      methodDetail: recipientId,
+      timestamp: getTimestamp(),
+      createdAt: Date.now(),
+      status: 'Hoan thanh',
+      shopName: null
+    };
+    APP.state.wallet.transactions.unshift(tx);
+
+    const reward = {
+      id: 'rw_' + Date.now(),
+      mode: 'grant',
+      from: 'SYSTEM',
+      to: recipientId,
+      amount,
+      newBalance: APP.state.accountBalances[recipientId],
+      note: note || 'He thong cong tien truc tiep',
+      timestamp: getTimestamp()
+    };
+    APP.state.rewards.unshift(reward);
+    saveState();
+    updateHeader();
+    renderRewardsFeed();
+    document.getElementById('reward-recipient').value = '';
+    document.getElementById('reward-amount').value = '';
+    document.getElementById('reward-note').value = '';
+    showToast(`He thong da cong +${formatVND(amount)} VND vao tai khoan ${recipientId}`, 'success', tx.id);
   }
-
-  const txHash = generateHash();
-  const tx = {
-    id: 'tx_' + Date.now(),
-    hash: txHash,
-    type: 'He thong cong tien',
-    amount: +amount,
-    method: 'System Grant',
-    methodDetail: recipientId,
-    timestamp: getTimestamp(),
-    createdAt: Date.now(),
-    status: 'Hoan thanh',
-    shopName: null
-  };
-  APP.state.wallet.transactions.unshift(tx);
-
-  const reward = {
-    id: 'rw_' + Date.now(),
-    from: 'SYSTEM',
-    to: recipientId,
-    amount,
-    newBalance: APP.state.accountBalances[recipientId],
-    note: note || 'He thong cong tien truc tiep',
-    timestamp: getTimestamp()
-  };
-  APP.state.rewards.unshift(reward);
-  saveState();
-  updateHeader();
-  renderRewardsFeed();
-  document.getElementById('reward-recipient').value = '';
-  document.getElementById('reward-amount').value = '';
-  document.getElementById('reward-note').value = '';
-  showToast(`He thong da cong +${formatVND(amount)} VND vao tai khoan ${recipientId}`, 'success', tx.id);
 }
 
 function renderRewardsFeed() {
   const el = document.getElementById('rewards-feed');
   if (APP.state.rewards.length === 0) {
-    el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px">Chua co giao dich cap thuong nao</div>';
+    el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px">Chua co giao dich thuong hoac tang tien nao</div>';
     return;
   }
   el.innerHTML = APP.state.rewards.map(r => {
     const accBal = APP.state.accountBalances[r.to] ?? r.newBalance ?? r.amount;
+    const isGift = r.mode === 'gift' || (r.from && r.from !== 'SYSTEM');
+    const sourceBadge = isGift
+      ? `<span class="badge badge-warning" style="font-size:10px;padding:2px 7px">TANG TU VI (${r.from})</span>`
+      : `<span class="badge badge-info" style="font-size:10px;padding:2px 7px">HE THONG CAP</span>`;
     return `
     <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(148,163,184,0.06);align-items:flex-start">
       ${generateProceduralAvatar(r.to.replace('@', ''), 32)}
       <div style="flex:1">
         <div style="font-size:13px">
-          <span class="badge badge-info" style="font-size:10px;padding:2px 7px">HE THONG</span>
+          ${sourceBadge}
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5" style="vertical-align:middle"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           <span style="font-weight:600;color:var(--accent)" class="mono">${r.to}</span>
         </div>
-        <div class="mono" style="font-size:14px;color:var(--accent);font-weight:600;margin-top:4px">+${formatVND(r.amount)} VND</div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${r.note} • So du TK: <span class="mono" style="color:var(--text)">${formatVND(accBal)} VND</span></div>
+        <div class="mono" style="font-size:14px;color:${isGift ? 'var(--accent2)' : 'var(--accent)'};font-weight:600;margin-top:4px">+${formatVND(r.amount)} VND</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${r.note} • So du TK nhan: <span class="mono" style="color:var(--text)">${formatVND(accBal)} VND</span></div>
       </div>
       <div class="mono" style="font-size:10px;color:var(--text-muted);white-space:nowrap">${r.timestamp}</div>
     </div>
@@ -2421,7 +2548,10 @@ function init() {
     }
   });
 
-  // Rewards
+  // Rewards Mode Tabs & Submit
+  document.querySelectorAll('[data-rmode]').forEach(tab => {
+    tab.addEventListener('click', () => switchRewardMode(tab.dataset.rmode));
+  });
   document.getElementById('reward-btn').addEventListener('click', handleReward);
   setupAutocomplete();
 
