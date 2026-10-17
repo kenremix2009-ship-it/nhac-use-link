@@ -1674,7 +1674,7 @@
               </div>
             </div>
 
-            <!-- 1. THẺ VISA (KHÔNG CÒN CÁC CHỮ VD: ...) -->
+            <!-- 1. THẺ VISA (ĐÃ XÓA CÁC CHỮ VD: ...) -->
             <div id="pane-visa" class="sub-pay-pane active">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <b style="font-size:13px;">Nhập thông tin thẻ Quốc tế (Visa / MasterCard)</b>
@@ -1705,7 +1705,7 @@
                 <input type="text" class="nc-input" placeholder="Số điện thoại MoMo" value="0855717751" />
               </div>
               <div class="vietqr-info-table" style="border-left-color:#a50064;">
-                <div class="row-line"><span>Tên tài khoản:</span> <b>CONG TI CONG NGHE DIEN TU NC</b></div>
+                <div class="row-line"><span>Tên tài khoản:</span> <b>NGUYEN HOANG CONG</b></div>
                 <div class="row-line"><span>Số tiền:</span> <b style="color:#e60023;">55.000.000 đ</b></div>
                 <div class="row-line"><span>Nội dung giao dịch:</span> <b>Asus ROG Astral GeForce RTX OC HATSUNE MIKU</b></div>
               </div>
@@ -1720,7 +1720,7 @@
                 <div class="vietqr-info-table">
                   <div class="row-line">
                     <span>Tên tài khoản:</span>
-                    <b>CONG TI CONG NGHE DIEN TU NC</b>
+                    <b>NGUYEN HOANG CONG</b>
                   </div>
                   <div class="row-line">
                     <span>Số tiền:</span>
@@ -1849,7 +1849,7 @@
         <div class="vietqr-info-table">
           <div class="row-line">
             <span>Tên tài khoản:</span>
-            <b>CONG TI CONG NGHE DIEN TU NC</b>
+            <b>NGUYEN HOANG CONG</b>
           </div>
           <div class="row-line">
             <span>Số tiền:</span>
@@ -1926,6 +1926,7 @@
   </footer>
 
   <script>
+    // Danh sách ảnh sản phẩm
     const GALLERY_IMAGES = [
       "https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-02.jpg",
       "https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-01.jpg",
@@ -1934,8 +1935,8 @@
       "https://nguyencongpc.vn/media/product/28025-asus-rog-astral-geforce-rtx-5080-o16g-hatsune-miku-edition-06.jpg"
     ];
     let currentGalleryIdx = 0;
-    let currentPayMode = 'cod';
-    let currentOnlineSubMethod = 'visa';
+    let currentPayMode = 'cod'; // 'cod' hoặc 'online'
+    let currentOnlineSubMethod = 'visa'; // 'visa' | 'momo' | 'vietqr'
 
     function setGalleryIndex(idx) {
       currentGalleryIdx = (idx + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
@@ -1950,6 +1951,7 @@
       setGalleryIndex(currentGalleryIdx + delta);
     }
 
+    // Hiệu ứng hiện biểu tượng xoay + màn hình bên ngoài mờ lại trước khi thực hiện hành động
     function showLoadingThen(durationMs, message, callback) {
       const backdrop = document.getElementById('loading-backdrop');
       const textEl = document.getElementById('loading-text');
@@ -1961,6 +1963,7 @@
       }, durationMs);
     }
 
+    // Chuyển trang có hiệu ứng xoay
     function navigateWithLoading(targetViewId, delayMs = 950, msg = 'Đang xử lý...') {
       showLoadingThen(delayMs, msg, () => {
         document.querySelectorAll('.view-page').forEach(v => v.classList.remove('active'));
@@ -1969,10 +1972,12 @@
       });
     }
 
+    // Khi bấm MUA NGAY: hiện biểu tượng xoay (màn hình bên ngoài mờ lại) rồi mới chuyển đến trang thanh toán
     function handleBuyNow() {
       navigateWithLoading('view-cart', 1000, 'Đang chuyển đến giỏ hàng...');
     }
 
+    // Đổi giữa Thanh toán khi nhận hàng (COD) và Thanh toán toàn bộ (Online)
     function onPayModeChange(mode) {
       currentPayMode = mode;
       const box = document.getElementById('full-payment-box');
@@ -1983,6 +1988,7 @@
       }
     }
 
+    // Chuyển đổi giữa 3 phương thức: Visa, MoMo, VietQR
     function switchOnlineMethod(method, tabEl) {
       currentOnlineSubMethod = method;
       document.querySelectorAll('.sub-pay-tab').forEach(t => t.classList.remove('active'));
@@ -1992,10 +1998,16 @@
       document.getElementById('pane-' + method).classList.add('active');
     }
 
+    // Xử lý khi bấm nút ĐẶT HÀNG ở dưới cùng giỏ hàng
     function handleOrderButtonClick() {
       if (currentPayMode === 'online' && currentOnlineSubMethod === 'vietqr') {
+        // Khi đang chọn VietQR mà bấm Đặt hàng: hiện bảng QR & thông tin giao dịch chi tiết lên, đợi bấm phím K
         document.getElementById('vietqr-modal').classList.add('show');
+      } else if (currentPayMode === 'online') {
+        // Nếu chọn Visa hoặc MoMo mà bấm Đặt hàng: xoay rồi hiện thông báo thành công
+        triggerSpinAndSuccess();
       } else {
+        // Nếu chọn Thanh toán khi nhận hàng: xoay rồi hiện thông báo thành công
         triggerSpinAndSuccess();
       }
     }
@@ -2004,6 +2016,7 @@
       document.getElementById('vietqr-modal').classList.remove('show');
     }
 
+    // Xoay loading rồi hiện bảng Thông báo thanh toán thành công
     function triggerSpinAndSuccess() {
       closeVietQRModal();
       showLoadingThen(1100, 'Đang xác nhận giao dịch...', () => {
@@ -2011,6 +2024,7 @@
       });
     }
 
+    // Phím tắt K trên bàn phím (ẩn hoàn toàn trên giao diện nhưng vẫn hoạt động)
     window.addEventListener('keydown', function (e) {
       const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
       if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') {
@@ -2022,6 +2036,7 @@
       }
     });
 
+    // Sinh mã đơn hàng ngẫu nhiên dạng #KZ872
     function generateRandomOrderCode() {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       const l1 = chars.charAt(Math.floor(Math.random() * chars.length));
@@ -2030,6 +2045,7 @@
       return '#' + l1 + l2 + digits;
     }
 
+    // Ẩn bớt địa chỉ chỉ hiện vài chữ đầu
     function shortenAddress(raw) {
       const val = (raw || '').trim();
       if (!val || val.toLowerCase().includes('thoon phaj 1')) {
@@ -2046,12 +2062,14 @@
       return val + '...';
     }
 
+    // Sinh ngày dự kiến nhận hàng ngẫu nhiên (4 - 5 ngày)
     function generateEstimatedDeliveryDate() {
       const sampleDates = ['19/10/2026', '20/10/2026', '21/10/2026', '22/10/2026'];
       const picked = sampleDates[Math.floor(Math.random() * sampleDates.length)];
       return '4 - 5 ngày (' + picked + ')';
     }
 
+    // Chuyển sang trang Xem lại Chi tiết đơn hàng
     function goToOrderDetailPage() {
       document.getElementById('success-modal').classList.remove('show');
 
@@ -2084,6 +2102,7 @@
       navigateWithLoading('view-order', 600, 'Đang tải chi tiết đơn hàng...');
     }
 
+    // Ma trận 33x33 trích xuất chính xác 100% từ ảnh VietQR bạn gửi
     const VIETQR_MATRIX = [
       '111111100110000010101110101111111',
       '100000101001010100010011001000001',
@@ -2147,7 +2166,9 @@
           }
         }
 
+        // Vẽ cụm logo VIETQR và napas 247 phía dưới
         const baseY = 356;
+        // Chữ V đỏ cách điệu của VIETQR
         ctx.beginPath();
         ctx.moveTo(26, baseY - 24);
         ctx.lineTo(42, baseY + 2);
@@ -2178,3 +2199,4 @@
   </script>
 </body>
 </html>
+
