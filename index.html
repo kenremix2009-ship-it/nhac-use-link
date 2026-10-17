@@ -1,1439 +1,1474 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<title>VDK - Paper Trading Sandbox</title>
-<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<script>
-tailwind.config={theme:{extend:{colors:{'vdk-bg':'#0B0E11','vdk-card':'#181A20','vdk-card2':'#1E2329','vdk-green':'#0ECB81','vdk-red':'#F6465D','vdk-yellow':'#FCD535','vdk-blue':'#1E80FF','vdk-border':'#2B3139','vdk-text':'#EAECEF','vdk-muted':'#848E9C','vdk-hover':'#2B3139'},fontFamily:{sans:['Inter','system-ui','sans-serif']}}}}
-</script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#0B0E11;color:#EAECEF;overflow-x:hidden}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:#181A20}
-::-webkit-scrollbar-thumb{background:#2B3139;border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:#3C4455}
-input,select,textarea{outline:none}
-.animate-fade-in{animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.animate-slide-up{animation:slideUp .4s ease}
-@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.animate-pulse-slow{animation:pulseSlow 2s ease-in-out infinite}
-@keyframes pulseSlow{0%,100%{opacity:1}50%{opacity:.7}}
-.gradient-border{background:linear-gradient(135deg,#0ECB81,#1E80FF);padding:1px;border-radius:8px}
-.gradient-border>*{background:#181A20;border-radius:7px}
-.glow-green{box-shadow:0 0 20px rgba(14,203,129,.15)}
-.glow-red{box-shadow:0 0 20px rgba(246,70,93,.15)}
-.slider-thumb::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#FCD535;border-radius:50%;cursor:pointer}
-.slider-thumb::-moz-range-thumb{width:18px;height:18px;background:#FCD535;border-radius:50%;cursor:pointer;border:none}
-.floating-panel{position:fixed;z-index:9999;background:#181A20;border:1px solid #2B3139;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);min-width:300px}
-.floating-panel-header{cursor:move;user-select:none;padding:10px 14px;background:#1E2329;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2B3139}
-@media(max-width:768px){.floating-panel{min-width:260px;max-width:90vw}}
-.btn-primary{background:linear-gradient(135deg,#FCD535,#F0B90B);color:#0B0E11;font-weight:600;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;transition:all .2s}
-.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
-.tab-active{border-bottom:2px solid #FCD535;color:#FCD535}
-.counter-num{font-variant-numeric:tabular-nums}
-select option{background:#181A20;color:#EAECEF}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f8;
+      color: #222;
+      padding-bottom: 60px;
+    }
+
+    /* HEADER NGUYENCONGPC */
+    .nc-header {
+      background: #0054d1;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .nc-top-bar {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
+      gap: 15px;
+    }
+
+    .nc-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 18px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nc-logo-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .nc-search {
+      flex: 1;
+      max-width: 460px;
+      display: flex;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 4px 14px;
+      align-items: center;
+    }
+
+    .nc-search input {
+      border: none;
+      outline: none;
+      width: 100%;
+      padding: 6px;
+      font-size: 13px;
+    }
+
+    .nc-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .nc-action-item {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      position: relative;
+    }
+
+    .nc-badge {
+      position: absolute;
+      top: -5px;
+      right: 6px;
+      background: #ff2a2a;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nc-nav-bar {
+      background: #0046b0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .nc-nav-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 8px 15px;
+      font-size: 13px;
+      overflow-x: auto;
+    }
+
+    .nc-cat-btn {
+      background: #fff;
+      color: #0046b0;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+
+    .nc-nav-link {
+      color: #fff;
+      text-decoration: none;
+      white-space: nowrap;
+      opacity: 0.95;
+    }
+
+    /* CONTAINER & BREADCRUMB */
+    .main-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 15px;
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 14px;
+    }
+
+    .breadcrumb span {
+      cursor: pointer;
+    }
+
+    .breadcrumb span:hover {
+      color: #0054d1;
+    }
+
+    /* VIEW SWITCHING */
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    /* VIEW 1: PRODUCT DETAIL */
+    .product-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 30px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .product-gallery {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+    }
+
+    .gpu-svg-large {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      filter: drop-shadow(0 12px 20px rgba(0, 180, 190, 0.22));
+    }
+
+    .product-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 10px;
+      color: #111;
+    }
+
+    .product-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .product-meta a {
+      color: #0054d1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .star-text {
+      color: #f59e0b;
+      font-weight: 700;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .text-red {
+      color: #e60023;
+      font-weight: 600;
+    }
+
+    .text-green {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .price-card {
+      border: 1px solid #dce6f7;
+      background: #f8fbff;
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+
+    .main-price {
+      font-size: 28px;
+      font-weight: 800;
+      color: #e60023;
+    }
+
+    .installment-info {
+      font-size: 13px;
+      color: #555;
+      border-left: 1px solid #d0d7de;
+      padding-left: 20px;
+    }
+
+    .installment-info strong {
+      display: block;
+      font-size: 15px;
+      color: #222;
+      margin-top: 2px;
+    }
+
+    .promo-card {
+      border: 1px solid #e11d48;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .promo-header {
+      background: #d91b24;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 15px;
+    }
+
+    .promo-body {
+      padding: 14px 16px;
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: #333;
+    }
+
+    .promo-body h4 {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #111;
+    }
+
+    .btn-buy-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-buy-now {
+      background: #d91b24;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+
+    .btn-buy-now:hover {
+      background: #b8141c;
+    }
+
+    .btn-installment {
+      background: #f59e0b;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    /* VIEW 2: CART & CHECKOUT */
+    .cart-layout {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .side-banner {
+      width: 140px;
+      border-radius: 10px;
+      padding: 16px 10px;
+      color: #fff;
+      text-align: center;
+      font-weight: 700;
+      min-height: 410px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+
+    .side-banner.left {
+      background: linear-gradient(180deg, #003380 0%, #3b82f6 55%, #f472b6 100%);
+    }
+
+    .side-banner.right {
+      background: linear-gradient(180deg, #09203f 0%, #1d4ed8 100%);
+    }
+
+    .side-banner h3 {
+      font-size: 18px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      color: #fde047;
+    }
+
+    .side-banner .voucher-box {
+      background: #fff;
+      color: #0046b0;
+      border-radius: 6px;
+      padding: 8px 4px;
+      font-size: 12px;
+      margin: 10px 0;
+    }
+
+    .side-banner .cta-pill {
+      background: #b91c1c;
+      color: #fff;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 14px;
+      display: inline-block;
+      margin: 0 auto;
+    }
+
+    .cart-center {
+      flex: 1;
+      max-width: 650px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .cart-top-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: #fafafa;
+      border-bottom: 1px solid #eee;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .cart-item-wrap {
+      padding: 16px 18px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .clear-cart-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .btn-clear-mini {
+      border: 1px solid #ddd;
+      background: #fff;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #444;
+    }
+
+    .cart-item-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cart-item-thumb {
+      width: 95px;
+      height: 56px;
+      flex-shrink: 0;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #222;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .cart-item-promo {
+      font-size: 12px;
+      color: #e60023;
+    }
+
+    .cart-item-promo span {
+      color: #0054d1;
+      cursor: pointer;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .qty-control button {
+      border: none;
+      background: #f9fafb;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .qty-control input {
+      width: 32px;
+      height: 26px;
+      border: none;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .cart-item-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: #e60023;
+      white-space: nowrap;
+    }
+
+    /* CUSTOMER FORM */
+    .checkout-section {
+      padding: 18px;
+    }
+
+    .sec-heading {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0066cc;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #d0d7de;
+      background: #eef4ff;
+      border-radius: 5px;
+      font-size: 13px;
+      color: #111;
+      outline: none;
+    }
+
+    .form-select, .form-textarea {
+      background: #fff;
+    }
+
+    .form-textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: #555;
+      margin: 12px 0 18px;
+    }
+
+    /* PAYMENT OPTIONS */
+    .pay-radio-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .pay-radio-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .full-pay-panel {
+      display: none;
+      border: 1px solid #cfe0fc;
+      background: #f8fbff;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+
+    .full-pay-panel.show {
+      display: block;
+    }
+
+    .method-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .method-tab {
+      border: 1.5px solid #d0d7de;
+      background: #fff;
+      border-radius: 6px;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .method-tab.active {
+      border-color: #0054d1;
+      background: #eef4ff;
+      color: #0054d1;
+    }
+
+    .method-content {
+      display: none;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 14px;
+    }
+
+    .method-content.active {
+      display: block;
+    }
+
+    /* VIETQR BOX */
+    .vietqr-container {
+      text-align: center;
+    }
+
+    .qr-frame {
+      width: 240px;
+      margin: 0 auto 12px;
+      background: #fff;
+      padding: 12px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .qr-transfer-details {
+      text-align: left;
+      background: #f1f5f9;
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.7;
+      border-left: 4px solid #0054d1;
+    }
+
+    .key-hint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #64748b;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* TOTAL SUMMARY */
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .total-final {
+      font-size: 15px;
+      font-weight: 800;
+      color: #e60023;
+    }
+
+    .vat-note {
+      text-align: right;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 14px;
+    }
+
+    /* FLOATING CHAT ICONS */
+    .floating-chats {
+      position: fixed;
+      right: 16px;
+      bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 90;
+    }
+
+    .chat-pill {
+      background: #fff;
+      border-radius: 24px;
+      padding: 6px 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: #0054d1;
+      font-weight: 600;
+    }
+
+    .chat-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #0068ff;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 10px;
+    }
+
+    /* MODAL / SUCCESS STATE */
+    .success-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .success-overlay.show {
+      display: flex;
+    }
+
+    .success-card {
+      background: #fff;
+      max-width: 430px;
+      width: 100%;
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+      animation: popIn 0.25s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .check-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #dcfce7;
+      color: #16a34a;
+      font-size: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-weight: 800;
+    }
+
+    .success-card h2 {
+      font-size: 21px;
+      color: #15803d;
+      margin-bottom: 8px;
+    }
+
+    .success-card p {
+      font-size: 13.5px;
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .btn-order-detail {
+      background: #0054d1;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+    }
+
+    .btn-order-detail:hover {
+      background: #003f9e;
+    }
+
+    /* VIEW 3: ORDER REVIEW PAGE */
+    .order-review-card {
+      max-width: 720px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 26px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .order-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #f1f5f9;
+      margin-bottom: 20px;
+    }
+
+    .order-code-badge {
+      background: #eef4ff;
+      color: #0054d1;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .order-product-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .order-product-box .thumb-wrap {
+      width: 115px;
+      flex-shrink: 0;
+    }
+
+    .order-product-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+      line-height: 1.4;
+    }
+
+    .order-info-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .order-info-table tr {
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .order-info-table td {
+      padding: 12px 6px;
+      font-size: 14px;
+    }
+
+    .order-info-table td.label {
+      color: #64748b;
+      width: 38%;
+      font-weight: 500;
+    }
+
+    .order-info-table td.val {
+      color: #111;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .status-pill-done {
+      display: inline-block;
+      background: #dcfce7;
+      color: #15803d;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 900px) {
+      .product-box {
+        grid-template-columns: 1fr;
+      }
+      .side-banner {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-const {useState,useEffect,useRef,useCallback,useMemo,createContext,useContext}=React;
 
-// ═══════════════════════════════════════════
-// CONSTANTS & CONFIG
-// ═══════════════════════════════════════════
-const USDT_VND_RATE=25500;
-const ADMIN_CODE='281009';
-const BANKS=['Techcombank','MB Bank','Agribank','Vietcombank','BIDV','VietinBank','TPBank','ACB','Sacombank','VPBank','SHB','HDBank','HSBC','Citibank','Standard Chartered','Deutsche Bank','JP Morgan','Bank of America'];
-const COINS=[
-  {symbol:'BTC',name:'Bitcoin',price:67500,icon:'₿'},
-  {symbol:'ETH',name:'Ethereum',price:3420,icon:'Ξ'},
-  {symbol:'SOL',name:'Solana',price:178,icon:'◎'},
-  {symbol:'OKB',name:'OKB',price:52.8,icon:'⬡'},
-  {symbol:'BNB',name:'BNB',price:610,icon:'◆'},
-  {symbol:'XRP',name:'Ripple',price:0.62,icon:'✕'},
-  {symbol:'ADA',name:'Cardano',price:0.45,icon:'◇'},
-  {symbol:'DOGE',name:'Dogecoin',price:0.128,icon:'Ð'},
-  {symbol:'AVAX',name:'Avalanche',price:38.5,icon:'▲'},
-  {symbol:'DOT',name:'Polkadot',price:7.2,icon:'●'}
-];
-const STOCKS=[
-  {symbol:'AAPL',name:'Apple Inc.',price:198.5,icon:'🍎'},
-  {symbol:'NVDA',name:'NVIDIA Corp.',price:875,icon:'🟢'},
-  {symbol:'TSLA',name:'Tesla Inc.',price:265,icon:'⚡'},
-  {symbol:'GOOGL',name:'Alphabet',price:165,icon:'🔍'},
-  {symbol:'AMZN',name:'Amazon',price:185,icon:'📦'},
-  {symbol:'MSFT',name:'Microsoft',price:420,icon:'🪟'},
-  {symbol:'VNM',name:'Vinamilk',price:3.2,icon:'🥛'},
-  {symbol:'VIC',name:'Vingroup',price:1.8,icon:'🏗️'},
-  {symbol:'FPT',name:'FPT Corp.',price:4.5,icon:'💻'},
-  {symbol:'HPG',name:'Hoa Phat',price:1.1,icon:'🔩'}
-];
-const ALL_ASSETS=[...COINS.map(c=>({...c,type:'coin'})),...STOCKS.map(s=>({...s,type:'stock'}))];
-
-// ═══════════════════════════════════════════
-// DATABASE (LocalStorage Wrapper)
-// ═══════════════════════════════════════════
-const DB={
-  get(key,def=null){try{const v=localStorage.getItem('vdk_'+key);return v?JSON.parse(v):def}catch{return def}},
-  set(key,val){localStorage.setItem('vdk_'+key,JSON.stringify(val));},
-  getUsers(){return this.get('users',{})},
-  setUsers(u){this.set('users',u)},
-  getUser(id){const users=this.getUsers();return users[id]||null},
-  setUser(id,data){const users=this.getUsers();users[id]=data;this.setUsers(users)},
-  getSession(){return this.get('session',null)},
-  setSession(s){this.set('session',s)},
-  getMarketPrices(){return this.get('market_prices',{})},
-  setMarketPrices(p){this.set('market_prices',p)},
-  getConfig(){return this.get('config',{emailOnPwChange:false,aiAssistant:false,usdtVndRate:USDT_VND_RATE,maintenance:false})},
-  setConfig(c){this.set('config',c)},
-};
-
-// Seed demo user
-function seedData(){
-  const users=DB.getUsers();
-  if(!users['@demo_user']){
-    users['@demo_user']={
-      id:'@demo_user',phone:'0901234567',email:'demo@vdk.com',password:'123456',
-      balance:{USDT:10000,VND:0,BTC:0,ETH:0,SOL:0},
-      vipLevel:0,level:1,title:'Nhà đầu tư tiềm năng',verified:false,
-      totalDeposited:0,totalInvested:0,banks:[],withdrawHistory:[],positions:[],
-      createdAt:new Date().toISOString()
-    };
-    DB.setUsers(users);
-  }
-  // Seed market prices
-  let prices=DB.getMarketPrices();
-  if(!prices||Object.keys(prices).length===0){
-    prices={};
-    ALL_ASSETS.forEach(a=>{prices[a.symbol]={price:a.price,change24h:(Math.random()*10-5).toFixed(2),high24h:a.price*1.05,low24h:a.price*0.95,volume:Math.floor(Math.random()*1e9)}});
-    DB.setMarketPrices(prices);
-  }
-}
-seedData();
-
-// ═══════════════════════════════════════════
-// BROADCAST CHANNEL
-// ═══════════════════════════════════════════
-let bc;
-try{bc=new BroadcastChannel('vdk-sync')}catch{bc={postMessage:()=>{},onmessage:null,close:()=>{}}}
-function broadcastUpdate(type,data){bc.postMessage({type,data,ts:Date.now()})}
-
-// ═══════════════════════════════════════════
-// UTILITY FUNCTIONS
-// ═══════════════════════════════════════════
-const fmt=(n,d=2)=>{if(n===undefined||n===null||isNaN(n))return'0';return Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})};
-const fmtVND=(n)=>Number(n).toLocaleString('vi-VN')+'₫';
-const fmtUSD=(n)=>'$'+fmt(n);
-const removeVietnameseTones=(str)=>{str=str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");str=str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");str=str.replace(/ì|í|ị|ỉ|ĩ/g,"i");str=str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");str=str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");str=str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");str=str.replace(/đ/g,"d");str=str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g,"A");str=str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g,"E");str=str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g,"I");str=str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g,"O");str=str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g,"U");str=str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g,"Y");str=str.replace(/Đ/g,"D");return str};
-
-function generateCandleData(basePrice,count=100){
-  const data=[];let p=basePrice;const now=Math.floor(Date.now()/1000);
-  for(let i=count;i>=0;i--){
-    const t=now-i*60;const o=p;const c=o*(1+(Math.random()-.498)*.02);
-    const h=Math.max(o,c)*(1+Math.random()*.008);const l=Math.min(o,c)*(1-Math.random()*.008);
-    data.push({time:t,open:+o.toFixed(2),high:+h.toFixed(2),low:+l.toFixed(2),close:+c.toFixed(2)});
-    p=c;
-  }
-  return data;
-}
-
-// ═══════════════════════════════════════════
-// APP CONTEXT
-// ═══════════════════════════════════════════
-const AppContext=createContext();
-
-function AppProvider({children}){
-  const[user,setUser]=useState(null);
-  const[page,setPage]=useState('home');
-  const[prices,setPrices]=useState(DB.getMarketPrices());
-  const[config,setConfig]=useState(DB.getConfig());
-  const[currentSymbol,setCurrentSymbol]=useState('BTC');
-  const[showFloatingPanel,setShowFloatingPanel]=useState(false);
-  const[balanceCurrency,setBalanceCurrency]=useState('USDT');
-  const priceControlRef=useRef({direction:0,magnitude:1});
-
-  // Load session
-  useEffect(()=>{
-    const s=DB.getSession();
-    if(s){const u=DB.getUser(s.id);if(u)setUser(u)}
-  },[]);
-
-  // Price simulation
-  useEffect(()=>{
-    const iv=setInterval(()=>{
-      setPrices(prev=>{
-        const next={...prev};
-        ALL_ASSETS.forEach(a=>{
-          if(!next[a.symbol])next[a.symbol]={price:a.price,change24h:0,high24h:a.price,low24h:a.price,volume:0};
-          const ctrl=priceControlRef.current;
-          let delta=(Math.random()-.498)*next[a.symbol].price*0.001;
-          if(a.symbol===currentSymbol&&ctrl.direction!==0){
-            const mag=ctrl.magnitude;
-            delta=ctrl.direction*(next[a.symbol].price*(mag*0.002+Math.random()*mag*0.001));
-            ctrl.direction=0;
-          }
-          next[a.symbol].price=Math.max(0.001,next[a.symbol].price+delta);
-          next[a.symbol].high24h=Math.max(next[a.symbol].high24h,next[a.symbol].price);
-          next[a.symbol].low24h=Math.min(next[a.symbol].low24h,next[a.symbol].price);
-          next[a.symbol].change24h=+((Math.random()*10-5)).toFixed(2);
-          next[a.symbol].volume=Math.floor(Math.random()*2e9);
-        });
-        DB.setMarketPrices(next);
-        broadcastUpdate('PRICE',next);
-        return next;
-      });
-    },1500);
-    return()=>clearInterval(iv);
-  },[currentSymbol]);
-
-  // Broadcast listener
-  useEffect(()=>{
-    bc.onmessage=(e)=>{
-      const{type,data}=e.data;
-      if(type==='PRICE')setPrices(data);
-      if(type==='USER_UPDATE'&&user&&data.id===user.id){setUser(data);DB.setUser(data.id,data)}
-      if(type==='CONFIG')setConfig(data);
-    };
-    const onStorage=(e)=>{
-      if(e.key==='vdk_market_prices')setPrices(JSON.parse(e.newValue||'{}'));
-      if(e.key==='vdk_users'&&user){const users=JSON.parse(e.newValue||'{}');if(users[user.id])setUser(users[user.id])}
-    };
-    window.addEventListener('storage',onStorage);
-    return()=>window.removeEventListener('storage',onStorage);
-  },[user]);
-
-  const login=(id,pw)=>{
-    const users=DB.getUsers();
-    const found=Object.values(users).find(u=>(u.id===id||u.email===id||u.phone===id)&&u.password===pw);
-    if(found){setUser(found);DB.setSession({id:found.id});return{ok:true}}
-    return{ok:false,msg:'Sai thông tin đăng nhập'}
-  };
-  const register=(data)=>{
-    const users=DB.getUsers();
-    if(users[data.id])return{ok:false,msg:'Tên đăng nhập đã tồn tại'};
-    if(Object.values(users).find(u=>u.email===data.email))return{ok:false,msg:'Email đã được sử dụng'};
-    const newUser={...data,balance:{USDT:0,VND:0,BTC:0,ETH:0,SOL:0},vipLevel:0,level:1,title:'Nhà đầu tư tiềm năng',verified:false,totalDeposited:0,totalInvested:0,banks:[],withdrawHistory:[],positions:[],createdAt:new Date().toISOString()};
-    users[data.id]=newUser;DB.setUsers(users);
-    setUser(newUser);DB.setSession({id:data.id});
-    return{ok:true}
-  };
-  const logout=()=>{setUser(null);DB.set('session',null);setPage('home')};
-  const updateUser=(data)=>{
-    const updated={...user,...data};
-    setUser(updated);DB.setUser(updated.id,updated);
-    broadcastUpdate('USER_UPDATE',updated);
-  };
-  const updateConfig=(data)=>{
-    const c={...config,...data};
-    setConfig(c);DB.setConfig(c);
-    broadcastUpdate('CONFIG',c);
-  };
-  const applyPriceControl=(dir,mag)=>{priceControlRef.current={direction:dir,magnitude:mag}};
-
-  return(<AppContext.Provider value={{user,page,setPage,prices,config,currentSymbol,setCurrentSymbol,showFloatingPanel,setShowFloatingPanel,balanceCurrency,setBalanceCurrency,login,register,logout,updateUser,updateConfig,applyPriceControl}}>{children}</AppContext.Provider>);
-}
-const useApp=()=>useContext(AppContext);
-
-// ═══════════════════════════════════════════
-// MODAL COMPONENT
-// ═══════════════════════════════════════════
-function Modal({open,onClose,title,children,width='max-w-lg'}){
-  if(!open)return null;
-  return(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"/>
-      <div className={`relative bg-vdk-card border border-vdk-border rounded-2xl w-full ${width} animate-fade-in max-h-[90vh] overflow-y-auto`} onClick={e=>e.stopPropagation()}>
-        <div className="flex items-center justify-between p-4 border-b border-vdk-border">
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <button onClick={onClose} className="text-vdk-muted hover:text-white text-xl">✕</button>
+  <!-- HEADER NGUYENCONGPC -->
+  <header class="nc-header">
+    <div class="nc-top-bar">
+      <div class="nc-logo" onclick="switchView('view-product')">
+        <div class="nc-logo-circle">NC</div>
+        <span>NGUYENCONGPC</span>
+      </div>
+      <div class="nc-search">
+        <input type="text" placeholder="Bạn cần tìm gì?" />
+        <span>🔍</span>
+      </div>
+      <div class="nc-actions">
+        <div class="nc-action-item"><span>🛠️</span><span>Xây Dựng Cấu Hình</span></div>
+        <div class="nc-action-item"><span>📞</span><span>Khách Hàng Liên Hệ</span></div>
+        <div class="nc-action-item"><span>📰</span><span>Tin Tức Công Nghệ</span></div>
+        <div class="nc-action-item" onclick="switchView('view-cart')">
+          <span class="nc-badge">1</span>
+          <span>🛒</span><span>Giỏ Hàng</span>
         </div>
-        <div className="p-4">{children}</div>
+        <div class="nc-action-item"><span>👤</span><span>Tài Khoản</span></div>
       </div>
     </div>
-  );
-}
-
-// ═══════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════
-let toastTimeout;
-function Toast({msg,type='success'}){
-  if(!msg)return null;
-  const bg=type==='success'?'bg-vdk-green':'bg-vdk-red';
-  return <div className={`fixed top-4 right-4 z-[99999] ${bg} text-black px-6 py-3 rounded-xl font-semibold animate-fade-in shadow-lg`}>{msg}</div>;
-}
-
-// ═══════════════════════════════════════════
-// AUTH PAGE
-// ═══════════════════════════════════════════
-function AuthPage(){
-  const{login,register}=useApp();
-  const[tab,setTab]=useState('login');
-  const[form,setForm]=useState({id:'',phone:'',email:'',password:'',loginId:'',loginPw:''});
-  const[error,setError]=useState('');
-  const[toast,setToast]=useState('');
-
-  const handleLogin=()=>{
-    if(!form.loginId||!form.loginPw){setError('Vui lòng nhập đầy đủ thông tin');return}
-    const r=login(form.loginId.startsWith('@')?form.loginId:form.loginId,form.loginPw);
-    if(!r.ok)setError(r.msg);
-  };
-  const handleRegister=()=>{
-    if(!form.id||!form.email||!form.password){setError('Vui lòng nhập đầy đủ thông tin');return}
-    const id=form.id.startsWith('@')?form.id:'@'+form.id;
-    const r=register({id,phone:form.phone,email:form.email,password:form.password});
-    if(!r.ok)setError(r.msg);
-    else setToast('Đăng ký thành công!');
-  };
-
-  return(
-    <div className="min-h-screen flex items-center justify-center bg-vdk-bg p-4">
-      {toast&&<Toast msg={toast}/>}
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-black bg-gradient-to-r from-vdk-yellow to-vdk-green bg-clip-text text-transparent">VDK</h1>
-          <p className="text-vdk-muted mt-2">Paper Trading Sandbox</p>
-        </div>
-        <div className="bg-vdk-card border border-vdk-border rounded-2xl overflow-hidden">
-          <div className="flex border-b border-vdk-border">
-            <button onClick={()=>{setTab('login');setError('')}} className={`flex-1 py-4 font-semibold transition ${tab==='login'?'text-vdk-yellow border-b-2 border-vdk-yellow':'text-vdk-muted hover:text-white'}`}>Đăng nhập</button>
-            <button onClick={()=>{setTab('register');setError('')}} className={`flex-1 py-4 font-semibold transition ${tab==='register'?'text-vdk-yellow border-b-2 border-vdk-yellow':'text-vdk-muted hover:text-white'}`}>Đăng ký</button>
-          </div>
-          <div className="p-6 space-y-4">
-            {error&&<div className="bg-vdk-red/10 border border-vdk-red/30 text-vdk-red px-4 py-2 rounded-lg text-sm">{error}</div>}
-            {tab==='login'?(
-              <>
-                <div>
-                  <label className="text-sm text-vdk-muted mb-1 block">Tên đăng nhập / Email / SĐT</label>
-                  <input className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white focus:border-vdk-yellow transition" placeholder="@demo_user" value={form.loginId} onChange={e=>setForm({...form,loginId:e.target.value})}/>
-                </div>
-                <div>
-                  <label className="text-sm text-vdk-muted mb-1 block">Mật khẩu</label>
-                  <input type="password" className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white focus:border-vdk-yellow transition" placeholder="••••••" value={form.loginPw} onChange={e=>setForm({...form,loginPw:e.target.value})} onKeyDown={e=>e.key==='Enter'&&handleLogin()}/>
-                </div>
-                <button onClick={handleLogin} className="btn-primary w-full py-3 text-lg">Đăng nhập</button>
-                <p className="text-center text-vdk-muted text-sm">Demo: <span className="text-vdk-yellow">@demo_user</span> / <span className="text-vdk-yellow">123456</span></p>
-              </>
-            ):(
-              <>
-                <div>
-                  <label className="text-sm text-vdk-muted mb-1 block">Tên đăng nhập (@id)</label>
-                  <input className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white focus:border-vdk-yellow transition" placeholder="@username" value={form.id} onChange={e=>setForm({...form,id:e.target.value})}/>
-                </div>
-                <div>
-                  <label className="text-sm text-vdk-muted mb-1 block">Số điện thoại</label>
-                  <input className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white focus:border-vdk-yellow transition" placeholder="0901234567" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})}/>
-                </div>
-                <div>
-                  <label className="text-sm text-vdk-muted mb-1 block">Email</label>
-                  <input type="email" className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white focus:border-vdk-yellow transition" placeholder="email@example.com" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/>
-                </div>
-                <div>
-                  <label className="text-sm text-vdk-muted mb-1 block">Mật khẩu</label>
-                  <input type="password" className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white focus:border-vdk-yellow transition" placeholder="••••••" value={form.password} onChange={e=>setForm({...form,password:e.target.value})}/>
-                </div>
-                <button onClick={handleRegister} className="btn-primary w-full py-3 text-lg">Đăng ký</button>
-              </>
-            )}
-          </div>
-        </div>
+    <div class="nc-nav-bar">
+      <div class="nc-nav-inner">
+        <div class="nc-cat-btn">☰ DANH MỤC SẢN PHẨM</div>
+        <a href="javascript:void(0)" class="nc-nav-link">💻 Laptop ▾</a>
+        <a href="javascript:void(0)" class="nc-nav-link">🖥️ PC ▾</a>
+        <a href="javascript:void(0)" class="nc-nav-link">📟 Mini PC ▾</a>
+        <a href="javascript:void(0)" class="nc-nav-link">🤖 PC AI ▾</a>
+        <a href="javascript:void(0)" class="nc-nav-link">⚙️ Linh kiện PC ▾</a>
+        <a href="javascript:void(0)" class="nc-nav-link">🖵 Màn hình ▾</a>
+        <a href="javascript:void(0)" class="nc-nav-link">⌨️ Phím chuột ghế gear ▾</a>
       </div>
     </div>
-  );
-}
+  </header>
 
-// ═══════════════════════════════════════════
-// HEADER
-// ═══════════════════════════════════════════
-function Header(){
-  const{user,page,setPage,prices,balanceCurrency,setBalanceCurrency,logout,config}=useApp();
-  const[showProfile,setShowProfile]=useState(false);
-  const[mobileMenu,setMobileMenu]=useState(false);
+  <!-- TEMPLATE HÌNH ẢNH CARD RTX 5080 HATSUNE MIKU (DÙNG CHUNG CHO 3 TRANG) -->
+  <svg style="display:none">
+    <symbol id="rtx-miku-card" viewBox="0 0 600 260">
+      <defs>
+        <linearGradient id="mikuTeal" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#00d2d3"/>
+          <stop offset="100%" stop-color="#01a3a4"/>
+        </linearGradient>
+        <linearGradient id="darkShroud" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1e272e"/>
+          <stop offset="100%" stop-color="#0f1419"/>
+        </linearGradient>
+      </defs>
+      <!-- PCIe Bracket -->
+      <path d="M18,25 L35,25 L35,235 L25,235 L25,45 L18,45 Z" fill="#95a5a6"/>
+      <!-- Card Main Body -->
+      <rect x="35" y="25" width="540" height="195" rx="14" fill="url(#mikuTeal)" stroke="#00f2fe" stroke-width="2"/>
+      <!-- Inner Dark Frame -->
+      <rect x="48" y="38" width="514" height="169" rx="10" fill="url(#darkShroud)" stroke="#ff2e93" stroke-width="2.5"/>
+      <!-- Pink & Cyan Miku Accents -->
+      <polygon points="50,38 220,38 205,48 50,48" fill="#00e5ff"/>
+      <polygon points="230,38 410,38 395,48 215,48" fill="#ff2e93"/>
+      <polygon points="48,197 380,197 395,207 48,207" fill="#00e5ff"/>
+      <!-- Fan 1 (Left) -->
+      <circle cx="135" cy="122" r="68" fill="#111" stroke="#00e5ff" stroke-width="3"/>
+      <circle cx="135" cy="122" r="56" fill="#1a1f24"/>
+      <g stroke="#2c3e50" stroke-width="8" stroke-linecap="round">
+        <line x1="135" y1="64" x2="150" y2="102"/><line x1="192" y1="100" x2="155" y2="120"/>
+        <line x1="180" y1="165" x2="145" y2="140"/><line x1="110" y1="175" x2="125" y2="140"/>
+        <line x1="78" y1="130" x2="115" y2="122"/><line x1="92" y1="80" x2="125" y2="105"/>
+      </g>
+      <circle cx="135" cy="122" r="20" fill="#111" stroke="#ff2e93" stroke-width="2"/>
+      <text x="135" y="126" fill="#00e5ff" font-size="9" font-weight="bold" text-anchor="middle">ROG</text>
 
-  const totalUSDT=user?user.balance.USDT+(user.positions||[]).reduce((s,p)=>s+p.margin,0):0;
-  const rate=config.usdtVndRate||USDT_VND_RATE;
-  const displayBalance=balanceCurrency==='USDT'?fmt(totalUSDT)+' USDT':fmtVND(totalUSDT*rate);
+      <!-- Fan 2 (Middle) -->
+      <circle cx="300" cy="122" r="68" fill="#111" stroke="#00e5ff" stroke-width="3"/>
+      <circle cx="300" cy="122" r="56" fill="#1a1f24"/>
+      <g stroke="#2c3e50" stroke-width="8" stroke-linecap="round">
+        <line x1="300" y1="64" x2="315" y2="102"/><line x1="357" y1="100" x2="320" y2="120"/>
+        <line x1="345" y1="165" x2="310" y2="140"/><line x1="275" y1="175" x2="290" y2="140"/>
+        <line x1="243" y1="130" x2="280" y2="122"/><line x1="257" y1="80" x2="290" y2="105"/>
+      </g>
+      <circle cx="300" cy="122" r="20" fill="#111" stroke="#ff2e93" stroke-width="2"/>
+      <text x="300" y="126" fill="#ff2e93" font-size="9" font-weight="bold" text-anchor="middle">ROG</text>
 
-  const navItems=[
-    {id:'home',label:'Trang chủ'},
-    {id:'market',label:'Thị trường'},
-    {id:'trade',label:'Giao dịch'},
-    {id:'swap',label:'Đổi tiền & Ví'},
-    {id:'security',label:'Security'},
-  ];
+      <!-- Fan 3 (Right - Teal Miku Blades + 01 Center) -->
+      <circle cx="468" cy="122" r="72" fill="#0a2e36" stroke="#ff2e93" stroke-width="3.5"/>
+      <circle cx="468" cy="122" r="62" fill="#00b8b8"/>
+      <g stroke="#064e59" stroke-width="7" stroke-linecap="round">
+        <line x1="468" y1="60" x2="483" y2="100"/><line x1="528" y1="98" x2="490" y2="120"/>
+        <line x1="515" y1="168" x2="478" y2="140"/><line x1="442" y1="178" x2="458" y2="140"/>
+        <line x1="408" y1="130" x2="448" y2="122"/><line x1="422" y1="78" x2="458" y2="105"/>
+      </g>
+      <circle cx="468" cy="122" r="21" fill="#111" stroke="#ff2e93" stroke-width="2.5"/>
+      <text x="468" y="128" fill="#ff2e93" font-size="16" font-weight="900" text-anchor="middle">01</text>
+    </symbol>
+  </svg>
 
-  return(
-    <header className="bg-vdk-card border-b border-vdk-border sticky top-0 z-50">
-      <div className="max-w-[1920px] mx-auto px-4 h-14 flex items-center justify-between">
-        {/* Left */}
-        <div className="flex items-center gap-6">
-          <button onClick={()=>setPage('home')} className="text-2xl font-black bg-gradient-to-r from-vdk-yellow to-vdk-green bg-clip-text text-transparent">VDK</button>
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map(n=>(
-              <button key={n.id} onClick={()=>setPage(n.id)} className={`px-3 py-2 rounded-lg text-sm font-medium transition ${page===n.id?'text-vdk-yellow bg-vdk-yellow/10':'text-vdk-muted hover:text-white hover:bg-vdk-hover'}`}>{n.label}</button>
-            ))}
-          </nav>
-        </div>
-        {/* Right */}
-        <div className="flex items-center gap-3">
-          {/* Balance */}
-          <button onClick={()=>setBalanceCurrency(balanceCurrency==='USDT'?'VND':'USDT')} className="hidden sm:flex items-center gap-2 bg-vdk-bg px-3 py-1.5 rounded-lg border border-vdk-border hover:border-vdk-yellow transition text-sm">
-            <span className="text-vdk-muted">Số dư:</span>
-            <span className="font-semibold text-vdk-green counter-num">{displayBalance}</span>
-            <span className="text-vdk-muted text-xs">⇄</span>
-          </button>
-          {/* Avatar */}
-          <div className="relative">
-            <button onClick={()=>setShowProfile(!showProfile)} className="w-9 h-9 rounded-full bg-gradient-to-br from-vdk-yellow to-vdk-green flex items-center justify-center text-black font-bold text-sm">{user?.id?.charAt(1)?.toUpperCase()||'U'}</button>
-            {showProfile&&<ProfileDropdown onClose={()=>setShowProfile(false)}/>}
-          </div>
-          {/* Mobile menu */}
-          <button onClick={()=>setMobileMenu(!mobileMenu)} className="md:hidden text-vdk-muted hover:text-white text-xl">☰</button>
-        </div>
+  <main class="main-wrap">
+    <!-- ==================== VIEW 1: TRANG SẢN PHẨM ==================== -->
+    <section id="view-product" class="view-section active">
+      <div class="breadcrumb">
+        <span>Trang chủ</span> &gt; <span>LINH KIỆN MÁY TÍNH</span> &gt; <span>VGA - Card Màn Hình</span>
       </div>
-      {/* Mobile Nav */}
-      {mobileMenu&&(
-        <div className="md:hidden border-t border-vdk-border bg-vdk-card animate-fade-in">
-          <div className="p-2 space-y-1">
-            <div className="px-3 py-2 text-sm text-vdk-muted">Số dư: <span className="text-vdk-green font-semibold">{displayBalance}</span>
-              <button onClick={()=>setBalanceCurrency(balanceCurrency==='USDT'?'VND':'USDT')} className="ml-2 text-vdk-yellow text-xs">⇄ Đổi</button>
-            </div>
-            {navItems.map(n=>(
-              <button key={n.id} onClick={()=>{setPage(n.id);setMobileMenu(false)}} className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition ${page===n.id?'text-vdk-yellow bg-vdk-yellow/10':'text-vdk-muted hover:text-white hover:bg-vdk-hover'}`}>{n.label}</button>
-            ))}
-          </div>
-        </div>
-      )}
-    </header>
-  );
-}
 
-function ProfileDropdown({onClose}){
-  const{user,logout}=useApp();
-  return(
-    <div className="absolute right-0 top-12 w-80 bg-vdk-card border border-vdk-border rounded-2xl shadow-2xl animate-fade-in overflow-hidden z-50">
-      <div className="p-4 bg-gradient-to-r from-vdk-yellow/10 to-vdk-green/10 border-b border-vdk-border">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-vdk-yellow to-vdk-green flex items-center justify-center text-black text-xl font-bold">{user?.id?.charAt(1)?.toUpperCase()}</div>
-          <div>
-            <p className="font-semibold">{user?.id}</p>
-            <span className={`text-xs px-2 py-0.5 rounded-full ${user?.verified?'bg-vdk-green/20 text-vdk-green':'bg-vdk-red/20 text-vdk-red'}`}>{user?.verified?'✓ Đã xác minh':'✗ Chưa xác minh'}</span>
-          </div>
+      <div class="product-box">
+        <div class="product-gallery">
+          <svg class="gpu-svg-large"><use href="#rtx-miku-card"></use></svg>
         </div>
-      </div>
-      <div className="p-4 space-y-3">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-vdk-bg rounded-xl p-3"><p className="text-xs text-vdk-muted">VIP Level</p><p className="text-lg font-bold text-vdk-yellow">VIP {user?.vipLevel||0}</p></div>
-          <div className="bg-vdk-bg rounded-xl p-3"><p className="text-xs text-vdk-muted">Cấp bậc</p><p className="text-lg font-bold">Lv.{user?.level||1}</p></div>
-        </div>
-        <div className="bg-vdk-bg rounded-xl p-3"><p className="text-xs text-vdk-muted">Danh hiệu</p><p className="text-sm font-semibold text-vdk-yellow">🏆 {user?.title||'Nhà đầu tư tiềm năng'}</p></div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-vdk-bg rounded-xl p-3"><p className="text-xs text-vdk-muted">Đã nạp</p><p className="text-sm font-semibold text-vdk-green">{fmt(user?.totalDeposited||0)} USDT</p></div>
-          <div className="bg-vdk-bg rounded-xl p-3"><p className="text-xs text-vdk-muted">Đang đầu tư</p><p className="text-sm font-semibold text-vdk-blue">{fmt(user?.totalInvested||0)} USDT</p></div>
-        </div>
-        <button onClick={()=>{logout();onClose()}} className="w-full py-2.5 bg-vdk-red/10 text-vdk-red rounded-xl font-semibold hover:bg-vdk-red/20 transition">Đăng xuất</button>
-      </div>
-    </div>
-  );
-}
 
-// ═══════════════════════════════════════════
-// HOME PAGE
-// ═══════════════════════════════════════════
-function HomePage(){
-  const{prices,setPage,setCurrentSymbol}=useApp();
-  const[counters,setCounters]=useState({users:0,volume:0,liquidity:0});
-
-  useEffect(()=>{
-    const targets={users:178000000,volume:42500000000,liquidity:99.9};
-    const dur=2000;const steps=60;let step=0;
-    const iv=setInterval(()=>{
-      step++;const p=Math.min(step/steps,1);const ease=1-Math.pow(1-p,3);
-      setCounters({users:Math.floor(targets.users*ease),volume:Math.floor(targets.volume*ease),liquidity:+(targets.liquidity*ease).toFixed(1)});
-      if(step>=steps)clearInterval(iv);
-    },dur/steps);
-    return()=>clearInterval(iv);
-  },[]);
-
-  return(
-    <div className="animate-fade-in">
-      {/* Hero */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-vdk-yellow/5 to-transparent"/>
-        <div className="max-w-6xl mx-auto px-4 py-16 md:py-24 text-center relative">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4">
-            <span className="bg-gradient-to-r from-vdk-yellow via-vdk-green to-vdk-blue bg-clip-text text-transparent">Giao Dịch Không Giới Hạn</span>
+        <div class="product-details-col">
+          <h1 class="product-title">
+            Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION
           </h1>
-          <p className="text-lg md:text-xl text-vdk-muted max-w-2xl mx-auto mb-8">Nền tảng mô phỏng giao dịch Chứng khoán, Cổ phiếu & Tiền điện tử hàng đầu thế giới</p>
-          <button onClick={()=>setPage('trade')} className="btn-primary text-lg px-8 py-4 rounded-xl">Bắt đầu giao dịch →</button>
-        </div>
-      </div>
-      {/* Stats */}
-      <div className="max-w-6xl mx-auto px-4 -mt-4 mb-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6 text-center glow-green">
-            <p className="text-3xl md:text-4xl font-black text-vdk-green counter-num">{counters.users.toLocaleString()}+</p>
-            <p className="text-vdk-muted mt-1">Người dùng toàn cầu</p>
+
+          <div class="product-meta">
+            <span>Mã SP: <a href="javascript:void(0)">VG000694</a></span>
+            <span><span class="star-text">★ 5.0</span> <a href="javascript:void(0)">(1 đánh giá)</a></span>
+            <span>👁️ 4844</span>
+            <span>💬 0</span>
+            <span>🛒 5</span>
           </div>
-          <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6 text-center">
-            <p className="text-3xl md:text-4xl font-black text-vdk-yellow counter-num">${(counters.volume/1e9).toFixed(1)}B+</p>
-            <p className="text-vdk-muted mt-1">Khối lượng giao dịch 24h</p>
+
+          <div class="status-row">
+            <div>Bảo hành: <span class="text-red">36 tháng</span></div>
+            <div>Tình trạng: <span class="text-green">Còn hàng</span></div>
           </div>
-          <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6 text-center">
-            <p className="text-3xl md:text-4xl font-black text-vdk-blue counter-num">{counters.liquidity}%</p>
-            <p className="text-vdk-muted mt-1">Tỷ lệ thanh khoản</p>
-          </div>
-        </div>
-      </div>
-      {/* Market Watch */}
-      <div className="max-w-6xl mx-auto px-4 pb-12">
-        <h2 className="text-2xl font-bold mb-6">📊 Thị Trường</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Crypto */}
-          <div className="bg-vdk-card border border-vdk-border rounded-2xl overflow-hidden">
-            <div className="p-4 border-b border-vdk-border font-semibold text-vdk-yellow">🪙 Tiền điện tử</div>
-            <div className="divide-y divide-vdk-border">
-              {COINS.slice(0,6).map(c=>{
-                const p=prices[c.symbol];if(!p)return null;
-                const chg=p.change24h;const isUp=chg>=0;
-                return(
-                  <button key={c.symbol} onClick={()=>{setCurrentSymbol(c.symbol);setPage('trade')}} className="w-full flex items-center justify-between px-4 py-3 hover:bg-vdk-hover transition">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{c.icon}</span>
-                      <div className="text-left"><p className="font-semibold">{c.symbol}</p><p className="text-xs text-vdk-muted">{c.name}</p></div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold counter-num">${fmt(p.price)}</p>
-                      <p className={`text-xs font-semibold ${isUp?'text-vdk-green':'text-vdk-red'}`}>{isUp?'+':''}{chg}%</p>
-                    </div>
-                  </button>
-                );
-              })}
+
+          <div class="price-card">
+            <div class="main-price">55.000.000đ</div>
+            <div class="installment-info">
+              Hoặc Trả góp
+              <strong>4.718.083đ/tháng</strong>
             </div>
           </div>
-          {/* Stocks */}
-          <div className="bg-vdk-card border border-vdk-border rounded-2xl overflow-hidden">
-            <div className="p-4 border-b border-vdk-border font-semibold text-vdk-green">📈 Cổ phiếu</div>
-            <div className="divide-y divide-vdk-border">
-              {STOCKS.slice(0,6).map(s=>{
-                const p=prices[s.symbol];if(!p)return null;
-                const chg=p.change24h;const isUp=chg>=0;
-                return(
-                  <button key={s.symbol} onClick={()=>{setCurrentSymbol(s.symbol);setPage('trade')}} className="w-full flex items-center justify-between px-4 py-3 hover:bg-vdk-hover transition">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{s.icon}</span>
-                      <div className="text-left"><p className="font-semibold">{s.symbol}</p><p className="text-xs text-vdk-muted">{s.name}</p></div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold counter-num">${fmt(p.price)}</p>
-                      <p className={`text-xs font-semibold ${isUp?'text-vdk-green':'text-vdk-red'}`}>{isUp?'+':''}{chg}%</p>
-                    </div>
-                  </button>
-                );
-              })}
+
+          <div class="promo-card">
+            <div class="promo-header">Khuyến mại &amp; Quà tặng khác</div>
+            <div class="promo-body">
+              <h4>SẢN PHẨM CHỈ BÁN KÈM THEO BỘ PC MIKU</h4>
+              <p>• Mainboard ASUS ROG STRIX X870E-H GAMING WIFI 7 Hatsune Miku Edition</p>
+              <p>• Nguồn Máy Tính ASUS ROG Thor 1200W Platinum III Hatsune Miku Edition</p>
             </div>
+          </div>
+
+          <div class="btn-buy-group">
+            <button class="btn-buy-now" onclick="switchView('view-cart')">MUA NGAY</button>
+            <button class="btn-installment" onclick="switchView('view-cart')">MUA TRẢ GÓP</button>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    </section>
 
-// ═══════════════════════════════════════════
-// MARKET PAGE
-// ═══════════════════════════════════════════
-function MarketPage(){
-  const{prices,setCurrentSymbol,setPage}=useApp();
-  const[filter,setFilter]=useState('all');
-  const items=filter==='coin'?COINS.map(c=>({...c,type:'coin'})):filter==='stock'?STOCKS.map(s=>({...s,type:'stock'})):ALL_ASSETS;
-
-  return(
-    <div className="max-w-6xl mx-auto px-4 py-6 animate-fade-in">
-      <h2 className="text-2xl font-bold mb-4">📊 Thị Trường</h2>
-      <div className="flex gap-2 mb-4">
-        {[['all','Tất cả'],['coin','Crypto'],['stock','Cổ phiếu']].map(([k,l])=>(
-          <button key={k} onClick={()=>setFilter(k)} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${filter===k?'bg-vdk-yellow text-black':'bg-vdk-card text-vdk-muted hover:text-white border border-vdk-border'}`}>{l}</button>
-        ))}
+    <!-- ==================== VIEW 2: TRANG GIỎ HÀNG & THANH TOÁN ==================== -->
+    <section id="view-cart" class="view-section">
+      <div class="breadcrumb">
+        <span onclick="switchView('view-product')">Trang chủ</span> &gt; <span>Thông tin giỏ hàng</span>
       </div>
-      <div className="bg-vdk-card border border-vdk-border rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="border-b border-vdk-border text-vdk-muted">
-              <th className="text-left px-4 py-3">Mã</th><th className="text-right px-4 py-3">Giá</th><th className="text-right px-4 py-3">24h %</th><th className="text-right px-4 py-3 hidden sm:table-cell">Cao 24h</th><th className="text-right px-4 py-3 hidden sm:table-cell">Thấp 24h</th><th className="text-right px-4 py-3 hidden md:table-cell">KL giao dịch</th><th className="px-4 py-3"></th>
-            </tr></thead>
-            <tbody>
-              {items.map(a=>{
-                const p=prices[a.symbol];if(!p)return null;const isUp=p.change24h>=0;
-                return(
-                  <tr key={a.symbol} className="border-b border-vdk-border/50 hover:bg-vdk-hover transition">
-                    <td className="px-4 py-3"><div className="flex items-center gap-2"><span>{a.icon}</span><div><p className="font-semibold">{a.symbol}</p><p className="text-xs text-vdk-muted">{a.name}</p></div></div></td>
-                    <td className="px-4 py-3 text-right font-semibold counter-num">${fmt(p.price)}</td>
-                    <td className={`px-4 py-3 text-right font-semibold ${isUp?'text-vdk-green':'text-vdk-red'}`}>{isUp?'+':''}{p.change24h}%</td>
-                    <td className="px-4 py-3 text-right text-vdk-muted hidden sm:table-cell counter-num">${fmt(p.high24h)}</td>
-                    <td className="px-4 py-3 text-right text-vdk-muted hidden sm:table-cell counter-num">${fmt(p.low24h)}</td>
-                    <td className="px-4 py-3 text-right text-vdk-muted hidden md:table-cell counter-num">${(p.volume/1e6).toFixed(1)}M</td>
-                    <td className="px-4 py-3"><button onClick={()=>{setCurrentSymbol(a.symbol);setPage('trade')}} className="px-3 py-1.5 bg-vdk-yellow/10 text-vdk-yellow rounded-lg text-xs font-semibold hover:bg-vdk-yellow/20 transition">Trade</button></td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+
+      <div class="cart-layout">
+        <!-- Banner Trái -->
+        <aside class="side-banner left">
+          <div>
+            <h3>LAPTOP DEAL HỜI</h3>
+            <p style="font-size:10px; margin-top:4px;">HÀNG HIỆU DÁNG XINH</p>
+            <div class="voucher-box">
+              VOUCHER LÊN ĐẾN<br/><strong>1.500.000Đ</strong>
+            </div>
+          </div>
+          <div class="cta-pill">MUA NGAY</div>
+        </aside>
+
+        <!-- Giỏ Hàng Trung Tâm -->
+        <div class="cart-center">
+          <div class="cart-top-bar">
+            <span>Giỏ hàng của bạn</span>
+            <span style="cursor:pointer; color:#0054d1;" onclick="switchView('view-product')">&lt; Mua thêm sản phẩm khác</span>
+          </div>
+
+          <div class="cart-item-wrap">
+            <div class="clear-cart-row">
+              <button class="btn-clear-mini">Xóa giỏ hàng</button>
+            </div>
+            <div class="cart-item-row">
+              <svg class="cart-item-thumb"><use href="#rtx-miku-card"></use></svg>
+              <div class="cart-item-info">
+                <div class="cart-item-name">
+                  Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION
+                </div>
+                <div class="cart-item-promo">Khuyến mại (<span>Chi tiết</span>) ▾</div>
+              </div>
+              <div class="qty-control">
+                <button type="button">-</button>
+                <input type="text" value="1" readonly />
+                <button type="button">+</button>
+              </div>
+              <div class="cart-item-price">55.000.000 đ</div>
+            </div>
+          </div>
+
+          <div class="checkout-section">
+            <div class="sec-heading">THÔNG TIN KHÁCH HÀNG</div>
+
+            <div class="form-group">
+              <input id="inp-name" class="form-input" type="text" value="Hiếu Đào" placeholder="Họ và tên" />
+            </div>
+
+            <div class="form-row-2">
+              <input id="inp-phone" class="form-input" type="text" value="0855717751" placeholder="Số điện thoại" />
+              <input id="inp-email" class="form-input" type="email" value="kanomiki2008@gmail.com" placeholder="Email" />
+            </div>
+
+            <div class="form-group">
+              <input id="inp-address" class="form-input" type="text" value="Thôn Phạ 1, Xã Cảm Nhân, Huyện Yên Bình" placeholder="Địa chỉ nhận hàng" />
+            </div>
+
+            <div class="form-row-2">
+              <select id="inp-province" class="form-select">
+                <option value="Yên Bái" selected>Yên Bái</option>
+                <option value="Lào Cai">Lào Cai</option>
+                <option value="Hà Nội">Hà Nội</option>
+              </select>
+              <select class="form-select">
+                <option value="">Quận/Huyện</option>
+                <option value="Yên Bình">Yên Bình</option>
+                <option value="Bảo Yên">Bảo Yên</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <textarea class="form-textarea" placeholder="Ghi chú"></textarea>
+            </div>
+
+            <label class="checkbox-row">
+              <input type="checkbox" /> Yêu cầu xuất hóa đơn công ty
+            </label>
+
+            <!-- PHƯƠNG THỨC THANH TOÁN -->
+            <div class="sec-heading">PHƯƠNG THỨC THANH TOÁN</div>
+            <div class="pay-radio-list">
+              <label class="pay-radio-item">
+                <input type="radio" name="pay_mode" value="cod" checked onchange="toggleFullPay(false)" />
+                Thanh toán khi nhận hàng
+              </label>
+              <label class="pay-radio-item">
+                <input type="radio" name="pay_mode" value="full" onchange="toggleFullPay(true)" />
+                Thanh toán toàn bộ
+              </label>
+            </div>
+
+            <!-- KHUNG 3 PHƯƠNG THỨC KHI CHỌN THANH TOÁN TOÀN BỘ -->
+            <div id="full-pay-panel" class="full-pay-panel">
+              <div class="method-tabs">
+                <div class="method-tab active" onclick="selectSubMethod('visa', this)">💳 Thẻ Visa</div>
+                <div class="method-tab" onclick="selectSubMethod('momo', this)">📱 Ví MoMo</div>
+                <div class="method-tab" onclick="selectSubMethod('vietqr', this)">🏦 VietQR</div>
+              </div>
+
+              <!-- 1. Nhập thẻ Visa -->
+              <div id="sub-visa" class="method-content active">
+                <div class="form-group">
+                  <input class="form-input" type="text" placeholder="Số thẻ Visa / Mastercard (VD: 4111 xxxx xxxx xxxx)" />
+                </div>
+                <div class="form-group">
+                  <input class="form-input" type="text" placeholder="Tên in trên thẻ (VD: HIEU DAO)" />
+                </div>
+                <div class="form-row-2">
+                  <input class="form-input" type="text" placeholder="MM/YY" />
+                  <input class="form-input" type="password" placeholder="Mã CVV" />
+                </div>
+              </div>
+
+              <!-- 2. Ví MoMo -->
+              <div id="sub-momo" class="method-content">
+                <p style="font-size:13px; margin-bottom:8px; color:#a50064; font-weight:700;">
+                  Thanh toán nhanh qua Ví điện tử MoMo
+                </p>
+                <div class="form-group">
+                  <input class="form-input" type="text" placeholder="Nhập số điện thoại đăng ký MoMo" value="0855717751" />
+                </div>
+                <p style="font-size:12.5px; color:#555;">
+                  Chủ TK nhận: <strong>CONG TI CONG NGHE DIEN TU NC</strong><br/>
+                  Nội dung: <strong>Asus ROG Astral GeForce RTX OC HATSUNE MIKU</strong>
+                </p>
+              </div>
+
+              <!-- 3. VietQR -->
+              <div id="sub-vietqr" class="method-content">
+                <div class="vietqr-container">
+                  <div class="qr-frame" title="Bạn có thể bấm phím K trên bàn phím để hoàn tất thanh toán">
+                    <!-- Canvas vẽ mã QR VietQR + Logo VietQR & napas247 giống hệt ảnh -->
+                    <canvas id="vietqr-canvas" width="210" height="240" style="width:100%; height:auto; display:block;"></canvas>
+                  </div>
+                  <div class="qr-transfer-details">
+                    <div>Tên tài khoản: <strong>CONG TI CONG NGHE DIEN TU NC</strong></div>
+                    <div>Số tiền: <strong style="color:#e60023;">55.000.000 đ</strong></div>
+                    <div>Nội dung giao dịch: <strong>Asus ROG Astral GeForce RTX OC HATSUNE MIKU</strong></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="key-hint">
+                (Nhấn phím <strong>K</strong> trên bàn phím để xác nhận thanh toán thành công ngay lập tức)
+              </div>
+            </div>
+
+            <!-- TỔNG TIỀN -->
+            <div class="sec-heading">TỔNG TIỀN</div>
+            <div class="total-row">
+              <span>Tổng cộng</span>
+              <strong>55.000.000 đ</strong>
+            </div>
+            <div class="total-row">
+              <span>Thành tiền</span>
+              <span class="total-final">55.000.000 đ</span>
+            </div>
+            <div class="vat-note">(Giá đã bao gồm VAT)</div>
+
+            <div class="btn-buy-group">
+              <button class="btn-buy-now" onclick="triggerPaymentSuccess()">ĐẶT HÀNG</button>
+              <button class="btn-installment">MUA TRẢ GÓP</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner Phải -->
+        <aside class="side-banner right">
+          <div>
+            <h3>MINI PC</h3>
+            <p style="font-size:12px; margin-top:8px;">NHỎ XINH<br/>TINH GỌN</p>
+          </div>
+          <div style="font-size:13px;">
+            GIÁ CHỈ TỪ<br/><strong style="color:#fde047; font-size:16px;">4.790.000Đ</strong>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: TRANG CHI TIẾT ĐƠN HÀNG ==================== -->
+    <section id="view-order-detail" class="view-section">
+      <div class="breadcrumb">
+        <span onclick="switchView('view-product')">Trang chủ</span> &gt; <span>Chi tiết đơn hàng</span>
+      </div>
+
+      <div class="order-review-card">
+        <div class="order-header-bar">
+          <div>
+            <h2 style="font-size:19px; color:#111;">Chi Tiết Đơn Hàng</h2>
+            <p style="font-size:12.5px; color:#64748b; margin-top:2px;">Cảm ơn bạn đã mua sắm tại Nguyễn Công PC</p>
+          </div>
+          <div id="order-code-display" class="order-code-badge">#KZ872</div>
+        </div>
+
+        <!-- Hình ảnh đơn hàng đứng trước tên đơn hàng -->
+        <div class="order-product-box">
+          <div class="thumb-wrap">
+            <svg style="width:100%; height:64px;"><use href="#rtx-miku-card"></use></svg>
+          </div>
+          <div class="order-product-title">
+            Card Màn Hình Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION
+          </div>
+        </div>
+
+        <table class="order-info-table">
+          <tr>
+            <td class="label">Mã đơn hàng</td>
+            <td class="val" id="tbl-order-code">#KZ872</td>
+          </tr>
+          <tr>
+            <td class="label">Tên người mua</td>
+            <td class="val" id="tbl-buyer-name">Hiếu Đào</td>
+          </tr>
+          <tr>
+            <td class="label">Địa chỉ nhận hàng</td>
+            <td class="val" id="tbl-buyer-addr">Thôn Phạ 1, Xã Cảm Nhân...</td>
+          </tr>
+          <tr>
+            <td class="label">Số điện thoại</td>
+            <td class="val" id="tbl-buyer-phone">0855717751</td>
+          </tr>
+          <tr>
+            <td class="label">Giá tiền</td>
+            <td class="val" style="color:#e60023; font-size:16px;">55.000.000 đ</td>
+          </tr>
+          <tr>
+            <td class="label">Trạng thái thanh toán</td>
+            <td class="val"><span class="status-pill-done">Hoàn tất</span></td>
+          </tr>
+        </table>
+
+        <div style="margin-top:22px; text-align:center;">
+          <button class="btn-order-detail" style="max-width:240px;" onclick="switchView('view-product')">
+            Quay về trang chủ
+          </button>
         </div>
       </div>
+    </section>
+  </main>
+
+  <!-- NÚT CHAT NỔI GÓC PHẢI -->
+  <div class="floating-chats">
+    <div class="chat-pill">
+      <div class="chat-circle">Zalo</div>
+      <div>Chat Zalo<br/><small>(8h-22h30)</small></div>
     </div>
-  );
-}
+    <div class="chat-pill">
+      <div class="chat-circle" style="background:#0084ff;">💬</div>
+      <div>Chat Facebook<br/><small>(8h-22h30)</small></div>
+    </div>
+  </div>
 
-// ═══════════════════════════════════════════
-// TRADE PAGE
-// ═══════════════════════════════════════════
-function TradePage(){
-  const{user,prices,currentSymbol,setCurrentSymbol,updateUser}=useApp();
-  const[side,setSide]=useState('buy');
-  const[orderType,setOrderType]=useState('market');
-  const[leverage,setLeverage]=useState(10);
-  const[amount,setAmount]=useState('');
-  const[limitPrice,setLimitPrice]=useState('');
-  const[showSymbolList,setShowSymbolList]=useState(false);
-  const[toast,setToast]=useState('');
-  const chartRef=useRef(null);
-  const chartInstanceRef=useRef(null);
-  const seriesRef=useRef(null);
-  const candleDataRef=useRef([]);
+  <!-- HỘP THOẠI THÔNG BÁO THANH TOÁN THÀNH CÔNG (KHI BẤM PHÍM K) -->
+  <div id="success-modal" class="success-overlay">
+    <div class="success-card">
+      <div class="check-circle">✓</div>
+      <h2>Thanh toán thành công!</h2>
+      <p>
+        Giao dịch cho đơn hàng <strong>Asus ROG Astral GeForce RTX OC HATSUNE MIKU</strong> đã được hệ thống ghi nhận hoàn tất.
+      </p>
+      <button class="btn-order-detail" onclick="openOrderDetails()">
+        Chi tiết đơn hàng
+      </button>
+    </div>
+  </div>
 
-  const asset=ALL_ASSETS.find(a=>a.symbol===currentSymbol)||ALL_ASSETS[0];
-  const currentPrice=prices[currentSymbol]?.price||asset.price;
+  <script>
+    // Chuyển đổi giữa các màn hình
+    function switchView(viewId) {
+      document.querySelectorAll('.view-section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      document.getElementById(viewId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-  // Chart
-  useEffect(()=>{
-    if(!chartRef.current)return;
-    chartRef.current.innerHTML='';
-    const chart=LightweightCharts.createChart(chartRef.current,{
-      width:chartRef.current.clientWidth,height:chartRef.current.clientHeight,
-      layout:{background:{type:'solid',color:'#0B0E11'},textColor:'#848E9C',fontSize:11},
-      grid:{vertLines:{color:'#1E2329'},horzLines:{color:'#1E2329'}},
-      crosshair:{mode:0},
-      timeScale:{timeVisible:true,secondsVisible:true,borderColor:'#2B3139'},
-      rightPriceScale:{borderColor:'#2B3139'},
-    });
-    const series=chart.addCandlestickSeries({upColor:'#0ECB81',downColor:'#F6465D',borderUpColor:'#0ECB81',borderDownColor:'#F6465D',wickUpColor:'#0ECB81',wickDownColor:'#F6465D'});
-    const data=generateCandleData(currentPrice,120);
-    series.setData(data);
-    candleDataRef.current=data;
-    seriesRef.current=series;
-    chartInstanceRef.current=chart;
-    chart.timeScale().fitContent();
-
-    const ro=new ResizeObserver(()=>{if(chartRef.current)chart.applyOptions({width:chartRef.current.clientWidth,height:chartRef.current.clientHeight})});
-    ro.observe(chartRef.current);
-    return()=>{ro.disconnect();chart.remove()};
-  },[currentSymbol]);
-
-  // Real-time update
-  useEffect(()=>{
-    const iv=setInterval(()=>{
-      if(!seriesRef.current)return;
-      const data=candleDataRef.current;
-      const last=data[data.length-1];
-      const now=Math.floor(Date.now()/1000);
-      const cp=prices[currentSymbol]?.price||currentPrice;
-      if(now-last.time>=60){
-        const newCandle={time:now,open:cp,high:cp,low:cp,close:cp};
-        data.push(newCandle);
-        seriesRef.current.update(newCandle);
-      }else{
-        last.close=cp;
-        last.high=Math.max(last.high,cp);
-        last.low=Math.min(last.low,cp);
-        seriesRef.current.update(last);
+    // Ẩn / hiện bảng 3 phương thức khi chọn "Thanh toán toàn bộ"
+    function toggleFullPay(show) {
+      const panel = document.getElementById('full-pay-panel');
+      if (show) {
+        panel.classList.add('show');
+      } else {
+        panel.classList.remove('show');
       }
-    },1000);
-    return()=>clearInterval(iv);
-  },[prices,currentSymbol,currentPrice]);
+    }
 
-  const placeOrder=()=>{
-    const qty=parseFloat(amount);
-    if(!qty||qty<=0){setToast('Nhập khối lượng hợp lệ');return}
-    const margin=qty;
-    if(margin>user.balance.USDT){setToast('Số dư không đủ');return}
-    const ep=orderType==='limit'?parseFloat(limitPrice)||currentPrice:currentPrice;
-    const pos={
-      id:Date.now().toString(),symbol:currentSymbol,side,type:orderType,
-      entryPrice:ep,currentPrice:ep,leverage,quantity:qty/ep*leverage,margin,
-      pnl:0,roe:0,openTime:new Date().toISOString()
-    };
-    const newBalance={...user.balance,USDT:user.balance.USDT-margin};
-    const newPositions=[...(user.positions||[]),pos];
-    updateUser({balance:newBalance,positions:newPositions,totalInvested:(user.totalInvested||0)+margin});
-    setAmount('');setToast('Đặt lệnh thành công!');
-    setTimeout(()=>setToast(''),2000);
-  };
+    // Chuyển tab Visa / MoMo / VietQR
+    function selectSubMethod(method, btnEl) {
+      document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+      btnEl.classList.add('active');
 
-  const closePosition=(posId)=>{
-    const pos=(user.positions||[]).find(p=>p.id===posId);if(!pos)return;
-    const cp=prices[pos.symbol]?.price||pos.entryPrice;
-    const pnl=pos.side==='buy'?(cp-pos.entryPrice)*pos.quantity:(pos.entryPrice-cp)*pos.quantity;
-    const newBalance={...user.balance,USDT:user.balance.USDT+pos.margin+pnl};
-    const newPositions=(user.positions||[]).filter(p=>p.id!==posId);
-    updateUser({balance:newBalance,positions:newPositions});
-    setToast(`Đóng lệnh: ${pnl>=0?'+':''}${fmt(pnl)} USDT`);
-    setTimeout(()=>setToast(''),3000);
-  };
+      document.querySelectorAll('.method-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('sub-' + method).classList.add('active');
+    }
 
-  return(
-    <div className="animate-fade-in">
-      {toast&&<Toast msg={toast} type={toast.includes('thành công')||toast.includes('+')?'success':'error'}/>}
-      <div className="flex flex-col lg:flex-row">
-        {/* Chart Area */}
-        <div className="flex-1 min-w-0">
-          {/* Symbol Selector */}
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-vdk-border bg-vdk-card">
-            <div className="relative">
-              <button onClick={()=>setShowSymbolList(!showSymbolList)} className="flex items-center gap-2 text-lg font-bold hover:text-vdk-yellow transition">
-                <span>{asset.icon}</span><span>{currentSymbol}/USDT</span><span className="text-xs text-vdk-muted">▼</span>
-              </button>
-              {showSymbolList&&(
-                <div className="absolute top-full left-0 mt-1 w-64 bg-vdk-card border border-vdk-border rounded-xl shadow-2xl max-h-80 overflow-y-auto z-40">
-                  <div className="p-2 text-xs text-vdk-muted font-semibold border-b border-vdk-border">Crypto</div>
-                  {COINS.map(c=>(
-                    <button key={c.symbol} onClick={()=>{setCurrentSymbol(c.symbol);setShowSymbolList(false)}} className="w-full flex items-center justify-between px-3 py-2 hover:bg-vdk-hover transition text-sm">
-                      <span>{c.icon} {c.symbol}</span><span className="text-vdk-muted">${fmt(prices[c.symbol]?.price||c.price)}</span>
-                    </button>
-                  ))}
-                  <div className="p-2 text-xs text-vdk-muted font-semibold border-b border-vdk-border border-t">Cổ phiếu</div>
-                  {STOCKS.map(s=>(
-                    <button key={s.symbol} onClick={()=>{setCurrentSymbol(s.symbol);setShowSymbolList(false)}} className="w-full flex items-center justify-between px-3 py-2 hover:bg-vdk-hover transition text-sm">
-                      <span>{s.icon} {s.symbol}</span><span className="text-vdk-muted">${fmt(prices[s.symbol]?.price||s.price)}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            <span className={`text-2xl font-bold counter-num ${prices[currentSymbol]?.change24h>=0?'text-vdk-green':'text-vdk-red'}`}>${fmt(currentPrice)}</span>
-            <span className={`text-sm font-semibold ${prices[currentSymbol]?.change24h>=0?'text-vdk-green':'text-vdk-red'}`}>{prices[currentSymbol]?.change24h>=0?'+':''}{prices[currentSymbol]?.change24h||0}%</span>
-          </div>
-          {/* Chart */}
-          <div className="flex">
-            {/* Drawing Toolbar */}
-            <div className="hidden md:flex flex-col gap-1 p-2 bg-vdk-card border-r border-vdk-border">
-              {['✏️','📏','〰️','📐','🔲','🗑️'].map((icon,i)=>(
-                <button key={i} className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-vdk-hover transition text-sm" title={['Trendline','Fibonacci','Hỗ trợ/Kháng cự','Thước đo','Chữ nhật','Xóa'][i]}>{icon}</button>
-              ))}
-            </div>
-            <div ref={chartRef} className="flex-1 h-[350px] md:h-[450px] lg:h-[500px] bg-vdk-bg"/>
-          </div>
-        </div>
-        {/* Order Panel */}
-        <div className="w-full lg:w-80 xl:w-96 bg-vdk-card border-l border-vdk-border">
-          <div className="p-4 space-y-4">
-            {/* Buy/Sell Toggle */}
-            <div className="flex gap-2">
-              <button onClick={()=>setSide('buy')} className={`flex-1 py-2.5 rounded-lg font-semibold transition ${side==='buy'?'bg-vdk-green text-black':'bg-vdk-bg text-vdk-muted border border-vdk-border hover:text-white'}`}>Mua / Long</button>
-              <button onClick={()=>setSide('sell')} className={`flex-1 py-2.5 rounded-lg font-semibold transition ${side==='sell'?'bg-vdk-red text-white':'bg-vdk-bg text-vdk-muted border border-vdk-border hover:text-white'}`}>Bán / Short</button>
-            </div>
-            {/* Order Type */}
-            <div className="flex gap-2">
-              <button onClick={()=>setOrderType('market')} className={`flex-1 py-2 rounded-lg text-sm font-medium ${orderType==='market'?'bg-vdk-yellow/20 text-vdk-yellow border border-vdk-yellow/30':'bg-vdk-bg text-vdk-muted border border-vdk-border'}`}>Market</button>
-              <button onClick={()=>setOrderType('limit')} className={`flex-1 py-2 rounded-lg text-sm font-medium ${orderType==='limit'?'bg-vdk-yellow/20 text-vdk-yellow border border-vdk-yellow/30':'bg-vdk-bg text-vdk-muted border border-vdk-border'}`}>Limit</button>
-            </div>
-            {/* Leverage */}
-            <div>
-              <div className="flex items-center justify-between mb-2"><span className="text-sm text-vdk-muted">Đòn bẩy</span><span className="text-lg font-bold text-vdk-yellow">{leverage}x</span></div>
-              <input type="range" min="1" max="100" value={leverage} onChange={e=>setLeverage(+e.target.value)} className="w-full h-1.5 bg-vdk-border rounded-full appearance-none slider-thumb"/>
-              <div className="flex justify-between mt-2 gap-1">
-                {[1,5,10,20,50,100].map(l=>(
-                  <button key={l} onClick={()=>setLeverage(l)} className={`flex-1 py-1 rounded text-xs font-semibold transition ${leverage===l?'bg-vdk-yellow text-black':'bg-vdk-bg text-vdk-muted border border-vdk-border hover:text-white'}`}>{l}x</button>
-                ))}
-              </div>
-            </div>
-            {/* Limit Price */}
-            {orderType==='limit'&&(
-              <div>
-                <label className="text-sm text-vdk-muted">Giá Limit</label>
-                <input type="number" className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white mt-1" placeholder={fmt(currentPrice)} value={limitPrice} onChange={e=>setLimitPrice(e.target.value)}/>
-              </div>
-            )}
-            {/* Amount */}
-            <div>
-              <div className="flex items-center justify-between"><label className="text-sm text-vdk-muted">Ký quỹ (USDT)</label><span className="text-xs text-vdk-muted">Khả dụng: {fmt(user?.balance?.USDT||0)}</span></div>
-              <input type="number" className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white mt-1" placeholder="0.00" value={amount} onChange={e=>setAmount(e.target.value)}/>
-              <div className="flex gap-1 mt-2">
-                {[25,50,75,100].map(pct=>(
-                  <button key={pct} onClick={()=>setAmount(((user?.balance?.USDT||0)*pct/100).toFixed(2))} className="flex-1 py-1 bg-vdk-bg border border-vdk-border rounded text-xs text-vdk-muted hover:text-white hover:border-vdk-yellow transition">{pct}%</button>
-                ))}
-              </div>
-            </div>
-            {/* Margin Info */}
-            {amount&&(
-              <div className="bg-vdk-bg rounded-xl p-3 text-sm space-y-1">
-                <div className="flex justify-between"><span className="text-vdk-muted">Giá trị lệnh</span><span>${fmt(parseFloat(amount||0)*leverage)}</span></div>
-                <div className="flex justify-between"><span className="text-vdk-muted">Phí mở lệnh</span><span className="text-vdk-yellow">~${fmt(parseFloat(amount||0)*0.001)}</span></div>
-              </div>
-            )}
-            {/* Place Order */}
-            <button onClick={placeOrder} className={`w-full py-3 rounded-xl font-bold text-lg transition ${side==='buy'?'bg-vdk-green text-black hover:opacity-90':'bg-vdk-red text-white hover:opacity-90'}`}>{side==='buy'?'Mua / Long':'Bán / Short'} {currentSymbol}</button>
-          </div>
-        </div>
-      </div>
-      {/* Positions */}
-      <div className="bg-vdk-card border-t border-vdk-border">
-        <div className="px-4 py-3 border-b border-vdk-border font-semibold">Vị thế đang mở ({(user?.positions||[]).length})</div>
-        {(user?.positions||[]).length===0?(
-          <div className="p-8 text-center text-vdk-muted">Chưa có vị thế nào</div>
-        ):(
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead><tr className="text-vdk-muted border-b border-vdk-border">
-                <th className="text-left px-4 py-2">Mã</th><th className="text-left px-4 py-2">Hướng</th><th className="text-right px-4 py-2">Đòn bẩy</th><th className="text-right px-4 py-2">Giá vào</th><th className="text-right px-4 py-2">Giá hiện tại</th><th className="text-right px-4 py-2">Ký quỹ</th><th className="text-right px-4 py-2">PnL (USDT)</th><th className="text-right px-4 py-2">ROE %</th><th className="px-4 py-2"></th>
-              </tr></thead>
-              <tbody>
-                {(user?.positions||[]).map(pos=>{
-                  const cp=prices[pos.symbol]?.price||pos.entryPrice;
-                  const pnl=pos.side==='buy'?(cp-pos.entryPrice)*pos.quantity:(pos.entryPrice-cp)*pos.quantity;
-                  const roe=pos.margin>0?(pnl/pos.margin*100):0;
-                  const isProfit=pnl>=0;
-                  return(
-                    <tr key={pos.id} className="border-b border-vdk-border/50 hover:bg-vdk-hover transition">
-                      <td className="px-4 py-3 font-semibold">{pos.symbol}</td>
-                      <td className="px-4 py-3"><span className={`px-2 py-0.5 rounded text-xs font-bold ${pos.side==='buy'?'bg-vdk-green/20 text-vdk-green':'bg-vdk-red/20 text-vdk-red'}`}>{pos.side==='buy'?'LONG':'SHORT'}</span></td>
-                      <td className="px-4 py-3 text-right text-vdk-yellow">{pos.leverage}x</td>
-                      <td className="px-4 py-3 text-right counter-num">${fmt(pos.entryPrice)}</td>
-                      <td className="px-4 py-3 text-right counter-num">${fmt(cp)}</td>
-                      <td className="px-4 py-3 text-right counter-num">${fmt(pos.margin)}</td>
-                      <td className={`px-4 py-3 text-right font-bold counter-num ${isProfit?'text-vdk-green':'text-vdk-red'}`}>{isProfit?'+':''}{fmt(pnl)}</td>
-                      <td className={`px-4 py-3 text-right font-bold counter-num ${isProfit?'text-vdk-green':'text-vdk-red'}`}>{isProfit?'+':''}{fmt(roe)}%</td>
-                      <td className="px-4 py-3"><button onClick={()=>closePosition(pos.id)} className="px-3 py-1.5 bg-vdk-red/10 text-vdk-red rounded-lg text-xs font-semibold hover:bg-vdk-red/20 transition">Đóng lệnh</button></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+    // Hàm tạo mã đơn hàng ngẫu nhiên dạng #KZ872
+    function generateOrderCode() {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const c1 = letters.charAt(Math.floor(Math.random() * letters.length));
+      const c2 = letters.charAt(Math.floor(Math.random() * letters.length));
+      const num = Math.floor(100 + Math.random() * 900);
+      return '#' + c1 + c2 + num;
+    }
 
-// ═══════════════════════════════════════════
-// SWAP & WITHDRAW PAGE
-// ═══════════════════════════════════════════
-function SwapPage(){
-  const{user,updateUser,config}=useApp();
-  const[tab,setTab]=useState('swap');
-  const[swapFrom,setSwapFrom]=useState('USDT');
-  const[swapTo,setSwapTo]=useState('VND');
-  const[swapAmt,setSwapAmt]=useState('');
-  const[withdrawAmt,setWithdrawAmt]=useState('');
-  const[selectedBank,setSelectedBank]=useState('');
-  const[showAddBank,setShowAddBank]=useState(false);
-  const[bankName,setBankName]=useState('');
-  const[bankAccName,setBankAccName]=useState('');
-  const[bankAccNum,setBankAccNum]=useState('');
-  const[showHistory,setShowHistory]=useState(false);
-  const[showKYC,setShowKYC]=useState(false);
-  const[toast,setToast]=useState('');
+    // Hàm rút gọn địa chỉ chỉ hiện vài từ đầu + "..."
+    function maskAddress(rawAddress) {
+      const clean = (rawAddress || 'Thôn Phạ 1, Xã Cảm Nhân').trim();
+      const parts = clean.split(',');
+      if (parts.length >= 2) {
+        return parts[0].trim() + ', ' + parts[1].trim() + '...';
+      }
+      const words = clean.split(/\s+/);
+      if (words.length > 6) {
+        return words.slice(0, 6).join(' ') + '...';
+      }
+      return clean + '...';
+    }
 
-  const rate=config.usdtVndRate||USDT_VND_RATE;
-  const currencies=['USDT','VND','BTC','ETH','EUR','JPY','KRW'];
-  const rates={USDT:1,VND:1/rate,BTC:1/67500,ETH:1/3420,EUR:1.08,JPY:0.0067,KRW:0.00075};
+    // Hiển thị thông báo thanh toán thành công
+    function triggerPaymentSuccess() {
+      document.getElementById('success-modal').classList.add('show');
+    }
 
-  const doSwap=()=>{
-    const a=parseFloat(swapAmt);if(!a||a<=0)return;
-    const fromBal=user.balance[swapFrom]||0;
-    if(a>fromBal){setToast('Số dư không đủ');setTimeout(()=>setToast(''),2000);return}
-    const usdVal=a*(rates[swapFrom]||1);
-    const toVal=usdVal/(rates[swapTo]||1);
-    const nb={...user.balance};
-    nb[swapFrom]=(nb[swapFrom]||0)-a;
-    nb[swapTo]=(nb[swapTo]||0)+toVal;
-    updateUser({balance:nb});
-    setSwapAmt('');setToast('Chuyển đổi thành công!');setTimeout(()=>setToast(''),2000);
-  };
+    // Chuyển đến trang xem lại Chi tiết đơn hàng
+    function openOrderDetails() {
+      document.getElementById('success-modal').classList.remove('show');
 
-  const addBank=()=>{
-    if(!bankName||!bankAccName||!bankAccNum)return;
-    const banks=[...(user.banks||[]),{name:bankName,accName:bankAccName,accNum:bankAccNum,id:Date.now()}];
-    updateUser({banks});setShowAddBank(false);setBankName('');setBankAccName('');setBankAccNum('');
-    setToast('Thêm ngân hàng thành công!');setTimeout(()=>setToast(''),2000);
-  };
+      const code = generateOrderCode();
+      const buyerName = document.getElementById('inp-name').value.trim() || 'Hiếu Đào';
+      const buyerPhone = document.getElementById('inp-phone').value.trim() || '0855717751';
+      const buyerAddr = document.getElementById('inp-address').value.trim();
 
-  const doWithdraw=()=>{
-    const a=parseFloat(withdrawAmt);
-    if(!a||a<=0||!selectedBank){setToast('Nhập đầy đủ thông tin');setTimeout(()=>setToast(''),2000);return}
-    if(a>user.balance.USDT){setToast('Số dư không đủ');setTimeout(()=>setToast(''),2000);return}
-    if(!user.verified){setShowKYC(true);return}
-    const nb={...user.balance,USDT:user.balance.USDT-a};
-    const bank=(user.banks||[]).find(b=>b.id+''===selectedBank+'');
-    const hist=[...(user.withdrawHistory||[]),{id:Date.now(),amount:a,bank:bank?.name||'N/A',accNum:bank?.accNum||'',date:new Date().toISOString(),status:'Thành công'}];
-    updateUser({balance:nb,withdrawHistory:hist});
-    setWithdrawAmt('');setToast('Rút tiền thành công!');setTimeout(()=>setToast(''),2000);
-  };
+      document.getElementById('order-code-display').textContent = code;
+      document.getElementById('tbl-order-code').textContent = code;
+      document.getElementById('tbl-buyer-name').textContent = buyerName;
+      document.getElementById('tbl-buyer-phone').textContent = buyerPhone;
+      document.getElementById('tbl-buyer-addr').textContent = maskAddress(buyerAddr);
 
-  return(
-    <div className="max-w-4xl mx-auto px-4 py-6 animate-fade-in">
-      {toast&&<Toast msg={toast} type={toast.includes('thành công')?'success':'error'}/>}
-      <div className="flex gap-2 mb-6">
-        <button onClick={()=>setTab('swap')} className={`px-6 py-2.5 rounded-xl font-semibold transition ${tab==='swap'?'bg-vdk-yellow text-black':'bg-vdk-card text-vdk-muted border border-vdk-border'}`}>💱 Đổi tiền</button>
-        <button onClick={()=>setTab('withdraw')} className={`px-6 py-2.5 rounded-xl font-semibold transition ${tab==='withdraw'?'bg-vdk-yellow text-black':'bg-vdk-card text-vdk-muted border border-vdk-border'}`}>💳 Rút tiền</button>
-      </div>
+      switchView('view-order-detail');
+    }
 
-      {tab==='swap'&&(
-        <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6">
-          <h3 className="text-xl font-bold mb-6">Chuyển đổi tiền tệ</h3>
-          <div className="space-y-4 max-w-md mx-auto">
-            <div className="bg-vdk-bg rounded-xl p-4">
-              <label className="text-sm text-vdk-muted">Từ</label>
-              <div className="flex gap-3 mt-2">
-                <select value={swapFrom} onChange={e=>setSwapFrom(e.target.value)} className="bg-vdk-card border border-vdk-border rounded-lg px-3 py-2 text-white">
-                  {currencies.map(c=><option key={c} value={c}>{c}</option>)}
-                </select>
-                <input type="number" value={swapAmt} onChange={e=>setSwapAmt(e.target.value)} className="flex-1 bg-transparent text-right text-xl font-semibold text-white" placeholder="0.00"/>
-              </div>
-              <p className="text-xs text-vdk-muted mt-1">Khả dụng: {fmt(user?.balance?.[swapFrom]||0)} {swapFrom}</p>
-            </div>
-            <div className="text-center text-2xl text-vdk-yellow">⇅</div>
-            <div className="bg-vdk-bg rounded-xl p-4">
-              <label className="text-sm text-vdk-muted">Sang</label>
-              <div className="flex gap-3 mt-2">
-                <select value={swapTo} onChange={e=>setSwapTo(e.target.value)} className="bg-vdk-card border border-vdk-border rounded-lg px-3 py-2 text-white">
-                  {currencies.filter(c=>c!==swapFrom).map(c=><option key={c} value={c}>{c}</option>)}
-                </select>
-                <div className="flex-1 text-right text-xl font-semibold text-vdk-green">
-                  {swapAmt?fmt(parseFloat(swapAmt)*(rates[swapFrom]||1)/(rates[swapTo]||1)):'0.00'}
-                </div>
-              </div>
-            </div>
-            <div className="text-sm text-vdk-muted text-center">Tỷ giá: 1 {swapFrom} = {fmt((rates[swapFrom]||1)/(rates[swapTo]||1),4)} {swapTo}</div>
-            <button onClick={doSwap} className="btn-primary w-full py-3 text-lg">Chuyển đổi</button>
-          </div>
-        </div>
-      )}
+    // Lắng nghe phím 'k' hoặc 'K' trên bàn phím để chuyển mọi phương thức sang Thanh toán thành công
+    window.addEventListener('keydown', function (e) {
+      const tag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      // Tránh kích hoạt nhầm khi người dùng đang gõ chữ vào ô input/textarea
+      if (tag === 'input' || tag === 'textarea') return;
 
-      {tab==='withdraw'&&(
-        <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold">Rút tiền</h3>
-            <button onClick={()=>setShowHistory(true)} className="text-sm text-vdk-yellow hover:underline">📋 Lịch sử giao dịch</button>
-          </div>
-          <div className="space-y-4 max-w-md mx-auto">
-            <div>
-              <label className="text-sm text-vdk-muted mb-2 block">Chọn ngân hàng</label>
-              {(user?.banks||[]).length===0?(
-                <div className="text-center py-6">
-                  <p className="text-vdk-muted mb-3">Chưa có tài khoản ngân hàng</p>
-                  <button onClick={()=>setShowAddBank(true)} className="btn-primary">+ Thêm ngân hàng</button>
-                </div>
-              ):(
-                <div className="space-y-2">
-                  {(user.banks||[]).map(b=>(
-                    <label key={b.id} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition ${selectedBank+''===b.id+''?'border-vdk-yellow bg-vdk-yellow/5':'border-vdk-border hover:border-vdk-muted'}`}>
-                      <input type="radio" name="bank" value={b.id} checked={selectedBank+''===b.id+''} onChange={e=>setSelectedBank(e.target.value)} className="accent-yellow-400"/>
-                      <div><p className="font-semibold">{b.name}</p><p className="text-sm text-vdk-muted">{b.accName} • {b.accNum}</p></div>
-                    </label>
-                  ))}
-                  <button onClick={()=>setShowAddBank(true)} className="text-sm text-vdk-yellow hover:underline mt-2">+ Thêm ngân hàng khác</button>
-                </div>
-              )}
-            </div>
-            <div>
-              <label className="text-sm text-vdk-muted">Số tiền rút (USDT)</label>
-              <input type="number" value={withdrawAmt} onChange={e=>setWithdrawAmt(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white mt-1" placeholder="0.00"/>
-              <p className="text-xs text-vdk-muted mt-1">Khả dụng: {fmt(user?.balance?.USDT||0)} USDT ≈ {fmtVND((user?.balance?.USDT||0)*rate)}</p>
-            </div>
-            <button onClick={doWithdraw} className="btn-primary w-full py-3 text-lg" disabled={!selectedBank}>Rút tiền</button>
-          </div>
-        </div>
-      )}
+      if (e.key === 'k' || e.key === 'K') {
+        e.preventDefault();
+        triggerPaymentSuccess();
+      }
+    });
 
-      {/* Add Bank Modal */}
-      <Modal open={showAddBank} onClose={()=>setShowAddBank(false)} title="Thêm tài khoản ngân hàng">
-        <div className="space-y-4">
-          <div>
-            <label className="text-sm text-vdk-muted mb-1 block">Chọn ngân hàng</label>
-            <select value={bankName} onChange={e=>setBankName(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white">
-              <option value="">-- Chọn ngân hàng --</option>
-              {BANKS.map(b=><option key={b} value={b}>{b}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="text-sm text-vdk-muted mb-1 block">Tên chủ tài khoản</label>
-            <input className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white uppercase" placeholder="NGUYEN VAN A" value={bankAccName} onChange={e=>setBankAccName(removeVietnameseTones(e.target.value).toUpperCase())}/>
-          </div>
-          <div>
-            <label className="text-sm text-vdk-muted mb-1 block">Số tài khoản</label>
-            <input className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="0123456789" value={bankAccNum} onChange={e=>setBankAccNum(e.target.value)}/>
-          </div>
-          <button onClick={addBank} className="btn-primary w-full py-3">Thêm</button>
-        </div>
-      </Modal>
+    // Vẽ mã VietQR + Logo VIETQR & napas 247 chuẩn xác lên Canvas
+    function drawVietQRCanvas() {
+      const canvas = document.getElementById('vietqr-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
 
-      {/* KYC Modal */}
-      <Modal open={showKYC} onClose={()=>setShowKYC(false)} title="⚠️ Yêu cầu xác minh danh tính">
-        <div className="text-center py-4 space-y-4">
-          <div className="text-6xl mb-4">🪪</div>
-          <p className="text-lg font-semibold">Xác minh CCCD / Hộ chiếu</p>
-          <p className="text-vdk-muted">Tài khoản của bạn chưa được xác minh danh tính. Để thực hiện rút tiền, bạn cần hoàn thành xác minh CCCD (Yêu cầu đủ 18 tuổi).</p>
-          <div className="bg-vdk-yellow/10 border border-vdk-yellow/30 rounded-xl p-4 text-sm text-vdk-yellow">Vui lòng liên hệ bộ phận hỗ trợ hoặc chờ quản trị viên duyệt xác minh.</div>
-          <button onClick={()=>setShowKYC(false)} className="btn-primary w-full py-3">Đã hiểu</button>
-        </div>
-      </Modal>
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      {/* Withdraw History Modal */}
-      <Modal open={showHistory} onClose={()=>setShowHistory(false)} title="📋 Lịch sử rút tiền" width="max-w-2xl">
-        {(user?.withdrawHistory||[]).length===0?(
-          <p className="text-center text-vdk-muted py-8">Chưa có lịch sử rút tiền</p>
-        ):(
-          <div className="space-y-3">
-            {(user.withdrawHistory||[]).slice().reverse().map(h=>(
-              <div key={h.id} className="bg-vdk-bg rounded-xl p-4 flex items-center justify-between">
-                <div>
-                  <p className="font-semibold">{fmt(h.amount)} USDT</p>
-                  <p className="text-sm text-vdk-muted">{h.bank} • {h.accNum}</p>
-                  <p className="text-xs text-vdk-muted">{new Date(h.date).toLocaleString('vi-VN')}</p>
-                </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${h.status==='Thành công'?'bg-vdk-green/20 text-vdk-green':h.status==='Đang xử lý'?'bg-vdk-yellow/20 text-vdk-yellow':'bg-vdk-red/20 text-vdk-red'}`}>{h.status}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </Modal>
-    </div>
-  );
-}
+      const size = 25;
+      const cell = 7.2;
+      const offsetX = 15;
+      const offsetY = 10;
 
-// ═══════════════════════════════════════════
-// SECURITY PAGE
-// ═══════════════════════════════════════════
-function SecurityPage(){
-  const{user,updateUser}=useApp();
-  const[secTab,setSecTab]=useState('password');
-  const[showDashboard,setShowDashboard]=useState(false);
-  const[adminCode,setAdminCode]=useState('');
-  const[adminAuth,setAdminAuth]=useState(false);
-  const[adminError,setAdminError]=useState('');
-  const[oldPw,setOldPw]=useState('');
-  const[newPw,setNewPw]=useState('');
-  const[toast,setToast]=useState('');
+      function isFinder(r, c) {
+        if (r < 7 && c < 7) return true;
+        if (r < 7 && c >= size - 7) return true;
+        if (r >= size - 7 && c < 7) return true;
+        return false;
+      }
 
-  const changePw=()=>{
-    if(oldPw!==user.password){setToast('Mật khẩu cũ không đúng');setTimeout(()=>setToast(''),2000);return}
-    if(newPw.length<4){setToast('Mật khẩu mới quá ngắn');setTimeout(()=>setToast(''),2000);return}
-    updateUser({password:newPw});setOldPw('');setNewPw('');
-    setToast('Đổi mật khẩu thành công!');setTimeout(()=>setToast(''),2000);
-  };
+      function drawFinder(startR, startC) {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(offsetX + startC * cell, offsetY + startR * cell, 7 * cell, 7 * cell);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(offsetX + (startC + 1) * cell, offsetY + (startR + 1) * cell, 5 * cell, 5 * cell);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(offsetX + (startC + 2) * cell, offsetY + (startR + 2) * cell, 3 * cell, 3 * cell);
+      }
 
-  const checkAdmin=()=>{
-    if(adminCode===ADMIN_CODE){setAdminAuth(true);setAdminError('')}
-    else setAdminError('Mã khóa không đúng');
-  };
+      drawFinder(0, 0);
+      drawFinder(0, size - 7);
+      drawFinder(size - 7, 0);
 
-  if(adminAuth)return<AdminDashboard onClose={()=>setAdminAuth(false)}/>;
+      // Các ô dữ liệu QR cố định theo mẫu
+      ctx.fillStyle = '#000';
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (isFinder(r, c)) continue;
+          const seed = (r * 31 + c * 17 + r * c * 7) % 11;
+          if (seed < 5) {
+            ctx.fillRect(offsetX + c * cell, offsetY + r * cell, cell - 0.4, cell - 0.4);
+          }
+        }
+      }
 
-  return(
-    <div className="max-w-4xl mx-auto px-4 py-6 animate-fade-in">
-      {toast&&<Toast msg={toast} type={toast.includes('thành công')?'success':'error'}/>}
-      <h2 className="text-2xl font-bold mb-6">🔒 Security</h2>
-      <div className="flex flex-col md:flex-row gap-4">
-        {/* Sidebar */}
-        <div className="md:w-56 space-y-1">
-          {[['password','🔑 Đổi mật khẩu'],['about','ℹ️ Bảo mật VDK'],['terms','📄 Chính sách']].map(([k,l])=>(
-            <button key={k} onClick={()=>setSecTab(k)} className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition ${secTab===k?'bg-vdk-yellow/10 text-vdk-yellow':'text-vdk-muted hover:text-white hover:bg-vdk-hover'}`}>{l}</button>
-          ))}
-          <div className="border-t border-vdk-border my-3"/>
-          <button onClick={()=>setShowDashboard(true)} className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-vdk-red hover:bg-vdk-red/10 transition">⚙️ Dashboard</button>
-        </div>
-        {/* Content */}
-        <div className="flex-1 bg-vdk-card border border-vdk-border rounded-2xl p-6">
-          {secTab==='password'&&(
-            <div className="max-w-md space-y-4">
-              <h3 className="text-lg font-semibold">Thay đổi mật khẩu</h3>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Mật khẩu hiện tại</label>
-                <input type="password" value={oldPw} onChange={e=>setOldPw(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white"/>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Mật khẩu mới</label>
-                <input type="password" value={newPw} onChange={e=>setNewPw(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white"/>
-              </div>
-              <button onClick={changePw} className="btn-primary py-3 px-8">Lưu thay đổi</button>
-            </div>
-          )}
-          {secTab==='about'&&(
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Hệ thống bảo mật VDK</h3>
-              <div className="space-y-3 text-sm text-vdk-muted leading-relaxed">
-                <div className="bg-vdk-bg rounded-xl p-4"><span className="text-vdk-green font-semibold">✓ Mã hóa đầu cuối:</span> Tất cả dữ liệu được mã hóa AES-256 trong quá trình truyền tải và lưu trữ.</div>
-                <div className="bg-vdk-bg rounded-xl p-4"><span className="text-vdk-green font-semibold">✓ Xác thực đa lớp:</span> Hỗ trợ 2FA, sinh trắc học, và xác minh CCCD.</div>
-                <div className="bg-vdk-bg rounded-xl p-4"><span className="text-vdk-green font-semibold">✓ Giám sát 24/7:</span> Hệ thống AI giám sát bất thường và ngăn chặn gian lận tự động.</div>
-                <div className="bg-vdk-bg rounded-xl p-4"><span className="text-vdk-green font-semibold">✓ Bảo hiểm tài sản:</span> Tài sản người dùng được bảo hiểm lên đến 100,000 USDT.</div>
-              </div>
-            </div>
-          )}
-          {secTab==='terms'&&(
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Chính sách & Điều khoản</h3>
-              <div className="text-sm text-vdk-muted leading-relaxed space-y-3 max-h-96 overflow-y-auto">
-                <p><strong className="text-white">1. Điều khoản sử dụng:</strong> VDK là nền tảng mô phỏng giao dịch (Paper Trading). Mọi giao dịch đều sử dụng tiền ảo và không liên quan đến tài sản thực.</p>
-                <p><strong className="text-white">2. Quyền riêng tư:</strong> Chúng tôi cam kết bảo vệ thông tin cá nhân của người dùng theo tiêu chuẩn GDPR.</p>
-                <p><strong className="text-white">3. Trách nhiệm:</strong> VDK không chịu trách nhiệm về bất kỳ quyết định đầu tư nào dựa trên dữ liệu mô phỏng.</p>
-                <p><strong className="text-white">4. Bảo mật:</strong> Người dùng có trách nhiệm bảo mật thông tin tài khoản cá nhân.</p>
-                <p><strong className="text-white">5. Quyền sửa đổi:</strong> VDK có quyền thay đổi điều khoản bất kỳ lúc nào với thông báo trước 7 ngày.</p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+      // Logo VIETQR & napas 247 bên dưới mã QR
+      ctx.font = '900 17px Segoe UI, Arial';
+      ctx.fillStyle = '#e11d48';
+      ctx.fillText('V', 18, 222);
+      ctx.font = '800 13px Segoe UI, Arial';
+      ctx.fillStyle = '#0f3e6d';
+      ctx.fillText('IETQR', 31, 222);
 
-      {/* Admin Code Dialog */}
-      <Modal open={showDashboard} onClose={()=>{setShowDashboard(false);setAdminCode('');setAdminError('')}} title="🔐 Xác thực quản trị viên">
-        <div className="space-y-4">
-          <p className="text-sm text-vdk-muted">Nhập mã khóa quản trị viên để truy cập Dashboard.</p>
-          {adminError&&<div className="bg-vdk-red/10 border border-vdk-red/30 text-vdk-red px-4 py-2 rounded-lg text-sm">{adminError}</div>}
-          <input type="password" value={adminCode} onChange={e=>setAdminCode(e.target.value)} onKeyDown={e=>e.key==='Enter'&&checkAdmin()} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-4 py-3 text-white text-center text-2xl tracking-[0.5em]" placeholder="••••••" maxLength={6}/>
-          <button onClick={checkAdmin} className="btn-primary w-full py-3">Xác nhận</button>
-        </div>
-      </Modal>
-    </div>
-  );
-}
+      ctx.font = 'italic 900 15px Segoe UI, Arial';
+      ctx.fillStyle = '#0f3e6d';
+      ctx.fillText('napas', 102, 222);
+      ctx.fillStyle = '#0284c7';
+      ctx.fillText('24', 150, 222);
+      ctx.fillStyle = '#84cc16';
+      ctx.fillText('7', 170, 222);
+    }
 
-// ═══════════════════════════════════════════
-// ADMIN DASHBOARD
-// ═══════════════════════════════════════════
-function AdminDashboard({onClose}){
-  const{user,updateUser,config,updateConfig,setShowFloatingPanel}=useApp();
-  const[tab,setTab]=useState('config');
-  const[targetId,setTargetId]=useState('');
-  const[giveAmount,setGiveAmount]=useState('');
-  const[giveVip,setGiveVip]=useState('');
-  const[giveLevel,setGiveLevel]=useState('');
-  const[giveDeposited,setGiveDeposited]=useState('');
-  const[giveInvested,setGiveInvested]=useState('');
-  const[giveTitle,setGiveTitle]=useState('Nhà đầu tư tiềm năng');
-  const[verifyId,setVerifyId]=useState('');
-  const[histId,setHistId]=useState('');
-  const[histAmount,setHistAmount]=useState('');
-  const[histDate,setHistDate]=useState(new Date().toISOString().slice(0,16));
-  const[histStatus,setHistStatus]=useState('Thành công');
-  const[toast,setToast]=useState('');
-
-  const allUsers=DB.getUsers();
-  const userIds=Object.keys(allUsers);
-
-  const showToast=(msg)=>{setToast(msg);setTimeout(()=>setToast(''),2500)};
-
-  const giveM=()=>{
-    const tid=targetId.startsWith('@')?targetId:'@'+targetId;
-    const u=allUsers[tid];if(!u){showToast('Không tìm thấy user');return}
-    const updates={};
-    if(giveAmount){updates.balance={...u.balance,USDT:(u.balance?.USDT||0)+parseFloat(giveAmount)}}
-    if(giveVip!=='')updates.vipLevel=parseInt(giveVip);
-    if(giveLevel!=='')updates.level=parseInt(giveLevel);
-    if(giveDeposited!=='')updates.totalDeposited=parseFloat(giveDeposited);
-    if(giveInvested!=='')updates.totalInvested=parseFloat(giveInvested);
-    if(giveTitle)updates.title=giveTitle;
-    const updated={...u,...updates};
-    DB.setUser(tid,updated);
-    broadcastUpdate('USER_UPDATE',updated);
-    if(user.id===tid)updateUser(updates);
-    showToast('Cập nhật thành công!');
-  };
-
-  const verifyUser=()=>{
-    const tid=verifyId.startsWith('@')?verifyId:'@'+verifyId;
-    const u=allUsers[tid];if(!u){showToast('Không tìm thấy user');return}
-    const updated={...u,verified:true};
-    DB.setUser(tid,updated);
-    broadcastUpdate('USER_UPDATE',updated);
-    if(user.id===tid)updateUser({verified:true});
-    showToast(`Đã duyệt xác minh cho ${tid}!`);
-  };
-
-  const addHistory=()=>{
-    const tid=histId.startsWith('@')?histId:'@'+histId;
-    const u=allUsers[tid];if(!u){showToast('Không tìm thấy user');return}
-    const entry={id:Date.now(),amount:parseFloat(histAmount)||0,bank:'Admin',accNum:'***',date:histDate?new Date(histDate).toISOString():new Date().toISOString(),status:histStatus};
-    const updated={...u,withdrawHistory:[...(u.withdrawHistory||[]),entry]};
-    DB.setUser(tid,updated);
-    broadcastUpdate('USER_UPDATE',updated);
-    if(user.id===tid)updateUser({withdrawHistory:updated.withdrawHistory});
-    showToast('Thêm lịch sử thành công!');
-  };
-
-  const clearHistory=(tid)=>{
-    const id=tid.startsWith('@')?tid:'@'+tid;
-    const u=allUsers[id];if(!u)return;
-    const updated={...u,withdrawHistory:[]};
-    DB.setUser(id,updated);
-    broadcastUpdate('USER_UPDATE',updated);
-    if(user.id===id)updateUser({withdrawHistory:[]});
-    showToast('Đã xóa lịch sử!');
-  };
-
-  return(
-    <div className="max-w-6xl mx-auto px-4 py-6 animate-fade-in">
-      {toast&&<Toast msg={toast} type={toast.includes('thành công')||toast.includes('Đã')?'success':'error'}/>}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">⚙️ Admin Dashboard</h2>
-        <button onClick={onClose} className="px-4 py-2 bg-vdk-card border border-vdk-border rounded-lg text-sm text-vdk-muted hover:text-white transition">← Quay lại</button>
-      </div>
-      {/* Tabs */}
-      <div className="flex gap-2 mb-6 overflow-x-auto">
-        {[['config','🔧 Cấu hình'],['ownapp','👥 Own App'],['control','🎮 Control']].map(([k,l])=>(
-          <button key={k} onClick={()=>setTab(k)} className={`px-5 py-2.5 rounded-xl font-semibold whitespace-nowrap transition ${tab===k?'bg-vdk-yellow text-black':'bg-vdk-card text-vdk-muted border border-vdk-border hover:text-white'}`}>{l}</button>
-        ))}
-      </div>
-
-      {/* CONFIG TAB */}
-      {tab==='config'&&(
-        <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6 space-y-4">
-          <h3 className="text-lg font-semibold mb-4">System Config</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              {key:'emailOnPwChange',label:'Gửi mail khi đổi mật khẩu',icon:'📧'},
-              {key:'aiAssistant',label:'Trợ lý tài chính AI',icon:'🤖'},
-              {key:'maintenance',label:'Thông báo bảo trì sàn',icon:'🔧'},
-            ].map(item=>(
-              <div key={item.key} className="flex items-center justify-between bg-vdk-bg rounded-xl p-4">
-                <span>{item.icon} {item.label}</span>
-                <button onClick={()=>updateConfig({[item.key]:!config[item.key]})} className={`w-12 h-6 rounded-full transition relative ${config[item.key]?'bg-vdk-green':'bg-vdk-border'}`}>
-                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white transition-transform ${config[item.key]?'translate-x-6':'translate-x-0.5'}`}/>
-                </button>
-              </div>
-            ))}
-            <div className="bg-vdk-bg rounded-xl p-4">
-              <label className="text-sm text-vdk-muted block mb-2">💱 Tỷ giá USDT/VND</label>
-              <input type="number" value={config.usdtVndRate||USDT_VND_RATE} onChange={e=>updateConfig({usdtVndRate:parseInt(e.target.value)||USDT_VND_RATE})} className="w-full bg-vdk-card border border-vdk-border rounded-lg px-3 py-2 text-white"/>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* OWN APP TAB */}
-      {tab==='ownapp'&&(
-        <div className="space-y-6">
-          {/* Give M */}
-          <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6">
-            <h3 className="text-lg font-semibold mb-4">💰 Give M & Chỉnh sửa thông số</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">@ID người dùng</label>
-                <input list="user-list" value={targetId} onChange={e=>setTargetId(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="@demo_user"/>
-                <datalist id="user-list">{userIds.map(id=><option key={id} value={id}/>)}</datalist>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Số tiền thưởng (USDT)</label>
-                <input type="number" value={giveAmount} onChange={e=>setGiveAmount(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="0"/>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Cấp VIP (0-9)</label>
-                <select value={giveVip} onChange={e=>setGiveVip(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white">
-                  <option value="">-- Giữ nguyên --</option>
-                  {[0,1,2,3,4,5,6,7,8,9].map(v=><option key={v} value={v}>VIP {v}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Cấp bậc (Level)</label>
-                <input type="number" value={giveLevel} onChange={e=>setGiveLevel(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="1"/>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Số tiền đã nạp</label>
-                <input type="number" value={giveDeposited} onChange={e=>setGiveDeposited(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="0"/>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Số tiền đã đầu tư</label>
-                <input type="number" value={giveInvested} onChange={e=>setGiveInvested(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="0"/>
-              </div>
-              <div className="md:col-span-2 lg:col-span-3">
-                <label className="text-sm text-vdk-muted mb-1 block">Danh hiệu</label>
-                <input value={giveTitle} onChange={e=>setGiveTitle(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="Nhà đầu tư tiềm năng"/>
-              </div>
-            </div>
-            <button onClick={giveM} className="btn-primary mt-4 px-8 py-3">Áp dụng thay đổi</button>
-          </div>
-
-          {/* Verify */}
-          <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6">
-            <h3 className="text-lg font-semibold mb-4">✅ Duyệt xác minh (Bypass KYC)</h3>
-            <div className="flex gap-3 items-end">
-              <div className="flex-1">
-                <label className="text-sm text-vdk-muted mb-1 block">@ID người dùng</label>
-                <input list="user-list" value={verifyId} onChange={e=>setVerifyId(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="@demo_user"/>
-              </div>
-              <button onClick={verifyUser} className="bg-vdk-green text-black font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition">Duyệt xác minh</button>
-            </div>
-          </div>
-
-          {/* Transaction History Management */}
-          <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6">
-            <h3 className="text-lg font-semibold mb-4">📋 Quản lý lịch sử giao dịch</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">@ID người dùng</label>
-                <input list="user-list" value={histId} onChange={e=>setHistId(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="@demo_user"/>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Số tiền rút</label>
-                <input type="number" value={histAmount} onChange={e=>setHistAmount(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white" placeholder="0"/>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Ngày giờ</label>
-                <input type="datetime-local" value={histDate} onChange={e=>setHistDate(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white"/>
-              </div>
-              <div>
-                <label className="text-sm text-vdk-muted mb-1 block">Trạng thái</label>
-                <select value={histStatus} onChange={e=>setHistStatus(e.target.value)} className="w-full bg-vdk-bg border border-vdk-border rounded-lg px-3 py-2.5 text-white">
-                  <option>Thành công</option><option>Đang xử lý</option><option>Từ chối</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex gap-3 mt-4">
-              <button onClick={addHistory} className="btn-primary px-6 py-2.5">+ Thêm lịch sử</button>
-              <button onClick={()=>histId&&clearHistory(histId)} className="bg-vdk-red/10 text-vdk-red font-semibold px-6 py-2.5 rounded-lg hover:bg-vdk-red/20 transition">🗑️ Xóa hết lịch sử</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CONTROL TAB */}
-      {tab==='control'&&(
-        <div className="bg-vdk-card border border-vdk-border rounded-2xl p-6 text-center">
-          <h3 className="text-lg font-semibold mb-4">🎮 Điều khiển Biểu đồ Nến</h3>
-          <p className="text-vdk-muted mb-6">Mở bảng điều khiển nổi để thao tác trực tiếp lên biểu đồ giá theo thời gian thực.</p>
-          <button onClick={()=>setShowFloatingPanel(true)} className="btn-primary text-lg px-8 py-4 rounded-xl">🎯 Mở bảng điều khiển nổi (Floating Control Panel)</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════
-// FLOATING CONTROL PANEL
-// ═══════════════════════════════════════════
-function FloatingControlPanel(){
-  const{showFloatingPanel,setShowFloatingPanel,currentSymbol,applyPriceControl,prices}=useApp();
-  const[minimized,setMinimized]=useState(false);
-  const[magnitude,setMagnitude]=useState(1);
-  const[customMag,setCustomMag]=useState('');
-  const[pos,setPos]=useState({x:window.innerWidth-360,y:80});
-  const dragRef=useRef(null);
-  const offsetRef=useRef({x:0,y:0});
-
-  const onMouseDown=(e)=>{
-    e.preventDefault();
-    offsetRef.current={x:e.clientX-pos.x,y:e.clientY-pos.y};
-    const onMove=(ev)=>setPos({x:ev.clientX-offsetRef.current.x,y:ev.clientY-offsetRef.current.y});
-    const onUp=()=>{document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp)};
-    document.addEventListener('mousemove',onMove);
-    document.addEventListener('mouseup',onUp);
-  };
-
-  const onTouchStart=(e)=>{
-    const t=e.touches[0];
-    offsetRef.current={x:t.clientX-pos.x,y:t.clientY-pos.y};
-    const onMove=(ev)=>{const t2=ev.touches[0];setPos({x:t2.clientX-offsetRef.current.x,y:t2.clientY-offsetRef.current.y})};
-    const onEnd=()=>{document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd)};
-    document.addEventListener('touchmove',onMove);
-    document.addEventListener('touchend',onEnd);
-  };
-
-  const activeMag=customMag?parseFloat(customMag):magnitude;
-
-  if(!showFloatingPanel)return null;
-
-  return(
-    <div className="floating-panel" style={{left:pos.x,top:pos.y}} ref={dragRef}>
-      <div className="floating-panel-header" onMouseDown={onMouseDown} onTouchStart={onTouchStart}>
-        <div className="flex items-center gap-2">
-          <span className="text-sm">🎮</span>
-          <span className="text-sm font-semibold">Control Panel</span>
-        </div>
-        <div className="flex gap-1">
-          <button onClick={()=>setMinimized(!minimized)} className="w-6 h-6 flex items-center justify-center rounded hover:bg-vdk-hover text-vdk-muted hover:text-white text-xs">{minimized?'▼':'^'}</button>
-          <button onClick={()=>setShowFloatingPanel(false)} className="w-6 h-6 flex items-center justify-center rounded hover:bg-vdk-red/20 text-vdk-muted hover:text-vdk-red text-xs">✕</button>
-        </div>
-      </div>
-      {!minimized&&(
-        <div className="p-4 space-y-3">
-          {/* Current Symbol */}
-          <div className="bg-vdk-bg rounded-xl p-3 text-center">
-            <p className="text-xs text-vdk-muted">Đang xem</p>
-            <p className="text-lg font-bold text-vdk-yellow">{currentSymbol}/USDT</p>
-            <p className="text-sm counter-num">${fmt(prices[currentSymbol]?.price||0)}</p>
-          </div>
-          {/* Magnitude */}
-          <div>
-            <p className="text-xs text-vdk-muted mb-2">Biên độ</p>
-            <div className="grid grid-cols-3 gap-1.5">
-              {[1,10,50,100,1000].map(m=>(
-                <button key={m} onClick={()=>{setMagnitude(m);setCustomMag('')}} className={`py-1.5 rounded-lg text-xs font-semibold transition ${magnitude===m&&!customMag?'bg-vdk-yellow text-black':'bg-vdk-bg text-vdk-muted border border-vdk-border hover:text-white'}`}>{m}</button>
-              ))}
-              <input type="number" value={customMag} onChange={e=>setCustomMag(e.target.value)} className="bg-vdk-bg border border-vdk-border rounded-lg px-2 py-1.5 text-xs text-white text-center" placeholder="Tuỳ chỉnh"/>
-            </div>
-          </div>
-          {/* Control Buttons */}
-          <div className="grid grid-cols-2 gap-2">
-            <button onClick={()=>applyPriceControl(1,activeMag)} className="py-3 bg-vdk-green rounded-xl font-bold text-black text-lg hover:opacity-90 transition active:scale-95">Tham số +</button>
-            <button onClick={()=>applyPriceControl(-1,activeMag)} className="py-3 bg-vdk-red rounded-xl font-bold text-white text-lg hover:opacity-90 transition active:scale-95">Tham số -</button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════
-// MAIN APP
-// ═══════════════════════════════════════════
-function App(){
-  const[ready,setReady]=useState(false);
-  useEffect(()=>setReady(true),[]);
-
-  if(!ready)return null;
-
-  return(
-    <AppProvider>
-      <AppInner/>
-    </AppProvider>
-  );
-}
-
-function AppInner(){
-  const{user,page}=useApp();
-
-  if(!user)return<AuthPage/>;
-
-  return(
-    <div className="min-h-screen bg-vdk-bg">
-      <Header/>
-      <main>
-        {page==='home'&&<HomePage/>}
-        {page==='market'&&<MarketPage/>}
-        {page==='trade'&&<TradePage/>}
-        {page==='swap'&&<SwapPage/>}
-        {page==='security'&&<SecurityPage/>}
-      </main>
-      <FloatingControlPanel/>
-    </div>
-  );
-}
-
-// Mount
-const root=ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App/>);
-</script>
+    drawVietQRCanvas();
+  </script>
 </body>
 </html>
-
