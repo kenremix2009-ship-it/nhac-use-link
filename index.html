@@ -18,14 +18,22 @@ body{font-family:var(--font-ui);background:var(--bg-primary);color:var(--text);o
 .btn-secondary{background:rgba(16,185,129,0.12);color:var(--accent);border:1px solid var(--border-card)}.btn-secondary:hover{background:rgba(16,185,129,0.22)}
 .btn-danger{background:rgba(239,68,68,0.15);color:var(--danger);border:1px solid rgba(239,68,68,0.2)}.btn-danger:hover{background:rgba(239,68,68,0.25)}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px}
+.btn-icon-only{width:34px;height:34px;padding:0;justify-content:center;border-radius:8px}
+.btn-icon-only svg{transition:transform .4s ease}
+.btn-icon-only:hover svg{transform:rotate(180deg)}
 .input{width:100%;padding:10px 14px;background:rgba(6,9,14,0.8);border:1px solid rgba(148,163,184,0.15);border-radius:8px;color:var(--text);font-family:var(--font-ui);font-size:14px;outline:none;transition:border-color .25s}
 .input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(16,185,129,0.1)}
 .input-mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
 label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
 .badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
-.badge-success{background:rgba(16,185,129,0.15);color:var(--accent)}.badge-warning{background:rgba(245,158,11,0.15);color:var(--warning)}.badge-danger{background:rgba(239,68,68,0.15);color:var(--danger)}
+.badge-success{background:rgba(16,185,129,0.15);color:var(--accent)}
+.badge-warning{background:rgba(245,158,11,0.15);color:var(--warning)}
+.badge-danger{background:rgba(239,68,68,0.15);color:var(--danger)}
+.badge-info{background:rgba(6,182,212,0.15);color:var(--accent2)}
 table{width:100%;border-collapse:collapse}th{text-align:left;padding:10px 14px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid rgba(148,163,184,0.1);font-weight:600}
 td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.06)}tr:hover td{background:rgba(16,185,129,0.04)}
+.tx-row{cursor:pointer;user-select:none;transition:background .15s}
+.tx-row:hover td{background:rgba(16,185,129,0.07)}
 .card{padding:20px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border-card)}
 .kpi-card{padding:20px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border-card);position:relative;overflow:hidden}
 .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity .3s}.kpi-card:hover::before{opacity:1}
@@ -97,7 +105,7 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 /* Modals */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:70;display:none;align-items:center;justify-content:center}
 .modal-overlay.show{display:flex}
-.modal{padding:32px;border-radius:16px;background:rgba(13,19,26,0.96);border:1px solid var(--border-card);backdrop-filter:blur(24px);max-width:440px;width:90%;animation:modalIn .3s ease}
+.modal{padding:32px;border-radius:16px;background:rgba(13,19,26,0.96);border:1px solid var(--border-card);backdrop-filter:blur(24px);max-width:480px;width:92%;animation:modalIn .3s ease}
 @keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .step-indicator{display:flex;align-items:center;gap:12px;padding:12px 0;opacity:0.4;transition:all .4s}.step-indicator.active{opacity:1}.step-indicator.done{opacity:0.7}
 .step-indicator .step-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--text-muted);display:flex;align-items:center;justify-content:center;transition:all .4s;flex-shrink:0}
@@ -107,9 +115,21 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 .spinner{width:20px;height:20px;border:2px solid rgba(16,185,129,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* Spin Selection Item */
+.spin-tx-item{padding:12px 14px;border-radius:10px;background:rgba(6,9,14,0.7);border:1px solid rgba(148,163,184,0.12);display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.spin-tx-item:hover{border-color:var(--accent);background:rgba(16,185,129,0.08);transform:translateX(3px)}
+
+/* Shift + Left Click Adjustment Floating Bar */
+#tx-adjust-bar{position:fixed;z-index:95;width:300px;padding:16px;border-radius:14px;background:rgba(13,19,26,0.98);border:1px solid rgba(16,185,129,0.35);backdrop-filter:blur(24px);box-shadow:0 16px 48px rgba(0,0,0,0.65);display:none;animation:modalIn .18s ease}
+#tx-adjust-bar.show{display:block}
+.adjust-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.adjust-btn{padding:8px 10px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid rgba(148,163,184,0.12);background:rgba(6,9,14,0.7);color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:all .18s;font-family:var(--font-ui)}
+.adjust-btn:hover{border-color:var(--accent);color:var(--text)}
+.adjust-btn.active-status{border-color:var(--accent);background:rgba(16,185,129,0.15);color:var(--accent)}
+
 /* Toast */
 #toast-container{position:fixed;bottom:20px;right:20px;z-index:80;display:flex;flex-direction:column;gap:8px}
-.toast{padding:14px 20px;border-radius:10px;background:rgba(13,19,26,0.95);border:1px solid var(--border-card);backdrop-filter:blur(16px);font-size:13px;display:flex;align-items:center;gap:10px;animation:toastIn .35s ease;min-width:280px;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.toast{padding:14px 20px;border-radius:10px;background:rgba(13,19,26,0.95);border:1px solid var(--border-card);backdrop-filter:blur(16px);font-size:13px;display:flex;align-items:center;gap:10px;animation:toastIn .35s ease;min-width:280px;box-shadow:0 8px 32px rgba(0,0,0,0.3);user-select:none}
 .toast.out{animation:toastOut .3s ease forwards}
 @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
 @keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
@@ -118,7 +138,7 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 /* Autocomplete */
 .autocomplete-wrap{position:relative}.autocomplete-list{position:absolute;top:100%;left:0;right:0;background:var(--bg-card);border:1px solid var(--border-card);border-radius:8px;margin-top:4px;z-index:10;display:none;max-height:180px;overflow-y:auto}
 .autocomplete-list.show{display:block}
-.autocomplete-item{padding:10px 14px;cursor:pointer;font-size:13px;transition:background .15s}.autocomplete-item:hover{background:rgba(16,185,129,0.08)}
+.autocomplete-item{padding:10px 14px;cursor:pointer;font-size:13px;transition:background .15s;display:flex;justify-content:space-between;align-items:center}.autocomplete-item:hover{background:rgba(16,185,129,0.08)}
 
 /* Export Buttons */
 .export-btns{display:flex;gap:8px}
@@ -326,10 +346,12 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
       <!-- History -->
       <div id="wallet-history" style="display:none">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div style="font-size:13px;color:var(--text-muted)">Lich su giao dich 30 ngay gan nhat</div>
-          <button class="btn btn-secondary btn-sm" id="simulate-btn">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-            Tua nhanh 5 phut (Simulate)
+          <div>
+            <div style="font-size:13px;color:var(--text-muted)">Lich su giao dich 30 ngay gan nhat</div>
+            <div style="font-size:11px;color:var(--accent2);margin-top:2px">Meo: Giu <b>Shift + Chuot trai</b> vao giao dich de mo thanh dieu chinh</div>
+          </div>
+          <button class="btn btn-secondary btn-icon-only" id="simulate-btn" title="Chon giao dich de duyet nhanh">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
           </button>
         </div>
         <div class="card" style="padding:0;overflow-x:auto">
@@ -371,24 +393,25 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 
     <!-- ===== REWARDS VIEW ===== -->
     <div id="view-rewards" class="view">
-      <div class="view-header"><div class="view-title">Thuong Tien Qua @ID</div></div>
+      <div class="view-header"><div class="view-title">He Thong Cap Phat Thuong (@ID)</div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
         <div class="card">
-          <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">Chuyen Thuong</h3>
+          <h3 style="font-size:14px;font-weight:600;margin-bottom:6px">Cap Tien Truc Tiep Vao Tai Khoan</h3>
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">He thong tu dong cong tien truc tiep vao tai khoan @ID ma khong tru so du vi ca nhan.</p>
           <div class="autocomplete-wrap" style="margin-bottom:14px">
-            <label>Nguoi Nhan (@ID)</label>
+            <label>Tai Khoan Nhan (@ID)</label>
             <input type="text" class="input input-mono" id="reward-recipient" placeholder="@dacil_admin">
             <div class="autocomplete-list" id="reward-autocomplete"></div>
           </div>
-          <div style="margin-bottom:14px"><label>So Tien (VND)</label><input type="text" class="input input-mono" id="reward-amount" placeholder="0"></div>
-          <div style="margin-bottom:18px"><label>Ghi Chu</label><textarea class="input" id="reward-note" rows="2" placeholder="Thuong doanh thu thang 10..."></textarea></div>
+          <div style="margin-bottom:14px"><label>So Tien Cong Them (VND)</label><input type="text" class="input input-mono" id="reward-amount" placeholder="0"></div>
+          <div style="margin-bottom:18px"><label>Ghi Chu He Thong</label><textarea class="input" id="reward-note" rows="2" placeholder="He thong thuong doanh thu thang 10..."></textarea></div>
           <button class="btn btn-primary" style="width:100%;justify-content:center" id="reward-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            Tang Thuong
+            Xac Nhan Cong Tien
           </button>
         </div>
         <div class="card">
-          <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">Thuong Gan Day</h3>
+          <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">Lich Su He Thong Cap Thuong</h3>
           <div id="rewards-feed" style="max-height:400px;overflow-y:auto"></div>
         </div>
       </div>
@@ -488,6 +511,55 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
     </div>
   </div>
 
+  <!-- Spin Selector Modal (Chon giao dich dang duyet -> Hoan thanh) -->
+  <div class="modal-overlay" id="spin-select-modal">
+    <div class="modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <h3 style="font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Chon Giao Dich Duyet Nhanh
+        </h3>
+        <button style="background:none;border:none;cursor:pointer;color:var(--text-muted)" id="close-spin-modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Bấm vào 1 giao dịch đang duyệt bên dưới để chuyển trực tiếp sang trạng thái <b style="color:var(--accent)">Hoàn thành</b>:</p>
+      <div id="spin-pending-list" style="max-height:280px;overflow-y:auto"></div>
+    </div>
+  </div>
+
+  <!-- Shift + Left Click Transaction Adjustment Bar -->
+  <div id="tx-adjust-bar">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(148,163,184,0.1)">
+      <div>
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Dieu Chinh Giao Dich</div>
+        <div class="mono" style="font-size:13px;color:var(--accent2);font-weight:600" id="adjust-tx-hash">0x...</div>
+      </div>
+      <button style="background:none;border:none;cursor:pointer;color:var(--text-muted)" id="close-adjust-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Chinh Trang Thai:</div>
+    <div class="adjust-status-grid">
+      <button class="adjust-btn" data-set-status="Hoan thanh">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--accent)"></span>Hoan thanh
+      </button>
+      <button class="adjust-btn" data-set-status="Dang duyet">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--warning)"></span>Dang duyet
+      </button>
+      <button class="adjust-btn" data-set-status="Vui long doi">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--accent2)"></span>Vui long doi
+      </button>
+      <button class="adjust-btn" data-set-status="Tu choi">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--danger)"></span>Tu choi
+      </button>
+    </div>
+    <button class="btn btn-danger btn-sm" style="width:100%;justify-content:center" id="adjust-delete-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      Xoa Giao Dich Nay
+    </button>
+  </div>
+
 </div>
 
 <!-- Toast Container -->
@@ -495,6 +567,8 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 
 <script>
 /* ========== NEXUS ENTERPRISE DASHBOARD — Core JavaScript ========== */
+
+const COUNTDOWN_DURATION = 86400; // 24 hours in seconds
 
 const APP = {
   state: {
@@ -504,6 +578,13 @@ const APP = {
     timeframe: '1M',
     walletTab: 'withdraw',
     wallet: { balance: 142850000, paymentMethods: [], transactions: [] },
+    accountBalances: {
+      '@dacil_admin': 54200000,
+      '@cloud_ops': 38900000,
+      '@gacha_dev': 19500000,
+      '@steam_trade': 41000000,
+      '@drag_master': 27600000
+    },
     shops: {},
     managerOverrides: {},
     managerLocks: {},
@@ -513,7 +594,8 @@ const APP = {
     orders: [],
     apiLogs: [],
     selectedMethodId: null,
-    addMethodType: 'VISA'
+    addMethodType: 'VISA',
+    activeAdjustTxId: null
   },
   timers: {},
   wireframeAnim: null,
@@ -552,6 +634,14 @@ function formatVND(n) {
   return neg ? '-' + r : r;
 }
 
+function formatCountdown24h(seconds) {
+  const s = Math.max(0, Math.floor(seconds));
+  const hrs = Math.floor(s / 3600);
+  const mins = Math.floor((s % 3600) / 60);
+  const secs = s % 60;
+  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
 function parseVNDInput(str) {
   if (!str) return 0;
   return parseInt(str.replace(/\./g, '').replace(/[^0-9-]/g, ''), 10) || 0;
@@ -574,10 +664,15 @@ function getTimestamp(date) {
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-function showToast(message, type = 'success') {
+function showToast(message, type = 'success', txId = null) {
   const c = document.getElementById('toast-container');
   const t = document.createElement('div');
   t.className = `toast toast-${type}`;
+  if (txId) {
+    t.dataset.txid = txId;
+    t.style.cursor = 'pointer';
+    t.title = 'Giu Shift + Chuot trai de dieu chinh giao dich nay';
+  }
   const icons = {
     success: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>',
     error: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
@@ -585,12 +680,21 @@ function showToast(message, type = 'success') {
     info: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
   };
   t.innerHTML = (icons[type] || icons.info) + `<span>${message}</span>`;
+
+  t.addEventListener('click', (e) => {
+    const targetTxId = txId || APP.state.wallet.transactions[0]?.id;
+    if (e.shiftKey && targetTxId) {
+      e.preventDefault();
+      e.stopPropagation();
+      openTxAdjustBar(targetTxId, e.clientX, e.clientY);
+    }
+  });
+
   c.appendChild(t);
-  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, 4000);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, 4500);
 }
 
 function animateCountUp(el, target, duration = 1500, prefix = '', suffix = '') {
-  let start = 0;
   const startTime = performance.now();
   const step = (now) => {
     const p = Math.min((now - startTime) / duration, 1);
@@ -626,6 +730,7 @@ function saveState() {
       paymentMethods: APP.state.wallet.paymentMethods,
       transactions: APP.state.wallet.transactions
     }));
+    localStorage.setItem('nexus_accounts', JSON.stringify(APP.state.accountBalances));
     localStorage.setItem('nexus_rewards', JSON.stringify(APP.state.rewards));
     localStorage.setItem('nexus_overrides', JSON.stringify(APP.state.managerOverrides));
   } catch (e) { /* ignore */ }
@@ -641,11 +746,13 @@ function loadState() {
       APP.state.wallet.transactions = (d.transactions || []).map(t => {
         if (t.status === 'Dang duyet') {
           const elapsed = (Date.now() - t.createdAt) / 1000;
-          if (elapsed >= 300) t.status = 'Hoan thanh';
+          if (elapsed >= COUNTDOWN_DURATION) t.status = 'Hoan thanh';
         }
         return t;
       });
     }
+    const acc = localStorage.getItem('nexus_accounts');
+    if (acc) APP.state.accountBalances = { ...APP.state.accountBalances, ...JSON.parse(acc) };
     const r = localStorage.getItem('nexus_rewards');
     if (r) APP.state.rewards = JSON.parse(r);
     const o = localStorage.getItem('nexus_overrides');
@@ -673,7 +780,6 @@ function generateShopData() {
       const variance = tf === '1Y' ? 0.1 : tf === '3M' ? 0.05 : 0;
       const v = () => 1 + (Math.random() * 2 - 1) * variance;
 
-      // Check for manager overrides
       const ov = APP.state.managerOverrides[shop.id]?.[tf];
       const rev = ov?.revenue ?? Math.round(b.revenue * mult * v());
       const cost = ov?.cost ?? Math.round(b.cost * mult * v());
@@ -686,7 +792,6 @@ function generateShopData() {
       const aov = units > 0 ? Math.round(rev / units) : 0;
       const refundRate = ov?.refundRate ?? b.refundRate;
 
-      // Generate chart data points
       const points = tf === '1M' ? 30 : tf === '3M' ? 12 : 12;
       const monthlyData = [];
       for (let i = 0; i < points; i++) {
@@ -726,7 +831,7 @@ function generateOrders() {
 
 function generateApiLogs() {
   const methods = ['GET', 'POST', 'GET', 'GET', 'PUT', 'DELETE'];
-  const paths = ['/api/v2/shops/revenue', '/api/v2/wallet/withdraw', '/api/v2/orders/list', '/api/v2/auth/verify', '/api/v2/shops/update', '/api/v2/system/health', '/api/v2/rewards/send', '/api/v2/tax/report'];
+  const paths = ['/api/v2/shops/revenue', '/api/v2/wallet/withdraw', '/api/v2/orders/list', '/api/v2/auth/verify', '/api/v2/shops/update', '/api/v2/system/health', '/api/v2/rewards/grant', '/api/v2/tax/report'];
   const codes = [200, 200, 200, 201, 200, 304, 200, 500, 200, 403];
   APP.state.apiLogs = [];
   for (let i = 0; i < 30; i++) {
@@ -769,7 +874,6 @@ function handleLogin(email, password) {
       return null;
     }
   }
-  // Auto-create user on login if not found
   const username = email.split('@')[0];
   const user = { email, username, handle: '@' + username.toLowerCase().replace(/[^a-z0-9_]/g, ''), registeredAt: getTimestamp(), avatarSvg: generateProceduralAvatar(username, 40) };
   APP.state.auth.user = user;
@@ -821,7 +925,6 @@ function toggleAuthForm() {
   }
 }
 
-
 /* ===== NAVIGATION & HEADER ===== */
 
 function navigateTo(viewId) {
@@ -832,7 +935,6 @@ function navigateTo(viewId) {
   document.querySelectorAll('.dock-item').forEach(d => {
     d.classList.toggle('active', d.dataset.view === viewId);
   });
-  // Render the target view
   switch (viewId) {
     case 'dashboard': renderDashboard(); break;
     case 'wallet': renderWallet(); break;
@@ -873,7 +975,6 @@ function initSpringDock() {
   function startAnim() { if (!animating) { animating = true; requestAnimationFrame(animate); } }
 
   dock.addEventListener('mousemove', (e) => {
-    const dockRect = dock.getBoundingClientRect();
     items.forEach((item, i) => {
       const rect = item.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
@@ -953,7 +1054,6 @@ function renderProfileDrawer() {
 
 function getShopData(shopId, tf) {
   if (shopId === 'all') {
-    // Aggregate all shops
     let revenue = 0, cost = 0, units = 0, tax = 0, netProfit = 0, growth = 0;
     const allMonthly = [];
     SHOP_LIST.forEach(s => {
@@ -967,7 +1067,6 @@ function getShopData(shopId, tf) {
     const aov = units > 0 ? Math.round(revenue / units) : 0;
     const refundRate = 2.7;
 
-    // Aggregate monthly data
     const first = APP.state.shops[SHOP_LIST[0].id]?.timeframes[tf]?.monthlyData;
     if (first) {
       for (let i = 0; i < first.length; i++) {
@@ -990,7 +1089,6 @@ function renderDashboard() {
   const data = getShopData(shopId, tf);
   if (!data) return;
 
-  // Shop tabs
   const tabsEl = document.getElementById('shop-tabs');
   tabsEl.innerHTML = `<div class="shop-tab ${shopId === 'all' ? 'active' : ''}" data-shop="all">Tat Ca</div>` +
     SHOP_LIST.map(s => `<div class="shop-tab ${shopId === s.id ? 'active' : ''}" data-shop="${s.id}">${s.name}</div>`).join('');
@@ -1025,7 +1123,6 @@ function renderKPIs(d) {
     </div>`;
   }).join('');
 
-  // Animate non-percent values
   kpis.forEach((k, i) => {
     if (!k.isPercent) {
       const el = document.getElementById('kpi-val-' + i);
@@ -1062,7 +1159,6 @@ function renderMainChart(data) {
     return path + ` L${x(md.length - 1).toFixed(1)},${y(minVal).toFixed(1)} L${x(0).toFixed(1)},${y(minVal).toFixed(1)} Z`;
   }
 
-  // Grid lines
   let gridLines = '';
   for (let i = 0; i <= 4; i++) {
     const val = minVal + (range * i / 4);
@@ -1071,14 +1167,12 @@ function renderMainChart(data) {
     gridLines += `<text x="${padL - 6}" y="${yPos + 4}" fill="#94A3B8" font-size="9" font-family="JetBrains Mono" text-anchor="end">${formatVND(Math.round(val / 1000))}K</text>`;
   }
 
-  // X-axis labels
   let xLabels = '';
   const step = Math.max(1, Math.floor(md.length / 8));
   for (let i = 0; i < md.length; i += step) {
     xLabels += `<text x="${x(i)}" y="${H - 4}" fill="#94A3B8" font-size="9" font-family="JetBrains Mono" text-anchor="middle">${md[i].label}</text>`;
   }
 
-  // Tooltip overlay rects
   let overlays = '';
   md.forEach((d, i) => {
     const bw = chartW / md.length;
@@ -1112,7 +1206,6 @@ function renderMainChart(data) {
     </div>
   `;
 
-  // Tooltip hover events
   container.querySelectorAll('.chart-hover-zone').forEach(rect => {
     rect.addEventListener('mouseenter', (e) => {
       const idx = parseInt(e.target.dataset.idx);
@@ -1172,12 +1265,11 @@ function renderPerfBars(tf) {
   }).join('');
 }
 
-/* ===== WALLET ===== */
+/* ===== WALLET & 24H COUNTDOWN & SHIFT+CLICK CONTROL ===== */
 
 function renderWallet() {
   renderPaymentMethods();
   renderTransactionHistory();
-  // Resume timers for pending transactions
   APP.state.wallet.transactions.forEach(tx => {
     if (tx.status === 'Dang duyet' && !APP.timers[tx.id]) {
       startTransactionTimer(tx.id);
@@ -1251,14 +1343,12 @@ async function handleWithdrawal() {
 
   const method = APP.state.wallet.paymentMethods.find(m => m.id === APP.state.selectedMethodId);
 
-  // Processing modal
   await showProcessingModal([
     'Xac thuc chu ky so...',
     'Tru so du tai khoan...',
     'Phat song den cong thanh toan...'
   ]);
 
-  // Deduct balance
   APP.state.wallet.balance -= amount;
   const txHash = generateHash();
   const tx = {
@@ -1277,16 +1367,15 @@ async function handleWithdrawal() {
   saveState();
   updateHeader();
 
-  // Hide processing, show completion
   document.getElementById('processing-modal').classList.remove('show');
   const completionModal = document.getElementById('completion-modal');
   document.getElementById('completion-hash').textContent = txHash;
   completionModal.classList.add('show');
   completionModal._lastTxId = tx.id;
 
-  // Start timer
   startTransactionTimer(tx.id);
   document.getElementById('withdraw-amount').value = '';
+  showToast(`Tao lenh rut ${formatVND(amount)} VND (Dang duyet 24h)`, 'info', tx.id);
 }
 
 function showProcessingModal(steps) {
@@ -1302,7 +1391,7 @@ function showProcessingModal(steps) {
     modal.classList.add('show');
 
     let i = 0;
-    const durations = [1500, 1000, 1500];
+    const durations = [1200, 900, 1200];
     function nextStep() {
       if (i >= steps.length) { resolve(); return; }
       const stepEl = document.getElementById('proc-step-' + i);
@@ -1328,8 +1417,13 @@ function startTransactionTimer(txId) {
   const tx = APP.state.wallet.transactions.find(t => t.id === txId);
   if (!tx || tx.status !== 'Dang duyet') return;
 
+  if (APP.timers[txId]) {
+    clearInterval(APP.timers[txId]);
+    delete APP.timers[txId];
+  }
+
   const elapsed = (Date.now() - tx.createdAt) / 1000;
-  let remaining = Math.max(0, 300 - elapsed);
+  let remaining = Math.max(0, COUNTDOWN_DURATION - elapsed);
 
   if (remaining <= 0) {
     tx.status = 'Hoan thanh';
@@ -1339,26 +1433,47 @@ function startTransactionTimer(txId) {
   }
 
   APP.timers[txId] = setInterval(() => {
-    remaining--;
+    const currentTx = APP.state.wallet.transactions.find(t => t.id === txId);
+    if (!currentTx || currentTx.status !== 'Dang duyet') {
+      clearInterval(APP.timers[txId]);
+      delete APP.timers[txId];
+      return;
+    }
+    const nowElapsed = (Date.now() - currentTx.createdAt) / 1000;
+    remaining = Math.max(0, COUNTDOWN_DURATION - nowElapsed);
+
     if (remaining <= 0) {
       clearInterval(APP.timers[txId]);
       delete APP.timers[txId];
-      tx.status = 'Hoan thanh';
+      currentTx.status = 'Hoan thanh';
       saveState();
-      showToast(`Giao dich ${tx.hash} da duoc duyet thanh cong`, 'success');
+      showToast(`Giao dich ${currentTx.hash} da duoc duyet thanh cong`, 'success', currentTx.id);
       if (APP.state.currentView === 'wallet') renderTransactionHistory();
     } else {
-      // Update countdown display if visible
       const cdEl = document.getElementById('cd-' + txId);
-      if (cdEl) {
-        const m = Math.floor(remaining / 60);
-        const s = Math.floor(remaining % 60);
-        cdEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-        const bar = document.getElementById('bar-' + txId);
-        if (bar) bar.style.width = ((remaining / 300) * 100) + '%';
-      }
+      if (cdEl) cdEl.textContent = formatCountdown24h(remaining);
+      const bar = document.getElementById('bar-' + txId);
+      if (bar) bar.style.width = ((remaining / COUNTDOWN_DURATION) * 100) + '%';
     }
   }, 1000);
+}
+
+function renderStatusBadge(tx) {
+  if (tx.status === 'Dang duyet') {
+    return `<span class="badge badge-warning"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Dang duyet</span>
+      <div style="font-size:10px;color:var(--warning);margin-top:2px" class="mono" id="cd-${tx.id}"></div>
+      <div class="countdown-bar"><div class="countdown-bar-fill" id="bar-${tx.id}"></div></div>`;
+  }
+  if (tx.status === 'Hoan thanh') {
+    return `<span class="badge badge-success"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Hoan thanh</span>`;
+  }
+  if (tx.status === 'Tu choi') {
+    return `<span class="badge badge-danger"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Tu choi</span>`;
+  }
+  if (tx.status === 'Vui long doi') {
+    return `<span class="badge badge-info"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Vui long doi</span>`;
+  }
+  return `<span class="badge badge-info">${tx.status}</span>`;
 }
 
 function renderTransactionHistory() {
@@ -1370,49 +1485,154 @@ function renderTransactionHistory() {
   }
   el.innerHTML = txs.map(tx => {
     const isCredit = tx.amount > 0;
-    const statusBadge = tx.status === 'Dang duyet'
-      ? `<span class="badge badge-warning"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Dang duyet</span><div style="font-size:10px;color:var(--warning);margin-top:2px" class="mono" id="cd-${tx.id}"></div><div class="countdown-bar"><div class="countdown-bar-fill" id="bar-${tx.id}"></div></div>`
-      : '<span class="badge badge-success"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Hoan thanh</span>';
-
-    return `<tr id="row-${tx.id}">
+    return `<tr id="row-${tx.id}" class="tx-row" data-txid="${tx.id}" title="Giu Shift + Chuot trai de dieu chinh giao dich nay">
       <td class="mono" style="font-size:12px;color:var(--accent2)">${tx.hash}</td>
       <td>${tx.type}</td>
       <td class="mono" style="color:${isCredit ? 'var(--accent)' : 'var(--danger)'}; font-weight:600">${isCredit ? '+' : ''}${formatVND(tx.amount)} VND</td>
       <td><span class="badge" style="background:rgba(148,163,184,0.08)">${tx.method}${tx.methodDetail ? ' ' + tx.methodDetail : ''}</span></td>
       <td class="mono" style="font-size:12px;color:var(--text-muted)">${tx.timestamp}</td>
-      <td>${statusBadge}</td>
+      <td>${renderStatusBadge(tx)}</td>
     </tr>`;
   }).join('');
 
-  // Update countdown displays for pending txs
+  // Update 24h countdown displays for pending txs
   txs.filter(tx => tx.status === 'Dang duyet').forEach(tx => {
     const elapsed = (Date.now() - tx.createdAt) / 1000;
-    const remaining = Math.max(0, 300 - elapsed);
-    const m = Math.floor(remaining / 60);
-    const s = Math.floor(remaining % 60);
+    const remaining = Math.max(0, COUNTDOWN_DURATION - elapsed);
     const cdEl = document.getElementById('cd-' + tx.id);
-    if (cdEl) cdEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+    if (cdEl) cdEl.textContent = formatCountdown24h(remaining);
     const bar = document.getElementById('bar-' + tx.id);
-    if (bar) bar.style.width = ((remaining / 300) * 100) + '%';
+    if (bar) bar.style.width = ((remaining / COUNTDOWN_DURATION) * 100) + '%';
   });
 }
 
-function simulateFiveMinutes() {
-  let count = 0;
-  APP.state.wallet.transactions.forEach(tx => {
-    if (tx.status === 'Dang duyet') {
-      tx.status = 'Hoan thanh';
-      if (APP.timers[tx.id]) { clearInterval(APP.timers[tx.id]); delete APP.timers[tx.id]; }
-      count++;
-    }
-  });
-  if (count > 0) {
-    saveState();
-    renderTransactionHistory();
-    showToast(`Da duyet nhanh ${count} giao dich`, 'success');
+/* Spin Button Modal: Pick a pending transaction to immediately complete */
+function openSpinSelectorModal() {
+  const modal = document.getElementById('spin-select-modal');
+  const listEl = document.getElementById('spin-pending-list');
+  const pendingTxs = APP.state.wallet.transactions.filter(tx => tx.status === 'Dang duyet' || tx.status === 'Vui long doi');
+
+  if (pendingTxs.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:28px 10px;font-size:13px">Khong co giao dich nao dang o trang thai cho duyet.</div>`;
   } else {
-    showToast('Khong co giao dich dang cho duyet', 'info');
+    listEl.innerHTML = pendingTxs.map(tx => {
+      const isCredit = tx.amount > 0;
+      const elapsed = (Date.now() - tx.createdAt) / 1000;
+      const remaining = Math.max(0, COUNTDOWN_DURATION - elapsed);
+      return `<div class="spin-tx-item" data-approve-id="${tx.id}">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="mono" style="font-size:12px;color:var(--accent2);font-weight:600">${tx.hash}</span>
+            <span class="badge badge-warning" style="font-size:10px">${tx.status}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">${tx.type} • ${tx.method} ${tx.methodDetail || ''}</div>
+          ${tx.status === 'Dang duyet' ? `<div class="mono" style="font-size:10px;color:var(--warning);margin-top:2px">Con lai: ${formatCountdown24h(remaining)}</div>` : ''}
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:13px;font-weight:600;color:${isCredit ? 'var(--accent)' : 'var(--danger)'}">${isCredit ? '+' : ''}${formatVND(tx.amount)} VND</div>
+          <div style="font-size:11px;color:var(--accent);margin-top:4px;font-weight:600">Duyet ngay →</div>
+        </div>
+      </div>`;
+    }).join('');
   }
+
+  modal.classList.add('show');
+}
+
+function approveTransactionDirectly(txId) {
+  const tx = APP.state.wallet.transactions.find(t => t.id === txId);
+  if (!tx) return;
+  tx.status = 'Hoan thanh';
+  if (APP.timers[tx.id]) {
+    clearInterval(APP.timers[tx.id]);
+    delete APP.timers[tx.id];
+  }
+  saveState();
+  renderTransactionHistory();
+  document.getElementById('spin-select-modal').classList.remove('show');
+  showToast(`Giao dich ${tx.hash} da chuyen sang Hoan thanh`, 'success', tx.id);
+}
+
+/* Shift + Left Click Adjustment Bar */
+function openTxAdjustBar(txId, clientX, clientY) {
+  const tx = APP.state.wallet.transactions.find(t => t.id === txId);
+  if (!tx) return;
+
+  APP.state.activeAdjustTxId = txId;
+  const bar = document.getElementById('tx-adjust-bar');
+  document.getElementById('adjust-tx-hash').textContent = `${tx.hash} (${formatVND(tx.amount)} VND)`;
+
+  bar.querySelectorAll('[data-set-status]').forEach(btn => {
+    btn.classList.toggle('active-status', btn.dataset.setStatus === tx.status);
+  });
+
+  bar.classList.add('show');
+
+  const barW = 300, barH = 220;
+  const left = Math.min(Math.max(12, clientX), window.innerWidth - barW - 16);
+  const top = Math.min(Math.max(12, clientY), window.innerHeight - barH - 16);
+  bar.style.left = left + 'px';
+  bar.style.top = top + 'px';
+}
+
+function closeTxAdjustBar() {
+  document.getElementById('tx-adjust-bar').classList.remove('show');
+  APP.state.activeAdjustTxId = null;
+}
+
+function updateTransactionStatus(txId, newStatus) {
+  const tx = APP.state.wallet.transactions.find(t => t.id === txId);
+  if (!tx) return;
+
+  const oldStatus = tx.status;
+  if (oldStatus === newStatus) {
+    closeTxAdjustBar();
+    return;
+  }
+
+  // Handle balance refund if a withdrawal is rejected ("Tu choi"), or re-deduct if un-rejected
+  if (tx.amount < 0) {
+    if (newStatus === 'Tu choi' && oldStatus !== 'Tu choi') {
+      APP.state.wallet.balance += Math.abs(tx.amount);
+    } else if (oldStatus === 'Tu choi' && newStatus !== 'Tu choi') {
+      APP.state.wallet.balance = Math.max(0, APP.state.wallet.balance - Math.abs(tx.amount));
+    }
+  }
+
+  tx.status = newStatus;
+
+  if (APP.timers[tx.id]) {
+    clearInterval(APP.timers[tx.id]);
+    delete APP.timers[tx.id];
+  }
+
+  if (newStatus === 'Dang duyet') {
+    tx.createdAt = Date.now();
+    startTransactionTimer(tx.id);
+  }
+
+  saveState();
+  updateHeader();
+  if (APP.state.currentView === 'wallet') renderTransactionHistory();
+  closeTxAdjustBar();
+  showToast(`Da cap nhat ${tx.hash} -> ${newStatus}`, 'info', tx.id);
+}
+
+function deleteTransaction(txId) {
+  const idx = APP.state.wallet.transactions.findIndex(t => t.id === txId);
+  if (idx === -1) return;
+  const tx = APP.state.wallet.transactions[idx];
+
+  if (APP.timers[tx.id]) {
+    clearInterval(APP.timers[tx.id]);
+    delete APP.timers[tx.id];
+  }
+
+  APP.state.wallet.transactions.splice(idx, 1);
+  saveState();
+  if (APP.state.currentView === 'wallet') renderTransactionHistory();
+  closeTxAdjustBar();
+  showToast(`Da xoa giao dich ${tx.hash}`, 'warning');
 }
 
 function highlightTransaction(txId) {
@@ -1425,7 +1645,6 @@ function highlightTransaction(txId) {
     }
   }, 200);
 }
-
 
 /* ===== MANAGER ===== */
 
@@ -1451,7 +1670,6 @@ function renderManager() {
     { key: 'netProfit', label: 'Loi Nhuan Rong (VND) [Tu Dong]', value: null, computed: true }
   ];
 
-  // Compute tax and net profit
   const rev = fields[0].value;
   const cost = fields[1].value;
   const taxRate = fields[3].value;
@@ -1515,15 +1733,10 @@ function autoCalibrate() {
   const taxRate = ov.taxRate ?? data.taxRate;
 
   if (locks.netProfit) {
-    // Lock net profit: adjust revenue proportionally
     const targetProfit = ov.netProfit ?? data.netProfit;
-    // netProfit = rev - cost - rev * taxRate/100
-    // netProfit = rev * (1 - taxRate/100) - cost
-    // rev = (netProfit + cost) / (1 - taxRate/100)
     const newRev = Math.round((targetProfit + cost) / (1 - taxRate / 100));
     ov.revenue = newRev;
   } else {
-    // Compute net profit from rev and cost
     const tax = Math.round(rev * taxRate / 100);
     ov.netProfit = rev - cost - tax;
   }
@@ -1536,30 +1749,37 @@ function autoCalibrate() {
   showToast('Da tu dong can chinh so lieu hop ly', 'info');
 }
 
-/* ===== REWARDS ===== */
+/* ===== REWARDS (Direct System Grant to @ID without deducting sender balance) ===== */
 
 function renderRewards() {
   renderRewardsFeed();
 }
 
 function handleReward() {
-  const recipientId = document.getElementById('reward-recipient').value.trim();
+  let recipientId = document.getElementById('reward-recipient').value.trim();
   const amountStr = document.getElementById('reward-amount').value;
   const note = document.getElementById('reward-note').value.trim();
   const amount = parseVNDInput(amountStr);
 
-  if (!recipientId || !recipientId.startsWith('@')) { showToast('Vui long nhap @id nguoi nhan hop le', 'error'); return; }
-  if (amount < 1000) { showToast('So tien thuong toi thieu 1.000 VND', 'error'); return; }
-  if (amount > APP.state.wallet.balance) { showToast('So du khong du de thuong', 'error'); return; }
+  if (!recipientId) { showToast('Vui long nhap @id tai khoan nhan', 'error'); return; }
+  if (!recipientId.startsWith('@')) recipientId = '@' + recipientId;
+  if (amount < 1000) { showToast('So tien cong them toi thieu 1.000 VND', 'error'); return; }
 
-  APP.state.wallet.balance -= amount;
+  // Direct System Grant: Add funds directly to target @ID without deducting from current wallet
+  APP.state.accountBalances[recipientId] = (APP.state.accountBalances[recipientId] || 0) + amount;
+
+  const currentHandle = APP.state.auth.user?.handle;
+  if (currentHandle && recipientId.toLowerCase() === currentHandle.toLowerCase()) {
+    APP.state.wallet.balance += amount;
+  }
+
   const txHash = generateHash();
   const tx = {
     id: 'tx_' + Date.now(),
     hash: txHash,
-    type: 'Thuong',
-    amount: -amount,
-    method: 'Internal',
+    type: 'He thong cong tien',
+    amount: +amount,
+    method: 'System Grant',
     methodDetail: recipientId,
     timestamp: getTimestamp(),
     createdAt: Date.now(),
@@ -1570,10 +1790,11 @@ function handleReward() {
 
   const reward = {
     id: 'rw_' + Date.now(),
-    from: APP.state.auth.user.handle,
+    from: 'SYSTEM',
     to: recipientId,
     amount,
-    note: note || 'Khong co ghi chu',
+    newBalance: APP.state.accountBalances[recipientId],
+    note: note || 'He thong cong tien truc tiep',
     timestamp: getTimestamp()
   };
   APP.state.rewards.unshift(reward);
@@ -1583,26 +1804,33 @@ function handleReward() {
   document.getElementById('reward-recipient').value = '';
   document.getElementById('reward-amount').value = '';
   document.getElementById('reward-note').value = '';
-  showToast(`Da thuong ${formatVND(amount)} VND cho ${recipientId}`, 'success');
+  showToast(`He thong da cong +${formatVND(amount)} VND vao tai khoan ${recipientId}`, 'success', tx.id);
 }
 
 function renderRewardsFeed() {
   const el = document.getElementById('rewards-feed');
   if (APP.state.rewards.length === 0) {
-    el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px">Chua co thuong nao</div>';
+    el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px">Chua co giao dich cap thuong nao</div>';
     return;
   }
-  el.innerHTML = APP.state.rewards.map(r => `
+  el.innerHTML = APP.state.rewards.map(r => {
+    const accBal = APP.state.accountBalances[r.to] ?? r.newBalance ?? r.amount;
+    return `
     <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(148,163,184,0.06);align-items:flex-start">
       ${generateProceduralAvatar(r.to.replace('@', ''), 32)}
       <div style="flex:1">
-        <div style="font-size:13px"><span style="font-weight:600">${r.from}</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5" style="vertical-align:middle"><path d="M5 12h14M12 5l7 7-7 7"/></svg> <span style="font-weight:600;color:var(--accent)">${r.to}</span></div>
-        <div class="mono" style="font-size:14px;color:var(--accent);margin-top:2px">${formatVND(r.amount)} VND</div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${r.note}</div>
+        <div style="font-size:13px">
+          <span class="badge badge-info" style="font-size:10px;padding:2px 7px">HE THONG</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5" style="vertical-align:middle"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span style="font-weight:600;color:var(--accent)" class="mono">${r.to}</span>
+        </div>
+        <div class="mono" style="font-size:14px;color:var(--accent);font-weight:600;margin-top:4px">+${formatVND(r.amount)} VND</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${r.note} • So du TK: <span class="mono" style="color:var(--text)">${formatVND(accBal)} VND</span></div>
       </div>
       <div class="mono" style="font-size:10px;color:var(--text-muted);white-space:nowrap">${r.timestamp}</div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function setupAutocomplete() {
@@ -1610,13 +1838,29 @@ function setupAutocomplete() {
   const list = document.getElementById('reward-autocomplete');
   if (!input || !list) return;
 
-  input.addEventListener('input', () => {
-    const val = input.value.toLowerCase();
-    if (val.length < 1) { list.classList.remove('show'); return; }
-    const matches = AUTOCOMPLETE_IDS.filter(id => id.includes(val));
+  function renderSuggestions(val) {
+    const currentHandle = APP.state.auth.user?.handle;
+    const pool = [...new Set([...(currentHandle ? [currentHandle] : []), ...AUTOCOMPLETE_IDS, ...Object.keys(APP.state.accountBalances)])];
+    const matches = pool.filter(id => id.toLowerCase().includes(val.toLowerCase()));
     if (matches.length === 0) { list.classList.remove('show'); return; }
-    list.innerHTML = matches.map(id => `<div class="autocomplete-item" data-acid="${id}">${id}</div>`).join('');
+    list.innerHTML = matches.map(id => {
+      const bal = id === currentHandle ? APP.state.wallet.balance : (APP.state.accountBalances[id] || 0);
+      return `<div class="autocomplete-item" data-acid="${id}">
+        <span class="mono" style="color:var(--accent);font-weight:600">${id}</span>
+        <span class="mono" style="font-size:11px;color:var(--text-muted)">${formatVND(bal)} VND</span>
+      </div>`;
+    }).join('');
     list.classList.add('show');
+  }
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    if (val.length < 1) { list.classList.remove('show'); return; }
+    renderSuggestions(val);
+  });
+
+  input.addEventListener('focus', () => {
+    renderSuggestions(input.value.trim());
   });
 
   list.addEventListener('click', (e) => {
@@ -1677,7 +1921,6 @@ function filterOrders() {
 function renderTaxReport() {
   const tf = APP.state.timeframe;
 
-  // Summary cards
   const taxCards = document.getElementById('tax-cards');
   taxCards.innerHTML = SHOP_LIST.map(s => {
     const d = APP.state.shops[s.id]?.timeframes[tf];
@@ -1689,7 +1932,6 @@ function renderTaxReport() {
     </div>`;
   }).join('');
 
-  // Table
   const taxTable = document.getElementById('tax-table');
   let totalVAT = 0, totalCIT = 0, totalTax = 0;
   taxTable.innerHTML = SHOP_LIST.map(s => {
@@ -1758,8 +2000,7 @@ function renderSystem() {
 
 function renderLatencyMetrics() {
   const el = document.getElementById('latency-metrics');
-  const colors = ['#10B981', '#06B6D4', '#F59E0B', '#8B5CF6', '#EC4899'];
-  el.innerHTML = SHOP_LIST.map((s, i) => {
+  el.innerHTML = SHOP_LIST.map((s) => {
     const lat = Math.round(8 + Math.random() * 120);
     const color = lat < 50 ? '#10B981' : lat < 100 ? '#F59E0B' : '#EF4444';
     return `<div style="margin-bottom:12px">
@@ -1837,10 +2078,7 @@ function initWireframe(canvasId) {
       [x,y,z] = rotateX(x, y, z, angle * 0.6);
       return project(x, y, z);
     });
-    edges.forEach(([a, b]) => {
-      drawLine(transformed[a], transformed[b], '#10B981', 0.7);
-    });
-    // Inner cube
+    edges.forEach(([a, b]) => drawLine(transformed[a], transformed[b], '#10B981', 0.7));
     const s2 = 30;
     const verts2 = [[-s2,-s2,-s2],[s2,-s2,-s2],[s2,s2,-s2],[-s2,s2,-s2],[-s2,-s2,s2],[s2,-s2,s2],[s2,s2,s2],[-s2,s2,s2]];
     const t2 = verts2.map(v => {
@@ -1889,7 +2127,6 @@ function initWireframe(canvasId) {
     radii.forEach((r, ri) => {
       const segments = 12;
       const a = angle * speeds[ri];
-      // Latitude circles
       for (let lat = -2; lat <= 2; lat++) {
         const phi = (lat / 3) * Math.PI / 2;
         const cr = r * Math.cos(phi);
@@ -1907,7 +2144,6 @@ function initWireframe(canvasId) {
           drawLine(p1, p2, colors[ri], 0.3 + ri * 0.15);
         }
       }
-      // Longitude circles
       for (let lon = 0; lon < 6; lon++) {
         const theta = (lon / 6) * Math.PI;
         for (let i = 0; i < segments; i++) {
@@ -1964,7 +2200,6 @@ function initAuthCanvas() {
     angle += 0.004;
     ctx.strokeStyle = 'rgba(16,185,129,0.08)';
     ctx.lineWidth = 1;
-    // Draw a large rotating grid
     const gridSize = 8;
     const spacing = 60;
     for (let i = -gridSize; i <= gridSize; i++) {
@@ -1977,7 +2212,6 @@ function initAuthCanvas() {
         ctx.arc(px, py, 1.5, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(16,185,129,${0.05 + Math.random() * 0.05})`;
         ctx.fill();
-        // Connect to right neighbor
         if (i < gridSize) {
           let [x2, y2, z2] = [(i + 1) * spacing, 0, j * spacing];
           [x2, y2, z2] = rotateY(x2, y2, z2, angle);
@@ -1985,7 +2219,6 @@ function initAuthCanvas() {
           const [px2, py2] = project(x2, y2, z2);
           ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px2, py2); ctx.stroke();
         }
-        // Connect to bottom neighbor
         if (j < gridSize) {
           let [x2, y2, z2] = [i * spacing, 0, (j + 1) * spacing];
           [x2, y2, z2] = rotateY(x2, y2, z2, angle);
@@ -2022,7 +2255,6 @@ function init() {
   document.getElementById('show-register').addEventListener('click', toggleAuthForm);
   document.getElementById('show-login').addEventListener('click', toggleAuthForm);
 
-  // Enter key for login/register
   ['login-email', 'login-password'].forEach(id => {
     document.getElementById(id).addEventListener('keypress', (e) => {
       if (e.key === 'Enter') document.getElementById('login-btn').click();
@@ -2039,10 +2271,8 @@ function init() {
     item.addEventListener('click', () => navigateTo(item.dataset.view));
   });
 
-  // Balance pill -> wallet
   document.getElementById('balance-pill').addEventListener('click', () => navigateTo('wallet'));
 
-  // User trigger -> profile drawer
   document.getElementById('user-trigger').addEventListener('click', toggleProfileDrawer);
   document.getElementById('drawer-overlay').addEventListener('click', closeProfileDrawer);
   document.getElementById('close-drawer').addEventListener('click', closeProfileDrawer);
@@ -2088,7 +2318,6 @@ function init() {
     });
   });
 
-  // Save method
   document.getElementById('save-method-btn').addEventListener('click', addPaymentMethod);
 
   // Quick amount chips
@@ -2100,18 +2329,61 @@ function init() {
     });
   });
 
-  // Withdraw amount formatting
   const wdInput = document.getElementById('withdraw-amount');
   wdInput.addEventListener('input', () => {
     const raw = parseVNDInput(wdInput.value);
     if (raw > 0) wdInput.value = formatVND(raw);
   });
 
-  // Withdraw button
   document.getElementById('withdraw-btn').addEventListener('click', handleWithdrawal);
 
-  // Simulate 5 min
-  document.getElementById('simulate-btn').addEventListener('click', simulateFiveMinutes);
+  // Spin Button: Open pending transaction picker modal
+  document.getElementById('simulate-btn').addEventListener('click', openSpinSelectorModal);
+  document.getElementById('close-spin-modal').addEventListener('click', () => {
+    document.getElementById('spin-select-modal').classList.remove('show');
+  });
+  document.getElementById('spin-select-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'spin-select-modal') {
+      document.getElementById('spin-select-modal').classList.remove('show');
+    }
+  });
+  document.getElementById('spin-pending-list').addEventListener('click', (e) => {
+    const item = e.target.closest('[data-approve-id]');
+    if (item) {
+      approveTransactionDirectly(item.dataset.approveId);
+    }
+  });
+
+  // Shift + Left Click on Transaction History Row -> Open Adjustment Bar
+  document.getElementById('tx-table').addEventListener('click', (e) => {
+    const row = e.target.closest('tr[data-txid]');
+    if (row && e.shiftKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      openTxAdjustBar(row.dataset.txid, e.clientX, e.clientY);
+    }
+  });
+
+  // Adjustment Bar actions
+  document.getElementById('close-adjust-bar').addEventListener('click', closeTxAdjustBar);
+  document.querySelectorAll('#tx-adjust-bar [data-set-status]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (APP.state.activeAdjustTxId) {
+        updateTransactionStatus(APP.state.activeAdjustTxId, btn.dataset.setStatus);
+      }
+    });
+  });
+  document.getElementById('adjust-delete-btn').addEventListener('click', () => {
+    if (APP.state.activeAdjustTxId) {
+      deleteTransaction(APP.state.activeAdjustTxId);
+    }
+  });
+  document.addEventListener('click', (e) => {
+    const bar = document.getElementById('tx-adjust-bar');
+    if (bar.classList.contains('show') && !e.target.closest('#tx-adjust-bar') && !e.shiftKey) {
+      closeTxAdjustBar();
+    }
+  });
 
   // Completion modal
   document.getElementById('close-completion').addEventListener('click', () => {
@@ -2140,7 +2412,6 @@ function init() {
   document.getElementById('apply-overrides-btn').addEventListener('click', applyManagerOverrides);
   document.getElementById('auto-calibrate-btn').addEventListener('click', autoCalibrate);
 
-  // Manager lock toggles (delegated)
   document.getElementById('manager-fields').addEventListener('click', (e) => {
     const lockBtn = e.target.closest('.lock-toggle');
     if (lockBtn) {
@@ -2154,7 +2425,6 @@ function init() {
   document.getElementById('reward-btn').addEventListener('click', handleReward);
   setupAutocomplete();
 
-  // Reward amount formatting
   const rwInput = document.getElementById('reward-amount');
   rwInput.addEventListener('input', () => {
     const raw = parseVNDInput(rwInput.value);
@@ -2178,7 +2448,6 @@ function init() {
     });
   });
 
-  // Check auth
   initAuth();
   if (!APP.state.auth.isLoggedIn) {
     initAuthCanvas();
@@ -2189,4 +2458,3 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
-
