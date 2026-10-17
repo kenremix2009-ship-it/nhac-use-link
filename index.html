@@ -15,7 +15,6 @@ body{font-family:var(--font-ui);background:var(--bg-primary);color:var(--text);o
 .glass{background:rgba(13,19,26,0.85);border:1px solid var(--border-card);backdrop-filter:blur(16px);border-radius:12px}
 .btn{padding:10px 20px;border:none;border-radius:8px;cursor:pointer;font-family:var(--font-ui);font-weight:600;font-size:14px;transition:all .25s ease;display:inline-flex;align-items:center;gap:8px}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#059669);color:#fff}.btn-primary:hover{box-shadow:0 0 24px rgba(16,185,129,0.35);transform:translateY(-1px)}
-.btn-cyan{background:linear-gradient(135deg,var(--accent2),#0284C7);color:#fff}.btn-cyan:hover{box-shadow:0 0 24px rgba(6,182,212,0.35);transform:translateY(-1px)}
 .btn-secondary{background:rgba(16,185,129,0.12);color:var(--accent);border:1px solid var(--border-card)}.btn-secondary:hover{background:rgba(16,185,129,0.22)}
 .btn-danger{background:rgba(239,68,68,0.15);color:var(--danger);border:1px solid rgba(239,68,68,0.2)}.btn-danger:hover{background:rgba(239,68,68,0.25)}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px}
@@ -86,14 +85,9 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 .tf-toggle{display:flex;gap:4px;padding:3px;border-radius:8px;background:rgba(148,163,184,0.06)}.tf-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s;border:none;background:none}
 .tf-btn.active{background:var(--accent);color:#fff}
 
-/* Wallet & Reward Mode Tabs */
+/* Wallet Tabs */
 .wallet-tabs{display:flex;gap:4px;margin-bottom:20px;padding:3px;border-radius:10px;background:rgba(148,163,184,0.06);width:fit-content}
 .wallet-tab{padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s}.wallet-tab.active{background:var(--accent);color:#fff}
-.reward-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px;padding:4px;border-radius:10px;background:rgba(6,9,14,0.8);border:1px solid rgba(148,163,184,0.1)}
-.reward-mode-tab{padding:9px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
-.reward-mode-tab.active[data-rmode="grant"]{background:rgba(16,185,129,0.15);color:var(--accent);border:1px solid rgba(16,185,129,0.3)}
-.reward-mode-tab.active[data-rmode="gift"]{background:rgba(6,182,212,0.15);color:var(--accent2);border:1px solid rgba(6,182,212,0.3)}
-
 .payment-card{padding:14px 18px;border-radius:10px;border:1px solid rgba(148,163,184,0.1);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;margin-bottom:8px}
 .payment-card:hover,.payment-card.selected{border-color:var(--accent);background:rgba(16,185,129,0.06)}
 .payment-card .card-icon{width:44px;height:30px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:10px;font-weight:700}
@@ -334,14 +328,13 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
           <div class="card">
             <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">So Tien Rut</h3>
             <div style="margin-bottom:12px"><label>So Tien (VND)</label><input type="text" class="input input-mono" id="withdraw-amount" placeholder="0" style="font-size:20px;text-align:right"></div>
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Toi thieu: 10.000 — Toi da: 999.999.999 VND</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Toi thieu: 10.000 — Toi da: 9.999.999 VND</div>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px">
+              <button class="chip" data-amt="50000">50K</button>
+              <button class="chip" data-amt="100000">100K</button>
               <button class="chip" data-amt="500000">500K</button>
               <button class="chip" data-amt="1000000">1M</button>
               <button class="chip" data-amt="5000000">5M</button>
-              <button class="chip" data-amt="10000000">10M</button>
-              <button class="chip" data-amt="50000000">50M</button>
-              <button class="chip" data-amt="100000000">100M</button>
             </div>
             <button class="btn btn-primary" style="width:100%;justify-content:center" id="withdraw-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
@@ -398,45 +391,28 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
       </div>
     </div>
 
-    <!-- ===== REWARDS VIEW (System Grant + Personal Gift) ===== -->
+    <!-- ===== REWARDS VIEW ===== -->
     <div id="view-rewards" class="view">
-      <div class="view-header"><div class="view-title">Thuong He Thong & Tang Tien (@ID)</div></div>
+      <div class="view-header"><div class="view-title">He Thong Cap Phat Thuong (@ID)</div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
         <div class="card">
-          <div class="reward-mode-tabs" id="reward-mode-tabs">
-            <div class="reward-mode-tab active" data-rmode="grant">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              He Thong Cong Tien
-            </div>
-            <div class="reward-mode-tab" data-rmode="gift">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-              Tang Tu So Du Vi
-            </div>
-          </div>
-
-          <h3 style="font-size:14px;font-weight:600;margin-bottom:6px" id="reward-form-title">Cap Tien Truc Tiep Vao Tai Khoan</h3>
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px" id="reward-form-desc">He thong tu dong cong tien truc tiep vao tai khoan @ID ma khong tru so du vi ca nhan.</p>
-
-          <div id="gift-balance-banner" style="display:none;padding:10px 14px;border-radius:8px;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.25);margin-bottom:14px;justify-content:space-between;align-items:center">
-            <span style="font-size:12px;color:var(--text-muted)">So du kha dung de tang:</span>
-            <span class="mono" style="font-size:14px;font-weight:600;color:var(--accent2)" id="gift-available-balance">0 VND</span>
-          </div>
-
+          <h3 style="font-size:14px;font-weight:600;margin-bottom:6px">Cap Tien Truc Tiep Vao Tai Khoan</h3>
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">He thong tu dong cong tien truc tiep vao tai khoan @ID ma khong tru so du vi ca nhan.</p>
           <div class="autocomplete-wrap" style="margin-bottom:14px">
-            <label id="reward-recipient-label">Tai Khoan Nhan (@ID)</label>
+            <label>Tai Khoan Nhan (@ID)</label>
             <input type="text" class="input input-mono" id="reward-recipient" placeholder="@dacil_admin">
             <div class="autocomplete-list" id="reward-autocomplete"></div>
           </div>
-          <div style="margin-bottom:14px"><label id="reward-amount-label">So Tien Cong Them (VND)</label><input type="text" class="input input-mono" id="reward-amount" placeholder="0"></div>
-          <div style="margin-bottom:18px"><label id="reward-note-label">Ghi Chu</label><textarea class="input" id="reward-note" rows="2" placeholder="Thuong doanh thu thang 10..."></textarea></div>
+          <div style="margin-bottom:14px"><label>So Tien Cong Them (VND)</label><input type="text" class="input input-mono" id="reward-amount" placeholder="0"></div>
+          <div style="margin-bottom:18px"><label>Ghi Chu He Thong</label><textarea class="input" id="reward-note" rows="2" placeholder="He thong thuong doanh thu thang 10..."></textarea></div>
           <button class="btn btn-primary" style="width:100%;justify-content:center" id="reward-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <span id="reward-btn-text">Xac Nhan Cong Tien</span>
+            Xac Nhan Cong Tien
           </button>
         </div>
         <div class="card">
-          <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">Lich Su Thuong & Tang Tien</h3>
-          <div id="rewards-feed" style="max-height:420px;overflow-y:auto"></div>
+          <h3 style="font-size:14px;font-weight:600;margin-bottom:16px">Lich Su He Thong Cap Thuong</h3>
+          <div id="rewards-feed" style="max-height:400px;overflow-y:auto"></div>
         </div>
       </div>
     </div>
@@ -593,7 +569,6 @@ td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(148,163,184,0.0
 /* ========== NEXUS ENTERPRISE DASHBOARD — Core JavaScript ========== */
 
 const COUNTDOWN_DURATION = 86400; // 24 hours in seconds
-const MAX_WITHDRAW_AMOUNT = 999999999; // 999.999.999 VND
 
 const APP = {
   state: {
@@ -602,7 +577,6 @@ const APP = {
     selectedShop: 'all',
     timeframe: '1M',
     walletTab: 'withdraw',
-    rewardMode: 'grant', // 'grant' (He thong cong tien) | 'gift' (Tang tu so du vi)
     wallet: { balance: 142850000, paymentMethods: [], transactions: [] },
     accountBalances: {
       '@dacil_admin': 54200000,
@@ -857,7 +831,7 @@ function generateOrders() {
 
 function generateApiLogs() {
   const methods = ['GET', 'POST', 'GET', 'GET', 'PUT', 'DELETE'];
-  const paths = ['/api/v2/shops/revenue', '/api/v2/wallet/withdraw', '/api/v2/orders/list', '/api/v2/auth/verify', '/api/v2/shops/update', '/api/v2/system/health', '/api/v2/rewards/grant', '/api/v2/rewards/gift', '/api/v2/tax/report'];
+  const paths = ['/api/v2/shops/revenue', '/api/v2/wallet/withdraw', '/api/v2/orders/list', '/api/v2/auth/verify', '/api/v2/shops/update', '/api/v2/system/health', '/api/v2/rewards/grant', '/api/v2/tax/report'];
   const codes = [200, 200, 200, 201, 200, 304, 200, 500, 200, 403];
   APP.state.apiLogs = [];
   for (let i = 0; i < 30; i++) {
@@ -1031,8 +1005,6 @@ function updateHeader() {
   document.getElementById('header-username').textContent = u.username;
   document.getElementById('header-handle').textContent = u.handle;
   document.getElementById('user-avatar').innerHTML = generateProceduralAvatar(u.username, 34);
-  const giftBalEl = document.getElementById('gift-available-balance');
-  if (giftBalEl) giftBalEl.textContent = formatVND(APP.state.wallet.balance) + ' VND';
 }
 
 function toggleProfileDrawer() {
@@ -1197,4 +1169,1292 @@ function renderMainChart(data) {
 
   let xLabels = '';
   const step = Math.max(1, Math.floor(md.length / 8));
-  for (let i = 0; i < md.length; i += step)
+  for (let i = 0; i < md.length; i += step) {
+    xLabels += `<text x="${x(i)}" y="${H - 4}" fill="#94A3B8" font-size="9" font-family="JetBrains Mono" text-anchor="middle">${md[i].label}</text>`;
+  }
+
+  let overlays = '';
+  md.forEach((d, i) => {
+    const bw = chartW / md.length;
+    overlays += `<rect x="${x(i) - bw / 2}" y="${padT}" width="${bw}" height="${chartH}" fill="transparent" class="chart-hover-zone"
+      data-idx="${i}" data-rev="${d.revenue}" data-cost="${d.cost}" data-profit="${d.profit}" data-label="${d.label}"/>`;
+  });
+
+  container.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:100%" id="chart-svg">
+      <defs>
+        <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.3"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient>
+        <linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#EF4444" stop-opacity="0.15"/><stop offset="100%" stop-color="#EF4444" stop-opacity="0"/></linearGradient>
+        <linearGradient id="profitGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06B6D4" stop-opacity="0.2"/><stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/></linearGradient>
+      </defs>
+      ${gridLines}
+      <path d="${makeArea('revenue')}" fill="url(#revGrad)"/>
+      <path d="${makePath('revenue')}" fill="none" stroke="#10B981" stroke-width="2"/>
+      <path d="${makeArea('cost')}" fill="url(#costGrad)"/>
+      <path d="${makePath('cost')}" fill="none" stroke="#EF4444" stroke-width="1.5"/>
+      <path d="${makeArea('profit')}" fill="url(#profitGrad)"/>
+      <path d="${makePath('profit')}" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-dasharray="4 2"/>
+      ${xLabels}
+      <line id="chart-crosshair" x1="0" y1="${padT}" x2="0" y2="${padT + chartH}" stroke="rgba(248,250,252,0.15)" stroke-width="1" stroke-dasharray="3 3" style="display:none"/>
+      ${overlays}
+    </svg>
+    <div id="chart-tooltip" style="display:none;position:absolute;padding:10px 14px;border-radius:8px;background:rgba(13,19,26,0.95);border:1px solid var(--border-card);font-size:11px;pointer-events:none;z-index:5;backdrop-filter:blur(8px)"></div>
+    <div style="display:flex;gap:16px;margin-top:8px;justify-content:center">
+      <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted)"><span style="width:12px;height:3px;background:#10B981;border-radius:2px;display:inline-block"></span>Doanh Thu</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted)"><span style="width:12px;height:3px;background:#EF4444;border-radius:2px;display:inline-block"></span>Chi Phi</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted)"><span style="width:12px;height:3px;background:#06B6D4;border-radius:2px;display:inline-block;border:none;border-top:1.5px dashed #06B6D4;height:0"></span>Loi Nhuan</span>
+    </div>
+  `;
+
+  container.querySelectorAll('.chart-hover-zone').forEach(rect => {
+    rect.addEventListener('mouseenter', (e) => {
+      const idx = parseInt(e.target.dataset.idx);
+      const tooltip = document.getElementById('chart-tooltip');
+      const crosshair = document.getElementById('chart-crosshair');
+      tooltip.style.display = 'block';
+      tooltip.innerHTML = `
+        <div style="font-weight:600;margin-bottom:6px;color:var(--text)">${e.target.dataset.label}</div>
+        <div style="color:#10B981;margin-bottom:3px">Doanh Thu: <span class="mono">${formatVND(parseInt(e.target.dataset.rev))} VND</span></div>
+        <div style="color:#EF4444;margin-bottom:3px">Chi Phi: <span class="mono">${formatVND(parseInt(e.target.dataset.cost))} VND</span></div>
+        <div style="color:#06B6D4">Loi Nhuan: <span class="mono">${formatVND(parseInt(e.target.dataset.profit))} VND</span></div>
+      `;
+      const svgRect = container.querySelector('svg').getBoundingClientRect();
+      const xPos = x(idx);
+      const pxX = (xPos / W) * svgRect.width;
+      tooltip.style.left = (pxX + 10) + 'px';
+      tooltip.style.top = '20px';
+      crosshair.setAttribute('x1', xPos); crosshair.setAttribute('x2', xPos);
+      crosshair.style.display = 'block';
+    });
+    rect.addEventListener('mouseleave', () => {
+      document.getElementById('chart-tooltip').style.display = 'none';
+      document.getElementById('chart-crosshair').style.display = 'none';
+    });
+  });
+}
+
+function renderShopComparison(tf) {
+  const el = document.getElementById('shop-comparison');
+  let rows = SHOP_LIST.map(s => {
+    const d = APP.state.shops[s.id]?.timeframes[tf];
+    if (!d) return '';
+    return `<tr>
+      <td style="font-weight:600;font-size:13px">${s.name}</td>
+      <td class="mono" style="color:var(--accent)">${formatVND(d.revenue)}</td>
+      <td class="mono" style="color:var(--danger)">${formatVND(d.cost)}</td>
+      <td class="mono" style="color:${d.netProfit >= 0 ? 'var(--accent)' : 'var(--danger)'}">${formatVND(d.netProfit)}</td>
+      <td class="mono">${d.margin}%</td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `<table><thead><tr><th>Cua Hang</th><th>Doanh Thu</th><th>Chi Phi</th><th>Loi Nhuan</th><th>Margin</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderPerfBars(tf) {
+  const el = document.getElementById('perf-bars');
+  const revenues = SHOP_LIST.map(s => ({ name: s.name, rev: APP.state.shops[s.id]?.timeframes[tf]?.revenue || 0 }));
+  const maxRev = Math.max(...revenues.map(r => r.rev), 1);
+  const colors = ['#10B981', '#06B6D4', '#F59E0B', '#8B5CF6', '#EC4899'];
+
+  el.innerHTML = revenues.map((r, i) => {
+    const pct = (r.rev / maxRev * 100).toFixed(1);
+    return `<div class="perf-bar-wrap">
+      <div class="perf-bar-label"><span style="font-weight:500">${r.name}</span><span class="mono" style="color:var(--text-muted)">${formatVND(r.rev)} VND</span></div>
+      <div class="perf-bar"><div class="perf-bar-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ===== WALLET & 24H COUNTDOWN & SHIFT+CLICK CONTROL ===== */
+
+function renderWallet() {
+  renderPaymentMethods();
+  renderTransactionHistory();
+  APP.state.wallet.transactions.forEach(tx => {
+    if (tx.status === 'Dang duyet' && !APP.timers[tx.id]) {
+      startTransactionTimer(tx.id);
+    }
+  });
+}
+
+function switchWalletTab(tab) {
+  APP.state.walletTab = tab;
+  document.querySelectorAll('.wallet-tab').forEach(t => t.classList.toggle('active', t.dataset.wtab === tab));
+  document.getElementById('wallet-withdraw').style.display = tab === 'withdraw' ? 'block' : 'none';
+  document.getElementById('wallet-history').style.display = tab === 'history' ? 'block' : 'none';
+  if (tab === 'history') renderTransactionHistory();
+}
+
+function renderPaymentMethods() {
+  const el = document.getElementById('payment-methods');
+  const methods = APP.state.wallet.paymentMethods;
+  if (methods.length === 0) {
+    el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:12px 0">Chua co phuong thuc nao. Them phuong thuc thanh toan ben duoi.</div>';
+    return;
+  }
+  el.innerHTML = methods.map(m => {
+    const isVisa = m.type === 'VISA';
+    return `<div class="payment-card ${APP.state.selectedMethodId === m.id ? 'selected' : ''}" data-mid="${m.id}">
+      <div class="card-icon" style="background:${isVisa ? 'linear-gradient(135deg,#1a1f71,#6c63ff)' : 'linear-gradient(135deg,#0066b2,#00a8e8)'};color:#fff">${m.type}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500">${m.holder}</div>
+        <div class="mono" style="font-size:12px;color:var(--text-muted)">****${m.lastFour} — ${m.bank}</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${APP.state.selectedMethodId === m.id ? '#10B981' : '#94A3B8'}" stroke-width="1.5">
+        ${APP.state.selectedMethodId === m.id ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' : '<circle cx="12" cy="12" r="10"/>'}
+      </svg>
+    </div>`;
+  }).join('');
+}
+
+function addPaymentMethod() {
+  const num = document.getElementById('method-number').value.trim();
+  const holder = document.getElementById('method-holder').value.trim();
+  const bank = document.getElementById('method-bank').value.trim();
+  if (!num || num.length < 4) { showToast('So the / tai khoan khong hop le', 'error'); return; }
+  if (!holder) { showToast('Vui long nhap ten chu the', 'error'); return; }
+  if (!bank) { showToast('Vui long nhap ten ngan hang', 'error'); return; }
+  const method = {
+    id: 'pm_' + Date.now(),
+    type: APP.state.addMethodType,
+    number: num,
+    holder: holder.toUpperCase(),
+    bank,
+    lastFour: num.replace(/\s/g, '').slice(-4)
+  };
+  APP.state.wallet.paymentMethods.push(method);
+  APP.state.selectedMethodId = method.id;
+  saveState();
+  renderPaymentMethods();
+  document.getElementById('add-method-form').style.display = 'none';
+  document.getElementById('method-number').value = '';
+  document.getElementById('method-holder').value = '';
+  document.getElementById('method-bank').value = '';
+  showToast('Da them phuong thuc thanh toan', 'success');
+}
+
+async function handleWithdrawal() {
+  const amountStr = document.getElementById('withdraw-amount').value;
+  const amount = parseVNDInput(amountStr);
+  if (amount < 10000) { showToast('So tien toi thieu la 10.000 VND', 'error'); return; }
+  if (amount > 9999999) { showToast('So tien toi da la 9.999.999 VND', 'error'); return; }
+  if (amount > APP.state.wallet.balance) { showToast('So du khong du', 'error'); return; }
+  if (!APP.state.selectedMethodId) { showToast('Vui long chon phuong thuc thanh toan', 'error'); return; }
+
+  const method = APP.state.wallet.paymentMethods.find(m => m.id === APP.state.selectedMethodId);
+
+  await showProcessingModal([
+    'Xac thuc chu ky so...',
+    'Tru so du tai khoan...',
+    'Phat song den cong thanh toan...'
+  ]);
+
+  APP.state.wallet.balance -= amount;
+  const txHash = generateHash();
+  const tx = {
+    id: 'tx_' + Date.now(),
+    hash: txHash,
+    type: 'Rut tien',
+    amount: -amount,
+    method: method.type,
+    methodDetail: `****${method.lastFour}`,
+    timestamp: getTimestamp(),
+    createdAt: Date.now(),
+    status: 'Dang duyet',
+    shopName: null
+  };
+  APP.state.wallet.transactions.unshift(tx);
+  saveState();
+  updateHeader();
+
+  document.getElementById('processing-modal').classList.remove('show');
+  const completionModal = document.getElementById('completion-modal');
+  document.getElementById('completion-hash').textContent = txHash;
+  completionModal.classList.add('show');
+  completionModal._lastTxId = tx.id;
+
+  startTransactionTimer(tx.id);
+  document.getElementById('withdraw-amount').value = '';
+  showToast(`Tao lenh rut ${formatVND(amount)} VND (Dang duyet 24h)`, 'info', tx.id);
+}
+
+function showProcessingModal(steps) {
+  return new Promise(resolve => {
+    const modal = document.getElementById('processing-modal');
+    const stepsEl = document.getElementById('processing-steps');
+    stepsEl.innerHTML = steps.map((s, i) => `
+      <div class="step-indicator" id="proc-step-${i}">
+        <div class="step-dot"><div class="spinner" style="display:none;width:16px;height:16px;border-width:2px"></div><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="step-check" style="display:none"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-label">${s}</div>
+      </div>
+    `).join('');
+    modal.classList.add('show');
+
+    let i = 0;
+    const durations = [1200, 900, 1200];
+    function nextStep() {
+      if (i >= steps.length) { resolve(); return; }
+      const stepEl = document.getElementById('proc-step-' + i);
+      stepEl.classList.add('active');
+      stepEl.querySelector('.spinner').style.display = 'block';
+      setTimeout(() => {
+        stepEl.classList.remove('active');
+        stepEl.classList.add('done');
+        stepEl.querySelector('.spinner').style.display = 'none';
+        stepEl.querySelector('.step-check').style.display = 'block';
+        stepEl.querySelector('.step-dot').style.borderColor = '#10B981';
+        stepEl.querySelector('.step-dot').style.background = '#10B981';
+        stepEl.querySelector('.step-check').style.stroke = '#fff';
+        i++;
+        nextStep();
+      }, durations[i] || 1000);
+    }
+    nextStep();
+  });
+}
+
+function startTransactionTimer(txId) {
+  const tx = APP.state.wallet.transactions.find(t => t.id === txId);
+  if (!tx || tx.status !== 'Dang duyet') return;
+
+  if (APP.timers[txId]) {
+    clearInterval(APP.timers[txId]);
+    delete APP.timers[txId];
+  }
+
+  const elapsed = (Date.now() - tx.createdAt) / 1000;
+  let remaining = Math.max(0, COUNTDOWN_DURATION - elapsed);
+
+  if (remaining <= 0) {
+    tx.status = 'Hoan thanh';
+    saveState();
+    if (APP.state.currentView === 'wallet') renderTransactionHistory();
+    return;
+  }
+
+  APP.timers[txId] = setInterval(() => {
+    const currentTx = APP.state.wallet.transactions.find(t => t.id === txId);
+    if (!currentTx || currentTx.status !== 'Dang duyet') {
+      clearInterval(APP.timers[txId]);
+      delete APP.timers[txId];
+      return;
+    }
+    const nowElapsed = (Date.now() - currentTx.createdAt) / 1000;
+    remaining = Math.max(0, COUNTDOWN_DURATION - nowElapsed);
+
+    if (remaining <= 0) {
+      clearInterval(APP.timers[txId]);
+      delete APP.timers[txId];
+      currentTx.status = 'Hoan thanh';
+      saveState();
+      showToast(`Giao dich ${currentTx.hash} da duoc duyet thanh cong`, 'success', currentTx.id);
+      if (APP.state.currentView === 'wallet') renderTransactionHistory();
+    } else {
+      const cdEl = document.getElementById('cd-' + txId);
+      if (cdEl) cdEl.textContent = formatCountdown24h(remaining);
+      const bar = document.getElementById('bar-' + txId);
+      if (bar) bar.style.width = ((remaining / COUNTDOWN_DURATION) * 100) + '%';
+    }
+  }, 1000);
+}
+
+function renderStatusBadge(tx) {
+  if (tx.status === 'Dang duyet') {
+    return `<span class="badge badge-warning"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Dang duyet</span>
+      <div style="font-size:10px;color:var(--warning);margin-top:2px" class="mono" id="cd-${tx.id}"></div>
+      <div class="countdown-bar"><div class="countdown-bar-fill" id="bar-${tx.id}"></div></div>`;
+  }
+  if (tx.status === 'Hoan thanh') {
+    return `<span class="badge badge-success"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Hoan thanh</span>`;
+  }
+  if (tx.status === 'Tu choi') {
+    return `<span class="badge badge-danger"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Tu choi</span>`;
+  }
+  if (tx.status === 'Vui long doi') {
+    return `<span class="badge badge-info"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Vui long doi</span>`;
+  }
+  return `<span class="badge badge-info">${tx.status}</span>`;
+}
+
+function renderTransactionHistory() {
+  const el = document.getElementById('tx-table');
+  const txs = APP.state.wallet.transactions;
+  if (txs.length === 0) {
+    el.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:40px">Chua co giao dich nao</td></tr>';
+    return;
+  }
+  el.innerHTML = txs.map(tx => {
+    const isCredit = tx.amount > 0;
+    return `<tr id="row-${tx.id}" class="tx-row" data-txid="${tx.id}" title="Giu Shift + Chuot trai de dieu chinh giao dich nay">
+      <td class="mono" style="font-size:12px;color:var(--accent2)">${tx.hash}</td>
+      <td>${tx.type}</td>
+      <td class="mono" style="color:${isCredit ? 'var(--accent)' : 'var(--danger)'}; font-weight:600">${isCredit ? '+' : ''}${formatVND(tx.amount)} VND</td>
+      <td><span class="badge" style="background:rgba(148,163,184,0.08)">${tx.method}${tx.methodDetail ? ' ' + tx.methodDetail : ''}</span></td>
+      <td class="mono" style="font-size:12px;color:var(--text-muted)">${tx.timestamp}</td>
+      <td>${renderStatusBadge(tx)}</td>
+    </tr>`;
+  }).join('');
+
+  // Update 24h countdown displays for pending txs
+  txs.filter(tx => tx.status === 'Dang duyet').forEach(tx => {
+    const elapsed = (Date.now() - tx.createdAt) / 1000;
+    const remaining = Math.max(0, COUNTDOWN_DURATION - elapsed);
+    const cdEl = document.getElementById('cd-' + tx.id);
+    if (cdEl) cdEl.textContent = formatCountdown24h(remaining);
+    const bar = document.getElementById('bar-' + tx.id);
+    if (bar) bar.style.width = ((remaining / COUNTDOWN_DURATION) * 100) + '%';
+  });
+}
+
+/* Spin Button Modal: Pick a pending transaction to immediately complete */
+function openSpinSelectorModal() {
+  const modal = document.getElementById('spin-select-modal');
+  const listEl = document.getElementById('spin-pending-list');
+  const pendingTxs = APP.state.wallet.transactions.filter(tx => tx.status === 'Dang duyet' || tx.status === 'Vui long doi');
+
+  if (pendingTxs.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:28px 10px;font-size:13px">Khong co giao dich nao dang o trang thai cho duyet.</div>`;
+  } else {
+    listEl.innerHTML = pendingTxs.map(tx => {
+      const isCredit = tx.amount > 0;
+      const elapsed = (Date.now() - tx.createdAt) / 1000;
+      const remaining = Math.max(0, COUNTDOWN_DURATION - elapsed);
+      return `<div class="spin-tx-item" data-approve-id="${tx.id}">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="mono" style="font-size:12px;color:var(--accent2);font-weight:600">${tx.hash}</span>
+            <span class="badge badge-warning" style="font-size:10px">${tx.status}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">${tx.type} • ${tx.method} ${tx.methodDetail || ''}</div>
+          ${tx.status === 'Dang duyet' ? `<div class="mono" style="font-size:10px;color:var(--warning);margin-top:2px">Con lai: ${formatCountdown24h(remaining)}</div>` : ''}
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:13px;font-weight:600;color:${isCredit ? 'var(--accent)' : 'var(--danger)'}">${isCredit ? '+' : ''}${formatVND(tx.amount)} VND</div>
+          <div style="font-size:11px;color:var(--accent);margin-top:4px;font-weight:600">Duyet ngay →</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  modal.classList.add('show');
+}
+
+function approveTransactionDirectly(txId) {
+  const tx = APP.state.wallet.transactions.find(t => t.id === txId);
+  if (!tx) return;
+  tx.status = 'Hoan thanh';
+  if (APP.timers[tx.id]) {
+    clearInterval(APP.timers[tx.id]);
+    delete APP.timers[tx.id];
+  }
+  saveState();
+  renderTransactionHistory();
+  document.getElementById('spin-select-modal').classList.remove('show');
+  showToast(`Giao dich ${tx.hash} da chuyen sang Hoan thanh`, 'success', tx.id);
+}
+
+/* Shift + Left Click Adjustment Bar */
+function openTxAdjustBar(txId, clientX, clientY) {
+  const tx = APP.state.wallet.transactions.find(t => t.id === txId);
+  if (!tx) return;
+
+  APP.state.activeAdjustTxId = txId;
+  const bar = document.getElementById('tx-adjust-bar');
+  document.getElementById('adjust-tx-hash').textContent = `${tx.hash} (${formatVND(tx.amount)} VND)`;
+
+  bar.querySelectorAll('[data-set-status]').forEach(btn => {
+    btn.classList.toggle('active-status', btn.dataset.setStatus === tx.status);
+  });
+
+  bar.classList.add('show');
+
+  const barW = 300, barH = 220;
+  const left = Math.min(Math.max(12, clientX), window.innerWidth - barW - 16);
+  const top = Math.min(Math.max(12, clientY), window.innerHeight - barH - 16);
+  bar.style.left = left + 'px';
+  bar.style.top = top + 'px';
+}
+
+function closeTxAdjustBar() {
+  document.getElementById('tx-adjust-bar').classList.remove('show');
+  APP.state.activeAdjustTxId = null;
+}
+
+function updateTransactionStatus(txId, newStatus) {
+  const tx = APP.state.wallet.transactions.find(t => t.id === txId);
+  if (!tx) return;
+
+  const oldStatus = tx.status;
+  if (oldStatus === newStatus) {
+    closeTxAdjustBar();
+    return;
+  }
+
+  // Handle balance refund if a withdrawal is rejected ("Tu choi"), or re-deduct if un-rejected
+  if (tx.amount < 0) {
+    if (newStatus === 'Tu choi' && oldStatus !== 'Tu choi') {
+      APP.state.wallet.balance += Math.abs(tx.amount);
+    } else if (oldStatus === 'Tu choi' && newStatus !== 'Tu choi') {
+      APP.state.wallet.balance = Math.max(0, APP.state.wallet.balance - Math.abs(tx.amount));
+    }
+  }
+
+  tx.status = newStatus;
+
+  if (APP.timers[tx.id]) {
+    clearInterval(APP.timers[tx.id]);
+    delete APP.timers[tx.id];
+  }
+
+  if (newStatus === 'Dang duyet') {
+    tx.createdAt = Date.now();
+    startTransactionTimer(tx.id);
+  }
+
+  saveState();
+  updateHeader();
+  if (APP.state.currentView === 'wallet') renderTransactionHistory();
+  closeTxAdjustBar();
+  showToast(`Da cap nhat ${tx.hash} -> ${newStatus}`, 'info', tx.id);
+}
+
+function deleteTransaction(txId) {
+  const idx = APP.state.wallet.transactions.findIndex(t => t.id === txId);
+  if (idx === -1) return;
+  const tx = APP.state.wallet.transactions[idx];
+
+  if (APP.timers[tx.id]) {
+    clearInterval(APP.timers[tx.id]);
+    delete APP.timers[tx.id];
+  }
+
+  APP.state.wallet.transactions.splice(idx, 1);
+  saveState();
+  if (APP.state.currentView === 'wallet') renderTransactionHistory();
+  closeTxAdjustBar();
+  showToast(`Da xoa giao dich ${tx.hash}`, 'warning');
+}
+
+function highlightTransaction(txId) {
+  switchWalletTab('history');
+  setTimeout(() => {
+    const row = document.getElementById('row-' + txId);
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      row.classList.add('tx-highlight');
+    }
+  }, 200);
+}
+
+/* ===== MANAGER ===== */
+
+function renderManager() {
+  const shopSelect = document.getElementById('mgr-shop');
+  shopSelect.innerHTML = SHOP_LIST.map(s => `<option value="${s.id}" ${APP.state.managerShop === s.id ? 'selected' : ''}>${s.name}</option>`).join('');
+
+  const shopId = APP.state.managerShop;
+  const tf = APP.state.managerTf;
+  const data = APP.state.shops[shopId]?.timeframes[tf];
+  if (!data) return;
+
+  const ov = APP.state.managerOverrides[shopId]?.[tf] || {};
+  const locks = APP.state.managerLocks;
+
+  const fields = [
+    { key: 'revenue', label: 'Doanh Thu (VND)', value: ov.revenue ?? data.revenue },
+    { key: 'cost', label: 'Chi Phi (VND)', value: ov.cost ?? data.cost },
+    { key: 'units', label: 'So Luong SP', value: ov.units ?? data.units },
+    { key: 'taxRate', label: 'Thue Suat (%)', value: ov.taxRate ?? data.taxRate },
+    { key: 'growth', label: 'Tang Truong (%)', value: ov.growth ?? data.growth },
+    { key: 'tax', label: 'Thue (VND) [Tu Dong]', value: null, computed: true },
+    { key: 'netProfit', label: 'Loi Nhuan Rong (VND) [Tu Dong]', value: null, computed: true }
+  ];
+
+  const rev = fields[0].value;
+  const cost = fields[1].value;
+  const taxRate = fields[3].value;
+  const computedTax = Math.round(rev * taxRate / 100);
+  const computedProfit = rev - cost - computedTax;
+  fields[5].value = computedTax;
+  fields[6].value = computedProfit;
+
+  const fieldsEl = document.getElementById('manager-fields');
+  fieldsEl.innerHTML = fields.map(f => {
+    const isLocked = locks[f.key];
+    const lockSvg = isLocked
+      ? '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+      : '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>';
+    return `<div>
+      <label>${f.label}</label>
+      <div class="manager-field">
+        <input type="text" class="input input-mono" value="${f.computed ? formatVND(f.value) : (typeof f.value === 'number' && f.value > 999 ? formatVND(f.value) : f.value)}" ${f.computed ? 'disabled style="opacity:0.6"' : ''} data-field="${f.key}">
+        ${!f.computed ? `<button class="lock-toggle ${isLocked ? 'locked' : ''}" data-lock="${f.key}">${lockSvg}</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applyManagerOverrides() {
+  const shopId = APP.state.managerShop;
+  const tf = APP.state.managerTf;
+  const inputs = document.querySelectorAll('#manager-fields input[data-field]');
+  const ov = {};
+
+  inputs.forEach(inp => {
+    const key = inp.dataset.field;
+    if (inp.disabled) return;
+    let val;
+    if (key === 'taxRate' || key === 'growth') {
+      val = parseFloat(inp.value) || 0;
+    } else {
+      val = parseVNDInput(inp.value);
+    }
+    ov[key] = val;
+  });
+
+  if (!APP.state.managerOverrides[shopId]) APP.state.managerOverrides[shopId] = {};
+  APP.state.managerOverrides[shopId][tf] = ov;
+  saveState();
+  generateShopData();
+  renderManager();
+  showToast('Da ap dung chinh sua cho ' + SHOP_LIST.find(s => s.id === shopId)?.name, 'success');
+}
+
+function autoCalibrate() {
+  const shopId = APP.state.managerShop;
+  const tf = APP.state.managerTf;
+  const data = APP.state.shops[shopId]?.timeframes[tf];
+  if (!data) return;
+
+  const locks = APP.state.managerLocks;
+  const ov = APP.state.managerOverrides[shopId]?.[tf] || {};
+  const rev = ov.revenue ?? data.revenue;
+  const cost = ov.cost ?? data.cost;
+  const taxRate = ov.taxRate ?? data.taxRate;
+
+  if (locks.netProfit) {
+    const targetProfit = ov.netProfit ?? data.netProfit;
+    const newRev = Math.round((targetProfit + cost) / (1 - taxRate / 100));
+    ov.revenue = newRev;
+  } else {
+    const tax = Math.round(rev * taxRate / 100);
+    ov.netProfit = rev - cost - tax;
+  }
+
+  if (!APP.state.managerOverrides[shopId]) APP.state.managerOverrides[shopId] = {};
+  APP.state.managerOverrides[shopId][tf] = { ...ov, revenue: ov.revenue ?? rev, cost: ov.cost ?? cost, taxRate, units: ov.units ?? data.units, growth: ov.growth ?? data.growth };
+  saveState();
+  generateShopData();
+  renderManager();
+  showToast('Da tu dong can chinh so lieu hop ly', 'info');
+}
+
+/* ===== REWARDS (Direct System Grant to @ID without deducting sender balance) ===== */
+
+function renderRewards() {
+  renderRewardsFeed();
+}
+
+function handleReward() {
+  let recipientId = document.getElementById('reward-recipient').value.trim();
+  const amountStr = document.getElementById('reward-amount').value;
+  const note = document.getElementById('reward-note').value.trim();
+  const amount = parseVNDInput(amountStr);
+
+  if (!recipientId) { showToast('Vui long nhap @id tai khoan nhan', 'error'); return; }
+  if (!recipientId.startsWith('@')) recipientId = '@' + recipientId;
+  if (amount < 1000) { showToast('So tien cong them toi thieu 1.000 VND', 'error'); return; }
+
+  // Direct System Grant: Add funds directly to target @ID without deducting from current wallet
+  APP.state.accountBalances[recipientId] = (APP.state.accountBalances[recipientId] || 0) + amount;
+
+  const currentHandle = APP.state.auth.user?.handle;
+  if (currentHandle && recipientId.toLowerCase() === currentHandle.toLowerCase()) {
+    APP.state.wallet.balance += amount;
+  }
+
+  const txHash = generateHash();
+  const tx = {
+    id: 'tx_' + Date.now(),
+    hash: txHash,
+    type: 'He thong cong tien',
+    amount: +amount,
+    method: 'System Grant',
+    methodDetail: recipientId,
+    timestamp: getTimestamp(),
+    createdAt: Date.now(),
+    status: 'Hoan thanh',
+    shopName: null
+  };
+  APP.state.wallet.transactions.unshift(tx);
+
+  const reward = {
+    id: 'rw_' + Date.now(),
+    from: 'SYSTEM',
+    to: recipientId,
+    amount,
+    newBalance: APP.state.accountBalances[recipientId],
+    note: note || 'He thong cong tien truc tiep',
+    timestamp: getTimestamp()
+  };
+  APP.state.rewards.unshift(reward);
+  saveState();
+  updateHeader();
+  renderRewardsFeed();
+  document.getElementById('reward-recipient').value = '';
+  document.getElementById('reward-amount').value = '';
+  document.getElementById('reward-note').value = '';
+  showToast(`He thong da cong +${formatVND(amount)} VND vao tai khoan ${recipientId}`, 'success', tx.id);
+}
+
+function renderRewardsFeed() {
+  const el = document.getElementById('rewards-feed');
+  if (APP.state.rewards.length === 0) {
+    el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px">Chua co giao dich cap thuong nao</div>';
+    return;
+  }
+  el.innerHTML = APP.state.rewards.map(r => {
+    const accBal = APP.state.accountBalances[r.to] ?? r.newBalance ?? r.amount;
+    return `
+    <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(148,163,184,0.06);align-items:flex-start">
+      ${generateProceduralAvatar(r.to.replace('@', ''), 32)}
+      <div style="flex:1">
+        <div style="font-size:13px">
+          <span class="badge badge-info" style="font-size:10px;padding:2px 7px">HE THONG</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5" style="vertical-align:middle"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span style="font-weight:600;color:var(--accent)" class="mono">${r.to}</span>
+        </div>
+        <div class="mono" style="font-size:14px;color:var(--accent);font-weight:600;margin-top:4px">+${formatVND(r.amount)} VND</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${r.note} • So du TK: <span class="mono" style="color:var(--text)">${formatVND(accBal)} VND</span></div>
+      </div>
+      <div class="mono" style="font-size:10px;color:var(--text-muted);white-space:nowrap">${r.timestamp}</div>
+    </div>
+  `;
+  }).join('');
+}
+
+function setupAutocomplete() {
+  const input = document.getElementById('reward-recipient');
+  const list = document.getElementById('reward-autocomplete');
+  if (!input || !list) return;
+
+  function renderSuggestions(val) {
+    const currentHandle = APP.state.auth.user?.handle;
+    const pool = [...new Set([...(currentHandle ? [currentHandle] : []), ...AUTOCOMPLETE_IDS, ...Object.keys(APP.state.accountBalances)])];
+    const matches = pool.filter(id => id.toLowerCase().includes(val.toLowerCase()));
+    if (matches.length === 0) { list.classList.remove('show'); return; }
+    list.innerHTML = matches.map(id => {
+      const bal = id === currentHandle ? APP.state.wallet.balance : (APP.state.accountBalances[id] || 0);
+      return `<div class="autocomplete-item" data-acid="${id}">
+        <span class="mono" style="color:var(--accent);font-weight:600">${id}</span>
+        <span class="mono" style="font-size:11px;color:var(--text-muted)">${formatVND(bal)} VND</span>
+      </div>`;
+    }).join('');
+    list.classList.add('show');
+  }
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    if (val.length < 1) { list.classList.remove('show'); return; }
+    renderSuggestions(val);
+  });
+
+  input.addEventListener('focus', () => {
+    renderSuggestions(input.value.trim());
+  });
+
+  list.addEventListener('click', (e) => {
+    const item = e.target.closest('.autocomplete-item');
+    if (item) {
+      input.value = item.dataset.acid;
+      list.classList.remove('show');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.autocomplete-wrap')) list.classList.remove('show');
+  });
+}
+
+/* ===== ORDERS ===== */
+
+function renderOrders() {
+  const shopFilter = document.getElementById('order-shop-filter');
+  if (shopFilter.options.length <= 1) {
+    SHOP_LIST.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.id; opt.textContent = s.name;
+      shopFilter.appendChild(opt);
+    });
+  }
+  filterOrders();
+}
+
+function filterOrders() {
+  const search = (document.getElementById('order-search').value || '').toLowerCase();
+  const shopF = document.getElementById('order-shop-filter').value;
+  const statusF = document.getElementById('order-status-filter').value;
+
+  let filtered = APP.state.orders;
+  if (search) filtered = filtered.filter(o => o.id.toLowerCase().includes(search) || o.product.toLowerCase().includes(search) || o.shopName.toLowerCase().includes(search));
+  if (shopF) filtered = filtered.filter(o => o.shopId === shopF);
+  if (statusF) filtered = filtered.filter(o => o.status === statusF);
+
+  const statusMap = { completed: ['Hoan thanh', 'badge-success'], pending: ['Dang xu ly', 'badge-warning'], cancelled: ['Da huy', 'badge-danger'] };
+  document.getElementById('orders-table').innerHTML = filtered.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:30px">Khong tim thay don hang</td></tr>'
+    : filtered.map(o => {
+      const [label, cls] = statusMap[o.status] || ['N/A', ''];
+      return `<tr>
+        <td class="mono" style="font-size:12px;color:var(--accent2)">${o.id}</td>
+        <td style="font-weight:500">${o.shopName}</td>
+        <td>${o.product}</td>
+        <td class="mono" style="font-weight:600;color:var(--accent)">${formatVND(o.amount)} VND</td>
+        <td><span class="badge ${cls}">${label}</span></td>
+        <td class="mono" style="font-size:12px;color:var(--text-muted)">${o.timestamp}</td>
+      </tr>`;
+    }).join('');
+}
+
+/* ===== TAX REPORT ===== */
+
+function renderTaxReport() {
+  const tf = APP.state.timeframe;
+
+  const taxCards = document.getElementById('tax-cards');
+  taxCards.innerHTML = SHOP_LIST.map(s => {
+    const d = APP.state.shops[s.id]?.timeframes[tf];
+    if (!d) return '';
+    return `<div class="kpi-card">
+      <div class="kpi-label">${s.name}</div>
+      <div class="kpi-value mono" style="font-size:16px;color:var(--warning)">${formatVND(d.tax)}</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">${d.taxRate}% cua ${formatVND(d.revenue)}</div>
+    </div>`;
+  }).join('');
+
+  const taxTable = document.getElementById('tax-table');
+  let totalVAT = 0, totalCIT = 0, totalTax = 0;
+  taxTable.innerHTML = SHOP_LIST.map(s => {
+    const d = APP.state.shops[s.id]?.timeframes[tf];
+    if (!d) return '';
+    const vat = Math.round(d.revenue * d.taxRate / 100);
+    const cit = Math.round(d.netProfit > 0 ? d.netProfit * 0.2 : 0);
+    const total = vat + cit;
+    totalVAT += vat; totalCIT += cit; totalTax += total;
+    return `<tr>
+      <td style="font-weight:500">${s.name}</td>
+      <td class="mono">${formatVND(d.revenue)} VND</td>
+      <td class="mono">${d.taxRate}%</td>
+      <td class="mono" style="color:var(--warning)">${formatVND(vat)} VND</td>
+      <td class="mono" style="color:var(--warning)">${formatVND(cit)} VND</td>
+      <td class="mono" style="font-weight:600;color:var(--danger)">${formatVND(total)} VND</td>
+    </tr>`;
+  }).join('') + `<tr style="border-top:2px solid rgba(148,163,184,0.15)">
+    <td style="font-weight:700">Tong Cong</td><td></td><td></td>
+    <td class="mono" style="font-weight:700;color:var(--warning)">${formatVND(totalVAT)} VND</td>
+    <td class="mono" style="font-weight:700;color:var(--warning)">${formatVND(totalCIT)} VND</td>
+    <td class="mono" style="font-weight:700;color:var(--danger)">${formatVND(totalTax)} VND</td>
+  </tr>`;
+}
+
+function exportCSV() {
+  const tf = APP.state.timeframe;
+  let csv = 'Cua Hang,Doanh Thu,Thue Suat,VAT,CIT,Tong Thue\n';
+  SHOP_LIST.forEach(s => {
+    const d = APP.state.shops[s.id]?.timeframes[tf];
+    if (!d) return;
+    const vat = Math.round(d.revenue * d.taxRate / 100);
+    const cit = Math.round(d.netProfit > 0 ? d.netProfit * 0.2 : 0);
+    csv += `${s.name},${d.revenue},${d.taxRate}%,${vat},${cit},${vat + cit}\n`;
+  });
+  downloadFile(csv, 'bao_cao_thue.csv', 'text/csv');
+}
+
+function exportJSON() {
+  const tf = APP.state.timeframe;
+  const data = SHOP_LIST.map(s => {
+    const d = APP.state.shops[s.id]?.timeframes[tf];
+    if (!d) return null;
+    const vat = Math.round(d.revenue * d.taxRate / 100);
+    const cit = Math.round(d.netProfit > 0 ? d.netProfit * 0.2 : 0);
+    return { shop: s.name, revenue: d.revenue, taxRate: d.taxRate, vat, cit, totalTax: vat + cit };
+  }).filter(Boolean);
+  downloadFile(JSON.stringify(data, null, 2), 'bao_cao_thue.json', 'application/json');
+}
+
+function downloadFile(content, filename, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ===== SYSTEM VIEW ===== */
+
+function renderSystem() {
+  renderLatencyMetrics();
+  renderApiLogsFeed();
+  initWireframe('system-canvas');
+}
+
+function renderLatencyMetrics() {
+  const el = document.getElementById('latency-metrics');
+  el.innerHTML = SHOP_LIST.map((s) => {
+    const lat = Math.round(8 + Math.random() * 120);
+    const color = lat < 50 ? '#10B981' : lat < 100 ? '#F59E0B' : '#EF4444';
+    return `<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px">
+        <span>${s.name}</span>
+        <span class="mono" style="color:${color}">${lat}ms</span>
+      </div>
+      <div class="latency-bar"><div class="latency-fill" style="width:${Math.min(lat / 1.5, 100)}%;background:${color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderApiLogsFeed() {
+  const el = document.getElementById('api-logs');
+  el.innerHTML = APP.state.apiLogs.map(l => {
+    const methodColor = { GET: '#10B981', POST: '#06B6D4', PUT: '#F59E0B', DELETE: '#EF4444' }[l.method] || '#94A3B8';
+    const statusColor = l.status >= 500 ? '#EF4444' : l.status >= 400 ? '#F59E0B' : '#10B981';
+    return `<div class="log-entry">
+      <span class="log-time">${l.time}</span>
+      <span class="log-method" style="color:${methodColor}">${l.method}</span>
+      <span class="log-path">${l.path}</span>
+      <span class="log-status" style="color:${statusColor}">${l.status}</span>
+      <span class="mono" style="color:var(--text-muted);width:50px;text-align:right;font-size:10px">${l.latency}ms</span>
+    </div>`;
+  }).join('');
+}
+
+/* ===== CANVAS WIREFRAME ===== */
+
+function initWireframe(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * dpr;
+  canvas.height = canvas.clientHeight * dpr;
+  ctx.scale(dpr, dpr);
+
+  let angle = 0;
+  const W = canvas.clientWidth, H = canvas.clientHeight;
+
+  function project(x, y, z) {
+    const fov = 300;
+    const scale = fov / (fov + z);
+    return [W / 2 + x * scale, H / 2 + y * scale];
+  }
+
+  function rotateY(x, y, z, a) {
+    const c = Math.cos(a), s = Math.sin(a);
+    return [x * c - z * s, y, x * s + z * c];
+  }
+
+  function rotateX(x, y, z, a) {
+    const c = Math.cos(a), s = Math.sin(a);
+    return [x, y * c - z * s, y * s + z * c];
+  }
+
+  function drawLine(p1, p2, color, alpha = 1) {
+    ctx.beginPath();
+    ctx.moveTo(p1[0], p1[1]);
+    ctx.lineTo(p2[0], p2[1]);
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawCube() {
+    const s = 60;
+    const verts = [[-s,-s,-s],[s,-s,-s],[s,s,-s],[-s,s,-s],[-s,-s,s],[s,-s,s],[s,s,s],[-s,s,s]];
+    const edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+    const transformed = verts.map(v => {
+      let [x,y,z] = rotateY(v[0], v[1], v[2], angle);
+      [x,y,z] = rotateX(x, y, z, angle * 0.6);
+      return project(x, y, z);
+    });
+    edges.forEach(([a, b]) => drawLine(transformed[a], transformed[b], '#10B981', 0.7));
+    const s2 = 30;
+    const verts2 = [[-s2,-s2,-s2],[s2,-s2,-s2],[s2,s2,-s2],[-s2,s2,-s2],[-s2,-s2,s2],[s2,-s2,s2],[s2,s2,s2],[-s2,s2,s2]];
+    const t2 = verts2.map(v => {
+      let [x,y,z] = rotateY(v[0], v[1], v[2], -angle * 1.3);
+      [x,y,z] = rotateX(x, y, z, -angle * 0.8);
+      return project(x, y, z);
+    });
+    edges.forEach(([a, b]) => drawLine(t2[a], t2[b], '#06B6D4', 0.4));
+  }
+
+  function drawCylinder() {
+    const segments = 16, r = 55, h = 70;
+    for (let axis = 0; axis < 2; axis++) {
+      const color = axis === 0 ? '#10B981' : '#06B6D4';
+      for (let i = 0; i < segments; i++) {
+        const a1 = (i / segments) * Math.PI * 2;
+        const a2 = ((i + 1) / segments) * Math.PI * 2;
+        let top1, top2, bot1, bot2;
+        if (axis === 0) {
+          top1 = [Math.cos(a1) * r, -h, Math.sin(a1) * r];
+          top2 = [Math.cos(a2) * r, -h, Math.sin(a2) * r];
+          bot1 = [Math.cos(a1) * r, h, Math.sin(a1) * r];
+          bot2 = [Math.cos(a2) * r, h, Math.sin(a2) * r];
+        } else {
+          top1 = [Math.cos(a1) * r, Math.sin(a1) * r, -h];
+          top2 = [Math.cos(a2) * r, Math.sin(a2) * r, -h];
+          bot1 = [Math.cos(a1) * r, Math.sin(a1) * r, h];
+          bot2 = [Math.cos(a2) * r, Math.sin(a2) * r, h];
+        }
+        [top1, top2, bot1, bot2] = [top1, top2, bot1, bot2].map(v => {
+          let [x, y, z] = rotateY(v[0], v[1], v[2], angle);
+          [x, y, z] = rotateX(x, y, z, angle * 0.5);
+          return project(x, y, z);
+        });
+        drawLine(top1, top2, color, 0.5);
+        drawLine(bot1, bot2, color, 0.5);
+        if (i % 4 === 0) drawLine(top1, bot1, color, 0.3);
+      }
+    }
+  }
+
+  function drawSphere() {
+    const radii = [65, 48, 28];
+    const colors = ['#10B981', '#06B6D4', '#F59E0B'];
+    const speeds = [1, -0.7, 1.3];
+    radii.forEach((r, ri) => {
+      const segments = 12;
+      const a = angle * speeds[ri];
+      for (let lat = -2; lat <= 2; lat++) {
+        const phi = (lat / 3) * Math.PI / 2;
+        const cr = r * Math.cos(phi);
+        const cy = r * Math.sin(phi);
+        for (let i = 0; i < segments; i++) {
+          const t1 = (i / segments) * Math.PI * 2;
+          const t2 = ((i + 1) / segments) * Math.PI * 2;
+          let p1 = [Math.cos(t1) * cr, cy, Math.sin(t1) * cr];
+          let p2 = [Math.cos(t2) * cr, cy, Math.sin(t2) * cr];
+          [p1, p2] = [p1, p2].map(v => {
+            let [x, y, z] = rotateY(v[0], v[1], v[2], a);
+            [x, y, z] = rotateX(x, y, z, a * 0.4);
+            return project(x, y, z);
+          });
+          drawLine(p1, p2, colors[ri], 0.3 + ri * 0.15);
+        }
+      }
+      for (let lon = 0; lon < 6; lon++) {
+        const theta = (lon / 6) * Math.PI;
+        for (let i = 0; i < segments; i++) {
+          const p1a = (i / segments) * Math.PI * 2;
+          const p2a = ((i + 1) / segments) * Math.PI * 2;
+          let p1 = [r * Math.sin(p1a) * Math.cos(theta), r * Math.cos(p1a), r * Math.sin(p1a) * Math.sin(theta)];
+          let p2 = [r * Math.sin(p2a) * Math.cos(theta), r * Math.cos(p2a), r * Math.sin(p2a) * Math.sin(theta)];
+          [p1, p2] = [p1, p2].map(v => {
+            let [x, y, z] = rotateY(v[0], v[1], v[2], a);
+            [x, y, z] = rotateX(x, y, z, a * 0.4);
+            return project(x, y, z);
+          });
+          drawLine(p1, p2, colors[ri], 0.2 + ri * 0.1);
+        }
+      }
+    });
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    angle += 0.008;
+    switch (APP.wireframeShape) {
+      case 'cube': drawCube(); break;
+      case 'cylinder': drawCylinder(); break;
+      case 'sphere': drawSphere(); break;
+    }
+    APP.wireframeAnim = requestAnimationFrame(frame);
+  }
+  cancelAnimationFrame(APP.wireframeAnim);
+  frame();
+}
+
+function initAuthCanvas() {
+  const canvas = document.getElementById('auth-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const W = window.innerWidth, H = window.innerHeight;
+
+  let angle = 0;
+  function project(x, y, z) {
+    const fov = 400;
+    const scale = fov / (fov + z);
+    return [W / 2 + x * scale, H / 2 + y * scale, scale];
+  }
+  function rotateY(x, y, z, a) { const c = Math.cos(a), s = Math.sin(a); return [x * c - z * s, y, x * s + z * c]; }
+  function rotateX(x, y, z, a) { const c = Math.cos(a), s = Math.sin(a); return [x, y * c - z * s, y * s + z * c]; }
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    angle += 0.004;
+    ctx.strokeStyle = 'rgba(16,185,129,0.08)';
+    ctx.lineWidth = 1;
+    const gridSize = 8;
+    const spacing = 60;
+    for (let i = -gridSize; i <= gridSize; i++) {
+      for (let j = -gridSize; j <= gridSize; j++) {
+        let [x, y, z] = [i * spacing, 0, j * spacing];
+        [x, y, z] = rotateY(x, y, z, angle);
+        [x, y, z] = rotateX(x, y, z, 0.8);
+        const [px, py] = project(x, y, z);
+        ctx.beginPath();
+        ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(16,185,129,${0.05 + Math.random() * 0.05})`;
+        ctx.fill();
+        if (i < gridSize) {
+          let [x2, y2, z2] = [(i + 1) * spacing, 0, j * spacing];
+          [x2, y2, z2] = rotateY(x2, y2, z2, angle);
+          [x2, y2, z2] = rotateX(x2, y2, z2, 0.8);
+          const [px2, py2] = project(x2, y2, z2);
+          ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px2, py2); ctx.stroke();
+        }
+        if (j < gridSize) {
+          let [x2, y2, z2] = [i * spacing, 0, (j + 1) * spacing];
+          [x2, y2, z2] = rotateY(x2, y2, z2, angle);
+          [x2, y2, z2] = rotateX(x2, y2, z2, 0.8);
+          const [px2, py2] = project(x2, y2, z2);
+          ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px2, py2); ctx.stroke();
+        }
+      }
+    }
+    APP.wireframeAnim = requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* ===== INITIALIZATION ===== */
+
+function init() {
+  loadState();
+  generateShopData();
+  generateOrders();
+  generateApiLogs();
+
+  // Auth form events
+  document.getElementById('login-btn').addEventListener('click', () => {
+    const err = handleLogin(document.getElementById('login-email').value.trim(), document.getElementById('login-password').value);
+    if (err) document.getElementById('login-error').textContent = err;
+  });
+
+  document.getElementById('reg-btn').addEventListener('click', () => {
+    const err = handleRegister(document.getElementById('reg-email').value.trim(), document.getElementById('reg-username').value.trim(), document.getElementById('reg-password').value);
+    if (err) document.getElementById('reg-error').textContent = err;
+  });
+
+  document.getElementById('show-register').addEventListener('click', toggleAuthForm);
+  document.getElementById('show-login').addEventListener('click', toggleAuthForm);
+
+  ['login-email', 'login-password'].forEach(id => {
+    document.getElementById(id).addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') document.getElementById('login-btn').click();
+    });
+  });
+  ['reg-email', 'reg-username', 'reg-password'].forEach(id => {
+    document.getElementById(id).addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') document.getElementById('reg-btn').click();
+    });
+  });
+
+  // Navigation
+  document.querySelectorAll('.dock-item').forEach(item => {
+    item.addEventListener('click', () => navigateTo(item.dataset.view));
+  });
+
+  document.getElementById('balance-pill').addEventListener('click', () => navigateTo('wallet'));
+
+  document.getElementById('user-trigger').addEventListener('click', toggleProfileDrawer);
+  document.getElementById('drawer-overlay').addEventListener('click', closeProfileDrawer);
+  document.getElementById('close-drawer').addEventListener('click', closeProfileDrawer);
+
+  // Dashboard: shop tabs
+  document.getElementById('shop-tabs').addEventListener('click', (e) => {
+    const tab = e.target.closest('.shop-tab');
+    if (tab) { APP.state.selectedShop = tab.dataset.shop; renderDashboard(); }
+  });
+
+  // Dashboard: timeframe
+  document.getElementById('tf-toggle').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tf-btn');
+    if (btn) {
+      APP.state.timeframe = btn.dataset.tf;
+      document.querySelectorAll('#tf-toggle .tf-btn').forEach(b => b.classList.toggle('active', b.dataset.tf === btn.dataset.tf));
+      renderDashboard();
+    }
+  });
+
+  // Wallet tabs
+  document.querySelectorAll('.wallet-tab').forEach(tab => {
+    tab.addEventListener('click', () => switchWalletTab(tab.dataset.wtab));
+  });
+
+  // Payment methods click to select
+  document.getElementById('payment-methods').addEventListener('click', (e) => {
+    const card = e.target.closest('.payment-card');
+    if (card) { APP.state.selectedMethodId = card.dataset.mid; renderPaymentMethods(); }
+  });
+
+  // Add method toggle
+  document.getElementById('add-method-btn').addEventListener('click', () => {
+    const form = document.getElementById('add-method-form');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  });
+
+  // Method type chips
+  document.querySelectorAll('[data-mtype]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      APP.state.addMethodType = chip.dataset.mtype;
+      document.querySelectorAll('[data-mtype]').forEach(c => c.classList.toggle('active', c.dataset.mtype === chip.dataset.mtype));
+    });
+  });
+
+  document.getElementById('save-method-btn').addEventListener('click', addPaymentMethod);
+
+  // Quick amount chips
+  document.querySelectorAll('[data-amt]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.getElementById('withdraw-amount').value = formatVND(parseInt(chip.dataset.amt));
+      document.querySelectorAll('[data-amt]').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+
+  const wdInput = document.getElementById('withdraw-amount');
+  wdInput.addEventListener('input', () => {
+    const raw = parseVNDInput(wdInput.value);
+    if (raw > 0) wdInput.value = formatVND(raw);
+  });
+
+  document.getElementById('withdraw-btn').addEventListener('click', handleWithdrawal);
+
+  // Spin Button: Open pending transaction picker modal
+  document.getElementById('simulate-btn').addEventListener('click', openSpinSelectorModal);
+  document.getElementById('close-spin-modal').addEventListener('click', () => {
+    document.getElementById('spin-select-modal').classList.remove('show');
+  });
+  document.getElementById('spin-select-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'spin-select-modal') {
+      document.getElementById('spin-select-modal').classList.remove('show');
+    }
+  });
+  document.getElementById('spin-pending-list').addEventListener('click', (e) => {
+    const item = e.target.closest('[data-approve-id]');
+    if (item) {
+      approveTransactionDirectly(item.dataset.approveId);
+    }
+  });
+
+  // Shift + Left Click on Transaction History Row -> Open Adjustment Bar
+  document.getElementById('tx-table').addEventListener('click', (e) => {
+    const row = e.target.closest('tr[data-txid]');
+    if (row && e.shiftKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      openTxAdjustBar(row.dataset.txid, e.clientX, e.clientY);
+    }
+  });
+
+  // Adjustment Bar actions
+  document.getElementById('close-adjust-bar').addEventListener('click', closeTxAdjustBar);
+  document.querySelectorAll('#tx-adjust-bar [data-set-status]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (APP.state.activeAdjustTxId) {
+        updateTransactionStatus(APP.state.activeAdjustTxId, btn.dataset.setStatus);
+      }
+    });
+  });
+  document.getElementById('adjust-delete-btn').addEventListener('click', () => {
+    if (APP.state.activeAdjustTxId) {
+      deleteTransaction(APP.state.activeAdjustTxId);
+    }
+  });
+  document.addEventListener('click', (e) => {
+    const bar = document.getElementById('tx-adjust-bar');
+    if (bar.classList.contains('show') && !e.target.closest('#tx-adjust-bar') && !e.shiftKey) {
+      closeTxAdjustBar();
+    }
+  });
+
+  // Completion modal
+  document.getElementById('close-completion').addEventListener('click', () => {
+    document.getElementById('completion-modal').classList.remove('show');
+  });
+  document.getElementById('view-details-btn').addEventListener('click', () => {
+    document.getElementById('completion-modal').classList.remove('show');
+    const lastTxId = document.getElementById('completion-modal')._lastTxId;
+    switchWalletTab('history');
+    if (lastTxId) setTimeout(() => highlightTransaction(lastTxId), 300);
+  });
+
+  // Manager
+  document.getElementById('mgr-shop').addEventListener('change', (e) => {
+    APP.state.managerShop = e.target.value;
+    renderManager();
+  });
+  document.getElementById('mgr-tf').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tf-btn');
+    if (btn) {
+      APP.state.managerTf = btn.dataset.tf;
+      document.querySelectorAll('#mgr-tf .tf-btn').forEach(b => b.classList.toggle('active', b.dataset.tf === btn.dataset.tf));
+      renderManager();
+    }
+  });
+  document.getElementById('apply-overrides-btn').addEventListener('click', applyManagerOverrides);
+  document.getElementById('auto-calibrate-btn').addEventListener('click', autoCalibrate);
+
+  document.getElementById('manager-fields').addEventListener('click', (e) => {
+    const lockBtn = e.target.closest('.lock-toggle');
+    if (lockBtn) {
+      const key = lockBtn.dataset.lock;
+      APP.state.managerLocks[key] = !APP.state.managerLocks[key];
+      lockBtn.classList.toggle('locked');
+    }
+  });
+
+  // Rewards
+  document.getElementById('reward-btn').addEventListener('click', handleReward);
+  setupAutocomplete();
+
+  const rwInput = document.getElementById('reward-amount');
+  rwInput.addEventListener('input', () => {
+    const raw = parseVNDInput(rwInput.value);
+    if (raw > 0) rwInput.value = formatVND(raw);
+  });
+
+  // Orders filter events
+  document.getElementById('order-search').addEventListener('input', filterOrders);
+  document.getElementById('order-shop-filter').addEventListener('change', filterOrders);
+  document.getElementById('order-status-filter').addEventListener('change', filterOrders);
+
+  // Tax exports
+  document.getElementById('export-csv-btn').addEventListener('click', exportCSV);
+  document.getElementById('export-json-btn').addEventListener('click', exportJSON);
+
+  // System wireframe shape selector
+  document.querySelectorAll('.shape-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      APP.wireframeShape = btn.dataset.shape;
+      document.querySelectorAll('.shape-btn').forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+
+  initAuth();
+  if (!APP.state.auth.isLoggedIn) {
+    initAuthCanvas();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
