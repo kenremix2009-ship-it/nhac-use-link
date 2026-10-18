@@ -1336,8 +1336,8 @@
             renderer: null,
             particles: null,
             geometry: null,
-            particleCount: 7000, // Tăng tổng số hạt
-            shapeParticleLimit: 4200, // Tăng số hạt tạo thành chữ/trái tim để dày hơn
+            particleCount: 8500, // Tăng tổng số hạt
+            shapeParticleLimit: 5500, // Tăng mạnh số hạt tạo thành chữ/trái tim để dày và sáng hơn
             currentPositions: null,
             targetPositions: null,
             baseColors: null,
@@ -1409,15 +1409,15 @@
                 spriteCanvas.height = 64;
                 const sCtx = spriteCanvas.getContext("2d");
                 const grad = sCtx.createRadialGradient(32, 32, 1, 32, 32, 30);
-                grad.addColorStop(0, "rgba(255,255,255,0.95)");
-                grad.addColorStop(0.4, "rgba(255,255,255,0.55)");
+                grad.addColorStop(0, "rgba(255,255,255,1.0)");
+                grad.addColorStop(0.4, "rgba(255,255,255,0.6)");
                 grad.addColorStop(1, "rgba(0,0,0,0)");
                 sCtx.fillStyle = grad;
                 sCtx.fillRect(0, 0, 64, 64);
                 const particleTexture = new THREE.CanvasTexture(spriteCanvas);
 
                 const material = new THREE.PointsMaterial({
-                    size: 4.6, // Tăng kích thước hạt để dày và sáng hơn
+                    size: 5.2, // Tăng kích thước hạt để dày và sáng hơn
                     map: particleTexture,
                     vertexColors: true,
                     transparent: true,
@@ -1508,9 +1508,9 @@
                     const i3 = i * 3;
                     if (mode === "rainbow") {
                         const hue = (i / this.particleCount) % 1;
-                        tempColor.setHSL(hue, 0.9, 0.56);
+                        tempColor.setHSL(hue, 0.9, 0.6);
                     } else if (i % 19 === 0) {
-                        tempColor.copy(colorA).lerp(whiteSparkle, 0.55); // Tăng độ lấp lánh
+                        tempColor.copy(colorA).lerp(whiteSparkle, 0.65); // Tăng độ lấp lánh
                     } else {
                         const ratio = (Math.sin(i * 0.17) + 1) * 0.5;
                         tempColor.copy(colorA).lerp(colorB, ratio);
@@ -1518,14 +1518,14 @@
 
                     if (i < this.shapeParticleLimit) {
                         // Hạt tạo hình (chữ/trái tim): Sáng rực rỡ, sắc nét
-                        this.baseColors[i3] = tempColor.r * 1.0;
-                        this.baseColors[i3 + 1] = tempColor.g * 1.0;
-                        this.baseColors[i3 + 2] = tempColor.b * 1.0;
+                        this.baseColors[i3] = Math.min(1.0, tempColor.r * 1.3);
+                        this.baseColors[i3 + 1] = Math.min(1.0, tempColor.g * 1.3);
+                        this.baseColors[i3 + 2] = Math.min(1.0, tempColor.b * 1.3);
                     } else {
                         // Hạt xung quanh: Sáng vừa phải để làm nền, không lấn át chữ
-                        this.baseColors[i3] = tempColor.r * 0.75;
-                        this.baseColors[i3 + 1] = tempColor.g * 0.75;
-                        this.baseColors[i3 + 2] = tempColor.b * 0.75;
+                        this.baseColors[i3] = tempColor.r * 0.8;
+                        this.baseColors[i3 + 1] = tempColor.g * 0.8;
+                        this.baseColors[i3 + 2] = tempColor.b * 0.8;
                     }
 
                     this.colors[i3] = this.baseColors[i3];
@@ -1612,7 +1612,7 @@
 
                 const imgData = ctx.getImageData(0, 0, width, height).data;
                 const validPoints = [];
-                const step = 3; // Giảm step từ 4 xuống 3 để quét dày hơn, tạo ra nhiều điểm ảnh hơn
+                const step = 3; // Giữ step=3 để quét dày
 
                 for (let y = 0; y < height; y += step) {
                     for (let x = 0; x < width; x += step) {
@@ -1633,15 +1633,15 @@
                     validPoints[j] = temp;
                 }
 
-                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 2000));
+                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 2500));
                 for (let i = 0; i < activeShapeCount; i++) {
                     const i3 = i * 3;
                     if (validPoints.length > 0) {
                         const pt = validPoints[i % validPoints.length];
-                        // Độ nhiễu (jitter) giảm nhẹ để nét chữ sắc sảo hơn
-                        this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 2.5;
-                        this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 2.5;
-                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 18;
+                        // Giảm nhiễu để nét chữ sắc sảo, dày đặc hơn
+                        this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 1.5;
+                        this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 1.5;
+                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 15;
                     }
                 }
 
@@ -1650,17 +1650,30 @@
             },
 
             morphToHeart3D() {
+                // Sử dụng thuật toán 3D Bulge để trái tim tròn, phình và dày
                 for (let i = 0; i < this.shapeParticleLimit; i++) {
                     const i3 = i * 3;
-                    // Uniform distribution across heart surface & volume to avoid pole clumping
-                    const t = (i / this.shapeParticleLimit) * Math.PI * 2 + (Math.random() - 0.5) * 0.15;
-                    const r = 0.35 + 0.65 * Math.cbrt(Math.random());
+                    
+                    // Phân bổ ngẫu nhiên góc và bán kính để tránh dồn cục (nguyên nhân gây dẹt)
+                    const t = Math.random() * Math.PI * 2;
+                    const r = Math.pow(Math.random(), 1/3); // Phân bổ thể tích đều
+
                     const hx = 16 * Math.pow(Math.sin(t), 3);
                     const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-                    const scale = 6.2 * r; // To hơn một chút
-                    this.targetPositions[i3] = hx * scale + (Math.random() - 0.5) * 3.5;
-                    this.targetPositions[i3 + 1] = hy * scale + (Math.random() - 0.5) * 3.5;
-                    this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 42 * (1 - r * 0.45);
+
+                    const scale = 6.0;
+                    const px = hx * scale * r;
+                    const py = hy * scale * r;
+
+                    // Tính toán độ phình (bulge) ở trục Z: Ở giữa phình to, ở rìa mỏng dần
+                    const bulge = Math.sqrt(Math.max(0, 1 - r * r));
+                    const maxZ = 26 * bulge + 1.5; // 26 là độ phình tối đa, 1.5 là độ dày tối thiểu ở rìa
+                    const pz = (Math.random() - 0.5) * maxZ;
+
+                    // Thêm nhiễu nhẹ để trông tự nhiên
+                    this.targetPositions[i3] = px + (Math.random() - 0.5) * 2.0;
+                    this.targetPositions[i3 + 1] = py + (Math.random() - 0.5) * 2.0;
+                    this.targetPositions[i3 + 2] = pz;
                 }
                 this.assignSurroundingParticles(this.shapeParticleLimit);
             },
@@ -1743,8 +1756,8 @@
                         pos[i3 + 2] += (this.targetPositions[i3 + 2] - pos[i3 + 2]) * 0.04;
                     }
 
-                    // Tăng độ sáng nền (0.65) để hạt không bị mờ tối
-                    const twinkle = 0.65 + 0.35 * Math.sin(elapsedTime * 7.2 + phase * 3.0);
+                    // Tăng độ sáng nền (0.8) để hạt không bị mờ tối, nhấp nháy nhẹ nhàng
+                    const twinkle = 0.8 + 0.2 * Math.sin(elapsedTime * 7.2 + phase * 3.0);
                     col[i3] = this.baseColors[i3] * twinkle;
                     col[i3 + 1] = this.baseColors[i3 + 1] * twinkle;
                     col[i3 + 2] = this.baseColors[i3 + 2] * twinkle;
