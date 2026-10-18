@@ -213,29 +213,22 @@
         </div>
     </div>
 
-    <!-- Chibi Angry Warning Modal (Triggered when user clicks 'Tiếp tục' before letter is fully typed) -->
+    <!-- Chibi Angry Warning Modal -->
     <div id="chibi-angry-modal" class="fixed inset-0 z-[130] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="glass-panel chibi-angry-anim w-full max-w-xs rounded-3xl p-6 text-center border-2 border-rose-500/60 shadow-2xl space-y-3">
-            <!-- Custom Cute Angry Chibi SVG Model -->
             <div class="w-28 h-28 mx-auto rounded-full bg-gradient-to-b from-rose-500/30 to-pink-500/20 border-2 border-rose-400 flex items-center justify-center shadow-inner relative">
                 <svg viewBox="0 0 120 120" class="w-24 h-24">
-                    <!-- Angry Steam Puff -->
                     <path d="M92 18 Q102 10 98 24 Q108 22 100 32" stroke="#fb7185" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-                    <!-- Chibi Hair & Head -->
                     <circle cx="60" cy="64" r="36" fill="#ffe4e6" stroke="#f43f5e" stroke-width="3"/>
                     <path d="M24 58 Q30 24 60 24 Q90 24 96 58 Q82 42 60 46 Q38 42 24 58 Z" fill="#db2777"/>
-                    <!-- Angry Eyebrows -->
                     <line x1="38" y1="52" x2="52" y2="58" stroke="#881337" stroke-width="4" stroke-linecap="round"/>
                     <line x1="82" y1="52" x2="68" y2="58" stroke="#881337" stroke-width="4" stroke-linecap="round"/>
-                    <!-- Chibi Eyes -->
                     <circle cx="45" cy="64" r="5.5" fill="#881337"/>
                     <circle cx="75" cy="64" r="5.5" fill="#881337"/>
                     <circle cx="43" cy="62" r="2" fill="#ffffff"/>
                     <circle cx="73" cy="62" r="2" fill="#ffffff"/>
-                    <!-- Puffed Angry Cheeks -->
                     <ellipse cx="34" cy="73" rx="7" ry="4.5" fill="#fb7185" opacity="0.75"/>
                     <ellipse cx="86" cy="73" rx="7" ry="4.5" fill="#fb7185" opacity="0.75"/>
-                    <!-- Angry Wavy Mouth -->
                     <path d="M49 80 Q60 72 71 80" stroke="#9f1239" stroke-width="3.5" fill="none" stroke-linecap="round"/>
                 </svg>
                 <span class="absolute -top-1 -right-1 text-2xl animate-bounce">💢</span>
@@ -247,7 +240,7 @@
         </div>
     </div>
 
-    <!-- Delete Saved Card Confirmation Modal (Triggered on Shift + Left Click) -->
+    <!-- Delete Saved Card Confirmation Modal -->
     <div id="delete-card-modal" class="fixed inset-0 z-[125] bg-black/75 backdrop-blur-md hidden items-center justify-center p-4">
         <div class="glass-panel w-full max-w-sm rounded-3xl p-6 text-center border border-rose-500/40 space-y-4">
             <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-400 text-2xl">
@@ -266,9 +259,7 @@
         </div>
     </div>
 
-    <!-- =======================================================================
-         VIEW 1: HOME SCREEN ("Tên của bạn là gì?" + Nút Tạo Thiệp)
-    ======================================================================== -->
+    <!-- VIEW 1: HOME SCREEN -->
     <section id="view-home" class="relative z-10 min-h-screen w-full flex flex-col justify-between p-4 sm:p-7">
         <header class="w-full max-w-6xl mx-auto flex items-center justify-between">
             <div class="glass-pill px-4 py-2 rounded-full flex items-center gap-2.5">
@@ -334,9 +325,7 @@
         </footer>
     </section>
 
-    <!-- =======================================================================
-         PASSWORD MODAL FOR CREATOR STUDIO (Password: thuan2810)
-    ======================================================================== -->
+    <!-- PASSWORD MODAL -->
     <div id="password-modal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
         <div class="glass-panel w-full max-w-sm rounded-3xl p-6 sm:p-7 relative">
             <button id="close-password-modal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300">
@@ -373,9 +362,7 @@
         </div>
     </div>
 
-    <!-- =======================================================================
-         VIEW 2: CREATOR STUDIO (Tạo & Tùy chỉnh 4 Giai Đoạn + Shift+Click Xóa)
-    ======================================================================== -->
+    <!-- VIEW 2: CREATOR STUDIO -->
     <section id="view-studio" class="relative z-20 min-h-screen w-full hidden py-6 px-3 sm:px-6">
         <div class="max-w-5xl mx-auto space-y-5">
             <div class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
@@ -399,7 +386,6 @@
                 </div>
             </div>
 
-            <!-- Saved Cards Bar (Shift + Click to delete) -->
             <div class="glass-panel rounded-2xl p-4">
                 <div class="flex items-center justify-between mb-2.5">
                     <span class="text-xs font-extrabold uppercase tracking-wider text-pink-300">
@@ -409,9 +395,8 @@
                 <div id="studio-card-list" class="flex flex-wrap gap-2"></div>
             </div>
 
-            <!-- Editor Form -->
             <div class="glass-panel rounded-3xl p-4 sm:p-6 space-y-6">
-                <!-- Section A: Thông tin Người Nhận & Chủ Đề -->
+                <!-- Section A -->
                 <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/75 border border-white/10 space-y-4">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
                         <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
@@ -447,7 +432,7 @@
                     </div>
                 </div>
 
-                <!-- Section B: Giai đoạn 1 (Màn Nút Bấm Chạy Trốn) -->
+                <!-- Section B -->
                 <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/75 border border-white/10 space-y-3.5">
                     <h3 class="text-sm font-extrabold text-white flex items-center gap-2 border-b border-white/10 pb-2.5">
                         <span class="w-6 h-6 rounded-lg bg-cyan-500 text-slate-950 font-mono text-xs flex items-center justify-center font-black">1</span>
@@ -473,7 +458,7 @@
                     </div>
                 </div>
 
-                <!-- Section C: Giai đoạn 2 (Hộp Quà & Lá Thư) -->
+                <!-- Section C -->
                 <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/75 border border-white/10 space-y-3.5">
                     <h3 class="text-sm font-extrabold text-white flex items-center gap-2 border-b border-white/10 pb-2.5">
                         <span class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 font-mono text-xs flex items-center justify-center font-black">2</span>
@@ -503,7 +488,7 @@
                     </div>
                 </div>
 
-                <!-- Section D: Giai đoạn 3 (Vũ trụ Hạt Sáng 3D & Màu Hạt) -->
+                <!-- Section D -->
                 <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/75 border border-white/10 space-y-4">
                     <h3 class="text-sm font-extrabold text-white flex items-center gap-2 border-b border-white/10 pb-2.5">
                         <span class="w-6 h-6 rounded-lg bg-purple-500 text-white font-mono text-xs flex items-center justify-center font-black">3</span>
@@ -554,7 +539,7 @@
                     </div>
                 </div>
 
-                <!-- Section E: Giai đoạn 4 (Slider Lời Nhắn 10s & Cuộn Phim Ảnh) -->
+                <!-- Section E -->
                 <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/75 border border-white/10 space-y-4">
                     <h3 class="text-sm font-extrabold text-white flex items-center gap-2 border-b border-white/10 pb-2.5">
                         <span class="w-6 h-6 rounded-lg bg-emerald-500 text-slate-950 font-mono text-xs flex items-center justify-center font-black">4</span>
@@ -576,7 +561,6 @@
                         </div>
                     </div>
 
-                    <!-- Photo Upload & URL Manager -->
                     <div class="p-3.5 rounded-xl bg-slate-950/80 border border-white/10 space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <span class="text-xs font-bold text-emerald-300">
@@ -606,7 +590,6 @@
                     </div>
                 </div>
 
-                <!-- Studio Save & Preview Actions -->
                 <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
                     <button type="button" id="copy-share-link-btn" class="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-slate-200 text-xs sm:text-sm font-bold transition flex items-center gap-2">
                         <i class="fa-solid fa-link text-cyan-300"></i>
@@ -625,11 +608,8 @@
         </div>
     </section>
 
-    <!-- =======================================================================
-         VIEW 3: RECIPIENT 4-STAGE CARD VIEWER (Locked Header, Sequential Flow)
-    ======================================================================== -->
+    <!-- VIEW 3: RECIPIENT 4-STAGE CARD VIEWER -->
     <section id="view-card" class="relative z-10 min-h-screen w-full hidden">
-        <!-- Top Bar (Locked Recipient Badge + Home & Sound Buttons) -->
         <header class="fixed top-0 left-0 right-0 z-50 p-3 sm:p-5 flex items-center justify-between pointer-events-none">
             <div class="glass-pill px-4 py-2 rounded-full flex items-center gap-2 pointer-events-auto shadow-lg">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -649,7 +629,7 @@
             </div>
         </header>
 
-        <!-- STAGE 1: RUNAWAY NO BUTTON GATEKEEPER -->
+        <!-- STAGE 1 -->
         <div id="stage-1" class="card-stage min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
             <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-9 text-center relative z-10 space-y-5">
                 <div id="s1-theme-badge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-pink-500/15 border border-pink-400/35 text-pink-300 text-[11px] font-extrabold tracking-wide">
@@ -689,18 +669,15 @@
             </div>
         </div>
 
-        <!-- STAGE 2: 3D GIFT BOX & TYPEWRITER LETTER WITH EFFECT SUMMONERS & STRICT UN-TYPED CHECK -->
+        <!-- STAGE 2 -->
         <div id="stage-2" class="card-stage min-h-screen w-full hidden items-center justify-center p-4 relative overflow-hidden">
-            <!-- Continuous Ambient Floating Effect Layer for Stage 2 -->
             <div id="stage2-ambient-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
 
-            <!-- Gift Box Unopened View -->
             <div id="s2-gift-Wrapper" class="relative z-10 text-center max-w-md mx-auto space-y-6">
                 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/20 border border-pink-400/40 text-pink-200 text-xs font-extrabold shadow-lg">
                     <span>✨ Chạm vào hộp quà hoặc bấm nút bên dưới để mở điều bất ngờ ✨</span>
                 </div>
 
-                <!-- Gift Box with Orbiting Theme Effects -->
                 <div class="relative w-56 h-56 sm:w-64 sm:h-64 mx-auto flex items-center justify-center">
                     <span id="s2-orbit-1" class="orbit-badge absolute -top-2 -left-2 text-3xl sm:text-4xl select-none pointer-events-none" style="animation-delay: 0s;">🌹</span>
                     <span id="s2-orbit-2" class="orbit-badge absolute -top-3 -right-2 text-3xl sm:text-4xl select-none pointer-events-none" style="animation-delay: 0.7s;">💖</span>
@@ -715,7 +692,6 @@
                     </div>
                 </div>
 
-                <!-- Explicit Open Gift Button & Quick Effect Trigger -->
                 <div class="flex flex-col items-center gap-3 pt-1">
                     <button
                         id="s2-open-gift-btn"
@@ -737,9 +713,7 @@
                 </div>
             </div>
 
-            <!-- Opened Letter View with Surrounding Effects & Effect Summoner Bar -->
             <div id="s2-letter-card" class="relative z-10 glass-panel w-full max-w-xl rounded-3xl p-6 sm:p-8 hidden">
-                <!-- Corner Floating Accents -->
                 <span id="s2-letter-corner-1" class="orbit-badge absolute -top-4 -left-4 text-3xl pointer-events-none select-none">🌹</span>
                 <span id="s2-letter-corner-2" class="orbit-badge absolute -top-4 -right-4 text-3xl pointer-events-none select-none" style="animation-delay: 0.8s;">💖</span>
                 <span id="s2-letter-corner-3" class="orbit-badge absolute -bottom-4 -left-4 text-3xl pointer-events-none select-none" style="animation-delay: 1.5s;">🌸</span>
@@ -756,7 +730,6 @@
 
                 <div id="s2-letter-body" class="text-sm sm:text-base text-slate-100 leading-relaxed whitespace-pre-line min-h-[140px] max-h-[42vh] overflow-y-auto pr-1 font-medium"></div>
 
-                <!-- Interactive Effect Summoner Buttons inside the Letter Card -->
                 <div class="mt-5 pt-3.5 border-t border-white/10">
                     <div class="text-[11px] font-bold text-pink-300 mb-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-wand-sparkles"></i>
@@ -796,7 +769,7 @@
             </div>
         </div>
 
-        <!-- STAGE 3: 3D CONTINUOUS-MOTION PARTICLE UNIVERSE WITH METEORS -->
+        <!-- STAGE 3 -->
         <div id="stage-3" class="card-stage h-screen w-full hidden relative overflow-hidden">
             <div id="three-canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
@@ -831,12 +804,11 @@
             </div>
         </div>
 
-        <!-- STAGE 4: FILMSTRIP PHOTO REEL IN CENTER + WISH SLIDER (< > 10s) BELOW + FLOATING WISHES -->
+        <!-- STAGE 4 -->
         <div id="stage-4" class="card-stage min-h-screen w-full hidden relative py-16 px-4 sm:px-8 overflow-y-auto">
             <div id="stage4-floating-wishes-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
 
             <div class="relative z-10 max-w-4xl mx-auto space-y-6">
-                <!-- Header Banner -->
                 <div class="glass-panel rounded-3xl p-5 sm:p-7 text-center relative overflow-hidden">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300 text-xs font-bold mb-2">
                         <i class="fa-solid fa-crown"></i> TRẠM CUỐI: CUỘN PHIM KỶ NIỆM & LỜI NHẮN YÊU THƯƠNG
@@ -844,7 +816,6 @@
                     <h2 id="s4-headline-display" class="text-xl sm:text-3xl font-black text-white leading-tight"></h2>
                 </div>
 
-                <!-- CENTER: CINEMA FILMSTRIP PHOTO REEL (Balanced ratio, click to enlarge) -->
                 <div id="s4-filmstrip-section" class="space-y-2.5">
                     <div class="flex items-center justify-between px-2">
                         <h3 class="text-xs sm:text-sm font-extrabold text-pink-300 flex items-center gap-2">
@@ -861,7 +832,6 @@
                     </div>
                 </div>
 
-                <!-- BELOW: WISH / MESSAGE SLIDER WITH < > BUTTONS & 10-SECOND AUTO ADVANCE -->
                 <div class="max-w-2xl mx-auto">
                     <div class="glass-panel rounded-3xl p-6 sm:p-8 relative shadow-2xl border border-pink-400/35">
                         <div class="flex items-center justify-between mb-3">
@@ -874,7 +844,6 @@
                             </span>
                         </div>
 
-                        <!-- Wish Content Box with < and > Controls -->
                         <div class="relative flex items-center justify-between gap-3 min-h-[100px] py-2">
                             <button
                                 id="wish-prev-btn"
@@ -899,7 +868,6 @@
                             </button>
                         </div>
 
-                        <!-- 10-Second Progress Bar & Dots -->
                         <div class="mt-4 space-y-2.5">
                             <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
                                 <div id="s4-wish-progress-bar" class="h-full bg-gradient-to-r from-pink-500 via-purple-400 to-cyan-400 w-0 transition-all duration-100"></div>
@@ -913,7 +881,6 @@
                     </div>
                 </div>
 
-                <!-- Replay & Effect Trigger Footer -->
                 <div class="flex flex-wrap items-center justify-center gap-3 pt-2 pb-8">
                     <button id="s4-celebrate-again-btn" type="button" class="glass-pill px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-amber-200 hover:bg-amber-500/20 border border-amber-400/30 transition inline-flex items-center gap-2">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -928,7 +895,7 @@
         </div>
     </section>
 
-    <!-- Lightbox Modal for Photos -->
+    <!-- Lightbox Modal -->
     <div id="photo-lightbox" class="fixed inset-0 z-[110] bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
         <button id="close-lightbox-btn" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-lg">
             <i class="fa-solid fa-xmark"></i>
@@ -941,10 +908,11 @@
     ======================================================================== -->
     <script>
         /**************************************************************
-         * 1. PRESETS & DATABASE ENGINE (STRICT ID VERIFICATION)
+         * 1. PRESETS & DATABASE ENGINE (CLOUD SYNC + LOCAL FALLBACK)
          **************************************************************/
-        const STORAGE_KEY = "cosmic_cards_v5_db";
+        const STORAGE_KEY = "cosmic_cards_v6_db";
         const ADMIN_PASSWORD = "thuan2810";
+        const CLOUD_API_URL = "https://jsonblob.com/api/jsonBlob"; // Free Cloud DB for cross-device sync
 
         const SAMPLE_20_10_PHOTOS = [
             "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
@@ -1068,28 +1036,84 @@
             wishSliderTimer: null,
             wishProgressTimer: null,
             wishProgressElapsed: 0,
-            pendingDeleteCardId: null
+            pendingDeleteCardId: null,
+            cloudDBId: null
         };
 
-        function loadCardsDB() {
+        // CLOUD DATABASE FUNCTIONS
+        async function loadCardsDB() {
+            const params = new URLSearchParams(window.location.search);
+            AppState.cloudDBId = params.get('db');
+
+            if (AppState.cloudDBId) {
+                try {
+                    const res = await fetch(`${CLOUD_API_URL}/${AppState.cloudDBId}`, {
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        AppState.cardsDB = { ...createDefaultCardsDB(), ...data };
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cardsDB));
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Lỗi tải DB từ Cloud", e);
+                }
+            }
+
+            // Local Fallback
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
-                    const parsed = JSON.parse(raw);
-                    AppState.cardsDB = { ...createDefaultCardsDB(), ...parsed };
+                    AppState.cardsDB = { ...createDefaultCardsDB(), ...JSON.parse(raw) };
                 } else {
                     AppState.cardsDB = createDefaultCardsDB();
                 }
             } catch (e) {
                 AppState.cardsDB = createDefaultCardsDB();
             }
+
+            // Create new Cloud DB if no db param exists
+            if (!AppState.cloudDBId) {
+                try {
+                    const res = await fetch(CLOUD_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(AppState.cardsDB)
+                    });
+                    if (res.ok) {
+                        const location = res.headers.get('Location');
+                        if (location) {
+                            AppState.cloudDBId = location.split('/').pop();
+                            const url = new URL(window.location);
+                            url.searchParams.set('db', AppState.cloudDBId);
+                            window.history.replaceState({}, '', url);
+                            showToast("Đã kết nối CSDL đám mây!", "fa-cloud");
+                        }
+                    }
+                } catch (e) {
+                    console.error("Lỗi tạo DB trên Cloud", e);
+                }
+            }
         }
 
-        function saveCardsDB() {
+        async function saveCardsDB() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cardsDB));
             } catch (e) {
                 showToast("Dung lượng vượt quá giới hạn lưu trữ!", "fa-triangle-exclamation");
+            }
+
+            if (AppState.cloudDBId) {
+                try {
+                    await fetch(`${CLOUD_API_URL}/${AppState.cloudDBId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(AppState.cardsDB)
+                    });
+                } catch (e) {
+                    console.error("Lỗi lưu DB lên Cloud", e);
+                }
             }
         }
 
@@ -1166,7 +1190,7 @@
         }
 
         /**************************************************************
-         * 3. AMBIENT STARFIELD & GIFT BOX BURST FX (FLOWERS & HEARTS)
+         * 3. AMBIENT STARFIELD & GIFT BOX BURST FX
          **************************************************************/
         function initAmbientStars() {
             const canvas = document.getElementById("ambient-star-canvas");
@@ -1327,7 +1351,7 @@
         };
 
         /**************************************************************
-         * 4. STAGE 3: THREE.JS 3D PARTICLE UNIVERSE + 3D SHOOTING STARS
+         * 4. STAGE 3: THREE.JS 3D PARTICLE UNIVERSE
          **************************************************************/
         const ThreeUniverse = {
             initialized: false,
@@ -1336,8 +1360,8 @@
             renderer: null,
             particles: null,
             geometry: null,
-            particleCount: 8500, // Tăng tổng số hạt
-            shapeParticleLimit: 5500, // Tăng mạnh số hạt tạo thành chữ/trái tim để dày và sáng hơn
+            particleCount: 8500,
+            shapeParticleLimit: 5500,
             currentPositions: null,
             targetPositions: null,
             baseColors: null,
@@ -1403,7 +1427,6 @@
                 this.geometry.setAttribute("position", new THREE.BufferAttribute(this.currentPositions, 3));
                 this.geometry.setAttribute("color", new THREE.BufferAttribute(this.colors, 3));
 
-                // Softer radial sprite to prevent over-bright white clumping glare
                 const spriteCanvas = document.createElement("canvas");
                 spriteCanvas.width = 64;
                 spriteCanvas.height = 64;
@@ -1417,7 +1440,7 @@
                 const particleTexture = new THREE.CanvasTexture(spriteCanvas);
 
                 const material = new THREE.PointsMaterial({
-                    size: 5.2, // Tăng kích thước hạt để dày và sáng hơn
+                    size: 5.2,
                     map: particleTexture,
                     vertexColors: true,
                     transparent: true,
@@ -1429,7 +1452,6 @@
                 this.particles = new THREE.Points(this.geometry, material);
                 this.scene.add(this.particles);
 
-                // Initialize 3D Shooting Stars (Meteors)
                 this.meteorGroup = new THREE.Group();
                 this.scene.add(this.meteorGroup);
                 this.initMeteors();
@@ -1441,7 +1463,6 @@
 
             initMeteors() {
                 this.meteors = [];
-                // Giảm số lượng sao băng từ 6 xuống 3 để thưa hơn
                 for (let m = 0; m < 3; m++) {
                     const trailPoints = [];
                     const segs = 18;
@@ -1510,19 +1531,17 @@
                         const hue = (i / this.particleCount) % 1;
                         tempColor.setHSL(hue, 0.9, 0.6);
                     } else if (i % 19 === 0) {
-                        tempColor.copy(colorA).lerp(whiteSparkle, 0.65); // Tăng độ lấp lánh
+                        tempColor.copy(colorA).lerp(whiteSparkle, 0.65);
                     } else {
                         const ratio = (Math.sin(i * 0.17) + 1) * 0.5;
                         tempColor.copy(colorA).lerp(colorB, ratio);
                     }
 
                     if (i < this.shapeParticleLimit) {
-                        // Hạt tạo hình (chữ/trái tim): Sáng rực rỡ, sắc nét
                         this.baseColors[i3] = Math.min(1.0, tempColor.r * 1.3);
                         this.baseColors[i3 + 1] = Math.min(1.0, tempColor.g * 1.3);
                         this.baseColors[i3 + 2] = Math.min(1.0, tempColor.b * 1.3);
                     } else {
-                        // Hạt xung quanh: Sáng vừa phải để làm nền, không lấn át chữ
                         this.baseColors[i3] = tempColor.r * 0.8;
                         this.baseColors[i3 + 1] = tempColor.g * 0.8;
                         this.baseColors[i3 + 2] = tempColor.b * 0.8;
@@ -1612,7 +1631,7 @@
 
                 const imgData = ctx.getImageData(0, 0, width, height).data;
                 const validPoints = [];
-                const step = 3; // Giữ step=3 để quét dày
+                const step = 3;
 
                 for (let y = 0; y < height; y += step) {
                     for (let x = 0; x < width; x += step) {
@@ -1625,7 +1644,6 @@
                     }
                 }
 
-                // Shuffle validPoints so particles distribute evenly without clumping
                 for (let i = validPoints.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     const temp = validPoints[i];
@@ -1638,42 +1656,42 @@
                     const i3 = i * 3;
                     if (validPoints.length > 0) {
                         const pt = validPoints[i % validPoints.length];
-                        // Giảm nhiễu để nét chữ sắc sảo, dày đặc hơn
                         this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 1.5;
                         this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 1.5;
                         this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 15;
                     }
                 }
 
-                // Phần còn lại làm hạt vũ trụ xung quanh
                 this.assignSurroundingParticles(activeShapeCount);
             },
 
             morphToHeart3D() {
-                // Sử dụng thuật toán 3D Bulge để trái tim tròn, phình và dày
-                for (let i = 0; i < this.shapeParticleLimit; i++) {
-                    const i3 = i * 3;
+                // Rejection Sampling to fill a solid 3D Heart Equation
+                let pointsGenerated = 0;
+                const scale = 22; 
+                
+                while (pointsGenerated < this.shapeParticleLimit) {
+                    const i3 = pointsGenerated * 3;
                     
-                    // Phân bổ ngẫu nhiên góc và bán kính để tránh dồn cục (nguyên nhân gây dẹt)
-                    const t = Math.random() * Math.PI * 2;
-                    const r = Math.pow(Math.random(), 1/3); // Phân bổ thể tích đều
-
-                    const hx = 16 * Math.pow(Math.sin(t), 3);
-                    const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-
-                    const scale = 6.0;
-                    const px = hx * scale * r;
-                    const py = hy * scale * r;
-
-                    // Tính toán độ phình (bulge) ở trục Z: Ở giữa phình to, ở rìa mỏng dần
-                    const bulge = Math.sqrt(Math.max(0, 1 - r * r));
-                    const maxZ = 26 * bulge + 1.5; // 26 là độ phình tối đa, 1.5 là độ dày tối thiểu ở rìa
-                    const pz = (Math.random() - 0.5) * maxZ;
-
-                    // Thêm nhiễu nhẹ để trông tự nhiên
-                    this.targetPositions[i3] = px + (Math.random() - 0.5) * 2.0;
-                    this.targetPositions[i3 + 1] = py + (Math.random() - 0.5) * 2.0;
-                    this.targetPositions[i3 + 2] = pz;
+                    // Bounding box
+                    const x = (Math.random() - 0.5) * 2.4;
+                    const y = (Math.random() - 0.5) * 2.4;
+                    const z = (Math.random() - 0.5) * 2.4;
+                    
+                    const x2 = x * x;
+                    const y2 = y * y;
+                    const z2 = z * z;
+                    const y3 = y2 * y;
+                    
+                    // Implicit 3D Heart Equation
+                    const val = Math.pow(x2 + 2.25 * z2 + y2 - 1, 3) - x2 * y3 - 0.1125 * z2 * y3;
+                    
+                    if (val <= 0) {
+                        this.targetPositions[i3] = x * scale;
+                        this.targetPositions[i3 + 1] = y * scale; 
+                        this.targetPositions[i3 + 2] = z * scale;
+                        pointsGenerated++;
+                    }
                 }
                 this.assignSurroundingParticles(this.shapeParticleLimit);
             },
@@ -1739,7 +1757,6 @@
                     const phase = this.twinklePhases[i];
 
                     if (i < this.shapeParticleLimit) {
-                        // Gentle continuous breathing & floating for shape particles
                         const waveX = Math.sin(elapsedTime * 2.1 + phase) * 0.95;
                         const waveY = Math.cos(elapsedTime * 2.4 + phase) * 0.95;
                         const waveZ = Math.sin(elapsedTime * 1.8 + phase) * 1.1;
@@ -1748,7 +1765,6 @@
                         pos[i3 + 1] += (this.targetPositions[i3 + 1] + waveY - pos[i3 + 1]) * 0.08;
                         pos[i3 + 2] += (this.targetPositions[i3 + 2] + waveZ - pos[i3 + 2]) * 0.08;
                     } else {
-                        // Surrounding space particles swirl and drift more actively
                         const orbitShiftX = Math.sin(elapsedTime * 1.4 + phase) * 4.2;
                         const orbitShiftY = Math.cos(elapsedTime * 1.6 + phase) * 4.2;
                         pos[i3] += (this.targetPositions[i3] + orbitShiftX - pos[i3]) * 0.04;
@@ -1756,7 +1772,6 @@
                         pos[i3 + 2] += (this.targetPositions[i3 + 2] - pos[i3 + 2]) * 0.04;
                     }
 
-                    // Tăng độ sáng nền (0.8) để hạt không bị mờ tối, nhấp nháy nhẹ nhàng
                     const twinkle = 0.8 + 0.2 * Math.sin(elapsedTime * 7.2 + phase * 3.0);
                     col[i3] = this.baseColors[i3] * twinkle;
                     col[i3 + 1] = this.baseColors[i3 + 1] * twinkle;
@@ -1765,7 +1780,6 @@
                 this.geometry.attributes.position.needsUpdate = true;
                 this.geometry.attributes.color.needsUpdate = true;
 
-                // Animate 3D Shooting Stars (Meteors)
                 for (const line of this.meteors) {
                     line.position.x += line.userData.vx;
                     line.position.y += line.userData.vy;
@@ -2036,15 +2050,10 @@
             }
         }
 
-        /**************************************************************
-         * STAGE 4 FILMSTRIP PHOTO REEL & < > WISH SLIDER (10S INTERVAL)
-         **************************************************************/
         function renderStage4Content(card) {
             document.getElementById("s4-headline-display").textContent = card.s4Headline;
 
-            // 1. Render Cinema Filmstrip Reel in the center with balanced proportions
             const rawPhotos = Array.isArray(card.photos) && card.photos.length > 0 ? card.photos : SAMPLE_20_10_PHOTOS;
-            // Repeat photos so the marquee filmstrip loops seamlessly
             const reelPhotos = [];
             while (reelPhotos.length < Math.max(8, rawPhotos.length * 2)) {
                 reelPhotos.push(...rawPhotos);
@@ -2073,7 +2082,6 @@
                 trackEl.appendChild(frame);
             });
 
-            // 2. Build Wish List for the < > Slider (10 seconds per wish)
             const allWishes = [];
             if (card.s4MainWish) allWishes.push(card.s4MainWish);
             if (Array.isArray(card.s4Wishes)) {
@@ -2086,7 +2094,7 @@
             }
 
             AppState.wishSliderIndex = 0;
-            const WISH_INTERVAL_MS = 10000; // 10 seconds per message
+            const WISH_INTERVAL_MS = 10000;
 
             const updateWishDisplay = () => {
                 const wishEl = document.getElementById("s4-active-wish");
@@ -2158,11 +2166,10 @@
         /**************************************************************
          * EVENT LISTENERS & INITIALIZATION
          **************************************************************/
-        window.addEventListener("DOMContentLoaded", () => {
-            loadCardsDB();
+        window.addEventListener("DOMContentLoaded", async () => {
+            await loadCardsDB(); // Wait for cloud sync or fallback
             initAmbientStars();
 
-            // URL Search parameter support (?to=dat)
             const params = new URLSearchParams(window.location.search);
             const toParam = params.get("to");
             if (toParam) {
@@ -2179,7 +2186,6 @@
                 openCardForRecipient(val);
             });
 
-            // Password modal for creator studio
             const pwdModal = document.getElementById("password-modal");
             const pwdInput = document.getElementById("creator-password-input");
             const pwdError = document.getElementById("password-error-msg");
@@ -2280,29 +2286,30 @@
                 e.target.value = "";
             });
 
-            document.getElementById("save-card-btn").addEventListener("click", () => {
+            // ASYNC EVENT LISTENERS FOR CLOUD SAVE
+            document.getElementById("save-card-btn").addEventListener("click", async () => {
                 const card = collectStudioFormCard();
                 AppState.cardsDB[card.recipientId] = card;
-                saveCardsDB();
+                await saveCardsDB();
                 renderStudioCardList();
                 SoundEngine.playCelebration();
                 showToast(`Đã lưu thiệp "${card.recipientName}" (ID: ${card.recipientId})!`, "fa-check");
             });
 
-            document.getElementById("preview-card-btn").addEventListener("click", () => {
+            document.getElementById("preview-card-btn").addEventListener("click", async () => {
                 const card = collectStudioFormCard();
                 AppState.cardsDB[card.recipientId] = card;
-                saveCardsDB();
+                await saveCardsDB();
                 renderStudioCardList();
                 openCardForRecipient(card.recipientId);
             });
 
-            document.getElementById("copy-share-link-btn").addEventListener("click", () => {
+            document.getElementById("copy-share-link-btn").addEventListener("click", async () => {
                 const card = collectStudioFormCard();
                 AppState.cardsDB[card.recipientId] = card;
-                saveCardsDB();
+                await saveCardsDB();
 
-                const shareUrl = `${window.location.origin}${window.location.pathname}?to=${encodeURIComponent(card.recipientId)}`;
+                const shareUrl = `${window.location.origin}${window.location.pathname}?to=${encodeURIComponent(card.recipientId)}&db=${AppState.cloudDBId || ''}`;
                 const tempInput = document.createElement("textarea");
                 tempInput.value = shareUrl;
                 document.body.appendChild(tempInput);
@@ -2316,7 +2323,6 @@
 
             document.getElementById("card-back-home-btn").addEventListener("click", () => switchView("home"));
 
-            // Stage 1 Runaway No Button
             const noBtn = document.getElementById("s1-no-btn");
             const dodgeNoButton = () => {
                 AppState.dodgeCount++;
@@ -2338,7 +2344,6 @@
                 goToCardStage(2);
             });
 
-            // Stage 2 Gift Box & Typewriter Letter with Strict Un-Typed Check
             const triggerOpenStage2Gift = () => {
                 const card = AppState.activeCard;
                 if (!card) return;
@@ -2380,7 +2385,6 @@
                 BurstFX.trigger((card && card.s2Effect) || "roses");
             });
 
-            // Effect Summoner Buttons inside Stage 2 Letter Card
             document.querySelectorAll(".summon-fx-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
                     const fxType = btn.getAttribute("data-summon-fx") || "roses";
@@ -2389,18 +2393,17 @@
                 });
             });
 
-            // Shift+Click Delete Confirmation Modal Buttons
             document.getElementById("cancel-delete-card-btn").addEventListener("click", () => {
                 AppState.pendingDeleteCardId = null;
                 document.getElementById("delete-card-modal").classList.add("hidden");
                 document.getElementById("delete-card-modal").classList.remove("flex");
             });
-            document.getElementById("confirm-delete-card-btn").addEventListener("click", () => {
+            document.getElementById("confirm-delete-card-btn").addEventListener("click", async () => {
                 const delId = AppState.pendingDeleteCardId;
                 if (delId && AppState.cardsDB[delId]) {
                     const deletedName = AppState.cardsDB[delId].recipientName;
                     delete AppState.cardsDB[delId];
-                    saveCardsDB();
+                    await saveCardsDB();
                     renderStudioCardList();
                     showToast(`Đã xóa thiệp của ${deletedName}!`, "fa-trash-can");
                 }
@@ -2428,7 +2431,6 @@
                 goToCardStage(3);
             });
 
-            // Nút Xem Lại ở Giai đoạn 3
             document.getElementById("replay-stage-3-btn").addEventListener("click", () => {
                 SoundEngine.playClick();
                 ThreeUniverse.startCardSequence(AppState.activeCard);
