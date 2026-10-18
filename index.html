@@ -904,15 +904,29 @@
     </div>
 
     <!-- =======================================================================
-         JAVASCRIPT ENGINE
+         JAVASCRIPT ENGINE (FIREBASE REALTIME DATABASE INTEGRATION)
     ======================================================================== -->
-    <script>
-        /**************************************************************
-         * 1. PRESETS & DATABASE ENGINE (CLOUD SYNC + LOCAL FALLBACK)
-         **************************************************************/
-        const STORAGE_KEY = "cosmic_cards_v6_db";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCLa-I1QwRGNDGyn_Tk1GvJSW_3F03GqNI",
+            authDomain: "vuive-1a57f.firebaseapp.com",
+            databaseURL: "https://vuive-1a57f-default-rtdb.firebaseio.com", // URL Realtime Database
+            projectId: "vuive-1a57f",
+            storageBucket: "vuive-1a57f.firebasestorage.app",
+            messagingSenderId: "919176396847",
+            appId: "1:919176396847:web:7e374940d3600f4ed446da",
+            measurementId: "G-RCE1LNDYNP"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const DB_PATH = "app_data/global_cards";
+
+        const STORAGE_KEY = "cosmic_cards_v9_db";
         const ADMIN_PASSWORD = "thuan2810";
-        const CLOUD_API_URL = "https://jsonblob.com/api/jsonBlob"; // Free Cloud DB for cross-device sync
 
         const SAMPLE_20_10_PHOTOS = [
             "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
@@ -1036,84 +1050,40 @@
             wishSliderTimer: null,
             wishProgressTimer: null,
             wishProgressElapsed: 0,
-            pendingDeleteCardId: null,
-            cloudDBId: null
+            pendingDeleteCardId: null
         };
 
-        // CLOUD DATABASE FUNCTIONS
+        // FIREBASE REALTIME DATABASE FUNCTIONS
         async function loadCardsDB() {
-            const params = new URLSearchParams(window.location.search);
-            AppState.cloudDBId = params.get('db');
-
-            if (AppState.cloudDBId) {
-                try {
-                    const res = await fetch(`${CLOUD_API_URL}/${AppState.cloudDBId}`, {
-                        headers: { 'Accept': 'application/json' }
-                    });
-                    if (res.ok) {
-                        const data = await res.json();
-                        AppState.cardsDB = { ...createDefaultCardsDB(), ...data };
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cardsDB));
-                        return;
-                    }
-                } catch (e) {
-                    console.error("Lỗi tải DB từ Cloud", e);
-                }
-            }
-
-            // Local Fallback
             try {
+                const snapshot = await get(ref(db, DB_PATH));
+                if (snapshot.exists()) {
+                    AppState.cardsDB = { ...createDefaultCardsDB(), ...snapshot.val() };
+                } else {
+                    AppState.cardsDB = createDefaultCardsDB();
+                    await set(ref(db, DB_PATH), AppState.cardsDB);
+                    showToast("Đã khởi tạo CSDL Firebase!", "fa-cloud");
+                }
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cardsDB));
+            } catch (e) {
+                console.error("Lỗi tải DB từ Firebase", e);
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     AppState.cardsDB = { ...createDefaultCardsDB(), ...JSON.parse(raw) };
                 } else {
                     AppState.cardsDB = createDefaultCardsDB();
                 }
-            } catch (e) {
-                AppState.cardsDB = createDefaultCardsDB();
-            }
-
-            // Create new Cloud DB if no db param exists
-            if (!AppState.cloudDBId) {
-                try {
-                    const res = await fetch(CLOUD_API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify(AppState.cardsDB)
-                    });
-                    if (res.ok) {
-                        const location = res.headers.get('Location');
-                        if (location) {
-                            AppState.cloudDBId = location.split('/').pop();
-                            const url = new URL(window.location);
-                            url.searchParams.set('db', AppState.cloudDBId);
-                            window.history.replaceState({}, '', url);
-                            showToast("Đã kết nối CSDL đám mây!", "fa-cloud");
-                        }
-                    }
-                } catch (e) {
-                    console.error("Lỗi tạo DB trên Cloud", e);
-                }
+                showToast("Không kết nối được Firebase. Đang dùng Offline.", "fa-triangle-exclamation");
             }
         }
 
         async function saveCardsDB() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cardsDB));
             try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cardsDB));
+                await set(ref(db, DB_PATH), AppState.cardsDB);
             } catch (e) {
-                showToast("Dung lượng vượt quá giới hạn lưu trữ!", "fa-triangle-exclamation");
-            }
-
-            if (AppState.cloudDBId) {
-                try {
-                    await fetch(`${CLOUD_API_URL}/${AppState.cloudDBId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify(AppState.cardsDB)
-                    });
-                } catch (e) {
-                    console.error("Lỗi lưu DB lên Cloud", e);
-                }
+                console.error("Lỗi lưu DB lên Firebase", e);
+                showToast("Lỗi lưu dữ liệu lên Firebase!", "fa-triangle-exclamation");
             }
         }
 
@@ -1360,8 +1330,8 @@
             renderer: null,
             particles: null,
             geometry: null,
-            particleCount: 8500,
-            shapeParticleLimit: 5500,
+            particleCount: 9000,
+            shapeParticleLimit: 6500,
             currentPositions: null,
             targetPositions: null,
             baseColors: null,
@@ -1433,14 +1403,14 @@
                 const sCtx = spriteCanvas.getContext("2d");
                 const grad = sCtx.createRadialGradient(32, 32, 1, 32, 32, 30);
                 grad.addColorStop(0, "rgba(255,255,255,1.0)");
-                grad.addColorStop(0.4, "rgba(255,255,255,0.6)");
+                grad.addColorStop(0.4, "rgba(255,255,255,0.7)");
                 grad.addColorStop(1, "rgba(0,0,0,0)");
                 sCtx.fillStyle = grad;
                 sCtx.fillRect(0, 0, 64, 64);
                 const particleTexture = new THREE.CanvasTexture(spriteCanvas);
 
                 const material = new THREE.PointsMaterial({
-                    size: 5.2,
+                    size: 5.5,
                     map: particleTexture,
                     vertexColors: true,
                     transparent: true,
@@ -1538,9 +1508,9 @@
                     }
 
                     if (i < this.shapeParticleLimit) {
-                        this.baseColors[i3] = Math.min(1.0, tempColor.r * 1.3);
-                        this.baseColors[i3 + 1] = Math.min(1.0, tempColor.g * 1.3);
-                        this.baseColors[i3 + 2] = Math.min(1.0, tempColor.b * 1.3);
+                        this.baseColors[i3] = Math.min(1.0, tempColor.r * 1.5);
+                        this.baseColors[i3 + 1] = Math.min(1.0, tempColor.g * 1.5);
+                        this.baseColors[i3 + 2] = Math.min(1.0, tempColor.b * 1.5);
                     } else {
                         this.baseColors[i3] = tempColor.r * 0.8;
                         this.baseColors[i3 + 1] = tempColor.g * 0.8;
@@ -1631,7 +1601,7 @@
 
                 const imgData = ctx.getImageData(0, 0, width, height).data;
                 const validPoints = [];
-                const step = 3;
+                const step = 2; 
 
                 for (let y = 0; y < height; y += step) {
                     for (let x = 0; x < width; x += step) {
@@ -1651,14 +1621,14 @@
                     validPoints[j] = temp;
                 }
 
-                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 2500));
+                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 3000));
                 for (let i = 0; i < activeShapeCount; i++) {
                     const i3 = i * 3;
                     if (validPoints.length > 0) {
                         const pt = validPoints[i % validPoints.length];
-                        this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 1.5;
-                        this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 1.5;
-                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 15;
+                        this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 1.2;
+                        this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 1.2;
+                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 12;
                     }
                 }
 
@@ -1666,24 +1636,21 @@
             },
 
             morphToHeart3D() {
-                // Rejection Sampling to fill a solid 3D Heart Equation
                 let pointsGenerated = 0;
                 const scale = 22; 
                 
                 while (pointsGenerated < this.shapeParticleLimit) {
                     const i3 = pointsGenerated * 3;
                     
-                    // Bounding box
-                    const x = (Math.random() - 0.5) * 2.4;
-                    const y = (Math.random() - 0.5) * 2.4;
-                    const z = (Math.random() - 0.5) * 2.4;
+                    const x = (Math.random() - 0.5) * 3.0;
+                    const y = (Math.random() - 0.5) * 3.0;
+                    const z = (Math.random() - 0.5) * 3.0;
                     
                     const x2 = x * x;
                     const y2 = y * y;
                     const z2 = z * z;
                     const y3 = y2 * y;
                     
-                    // Implicit 3D Heart Equation
                     const val = Math.pow(x2 + 2.25 * z2 + y2 - 1, 3) - x2 * y3 - 0.1125 * z2 * y3;
                     
                     if (val <= 0) {
@@ -1772,7 +1739,7 @@
                         pos[i3 + 2] += (this.targetPositions[i3 + 2] - pos[i3 + 2]) * 0.04;
                     }
 
-                    const twinkle = 0.8 + 0.2 * Math.sin(elapsedTime * 7.2 + phase * 3.0);
+                    const twinkle = 0.85 + 0.15 * Math.sin(elapsedTime * 7.2 + phase * 3.0);
                     col[i3] = this.baseColors[i3] * twinkle;
                     col[i3 + 1] = this.baseColors[i3 + 1] * twinkle;
                     col[i3 + 2] = this.baseColors[i3 + 2] * twinkle;
@@ -2167,7 +2134,7 @@
          * EVENT LISTENERS & INITIALIZATION
          **************************************************************/
         window.addEventListener("DOMContentLoaded", async () => {
-            await loadCardsDB(); // Wait for cloud sync or fallback
+            await loadCardsDB(); // Tải dữ liệu từ Firebase Realtime DB
             initAmbientStars();
 
             const params = new URLSearchParams(window.location.search);
@@ -2286,7 +2253,6 @@
                 e.target.value = "";
             });
 
-            // ASYNC EVENT LISTENERS FOR CLOUD SAVE
             document.getElementById("save-card-btn").addEventListener("click", async () => {
                 const card = collectStudioFormCard();
                 AppState.cardsDB[card.recipientId] = card;
@@ -2309,7 +2275,7 @@
                 AppState.cardsDB[card.recipientId] = card;
                 await saveCardsDB();
 
-                const shareUrl = `${window.location.origin}${window.location.pathname}?to=${encodeURIComponent(card.recipientId)}&db=${AppState.cloudDBId || ''}`;
+                const shareUrl = `${window.location.origin}${window.location.pathname}?to=${encodeURIComponent(card.recipientId)}`;
                 const tempInput = document.createElement("textarea");
                 tempInput.value = shareUrl;
                 document.body.appendChild(tempInput);
