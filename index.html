@@ -1178,6 +1178,59 @@ const PIANO_ACCOMPANIMENT = (() => {
     return notes;
 })();
 
+const PIANO_NOTE_FREQ = {
+    'A1': 55.00, 'C2': 65.41, 'D2': 73.42, 'E2': 82.41, 'F2': 87.31, 'G2': 98.00, 'A2': 110.00, 'B2': 123.47,
+    'C3': 130.81, 'D3': 146.83, 'E3': 164.81, 'F3': 174.61, 'G3': 196.00, 'A3': 220.00, 'B3': 246.94,
+    'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+    'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 'G5': 783.99, 'A5': 880.00, 'B5': 987.77,
+    'C6': 1046.50, 'D6': 1174.66, 'E6': 1318.51,
+};
+
+const PIANO_BPM = 66; // Chậm hơn một chút để tăng cảm giác da diết
+const PIANO_BEAT_SEC = 60 / PIANO_BPM;
+
+// Cấu trúc 16 ô nhịp, mỗi ô 4 phách (64 phách tổng cộng)
+// Vòng hợp âm dựa trên intro: Am - G - F - G | Am - G - F - Em
+const PIANO_SONG_STRUCTURE = [
+    // Phần 1: Giới thiệu (8 bars) - Xây dựng không gian
+    { chord: 'Am', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 },
+    { chord: 'Am', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'F', beats: 4 }, { chord: 'Em', beats: 4 },
+    // Phần 2: Phát triển (8 bars) - Thêm giai điệu và hợp âm rải dày hơn
+    { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'Em', beats: 4 }, { chord: 'Am', beats: 4 },
+    { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'C', beats: 4 }, { chord: 'G', beats: 4 },
+];
+
+// Định nghĩa các nốt trong hợp âm để tự động tạo arpeggio
+const PIANO_CHORD_NOTES = {
+    'Am': { root: 'A2', third: 'C4', fifth: 'E4', octave: 'A3' },
+    'G':  { root: 'G2', third: 'B3', fifth: 'D4', octave: 'G3' },
+    'F':  { root: 'F2', third: 'A3', fifth: 'C4', octave: 'F3' },
+    'Em': { root: 'E2', third: 'G3', fifth: 'B3', octave: 'E3' },
+    'C':  { root: 'C3', third: 'E4', fifth: 'G4', octave: 'C4' },
+};
+
+// Giai điệu tay phải được soạn thủ công, có nốt dài, nốt luyến và cao trào
+const PIANO_MELODY = [
+    // --- Phần 1: Giai điệu chính, da diết ---
+    ['E5', 0, 2, 0.14], ['D5', 2, 1, 0.12], ['C5', 3, 1, 0.12],
+    ['B4', 4, 2, 0.13], ['A4', 6, 2, 0.12],
+    ['C5', 8, 2, 0.13], ['E5', 10, 2, 0.14],
+    ['D5', 12, 4, 0.13],
+    ['E5', 16, 2, 0.14], ['G5', 18, 2, 0.15],
+    ['F5', 20, 2, 0.14], ['E5', 22, 2, 0.13],
+    ['D5', 24, 2, 0.13], ['C5', 26, 2, 0.12],
+    ['B4', 28, 4, 0.12],
+    // --- Phần 2: Cao trào, giai điệu vút cao ---
+    ['A5', 32, 2, 0.15], ['G5', 34, 2, 0.14],
+    ['F5', 36, 2, 0.14], ['E5', 38, 2, 0.13],
+    ['D5', 40, 2, 0.13], ['E5', 42, 2, 0.14],
+    ['C5', 44, 4, 0.13],
+    ['F5', 48, 2, 0.14], ['A5', 50, 2, 0.15],
+    ['G5', 52, 2, 0.14], ['E5', 54, 2, 0.13],
+    ['D5', 56, 2, 0.13], ['C5', 58, 2, 0.12],
+    ['G4', 60, 4, 0.12],
+];
+
 const SoundEngine = {
     ctx: null,
     muted: false,
@@ -1215,7 +1268,7 @@ const SoundEngine = {
         });
     },
 
-    // ---- Tổng hợp tiếng piano từ nhiều partials + envelope mềm mại ----
+    // Tổng hợp một nốt piano với 4 lớp hài âm
     playPianoNote(noteName, startTime, duration, velocity) {
         if (!this.ctx || !this.bgmGain) return;
         const freq = PIANO_NOTE_FREQ[noteName];
@@ -1228,9 +1281,9 @@ const SoundEngine = {
 
         const partials = [
             { ratio: 1,    gain: 1.00, decay: 1.00 },
-            { ratio: 2,    gain: 0.32, decay: 0.65 },
-            { ratio: 3,    gain: 0.14, decay: 0.45 },
-            { ratio: 4.01, gain: 0.06, decay: 0.30 },
+            { ratio: 2,    gain: 0.28, decay: 0.60 },
+            { ratio: 3,    gain: 0.12, decay: 0.40 },
+            { ratio: 4.01, gain: 0.05, decay: 0.25 },
         ];
 
         partials.forEach(p => {
@@ -1238,10 +1291,10 @@ const SoundEngine = {
             osc.type = 'sine';
             osc.frequency.value = freq * p.ratio;
             const g = ctx.createGain();
-            const pDur = Math.max(0.15, duration * p.decay);
+            const pDur = Math.max(0.2, duration * p.decay);
             g.gain.setValueAtTime(0, startTime);
-            g.gain.linearRampToValueAtTime(p.gain, startTime + 0.005);
-            g.gain.exponentialRampToValueAtTime(p.gain * 0.30, startTime + 0.12);
+            g.gain.linearRampToValueAtTime(p.gain, startTime + 0.006);
+            g.gain.exponentialRampToValueAtTime(p.gain * 0.25, startTime + 0.15);
             g.gain.exponentialRampToValueAtTime(0.0001, startTime + pDur);
             osc.connect(g);
             g.connect(noteGain);
@@ -1250,18 +1303,47 @@ const SoundEngine = {
         });
     },
 
-    // ---- Lên lịch toàn bộ bản nhạc (có humanize nhẹ) ----
+    // Tạo arpeggio (hợp âm rải) cho tay trái
+    scheduleArpeggio(chordName, startBeat, beatsDuration, baseVelocity) {
+        const chord = PIANO_CHORD_NOTES[chordName];
+        if (!chord) return;
+        const bd = PIANO_BEAT_SEC;
+        const startTime = this.ctx.currentTime + 0.15 + startBeat * bd; // Đã có offset ban đầu
+
+        // Mẫu arpeggio: Root - Fifth - Octave - Third - Fifth - Octave
+        const pattern = [chord.root, chord.fifth, chord.octave, chord.third, chord.fifth, chord.octave];
+        const noteDuration = (beatsDuration * bd) / pattern.length;
+
+        pattern.forEach((note, idx) => {
+            const noteTime = startTime + idx * noteDuration;
+            const vel = baseVelocity * (0.8 + Math.random() * 0.3);
+            this.playPianoNote(note, noteTime, noteDuration * 0.9, vel);
+        });
+
+        // Thêm một lớp hợp âm nền (pad) nhẹ để tạo không gian
+        const padTime = startTime + beatsDuration * bd * 0.1;
+        [chord.root, chord.third, chord.fifth].forEach(n => {
+            this.playPianoNote(n, padTime, beatsDuration * bd * 0.8, baseVelocity * 0.4);
+        });
+    },
+
+    // Lên lịch toàn bộ bản nhạc
     scheduleSong(startTime) {
         const bd = PIANO_BEAT_SEC;
-        const schedule = (list, isMelody) => {
-            list.forEach(([note, beat, dur, vel]) => {
-                const humanVel = vel * (isMelody ? (0.92 + Math.random() * 0.16) : (0.9 + Math.random() * 0.2));
-                const humanTime = startTime + beat * bd + (Math.random() - 0.5) * (isMelody ? 0.008 : 0.012);
-                this.playPianoNote(note, humanTime, dur * bd, humanVel);
-            });
-        };
-        schedule(PIANO_MELODY, true);
-        schedule(PIANO_ACCOMPANIMENT, false);
+
+        // 1. Lên lịch giai điệu tay phải
+        PIANO_MELODY.forEach(([note, beat, dur, vel]) => {
+            const humanVel = vel * (0.9 + Math.random() * 0.2);
+            const humanTime = startTime + beat * bd + (Math.random() - 0.5) * 0.01;
+            this.playPianoNote(note, humanTime, dur * bd, humanVel);
+        });
+
+        // 2. Lên lịch arpeggio tay trái dựa trên cấu trúc hợp âm
+        let currentBeat = 0;
+        PIANO_SONG_STRUCTURE.forEach(section => {
+            this.scheduleArpeggio(section.chord, currentBeat, section.beats, 0.08);
+            currentBeat += section.beats;
+        });
     },
 
     startBGM() {
@@ -1271,18 +1353,20 @@ const SoundEngine = {
 
         if (!this.bgmGain) {
             this.bgmGain = this.ctx.createGain();
-            this.bgmGain.gain.value = this.muted ? 0 : 0.5;
+            this.bgmGain.gain.value = this.muted ? 0 : 0.45; // Giảm nhẹ âm lượng tổng
             this.bgmGain.connect(this.ctx.destination);
         }
         this.bgmPlaying = true;
 
         const loop = () => {
             if (!this.bgmPlaying) return;
-            const startTime = this.ctx.currentTime + 0.15;
+            const startTime = this.ctx.currentTime + 0.1;
             this.scheduleSong(startTime);
-            const totalDur = PIANO_TOTAL_BEATS * PIANO_BEAT_SEC;
-            // lên lịch vòng kế tiếp trước khi vòng hiện tại kết thúc ~1.5 giây
-            this.bgmTimer = setTimeout(loop, (totalDur - 1.5) * 1000);
+
+            const totalBeats = PIANO_SONG_STRUCTURE.reduce((sum, s) => sum + s.beats, 0);
+            const totalDur = totalBeats * PIANO_BEAT_SEC;
+            // Lên lịch vòng kế tiếp, chồng lấn nhẹ để không bị khoảng lặng
+            this.bgmTimer = setTimeout(loop, (totalDur - 2) * 1000);
         };
         loop();
     },
@@ -1304,13 +1388,12 @@ const SoundEngine = {
         });
         showToast(this.muted ? "Đã tắt âm thanh" : "Đã bật âm thanh", this.muted ? "fa-volume-xmark" : "fa-volume-high");
 
-        // Tắt/mở BGM piano mượt mà
         if (this.bgmGain && this.ctx) {
-            this.bgmGain.gain.setTargetAtTime(this.muted ? 0 : 0.5, this.ctx.currentTime, 0.12);
+            this.bgmGain.gain.setTargetAtTime(this.muted ? 0 : 0.45, this.ctx.currentTime, 0.15);
         }
     }
-};
-        /**************************************************************
+};   
+     /**************************************************************
          * 3. AMBIENT STARFIELD & GIFT BOX BURST FX
          **************************************************************/
         function initAmbientStars() {
