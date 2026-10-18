@@ -168,7 +168,7 @@
             0% { transform: translateY(110vh) translateX(0); opacity: 0; }
             15% { opacity: 0.85; }
             85% { opacity: 0.85; }
-            100% { transform: translateY(-10vh) translateX(40px); opacity: 0; }
+            100% { transform: translateY(-10vh) translateX(var(--tx, 40px)); opacity: 0; }
         }
         .floating-wish-item {
             position: fixed;
@@ -184,6 +184,10 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             animation: floatWishBg 9s linear infinite;
             z-index: 5;
+            max-width: 85vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Custom Scrollbar */
@@ -1965,7 +1969,15 @@
                     const el = document.createElement("div");
                     el.className = "floating-wish-item";
                     el.textContent = wishText;
-                    el.style.left = `${Math.random() * 75 + 10}vw`;
+                    
+                    if (Math.random() > 0.5) {
+                        el.style.left = `${Math.random() * 15 + 2}vw`;
+                        el.style.setProperty('--tx', '40px');
+                    } else {
+                        el.style.right = `${Math.random() * 15 + 2}vw`;
+                        el.style.setProperty('--tx', '-40px');
+                    }
+                    
                     el.style.animationDuration = `${Math.random() * 4 + 7}s`;
                     container.appendChild(el);
 
