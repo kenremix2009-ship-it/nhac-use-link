@@ -913,7 +913,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCLa-I1QwRGNDGyn_Tk1GvJSW_3F03GqNI",
             authDomain: "vuive-1a57f.firebaseapp.com",
-            databaseURL: "https://vuive-1a57f-default-rtdb.firebaseio.com", // URL Realtime Database
+            databaseURL: "https://vuive-1a57f-default-rtdb.firebaseio.com",
             projectId: "vuive-1a57f",
             storageBucket: "vuive-1a57f.firebasestorage.app",
             messagingSenderId: "919176396847",
@@ -1053,7 +1053,6 @@
             pendingDeleteCardId: null
         };
 
-        // FIREBASE REALTIME DATABASE FUNCTIONS
         async function loadCardsDB() {
             try {
                 const snapshot = await get(ref(db, DB_PATH));
@@ -1088,313 +1087,223 @@
         }
 
         /**************************************************************
-         * 2. AUDIO & TOAST UTILITIES
+         * PIANO BGM ENGINE - HÒA ÂM ĐA LỚP (Lấy cảm hứng từ intro piano)
          **************************************************************/
         const PIANO_NOTE_FREQ = {
-    'C2': 65.41, 'D2': 73.42, 'E2': 82.41, 'F2': 87.31, 'G2': 98.00, 'A2': 110.00, 'B2': 123.47,
-    'C3': 130.81, 'D3': 146.83, 'E3': 164.81, 'F3': 174.61, 'G3': 196.00, 'A3': 220.00, 'B3': 246.94,
-    'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
-    'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 'G5': 783.99, 'A5': 880.00, 'B5': 987.77,
-    'C6': 1046.50, 'D6': 1174.66, 'E6': 1318.51,
-};
+            'A1': 55.00, 'C2': 65.41, 'D2': 73.42, 'E2': 82.41, 'F2': 87.31, 'G2': 98.00, 'A2': 110.00, 'B2': 123.47,
+            'C3': 130.81, 'D3': 146.83, 'E3': 164.81, 'F3': 174.61, 'G3': 196.00, 'A3': 220.00, 'B3': 246.94,
+            'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+            'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 'G5': 783.99, 'A5': 880.00, 'B5': 987.77,
+            'C6': 1046.50, 'D6': 1174.66, 'E6': 1318.51,
+        };
 
-const PIANO_BPM = 68;
-const PIANO_BEAT_SEC = 60 / PIANO_BPM;
-const PIANO_TOTAL_BEATS = 32 * 4;
+        const PIANO_BPM = 66;
+        const PIANO_BEAT_SEC = 60 / PIANO_BPM;
 
-// Vòng hợp âm 32 ô nhịp (mỗi ô 4 phách)
-const PIANO_CHORDS = [
-    // Đoạn A (1-8) — chủ đề chính, da diết
-    'Am','F','C','G','Am','F','C','G',
-    // Đoạn B (9-16) — phát triển, cao trào nhẹ
-    'F','G','Em','Am','F','G','C','G',
-    // Đoạn C (17-24) — cao trào rực rỡ
-    'Am','F','C','G','Dm','Em','F','G',
-    // Đoạn D (25-32) — lắng đọng và kết
-    'F','G','C','Am','F','G','C','C',
-];
-
-const PIANO_CHORD_DEF = {
-    'Am': { root:'A', third:'C', fifth:'E' },
-    'F':  { root:'F', third:'A', fifth:'C' },
-    'C':  { root:'C', third:'E', fifth:'G' },
-    'G':  { root:'G', third:'B', fifth:'D' },
-    'Em': { root:'E', third:'G', fifth:'B' },
-    'Dm': { root:'D', third:'F', fifth:'A' },
-};
-
-// Giai điệu tay phải — [nốt, phách bắt đầu, độ dài (phách), cường độ]
-const PIANO_MELODY = [
-    // Đoạn A
-    ['E5',0,1,0.15], ['C5',1,1,0.13], ['A4',2,2,0.13],
-    ['F5',4,1,0.15], ['E5',5,1,0.13], ['C5',6,2,0.13],
-    ['E5',8,1,0.15], ['G5',9,1,0.14], ['E5',10,1,0.13], ['D5',11,1,0.13],
-    ['D5',12,2,0.14], ['B4',14,2,0.13],
-    ['E5',16,1,0.15], ['C5',17,1,0.13], ['A4',18,2,0.13],
-    ['F5',20,1,0.15], ['A5',21,1,0.14], ['G5',22,2,0.14],
-    ['G5',24,1,0.14], ['E5',25,1,0.13], ['D5',26,2,0.13],
-    ['B4',28,2,0.13], ['D5',30,2,0.13],
-    // Đoạn B
-    ['A5',32,1,0.15], ['G5',33,1,0.14], ['F5',34,2,0.14],
-    ['G5',36,1,0.14], ['F5',37,1,0.13], ['D5',38,2,0.13],
-    ['E5',40,1,0.15], ['G5',41,1,0.14], ['B5',42,2,0.15],
-    ['A5',44,4,0.15],
-    ['F5',48,1,0.14], ['E5',49,1,0.13], ['C5',50,2,0.13],
-    ['D5',52,1,0.14], ['E5',53,1,0.13], ['G5',54,2,0.14],
-    ['E5',56,1,0.13], ['D5',57,1,0.13], ['C5',58,2,0.13],
-    ['B4',60,2,0.13], ['D5',62,2,0.13],
-    // Đoạn C — cao trào
-    ['E5',64,1,0.15], ['A5',65,1,0.14], ['G5',66,2,0.14],
-    ['F5',68,1,0.15], ['A5',69,1,0.14], ['C6',70,2,0.15],
-    ['E5',72,1,0.14], ['G5',73,1,0.14], ['E5',74,2,0.13],
-    ['D5',76,1,0.13], ['B4',77,1,0.12], ['G4',78,2,0.12],
-    ['D5',80,1,0.14], ['F5',81,1,0.14], ['A5',82,2,0.15],
-    ['E5',84,1,0.14], ['G5',85,1,0.14], ['B5',86,2,0.15],
-    ['A5',88,1,0.15], ['G5',89,1,0.14], ['F5',90,2,0.14],
-    ['G5',92,2,0.14], ['D5',94,2,0.13],
-    // Đoạn D — lắng đọng
-    ['F5',96,1,0.14], ['E5',97,1,0.13], ['C5',98,2,0.13],
-    ['D5',100,1,0.13], ['E5',101,1,0.13], ['G5',102,2,0.14],
-    ['E5',104,1,0.13], ['G5',105,1,0.14], ['C6',106,2,0.15],
-    ['A5',108,4,0.15],
-    ['C5',112,1,0.12], ['A4',113,1,0.12], ['F4',114,2,0.11],
-    ['B4',116,1,0.12], ['D5',117,1,0.12], ['G5',118,2,0.13],
-    ['E5',120,1,0.12], ['D5',121,1,0.12], ['C5',122,2,0.12],
-    ['C5',124,4,0.13],
-];
-
-// Đệm tay trái kiểu Alberti — tự sinh từ vòng hợp âm
-const PIANO_ACCOMPANIMENT = (() => {
-    const notes = [];
-    PIANO_CHORDS.forEach((chordName, barIdx) => {
-        const barStart = barIdx * 4;
-        const c = PIANO_CHORD_DEF[chordName];
-        if (!c) return;
-        notes.push([c.root + '2',   barStart,     3.8, 0.10]); // bass nốt gốc
-        notes.push([c.fifth + '3',  barStart + 1, 0.9, 0.05]); // hợp âm rải
-        notes.push([c.root + '3',   barStart + 2, 0.9, 0.05]);
-        notes.push([c.third + '4',  barStart + 3, 0.9, 0.05]);
-    });
-    return notes;
-})();
-
-const PIANO_NOTE_FREQ = {
-    'A1': 55.00, 'C2': 65.41, 'D2': 73.42, 'E2': 82.41, 'F2': 87.31, 'G2': 98.00, 'A2': 110.00, 'B2': 123.47,
-    'C3': 130.81, 'D3': 146.83, 'E3': 164.81, 'F3': 174.61, 'G3': 196.00, 'A3': 220.00, 'B3': 246.94,
-    'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
-    'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 'G5': 783.99, 'A5': 880.00, 'B5': 987.77,
-    'C6': 1046.50, 'D6': 1174.66, 'E6': 1318.51,
-};
-
-const PIANO_BPM = 66; // Chậm hơn một chút để tăng cảm giác da diết
-const PIANO_BEAT_SEC = 60 / PIANO_BPM;
-
-// Cấu trúc 16 ô nhịp, mỗi ô 4 phách (64 phách tổng cộng)
-// Vòng hợp âm dựa trên intro: Am - G - F - G | Am - G - F - Em
-const PIANO_SONG_STRUCTURE = [
-    // Phần 1: Giới thiệu (8 bars) - Xây dựng không gian
-    { chord: 'Am', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 },
-    { chord: 'Am', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'F', beats: 4 }, { chord: 'Em', beats: 4 },
-    // Phần 2: Phát triển (8 bars) - Thêm giai điệu và hợp âm rải dày hơn
-    { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'Em', beats: 4 }, { chord: 'Am', beats: 4 },
-    { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'C', beats: 4 }, { chord: 'G', beats: 4 },
-];
-
-// Định nghĩa các nốt trong hợp âm để tự động tạo arpeggio
-const PIANO_CHORD_NOTES = {
-    'Am': { root: 'A2', third: 'C4', fifth: 'E4', octave: 'A3' },
-    'G':  { root: 'G2', third: 'B3', fifth: 'D4', octave: 'G3' },
-    'F':  { root: 'F2', third: 'A3', fifth: 'C4', octave: 'F3' },
-    'Em': { root: 'E2', third: 'G3', fifth: 'B3', octave: 'E3' },
-    'C':  { root: 'C3', third: 'E4', fifth: 'G4', octave: 'C4' },
-};
-
-// Giai điệu tay phải được soạn thủ công, có nốt dài, nốt luyến và cao trào
-const PIANO_MELODY = [
-    // --- Phần 1: Giai điệu chính, da diết ---
-    ['E5', 0, 2, 0.14], ['D5', 2, 1, 0.12], ['C5', 3, 1, 0.12],
-    ['B4', 4, 2, 0.13], ['A4', 6, 2, 0.12],
-    ['C5', 8, 2, 0.13], ['E5', 10, 2, 0.14],
-    ['D5', 12, 4, 0.13],
-    ['E5', 16, 2, 0.14], ['G5', 18, 2, 0.15],
-    ['F5', 20, 2, 0.14], ['E5', 22, 2, 0.13],
-    ['D5', 24, 2, 0.13], ['C5', 26, 2, 0.12],
-    ['B4', 28, 4, 0.12],
-    // --- Phần 2: Cao trào, giai điệu vút cao ---
-    ['A5', 32, 2, 0.15], ['G5', 34, 2, 0.14],
-    ['F5', 36, 2, 0.14], ['E5', 38, 2, 0.13],
-    ['D5', 40, 2, 0.13], ['E5', 42, 2, 0.14],
-    ['C5', 44, 4, 0.13],
-    ['F5', 48, 2, 0.14], ['A5', 50, 2, 0.15],
-    ['G5', 52, 2, 0.14], ['E5', 54, 2, 0.13],
-    ['D5', 56, 2, 0.13], ['C5', 58, 2, 0.12],
-    ['G4', 60, 4, 0.12],
-];
-
-const SoundEngine = {
-    ctx: null,
-    muted: false,
-    bgmTimer: null,
-    bgmPlaying: false,
-    bgmGain: null,
-    init() {
-        if (!this.ctx) {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if (AudioCtx) this.ctx = new AudioCtx();
-        }
-        if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
-    },
-    playTone(freq, duration = 0.15, type = "sine", vol = 0.08) {
-        if (this.muted) return;
-        this.init();
-        if (!this.ctx) return;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + duration);
-    },
-    playClick() { this.playTone(620, 0.1, "triangle", 0.08); },
-    playDodge() { this.playTone(340 + Math.random() * 280, 0.12, "sine", 0.07); },
-    playAngry() { this.playTone(180, 0.25, "sawtooth", 0.12); },
-    playCelebration() {
-        [523.25, 659.25, 783.99, 1046.5].forEach((n, idx) => {
-            setTimeout(() => this.playTone(n, 0.32, "triangle", 0.1), idx * 90);
-        });
-    },
-
-    // Tổng hợp một nốt piano với 4 lớp hài âm
-    playPianoNote(noteName, startTime, duration, velocity) {
-        if (!this.ctx || !this.bgmGain) return;
-        const freq = PIANO_NOTE_FREQ[noteName];
-        if (!freq) return;
-        const ctx = this.ctx;
-
-        const noteGain = ctx.createGain();
-        noteGain.gain.value = velocity;
-        noteGain.connect(this.bgmGain);
-
-        const partials = [
-            { ratio: 1,    gain: 1.00, decay: 1.00 },
-            { ratio: 2,    gain: 0.28, decay: 0.60 },
-            { ratio: 3,    gain: 0.12, decay: 0.40 },
-            { ratio: 4.01, gain: 0.05, decay: 0.25 },
+        const PIANO_SONG_STRUCTURE = [
+            { chord: 'Am', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 },
+            { chord: 'Am', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'F', beats: 4 }, { chord: 'Em', beats: 4 },
+            { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'Em', beats: 4 }, { chord: 'Am', beats: 4 },
+            { chord: 'F', beats: 4 }, { chord: 'G', beats: 4 }, { chord: 'C', beats: 4 }, { chord: 'G', beats: 4 },
         ];
 
-        partials.forEach(p => {
-            const osc = ctx.createOscillator();
-            osc.type = 'sine';
-            osc.frequency.value = freq * p.ratio;
-            const g = ctx.createGain();
-            const pDur = Math.max(0.2, duration * p.decay);
-            g.gain.setValueAtTime(0, startTime);
-            g.gain.linearRampToValueAtTime(p.gain, startTime + 0.006);
-            g.gain.exponentialRampToValueAtTime(p.gain * 0.25, startTime + 0.15);
-            g.gain.exponentialRampToValueAtTime(0.0001, startTime + pDur);
-            osc.connect(g);
-            g.connect(noteGain);
-            osc.start(startTime);
-            osc.stop(startTime + pDur + 0.05);
-        });
-    },
-
-    // Tạo arpeggio (hợp âm rải) cho tay trái
-    scheduleArpeggio(chordName, startBeat, beatsDuration, baseVelocity) {
-        const chord = PIANO_CHORD_NOTES[chordName];
-        if (!chord) return;
-        const bd = PIANO_BEAT_SEC;
-        const startTime = this.ctx.currentTime + 0.15 + startBeat * bd; // Đã có offset ban đầu
-
-        // Mẫu arpeggio: Root - Fifth - Octave - Third - Fifth - Octave
-        const pattern = [chord.root, chord.fifth, chord.octave, chord.third, chord.fifth, chord.octave];
-        const noteDuration = (beatsDuration * bd) / pattern.length;
-
-        pattern.forEach((note, idx) => {
-            const noteTime = startTime + idx * noteDuration;
-            const vel = baseVelocity * (0.8 + Math.random() * 0.3);
-            this.playPianoNote(note, noteTime, noteDuration * 0.9, vel);
-        });
-
-        // Thêm một lớp hợp âm nền (pad) nhẹ để tạo không gian
-        const padTime = startTime + beatsDuration * bd * 0.1;
-        [chord.root, chord.third, chord.fifth].forEach(n => {
-            this.playPianoNote(n, padTime, beatsDuration * bd * 0.8, baseVelocity * 0.4);
-        });
-    },
-
-    // Lên lịch toàn bộ bản nhạc
-    scheduleSong(startTime) {
-        const bd = PIANO_BEAT_SEC;
-
-        // 1. Lên lịch giai điệu tay phải
-        PIANO_MELODY.forEach(([note, beat, dur, vel]) => {
-            const humanVel = vel * (0.9 + Math.random() * 0.2);
-            const humanTime = startTime + beat * bd + (Math.random() - 0.5) * 0.01;
-            this.playPianoNote(note, humanTime, dur * bd, humanVel);
-        });
-
-        // 2. Lên lịch arpeggio tay trái dựa trên cấu trúc hợp âm
-        let currentBeat = 0;
-        PIANO_SONG_STRUCTURE.forEach(section => {
-            this.scheduleArpeggio(section.chord, currentBeat, section.beats, 0.08);
-            currentBeat += section.beats;
-        });
-    },
-
-    startBGM() {
-        if (this.bgmPlaying) return;
-        this.init();
-        if (!this.ctx) return;
-
-        if (!this.bgmGain) {
-            this.bgmGain = this.ctx.createGain();
-            this.bgmGain.gain.value = this.muted ? 0 : 0.45; // Giảm nhẹ âm lượng tổng
-            this.bgmGain.connect(this.ctx.destination);
-        }
-        this.bgmPlaying = true;
-
-        const loop = () => {
-            if (!this.bgmPlaying) return;
-            const startTime = this.ctx.currentTime + 0.1;
-            this.scheduleSong(startTime);
-
-            const totalBeats = PIANO_SONG_STRUCTURE.reduce((sum, s) => sum + s.beats, 0);
-            const totalDur = totalBeats * PIANO_BEAT_SEC;
-            // Lên lịch vòng kế tiếp, chồng lấn nhẹ để không bị khoảng lặng
-            this.bgmTimer = setTimeout(loop, (totalDur - 2) * 1000);
+        const PIANO_CHORD_NOTES = {
+            'Am': { root: 'A2', third: 'C4', fifth: 'E4', octave: 'A3' },
+            'G':  { root: 'G2', third: 'B3', fifth: 'D4', octave: 'G3' },
+            'F':  { root: 'F2', third: 'A3', fifth: 'C4', octave: 'F3' },
+            'Em': { root: 'E2', third: 'G3', fifth: 'B3', octave: 'E3' },
+            'C':  { root: 'C3', third: 'E4', fifth: 'G4', octave: 'C4' },
         };
-        loop();
-    },
 
-    stopBGM() {
-        this.bgmPlaying = false;
-        if (this.bgmTimer) {
-            clearTimeout(this.bgmTimer);
-            this.bgmTimer = null;
+        const PIANO_MELODY = [
+            ['E5', 0, 2, 0.14], ['D5', 2, 1, 0.12], ['C5', 3, 1, 0.12],
+            ['B4', 4, 2, 0.13], ['A4', 6, 2, 0.12],
+            ['C5', 8, 2, 0.13], ['E5', 10, 2, 0.14],
+            ['D5', 12, 4, 0.13],
+            ['E5', 16, 2, 0.14], ['G5', 18, 2, 0.15],
+            ['F5', 20, 2, 0.14], ['E5', 22, 2, 0.13],
+            ['D5', 24, 2, 0.13], ['C5', 26, 2, 0.12],
+            ['B4', 28, 4, 0.12],
+            ['A5', 32, 2, 0.15], ['G5', 34, 2, 0.14],
+            ['F5', 36, 2, 0.14], ['E5', 38, 2, 0.13],
+            ['D5', 40, 2, 0.13], ['E5', 42, 2, 0.14],
+            ['C5', 44, 4, 0.13],
+            ['F5', 48, 2, 0.14], ['A5', 50, 2, 0.15],
+            ['G5', 52, 2, 0.14], ['E5', 54, 2, 0.13],
+            ['D5', 56, 2, 0.13], ['C5', 58, 2, 0.12],
+            ['G4', 60, 4, 0.12],
+        ];
+
+        const SoundEngine = {
+            ctx: null,
+            muted: false,
+            bgmTimer: null,
+            bgmPlaying: false,
+            bgmGain: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+                if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+            },
+            playTone(freq, duration = 0.15, type = "sine", vol = 0.08) {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            },
+            playClick() { this.playTone(620, 0.1, "triangle", 0.08); },
+            playDodge() { this.playTone(340 + Math.random() * 280, 0.12, "sine", 0.07); },
+            playAngry() { this.playTone(180, 0.25, "sawtooth", 0.12); },
+            playCelebration() {
+                [523.25, 659.25, 783.99, 1046.5].forEach((n, idx) => {
+                    setTimeout(() => this.playTone(n, 0.32, "triangle", 0.1), idx * 90);
+                });
+            },
+
+            playPianoNote(noteName, startTime, duration, velocity) {
+                if (!this.ctx || !this.bgmGain) return;
+                const freq = PIANO_NOTE_FREQ[noteName];
+                if (!freq) return;
+                const ctx = this.ctx;
+
+                const noteGain = ctx.createGain();
+                noteGain.gain.value = velocity;
+                noteGain.connect(this.bgmGain);
+
+                const partials = [
+                    { ratio: 1,    gain: 1.00, decay: 1.00 },
+                    { ratio: 2,    gain: 0.28, decay: 0.60 },
+                    { ratio: 3,    gain: 0.12, decay: 0.40 },
+                    { ratio: 4.01, gain: 0.05, decay: 0.25 },
+                ];
+
+                partials.forEach(p => {
+                    const osc = ctx.createOscillator();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq * p.ratio;
+                    const g = ctx.createGain();
+                    const pDur = Math.max(0.2, duration * p.decay);
+                    g.gain.setValueAtTime(0, startTime);
+                    g.gain.linearRampToValueAtTime(p.gain, startTime + 0.006);
+                    g.gain.exponentialRampToValueAtTime(p.gain * 0.25, startTime + 0.15);
+                    g.gain.exponentialRampToValueAtTime(0.0001, startTime + pDur);
+                    osc.connect(g);
+                    g.connect(noteGain);
+                    osc.start(startTime);
+                    osc.stop(startTime + pDur + 0.05);
+                });
+            },
+
+            scheduleArpeggio(chordName, startBeat, beatsDuration, baseVelocity) {
+                const chord = PIANO_CHORD_NOTES[chordName];
+                if (!chord) return;
+                const bd = PIANO_BEAT_SEC;
+                const startTime = this.ctx.currentTime + 0.15 + startBeat * bd;
+
+                const pattern = [chord.root, chord.fifth, chord.octave, chord.third, chord.fifth, chord.octave];
+                const noteDuration = (beatsDuration * bd) / pattern.length;
+
+                pattern.forEach((note, idx) => {
+                    const noteTime = startTime + idx * noteDuration;
+                    const vel = baseVelocity * (0.8 + Math.random() * 0.3);
+                    this.playPianoNote(note, noteTime, noteDuration * 0.9, vel);
+                });
+
+                const padTime = startTime + beatsDuration * bd * 0.1;
+                [chord.root, chord.third, chord.fifth].forEach(n => {
+                    this.playPianoNote(n, padTime, beatsDuration * bd * 0.8, baseVelocity * 0.4);
+                });
+            },
+
+            scheduleSong(startTime) {
+                const bd = PIANO_BEAT_SEC;
+
+                PIANO_MELODY.forEach(([note, beat, dur, vel]) => {
+                    const humanVel = vel * (0.9 + Math.random() * 0.2);
+                    const humanTime = startTime + beat * bd + (Math.random() - 0.5) * 0.01;
+                    this.playPianoNote(note, humanTime, dur * bd, humanVel);
+                });
+
+                let currentBeat = 0;
+                PIANO_SONG_STRUCTURE.forEach(section => {
+                    this.scheduleArpeggio(section.chord, currentBeat, section.beats, 0.08);
+                    currentBeat += section.beats;
+                });
+            },
+
+            startBGM() {
+                if (this.bgmPlaying) return;
+                this.init();
+                if (!this.ctx) return;
+
+                if (!this.bgmGain) {
+                    this.bgmGain = this.ctx.createGain();
+                    this.bgmGain.gain.value = this.muted ? 0 : 0.45;
+                    this.bgmGain.connect(this.ctx.destination);
+                }
+                this.bgmPlaying = true;
+
+                const loop = () => {
+                    if (!this.bgmPlaying) return;
+                    const startTime = this.ctx.currentTime + 0.1;
+                    this.scheduleSong(startTime);
+
+                    const totalBeats = PIANO_SONG_STRUCTURE.reduce((sum, s) => sum + s.beats, 0);
+                    const totalDur = totalBeats * PIANO_BEAT_SEC;
+                    this.bgmTimer = setTimeout(loop, (totalDur - 2) * 1000);
+                };
+                loop();
+            },
+
+            stopBGM() {
+                this.bgmPlaying = false;
+                if (this.bgmTimer) {
+                    clearTimeout(this.bgmTimer);
+                    this.bgmTimer = null;
+                }
+            },
+
+            toggleMute() {
+                this.muted = !this.muted;
+                const iconClass = this.muted ? "fa-solid fa-volume-xmark text-sm text-rose-400" : "fa-solid fa-volume-high text-sm text-cyan-300";
+                ['sound-toggle-home', 'sound-toggle-card'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = `<i class="${iconClass}"></i>`;
+                });
+                showToast(this.muted ? "Đã tắt âm thanh" : "Đã bật âm thanh", this.muted ? "fa-volume-xmark" : "fa-volume-high");
+
+                if (this.bgmGain && this.ctx) {
+                    this.bgmGain.gain.setTargetAtTime(this.muted ? 0 : 0.45, this.ctx.currentTime, 0.15);
+                }
+            }
+        };
+
+        function showToast(message, icon = "fa-sparkles") {
+            const box = document.getElementById("toast-box");
+            document.getElementById("toast-text").textContent = message;
+            document.getElementById("toast-icon").className = `fa-solid ${icon} text-pink-400`;
+            box.classList.remove("opacity-0", "-translate-y-3");
+            box.classList.add("opacity-100", "translate-y-0");
+            clearTimeout(box._hideTimer);
+            box._hideTimer = setTimeout(() => {
+                box.classList.add("opacity-0", "-translate-y-3");
+                box.classList.remove("opacity-100", "translate-y-0");
+            }, 2600);
         }
-    },
 
-    toggleMute() {
-        this.muted = !this.muted;
-        const iconClass = this.muted ? "fa-solid fa-volume-xmark text-sm text-rose-400" : "fa-solid fa-volume-high text-sm text-cyan-300";
-        ['sound-toggle-home', 'sound-toggle-card'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.innerHTML = `<i class="${iconClass}"></i>`;
-        });
-        showToast(this.muted ? "Đã tắt âm thanh" : "Đã bật âm thanh", this.muted ? "fa-volume-xmark" : "fa-volume-high");
-
-        if (this.bgmGain && this.ctx) {
-            this.bgmGain.gain.setTargetAtTime(this.muted ? 0 : 0.45, this.ctx.currentTime, 0.15);
-        }
-    }
-};   
-     /**************************************************************
-         * 3. AMBIENT STARFIELD & GIFT BOX BURST FX
+        /**************************************************************
+         * AMBIENT STARFIELD & GIFT BOX BURST FX
          **************************************************************/
         function initAmbientStars() {
             const canvas = document.getElementById("ambient-star-canvas");
@@ -1555,7 +1464,7 @@ const SoundEngine = {
         };
 
         /**************************************************************
-         * 4. STAGE 3: THREE.JS 3D PARTICLE UNIVERSE
+         * STAGE 3: THREE.JS 3D PARTICLE UNIVERSE
          **************************************************************/
         const ThreeUniverse = {
             initialized: false,
@@ -1564,8 +1473,8 @@ const SoundEngine = {
             renderer: null,
             particles: null,
             geometry: null,
-            particleCount: 9000, // Will be set dynamically on init
-            shapeParticleLimit: 6500, // Will be set dynamically on init
+            particleCount: 9000,
+            shapeParticleLimit: 6500,
             currentPositions: null,
             targetPositions: null,
             baseColors: null,
@@ -1587,7 +1496,7 @@ const SoundEngine = {
                 this.initialized = true;
 
                 const isMobile = window.innerWidth < 768;
-                this.particleCount = isMobile ? 6000 : 9000; // Tối ưu số lượng hạt trên mobile
+                this.particleCount = isMobile ? 6000 : 9000;
                 this.shapeParticleLimit = isMobile ? 4000 : 6500;
 
                 const container = document.getElementById("three-canvas-container");
@@ -1648,7 +1557,7 @@ const SoundEngine = {
                 const particleTexture = new THREE.CanvasTexture(spriteCanvas);
 
                 const material = new THREE.PointsMaterial({
-                    size: isMobile ? 4.5 : 5.5, // Hạt nhỏ hơn chút trên mobile cho đỡ rối
+                    size: isMobile ? 4.5 : 5.5,
                     map: particleTexture,
                     vertexColors: true,
                     transparent: true,
@@ -1822,7 +1731,7 @@ const SoundEngine = {
             morphToText(text) {
                 const canvas = document.createElement("canvas");
                 const width = 1024;
-                const height = 512; // Tăng chiều cao để chứa được nhiều dòng chữ
+                const height = 512;
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext("2d");
@@ -1830,19 +1739,17 @@ const SoundEngine = {
                 ctx.fillStyle = "#000000";
                 ctx.fillRect(0, 0, width, height);
 
-                // Tự động tính toán font size và xuống dòng (Word Wrap)
                 let fontSize = text.length > 20 ? 80 : text.length > 10 ? 110 : 140;
-                const maxTextWidth = width * 0.85; // Chừa lề 2 bên
+                const maxTextWidth = width * 0.85;
                 const words = text.split(' ');
                 let lines = [];
                 let currentLine = words[0];
 
-                // Vòng lặp thu nhỏ font nếu từ quá dài không xuống dòng được
                 while (true) {
                     ctx.font = `900 ${fontSize}px "Be Vietnam Pro", sans-serif`;
                     lines = [];
                     currentLine = words[0];
-                    
+
                     for (let i = 1; i < words.length; i++) {
                         const word = words[i];
                         if (ctx.measureText(currentLine + " " + word).width < maxTextWidth) {
@@ -1870,7 +1777,6 @@ const SoundEngine = {
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
 
-                // Vẽ từng dòng chữ
                 const lineHeight = fontSize * 1.3;
                 const totalHeight = lines.length * lineHeight;
                 let startY = (height - totalHeight) / 2 + lineHeight / 2;
@@ -1881,11 +1787,10 @@ const SoundEngine = {
 
                 const imgData = ctx.getImageData(0, 0, width, height).data;
                 const validPoints = [];
-                
-                // Tối ưu số lượng điểm ảnh quét trên điện thoại để giảm lag
+
                 const isMobile = window.innerWidth < 768;
                 const step = isMobile ? 3 : 2;
-                const scaleFactor = isMobile ? 0.32 : 0.44; 
+                const scaleFactor = isMobile ? 0.32 : 0.44;
 
                 for (let y = 0; y < height; y += step) {
                     for (let x = 0; x < width; x += step) {
@@ -1922,25 +1827,25 @@ const SoundEngine = {
             morphToHeart3D() {
                 let pointsGenerated = 0;
                 const isMobile = window.innerWidth < 768;
-                const scale = isMobile ? 16 : 22; // Thu nhỏ trái tim trên mobile để không tràn viền
-                
+                const scale = isMobile ? 16 : 22;
+
                 while (pointsGenerated < this.shapeParticleLimit) {
                     const i3 = pointsGenerated * 3;
-                    
+
                     const x = (Math.random() - 0.5) * 3.0;
                     const y = (Math.random() - 0.5) * 3.0;
                     const z = (Math.random() - 0.5) * 3.0;
-                    
+
                     const x2 = x * x;
                     const y2 = y * y;
                     const z2 = z * z;
                     const y3 = y2 * y;
-                    
+
                     const val = Math.pow(x2 + 2.25 * z2 + y2 - 1, 3) - x2 * y3 - 0.1125 * z2 * y3;
-                    
+
                     if (val <= 0) {
                         this.targetPositions[i3] = x * scale;
-                        this.targetPositions[i3 + 1] = y * scale; 
+                        this.targetPositions[i3 + 1] = y * scale;
                         this.targetPositions[i3 + 2] = z * scale;
                         pointsGenerated++;
                     }
@@ -2052,7 +1957,7 @@ const SoundEngine = {
         };
 
         /**************************************************************
-         * 5. STAGE 4 FLOATING BACKGROUND WISHES & PHOTO SLIDER
+         * STAGE 4 FLOATING BACKGROUND WISHES
          **************************************************************/
         const Stage4WishBackground = {
             timer: null,
@@ -2086,7 +1991,7 @@ const SoundEngine = {
         };
 
         /**************************************************************
-         * 6. NAVIGATION, STUDIO & RECIPIENT FLOW
+         * NAVIGATION, STUDIO & RECIPIENT FLOW
          **************************************************************/
         function switchView(viewName) {
             document.getElementById("view-home").classList.add("hidden");
@@ -2119,7 +2024,7 @@ const SoundEngine = {
                         <span class="font-mono text-[10px] text-slate-400">#${card.recipientId}</span>
                     </button>
                 `;
-                
+
                 const btn = item.querySelector(".edit-select-btn");
                 btn.addEventListener("click", (e) => {
                     if (e.shiftKey) {
@@ -2419,7 +2324,7 @@ const SoundEngine = {
          * EVENT LISTENERS & INITIALIZATION
          **************************************************************/
         window.addEventListener("DOMContentLoaded", async () => {
-            await loadCardsDB(); // Tải dữ liệu từ Firebase Realtime DB
+            await loadCardsDB();
             initAmbientStars();
 
             const params = new URLSearchParams(window.location.search);
