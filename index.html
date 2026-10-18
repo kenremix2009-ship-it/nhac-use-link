@@ -1330,8 +1330,8 @@
             renderer: null,
             particles: null,
             geometry: null,
-            particleCount: 9000,
-            shapeParticleLimit: 6500,
+            particleCount: 9000, // Will be set dynamically on init
+            shapeParticleLimit: 6500, // Will be set dynamically on init
             currentPositions: null,
             targetPositions: null,
             baseColors: null,
@@ -1351,6 +1351,10 @@
                     return;
                 }
                 this.initialized = true;
+
+                const isMobile = window.innerWidth < 768;
+                this.particleCount = isMobile ? 6000 : 9000; // Tối ưu số lượng hạt trên mobile
+                this.shapeParticleLimit = isMobile ? 4000 : 6500;
 
                 const container = document.getElementById("three-canvas-container");
                 this.scene = new THREE.Scene();
@@ -1410,7 +1414,7 @@
                 const particleTexture = new THREE.CanvasTexture(spriteCanvas);
 
                 const material = new THREE.PointsMaterial({
-                    size: 5.5,
+                    size: isMobile ? 4.5 : 5.5, // Hạt nhỏ hơn chút trên mobile cho đỡ rối
                     map: particleTexture,
                     vertexColors: true,
                     transparent: true,
@@ -1584,7 +1588,7 @@
             morphToText(text) {
                 const canvas = document.createElement("canvas");
                 const width = 1024;
-                const height = 360;
+                const height = 512; // Tăng chiều cao để chứa được nhiều dòng chữ
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext("2d");
@@ -1592,23 +1596,69 @@
                 ctx.fillStyle = "#000000";
                 ctx.fillRect(0, 0, width, height);
 
-                const fontSize = text.length > 14 ? 62 : text.length > 8 ? 86 : 124;
-                ctx.font = `900 ${fontSize}px "Be Vietnam Pro", sans-serif`;
+                // Tự động tính toán font size và xuống dòng (Word Wrap)
+                let fontSize = text.length > 20 ? 80 : text.length > 10 ? 110 : 140;
+                const maxTextWidth = width * 0.85; // Chừa lề 2 bên
+                const words = text.split(' ');
+                let lines = [];
+                let currentLine = words[0];
+
+                // Vòng lặp thu nhỏ font nếu từ quá dài không xuống dòng được
+                while (true) {
+                    ctx.font = `900 ${fontSize}px "Be Vietnam Pro", sans-serif`;
+                    lines = [];
+                    currentLine = words[0];
+                    
+                    for (let i = 1; i < words.length; i++) {
+                        const word = words[i];
+                        if (ctx.measureText(currentLine + " " + word).width < maxTextWidth) {
+                            currentLine += " " + word;
+                        } else {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        }
+                    }
+                    lines.push(currentLine);
+
+                    let overflow = false;
+                    for (let line of lines) {
+                        if (ctx.measureText(line).width > maxTextWidth) {
+                            overflow = true;
+                            break;
+                        }
+                    }
+
+                    if (!overflow || fontSize <= 40) break;
+                    fontSize -= 10;
+                }
+
                 ctx.fillStyle = "#ffffff";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
-                ctx.fillText(text, width / 2, height / 2);
+
+                // Vẽ từng dòng chữ
+                const lineHeight = fontSize * 1.3;
+                const totalHeight = lines.length * lineHeight;
+                let startY = (height - totalHeight) / 2 + lineHeight / 2;
+
+                lines.forEach((line, index) => {
+                    ctx.fillText(line, width / 2, startY + index * lineHeight);
+                });
 
                 const imgData = ctx.getImageData(0, 0, width, height).data;
                 const validPoints = [];
-                const step = 2; 
+                
+                // Tối ưu số lượng điểm ảnh quét trên điện thoại để giảm lag
+                const isMobile = window.innerWidth < 768;
+                const step = isMobile ? 3 : 2;
+                const scaleFactor = isMobile ? 0.32 : 0.44; 
 
                 for (let y = 0; y < height; y += step) {
                     for (let x = 0; x < width; x += step) {
                         const alpha = imgData[(y * width + x) * 4];
                         if (alpha > 135) {
-                            const px = (x - width / 2) * 0.44;
-                            const py = (height / 2 - y) * 0.44;
+                            const px = (x - width / 2) * scaleFactor;
+                            const py = (height / 2 - y) * scaleFactor;
                             validPoints.push({ x: px, y: py });
                         }
                     }
@@ -1621,7 +1671,7 @@
                     validPoints[j] = temp;
                 }
 
-                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 3000));
+                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 2500));
                 for (let i = 0; i < activeShapeCount; i++) {
                     const i3 = i * 3;
                     if (validPoints.length > 0) {
@@ -1637,7 +1687,8 @@
 
             morphToHeart3D() {
                 let pointsGenerated = 0;
-                const scale = 22; 
+                const isMobile = window.innerWidth < 768;
+                const scale = isMobile ? 16 : 22; // Thu nhỏ trái tim trên mobile để không tràn viền
                 
                 while (pointsGenerated < this.shapeParticleLimit) {
                     const i3 = pointsGenerated * 3;
