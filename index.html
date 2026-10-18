@@ -1749,15 +1749,10 @@
                 if (found) {
                     card = found;
                 } else {
-                    const displayName = (queryNameOrId || "Đạt").trim();
-                    const dynamicPreset = generatePresetByTheme("20/10", displayName);
-                    card = {
-                        recipientId: key || "dat",
-                        recipientName: displayName,
-                        theme: "20/10",
-                        ...dynamicPreset,
-                        photos: [...SAMPLE_20_10_PHOTOS]
-                    };
+                    // Yêu cầu nhập đúng ID/Tên đã được tạo trong hệ thống
+                    showToast(`Không tìm thấy thiệp với tên/mã "${queryNameOrId}"! Vui lòng nhập đúng mã thiệp.`, "fa-circle-exclamation");
+                    SoundEngine.playDodge();
+                    return;
                 }
             }
 
