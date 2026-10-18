@@ -1582,10 +1582,29 @@
                         <span class="font-mono text-[10px] text-slate-400">#${card.recipientId}</span>
                     </button>
                 `;
-                item.querySelector(".edit-select-btn").addEventListener("click", () => {
+                
+                const btn = item.querySelector(".edit-select-btn");
+                // Normal click: load card into studio
+                btn.addEventListener("click", (e) => {
+                    if (e.shiftKey) return; // handled by mousedown/click combo or dedicated listener
                     loadCardIntoStudioForm(card);
                     showToast(`Đang chỉnh sửa thiệp của ${card.recipientName}`, "fa-pen-to-square");
                 });
+
+                // Shift + Click support for deletion
+                btn.addEventListener("click", (e) => {
+                    if (e.shiftKey) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (confirm(`Bạn có chắc chắn muốn xóa thiệp của "${card.recipientName}" (Mã: #${card.recipientId}) không?`)) {
+                            delete AppState.cardsDB[card.recipientId];
+                            saveCardsDB();
+                            renderStudioCardList();
+                            showToast(`Đã xóa thiệp ${card.recipientName}!`, "fa-trash-can");
+                        }
+                    }
+                });
+
                 container.appendChild(item);
             });
         }
