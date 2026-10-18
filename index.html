@@ -619,6 +619,9 @@
             </div>
 
             <div class="flex items-center gap-2 pointer-events-auto">
+                <button id="fullscreen-toggle-btn" class="glass-pill w-9 h-9 rounded-full flex items-center justify-center text-pink-300 hover:bg-white/15 transition" title="Toàn màn hình">
+                    <i class="fa-solid fa-expand text-sm"></i>
+                </button>
                 <button id="card-back-home-btn" class="glass-pill px-3.5 py-2 rounded-full text-xs font-bold text-slate-200 hover:bg-white/15 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-house text-pink-400"></i>
                     <span>Trang chủ</span>
@@ -904,7 +907,7 @@
     </div>
 
     <!-- =======================================================================
-         JAVASCRIPT ENGINE (FIREBASE REALTIME DATABASE INTEGRATION)
+         JAVASCRIPT ENGINE (FIREBASE REALTIME DATABASE INTEGRATION + CUSTOM PIANO BGM)
     ======================================================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -913,7 +916,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCLa-I1QwRGNDGyn_Tk1GvJSW_3F03GqNI",
             authDomain: "vuive-1a57f.firebaseapp.com",
-            databaseURL: "https://vuive-1a57f-default-rtdb.firebaseio.com", // URL Realtime Database
+            databaseURL: "https://vuive-1a57f-default-rtdb.firebaseio.com",
             projectId: "vuive-1a57f",
             storageBucket: "vuive-1a57f.firebasestorage.app",
             messagingSenderId: "919176396847",
@@ -925,7 +928,7 @@
         const db = getDatabase(app);
         const DB_PATH = "app_data/global_cards";
 
-        const STORAGE_KEY = "cosmic_cards_v9_db";
+        const STORAGE_KEY = "cosmic_cards_v10_db";
         const ADMIN_PASSWORD = "thuan2810";
 
         const SAMPLE_20_10_PHOTOS = [
@@ -1088,19 +1091,36 @@
         }
 
         /**************************************************************
-         * 2. AUDIO & TOAST UTILITIES
+         * 2. AUDIO & TOAST UTILITIES (CUSTOM PIANO BGM)
          **************************************************************/
         const SoundEngine = {
             ctx: null,
             muted: false,
             bgmTimer: null,
+            delayNode: null,
+            feedbackNode: null,
+
             init() {
                 if (!this.ctx) {
                     const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                    if (AudioCtx) this.ctx = new AudioCtx();
+                    if (AudioCtx) {
+                        this.ctx = new AudioCtx();
+
+                        // Setup Ethereal Reverb/Delay
+                        this.delayNode = this.ctx.createDelay();
+                        this.delayNode.delayTime.value = 0.45; // 450ms
+                        this.feedbackNode = this.ctx.createGain();
+                        this.feedbackNode.gain.value = 0.35; // 35% feedback
+
+                        this.delayNode.connect(this.feedbackNode);
+                        this.feedbackNode.connect(this.delayNode);
+                        this.delayNode.connect(this.ctx.destination);
+                    }
                 }
                 if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
             },
+
+            // General tone for UI clicks
             playTone(freq, duration = 0.15, type = "sine", vol = 0.08) {
                 if (this.muted) return;
                 this.init();
@@ -1116,6 +1136,39 @@
                 osc.start();
                 osc.stop(this.ctx.currentTime + duration);
             },
+
+            // Soft, ethereal piano/guzheng note
+            playPianoNote(freq, duration = 2.5, vol = 0.04, timeOffset = 0) {
+                if (this.muted || !this.ctx) return;
+                const t = this.ctx.currentTime + timeOffset;
+                
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                const filter = this.ctx.createBiquadFilter();
+
+                osc.type = "triangle"; // Softer than sawtooth, richer than sine
+                osc.frequency.setValueAtTime(freq, t);
+
+                // Warmth filter (muffles harsh highs)
+                filter.type = "lowpass";
+                filter.frequency.setValueAtTime(1000, t);
+
+                // Envelope: Quick attack, very slow decay
+                gain.gain.setValueAtTime(0, t);
+                gain.gain.linearRampToValueAtTime(vol, t + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                // Connect to echo/reverb
+                if (this.delayNode) gain.connect(this.delayNode);
+
+                osc.start(t);
+                osc.stop(t + duration);
+            },
+
             playClick() { this.playTone(620, 0.1, "triangle", 0.08); },
             playDodge() { this.playTone(340 + Math.random() * 280, 0.12, "sine", 0.07); },
             playAngry() { this.playTone(180, 0.25, "sawtooth", 0.12); },
@@ -1124,17 +1177,49 @@
                     setTimeout(() => this.playTone(n, 0.32, "triangle", 0.1), idx * 90);
                 });
             },
+
             startBGM() {
                 if (this.bgmTimer || this.muted) return;
-                const melody = [523.25, 659.25, 783.99, 659.25, 880, 783.99, 659.25, 587.33];
-                let step = 0;
-                this.bgmTimer = setInterval(() => {
-                    if (!this.muted) {
-                        this.playTone(melody[step % melody.length], 0.45, "sine", 0.025);
-                        step++;
-                    }
-                }, 550);
+                this.init();
+                if (!this.ctx) return;
+
+                const playLoop = () => {
+                    if (this.muted) return;
+                    
+                    // Pentatonic Ethereal Melody (Cmaj7 -> Am7 -> Fmaj7 -> G)
+                    // Bar 1: Cmaj7
+                    this.playPianoNote(261.63, 4.0, 0.03, 0);     // C4
+                    this.playPianoNote(329.63, 3.5, 0.02, 0.3);   // E4
+                    this.playPianoNote(392.00, 3.0, 0.025, 0.6);  // G4
+                    this.playPianoNote(523.25, 2.5, 0.03, 0.9);   // C5
+                    this.playPianoNote(1046.50, 2.0, 0.01, 1.5);  // C6 sparkle
+
+                    // Bar 2: Am7
+                    this.playPianoNote(220.00, 4.0, 0.03, 3.0);   // A3
+                    this.playPianoNote(261.63, 3.5, 0.02, 3.3);   // C4
+                    this.playPianoNote(329.63, 3.0, 0.025, 3.6);  // E4
+                    this.playPianoNote(440.00, 2.5, 0.03, 3.9);   // A4
+                    this.playPianoNote(880.00, 2.0, 0.01, 4.5);   // A5 sparkle
+
+                    // Bar 3: Fmaj7
+                    this.playPianoNote(174.61, 4.0, 0.03, 6.0);   // F3
+                    this.playPianoNote(261.63, 3.5, 0.02, 6.3);   // C4
+                    this.playPianoNote(349.23, 3.0, 0.025, 6.6);  // F4
+                    this.playPianoNote(440.00, 2.5, 0.03, 6.9);   // A4
+                    this.playPianoNote(1046.50, 2.0, 0.01, 7.5);  // C6 sparkle
+
+                    // Bar 4: G
+                    this.playPianoNote(196.00, 4.0, 0.03, 9.0);   // G3
+                    this.playPianoNote(293.66, 3.5, 0.02, 9.3);   // D4
+                    this.playPianoNote(392.00, 3.0, 0.025, 9.6);  // G4
+                    this.playPianoNote(587.33, 2.5, 0.03, 9.9);   // D5
+                    this.playPianoNote(1174.66, 2.0, 0.01, 10.5); // D6 sparkle
+                };
+
+                playLoop();
+                this.bgmTimer = setInterval(playLoop, 12000); // 12 second loop
             },
+
             toggleMute() {
                 this.muted = !this.muted;
                 const iconClass = this.muted ? "fa-solid fa-volume-xmark text-sm text-rose-400" : "fa-solid fa-volume-high text-sm text-cyan-300";
@@ -1142,6 +1227,14 @@
                     const el = document.getElementById(id);
                     if (el) el.innerHTML = `<i class="${iconClass}"></i>`;
                 });
+                
+                if (this.muted) {
+                    if (this.bgmTimer) clearInterval(this.bgmTimer);
+                    this.bgmTimer = null;
+                } else {
+                    this.startBGM();
+                }
+
                 showToast(this.muted ? "Đã tắt âm thanh" : "Đã bật âm thanh", this.muted ? "fa-volume-xmark" : "fa-volume-high");
             }
         };
@@ -1330,8 +1423,8 @@
             renderer: null,
             particles: null,
             geometry: null,
-            particleCount: 9000, // Will be set dynamically on init
-            shapeParticleLimit: 6500, // Will be set dynamically on init
+            particleCount: 9000,
+            shapeParticleLimit: 6500,
             currentPositions: null,
             targetPositions: null,
             baseColors: null,
@@ -1353,7 +1446,7 @@
                 this.initialized = true;
 
                 const isMobile = window.innerWidth < 768;
-                this.particleCount = isMobile ? 6000 : 9000; // Tối ưu số lượng hạt trên mobile
+                this.particleCount = isMobile ? 6000 : 9000;
                 this.shapeParticleLimit = isMobile ? 4000 : 6500;
 
                 const container = document.getElementById("three-canvas-container");
@@ -1414,7 +1507,7 @@
                 const particleTexture = new THREE.CanvasTexture(spriteCanvas);
 
                 const material = new THREE.PointsMaterial({
-                    size: isMobile ? 4.5 : 5.5, // Hạt nhỏ hơn chút trên mobile cho đỡ rối
+                    size: isMobile ? 4.5 : 5.5,
                     map: particleTexture,
                     vertexColors: true,
                     transparent: true,
@@ -1588,7 +1681,7 @@
             morphToText(text) {
                 const canvas = document.createElement("canvas");
                 const width = 1024;
-                const height = 512; // Tăng chiều cao để chứa được nhiều dòng chữ
+                const height = 512;
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext("2d");
@@ -1596,14 +1689,12 @@
                 ctx.fillStyle = "#000000";
                 ctx.fillRect(0, 0, width, height);
 
-                // Tự động tính toán font size và xuống dòng (Word Wrap)
                 let fontSize = text.length > 20 ? 80 : text.length > 10 ? 110 : 140;
-                const maxTextWidth = width * 0.85; // Chừa lề 2 bên
+                const maxTextWidth = width * 0.85;
                 const words = text.split(' ');
                 let lines = [];
                 let currentLine = words[0];
 
-                // Vòng lặp thu nhỏ font nếu từ quá dài không xuống dòng được
                 while (true) {
                     ctx.font = `900 ${fontSize}px "Be Vietnam Pro", sans-serif`;
                     lines = [];
@@ -1636,7 +1727,6 @@
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
 
-                // Vẽ từng dòng chữ
                 const lineHeight = fontSize * 1.3;
                 const totalHeight = lines.length * lineHeight;
                 let startY = (height - totalHeight) / 2 + lineHeight / 2;
@@ -1648,7 +1738,6 @@
                 const imgData = ctx.getImageData(0, 0, width, height).data;
                 const validPoints = [];
                 
-                // Tối ưu số lượng điểm ảnh quét trên điện thoại để giảm lag
                 const isMobile = window.innerWidth < 768;
                 const step = isMobile ? 3 : 2;
                 const scaleFactor = isMobile ? 0.32 : 0.44; 
@@ -1688,7 +1777,7 @@
             morphToHeart3D() {
                 let pointsGenerated = 0;
                 const isMobile = window.innerWidth < 768;
-                const scale = isMobile ? 16 : 22; // Thu nhỏ trái tim trên mobile để không tràn viền
+                const scale = isMobile ? 16 : 22; 
                 
                 while (pointsGenerated < this.shapeParticleLimit) {
                     const i3 = pointsGenerated * 3;
@@ -2202,6 +2291,36 @@
                 const val = document.getElementById("recipient-lookup-input").value.trim();
                 if (!val) return;
                 openCardForRecipient(val);
+            });
+
+            // Fullscreen Toggle Logic
+            const fsBtn = document.getElementById("fullscreen-toggle-btn");
+            fsBtn.addEventListener("click", async () => {
+                try {
+                    if (!document.fullscreenElement) {
+                        if (document.documentElement.requestFullscreen) {
+                            await document.documentElement.requestFullscreen();
+                        } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+                            await document.documentElement.webkitRequestFullscreen();
+                        }
+                        if (screen.orientation && screen.orientation.lock) {
+                            await screen.orientation.lock('landscape').catch(e => console.log('Orientation lock failed:', e));
+                        }
+                        fsBtn.innerHTML = '<i class="fa-solid fa-compress text-pink-400"></i>';
+                    } else {
+                        if (document.exitFullscreen) {
+                            await document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) { /* Safari */
+                            await document.webkitExitFullscreen();
+                        }
+                        if (screen.orientation && screen.orientation.unlock) {
+                            screen.orientation.unlock();
+                        }
+                        fsBtn.innerHTML = '<i class="fa-solid fa-expand text-pink-300"></i>';
+                    }
+                } catch (err) {
+                    console.error("Fullscreen error:", err);
+                }
             });
 
             const pwdModal = document.getElementById("password-modal");
