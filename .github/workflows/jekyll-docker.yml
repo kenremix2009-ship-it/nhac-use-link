@@ -1,0 +1,4129 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="mother">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LUMINA 20/10 — Interactive Memory & 3D Card Studio</title>
+
+  <!-- Google Fonts: Cormorant Garamond (Luxury Serif), Plus Jakarta Sans (Modern UI), JetBrains Mono (ThreeUI HUD) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Core Libraries: Three.js, GSAP, Lucide Icons, QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       1. DYNAMIC RECIPIENT THEME TOKENS (5 SUBJECT PALETTES)
+       ========================================================================== */
+    :root,
+    [data-theme="mother"] {
+      --bg-deep: #0c0906;
+      --bg-surface: rgba(24, 18, 12, 0.72);
+      --bg-elevated: rgba(38, 28, 18, 0.82);
+      --accent-primary: #f59e0b;
+      --accent-secondary: #fde68a;
+      --accent-tertiary: #ea580c;
+      --accent-rgb: 245, 158, 11;
+      --accent-2-rgb: 253, 230, 138;
+      --text-primary: #fef3c7;
+      --text-secondary: rgba(254, 243, 199, 0.68);
+      --text-muted: rgba(254, 243, 199, 0.42);
+      --border-subtle: rgba(245, 158, 11, 0.22);
+      --theme-label: "MẸ YÊU — HỔ PHÁCH ẤM ÁP";
+    }
+
+    [data-theme="grandma"] {
+      --bg-deep: #0b0806;
+      --bg-surface: rgba(27, 20, 14, 0.74);
+      --bg-elevated: rgba(42, 31, 21, 0.84);
+      --accent-primary: #eab308;
+      --accent-secondary: #fef08a;
+      --accent-tertiary: #ca8a04;
+      --accent-rgb: 234, 179, 8;
+      --accent-2-rgb: 254, 240, 138;
+      --text-primary: #fefce8;
+      --text-secondary: rgba(254, 252, 232, 0.68);
+      --text-muted: rgba(254, 252, 232, 0.42);
+      --border-subtle: rgba(234, 179, 8, 0.24);
+      --theme-label: "BÀ KÍNH YÊU — HOÀNG KIM TÔN KÍNH";
+    }
+
+    [data-theme="friend"] {
+      --bg-deep: #040914;
+      --bg-surface: rgba(10, 22, 42, 0.72);
+      --bg-elevated: rgba(16, 34, 64, 0.82);
+      --accent-primary: #38bdf8;
+      --accent-secondary: #a5f3fc;
+      --accent-tertiary: #6366f1;
+      --accent-rgb: 56, 189, 248;
+      --accent-2-rgb: 165, 243, 252;
+      --text-primary: #f0f9ff;
+      --text-secondary: rgba(240, 249, 255, 0.68);
+      --text-muted: rgba(240, 249, 255, 0.42);
+      --border-subtle: rgba(56, 189, 248, 0.24);
+      --theme-label: "BẠN BÈ — THANH KHIẾT THIÊN THANH";
+    }
+
+    [data-theme="teacher"] {
+      --bg-deep: #080612;
+      --bg-surface: rgba(20, 15, 38, 0.72);
+      --bg-elevated: rgba(32, 24, 58, 0.82);
+      --accent-primary: #c084fc;
+      --accent-secondary: #f5d0fe;
+      --accent-tertiary: #818cf8;
+      --accent-rgb: 192, 132, 252;
+      --accent-2-rgb: 245, 208, 254;
+      --text-primary: #faf5ff;
+      --text-secondary: rgba(250, 245, 255, 0.68);
+      --text-muted: rgba(250, 245, 255, 0.42);
+      --border-subtle: rgba(192, 132, 252, 0.24);
+      --theme-label: "CÔ GIÁO — TÍM NGỌC TRI ÂN";
+    }
+
+    [data-theme="lover"] {
+      --bg-deep: #110408;
+      --bg-surface: rgba(32, 10, 18, 0.72);
+      --bg-elevated: rgba(48, 14, 28, 0.82);
+      --accent-primary: #f43f5e;
+      --accent-secondary: #fecdd3;
+      --accent-tertiary: #e11d48;
+      --accent-rgb: 244, 63, 94;
+      --accent-2-rgb: 254, 205, 211;
+      --text-primary: #fff1f2;
+      --text-secondary: rgba(255, 241, 242, 0.68);
+      --text-muted: rgba(255, 241, 242, 0.42);
+      --border-subtle: rgba(244, 63, 94, 0.25);
+      --theme-label: "NGƯỜI YÊU — ĐỎ NHUNG LÃNG MẠN";
+    }
+
+    /* ==========================================================================
+       2. GLOBAL RESET & TYPOGRAPHY (THREEUI + UIVERSE SYSTEM)
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background-color 0.8s cubic-bezier(0.22, 1, 0.36, 1), color 0.6s ease;
+    }
+
+    .font-serif-luxury {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    .font-mono-hud {
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Normalize Lucide Stroke Width to 1.5px globally */
+    svg.lucide {
+      stroke-width: 1.5px;
+      flex-shrink: 0;
+    }
+
+    /* Scrollbar styling for Studio panels */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(var(--accent-rgb), 0.35);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(var(--accent-rgb), 0.65);
+    }
+
+    /* ==========================================================================
+       3. UIVERSE.IO COMPONENTS: ANIMATED BORDER, SPOTLIGHT, GLASSMORPHISM
+       ========================================================================== */
+    @keyframes spinBorder {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.45; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.04); }
+    }
+
+    .uiverse-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.45s ease;
+      box-shadow: 0 8px 30px -6px rgba(0, 0, 0, 0.5),
+                  inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+    }
+
+    /* Animated glowing border beam on primary UIverse button */
+    .uiverse-btn-primary {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.25), rgba(var(--accent-rgb), 0.06));
+      border-color: rgba(var(--accent-rgb), 0.55);
+      box-shadow: 0 10px 32px -6px rgba(var(--accent-rgb), 0.32),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.22);
+    }
+
+    .uiverse-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        180px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(var(--accent-rgb), 0.32),
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+
+    .uiverse-btn:hover {
+      transform: translateY(-2px) scale(1.015);
+      border-color: rgba(var(--accent-rgb), 0.85);
+      box-shadow: 0 14px 36px -6px rgba(var(--accent-rgb), 0.42),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.28);
+    }
+
+    .uiverse-btn:hover::before {
+      opacity: 1;
+    }
+
+    .uiverse-btn:active {
+      transform: translateY(1px) scale(0.985);
+    }
+
+    /* UIverse Card with Mouse Spotlight & Glassmorphism */
+    .uiverse-card {
+      position: relative;
+      background: var(--bg-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.4s ease,
+                  box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.65),
+                  inset 0 1px 0 0 rgba(255, 255, 255, 0.09);
+    }
+
+    .uiverse-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        380px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(var(--accent-rgb), 0.14),
+        transparent 65%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .uiverse-card:hover::after {
+      opacity: 1;
+    }
+
+    .uiverse-card:hover {
+      border-color: rgba(var(--accent-rgb), 0.5);
+      box-shadow: 0 24px 60px -12px rgba(var(--accent-rgb), 0.18),
+                  inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
+    }
+
+    .uiverse-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* UIverse Input & Textarea */
+    .uiverse-input,
+    .uiverse-textarea,
+    .uiverse-select {
+      width: 100%;
+      padding: 11px 15px;
+      background: rgba(0, 0, 0, 0.34);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      user-select: text;
+    }
+
+    .uiverse-input:focus,
+    .uiverse-textarea:focus,
+    .uiverse-select:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.18),
+                  0 6px 20px -4px rgba(var(--accent-rgb), 0.25);
+      background: rgba(0, 0, 0, 0.52);
+    }
+
+    .uiverse-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-secondary);
+      margin-bottom: 7px;
+    }
+
+    /* ==========================================================================
+       4. THREEUI.COM FLOATING HUD & NAVIGATION OVERLAY
+       ========================================================================== */
+    #main-webgl-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: auto;
+    }
+
+    /* ThreeUI Top Floating HUD Bar */
+    .threeui-header {
+      position: fixed;
+      top: 18px;
+      left: 24px;
+      right: 24px;
+      height: 60px;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.6);
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+    }
+
+    .threeui-header.hidden-hud {
+      transform: translateY(-120%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-emblem {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 30% 30%, var(--accent-primary), transparent 75%);
+      border: 1px solid rgba(var(--accent-rgb), 0.6);
+      box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.4);
+    }
+
+    .brand-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      letter-spacing: 0.06em;
+      color: var(--text-primary);
+    }
+
+    .hud-telemetry {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .hud-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(var(--accent-rgb), 0.12);
+      border: 1px solid rgba(var(--accent-rgb), 0.32);
+      color: var(--accent-secondary);
+      font-size: 0.7rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 10px var(--accent-primary);
+      animation: pulseGlow 2s infinite;
+    }
+
+    /* ==========================================================================
+       5. VIEW SCREENS MANAGEMENT (LANDING, DASHBOARD, STUDIO, ISOLATED VIEWER)
+       ========================================================================== */
+    .app-view {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    .app-view.active-view {
+      display: flex;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* --- VIEW 1: LANDING PORTAL --- */
+    #view-landing {
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 104px 40px 36px;
+      pointer-events: none;
+    }
+
+    .landing-hero-center {
+      max-width: 780px;
+      margin: auto;
+      text-align: center;
+      pointer-events: auto;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(var(--accent-rgb), 0.12);
+      border: 1px solid rgba(var(--accent-rgb), 0.35);
+      font-size: 0.73rem;
+      color: var(--accent-secondary);
+      margin-bottom: 20px;
+    }
+
+    .hero-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+      font-weight: 600;
+      line-height: 1.06;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 15%, var(--accent-secondary) 60%, var(--accent-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .hero-subtext {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto 30px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 34px;
+    }
+
+    .theme-quick-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 999px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(20px);
+    }
+
+    .theme-pill {
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .theme-pill.active {
+      background: rgba(var(--accent-rgb), 0.22);
+      color: var(--text-primary);
+      border-color: rgba(var(--accent-rgb), 0.55);
+      box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.25);
+    }
+
+    .landing-feature-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+      pointer-events: auto;
+    }
+
+    .feature-mini-card {
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .feature-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(var(--accent-rgb), 0.14);
+      border: 1px solid rgba(var(--accent-rgb), 0.35);
+      color: var(--accent-primary);
+    }
+
+    /* --- VIEW 2: SAVED CARDS DASHBOARD (3D TILT CARDS) --- */
+    #view-dashboard {
+      flex-direction: column;
+      padding: 96px 40px 40px;
+      overflow-y: auto;
+      background: radial-gradient(circle at 50% 0%, rgba(var(--accent-rgb), 0.12), rgba(0, 0, 0, 0.78) 70%);
+      backdrop-filter: blur(10px);
+    }
+
+    .dashboard-container {
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .dashboard-top-bar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .cards-grid-3d {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+      perspective: 1200px;
+    }
+
+    .tilt-card-3d {
+      padding: 24px;
+      transform-style: preserve-3d;
+      will-change: transform;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 290px;
+      transition: transform 0.18s ease-out, border-color 0.35s ease;
+    }
+
+    .tilt-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .tilt-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .tilt-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 20px;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.73rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+    }
+
+    .tilt-card-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card-action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 9px 6px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .card-action-btn:hover {
+      background: rgba(var(--accent-rgb), 0.2);
+      border-color: rgba(var(--accent-rgb), 0.55);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .card-action-btn.danger:hover {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: rgba(239, 68, 68, 0.6);
+      color: #fca5a5;
+    }
+
+    /* --- VIEW 3: SPLIT-SCREEN STUDIO (LEFT CONFIG, RIGHT LIVE PREVIEW) --- */
+    #view-studio {
+      padding: 88px 24px 20px;
+      gap: 20px;
+      background: rgba(5, 5, 8, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .studio-left-panel {
+      width: 47%;
+      min-width: 430px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .studio-right-panel {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    /* 4-Step Stepper Navigation */
+    .studio-stepper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .step-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .step-tab.active {
+      background: rgba(var(--accent-rgb), 0.2);
+      border-color: rgba(var(--accent-rgb), 0.65);
+      color: var(--text-primary);
+      box-shadow: 0 6px 20px -4px rgba(var(--accent-rgb), 0.3);
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+    }
+
+    .step-tab.active .step-num {
+      background: var(--accent-primary);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .studio-step-body {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .studio-step-body.active {
+      display: flex;
+    }
+
+    .option-grid-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 10px;
+    }
+
+    .selectable-tile {
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .selectable-tile:hover {
+      border-color: rgba(var(--accent-rgb), 0.45);
+      background: rgba(var(--accent-rgb), 0.08);
+    }
+
+    .selectable-tile.selected {
+      background: rgba(var(--accent-rgb), 0.22);
+      border-color: var(--accent-primary);
+      color: var(--text-primary);
+      box-shadow: 0 8px 24px -6px rgba(var(--accent-rgb), 0.35);
+    }
+
+    .selectable-tile-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .selectable-tile-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    .studio-footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      margin-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    /* Live Interactive Preview Viewport */
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .preview-stage-pills {
+      display: flex;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .preview-stage-btn {
+      padding: 6px 10px;
+      border-radius: 7px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .preview-stage-btn.active {
+      background: rgba(var(--accent-rgb), 0.25);
+      color: var(--text-primary);
+    }
+
+    .preview-viewport-wrapper {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at center, rgba(var(--accent-rgb), 0.08), rgba(0, 0, 0, 0.65));
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      position: relative;
+      padding: 12px;
+    }
+
+    /* Container that holds the Interactive Recipient Stage (shared between Live Preview & Fullscreen Viewer) */
+    #recipient-stage-mount {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-deep);
+      border: 1px solid rgba(var(--accent-rgb), 0.35);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75);
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                  height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-radius 0.45s ease;
+    }
+
+    #recipient-stage-mount.mobile-frame {
+      width: 375px;
+      max-width: 100%;
+      height: 96%;
+      border-radius: 34px;
+      border: 6px solid rgba(255, 255, 255, 0.14);
+    }
+
+    /* When in Full-Screen Isolated Viewer Mode */
+    body.isolated-viewer-mode #recipient-stage-mount {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      border-radius: 0 !important;
+      border: none !important;
+      z-index: 90 !important;
+    }
+
+    /* ==========================================================================
+       6. RECIPIENT 3-STAGE EXPERIENCE (MINI-GAME -> GESTURE -> 3D JOURNEY)
+       ========================================================================== */
+    .stage-canvas-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .recipient-hud-top {
+      position: absolute;
+      top: 16px;
+      left: 18px;
+      right: 18px;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .recipient-hud-top > * {
+      pointer-events: auto;
+    }
+
+    .stage-progress-steps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.72rem;
+    }
+
+    .stage-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.35s ease;
+    }
+
+    .stage-dot.active {
+      width: 24px;
+      border-radius: 999px;
+      background: var(--accent-primary);
+      box-shadow: 0 0 12px var(--accent-primary);
+    }
+
+    /* Stage Overlay Screens (Stage 1, Stage 2, Stage 3 HUD) */
+    .recipient-substage {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 64px 20px 24px;
+    }
+
+    .recipient-substage.active {
+      display: flex;
+    }
+
+    /* --- STAGE 1: MINI-GAME CONTAINERS --- */
+    .minigame-card {
+      max-width: 500px;
+      width: 100%;
+      padding: 24px;
+      text-align: center;
+    }
+
+    /* Game 1: Sliding / Magnetic Jigsaw Puzzle */
+    .puzzle-grid {
+      width: 285px;
+      height: 285px;
+      margin: 16px auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 5px;
+      padding: 6px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .puzzle-tile {
+      border-radius: 8px;
+      cursor: pointer;
+      background-size: 273px 273px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      position: relative;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .puzzle-tile.selected-tile {
+      transform: scale(0.92);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 18px var(--accent-primary);
+      z-index: 2;
+    }
+
+    .puzzle-tile.correct-slot {
+      border-color: rgba(var(--accent-rgb), 0.7);
+    }
+
+    /* Game 2: Trivia Quiz */
+    .trivia-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .trivia-option-btn {
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .trivia-option-btn:hover {
+      background: rgba(var(--accent-rgb), 0.16);
+      border-color: var(--accent-primary);
+    }
+
+    /* Game 3: Scratch Card */
+    .scratch-container {
+      position: relative;
+      width: 300px;
+      height: 190px;
+      margin: 16px auto;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: radial-gradient(circle at center, rgba(var(--accent-rgb), 0.28), rgba(0, 0, 0, 0.85));
+      display: grid;
+      place-items: center;
+    }
+
+    .scratch-secret-underlay {
+      padding: 18px;
+      text-align: center;
+    }
+
+    #scratch-foil-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    /* Game 4: Memory Star Catcher */
+    #catcher-game-canvas {
+      width: 320px;
+      height: 250px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid var(--border-subtle);
+      margin: 12px auto;
+      display: block;
+      touch-action: none;
+      cursor: ew-resize;
+    }
+
+    /* --- STAGE 2: GESTURE INTERACTION CANVAS --- */
+    #gesture-interactive-canvas {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(var(--accent-rgb), 0.16), rgba(0, 0, 0, 0.65) 72%);
+      border: 1px solid rgba(var(--accent-rgb), 0.35);
+      box-shadow: 0 0 60px rgba(var(--accent-rgb), 0.2);
+      cursor: pointer;
+      touch-action: none;
+      margin: 14px auto;
+    }
+
+    /* --- STAGE 3: 3D PARTICLE & MEMORY LANE HUD --- */
+    #substage-3-hud {
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    #substage-3-hud > * {
+      pointer-events: auto;
+    }
+
+    /* Floating Memory Caption Card when approaching a 3D Photo Portal */
+    .memory-portal-popup {
+      max-width: 440px;
+      width: 92%;
+      padding: 18px 22px;
+      margin-top: auto;
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(20px) scale(0.96);
+      transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    .memory-portal-popup.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .journey-scrubber-bar {
+      max-width: 560px;
+      width: 94%;
+      padding: 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .spline-range-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .spline-range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      border: 2px solid #fff;
+      box-shadow: 0 0 16px var(--accent-primary);
+      cursor: grab;
+      transition: transform 0.2s ease;
+    }
+
+    .spline-range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    /* ==========================================================================
+       7. MODALS: AUTH GATE, QR GENERATOR, & FINAL 20/10 GRAND LETTER
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(3, 3, 6, 0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: none;
+       place-items: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .modal-backdrop.open {
+      display: grid;
+      opacity: 1;
+    }
+
+    .modal-box {
+      max-width: 460px;
+      width: 100%;
+      padding: 30px;
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(var(--accent-rgb), 0.22);
+      color: var(--text-primary);
+      border-color: var(--accent-primary);
+    }
+
+    /* Grand 20/10 Letter Modal */
+    .grand-letter-modal {
+      max-width: 620px;
+      width: 100%;
+      padding: 40px 36px;
+      border: 1px solid rgba(var(--accent-rgb), 0.6);
+      box-shadow: 0 30px 90px rgba(var(--accent-rgb), 0.28);
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    .letter-body-prose {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.32rem;
+      line-height: 1.75;
+      color: var(--text-primary);
+      white-space: pre-line;
+      margin: 22px 0;
+      padding: 20px 0;
+      border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+      border-bottom: 1px solid rgba(var(--accent-rgb), 0.25);
+    }
+
+    #qr-code-mount {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 16px;
+      width: fit-content;
+      margin: 18px auto;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Memory List Item in Studio Step 4 */
+    .memory-item-row {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .memory-thumb-preview {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Toast Notification */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .lumina-toast {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--accent-primary);
+      color: var(--text-primary);
+      font-size: 0.84rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(16px);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1024px) {
+      #view-studio {
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .studio-left-panel,
+      .studio-right-panel {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+      }
+      .preview-viewport-wrapper {
+        min-height: 540px;
+      }
+      .landing-feature-strip {
+        grid-template-columns: 1fr;
+      }
+      .hud-telemetry {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       BACKGROUND 3D WEBGL CANVAS (SHARED AMBIENT & FULLSCREEN STAGE)
+       ========================================================================== -->
+  <canvas id="main-webgl-canvas"></canvas>
+
+  <!-- ==========================================================================
+       THREEUI FLOATING TOP HUD HEADER (HIDDEN IN ISOLATED QR VIEWER MODE)
+       ========================================================================== -->
+  <header class="threeui-header" id="main-hud-header">
+    <div class="brand-cluster" onclick="App.navigate('landing')">
+      <div class="brand-emblem">
+        <i data-lucide="sparkles" style="width:18px;height:18px;color:var(--accent-secondary)"></i>
+      </div>
+      <div>
+        <div class="brand-title">LUMINA 20/10</div>
+        <div class="font-mono-hud" style="font-size:0.62rem;color:var(--text-muted)">3D MEMORY & CARD STUDIO</div>
+      </div>
+    </div>
+
+    <div class="hud-telemetry">
+      <div class="hud-badge">
+        <span class="status-dot"></span>
+        <span class="font-mono-hud" id="hud-theme-indicator">MẸ YÊU — HỔ PHÁCH ẤM ÁP</span>
+      </div>
+      <span class="font-mono-hud" id="hud-coords-readout">CAM: 0.00, 1.20, 14.00</span>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="uiverse-btn" onclick="App.requireAuth(() => App.navigate('dashboard'))" style="padding:9px 16px;font-size:0.8rem">
+        <i data-lucide="layers" style="width:16px;height:16px"></i>
+        <span>Kho Thiệp Đã Tạo</span>
+      </button>
+      <button class="uiverse-btn uiverse-btn-primary" onclick="App.requireAuth(() => App.openNewCardStudio())" style="padding:9px 18px;font-size:0.8rem">
+        <i data-lucide="wand-2" style="width:16px;height:16px"></i>
+        <span>Tạo Thiệp Mới</span>
+      </button>
+      <button class="uiverse-btn" id="header-auth-btn" onclick="App.openAuthModal()" style="padding:9px 15px;font-size:0.8rem">
+        <i data-lucide="user-check" style="width:16px;height:16px"></i>
+        <span id="header-user-label">Đăng Nhập</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       VIEW 1: CREATOR PORTAL LANDING PAGE
+       ========================================================================== -->
+  <section class="app-view active-view" id="view-landing">
+    <div class="landing-hero-center">
+      <div class="hero-eyebrow font-mono-hud">
+        <i data-lucide="compass" style="width:14px;height:14px"></i>
+        <span>VIETNAMESE WOMEN'S DAY 20/10 — WEBGL EXPERIENCE</span>
+      </div>
+
+      <h1 class="hero-headline">
+        Kiến Tạo Hành Trình Ký Ức 3D Dành Tặng Người Phụ Nữ Trân Quý
+      </h1>
+
+      <p class="hero-subtext">
+        Kết hợp nghệ thuật hạt 3D biến hình, trò chơi tương tác mở khóa và con đường ký ức 
+        <span class="font-mono-hud" style="font-size:0.82rem;color:var(--accent-secondary)">Catmull-Rom Spline</span> 
+        độc bản. Xuất bản tức thì qua mã QR với chế độ thưởng thức toàn màn hình độc lập.
+      </p>
+
+      <div class="hero-cta-group">
+        <button class="uiverse-btn uiverse-btn-primary" onclick="App.requireAuth(() => App.openNewCardStudio())" style="padding:15px 30px;font-size:0.96rem">
+          <i data-lucide="plus-circle" style="width:19px;height:19px"></i>
+          <span>Tạo Thiệp Mới Ngay</span>
+        </button>
+        <button class="uiverse-btn" onclick="App.requireAuth(() => App.navigate('dashboard'))" style="padding:15px 28px;font-size:0.96rem">
+          <i data-lucide="folder-heart" style="width:19px;height:19px"></i>
+          <span>Kho Thiệp Đã Tạo (<span id="landing-card-count">3</span>)</span>
+        </button>
+      </div>
+
+      <!-- Real-time Theme Preview Bar -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+        <span class="font-mono-hud" style="font-size:0.68rem;color:var(--text-muted)">CHỌN BẢNG MÀU & HÌNH KHỐI HẠT 3D THEO ĐỐI TƯỢNG</span>
+        <div class="theme-quick-switcher">
+          <button class="theme-pill active" data-theme-btn="mother" onclick="App.setGlobalTheme('mother', 'lotus')">Mẹ Yêu</button>
+          <button class="theme-pill" data-theme-btn="grandma" onclick="App.setGlobalTheme('grandma', 'lotus')">Bà Kính Yêu</button>
+          <button class="theme-pill" data-theme-btn="friend" onclick="App.setGlobalTheme('friend', 'cloud')">Bạn Bè</button>
+          <button class="theme-pill" data-theme-btn="teacher" onclick="App.setGlobalTheme('teacher', 'airplane')">Cô Giáo</button>
+          <button class="theme-pill" data-theme-btn="lover" onclick="App.setGlobalTheme('lover', 'heart')">Người Yêu</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="landing-feature-strip">
+      <div class="uiverse-card feature-mini-card">
+        <div class="feature-icon-box"><i data-lucide="puzzle" style="width:20px;height:20px"></i></div>
+        <div>
+          <div style="font-weight:600;font-size:0.92rem;margin-bottom:4px">Chặng 1: 4 Mini-Game Mở Khóa</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5">Ghép ảnh kỷ niệm từ tính, Đố vui thấu hiểu tùy biến, Thẻ cào ánh kim Canvas và Hứng sao ký ức.</div>
+        </div>
+      </div>
+      <div class="uiverse-card feature-mini-card">
+        <div class="feature-icon-box"><i data-lucide="fingerprint" style="width:20px;height:20px"></i></div>
+        <div>
+          <div style="font-weight:600;font-size:0.92rem;margin-bottom:4px">Chặng 2: Cử Chỉ Vật Lý Phát Sáng</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5">Xoay vòng lên dây cót, vẽ đường dẫn trái tim ánh sáng hoặc nhấn giữ truyền hơi ấm nở hoa.</div>
+        </div>
+      </div>
+      <div class="uiverse-card feature-mini-card">
+        <div class="feature-icon-box"><i data-lucide="orbit" style="width:20px;height:20px"></i></div>
+        <div>
+          <div style="font-weight:600;font-size:0.92rem;margin-bottom:4px">Chặng 3: Hóa Thân & Con Đường 3D</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5">8.000 hạt biến hình đa dạng và lướt qua khung tranh 3D cùng Chiếc lá, Thuyền giấy, Hạc giấy, Tàu hỏa.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW 2: SAVED CARDS DASHBOARD (3D TILT CARDS + QR + EDIT)
+       ========================================================================== -->
+  <section class="app-view" id="view-dashboard">
+    <div class="dashboard-container">
+      <div class="dashboard-top-bar">
+        <div>
+          <div class="font-mono-hud" style="font-size:0.74rem;color:var(--accent-primary);margin-bottom:6px">CREATOR WORKSPACE</div>
+          <h2 class="font-serif-luxury" style="font-size:2.4rem;font-weight:600">Kho Thiệp 3D Đã Tạo</h2>
+        </div>
+        <div style="display:flex;gap:12px">
+          <button class="uiverse-btn" onclick="App.navigate('landing')">
+            <i data-lucide="arrow-left" style="width:16px;height:16px"></i>
+            <span>Trang Chủ</span>
+          </button>
+          <button class="uiverse-btn uiverse-btn-primary" onclick="App.openNewCardStudio()">
+            <i data-lucide="plus" style="width:16px;height:16px"></i>
+            <span>Tạo Thiệp 20/10 Mới</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="cards-grid-3d" id="saved-cards-grid">
+        <!-- Populated dynamically via JS with 3D perspective tilt listeners -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW 3: SPLIT-SCREEN STUDIO (LEFT: 4-STEP CONFIG, RIGHT: LIVE PREVIEW)
+       ========================================================================== -->
+  <section class="app-view" id="view-studio">
+    <!-- LEFT HALF: 4-STEP CONFIGURATION -->
+    <div class="uiverse-card studio-left-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div>
+          <span class="font-mono-hud" style="font-size:0.68rem;color:var(--accent-primary)">SPLIT-SCREEN STUDIO</span>
+          <h3 class="font-serif-luxury" style="font-size:1.55rem;font-weight:600" id="studio-card-heading">Thiết Kế Thiệp 20/10</h3>
+        </div>
+        <button class="uiverse-btn" onclick="App.navigate('dashboard')" style="padding:7px 14px;font-size:0.76rem">
+          <i data-lucide="layout-grid" style="width:14px;height:14px"></i>
+          <span>Kho Thiệp</span>
+        </button>
+      </div>
+
+      <!-- 4-Step Tabs -->
+      <div class="studio-stepper">
+        <button class="step-tab active" data-step="1" onclick="App.setStudioStep(1)">
+          <span class="step-num">01</span>
+          <span>Chủ Đề & 3D</span>
+        </button>
+        <button class="step-tab" data-step="2" onclick="App.setStudioStep(2)">
+          <span class="step-num">02</span>
+          <span>Mini-Game</span>
+        </button>
+        <button class="step-tab" data-step="3" onclick="App.setStudioStep(3)">
+          <span class="step-num">03</span>
+          <span>Cử Chỉ & Xe</span>
+        </button>
+        <button class="step-tab" data-step="4" onclick="App.setStudioStep(4)">
+          <span class="step-num">04</span>
+          <span>Ký Ức & Thư</span>
+        </button>
+      </div>
+
+      <!-- STEP 1: RECIPIENT THEME & CENTRAL 3D PARTICLE SHAPE -->
+      <div class="studio-step-body active" id="studio-step-1">
+        <div>
+          <label class="uiverse-label"><i data-lucide="tag" style="width:14px;height:14px"></i> Tên Tấm Thiệp & Người Nhận</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <input type="text" class="uiverse-input" id="cfg-card-title" placeholder="VD: Gửi Mẹ Yêu Dấu 20/10" oninput="App.syncDraftFromInputs()" />
+            <input type="text" class="uiverse-input" id="cfg-recipient-name" placeholder="Tên người nhận (VD: Mẹ Hiền)" oninput="App.syncDraftFromInputs()" />
+          </div>
+        </div>
+
+        <div>
+          <label class="uiverse-label"><i data-lucide="palette" style="width:14px;height:14px"></i> Chọn Đối Tượng Nhận (Tự động đổi hệ màu & ánh sáng)</label>
+          <div class="option-grid-selector" id="cfg-theme-grid">
+            <div class="selectable-tile selected" data-val="mother" onclick="App.selectConfigTile('theme', 'mother')">
+              <i data-lucide="sun" style="width:18px;height:18px;color:#f59e0b"></i>
+              <div class="selectable-tile-title">Mẹ Yêu</div>
+              <div class="selectable-tile-sub">Vàng hổ phách ấm áp</div>
+            </div>
+            <div class="selectable-tile" data-val="grandma" onclick="App.selectConfigTile('theme', 'grandma')">
+              <i data-lucide="award" style="width:18px;height:18px;color:#eab308"></i>
+              <div class="selectable-tile-title">Bà Kính Yêu</div>
+              <div class="selectable-tile-sub">Hoàng kim tôn kính</div>
+            </div>
+            <div class="selectable-tile" data-val="friend" onclick="App.selectConfigTile('theme', 'friend')">
+              <i data-lucide="cloud-sun" style="width:18px;height:18px;color:#38bdf8"></i>
+              <div class="selectable-tile-title">Bạn Bè</div>
+              <div class="selectable-tile-sub">Xanh da trời thanh khiết</div>
+            </div>
+            <div class="selectable-tile" data-val="teacher" onclick="App.selectConfigTile('theme', 'teacher')">
+              <i data-lucide="book-open" style="width:18px;height:18px;color:#c084fc"></i>
+              <div class="selectable-tile-title">Cô Giáo</div>
+              <div class="selectable-tile-sub">Tím ngọc tri ân</div>
+            </div>
+            <div class="selectable-tile" data-val="lover" onclick="App.selectConfigTile('theme', 'lover')">
+              <i data-lucide="heart" style="width:18px;height:18px;color:#f43f5e"></i>
+              <div class="selectable-tile-title">Người Yêu</div>
+              <div class="selectable-tile-sub">Đỏ nhung & hồng phấn</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="uiverse-label"><i data-lucide="box" style="width:14px;height:14px"></i> Hình Khối Hạt 3D Trung Tâm (Phân Cảnh 3A)</label>
+          <div class="option-grid-selector" id="cfg-shape-grid">
+            <div class="selectable-tile selected" data-val="lotus" onclick="App.selectConfigTile('particleShape', 'lotus')">
+              <i data-lucide="flower-2" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Đóa Sen Mẫu Tử</div>
+              <div class="selectable-tile-sub">Tôn kính & tần tảo</div>
+            </div>
+            <div class="selectable-tile" data-val="heart" onclick="App.selectConfigTile('particleShape', 'heart')">
+              <i data-lucide="heart" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Trái Tim 3D</div>
+              <div class="selectable-tile-sub">Lãng mạn & nồng nhiệt</div>
+            </div>
+            <div class="selectable-tile" data-val="cloud" onclick="App.selectConfigTile('particleShape', 'cloud')">
+              <i data-lucide="cloud" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Đám Mây Bồng Bềnh</div>
+              <div class="selectable-tile-sub">Dịu mắt cho tình bạn</div>
+            </div>
+            <div class="selectable-tile" data-val="airplane" onclick="App.selectConfigTile('particleShape', 'airplane')">
+              <i data-lucide="plane" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Chiếc Máy Bay 3D</div>
+              <div class="selectable-tile-sub">Ước mơ & hành trình</div>
+            </div>
+            <div class="selectable-tile" data-val="rose" onclick="App.selectConfigTile('particleShape', 'rose')">
+              <i data-lucide="Component" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Đóa Hồng Xoắn Ốc</div>
+              <div class="selectable-tile-sub">Cánh hoa ánh sáng</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: UNLOCK MINI-GAME CONFIGURATION -->
+      <div class="studio-step-body" id="studio-step-2">
+        <div>
+          <label class="uiverse-label"><i data-lucide="gamepad-2" style="width:14px;height:14px"></i> Chọn Trò Chơi Mở Khóa Thiệp (Chặng 1)</label>
+          <div class="option-grid-selector" id="cfg-game-grid">
+            <div class="selectable-tile selected" data-val="puzzle" onclick="App.selectConfigTile('miniGame', 'puzzle')">
+              <i data-lucide="grid" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Ghép Hình Ký Ức</div>
+              <div class="selectable-tile-sub">Lưới 3x3 nam châm hút</div>
+            </div>
+            <div class="selectable-tile" data-val="trivia" onclick="App.selectConfigTile('miniGame', 'trivia')">
+              <i data-lucide="help-circle" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Đố Vui Thấu Hiểu</div>
+              <div class="selectable-tile-sub">Câu hỏi A/B/C/D tự soạn</div>
+            </div>
+            <div class="selectable-tile" data-val="scratch" onclick="App.selectConfigTile('miniGame', 'scratch')">
+              <i data-lucide="sparkles" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Thẻ Cào Ánh Kim</div>
+              <div class="selectable-tile-sub">Cào lớp nhũ lộ mật mã</div>
+            </div>
+            <div class="selectable-tile" data-val="catcher" onclick="App.selectConfigTile('miniGame', 'catcher')">
+              <i data-lucide="star" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Hứng Sao Ký Ức</div>
+              <div class="selectable-tile-sub">Điều khiển giỏ ánh sáng</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Game Sub-Settings -->
+        <div id="game-cfg-puzzle" class="uiverse-card" style="padding:14px">
+          <label class="uiverse-label"><i data-lucide="image" style="width:14px;height:14px"></i> Ảnh Ghép Hình (URL hoặc Tải file)</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" class="uiverse-input" id="cfg-puzzle-img" placeholder="URL bức ảnh ghép hình..." oninput="App.syncDraftFromInputs()" />
+            <label class="uiverse-btn" style="padding:8px 14px;cursor:pointer;white-space:nowrap">
+              <i data-lucide="upload" style="width:15px;height:15px"></i>
+              <span>Tải Ảnh</span>
+              <input type="file" accept="image/*" style="display:none" onchange="App.handlePuzzleImageUpload(event)" />
+            </label>
+          </div>
+        </div>
+
+        <div id="game-cfg-trivia" class="uiverse-card" style="padding:14px;display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <label class="uiverse-label" style="margin:0"><i data-lucide="list-checks" style="width:14px;height:14px"></i> Danh Sách Câu Hỏi Đố Vui</label>
+            <button class="uiverse-btn" onclick="App.addTriviaQuestion()" style="padding:5px 12px;font-size:0.74rem">
+              <i data-lucide="plus" style="width:13px;height:13px"></i> Thêm Câu Hỏi
+            </button>
+          </div>
+          <div id="trivia-builder-list" style="display:flex;flex-direction:column;gap:12px"></div>
+        </div>
+
+        <div id="game-cfg-scratch" class="uiverse-card" style="padding:14px;display:none">
+          <label class="uiverse-label"><i data-lucide="key-round" style="width:14px;height:14px"></i> Thông Điệp Ẩn Dưới Lớp Nhũ Ánh Kim</label>
+          <input type="text" class="uiverse-input" id="cfg-scratch-code" placeholder="VD: 2010 - NGƯỜI PHỤ NỮ TUYỆT VỜI NHẤT" oninput="App.syncDraftFromInputs()" />
+        </div>
+
+        <div id="game-cfg-catcher" class="uiverse-card" style="padding:14px;display:none">
+          <label class="uiverse-label"><i data-lucide="trophy" style="width:14px;height:14px"></i> Số Ngôi Sao Ký Ức Cần Hứng Đủ</label>
+          <input type="number" min="3" max="15" class="uiverse-input" id="cfg-catcher-target" value="6" oninput="App.syncDraftFromInputs()" />
+        </div>
+      </div>
+
+      <!-- STEP 3: GESTURE TRANSITION & 3D MEMORY VEHICLE AVATAR -->
+      <div class="studio-step-body" id="studio-step-3">
+        <div>
+          <label class="uiverse-label"><i data-lucide="hand" style="width:14px;height:14px"></i> Cử Chỉ Vật Lý Chuyển Cảnh (Chặng 2)</label>
+          <div class="option-grid-selector" id="cfg-gesture-grid">
+            <div class="selectable-tile selected" data-val="windup" onclick="App.selectConfigTile('gestureType', 'windup')">
+              <i data-lucide="refresh-cw" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Xoay Vòng Tròn</div>
+              <div class="selectable-tile-sub">Lên dây cót năng lượng</div>
+            </div>
+            <div class="selectable-tile" data-val="heartpath" onclick="App.selectConfigTile('gestureType', 'heartpath')">
+              <i data-lucide="pen-tool" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Vẽ Đường Trái Tim</div>
+              <div class="selectable-tile-sub">Nối các điểm sáng quỹ đạo</div>
+            </div>
+            <div class="selectable-tile" data-val="longpress" onclick="App.selectConfigTile('gestureType', 'longpress')">
+              <i data-lucide="radio" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Nhấn Giữ Hơi Ấm</div>
+              <div class="selectable-tile-sub">Truyền lực nở cánh hoa</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="uiverse-label"><i data-lucide="navigation" style="width:14px;height:14px"></i> Hóa Thân Trên Con Đường Ký Ức 3D (Phân Cảnh 3B)</label>
+          <div class="option-grid-selector" id="cfg-vehicle-grid">
+            <div class="selectable-tile selected" data-val="boat" onclick="App.selectConfigTile('vehicleType', 'boat')">
+              <i data-lucide="sailboat" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Thuyền Giấy Ngân Hà</div>
+              <div class="selectable-tile-sub">Trôi giữa sông hoa đăng</div>
+            </div>
+            <div class="selectable-tile" data-val="leaf" onclick="App.selectConfigTile('vehicleType', 'leaf')">
+              <i data-lucide="feather" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Chiếc Lá Mùa Thu</div>
+              <div class="selectable-tile-sub">Bay nhẹ qua rừng sáng</div>
+            </div>
+            <div class="selectable-tile" data-val="glider" onclick="App.selectConfigTile('vehicleType', 'glider')">
+              <i data-lucide="send" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Máy Bay Giấy</div>
+              <div class="selectable-tile-sub">Lướt qua tầng mây</div>
+            </div>
+            <div class="selectable-tile" data-val="crane" onclick="App.selectConfigTile('vehicleType', 'crane')">
+              <i data-lucide="bird" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Hạc Giấy Origami</div>
+              <div class="selectable-tile-sub">Vỗ cánh bầu trời sao</div>
+            </div>
+            <div class="selectable-tile" data-val="train" onclick="App.selectConfigTile('vehicleType', 'train')">
+              <i data-lucide="train-front" style="width:18px;height:18px"></i>
+              <div class="selectable-tile-title">Đoàn Tàu Ký Ức</div>
+              <div class="selectable-tile-sub">Chạy trên đường ray sáng</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: MEMORIES (PHOTOS + CAPTIONS) & MAIN 20/10 LETTER -->
+      <div class="studio-step-body" id="studio-step-4">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <label class="uiverse-label" style="margin:0"><i data-lucide="images" style="width:14px;height:14px"></i> Các Khung Tranh Ký Ức 3D Dọc Đường Đi</label>
+            <div style="display:flex;gap:6px">
+              <label class="uiverse-btn" style="padding:5px 11px;font-size:0.73rem;cursor:pointer">
+                <i data-lucide="upload-cloud" style="width:13px;height:13px"></i> Tải Ảnh Lên
+                <input type="file" accept="image/*" multiple style="display:none" onchange="App.handleMemoryFilesUpload(event)" />
+              </label>
+              <button class="uiverse-btn" onclick="App.addMemorySlotByUrl()" style="padding:5px 11px;font-size:0.73rem">
+                <i data-lucide="plus" style="width:13px;height:13px"></i> Thêm Khung Nhớ
+              </button>
+            </div>
+          </div>
+          <div id="studio-memories-list" style="display:flex;flex-direction:column;gap:8px;max-height:195px;overflow-y:auto;padding-right:4px"></div>
+        </div>
+
+        <div>
+          <label class="uiverse-label"><i data-lucide="scroll-text" style="width:14px;height:14px"></i> Bức Tâm Thư Lớn Cuối Con Đường Ký Ức</label>
+          <textarea class="uiverse-textarea" id="cfg-main-letter" rows="4" placeholder="Viết lời chúc 20/10 sâu sắc dành tặng người nhận..." oninput="App.syncDraftFromInputs()"></textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <label class="uiverse-label"><i data-lucide="pen-line" style="width:14px;height:14px"></i> Chữ Ký Người Gửi</label>
+            <input type="text" class="uiverse-input" id="cfg-sender-name" placeholder="VD: Con trai của Mẹ" oninput="App.syncDraftFromInputs()" />
+          </div>
+          <div>
+            <label class="uiverse-label"><i data-lucide="music" style="width:14px;height:14px"></i> Giai Điệu Âm Thanh Nền</label>
+            <select class="uiverse-select" id="cfg-music-style" onchange="App.syncDraftFromInputs()">
+              <option value="harp">Giao Hưởng Đàn Hạc Ánh Sáng</option>
+              <option value="musicbox">Hộp Nhạc Pha Lê Ấm Áp</option>
+              <option value="ethereal">Đêm Ngân Hà Du Dương</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Studio Footer Action Bar -->
+      <div class="studio-footer-bar">
+        <div style="display:flex;gap:8px">
+          <button class="uiverse-btn" onclick="App.prevStudioStep()" style="padding:9px 14px;font-size:0.78rem">
+            <i data-lucide="chevron-left" style="width:15px;height:15px"></i> Bước Trước
+          </button>
+          <button class="uiverse-btn" onclick="App.nextStudioStep()" style="padding:9px 14px;font-size:0.78rem">
+            Bước Tiếp <i data-lucide="chevron-right" style="width:15px;height:15px"></i>
+          </button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="uiverse-btn uiverse-btn-primary" onclick="App.saveCurrentCardAndShowQR()" style="padding:10px 20px;font-size:0.82rem">
+            <i data-lucide="qr-code" style="width:16px;height:16px"></i>
+            <span>Lưu Thiệp & Xuất Mã QR</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT HALF: REAL-TIME INTERACTIVE PREVIEW -->
+    <div class="uiverse-card studio-right-panel">
+      <div class="preview-toolbar">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="status-dot"></span>
+          <span class="font-mono-hud" style="font-size:0.72rem;color:var(--text-secondary)">LIVE INTERACTIVE PREVIEW</span>
+        </div>
+
+        <!-- Stage Switcher for Instant Studio Testing -->
+        <div class="preview-stage-pills">
+          <button class="preview-stage-btn active" data-pstage="1" onclick="RecipientExperience.goToStage(1)">1. Mini-Game</button>
+          <button class="preview-stage-btn" data-pstage="2" onclick="RecipientExperience.goToStage(2)">2. Cử Chỉ</button>
+          <button class="preview-stage-btn" data-pstage="3A" onclick="RecipientExperience.goToStage('3A')">3A. Hạt 3D</button>
+          <button class="preview-stage-btn" data-pstage="3B" onclick="RecipientExperience.goToStage('3B')">3B. Đường Ký Ức</button>
+        </div>
+
+        <!-- Desktop / Mobile Frame Toggle -->
+        <div style="display:flex;gap:6px">
+          <button class="uiverse-btn" onclick="App.setPreviewViewport('desktop')" id="vp-desktop-btn" style="padding:6px 10px;font-size:0.72rem">
+            <i data-lucide="monitor" style="width:14px;height:14px"></i>
+          </button>
+          <button class="uiverse-btn" onclick="App.setPreviewViewport('mobile')" id="vp-mobile-btn" style="padding:6px 10px;font-size:0.72rem">
+            <i data-lucide="smartphone" style="width:14px;height:14px"></i>
+          </button>
+          <button class="uiverse-btn" onclick="App.launchIsolatedViewerSimulation()" title="Mở chế độ Người Nhận Toàn Màn Hình (Như khi quét QR)" style="padding:6px 12px;font-size:0.72rem">
+            <i data-lucide="maximize-2" style="width:14px;height:14px"></i>
+            <span>Full QR View</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="preview-viewport-wrapper" id="studio-preview-slot">
+        <!-- #recipient-stage-mount lives here during Studio mode, or expands to fullscreen in Isolated QR mode -->
+        <div id="recipient-stage-mount">
+          <!-- Dedicated WebGL Canvas for Recipient Stage -->
+          <canvas id="stage-webgl-canvas" class="stage-canvas-layer"></canvas>
+
+          <!-- Top Minimal Recipient HUD -->
+          <div class="recipient-hud-top">
+            <div class="stage-progress-steps">
+              <div class="stage-dot active" id="r-dot-1"></div>
+              <div class="stage-dot" id="r-dot-2"></div>
+              <div class="stage-dot" id="r-dot-3"></div>
+              <span class="font-mono-hud" id="r-stage-label" style="margin-left:6px;color:var(--accent-secondary)">CHẶNG 01 / MỞ KHÓA</span>
+            </div>
+
+            <div style="display:flex;gap:8px">
+              <button class="uiverse-btn" onclick="AudioSynth.toggleMute()" id="r-audio-btn" style="padding:7px 12px;font-size:0.72rem">
+                <i data-lucide="volume-2" style="width:14px;height:14px"></i>
+                <span id="r-audio-label">Âm Thanh</span>
+              </button>
+              <!-- Exit button ONLY visible when creator is previewing, completely hidden in real QR view mode -->
+              <button class="uiverse-btn" id="exit-simulation-btn" onclick="App.exitIsolatedViewerSimulation()" style="padding:7px 12px;font-size:0.72rem;display:none">
+                <i data-lucide="minimize-2" style="width:14px;height:14px"></i>
+                <span>Thoát Chế Độ Xem Thử</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ===============================================================
+               RECIPIENT SUBSTAGE 1: INTERACTIVE MINI-GAME GATE
+               =============================================================== -->
+          <div class="recipient-substage active" id="substage-1">
+            <div class="uiverse-card minigame-card">
+              <div class="font-mono-hud" style="font-size:0.68rem;color:var(--accent-primary);margin-bottom:4px">INTERACTIVE UNLOCK GATE</div>
+              <h3 class="font-serif-luxury" style="font-size:1.75rem;font-weight:600" id="r-game-title">Mảnh Ghép Ký Ức</h3>
+              <p style="font-size:0.82rem;color:var(--text-secondary);margin-top:4px" id="r-game-desc">
+                Hoàn thành thử thách nhỏ để mở khóa không gian ký ức 3D dành riêng cho <strong id="r-recipient-inline">Mẹ Hiền</strong>.
+              </p>
+
+              <!-- Dynamic Game Mount -->
+              <div id="r-game-mount-area" style="margin-top:10px"></div>
+
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08)">
+                <span class="font-mono-hud" style="font-size:0.7rem;color:var(--text-muted)" id="r-game-status-text">TIẾN ĐỘ: ĐANG THỰC HIỆN</span>
+                <button class="uiverse-btn" onclick="RecipientExperience.completeStage1()" style="padding:6px 12px;font-size:0.72rem">
+                  <i data-lucide="fast-forward" style="width:13px;height:13px"></i>
+                  <span>Mở Khóa Nhanh</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===============================================================
+               RECIPIENT SUBSTAGE 2: PHYSICAL GESTURE TRANSITION
+               =============================================================== -->
+          <div class="recipient-substage" id="substage-2">
+            <div class="uiverse-card minigame-card" style="max-width:440px">
+              <div class="font-mono-hud" style="font-size:0.68rem;color:var(--accent-primary);margin-bottom:4px">PHYSICAL GESTURE PORTAL</div>
+              <h3 class="font-serif-luxury" style="font-size:1.7rem;font-weight:600" id="r-gesture-title">Xoay Vòng Đánh Thức Ký Ức</h3>
+              <p style="font-size:0.82rem;color:var(--text-secondary);margin-top:4px" id="r-gesture-desc">
+                Giữ chuột hoặc ngón tay xoay theo vòng tròn quanh tâm sáng để tích tụ năng lượng mở cổng 3D.
+              </p>
+
+              <canvas id="gesture-interactive-canvas" width="320" height="320"></canvas>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+                <span class="font-mono-hud" style="font-size:0.76rem;color:var(--accent-secondary)" id="r-gesture-progress">NĂNG LƯỢNG: 0%</span>
+                <button class="uiverse-btn" onclick="RecipientExperience.goToStage('3A')" style="padding:6px 12px;font-size:0.72rem">
+                  <span>Bỏ Qua Cử Chỉ</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===============================================================
+               RECIPIENT SUBSTAGE 3: 3A (3D MORPHING ENTITY) & 3B (MEMORY LANE)
+               =============================================================== -->
+          <div class="recipient-substage" id="substage-3-hud">
+            <!-- Scene 3A Top Banner -->
+            <div id="scene-3a-banner" class="uiverse-card" style="padding:16px 24px;text-align:center;max-width:460px;margin-top:12px">
+              <div class="font-mono-hud" style="font-size:0.66rem;color:var(--accent-primary)">PHÂN CẢNH 3A — 8,000 LUMINOUS PARTICLES</div>
+              <h3 class="font-serif-luxury" style="font-size:1.75rem;margin:4px 0" id="r-3a-heading">Gửi Tặng Mẹ Hiền</h3>
+              <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:14px">
+                Di chuyển chuột hoặc nghiêng ngón tay để xoay thực thể ánh sáng 3D.
+              </p>
+              <button class="uiverse-btn uiverse-btn-primary" onclick="RecipientExperience.goToStage('3B')" style="padding:10px 22px;font-size:0.84rem">
+                <i data-lucide="sparkles" style="width:16px;height:16px"></i>
+                <span>Bước Vào Con Đường Ký Ức 3D</span>
+              </button>
+            </div>
+
+            <!-- Scene 3B Active Memory Portal Caption Popup -->
+            <div class="uiverse-card memory-portal-popup" id="memory-portal-popup">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <span class="font-mono-hud" style="font-size:0.68rem;color:var(--accent-primary)" id="portal-popup-index">TRẠM KÝ ỨC 01</span>
+                <span class="font-mono-hud" style="font-size:0.68rem;color:var(--text-muted)" id="portal-popup-date">20 / 10</span>
+              </div>
+              <div class="font-serif-luxury" style="font-size:1.35rem;font-weight:600;line-height:1.4" id="portal-popup-caption">
+                Ký ức đẹp nhất luôn tỏa sáng dọc theo hành trình.
+              </div>
+            </div>
+
+            <!-- Scene 3B Bottom Journey Spline Scrubber -->
+            <div class="uiverse-card journey-scrubber-bar" id="scene-3b-controls" style="display:none">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="font-mono-hud" style="font-size:0.7rem;color:var(--accent-secondary)" id="r-vehicle-status">
+                  HÓA THÂN: THUYỀN GIẤY NGÂN HÀ
+                </span>
+                <span class="font-mono-hud" style="font-size:0.7rem;color:var(--text-secondary)" id="r-spline-percent">
+                  HÀNH TRÌNH: 0%
+                </span>
+              </div>
+              <input type="range" min="0" max="1000" value="0" class="spline-range-slider" id="spline-progress-slider" oninput="RecipientExperience.onSplineScrub(this.value)" />
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+                <span style="font-size:0.74rem;color:var(--text-muted)">Cuộn chuột hoặc kéo thanh trượt để lướt qua các khung ảnh 3D</span>
+                <button class="uiverse-btn uiverse-btn-primary" onclick="RecipientExperience.openGrandLetterModal()" style="padding:6px 14px;font-size:0.74rem">
+                  <i data-lucide="mail-open" style="width:14px;height:14px"></i>
+                  <span>Mở Tâm Thư 20/10</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       MODAL 1: AUTHENTICATION GATE (LOGIN / REGISTER WITH UIVERSE SLIDE)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-auth">
+    <div class="uiverse-card modal-box">
+      <button class="modal-close-btn" onclick="App.closeModal('modal-auth')">
+        <i data-lucide="x" style="width:16px;height:16px"></i>
+      </button>
+
+      <div class="font-mono-hud" style="font-size:0.7rem;color:var(--accent-primary);margin-bottom:6px">CREATOR AUTHENTICATION GATE</div>
+      <h3 class="font-serif-luxury" style="font-size:2rem;font-weight:600;margin-bottom:6px" id="auth-modal-title">Đăng Nhập Studio</h3>
+      <p style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:18px">
+        Đăng nhập để khởi tạo thiệp 3D mới, lưu trữ đám mây cục bộ và quản lý mã QR cá nhân.
+      </p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;padding:4px;background:rgba(0,0,0,0.35);border-radius:12px">
+        <button class="uiverse-btn uiverse-btn-primary" id="tab-login-btn" onclick="App.switchAuthMode('login')" style="padding:8px;border-radius:9px">Đăng Nhập</button>
+        <button class="uiverse-btn" id="tab-register-btn" onclick="App.switchAuthMode('register')" style="padding:8px;border-radius:9px">Đăng Ký</button>
+      </div>
+
+      <form onsubmit="App.submitAuthForm(event)" style="display:flex;flex-direction:column;gap:14px">
+        <div id="auth-name-group" style="display:none">
+          <label class="uiverse-label"><i data-lucide="user" style="width:14px;height:14px"></i> Họ và Tên Creator</label>
+          <input type="text" class="uiverse-input" id="auth-input-name" placeholder="VD: Nguyễn Minh Anh" />
+        </div>
+        <div>
+          <label class="uiverse-label"><i data-lucide="mail" style="width:14px;height:14px"></i> Email Tài Khoản</label>
+          <input type="email" class="uiverse-input" id="auth-input-email" required placeholder="creator@lumina2010.vn" value="creator@lumina2010.vn" />
+        </div>
+        <div>
+          <label class="uiverse-label"><i data-lucide="lock" style="width:14px;height:14px"></i> Mật Khẩu</label>
+          <input type="password" class="uiverse-input" id="auth-input-password" required placeholder="••••••••" value="20102026" />
+        </div>
+
+        <button type="submit" class="uiverse-btn uiverse-btn-primary" style="width:100%;padding:13px;margin-top:4px">
+          <i data-lucide="shield-check" style="width:17px;height:17px"></i>
+          <span id="auth-submit-label">Xác Thực & Vào Studio</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: QR CODE ISOLATED RECIPIENT SHARE MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-qr">
+    <div class="uiverse-card modal-box" style="text-align:center">
+      <button class="modal-close-btn" onclick="App.closeModal('modal-qr')">
+        <i data-lucide="x" style="width:16px;height:16px"></i>
+      </button>
+
+      <div class="font-mono-hud" style="font-size:0.7rem;color:var(--accent-primary);margin-bottom:4px">ISOLATED RECIPIENT PORTAL</div>
+      <h3 class="font-serif-luxury" style="font-size:1.95rem;font-weight:600" id="qr-modal-card-title">Mã QR Thiệp 20/10</h3>
+      <p style="font-size:0.82rem;color:var(--text-secondary);margin-top:4px">
+        Khi người nhận quét mã QR này, hệ thống tự động mở <strong>Chế Độ Toàn Màn Hình Độc Lập</strong> (không cần đăng nhập, ẩn toàn bộ thanh công cụ quản trị).
+      </p>
+
+      <div id="qr-code-mount"></div>
+
+      <div style="margin-bottom:16px">
+        <input type="text" class="uiverse-input font-mono-hud" id="qr-share-url-input" readonly style="font-size:0.72rem;text-align:center" />
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <button class="uiverse-btn" onclick="App.downloadQRCodeImage()">
+          <i data-lucide="download" style="width:16px;height:16px"></i>
+          <span>Tải Ảnh QR (PNG)</span>
+        </button>
+        <button class="uiverse-btn uiverse-btn-primary" onclick="App.copyShareUrl()">
+          <i data-lucide="copy" style="width:16px;height:16px"></i>
+          <span>Sao Chép Link</span>
+        </button>
+      </div>
+
+      <button class="uiverse-btn" onclick="App.openIsolatedViewerFromModal()" style="width:100%;margin-top:10px">
+        <i data-lucide="external-link" style="width:16px;height:16px"></i>
+        <span>Trải Nghiệm Ngay Như Người Quét QR</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: GRAND 20/10 DEDICATION LETTER (FINALE OF STAGE 3B)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-grand-letter">
+    <div class="uiverse-card grand-letter-modal">
+      <button class="modal-close-btn" onclick="App.closeModal('modal-grand-letter')">
+        <i data-lucide="x" style="width:16px;height:16px"></i>
+      </button>
+
+      <div style="display:flex;align-items:center;gap:10px;color:var(--accent-primary);margin-bottom:8px">
+        <i data-lucide="award" style="width:20px;height:20px"></i>
+        <span class="font-mono-hud" style="font-size:0.74rem">BỨC TÂM THƯ KỶ NIỆM 20 THÁNG 10</span>
+      </div>
+
+      <h2 class="font-serif-luxury" style="font-size:2.4rem;font-weight:700" id="letter-modal-recipient">Gửi Mẹ Yêu Dấu</h2>
+
+      <div class="letter-body-prose" id="letter-modal-body"></div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div class="font-mono-hud" style="font-size:0.68rem;color:var(--text-muted)">NGƯỜI GỬI TRỌN YÊU THƯƠNG</div>
+          <div class="font-serif-luxury" style="font-size:1.5rem;font-weight:600;color:var(--accent-secondary)" id="letter-modal-sender">Con của Mẹ</div>
+        </div>
+        <button class="uiverse-btn uiverse-btn-primary" onclick="RecipientExperience.triggerFireworkBurst(); App.closeModal('modal-grand-letter')">
+          <i data-lucide="sparkles" style="width:16px;height:16px"></i>
+          <span>Ngắm Pháo Hoa Ánh Sáng 3D</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- ==========================================================================
+       CORE APPLICATION ARCHITECTURE (MODULAR ES6 ENGINE)
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       MODULE 1: PROCEDURAL SVG MEMORY PHOTO GENERATOR (ZERO EXTERNAL BROKEN LINKS)
+       Creates rich, high-resolution artistic SVG data-URI illustrations so every
+       pre-seeded card & 3D photo frame looks sharp and loads with 100% CORS safety.
+       ========================================================================== */
+    const ProceduralArt = {
+      createSVGDataURL(title, subtitle, c1, c2, accent) {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+          <defs>
+            <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${c1}"/>
+              <stop offset="100%" stop-color="${c2}"/>
+            </linearGradient>
+            <radialGradient id="glow" cx="50%" cy="42%" r="48%">
+              <stop offset="0%" stop-color="${accent}" stop-opacity="0.65"/>
+              <stop offset="100%" stop-color="${c2}" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="600" height="600" fill="url(#bg)"/>
+          <circle cx="300" cy="250" r="220" fill="url(#glow)"/>
+          <g stroke="${accent}" stroke-opacity="0.38" fill="none" stroke-width="1.5">
+            <circle cx="300" cy="250" r="140"/>
+            <circle cx="300" cy="250" r="95" stroke-dasharray="6 6"/>
+            <path d="M300 90 L350 250 L300 410 L250 250 Z"/>
+            <path d="M140 250 L300 200 L460 250 L300 300 Z"/>
+            <rect x="36" y="36" width="528" height="528" rx="24"/>
+          </g>
+          <text x="300" y="475" text-anchor="middle" fill="#ffffff" font-family="Georgia, serif" font-size="31" font-weight="bold">${title}</text>
+          <text x="300" y="515" text-anchor="middle" fill="${accent}" font-family="monospace" font-size="16" letter-spacing="4">${subtitle}</text>
+        </svg>`;
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+      }
+    };
+
+    /* ==========================================================================
+       MODULE 2: WEB AUDIO API HARMONIC SYNTHESIZER (CHIMES, INTERACTION & AMBIENT)
+       ========================================================================== */
+    const AudioSynth = {
+      ctx: null,
+      muted: false,
+      ambientTimer: null,
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+
+      playTone(freq = 528, duration = 0.45, type = 'sine', vol = 0.08) {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+        gain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(vol, this.ctx.currentTime + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      },
+
+      playSuccessChord() {
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((n, idx) => {
+          setTimeout(() => this.playTone(n, 0.9, 'triangle', 0.09), idx * 95);
+        });
+      },
+
+      playErrorBuzz() {
+        this.playTone(170, 0.25, 'sawtooth', 0.06);
+        setTimeout(() => this.playTone(145, 0.3, 'sawtooth', 0.06), 110);
+      },
+
+      startAmbientLoop(style = 'harp') {
+        this.stopAmbientLoop();
+        const scales = {
+          harp: [261.63, 329.63, 392.00, 493.88, 523.25, 659.25, 783.99],
+          musicbox: [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50],
+          ethereal: [220.00, 277.18, 329.63, 440.00, 554.37, 659.25]
+        };
+        const pool = scales[style] || scales.harp;
+        let step = 0;
+        this.ambientTimer = setInterval(() => {
+          if (this.muted) return;
+          const note = pool[step % pool.length];
+          this.playTone(note, 1.8, style === 'musicbox' ? 'sine' : 'triangle', 0.035);
+          step++;
+        }, 1350);
+      },
+
+      stopAmbientLoop() {
+        if (this.ambientTimer) {
+          clearInterval(this.ambientTimer);
+          this.ambientTimer = null;
+        }
+      },
+
+      toggleMute() {
+        this.muted = !this.muted;
+        const lbl = document.getElementById('r-audio-label');
+        if (lbl) lbl.textContent = this.muted ? 'Đã Tắt Tiếng' : 'Âm Thanh';
+        App.toast(this.muted ? 'Đã tắt âm thanh nền' : 'Đã bật giai điệu ánh sáng');
+      }
+    };
+
+    /* ==========================================================================
+       MODULE 3: STORAGE & URL PAYLOAD CODEC (PRE-SEEDED SHOWCASE CARDS)
+       ========================================================================== */
+    const StorageEngine = {
+      CARDS_KEY: 'lumina_2010_saved_cards_v1',
+      USER_KEY: 'lumina_2010_active_user_v1',
+
+      getDefaultSeedCards() {
+        return [
+          {
+            id: 'card-mother-2010',
+            title: 'Ánh Nhật Quang Của Mẹ',
+            recipientName: 'Mẹ Hiền Kính Yêu',
+            senderName: 'Con của Mẹ',
+            theme: 'mother',
+            particleShape: 'lotus',
+            miniGame: 'puzzle',
+            gestureType: 'windup',
+            vehicleType: 'boat',
+            musicStyle: 'harp',
+            puzzleImage: ProceduralArt.createSVGDataURL('VÒNG TAY CỦA MẸ', '20 THÁNG 10 ẤM ÁP', '#2e1a08', '#0c0804', '#f59e0b'),
+            scratchSecret: '2010 — MẸ LÀ BÌNH YÊN NHẤT',
+            catcherTarget: 6,
+            triviaQuestions: [
+              {
+                question: 'Món ăn nào Mẹ nấu luôn khiến cả nhà nhớ nhất mỗi khi đi xa?',
+                options: ['Canh chua cá lóc & cơm nóng', 'Phở bò gia truyền', 'Bánh xèo miền Tây', 'Món nào Mẹ nấu cũng tuyệt vời nhất'],
+                correctIndex: 3,
+                hint: 'Hãy chọn đáp án gói trọn tấm lòng của Mẹ!'
+              }
+            ],
+            memories: [
+              {
+                img: ProceduralArt.createSVGDataURL('NHỮNG SỚM MAI TẦN TẢO', 'KÝ ỨC TUỔI THƠ 01', '#3b2109', '#120b04', '#f59e0b'),
+                caption: 'Những buổi sớm mai Mẹ thức dậy chuẩn bị từng bữa ăn ấm nóng trước khi con đến trường.',
+                date: 'Ký Ức Tuổi Thơ'
+              },
+              {
+                img: ProceduralArt.createSVGDataURL('NỤ CƯỜI DỊU HIỀN', 'HÀNH TRÌNH TRƯỞNG THÀNH 02', '#422608', '#140c05', '#fbbf24'),
+                caption: 'Dù cuộc sống bộn bề, ánh mắt và nụ cười của Mẹ vẫn luôn là bến đỗ bình yên nhất.',
+                date: 'Bến Đỗ Bình Yên'
+              },
+              {
+                img: ProceduralArt.createSVGDataURL('MÙA THU THÁNG MƯỜI', 'TRI ÂN 20/10', '#4f2c07', '#170d04', '#fde68a'),
+                caption: 'Mỗi mùa 20/10 đi qua, con càng thấu hiểu những hy sinh thầm lặng của Mẹ.',
+                date: '20 Tháng 10'
+              }
+            ],
+            mainLetter: 'Mẹ kính yêu của con,\n\nNhân ngày Phụ nữ Việt Nam 20/10, con muốn gửi tới Mẹ ngàn lời biết ơn sâu sắc nhất. Cảm ơn Mẹ đã luôn là ánh mặt trời ấm áp dẫn đường, kiên nhẫn lắng nghe và chở che cho con qua mọi giông bão.\n\nCon chúc Mẹ luôn dồi dào sức khỏe, tâm an vui và mãi nở nụ cười rạng rỡ như đóa sen vàng trong không gian ánh sáng này.'
+          },
+          {
+            id: 'card-lover-2010',
+            title: 'Bản Giao Hưởng Ánh Sao',
+            recipientName: 'Người Thương Của Anh',
+            senderName: 'Người luôn dõi theo Em',
+            theme: 'lover',
+            particleShape: 'heart',
+            miniGame: 'scratch',
+            gestureType: 'heartpath',
+            vehicleType: 'crane',
+            musicStyle: 'musicbox',
+            puzzleImage: ProceduralArt.createSVGDataURL('NHỊP ĐẬP TRÁI TIM', '20/10 LÃNG MẠN', '#3b0716', '#120307', '#f43f5e'),
+            scratchSecret: 'EM LÀ ĐIỀU TUYỆT VỜI NHẤT — 20/10',
+            catcherTarget: 6,
+            triviaQuestions: [
+              {
+                question: 'Khoảnh khắc nào khiến trái tim hai đứa đồng điệu nhất?',
+                options: ['Buổi hẹn đầu tiên dưới cơn mưa', 'Những chuyến đi ngắm hoàng hôn', 'Mỗi giây phút được ở cạnh nhau', 'Khi cùng nhau cười vang'],
+                correctIndex: 2,
+                hint: 'Mọi khoảnh khắc bên nhau đều là vô giá!'
+              }
+            ],
+            memories: [
+              {
+                img: ProceduralArt.createSVGDataURL('ÁNH MẮT ĐẦU TIÊN', 'CHƯƠNG 01 — GẶP GỠ', '#450a1b', '#140409', '#f43f5e'),
+                caption: 'Ngày đầu tiên ánh mắt chạm nhau, cả bầu trời như bừng sáng hàng vạn vì sao.',
+                date: 'Ngày Đầu Gặp Gỡ'
+              },
+              {
+                img: ProceduralArt.createSVGDataURL('DẠO BƯỚC HOÀNG HÔN', 'CHƯƠNG 02 — ĐỒNG HÀNH', '#4c0c20', '#17040a', '#fb7185'),
+                caption: 'Những chiều nắm tay đi dọc con phố nhỏ, mọi muộn phiền đều tan biến.',
+                date: 'Chiều Hoàng Hôn'
+              },
+              {
+                img: ProceduralArt.createSVGDataURL('HẸN ƯỚC TƯƠNG LAI', 'CHƯƠNG 03 — VĨNH CỬU', '#590d24', '#1a050b', '#fecdd3'),
+                caption: 'Cảm ơn em đã bước vào cuộc đời anh bằng tất cả sự dịu dàng và rạng rỡ.',
+                date: '20 Tháng 10'
+              }
+            ],
+            mainLetter: 'Gửi người con gái anh thương,\n\nNgày 20/10 năm nay, anh gói trọn những kỷ niệm đẹp nhất của chúng mình vào dải ngân hà 3D này. Cảm ơn em vì sự dịu dàng, thấu hiểu và nguồn năng lượng tích cực mà em mang đến mỗi ngày.\n\nChúc em luôn kiêu hãnh, hạnh phúc và tỏa sáng rực rỡ nhất trong thế giới của riêng mình và trong trái tim anh.'
+          },
+          {
+            id: 'card-friend-2010',
+            title: 'Chuyến Bay Thanh Xuân',
+            recipientName: 'Tri Kỷ Của Tôi',
+            senderName: 'Người bạn đồng hành',
+            theme: 'friend',
+            particleShape: 'cloud',
+            miniGame: 'trivia',
+            gestureType: 'longpress',
+            vehicleType: 'glider',
+            musicStyle: 'ethereal',
+            puzzleImage: ProceduralArt.createSVGDataURL('BẦU TRỜI THANH XUÂN', 'TÌNH BẠN DIỆU KỲ', '#08203e', '#030b17', '#38bdf8'),
+            scratchSecret: 'TÌNH BẠN BẤT DIỆT — 20/10',
+            catcherTarget: 6,
+            triviaQuestions: [
+              {
+                question: 'Điều gì làm nên tình bạn bền vững của chúng ta suốt những năm qua?',
+                options: ['Cùng đam mê khám phá', 'Luôn thẳng thắn và sẻ chia mọi buồn vui', 'Những cuộc trò chuyện thâu đêm', 'Tất cả những điều trên'],
+                correctIndex: 3,
+                hint: 'Đáp án bao hàm tất cả kỷ niệm của tụi mình!'
+              }
+            ],
+            memories: [
+              {
+                img: ProceduralArt.createSVGDataURL('NHỮNG CHUYẾN ĐI XA', 'KÝ ỨC THANH XUÂN 01', '#0c2d57', '#040c1a', '#38bdf8'),
+                caption: 'Những chuyến đi ngẫu hứng đầy ắp tiếng cười dưới bầu trời xanh biếc.',
+                date: 'Hành Trình Rực Rỡ'
+              },
+              {
+                img: ProceduralArt.createSVGDataURL('SẺ CHIA THẤU HIỂU', 'KÝ ỨC THANH XUÂN 02', '#0f3566', '#050e1c', '#7dd3fc'),
+                caption: 'Cảm ơn bạn đã luôn lắng nghe và tiếp thêm sức mạnh mỗi khi tôi chùn bước.',
+                date: 'Tri Kỷ Đồng Hành'
+              }
+            ],
+            mainLetter: 'Gửi người bạn tuyệt vời,\n\nNhân ngày 20/10, chúc bạn luôn giữ vững đôi cánh tự do, bay cao tới những chân trời mơ ước. Cảm ơn vì đã trở thành một phần thanh xuân tươi đẹp và đáng tự hào nhất!'
+          }
+        ];
+      },
+
+      loadCards() {
+        try {
+          const raw = localStorage.getItem(this.CARDS_KEY);
+          if (!raw) {
+            const seeds = this.getDefaultSeedCards();
+            this.saveCards(seeds);
+            return seeds;
+          }
+          return JSON.parse(raw);
+        } catch (e) {
+          return this.getDefaultSeedCards();
+        }
+      },
+
+      saveCards(cards) {
+        try {
+          localStorage.setItem(this.CARDS_KEY, JSON.stringify(cards));
+        } catch (e) {
+          console.warn('Storage quota notice:', e);
+        }
+      },
+
+      getUser() {
+        try {
+          const raw = localStorage.getItem(this.USER_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      },
+
+      setUser(user) {
+        localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+      },
+
+      encodeCardPayload(card) {
+        try {
+          // Create a compact clone for QR URL portability across devices
+          const compact = {
+            id: card.id,
+            t: card.title,
+            r: card.recipientName,
+            s: card.senderName,
+            th: card.theme,
+            ps: card.particleShape,
+            mg: card.miniGame,
+            gt: card.gestureType,
+            vt: card.vehicleType,
+            ms: card.musicStyle,
+            ss: card.scratchSecret,
+            ct: card.catcherTarget,
+            ml: card.mainLetter
+          };
+          return btoa(encodeURIComponent(JSON.stringify(compact)));
+        } catch (e) {
+          return '';
+        }
+      },
+
+      decodeCardPayload(encoded) {
+        try {
+          const obj = JSON.parse(decodeURIComponent(atob(encoded)));
+          const fallback = this.getDefaultSeedCards()[0];
+          return {
+            ...fallback,
+            id: obj.id || 'qr-card',
+            title: obj.t || fallback.title,
+            recipientName: obj.r || fallback.recipientName,
+            senderName: obj.s || fallback.senderName,
+            theme: obj.th || fallback.theme,
+            particleShape: obj.ps || fallback.particleShape,
+            miniGame: obj.mg || fallback.miniGame,
+            gestureType: obj.gt || fallback.gestureType,
+            vehicleType: obj.vt || fallback.vehicleType,
+            musicStyle: obj.ms || fallback.musicStyle,
+            scratchSecret: obj.ss || fallback.scratchSecret,
+            catcherTarget: obj.ct || 6,
+            mainLetter: obj.ml || fallback.mainLetter
+          };
+        } catch (e) {
+          return null;
+        }
+      }
+    };
+
+    /* ==========================================================================
+       MODULE 4: LUMINA WEBGL 3D ENGINE (THREE.JS + GSAP)
+       Handles:
+       1. Ambient 3D background particles on Landing/Dashboard
+       2. Stage 3A: 8,000-Particle Morphing Entity (Heart, Cloud, Airplane, Lotus, Rose)
+       3. Stage 3B: CatmullRomCurve3 3D Memory Lane + 5 Custom 3D Vehicles + Floating Photo Portals
+       ========================================================================== */
+    class LuminaWebGLController {
+      constructor(canvasId, isRecipientStage = false) {
+        this.canvas = document.getElementById(canvasId);
+        this.isRecipientStage = isRecipientStage;
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(55, 1, 0.1, 250);
+        this.camera.position.set(0, 1.2, 14);
+
+        this.renderer = new THREE.WebGLRenderer({
+          canvas: this.canvas,
+          antialias: true,
+          alpha: true,
+          powerPreference: 'high-performance'
+        });
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        this.particleCount = isRecipientStage ? 8000 : 3200;
+        this.currentMode = '3A'; // '3A' or '3B'
+        this.mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+        this.splineProgress = 0;
+
+        this.photoPortals = [];
+        this.vehicleGroup = new THREE.Group();
+        this.memoryLaneGroup = new THREE.Group();
+        this.fireworksGroup = new THREE.Group();
+
+        this.initLights();
+        this.initMorphingParticleCloud();
+        if (this.isRecipientStage) {
+          this.initMemoryLaneSpline();
+          this.scene.add(this.fireworksGroup);
+        }
+
+        this.bindEvents();
+        this.resize();
+        this.animate();
+      }
+
+      initLights() {
+        const ambient = new THREE.AmbientLight(0xffffff, 0.85);
+        this.pointLight1 = new THREE.PointLight(0xf59e0b, 2.5, 45);
+        this.pointLight1.position.set(6, 8, 8);
+        this.pointLight2 = new THREE.PointLight(0xfde68a, 1.8, 45);
+        this.pointLight2.position.set(-6, -4, 6);
+        this.scene.add(ambient, this.pointLight1, this.pointLight2);
+      }
+
+      /* Generates glowing radial sprite texture for Three.js Points */
+      createGlowSprite() {
+        const c = document.createElement('canvas');
+        c.width = 64;
+        c.height = 64;
+        const ctx = c.getContext('2d');
+        const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+        grad.addColorStop(0, 'rgba(255,255,255,1)');
+        grad.addColorStop(0.28, 'rgba(255,255,255,0.85)');
+        grad.addColorStop(0.65, 'rgba(255,255,255,0.22)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 64, 64);
+        return new THREE.CanvasTexture(c);
+      }
+
+      /* Parametric 3D Point Cloud Generators for the 5 Shapes */
+      computeShapePositions(shapeType) {
+        const arr = new Float32Array(this.particleCount * 3);
+        const N = this.particleCount;
+
+        for (let i = 0; i < N; i++) {
+          const i3 = i * 3;
+          const u = Math.random();
+          const v = Math.random();
+          const theta = u * Math.PI * 2;
+          const phi = v * Math.PI;
+
+          let x = 0, y = 0, z = 0;
+
+          if (shapeType === 'heart') {
+            // 3D Parametric Love Heart
+            const t = theta;
+            const r = Math.cbrt(Math.random()) * 0.27;
+            x = r * 16 * Math.pow(Math.sin(t), 3);
+            y = r * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+            z = (Math.random() - 0.5) * 2.4 * (1 - Math.abs(y) / 5.5);
+          } else if (shapeType === 'cloud') {
+            // Fluffy Multi-Puff Cumulus Cloud
+            const puffs = [
+              { cx: 0, cy: 0.5, cz: 0, rx: 2.6, ry: 1.7, rz: 1.8 },
+              { cx: -2.4, cy: -0.2, cz: 0.2, rx: 1.9, ry: 1.3, rz: 1.5 },
+              { cx: 2.4, cy: -0.1, cz: -0.2, rx: 2.0, ry: 1.4, rz: 1.5 },
+              { cx: -1.1, cy: 1.2, cz: 0.3, rx: 1.6, ry: 1.3, rz: 1.4 },
+              { cx: 1.3, cy: 1.1, cz: -0.2, rx: 1.5, ry: 1.2, rz: 1.3 }
+            ];
+            const p = puffs[i % puffs.length];
+            const rad = Math.cbrt(Math.random());
+            x = p.cx + rad * p.rx * Math.sin(phi) * Math.cos(theta);
+            y = p.cy + rad * p.ry * Math.cos(phi);
+            z = p.cz + rad * p.rz * Math.sin(phi) * Math.sin(theta);
+          } else if (shapeType === 'airplane') {
+            // 3D Geometric Swept-Wing Airplane
+            const section = Math.random();
+            if (section < 0.42) {
+              // Fuselage
+              z = (Math.random() - 0.5) * 9.0;
+              const taper = 1 - Math.pow(z / 5.0, 2) * 0.65;
+              const ang = Math.random() * Math.PI * 2;
+              const rad = 0.55 * taper * Math.sqrt(Math.random());
+              x = Math.cos(ang) * rad;
+              y = Math.sin(ang) * rad;
+            } else if (section < 0.84) {
+              // Swept Main Wings
+              const side = Math.random() < 0.5 ? -1 : 1;
+              const span = Math.random() * 4.8;
+              x = side * (0.4 + span);
+              z = -span * 0.45 + (Math.random() - 0.5) * (1.4 - span * 0.2);
+              y = (Math.random() - 0.5) * 0.16;
+            } else {
+              // Tail Fin & Stabilizers
+              const h = Math.random() * 1.9;
+              x = (Math.random() - 0.5) * 0.18;
+              y = 0.3 + h;
+              z = -3.6 - h * 0.35 + (Math.random() - 0.5) * 0.7;
+            }
+          } else if (shapeType === 'rose') {
+            // 3D Blooming Spiral Rose (Rhodonea)
+            const k = 4.5;
+            const r = 3.8 * Math.pow(Math.random(), 0.65);
+            const petalWave = Math.sin(k * theta) * 0.85;
+            x = (r + petalWave) * Math.cos(theta) * 0.85;
+            z = (r + petalWave) * Math.sin(theta) * 0.85;
+            y = Math.cos(r * 1.2) * 1.35 + (Math.random() - 0.5) * 0.35;
+          } else {
+            // Default 'lotus': Maternal Sacred Lotus + Halo
+            if (i < N * 0.78) {
+              const petals = 8;
+              const layer = (i % 3) + 1;
+              const t = theta;
+              const petalShape = Math.abs(Math.sin((petals / 2) * t));
+              const rad = (0.9 + layer * 0.85) * (0.55 + 0.45 * petalShape);
+              x = rad * Math.cos(t);
+              z = rad * Math.sin(t);
+              y = -1.6 + Math.pow(rad * 0.45, 1.65) + layer * 0.25;
+            } else {
+              // Warm Maternal Halo Ring behind Lotus
+              const ringR = 3.7 + (Math.random() - 0.5) * 0.35;
+              x = ringR * Math.cos(theta);
+              y = 0.6 + ringR * Math.sin(theta);
+              z = -1.2 + (Math.random() - 0.5) * 0.3;
+            }
+          }
+
+          arr[i3] = x;
+          arr[i3 + 1] = y;
+          arr[i3 + 2] = z;
+        }
+        return arr;
+      }
+
+      initMorphingParticleCloud() {
+        this.particleGeometry = new THREE.BufferGeometry();
+        const initialPos = this.computeShapePositions('lotus');
+        const colors = new Float32Array(this.particleCount * 3);
+
+        const cPrimary = new THREE.Color(0xf59e0b);
+        const cSecondary = new THREE.Color(0xfde68a);
+
+        for (let i = 0; i < this.particleCount; i++) {
+          const mixC = cPrimary.clone().lerp(cSecondary, Math.random());
+          colors[i * 3] = mixC.r;
+          colors[i * 3 + 1] = mixC.g;
+          colors[i * 3 + 2] = mixC.b;
+        }
+
+        this.particleGeometry.setAttribute('position', new THREE.BufferAttribute(initialPos, 3));
+        this.particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        this.particleMaterial = new THREE.PointsMaterial({
+          size: this.isRecipientStage ? 0.14 : 0.11,
+          map: this.createGlowSprite(),
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.92,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending
+        });
+
+        this.particleSystem = new THREE.Points(this.particleGeometry, this.particleMaterial);
+        this.scene.add(this.particleSystem);
+      }
+
+      morphToShape(shapeType) {
+        const targetPositions = this.computeShapePositions(shapeType);
+        const posAttr = this.particleGeometry.attributes.position;
+        const startPositions = Float32Array.from(posAttr.array);
+        const tweenObj = { t: 0 };
+
+        gsap.killTweensOf(tweenObj);
+        gsap.to(tweenObj, {
+          t: 1,
+          duration: 1.5,
+          ease: 'power3.inOut',
+          onUpdate: () => {
+            const arr = posAttr.array;
+            for (let i = 0; i < arr.length; i++) {
+              arr[i] = startPositions[i] + (targetPositions[i] - startPositions[i]) * tweenObj.t;
+            }
+            posAttr.needsUpdate = true;
+          }
+        });
+      }
+
+      updateThemeColors(primaryHex, secondaryHex) {
+        const c1 = new THREE.Color(primaryHex);
+        const c2 = new THREE.Color(secondaryHex);
+        if (this.pointLight1) this.pointLight1.color.copy(c1);
+        if (this.pointLight2) this.pointLight2.color.copy(c2);
+
+        const colorAttr = this.particleGeometry.attributes.color;
+        const arr = colorAttr.array;
+        for (let i = 0; i < this.particleCount; i++) {
+          const mixed = c1.clone().lerp(c2, (i % 10) / 10);
+          arr[i * 3] = mixed.r;
+          arr[i * 3 + 1] = mixed.g;
+          arr[i * 3 + 2] = mixed.b;
+        }
+        colorAttr.needsUpdate = true;
+      }
+
+      /* ======================================================================
+         SCENE 3B: CATMULL-ROM SPLINE MEMORY LANE & 3D VEHICLE AVATAR
+         ====================================================================== */
+      initMemoryLaneSpline() {
+        this.scene.add(this.memoryLaneGroup);
+        this.memoryLaneGroup.visible = false;
+
+        // Define a sweeping 3D CatmullRomCurve3 through space
+        const curvePoints = [
+          new THREE.Vector3(0, 0, 10),
+          new THREE.Vector3(-4.5, 1.2, -5),
+          new THREE.Vector3(4.5, 2.5, -22),
+          new THREE.Vector3(-4.0, 0.8, -39),
+          new THREE.Vector3(3.5, 2.2, -56),
+          new THREE.Vector3(0, 1.5, -74)
+        ];
+        this.splineCurve = new THREE.CatmullRomCurve3(curvePoints);
+
+        // Glowing Spline Tube Pathway
+        const tubeGeo = new THREE.TubeGeometry(this.splineCurve, 180, 0.14, 12, false);
+        const tubeMat = new THREE.MeshBasicMaterial({
+          color: 0xf59e0b,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.38
+        });
+        this.splineTubeMesh = new THREE.Mesh(tubeGeo, tubeMat);
+        this.memoryLaneGroup.add(this.splineTubeMesh);
+
+        // Add vehicle container
+        this.memoryLaneGroup.add(this.vehicleGroup);
+        this.buildVehicleAvatar('boat');
+      }
+
+      /* Builds Procedural 3D Mesh for the 5 Chosen Vehicles */
+      buildVehicleAvatar(vehicleType) {
+        while (this.vehicleGroup.children.length > 0) {
+          this.vehicleGroup.remove(this.vehicleGroup.children[0]);
+        }
+        this.currentVehicleType = vehicleType;
+
+        const matPrimary = new THREE.MeshStandardMaterial({
+          color: 0xfde68a,
+          emissive: 0xf59e0b,
+          emissiveIntensity: 0.45,
+          roughness: 0.25,
+          metalness: 0.6,
+          side: THREE.DoubleSide
+        });
+
+        const wireMat = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.45
+        });
+
+        if (vehicleType === 'leaf') {
+          // Drifting Autumn Leaf
+          const leafGeo = new THREE.ConeGeometry(0.65, 1.8, 4);
+          leafGeo.scale(1, 1, 0.18);
+          leafGeo.rotateX(Math.PI / 2);
+          const mesh = new THREE.Mesh(leafGeo, matPrimary);
+          this.vehicleGroup.add(mesh, new THREE.Mesh(leafGeo, wireMat));
+        } else if (vehicleType === 'glider') {
+          // Paper Glider Dart
+          const wingGeo = new THREE.ConeGeometry(0.9, 2.2, 3);
+          wingGeo.scale(1.2, 1, 0.22);
+          wingGeo.rotateX(-Math.PI / 2);
+          const mesh = new THREE.Mesh(wingGeo, matPrimary);
+          this.vehicleGroup.add(mesh, new THREE.Mesh(wingGeo, wireMat));
+        } else if (vehicleType === 'crane') {
+          // Origami Crane with Animated Wings
+          const bodyGeo = new THREE.OctahedronGeometry(0.45, 0);
+          bodyGeo.scale(0.7, 0.6, 1.8);
+          const body = new THREE.Mesh(bodyGeo, matPrimary);
+
+          const wingGeo = new THREE.BoxGeometry(1.5, 0.04, 0.7);
+          this.leftWing = new THREE.Mesh(wingGeo, matPrimary);
+          this.leftWing.position.set(-0.75, 0.1, 0);
+          this.rightWing = new THREE.Mesh(wingGeo, matPrimary);
+          this.rightWing.position.set(0.75, 0.1, 0);
+
+          this.vehicleGroup.add(body, this.leftWing, this.rightWing);
+        } else if (vehicleType === 'train') {
+          // Vintage Memory Train
+          const loco = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.75, 1.8), matPrimary);
+          const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.55, 0.7), matPrimary);
+          cabin.position.set(0, 0.5, 0.4);
+          const chimney = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.55, 12), matPrimary);
+          chimney.position.set(0, 0.55, -0.55);
+          this.vehicleGroup.add(loco, cabin, chimney);
+        } else {
+          // Paper Boat (Default)
+          const hullGeo = new THREE.ConeGeometry(0.75, 1.9, 4);
+          hullGeo.rotateX(Math.PI / 2);
+          hullGeo.scale(0.85, 0.45, 1.1);
+          const hull = new THREE.Mesh(hullGeo, matPrimary);
+
+          const sailGeo = new THREE.ConeGeometry(0.5, 0.95, 4);
+          sailGeo.position.set(0, 0.45, 0);
+          const sail = new THREE.Mesh(sailGeo, matPrimary);
+          this.vehicleGroup.add(hull, sail, new THREE.Mesh(hullGeo, wireMat));
+        }
+      }
+
+      /* Rebuilds Floating 3D Photo Portals along the CatmullRomCurve3 */
+      rebuildPhotoPortals(memories = []) {
+        if (!this.isRecipientStage) return;
+        // Remove previous portals
+        this.photoPortals.forEach(p => this.memoryLaneGroup.remove(p.group));
+        this.photoPortals = [];
+
+        const loader = new THREE.TextureLoader();
+        const total = Math.max(memories.length, 1);
+
+        memories.forEach((mem, idx) => {
+          const t = 0.16 + ((idx + 0.5) / total) * 0.72;
+          const pt = this.splineCurve.getPointAt(t);
+          const tangent = this.splineCurve.getTangentAt(t);
+          const side = idx % 2 === 0 ? -1 : 1;
+
+          const portalGroup = new THREE.Group();
+          portalGroup.position.set(pt.x + side * 2.65, pt.y + 0.9, pt.z);
+
+          // Glowing Outer Frame
+          const frameGeo = new THREE.BoxGeometry(2.7, 2.7, 0.12);
+          const frameMat = new THREE.MeshStandardMaterial({
+            color: 0xf59e0b,
+            emissive: 0xf59e0b,
+            emissiveIntensity: 0.35,
+            roughness: 0.2,
+            metalness: 0.8
+          });
+          const frameMesh = new THREE.Mesh(frameGeo, frameMat);
+          portalGroup.add(frameMesh);
+
+          // Photo Plane
+          const tex = loader.load(mem.img);
+          const photoGeo = new THREE.PlaneGeometry(2.4, 2.4);
+          const photoMat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
+          const photoMesh = new THREE.Mesh(photoGeo, photoMat);
+          photoMesh.position.z = 0.08;
+          portalGroup.add(photoMesh);
+
+          // Orient slightly toward the path
+          portalGroup.lookAt(pt.x, pt.y + 0.8, pt.z + 4);
+
+          this.memoryLaneGroup.add(portalGroup);
+          this.photoPortals.push({
+            group: portalGroup,
+            frameMat,
+            t,
+            memory: mem,
+            index: idx
+          });
+        });
+      }
+
+      setStageMode(mode) {
+        this.currentMode = mode;
+        if (!this.isRecipientStage) return;
+
+        if (mode === '3A') {
+          this.memoryLaneGroup.visible = false;
+          this.particleSystem.visible = true;
+          gsap.to(this.camera.position, { x: 0, y: 1.2, z: 13.5, duration: 1.4, ease: 'power3.out' });
+          gsap.to(this.particleSystem.scale, { x: 1, y: 1, z: 1, duration: 1.2 });
+        } else if (mode === '3B') {
+          this.memoryLaneGroup.visible = true;
+          this.particleSystem.visible = true;
+          // Expand particles into surrounding starfield tunnel
+          gsap.to(this.particleSystem.scale, { x: 4.5, y: 4.5, z: 12, duration: 1.8, ease: 'power2.out' });
+          this.updateSplineJourney(this.splineProgress);
+        }
+      }
+
+      updateSplineJourney(normalizedT) {
+        if (!this.isRecipientStage || !this.splineCurve) return;
+        this.splineProgress = Math.max(0, Math.min(0.995, normalizedT));
+
+        // Position vehicle ahead on the spline
+        const vehicleT = Math.min(0.998, this.splineProgress + 0.045);
+        const vehiclePos = this.splineCurve.getPointAt(vehicleT);
+        const vehicleTan = this.splineCurve.getTangentAt(vehicleT);
+        this.vehicleGroup.position.copy(vehiclePos);
+        this.vehicleGroup.lookAt(vehiclePos.clone().add(vehicleTan));
+
+        // Position camera smoothly behind and slightly above the vehicle
+        const camPos = this.splineCurve.getPointAt(this.splineProgress);
+        this.camera.position.set(camPos.x, camPos.y + 1.45, camPos.z + 3.2);
+        this.camera.lookAt(vehiclePos.x, vehiclePos.y + 0.35, vehiclePos.z);
+
+        // Check proximity to Floating 3D Photo Portals
+        let activePortal = null;
+        let minDistance = 999;
+
+        this.photoPortals.forEach(portal => {
+          const dist = Math.abs(this.splineProgress - portal.t);
+          if (dist < 0.11 && dist < minDistance) {
+            minDistance = dist;
+            activePortal = portal;
+          }
+          // Highlight close frame and tilt toward camera
+          if (dist < 0.12) {
+            portal.frameMat.emissiveIntensity = 0.95;
+            portal.group.scale.setScalar(1.12);
+          } else {
+            portal.frameMat.emissiveIntensity = 0.28;
+            portal.group.scale.setScalar(1.0);
+          }
+        });
+
+        RecipientExperience.updateActivePortalHUD(activePortal);
+      }
+
+      spawn3DFireworkBurst() {
+        const count = 220;
+        const geo = new THREE.BufferGeometry();
+        const pos = new Float32Array(count * 3);
+        const vels = [];
+
+        const origin = this.vehicleGroup.position.clone();
+        for (let i = 0; i < count; i++) {
+          pos[i * 3] = origin.x;
+          pos[i * 3 + 1] = origin.y + 1.5;
+          pos[i * 3 + 2] = origin.z - 2;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.random() * Math.PI;
+          const speed = 0.08 + Math.random() * 0.22;
+          vels.push({
+            vx: speed * Math.sin(phi) * Math.cos(theta),
+            vy: speed * Math.cos(phi),
+            vz: speed * Math.sin(phi) * Math.sin(theta)
+          });
+        }
+
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        const mat = new THREE.PointsMaterial({
+          size: 0.28,
+          map: this.createGlowSprite(),
+          color: 0xfde68a,
+          transparent: true,
+          opacity: 1,
+          blending: THREE.AdditiveBlending
+        });
+
+        const points = new THREE.Points(geo, mat);
+        this.fireworksGroup.add(points);
+
+        const anim = { p: 0 };
+        gsap.to(anim, {
+          p: 1,
+          duration: 1.8,
+          ease: 'power2.out',
+          onUpdate: () => {
+            const arr = geo.attributes.position.array;
+            for (let i = 0; i < count; i++) {
+              arr[i * 3] += vels[i].vx;
+              arr[i * 3 + 1] += vels[i].vy - anim.p * 0.03;
+              arr[i * 3 + 2] += vels[i].vz;
+            }
+            geo.attributes.position.needsUpdate = true;
+            mat.opacity = 1 - anim.p;
+          },
+          onComplete: () => {
+            this.fireworksGroup.remove(points);
+            geo.dispose();
+            mat.dispose();
+          }
+        });
+      }
+
+      bindEvents() {
+        window.addEventListener('mousemove', e => {
+          this.mouse.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+          this.mouse.targetY = -(e.clientY / window.innerHeight - 0.5) * 2;
+        });
+        window.addEventListener('resize', () => this.resize());
+      }
+
+      resize() {
+        if (!this.canvas) return;
+        const parent = this.canvas.parentElement || document.body;
+        const w = this.isRecipientStage ? parent.clientWidth : window.innerWidth;
+        const h = this.isRecipientStage ? parent.clientHeight : window.innerHeight;
+        if (w === 0 || h === 0) return;
+        this.camera.aspect = w / h;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(w, h, false);
+      }
+
+      animate() {
+        requestAnimationFrame(() => this.animate());
+        const time = performance.now() * 0.001;
+
+        this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.06;
+        this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.06;
+
+        if (this.particleSystem) {
+          if (this.currentMode === '3A') {
+            this.particleSystem.rotation.y = time * 0.22 + this.mouse.x * 0.65;
+            this.particleSystem.rotation.x = this.mouse.y * 0.35;
+          } else {
+            this.particleSystem.rotation.y = time * 0.03;
+          }
+        }
+
+        // Animate vehicle bobbing and crane wings in Scene 3B
+        if (this.isRecipientStage && this.currentMode === '3B') {
+          this.vehicleGroup.position.y += Math.sin(time * 3.2) * 0.008;
+          if (this.currentVehicleType === 'crane' && this.leftWing && this.rightWing) {
+            this.leftWing.rotation.z = Math.sin(time * 6) * 0.45;
+            this.rightWing.rotation.z = -Math.sin(time * 6) * 0.45;
+          }
+        }
+
+        // Update HUD camera readout on main header
+        if (!this.isRecipientStage) {
+          const hudEl = document.getElementById('hud-coords-readout');
+          if (hudEl) {
+            hudEl.textContent = `CAM: ${(this.mouse.x * 2).toFixed(2)}, ${(1.2 + this.mouse.y).toFixed(2)}, 14.00`;
+          }
+        }
+
+        this.renderer.render(this.scene, this.camera);
+      }
+    }
+
+    /* ==========================================================================
+       MODULE 5: 3-STAGE RECIPIENT EXPERIENCE CONTROLLER
+       Manages Stage 1 (4 Playable Mini-Games), Stage 2 (3 Gestures with Particle Trail),
+       and Stage 3 (3A Particle Entity + 3B Memory Lane Spline).
+       ========================================================================== */
+    const RecipientExperience = {
+      activeCard: null,
+      currentStage: 1,
+      catcherRAF: null,
+      gestureRAF: null,
+      lastPortalIndex: -1,
+
+      loadCard(card) {
+        this.activeCard = JSON.parse(JSON.stringify(card));
+        document.getElementById('r-recipient-inline').textContent = this.activeCard.recipientName;
+        document.getElementById('r-3a-heading').textContent = `Dành Tặng ${this.activeCard.recipientName}`;
+
+        // Sync Theme & 3D Engine
+        App.applyThemePaletteOnly(this.activeCard.theme);
+        if (window.stageWebGL) {
+          window.stageWebGL.morphToShape(this.activeCard.particleShape);
+          window.stageWebGL.buildVehicleAvatar(this.activeCard.vehicleType);
+          window.stageWebGL.rebuildPhotoPortals(this.activeCard.memories || []);
+        }
+
+        this.goToStage(1);
+      },
+
+      goToStage(stageId) {
+        this.currentStage = stageId;
+        if (this.catcherRAF) cancelAnimationFrame(this.catcherRAF);
+        if (this.gestureRAF) cancelAnimationFrame(this.gestureRAF);
+
+        // Update studio preview pills
+        document.querySelectorAll('.preview-stage-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.pstage === String(stageId));
+        });
+
+        // Update Recipient Top Dots
+        const d1 = document.getElementById('r-dot-1');
+        const d2 = document.getElementById('r-dot-2');
+        const d3 = document.getElementById('r-dot-3');
+        const lbl = document.getElementById('r-stage-label');
+        d1.classList.toggle('active', stageId === 1);
+        d2.classList.toggle('active', stageId === 2);
+        d3.classList.toggle('active', stageId === '3A' || stageId === '3B');
+
+        document.getElementById('substage-1').classList.toggle('active', stageId === 1);
+        document.getElementById('substage-2').classList.toggle('active', stageId === 2);
+        document.getElementById('substage-3-hud').classList.toggle('active', stageId === '3A' || stageId === '3B');
+
+        if (stageId === 1) {
+          lbl.textContent = 'CHẶNG 01 / MINI-GAME MỞ KHÓA';
+          if (window.stageWebGL) window.stageWebGL.setStageMode('3A');
+          this.renderStage1MiniGame();
+        } else if (stageId === 2) {
+          lbl.textContent = 'CHẶNG 02 / CỬ CHỈ KHỞI ĐỘNG';
+          if (window.stageWebGL) window.stageWebGL.setStageMode('3A');
+          this.initStage2GestureCanvas();
+        } else if (stageId === '3A') {
+          lbl.textContent = 'CHẶNG 03A / HẠT 3D BIẾN HÌNH';
+          document.getElementById('scene-3a-banner').style.display = 'block';
+          document.getElementById('scene-3b-controls').style.display = 'none';
+          document.getElementById('memory-portal-popup').classList.remove('visible');
+          if (window.stageWebGL) {
+            window.stageWebGL.setStageMode('3A');
+            window.stageWebGL.morphToShape(this.activeCard.particleShape);
+          }
+          AudioSynth.startAmbientLoop(this.activeCard.musicStyle);
+        } else if (stageId === '3B') {
+          lbl.textContent = 'CHẶNG 03B / CON ĐƯỜNG KÝ ỨC';
+          document.getElementById('scene-3a-banner').style.display = 'none';
+          document.getElementById('scene-3b-controls').style.display = 'flex';
+
+          const vehicleNames = {
+            boat: 'THUYỀN GIẤY NGÂN HÀ',
+            leaf: 'CHIẾC LÁ MÙA THU',
+            glider: 'MÁY BAY GIẤY',
+            crane: 'HẠC GIẤY ORIGAMI',
+            train: 'ĐOÀN TÀU KÝ ỨC'
+          };
+          document.getElementById('r-vehicle-status').textContent =
+            `HÓA THÂN: ${vehicleNames[this.activeCard.vehicleType] || 'THUYỀN GIẤY'}`;
+
+          if (window.stageWebGL) {
+            window.stageWebGL.buildVehicleAvatar(this.activeCard.vehicleType);
+            window.stageWebGL.rebuildPhotoPortals(this.activeCard.memories || []);
+            window.stageWebGL.setStageMode('3B');
+            document.getElementById('spline-progress-slider').value = 0;
+            this.onSplineScrub(0);
+          }
+        }
+        lucide.createIcons();
+      },
+
+      completeStage1() {
+        AudioSynth.playSuccessChord();
+        document.getElementById('r-game-status-text').textContent = 'ĐÃ MỞ KHÓA THÀNH CÔNG!';
+        setTimeout(() => this.goToStage(2), 550);
+      },
+
+      /* ======================================================================
+         STAGE 1: 4 PLAYABLE MINI-GAMES
+         ====================================================================== */
+      renderStage1MiniGame() {
+        const mount = document.getElementById('r-game-mount-area');
+        const titleEl = document.getElementById('r-game-title');
+        const descEl = document.getElementById('r-game-desc');
+        const statusEl = document.getElementById('r-game-status-text');
+        mount.innerHTML = '';
+        statusEl.textContent = 'TIẾN ĐỘ: ĐANG THỰC HIỆN';
+
+        const gameType = this.activeCard.miniGame || 'puzzle';
+
+        if (gameType === 'puzzle') {
+          titleEl.textContent = 'Ghép Hình Ký Ức Từ Tính';
+          descEl.textContent = 'Chạm vào 2 mảnh ghép bất kỳ để hoán đổi vị trí cho đến khi bức ảnh kỷ niệm hoàn chỉnh.';
+
+          const grid = document.createElement('div');
+          grid.className = 'puzzle-grid';
+          mount.appendChild(grid);
+
+          // Create shuffled 3x3 array (only 2 swaps away from solved so it's fun & quick!)
+          const order = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+          // Swap two pairs
+          [order[0], order[4]] = [order[4], order[0]];
+          [order[2], order[7]] = [order[7], order[2]];
+
+          let firstSelected = null;
+          const imgUrl = this.activeCard.puzzleImage || ProceduralArt.createSVGDataURL('KÝ ỨC 20/10', 'LUMINA STUDIO', '#2e1a08', '#0c0804', '#f59e0b');
+
+          const renderTiles = () => {
+            grid.innerHTML = '';
+            let correctCount = 0;
+            order.forEach((pieceIdx, slotIdx) => {
+              const tile = document.createElement('div');
+              tile.className = 'puzzle-tile';
+              if (pieceIdx === slotIdx) {
+                tile.classList.add('correct-slot');
+                correctCount++;
+              }
+              if (firstSelected === slotIdx) tile.classList.add('selected-tile');
+
+              const row = Math.floor(pieceIdx / 3);
+              const col = pieceIdx % 3;
+              tile.style.backgroundImage = `url("${imgUrl}")`;
+              tile.style.backgroundPosition = `-${col * 91}px -${row * 91}px`;
+
+              tile.onclick = () => {
+                AudioSynth.playTone(440 + slotIdx * 35, 0.15);
+                if (firstSelected === null) {
+                  firstSelected = slotIdx;
+                  renderTiles();
+                } else if (firstSelected === slotIdx) {
+                  firstSelected = null;
+                  renderTiles();
+                } else {
+                  [order[firstSelected], order[slotIdx]] = [order[slotIdx], order[firstSelected]];
+                  firstSelected = null;
+                  renderTiles();
+                }
+              };
+              grid.appendChild(tile);
+            });
+
+            statusEl.textContent = `KHỚP ĐÚNG: ${correctCount} / 9 MẢNH`;
+            if (correctCount === 9) {
+              this.completeStage1();
+            }
+          };
+          renderTiles();
+
+        } else if (gameType === 'trivia') {
+          titleEl.textContent = 'Đố Vui Thấu Hiểu';
+          const questions = (this.activeCard.triviaQuestions && this.activeCard.triviaQuestions.length > 0)
+            ? this.activeCard.triviaQuestions
+            : StorageEngine.getDefaultSeedCards()[0].triviaQuestions;
+
+          let qIdx = 0;
+          const renderQuestion = () => {
+            const q = questions[qIdx];
+            descEl.textContent = `Câu hỏi ${qIdx + 1}/${questions.length}: ${q.question}`;
+            mount.innerHTML = '';
+            const list = document.createElement('div');
+            list.className = 'trivia-options-list';
+
+            q.options.forEach((optText, idx) => {
+              const btn = document.createElement('button');
+              btn.className = 'trivia-option-btn';
+              btn.innerHTML = `<span class="step-num">${['A', 'B', 'C', 'D'][idx]}</span><span>${optText}</span>`;
+              btn.onclick = () => {
+                if (idx === Number(q.correctIndex)) {
+                  AudioSynth.playTone(660, 0.25);
+                  btn.style.borderColor = '#22c55e';
+                  btn.style.background = 'rgba(34,197,94,0.2)';
+                  qIdx++;
+                  if (qIdx >= questions.length) {
+                    this.completeStage1();
+                  } else {
+                    setTimeout(renderQuestion, 450);
+                  }
+                } else {
+                  AudioSynth.playErrorBuzz();
+                  gsap.fromTo(btn, { x: -8 }, { x: 0, duration: 0.4, ease: 'elastic.out(1, 0.2)' });
+                  statusEl.textContent = `GỢI Ý: ${q.hint || 'Hãy thử suy nghĩ lại nhé!'}`;
+                }
+              };
+              list.appendChild(btn);
+            });
+            mount.appendChild(list);
+          };
+          renderQuestion();
+
+        } else if (gameType === 'scratch') {
+          titleEl.textContent = 'Thẻ Cào Ánh Kim Bí Mật';
+          descEl.textContent = 'Di chuột hoặc miết ngón tay trên lớp nhũ ánh kim để lộ thông điệp mở khóa thiệp.';
+
+          const wrap = document.createElement('div');
+          wrap.className = 'scratch-container';
+          wrap.innerHTML = `
+            <div class="scratch-secret-underlay">
+              <div class="font-mono-hud" style="font-size:0.7rem;color:var(--accent-primary);margin-bottom:6px">MẬT MÃ YÊU THƯƠNG</div>
+              <div class="font-serif-luxury" style="font-size:1.5rem;font-weight:700;color:var(--text-primary)">
+                ${this.activeCard.scratchSecret || '20/10 HẠNH PHÚC RẠNG NGỜI'}
+              </div>
+            </div>
+            <canvas id="scratch-foil-canvas" width="300" height="190"></canvas>
+          `;
+          mount.appendChild(wrap);
+
+          const canvas = wrap.querySelector('#scratch-foil-canvas');
+          const ctx = canvas.getContext('2d');
+
+          // Paint metallic shimmer foil
+          const grad = ctx.createLinearGradient(0, 0, 300, 190);
+          grad.addColorStop(0, '#a1a1aa');
+          grad.addColorStop(0.5, '#e4e4e7');
+          grad.addColorStop(1, '#71717a');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, 300, 190);
+
+          ctx.fillStyle = '#27272a';
+          ctx.font = '600 13px "JetBrains Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('CÀO LỚP NHŨ ÁNH KIM TẠI ĐÂY', 150, 98);
+
+          let isDrawing = false;
+          let scratchedCount = 0;
+
+          const scratchAt = (x, y) => {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 24, 0, Math.PI * 2);
+            ctx.fill();
+            scratchedCount++;
+            const pct = Math.min(100, Math.round((scratchedCount / 42) * 100));
+            statusEl.textContent = `ĐÃ CÀO: ${pct}%`;
+            if (scratchedCount === 42) {
+              this.completeStage1();
+            }
+          };
+
+          canvas.addEventListener('pointerdown', e => {
+            isDrawing = true;
+            const r = canvas.getBoundingClientRect();
+            scratchAt(e.clientX - r.left, e.clientY - r.top);
+          });
+          canvas.addEventListener('pointermove', e => {
+            if (!isDrawing) return;
+            const r = canvas.getBoundingClientRect();
+            scratchAt(e.clientX - r.left, e.clientY - r.top);
+          });
+          window.addEventListener('pointerup', () => { isDrawing = false; });
+
+        } else if (gameType === 'catcher') {
+          titleEl.textContent = 'Bắt Mảnh Ghép Ánh Sao';
+          const target = Number(this.activeCard.catcherTarget) || 6;
+          descEl.textContent = `Di chuyển chuột hoặc ngón tay để điều khiển chiếc giỏ ánh sáng hứng đủ ${target} ngôi sao ký ức.`;
+
+          const canvas = document.createElement('canvas');
+          canvas.id = 'catcher-game-canvas';
+          canvas.width = 320;
+          canvas.height = 240;
+          mount.appendChild(canvas);
+
+          const ctx = canvas.getContext('2d');
+          let basketX = 160;
+          let caught = 0;
+          const stars = [
+            { x: 60 + Math.random() * 200, y: -10, vy: 1.7 + Math.random() * 1.1 },
+            { x: 60 + Math.random() * 200, y: -90, vy: 1.8 + Math.random() * 1.2 }
+          ];
+
+          canvas.addEventListener('pointermove', e => {
+            const r = canvas.getBoundingClientRect();
+            basketX = Math.max(35, Math.min(285, e.clientX - r.left));
+          });
+
+          const loop = () => {
+            ctx.clearRect(0, 0, 320, 240);
+
+            // Draw glowing basket
+            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#f59e0b';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(basketX, 212, 28, 0, Math.PI, false);
+            ctx.stroke();
+
+            // Update & draw falling geometric stars
+            stars.forEach(s => {
+              s.y += s.vy;
+              ctx.fillStyle = '#ffffff';
+              ctx.beginPath();
+              ctx.arc(s.x, s.y, 6, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Check collision with basket
+              if (s.y >= 198 && s.y <= 220 && Math.abs(s.x - basketX) < 32) {
+                caught++;
+                AudioSynth.playTone(520 + caught * 60, 0.18);
+                statusEl.textContent = `ĐÃ HỨNG: ${caught} / ${target} NGÔI SAO`;
+                s.y = -20;
+                s.x = 30 + Math.random() * 260;
+              } else if (s.y > 245) {
+                s.y = -15;
+                s.x = 30 + Math.random() * 260;
+              }
+            });
+
+            if (caught >= target) {
+              this.completeStage1();
+              return;
+            }
+            this.catcherRAF = requestAnimationFrame(loop);
+          };
+          this.catcherRAF = requestAnimationFrame(loop);
+        }
+      },
+
+      /* ======================================================================
+         STAGE 2: PHYSICAL GESTURE RECOGNITION WITH PARTICLE TRAIL
+         ====================================================================== */
+      initStage2GestureCanvas() {
+        const canvas = document.getElementById('gesture-interactive-canvas');
+        const ctx = canvas.getContext('2d');
+        const gestureType = this.activeCard.gestureType || 'windup';
+        const titleEl = document.getElementById('r-gesture-title');
+        const descEl = document.getElementById('r-gesture-desc');
+        const progEl = document.getElementById('r-gesture-progress');
+
+        let progress = 0;
+        let isHolding = false;
+        let lastAngle = null;
+        const trailParticles = [];
+
+        if (gestureType === 'windup') {
+          titleEl.textContent = 'Xoay Vòng Lên Dây Cót Ký Ức';
+          descEl.textContent = 'Giữ và xoay chuột hoặc ngón tay theo vòng tròn quanh tâm sáng để tích tụ năng lượng 100%.';
+        } else if (gestureType === 'heartpath') {
+          titleEl.textContent = 'Vẽ Quỹ Đạo Trái Tim Ánh Sáng';
+          descEl.textContent = 'Di chuyển chuột hoặc ngón tay lướt theo đường viền trái tim phát sáng để đánh thức không gian 3D.';
+        } else {
+          titleEl.textContent = 'Nhấn Giữ Truyền Hơi Ấm';
+          descEl.textContent = 'Nhấn và giữ vào tâm bông hoa hình học để truyền năng lượng làm nở bung từng tầng cánh sáng.';
+        }
+
+        const spawnTrail = (x, y) => {
+          for (let i = 0; i < 3; i++) {
+            trailParticles.push({
+              x, y,
+              vx: (Math.random() - 0.5) * 2.2,
+              vy: (Math.random() - 0.5) * 2.2,
+              alpha: 1,
+              size: 2 + Math.random() * 3
+            });
+          }
+        };
+
+        const handlePointerMove = e => {
+          const r = canvas.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          const y = e.clientY - r.top;
+          spawnTrail(x, y);
+
+          if (gestureType === 'windup' && isHolding) {
+            const angle = Math.atan2(y - 160, x - 160);
+            if (lastAngle !== null) {
+              let delta = Math.abs(angle - lastAngle);
+              if (delta > Math.PI) delta = Math.PI * 2 - delta;
+              progress = Math.min(100, progress + delta * 14);
+            }
+            lastAngle = angle;
+          } else if (gestureType === 'heartpath') {
+            progress = Math.min(100, progress + 0.9);
+          }
+        };
+
+        canvas.onpointerdown = e => {
+          isHolding = true;
+          const r = canvas.getBoundingClientRect();
+          spawnTrail(e.clientX - r.left, e.clientY - r.top);
+        };
+        canvas.onpointermove = handlePointerMove;
+        window.onpointerup = () => {
+          isHolding = false;
+          lastAngle = null;
+        };
+
+        const renderGestureLoop = () => {
+          ctx.clearRect(0, 0, 320, 320);
+          const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#f59e0b';
+
+          if (gestureType === 'longpress' && isHolding) {
+            progress = Math.min(100, progress + 0.85);
+            spawnTrail(160 + (Math.random() - 0.5) * 40, 160 + (Math.random() - 0.5) * 40);
+          }
+
+          // Draw Guide Geometry
+          ctx.save();
+          ctx.translate(160, 160);
+          ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+          ctx.lineWidth = 2;
+
+          if (gestureType === 'heartpath') {
+            ctx.beginPath();
+            for (let t = 0; t <= Math.PI * 2; t += 0.08) {
+              const hx = 5.5 * 16 * Math.pow(Math.sin(t), 3);
+              const hy = -5.5 * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+              if (t === 0) ctx.moveTo(hx, hy);
+              else ctx.lineTo(hx, hy);
+            }
+            ctx.stroke();
+          } else {
+            // Blooming Sacred Rings
+            const petals = 8;
+            const radius = 38 + (progress / 100) * 65;
+            ctx.strokeStyle = accent;
+            for (let i = 0; i < petals; i++) {
+              ctx.rotate((Math.PI * 2) / petals);
+              ctx.beginPath();
+              ctx.ellipse(0, radius * 0.45, 18, radius * 0.55, 0, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+          }
+          ctx.restore();
+
+          // Render Particle Trail
+          for (let i = trailParticles.length - 1; i >= 0; i--) {
+            const p = trailParticles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.alpha -= 0.028;
+            if (p.alpha <= 0) {
+              trailParticles.splice(i, 1);
+              continue;
+            }
+            ctx.fillStyle = accent;
+            ctx.globalAlpha = p.alpha;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+
+          progEl.textContent = `NĂNG LƯỢNG: ${Math.floor(progress)}%`;
+
+          if (progress >= 100) {
+            AudioSynth.playSuccessChord();
+            this.goToStage('3A');
+            return;
+          }
+          this.gestureRAF = requestAnimationFrame(renderGestureLoop);
+        };
+
+        this.gestureRAF = requestAnimationFrame(renderGestureLoop);
+      },
+
+      /* ======================================================================
+         STAGE 3B: MEMORY LANE SPLINE SCRUBBING & PORTAL TEXT REVEAL
+         ====================================================================== */
+      onSplineScrub(val) {
+        const norm = Number(val) / 1000;
+        const pct = Math.round(norm * 100);
+        document.getElementById('r-spline-percent').textContent = `HÀNH TRÌNH: ${pct}%`;
+
+        if (window.stageWebGL) {
+          window.stageWebGL.updateSplineJourney(norm);
+        }
+
+        // At 98%+, automatically trigger firework burst & offer the Grand Letter
+        if (pct >= 98 && !this._letterAutoShown) {
+          this._letterAutoShown = true;
+          this.triggerFireworkBurst();
+          setTimeout(() => this.openGrandLetterModal(), 650);
+        } else if (pct < 90) {
+          this._letterAutoShown = false;
+        }
+      },
+
+      updateActivePortalHUD(portalObj) {
+        const popup = document.getElementById('memory-portal-popup');
+        if (!portalObj) {
+          popup.classList.remove('visible');
+          this.lastPortalIndex = -1;
+          return;
+        }
+
+        popup.classList.add('visible');
+        if (this.lastPortalIndex !== portalObj.index) {
+          this.lastPortalIndex = portalObj.index;
+          AudioSynth.playTone(587.33 + portalObj.index * 55, 0.35, 'triangle', 0.05);
+
+          document.getElementById('portal-popup-index').textContent = `KHUNG TRANH KÝ ỨC 0${portalObj.index + 1}`;
+          document.getElementById('portal-popup-date').textContent = portalObj.memory.date || '20 / 10';
+
+          const capEl = document.getElementById('portal-popup-caption');
+          capEl.textContent = portalObj.memory.caption;
+          gsap.fromTo(capEl, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' });
+        }
+      },
+
+      triggerFireworkBurst() {
+        AudioSynth.playSuccessChord();
+        if (window.stageWebGL) {
+          window.stageWebGL.spawn3DFireworkBurst();
+        }
+      },
+
+      openGrandLetterModal() {
+        if (!this.activeCard) return;
+        document.getElementById('letter-modal-recipient').textContent = `Kính Gửi: ${this.activeCard.recipientName}`;
+        document.getElementById('letter-modal-body').textContent = this.activeCard.mainLetter;
+        document.getElementById('letter-modal-sender').textContent = this.activeCard.senderName;
+        App.openModal('modal-grand-letter');
+      }
+    };
+
+    /* ==========================================================================
+       MODULE 6: MAIN STUDIO & PORTAL APPLICATION CONTROLLER
+       ========================================================================== */
+    const App = {
+      cards: [],
+      currentUser: null,
+      authMode: 'login',
+      pendingAuthCallback: null,
+      editingCard: null,
+      currentStudioStep: 1,
+
+      ThemeColorsMap: {
+        mother: ['#f59e0b', '#fde68a', 'MẸ YÊU — HỔ PHÁCH ẤM ÁP'],
+        grandma: ['#eab308', '#fef08a', 'BÀ KÍNH YÊU — HOÀNG KIM TÔN KÍNH'],
+        friend: ['#38bdf8', '#a5f3fc', 'BẠN BÈ — THANH KHIẾT THIÊN THANH'],
+        teacher: ['#c084fc', '#f5d0fe', 'CÔ GIÁO — TÍM NGỌC TRI ÂN'],
+        lover: ['#f43f5e', '#fecdd3', 'NGƯỜI YÊU — ĐỎ NHUNG LÃNG MẠN']
+      },
+
+      init() {
+        this.cards = StorageEngine.loadCards();
+        this.currentUser = StorageEngine.getUser();
+        this.updateAuthHeaderUI();
+        this.updateCardCountUI();
+
+        // Initialize WebGL Canvases
+        window.bgWebGL = new LuminaWebGLController('main-webgl-canvas', false);
+        window.stageWebGL = new LuminaWebGLController('stage-webgl-canvas', true);
+
+        // Setup UIverse mouse spotlight tracking globally
+        this.initSpotlightTracking();
+
+        // Bind Wheel Scroll on Recipient Stage for Scene 3B Spline Journey
+        const stageMount = document.getElementById('recipient-stage-mount');
+        stageMount.addEventListener('wheel', e => {
+          if (RecipientExperience.currentStage === '3B') {
+            e.preventDefault();
+            const slider = document.getElementById('spline-progress-slider');
+            const nextVal = Math.max(0, Math.min(1000, Number(slider.value) + (e.deltaY > 0 ? 38 : -38)));
+            slider.value = nextVal;
+            RecipientExperience.onSplineScrub(nextVal);
+          }
+        }, { passive: false });
+
+        // Check URL Query Parameters for ISOLATED QR VIEWER MODE (?mode=view&cardId=xxx)
+        this.checkIsolatedViewerURL();
+
+        lucide.createIcons();
+      },
+
+      initSpotlightTracking() {
+        document.addEventListener('pointermove', e => {
+          document.querySelectorAll('.uiverse-btn, .uiverse-card').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            el.style.setProperty('--mouse-x', `${x}px`);
+            el.style.setProperty('--mouse-y', `${y}px`);
+          });
+        });
+      },
+
+      /* Checks if opened via QR Code URL (?mode=view&cardId=...) */
+      checkIsolatedViewerURL() {
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get('mode');
+        const cardId = params.get('cardId');
+        const payload = params.get('payload');
+
+        if (mode === 'view') {
+          let targetCard = this.cards.find(c => c.id === cardId);
+          if (!targetCard && payload) {
+            targetCard = StorageEngine.decodeCardPayload(payload);
+          }
+          if (!targetCard) {
+            targetCard = this.cards[0];
+          }
+          // Lock into Full-Screen Isolated Viewer Mode (Hide Header, No Login Required)
+          document.body.classList.add('isolated-viewer-mode');
+          document.getElementById('main-hud-header').classList.add('hidden-hud');
+          document.getElementById('exit-simulation-btn').style.display = 'none';
+          this.navigate('studio', true);
+          setTimeout(() => {
+            window.stageWebGL.resize();
+            RecipientExperience.loadCard(targetCard);
+          }, 120);
+        }
+      },
+
+      /* Simulates QR Viewer Mode inside the current session */
+      launchIsolatedViewerSimulation(cardToView = null) {
+        const card = cardToView || this.editingCard || this.cards[0];
+        document.body.classList.add('isolated-viewer-mode');
+        document.getElementById('main-hud-header').classList.add('hidden-hud');
+        document.getElementById('exit-simulation-btn').style.display = 'inline-flex';
+        this.navigate('studio', true);
+        setTimeout(() => {
+          window.stageWebGL.resize();
+          RecipientExperience.loadCard(card);
+        }, 120);
+      },
+
+      exitIsolatedViewerSimulation() {
+        document.body.classList.remove('isolated-viewer-mode');
+        document.getElementById('main-hud-header').classList.remove('hidden-hud');
+        document.getElementById('exit-simulation-btn').style.display = 'none';
+        setTimeout(() => window.stageWebGL.resize(), 120);
+      },
+
+      /* ======================================================================
+         THEME SWITCHING (SYNCS CSS VARIABLES + WEBGL SHADERS)
+         ====================================================================== */
+      applyThemePaletteOnly(themeKey) {
+        document.documentElement.setAttribute('data-theme', themeKey);
+        const info = this.ThemeColorsMap[themeKey] || this.ThemeColorsMap.mother;
+        document.getElementById('hud-theme-indicator').textContent = info[2];
+
+        document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.themeBtn === themeKey);
+        });
+
+        if (window.bgWebGL) window.bgWebGL.updateThemeColors(info[0], info[1]);
+        if (window.stageWebGL) window.stageWebGL.updateThemeColors(info[0], info[1]);
+      },
+
+      setGlobalTheme(themeKey, shapeKey) {
+        this.applyThemePaletteOnly(themeKey);
+        if (shapeKey && window.bgWebGL) {
+          window.bgWebGL.morphToShape(shapeKey);
+        }
+        AudioSynth.playTone(528, 0.3);
+      },
+
+      /* ======================================================================
+         AUTHENTICATION GATE
+         ====================================================================== */
+      requireAuth(callback) {
+        if (this.currentUser) {
+          callback();
+        } else {
+          this.pendingAuthCallback = callback;
+          this.openAuthModal();
+        }
+      },
+
+      openAuthModal() {
+        this.openModal('modal-auth');
+      },
+
+      switchAuthMode(mode) {
+        this.authMode = mode;
+        const isReg = mode === 'register';
+        document.getElementById('auth-name-group').style.display = isReg ? 'block' : 'none';
+        document.getElementById('auth-modal-title').textContent = isReg ? 'Đăng Ký Tài Khoản' : 'Đăng Nhập Studio';
+        document.getElementById('auth-submit-label').textContent = isReg ? 'Tạo Tài Khoản & Vào Studio' : 'Xác Thực & Vào Studio';
+        document.getElementById('tab-login-btn').classList.toggle('uiverse-btn-primary', !isReg);
+        document.getElementById('tab-register-btn').classList.toggle('uiverse-btn-primary', isReg);
+      },
+
+      submitAuthForm(e) {
+        e.preventDefault();
+        const email = document.getElementById('auth-input-email').value.trim();
+        const name = document.getElementById('auth-input-name').value.trim() || email.split('@')[0];
+
+        this.currentUser = { name, email };
+        StorageEngine.setUser(this.currentUser);
+        this.updateAuthHeaderUI();
+        this.closeModal('modal-auth');
+        AudioSynth.playSuccessChord();
+        this.toast(`Xin chào Creator ${this.currentUser.name}`);
+
+        if (this.pendingAuthCallback) {
+          const cb = this.pendingAuthCallback;
+          this.pendingAuthCallback = null;
+          cb();
+        }
+      },
+
+      updateAuthHeaderUI() {
+        const lbl = document.getElementById('header-user-label');
+        if (this.currentUser) {
+          lbl.textContent = this.currentUser.name;
+        } else {
+          lbl.textContent = 'Đăng Nhập';
+        }
+      },
+
+      updateCardCountUI() {
+        const el = document.getElementById('landing-card-count');
+        if (el) el.textContent = this.cards.length;
+      },
+
+      /* ======================================================================
+         VIEW NAVIGATION & SAVED CARDS DASHBOARD (3D TILT CARDS)
+         ====================================================================== */
+      navigate(viewName, skipExitSim = false) {
+        if (!skipExitSim && document.body.classList.contains('isolated-viewer-mode')) {
+          this.exitIsolatedViewerSimulation();
+        }
+
+        document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active-view'));
+        const target = document.getElementById(`view-${viewName}`);
+        if (target) target.classList.add('active-view');
+
+        if (viewName === 'dashboard') {
+          this.renderSavedCardsDashboard();
+        } else if (viewName === 'studio') {
+          setTimeout(() => window.stageWebGL && window.stageWebGL.resize(), 80);
+        }
+        lucide.createIcons();
+      },
+
+      renderSavedCardsDashboard() {
+        const grid = document.getElementById('saved-cards-grid');
+        grid.innerHTML = '';
+        this.updateCardCountUI();
+
+        const themeNames = {
+          mother: 'Chủ đề: Mẹ Yêu',
+          grandma: 'Chủ đề: Bà Kính Yêu',
+          friend: 'Chủ đề: Bạn Bè',
+          teacher: 'Chủ đề: Cô Giáo',
+          lover: 'Chủ đề: Người Yêu'
+        };
+
+        const shapeNames = {
+          lotus: 'Đóa Sen 3D',
+          heart: 'Trái Tim 3D',
+          cloud: 'Đám Mây 3D',
+          airplane: 'Máy Bay 3D',
+          rose: 'Hoa Hồng 3D'
+        };
+
+        this.cards.forEach(card => {
+          const el = document.createElement('div');
+          el.className = 'uiverse-card tilt-card-3d';
+          el.innerHTML = `
+            <div>
+              <div class="tilt-card-header">
+                <span class="hud-badge font-mono-hud">${themeNames[card.theme] || 'Chủ đề 20/10'}</span>
+                <span class="font-mono-hud" style="font-size:0.7rem;color:var(--text-muted)">#${card.id.slice(-5)}</span>
+              </div>
+              <div class="tilt-card-title">${card.title}</div>
+              <div style="font-size:0.84rem;color:var(--text-secondary)">
+                Người nhận: <strong style="color:var(--text-primary)">${card.recipientName}</strong>
+              </div>
+              <div class="tilt-card-meta">
+                <span class="meta-chip"><i data-lucide="box" style="width:13px;height:13px"></i> ${shapeNames[card.particleShape] || 'Hạt 3D'}</span>
+                <span class="meta-chip"><i data-lucide="gamepad-2" style="width:13px;height:13px"></i> Game: ${card.miniGame.toUpperCase()}</span>
+                <span class="meta-chip"><i data-lucide="images" style="width:13px;height:13px"></i> ${(card.memories || []).length} Khung ảnh 3D</span>
+              </div>
+            </div>
+
+            <div class="tilt-card-actions">
+              <button class="card-action-btn" onclick="App.previewCardFromDashboard('${card.id}')">
+                <i data-lucide="eye" style="width:16px;height:16px"></i>
+                <span>Xem Thử</span>
+              </button>
+              <button class="card-action-btn" onclick="App.editCardInStudio('${card.id}')">
+                <i data-lucide="sliders" style="width:16px;height:16px"></i>
+                <span>Chỉnh Sửa</span>
+              </button>
+              <button class="card-action-btn" onclick="App.openQRModalForCard('${card.id}')">
+                <i data-lucide="qr-code" style="width:16px;height:16px"></i>
+                <span>Mã QR</span>
+              </button>
+              <button class="card-action-btn danger" onclick="App.deleteCard('${card.id}')">
+                <i data-lucide="trash-2" style="width:16px;height:16px"></i>
+                <span>Xóa</span>
+              </button>
+            </div>
+          `;
+
+          // 3D Tilt Physics Effect
+          el.addEventListener('pointermove', e => {
+            const r = el.getBoundingClientRect();
+            const nx = (e.clientX - r.left) / r.width - 0.5;
+            const ny = (e.clientY - r.top) / r.height - 0.5;
+            el.style.transform = `rotateY(${nx * 12}deg) rotateX(${-ny * 12}deg) translateZ(6px)`;
+          });
+          el.addEventListener('pointerleave', () => {
+            el.style.transform = 'rotateY(0deg) rotateX(0deg) translateZ(0px)';
+          });
+
+          grid.appendChild(el);
+        });
+
+        lucide.createIcons();
+      },
+
+      previewCardFromDashboard(cardId) {
+        const card = this.cards.find(c => c.id === cardId);
+        if (card) this.launchIsolatedViewerSimulation(card);
+      },
+
+      deleteCard(cardId) {
+        if (this.cards.length <= 1) {
+          this.toast('Cần giữ lại ít nhất 1 thiệp mẫu trong kho');
+          return;
+        }
+        this.cards = this.cards.filter(c => c.id !== cardId);
+        StorageEngine.saveCards(this.cards);
+        this.renderSavedCardsDashboard();
+        this.toast('Đã xóa tấm thiệp khỏi kho lưu trữ');
+      },
+
+      /* ======================================================================
+         SPLIT-SCREEN STUDIO CONFIGURATION & LIVE REAL-TIME SYNC
+         ====================================================================== */
+      openNewCardStudio() {
+        const template = JSON.parse(JSON.stringify(StorageEngine.getDefaultSeedCards()[0]));
+        template.id = 'lumina-' + Date.now();
+        template.title = 'Thiệp 20/10 Ánh Sáng Mới';
+        this.editingCard = template;
+        this.populateStudioFormFromDraft();
+        this.navigate('studio');
+        this.setStudioStep(1);
+        RecipientExperience.loadCard(this.editingCard);
+      },
+
+      editCardInStudio(cardId) {
+        const found = this.cards.find(c => c.id === cardId);
+        if (!found) return;
+        this.editingCard = JSON.parse(JSON.stringify(found));
+        this.populateStudioFormFromDraft();
+        this.navigate('studio');
+        this.setStudioStep(1);
+        RecipientExperience.loadCard(this.editingCard);
+      },
+
+      setStudioStep(stepNum) {
+        this.currentStudioStep = stepNum;
+        document.querySelectorAll('.step-tab').forEach(t => {
+          t.classList.toggle('active', Number(t.dataset.step) === stepNum);
+        });
+        document.querySelectorAll('.studio-step-body').forEach((b, idx) => {
+          b.classList.toggle('active', idx + 1 === stepNum);
+        });
+
+        // Automatically switch Right Live Preview stage to match the left config step!
+        if (stepNum === 1) RecipientExperience.goToStage('3A');
+        else if (stepNum === 2) RecipientExperience.goToStage(1);
+        else if (stepNum === 3) RecipientExperience.goToStage(2);
+        else if (stepNum === 4) RecipientExperience.goToStage('3B');
+      },
+
+      prevStudioStep() {
+        if (this.currentStudioStep > 1) this.setStudioStep(this.currentStudioStep - 1);
+      },
+
+      nextStudioStep() {
+        if (this.currentStudioStep < 4) this.setStudioStep(this.currentStudioStep + 1);
+      },
+
+      populateStudioFormFromDraft() {
+        const c = this.editingCard;
+        document.getElementById('cfg-card-title').value = c.title || '';
+        document.getElementById('cfg-recipient-name').value = c.recipientName || '';
+        document.getElementById('cfg-puzzle-img').value = c.puzzleImage || '';
+        document.getElementById('cfg-scratch-code').value = c.scratchSecret || '';
+        document.getElementById('cfg-catcher-target').value = c.catcherTarget || 6;
+        document.getElementById('cfg-main-letter').value = c.mainLetter || '';
+        document.getElementById('cfg-sender-name').value = c.senderName || '';
+        document.getElementById('cfg-music-style').value = c.musicStyle || 'harp';
+
+        this.highlightTileGroup('#cfg-theme-grid', c.theme);
+        this.highlightTileGroup('#cfg-shape-grid', c.particleShape);
+        this.highlightTileGroup('#cfg-game-grid', c.miniGame);
+        this.highlightTileGroup('#cfg-gesture-grid', c.gestureType);
+        this.highlightTileGroup('#cfg-vehicle-grid', c.vehicleType);
+
+        this.toggleGameSubConfigPanels(c.miniGame);
+        this.renderTriviaBuilder();
+        this.renderMemoriesBuilder();
+      },
+
+      highlightTileGroup(containerSelector, activeVal) {
+        document.querySelectorAll(`${containerSelector} .selectable-tile`).forEach(tile => {
+          tile.classList.toggle('selected', tile.dataset.val === activeVal);
+        });
+      },
+
+      selectConfigTile(propName, value) {
+        if (!this.editingCard) return;
+        this.editingCard[propName] = value;
+
+        const gridMap = {
+          theme: '#cfg-theme-grid',
+          particleShape: '#cfg-shape-grid',
+          miniGame: '#cfg-game-grid',
+          gestureType: '#cfg-gesture-grid',
+          vehicleType: '#cfg-vehicle-grid'
+        };
+        this.highlightTileGroup(gridMap[propName], value);
+
+        if (propName === 'theme') {
+          this.applyThemePaletteOnly(value);
+        } else if (propName === 'particleShape') {
+          RecipientExperience.activeCard.particleShape = value;
+          RecipientExperience.goToStage('3A');
+        } else if (propName === 'miniGame') {
+          this.toggleGameSubConfigPanels(value);
+          RecipientExperience.activeCard.miniGame = value;
+          RecipientExperience.goToStage(1);
+        } else if (propName === 'gestureType') {
+          RecipientExperience.activeCard.gestureType = value;
+          RecipientExperience.goToStage(2);
+        } else if (propName === 'vehicleType') {
+          RecipientExperience.activeCard.vehicleType = value;
+          RecipientExperience.goToStage('3B');
+        }
+
+        AudioSynth.playTone(580, 0.15);
+      },
+
+      toggleGameSubConfigPanels(gameType) {
+        ['puzzle', 'trivia', 'scratch', 'catcher'].forEach(g => {
+          const el = document.getElementById(`game-cfg-${g}`);
+          if (el) el.style.display = g === gameType ? 'block' : 'none';
+        });
+      },
+
+      syncDraftFromInputs() {
+        if (!this.editingCard) return;
+        this.editingCard.title = document.getElementById('cfg-card-title').value;
+        this.editingCard.recipientName = document.getElementById('cfg-recipient-name').value;
+        this.editingCard.puzzleImage = document.getElementById('cfg-puzzle-img').value;
+        this.editingCard.scratchSecret = document.getElementById('cfg-scratch-code').value;
+        this.editingCard.catcherTarget = Number(document.getElementById('cfg-catcher-target').value) || 6;
+        this.editingCard.mainLetter = document.getElementById('cfg-main-letter').value;
+        this.editingCard.senderName = document.getElementById('cfg-sender-name').value;
+        this.editingCard.musicStyle = document.getElementById('cfg-music-style').value;
+
+        // Real-time update into Live Interactive Preview
+        RecipientExperience.activeCard = JSON.parse(JSON.stringify(this.editingCard));
+        document.getElementById('r-recipient-inline').textContent = this.editingCard.recipientName;
+        document.getElementById('r-3a-heading').textContent = `Dành Tặng ${this.editingCard.recipientName}`;
+        if (RecipientExperience.currentStage === 1) {
+          RecipientExperience.renderStage1MiniGame();
+        }
+      },
+
+      /* Trivia Questions Builder in Step 2 */
+      renderTriviaBuilder() {
+        const list = document.getElementById('trivia-builder-list');
+        list.innerHTML = '';
+        const questions = this.editingCard.triviaQuestions || [];
+
+        questions.forEach((q, qIdx) => {
+          const box = document.createElement('div');
+          box.style.cssText = 'padding:10px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08)';
+          box.innerHTML = `
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span class="font-mono-hud" style="font-size:0.68rem;color:var(--accent-secondary)">CÂU HỎI 0${qIdx + 1}</span>
+              <button class="uiverse-btn" onclick="App.removeTriviaQuestion(${qIdx})" style="padding:2px 8px;font-size:0.68rem">Xóa</button>
+            </div>
+            <input type="text" class="uiverse-input" value="${q.question}" placeholder="Nhập câu hỏi..." style="margin-bottom:6px"
+              oninput="App.updateTriviaField(${qIdx}, 'question', this.value)" />
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+              ${q.options.map((opt, oIdx) => `
+                <input type="text" class="uiverse-input" value="${opt}" placeholder="Đáp án ${['A','B','C','D'][oIdx]}"
+                  oninput="App.updateTriviaOption(${qIdx}, ${oIdx}, this.value)" />
+              `).join('')}
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <select class="uiverse-select" onchange="App.updateTriviaField(${qIdx}, 'correctIndex', Number(this.value))">
+                <option value="0" ${q.correctIndex == 0 ? 'selected' : ''}>Đáp án đúng: A</option>
+                <option value="1" ${q.correctIndex == 1 ? 'selected' : ''}>Đáp án đúng: B</option>
+                <option value="2" ${q.correctIndex == 2 ? 'selected' : ''}>Đáp án đúng: C</option>
+                <option value="3" ${q.correctIndex == 3 ? 'selected' : ''}>Đáp án đúng: D</option>
+              </select>
+              <input type="text" class="uiverse-input" value="${q.hint || ''}" placeholder="Gợi ý khi chọn sai..."
+                oninput="App.updateTriviaField(${qIdx}, 'hint', this.value)" />
+            </div>
+          `;
+          list.appendChild(box);
+        });
+      },
+
+      addTriviaQuestion() {
+        this.editingCard.triviaQuestions.push({
+          question: 'Kỷ niệm đáng nhớ nhất của chúng ta là gì?',
+          options: ['Phương án A', 'Phương án B', 'Phương án C', 'Tất cả đều đúng'],
+          correctIndex: 3,
+          hint: 'Hãy chọn đáp án đầy đủ nhất!'
+        });
+        this.renderTriviaBuilder();
+        this.syncDraftFromInputs();
+      },
+
+      removeTriviaQuestion(idx) {
+        if (this.editingCard.triviaQuestions.length <= 1) return;
+        this.editingCard.triviaQuestions.splice(idx, 1);
+        this.renderTriviaBuilder();
+        this.syncDraftFromInputs();
+      },
+
+      updateTriviaField(qIdx, field, val) {
+        this.editingCard.triviaQuestions[qIdx][field] = val;
+        this.syncDraftFromInputs();
+      },
+
+      updateTriviaOption(qIdx, oIdx, val) {
+        this.editingCard.triviaQuestions[qIdx].options[oIdx] = val;
+        this.syncDraftFromInputs();
+      },
+
+      handlePuzzleImageUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          document.getElementById('cfg-puzzle-img').value = ev.target.result;
+          this.syncDraftFromInputs();
+          this.toast('Đã tải ảnh ghép hình lên thành công');
+        };
+        reader.readAsDataURL(file);
+      },
+
+      /* Memories Builder in Step 4 */
+      renderMemoriesBuilder() {
+        const container = document.getElementById('studio-memories-list');
+        container.innerHTML = '';
+        const memories = this.editingCard.memories || [];
+
+        memories.forEach((m, idx) => {
+          const row = document.createElement('div');
+          row.className = 'memory-item-row';
+          row.innerHTML = `
+            <img src="${m.img}" class="memory-thumb-preview" alt="Memory ${idx + 1}" />
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <input type="text" class="uiverse-input" value="${m.caption}" placeholder="Lời nhắn gắn với bức ảnh này..."
+                style="padding:7px 10px;font-size:0.8rem" oninput="App.updateMemoryItem(${idx}, 'caption', this.value)" />
+              <input type="text" class="uiverse-input" value="${m.date || '20 / 10'}" placeholder="Dấu mốc thời gian..."
+                style="padding:5px 10px;font-size:0.74rem" oninput="App.updateMemoryItem(${idx}, 'date', this.value)" />
+            </div>
+            <button class="uiverse-btn" onclick="App.removeMemoryItem(${idx})" style="padding:8px 10px">
+              <i data-lucide="trash-2" style="width:14px;height:14px"></i>
+            </button>
+          `;
+          container.appendChild(row);
+        });
+        lucide.createIcons();
+      },
+
+      updateMemoryItem(idx, key, val) {
+        this.editingCard.memories[idx][key] = val;
+        RecipientExperience.activeCard = JSON.parse(JSON.stringify(this.editingCard));
+        if (window.stageWebGL) window.stageWebGL.rebuildPhotoPortals(this.editingCard.memories);
+      },
+
+      removeMemoryItem(idx) {
+        if (this.editingCard.memories.length <= 1) {
+          this.toast('Cần tối thiểu 1 khung ảnh trên Con Đường Ký Ức');
+          return;
+        }
+        this.editingCard.memories.splice(idx, 1);
+        this.renderMemoriesBuilder();
+        if (window.stageWebGL) window.stageWebGL.rebuildPhotoPortals(this.editingCard.memories);
+      },
+
+      addMemorySlotByUrl() {
+        const count = this.editingCard.memories.length + 1;
+        this.editingCard.memories.push({
+          img: ProceduralArt.createSVGDataURL(`KHOẢNH KHẮC 0${count}`, '20 THÁNG 10', '#3b1d38', '#110712', '#f472b6'),
+          caption: 'Mỗi bức ảnh là một mảnh ghép ký ức tỏa sáng trên hành trình.',
+          date: `Kỷ Niệm 0${count}`
+        });
+        this.renderMemoriesBuilder();
+        if (window.stageWebGL) window.stageWebGL.rebuildPhotoPortals(this.editingCard.memories);
+      },
+
+      handleMemoryFilesUpload(e) {
+        const files = Array.from(e.target.files || []);
+        files.forEach(file => {
+          const reader = new FileReader();
+          reader.onload = ev => {
+            this.editingCard.memories.push({
+              img: ev.target.result,
+              caption: `Kỷ niệm đáng nhớ (${file.name.replace(/\.[^/.]+$/, '')})`,
+              date: '20 Tháng 10'
+            });
+            this.renderMemoriesBuilder();
+            if (window.stageWebGL) window.stageWebGL.rebuildPhotoPortals(this.editingCard.memories);
+          };
+          reader.readAsDataURL(file);
+        });
+        this.toast(`Đã thêm ${files.length} bức ảnh vào Con Đường Ký Ức 3D`);
+      },
+
+      setPreviewViewport(mode) {
+        const mount = document.getElementById('recipient-stage-mount');
+        mount.classList.toggle('mobile-frame', mode === 'mobile');
+        setTimeout(() => window.stageWebGL && window.stageWebGL.resize(), 480);
+      },
+
+      /* ======================================================================
+         SAVE CARD & GENERATE HIGH-RES QR CODE MODAL
+         ====================================================================== */
+      saveCurrentCardAndShowQR() {
+        if (!this.editingCard) return;
+        this.syncDraftFromInputs();
+
+        const existingIdx = this.cards.findIndex(c => c.id === this.editingCard.id);
+        if (existingIdx >= 0) {
+          this.cards[existingIdx] = JSON.parse(JSON.stringify(this.editingCard));
+        } else {
+          this.cards.unshift(JSON.parse(JSON.stringify(this.editingCard)));
+        }
+
+        StorageEngine.saveCards(this.cards);
+        this.updateCardCountUI();
+        this.toast('Đã lưu tấm thiệp 3D thành công!');
+        this.openQRModalForCard(this.editingCard.id);
+      },
+
+      openQRModalForCard(cardId) {
+        const card = this.cards.find(c => c.id === cardId) || this.editingCard;
+        if (!card) return;
+        this.currentQRCard = card;
+
+        document.getElementById('qr-modal-card-title').textContent = card.title;
+        const payload = StorageEngine.encodeCardPayload(card);
+        const baseUrl = window.location.origin + window.location.pathname;
+        const fullShareUrl = `${baseUrl}?mode=view&cardId=${encodeURIComponent(card.id)}&payload=${payload}`;
+        const shortVisualUrl = `${baseUrl}?mode=view&cardId=${encodeURIComponent(card.id)}`;
+
+        document.getElementById('qr-share-url-input').value = fullShareUrl;
+
+        const qrMount = document.getElementById('qr-code-mount');
+        qrMount.innerHTML = '';
+        new QRCode(qrMount, {
+          text: shortVisualUrl,
+          width: 200,
+          height: 200,
+          colorDark: '#09090b',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+
+        this.openModal('modal-qr');
+      },
+
+      downloadQRCodeImage() {
+        const qrMount = document.getElementById('qr-code-mount');
+        const canvas = qrMount.querySelector('canvas');
+        const img = qrMount.querySelector('img');
+        const dataUrl = canvas ? canvas.toDataURL('image/png') : (img ? img.src : null);
+        if (!dataUrl) return;
+
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = `QR-Lumina-20-10-${this.currentQRCard ? this.currentQRCard.id : 'card'}.png`;
+        a.click();
+        this.toast('Đã tải ảnh Mã QR về thiết bị');
+      },
+
+      copyShareUrl() {
+        const input = document.getElementById('qr-share-url-input');
+        navigator.clipboard.writeText(input.value);
+        this.toast('Đã sao chép đường dẫn chế độ Người Nhận');
+      },
+
+      openIsolatedViewerFromModal() {
+        this.closeModal('modal-qr');
+        if (this.currentQRCard) {
+          this.launchIsolatedViewerSimulation(this.currentQRCard);
+        }
+      },
+
+      openModal(id) {
+        document.getElementById(id).classList.add('open');
+        lucide.createIcons();
+      },
+
+      closeModal(id) {
+        document.getElementById(id).classList.remove('open');
+      },
+
+      toast(msg) {
+        const container = document.getElementById('toast-container');
+        const item = document.createElement('div');
+        item.className = 'lumina-toast';
+        item.innerHTML = `<i data-lucide="check-circle-2" style="width:16px;height:16px;color:var(--accent-primary)"></i><span>${msg}</span>`;
+        container.appendChild(item);
+        lucide.createIcons();
+        gsap.fromTo(item, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35 });
+        setTimeout(() => {
+          gsap.to(item, {
+            opacity: 0,
+            y: 12,
+            duration: 0.3,
+            onComplete: () => item.remove()
+          });
+        }, 2800);
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => App.init());
+  </script>
+</body>
+</html>
