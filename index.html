@@ -32,7 +32,7 @@
 
         /* Glassmorphism */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.72);
+            background: rgba(15, 23, 42, 0.78);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.14);
@@ -40,7 +40,7 @@
         }
 
         .glass-pill {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.88);
             backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.14);
         }
@@ -63,19 +63,127 @@
             animation: pulseGlow 2.4s infinite;
         }
 
-        /* Polaroid Card Styling */
-        .polaroid-card {
-            background: rgba(255, 255, 255, 0.95);
-            color: #1e293b;
-            padding: 10px 10px 26px 10px;
-            border-radius: 14px;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
-            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+        /* Orbiting icons around Gift Box & Letter */
+        @keyframes orbitFloat {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); opacity: 0.9; }
+            50% { transform: translateY(-14px) scale(1.15) rotate(12deg); opacity: 1; }
         }
-        .polaroid-card:hover {
-            transform: translateY(-8px) scale(1.03) rotate(0deg) !important;
-            box-shadow: 0 25px 50px rgba(255, 77, 148, 0.4);
-            z-index: 20;
+        .orbit-badge {
+            animation: orbitFloat 2.8s ease-in-out infinite;
+        }
+
+        /* Ambient falling/floating particles in Stage 2 */
+        @keyframes stage2AmbientFloat {
+            0% { transform: translateY(105vh) translateX(0px) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.85; }
+            85% { opacity: 0.85; }
+            100% { transform: translateY(-12vh) translateX(35px) rotate(360deg); opacity: 0; }
+        }
+        .stage2-ambient-item {
+            position: fixed;
+            pointer-events: none;
+            z-index: 5;
+            animation: stage2AmbientFloat 7.5s linear infinite;
+        }
+
+        /* Cinema Filmstrip Roll Styling for Stage 4 */
+        @keyframes filmScrollMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .filmstrip-container {
+            background: #0b0f19;
+            border-top: 3px solid rgba(244, 114, 182, 0.45);
+            border-bottom: 3px solid rgba(244, 114, 182, 0.45);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+            position: relative;
+            overflow: hidden;
+            padding: 26px 0;
+        }
+        .filmstrip-holes-top,
+        .filmstrip-holes-bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 14px;
+            background-image: repeating-linear-gradient(
+                to right,
+                transparent 0px,
+                transparent 10px,
+                rgba(255, 255, 255, 0.28) 10px,
+                rgba(255, 255, 255, 0.28) 24px
+            );
+            pointer-events: none;
+            z-index: 10;
+        }
+        .filmstrip-holes-top { top: 6px; }
+        .filmstrip-holes-bottom { bottom: 6px; }
+
+        .filmstrip-track {
+            display: flex;
+            gap: 18px;
+            width: max-content;
+            animation: filmScrollMarquee 26s linear infinite;
+            padding: 0 18px;
+        }
+        .filmstrip-track:hover {
+            animation-play-state: paused;
+        }
+        .film-frame {
+            width: 210px;
+            height: 148px;
+            flex-shrink: 0;
+            background: #020617;
+            border: 2px solid rgba(255, 255, 255, 0.22);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+        @media (min-width: 640px) {
+            .film-frame {
+                width: 240px;
+                height: 165px;
+            }
+        }
+        .film-frame:hover {
+            transform: scale(1.05);
+            border-color: #f472b6;
+        }
+
+        /* Chibi Angry Pop-up animation */
+        @keyframes chibiBounce {
+            0% { transform: scale(0.5) translateY(20px); opacity: 0; }
+            50% { transform: scale(1.1) translateY(-10px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .chibi-angry-anim {
+            animation: chibiBounce 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Floating background wishes in Stage 4 */
+        @keyframes floatWishBg {
+            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
+            15% { opacity: 0.85; }
+            85% { opacity: 0.85; }
+            100% { transform: translateY(-10vh) translateX(40px); opacity: 0; }
+        }
+        .floating-wish-item {
+            position: fixed;
+            pointer-events: none;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            background: rgba(255, 77, 148, 0.18);
+            border: 1px solid rgba(255, 179, 217, 0.4);
+            backdrop-filter: blur(8px);
+            color: #fbcfe8;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: floatWishBg 9s linear infinite;
+            z-index: 5;
         }
 
         /* Custom Scrollbar */
@@ -89,9 +197,6 @@
         ::-webkit-scrollbar-thumb {
             background: rgba(236, 72, 153, 0.45);
             border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(236, 72, 153, 0.75);
         }
     </style>
 </head>
@@ -108,11 +213,63 @@
         </div>
     </div>
 
+    <!-- Chibi Angry Warning Modal (Triggered when user clicks 'Tiếp tục' before letter is fully typed) -->
+    <div id="chibi-angry-modal" class="fixed inset-0 z-[130] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="glass-panel chibi-angry-anim w-full max-w-xs rounded-3xl p-6 text-center border-2 border-rose-500/60 shadow-2xl space-y-3">
+            <!-- Custom Cute Angry Chibi SVG Model -->
+            <div class="w-28 h-28 mx-auto rounded-full bg-gradient-to-b from-rose-500/30 to-pink-500/20 border-2 border-rose-400 flex items-center justify-center shadow-inner relative">
+                <svg viewBox="0 0 120 120" class="w-24 h-24">
+                    <!-- Angry Steam Puff -->
+                    <path d="M92 18 Q102 10 98 24 Q108 22 100 32" stroke="#fb7185" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <!-- Chibi Hair & Head -->
+                    <circle cx="60" cy="64" r="36" fill="#ffe4e6" stroke="#f43f5e" stroke-width="3"/>
+                    <path d="M24 58 Q30 24 60 24 Q90 24 96 58 Q82 42 60 46 Q38 42 24 58 Z" fill="#db2777"/>
+                    <!-- Angry Eyebrows -->
+                    <line x1="38" y1="52" x2="52" y2="58" stroke="#881337" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="82" y1="52" x2="68" y2="58" stroke="#881337" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Chibi Eyes -->
+                    <circle cx="45" cy="64" r="5.5" fill="#881337"/>
+                    <circle cx="75" cy="64" r="5.5" fill="#881337"/>
+                    <circle cx="43" cy="62" r="2" fill="#ffffff"/>
+                    <circle cx="73" cy="62" r="2" fill="#ffffff"/>
+                    <!-- Puffed Angry Cheeks -->
+                    <ellipse cx="34" cy="73" rx="7" ry="4.5" fill="#fb7185" opacity="0.75"/>
+                    <ellipse cx="86" cy="73" rx="7" ry="4.5" fill="#fb7185" opacity="0.75"/>
+                    <!-- Angry Wavy Mouth -->
+                    <path d="M49 80 Q60 72 71 80" stroke="#9f1239" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                </svg>
+                <span class="absolute -top-1 -right-1 text-2xl animate-bounce">💢</span>
+            </div>
+            <h3 class="text-base font-black text-rose-300">Khoan đã nào! 😾</h3>
+            <p id="chibi-warning-text" class="text-xs text-slate-200 font-medium leading-relaxed">
+                Lời nhắn còn đang hiện dở mà đòi bấm đi đâu đấy hả? Đọc hết lời chúc rồi mới được đi tiếp nha! 💢
+            </p>
+        </div>
+    </div>
+
+    <!-- Delete Saved Card Confirmation Modal (Triggered on Shift + Left Click) -->
+    <div id="delete-card-modal" class="fixed inset-0 z-[125] bg-black/75 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-6 text-center border border-rose-500/40 space-y-4">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-400 text-2xl">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h3 class="text-lg font-black text-white">Bảng Quản Lý Xóa Thiệp</h3>
+            <p id="delete-card-prompt" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+            <div class="flex items-center justify-center gap-3 pt-2">
+                <button id="cancel-delete-card-btn" type="button" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-bold transition">
+                    Hủy bỏ
+                </button>
+                <button id="confirm-delete-card-btn" type="button" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white text-xs font-extrabold shadow-lg hover:opacity-95 transition">
+                    Chắc chắn xóa
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- =======================================================================
-         VIEW 1: HOME SCREEN ("Tên của bạn là gì?" + Nút Tạo Thiệp góc trên)
+         VIEW 1: HOME SCREEN ("Tên của bạn là gì?" + Nút Tạo Thiệp)
     ======================================================================== -->
     <section id="view-home" class="relative z-10 min-h-screen w-full flex flex-col justify-between p-4 sm:p-7">
-        <!-- Top Bar -->
         <header class="w-full max-w-6xl mx-auto flex items-center justify-between">
             <div class="glass-pill px-4 py-2 rounded-full flex items-center gap-2.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-pink-400 animate-ping"></span>
@@ -132,7 +289,6 @@
             </div>
         </header>
 
-        <!-- Center Lookup Card -->
         <main class="my-auto py-8 flex items-center justify-center">
             <div class="glass-panel w-full max-w-md rounded-3xl p-6 sm:p-9 text-center relative overflow-hidden">
                 <div class="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-pink-500/30 via-purple-500/30 to-cyan-500/30 border border-pink-400/40 flex items-center justify-center shadow-xl">
@@ -147,7 +303,7 @@
                     Tên của bạn là gì?
                 </h1>
                 <p class="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
-                    Nhập tên hoặc mã người nhận của bạn (ví dụ: <span class="text-pink-300 font-bold">Đạt</span>) để mở món quà tương tác 3D dành riêng cho bạn nhé!
+                    Nhập đúng tên hoặc mã thiệp (ví dụ: <span class="text-pink-300 font-bold">dat</span>) đã được tạo để mở món quà 3D dành riêng cho bạn!
                 </p>
 
                 <form id="recipient-lookup-form" class="space-y-3.5">
@@ -156,8 +312,8 @@
                         <input
                             id="recipient-lookup-input"
                             type="text"
-                            value="Đạt"
-                            placeholder="Nhập tên của bạn (VD: Đạt, Thuận, Hoa...)"
+                            value="dat"
+                            placeholder="Nhập mã/tên thiệp (VD: dat, thuan...)"
                             class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-950/90 border border-white/20 text-white font-bold text-sm sm:text-base focus:outline-none focus:border-pink-400 transition"
                             required
                         >
@@ -173,7 +329,6 @@
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="w-full max-w-6xl mx-auto text-center text-[11px] text-slate-400">
             Trải nghiệm tốt nhất khi bật âm thanh • Xoay & Chạm tương tác 3D trực tiếp
         </footer>
@@ -206,7 +361,7 @@
                     required
                 >
                 <p id="password-error-msg" class="text-xs text-rose-400 font-bold hidden">
-                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Mật khẩu chưa đúng! Vui lòng thử lại.
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Mật khẩu chưa đúng! (Gợi ý: thuan2810)
                 </p>
                 <button
                     type="submit"
@@ -219,11 +374,10 @@
     </div>
 
     <!-- =======================================================================
-         VIEW 2: CREATOR STUDIO (Tạo & Tùy chỉnh 4 Giai Đoạn + Màu Hạt 3D)
+         VIEW 2: CREATOR STUDIO (Tạo & Tùy chỉnh 4 Giai Đoạn + Shift+Click Xóa)
     ======================================================================== -->
     <section id="view-studio" class="relative z-20 min-h-screen w-full hidden py-6 px-3 sm:px-6">
         <div class="max-w-5xl mx-auto space-y-5">
-            <!-- Top Header -->
             <div class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white text-lg shadow-lg">
@@ -231,7 +385,7 @@
                     </div>
                     <div>
                         <h1 class="text-base sm:text-xl font-black text-white">Xưởng Thiết Kế Thiệp 4 Giai Đoạn</h1>
-                        <p class="text-xs text-slate-300">Tùy biến người nhận, chủ đề 20/10, màu hạt 3D, lời chúc và ảnh kỷ niệm</p>
+                        <p class="text-xs text-slate-300">Tùy biến ID, chủ đề 20/10, màu hạt 3D, thư, ảnh và hiệu ứng mở quà</p>
                     </div>
                 </div>
 
@@ -245,11 +399,11 @@
                 </div>
             </div>
 
-            <!-- Saved Cards Bar -->
+            <!-- Saved Cards Bar (Shift + Click to delete) -->
             <div class="glass-panel rounded-2xl p-4">
                 <div class="flex items-center justify-between mb-2.5">
                     <span class="text-xs font-extrabold uppercase tracking-wider text-pink-300">
-                        <i class="fa-solid fa-folder-open mr-1.5"></i> Danh sách thiệp đã lưu (Bấm để sửa hoặc xem)
+                        <i class="fa-solid fa-folder-open mr-1.5"></i> Danh sách thiệp đã lưu (<span class="text-amber-300 underline">Giữ Shift + Click để xóa</span>)
                     </span>
                 </div>
                 <div id="studio-card-list" class="flex flex-wrap gap-2"></div>
@@ -271,8 +425,8 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Mã nhận thiệp / ID (Không dấu)</label>
-                            <input id="edit-recipient-id" type="text" placeholder="VD: dat, thuan, hoa" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm font-mono focus:border-pink-400 focus:outline-none">
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Mã nhận thiệp / ID (VD: dat, thuan)</label>
+                            <input id="edit-recipient-id" type="text" placeholder="VD: dat" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm font-mono focus:border-pink-400 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-slate-300 mb-1">Tên hiển thị trên thiệp</label>
@@ -309,11 +463,11 @@
                             <textarea id="edit-s1-sub" rows="2" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-sm focus:border-cyan-400 focus:outline-none"></textarea>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Chữ trên nút Đồng Ý (Đi tiếp)</label>
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Chữ trên nút Đồng Ý</label>
                             <input id="edit-s1-yes" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm focus:border-cyan-400 focus:outline-none">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Chữ trên nút Từ Chối (Tự chạy trốn)</label>
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Chữ trên nút Từ Chối (Chạy trốn)</label>
                             <input id="edit-s1-no" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm focus:border-cyan-400 focus:outline-none">
                         </div>
                     </div>
@@ -323,7 +477,7 @@
                 <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/75 border border-white/10 space-y-3.5">
                     <h3 class="text-sm font-extrabold text-white flex items-center gap-2 border-b border-white/10 pb-2.5">
                         <span class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 font-mono text-xs flex items-center justify-center font-black">2</span>
-                        <span>Giai Đoạn 2: Mở Hộp Quà & Đọc Tâm Thư</span>
+                        <span>Giai Đoạn 2: Mở Hộp Quà (Hiệu Ứng Hoa & Trái Tim) & Đọc Tâm Thư</span>
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                         <div>
@@ -343,13 +497,13 @@
                             <input id="edit-s2-title" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm focus:border-amber-400 focus:outline-none">
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Nội dung bức thư (Hiệu ứng gõ chữ từng dòng)</label>
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Nội dung bức thư (Gõ chữ từng dòng - Cấm bấm tiếp nếu chưa load xong)</label>
                             <textarea id="edit-s2-letter" rows="4" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm focus:border-amber-400 focus:outline-none"></textarea>
                         </div>
                     </div>
                 </div>
 
-                <!-- Section D: Giai đoạn 3 (Vũ trụ Hạt Sáng 3D & Tùy chọn Màu Hạt) -->
+                <!-- Section D: Giai đoạn 3 (Vũ trụ Hạt Sáng 3D & Màu Hạt) -->
                 <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/75 border border-white/10 space-y-4">
                     <h3 class="text-sm font-extrabold text-white flex items-center gap-2 border-b border-white/10 pb-2.5">
                         <span class="w-6 h-6 rounded-lg bg-purple-500 text-white font-mono text-xs flex items-center justify-center font-black">3</span>
@@ -357,38 +511,31 @@
                     </h3>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-300 mb-1">
-                            Các chữ hiển thị lần lượt (Ngăn cách bằng dấu phẩy `,` - Cuối chuỗi sẽ tự ghép Trái Tim 3D)
+                            Các chữ hiển thị lần lượt (Ngăn cách bằng dấu phẩy `,` - Cuối chuỗi sẽ ghép Trái Tim 3D)
                         </label>
-                        <input id="edit-s3-words" type="text" placeholder="VD: 3, 2, 1, HAPPY 20/10, ĐẠT XINH ĐẸP, LUÔN RẠNG RỠ" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm font-mono focus:border-purple-400 focus:outline-none">
+                        <input id="edit-s3-words" type="text" placeholder="VD: 3, 2, 1, HAPPY 20/10, ĐẠT XINH ĐẸP" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm font-mono focus:border-purple-400 focus:outline-none">
                     </div>
 
-                    <!-- Tùy chỉnh Màu sắc Hạt 3D -->
                     <div class="p-4 rounded-xl bg-slate-950/90 border border-purple-400/30 space-y-3.5">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <label class="text-xs font-extrabold text-purple-300 flex items-center gap-1.5">
-                                <i class="fa-solid fa-palette"></i> Bảng Tùy Chọn Màu Sắc Hạt 3D
+                                <i class="fa-solid fa-palette"></i> Bảng Tùy Chọn Màu Sắc Hạt 3D (Chuyển động liên tục, mượt mà)
                             </label>
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-400/30 text-[10px] font-mono text-purple-200">
-                                4.200 Hạt Sáng 3D
-                            </span>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-300 mb-1">Chế độ màu hạt 3D</label>
                                 <select id="edit-s3-color-mode" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/20 text-white text-xs sm:text-sm font-bold focus:border-purple-400 focus:outline-none">
-                                    <option value="theme">🎨 Theo màu chủ đề thiệp (Mặc định)</option>
+                                    <option value="theme">🎨 Theo màu chủ đề thiệp</option>
                                     <option value="rose_pink">🌸 Hồng Phấn & Đỏ Hoa Hồng 20/10</option>
                                     <option value="cyber_neon">⚡ Xanh Cyan & Tím Vũ Trụ</option>
-                                    <option value="gold_luxury">👑 Vàng Hoàng Kim & Cam Ánh Kim</option>
-                                    <option value="ice_blue">❄️ Xanh Băng Tuyết & Trắng Ngân Hà</option>
+                                    <option value="gold_luxury">👑 Vàng Hoàng Kim & Ánh Kim</option>
+                                    <option value="ice_blue">❄️ Xanh Băng Tuyết & Ngân Hà</option>
                                     <option value="emerald_magic">🍀 Xanh Ngọc Lục Bảo & Mint</option>
-                                    <option value="sunset_love">🌅 Đỏ Hoàng Hôn & Vàng Nắng</option>
-                                    <option value="rainbow">🌈 Cầu Vồng Đa Sắc (7 màu rực rỡ)</option>
-                                    <option value="custom">🖌️ Tự chọn màu tùy chỉnh (Custom)</option>
+                                    <option value="rainbow">🌈 Cầu Vồng Đa Sắc</option>
                                 </select>
                             </div>
-
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-300 mb-1">Màu hạt chính</label>
                                 <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/15">
@@ -396,51 +543,35 @@
                                     <span id="s3-primary-hex" class="font-mono text-xs text-cyan-200 uppercase">#FF4D94</span>
                                 </div>
                             </div>
-
                             <div>
-                                <label class="block text-[11px] font-bold text-slate-300 mb-1">Màu hạt chuyển sắc / phụ</label>
+                                <label class="block text-[11px] font-bold text-slate-300 mb-1">Màu hạt phụ</label>
                                 <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/15">
                                     <input id="edit-s3-color-secondary" type="color" value="#ffb3d9" class="w-8 h-7 rounded cursor-pointer bg-transparent border-0 p-0">
                                     <span id="s3-secondary-hex" class="font-mono text-xs text-pink-200 uppercase">#FFB3D9</span>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Thanh xem trước dải màu hạt 3D -->
-                        <div class="space-y-1">
-                            <div class="flex items-center justify-between text-[11px] text-slate-400">
-                                <span>Xem trước dải màu hạt 3D:</span>
-                                <span id="s3-preview-label" class="font-bold text-pink-300">🌸 Hồng Phấn & Đỏ Hoa Hồng 20/10</span>
-                            </div>
-                            <div id="s3-color-preview-bar" class="w-full h-3 rounded-full border border-white/20 shadow-inner transition-all duration-300" style="background: linear-gradient(90deg, #ff4d94, #ffb3d9);"></div>
-                        </div>
                     </div>
                 </div>
 
-                <!-- Section E: Giai đoạn 4 (Màn Câu Chúc, Hiệu Ứng & Ảnh Kỷ Niệm) -->
+                <!-- Section E: Giai đoạn 4 (Slider Lời Nhắn 10s & Cuộn Phim Ảnh) -->
                 <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/75 border border-white/10 space-y-4">
                     <h3 class="text-sm font-extrabold text-white flex items-center gap-2 border-b border-white/10 pb-2.5">
                         <span class="w-6 h-6 rounded-lg bg-emerald-500 text-slate-950 font-mono text-xs flex items-center justify-center font-black">4</span>
-                        <span>Giai Đoạn 4: Không Gian Lời Chúc & Album Ảnh Kỷ Niệm</span>
+                        <span>Giai Đoạn 4: Lời Nhắn Chuyển Đổi (`<` `>` 10s) & Cuộn Phim Ảnh Kỷ Niệm</span>
                     </h3>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Hiệu ứng bầu trời Màn 4</label>
-                            <select id="edit-s4-effect" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm font-bold focus:border-emerald-400 focus:outline-none">
-                                <option value="petals">🌸 Cánh Hoa Đào / Hoa Hồng Bay</option>
-                                <option value="starlight">✨ Sao Băng & Đom Đóm Vũ Trụ</option>
-                                <option value="hearts">💖 Trái Tim Lấp Lánh Bay Lên</option>
-                                <option value="snow">❄️ Tuyết Trắng Mùa Đông</option>
-                                <option value="lanterns">🏮 Đèn Trời Ước Nguyện</option>
-                            </select>
-                        </div>
-                        <div>
                             <label class="block text-[11px] font-bold text-slate-300 mb-1">Tiêu đề lớn Màn 4</label>
                             <input id="edit-s4-headline" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none">
                         </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Lời chúc mở đầu nổi bật</label>
+                            <input id="edit-s4-main-wish" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none">
+                        </div>
                         <div class="sm:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Danh sách các câu chúc (Mỗi dòng 1 câu chúc)</label>
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Danh sách lời nhắn chuyển đổi `<` `>` (10s/lời nhắn) & lời chúc bay ở nền (Mỗi dòng 1 câu)</label>
                             <textarea id="edit-s4-wishes" rows="4" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none"></textarea>
                         </div>
                     </div>
@@ -449,24 +580,24 @@
                     <div class="p-3.5 rounded-xl bg-slate-950/80 border border-white/10 space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <span class="text-xs font-bold text-emerald-300">
-                                <i class="fa-solid fa-images mr-1"></i> Ảnh Kỷ Niệm Hiển Thị Ở Màn 4
+                                <i class="fa-solid fa-film mr-1"></i> Cuộn Phim Ảnh Kỷ Niệm (Tỉ lệ cân đối ở giữa màn hình)
                             </span>
                             <button type="button" id="add-sample-photos-btn" class="text-[11px] px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-semibold transition">
                                 + Thêm bộ ảnh mẫu 20/10
                             </button>
                         </div>
 
-                        <div class="flex flex-wrap gap-2">
-                            <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-xs font-bold hover:bg-emerald-500/30 transition inline-flex items-center gap-1.5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <label class="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500/15 border border-dashed border-emerald-400/50 text-emerald-200 text-xs font-bold cursor-pointer hover:bg-emerald-500/25 transition">
                                 <i class="fa-solid fa-upload"></i>
                                 <span>Tải ảnh từ máy lên</span>
                                 <input id="photo-file-input" type="file" accept="image/*" multiple class="hidden">
                             </label>
 
-                            <div class="flex-1 min-w-[210px] flex gap-1.5">
-                                <input id="photo-url-input" type="url" placeholder="Hoặc dán link ảnh (https://...)" class="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-white text-xs focus:outline-none focus:border-emerald-400">
-                                <button type="button" id="add-photo-url-btn" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">
-                                    Thêm Link
+                            <div class="flex gap-1.5">
+                                <input id="photo-url-input" type="url" placeholder="Hoặc dán link ảnh (https://...)" class="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-white text-xs focus:border-emerald-400 focus:outline-none">
+                                <button type="button" id="add-photo-url-btn" class="px-3 py-2 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs hover:opacity-90 transition">
+                                    Thêm
                                 </button>
                             </div>
                         </div>
@@ -475,22 +606,19 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons & Share Link -->
-                <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-                    <div class="flex flex-wrap items-center gap-2.5">
-                        <button type="button" id="save-card-btn" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-extrabold text-xs sm:text-sm shadow-lg hover:opacity-95 transition flex items-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            <span>Lưu Thiệp</span>
-                        </button>
-                        <button type="button" id="preview-card-btn" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-extrabold text-xs sm:text-sm shadow-lg hover:opacity-95 transition flex items-center gap-2">
-                            <i class="fa-solid fa-play"></i>
-                            <span>Lưu & Xem Thử Ngay</span>
-                        </button>
-                    </div>
-
-                    <button type="button" id="copy-share-link-btn" class="px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-pink-200 font-bold text-xs sm:text-sm hover:bg-white/15 transition flex items-center gap-2">
-                        <i class="fa-solid fa-share-nodes"></i>
-                        <span>Copy Link Gửi Người Nhận</span>
+                <!-- Studio Save & Preview Actions -->
+                <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
+                    <button type="button" id="copy-share-link-btn" class="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-slate-200 text-xs sm:text-sm font-bold transition flex items-center gap-2">
+                        <i class="fa-solid fa-link text-cyan-300"></i>
+                        <span>Copy Link Chia Sẻ</span>
+                    </button>
+                    <button type="button" id="save-card-btn" class="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs sm:text-sm font-extrabold transition flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Lưu Thiệp</span>
+                    </button>
+                    <button type="button" id="preview-card-btn" class="neon-btn-glow px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white text-xs sm:text-sm font-extrabold transition flex items-center gap-2 shadow-xl">
+                        <i class="fa-solid fa-eye"></i>
+                        <span>Lưu & Xem Thử Ngay</span>
                     </button>
                 </div>
             </div>
@@ -498,95 +626,165 @@
     </section>
 
     <!-- =======================================================================
-         VIEW 3: CARD RECIPIENT EXPERIENCE (4 Giai Đoạn Tuần Tự - Không Skip)
+         VIEW 3: RECIPIENT 4-STAGE CARD VIEWER (Locked Header, Sequential Flow)
     ======================================================================== -->
-    <section id="view-card" class="relative z-10 min-h-screen w-full hidden overflow-hidden">
-        <!-- Top Bar (Locked recipient badge - no edit button, no bottom skip bar) -->
-        <header class="fixed top-0 left-0 right-0 z-50 p-3.5 sm:p-5 flex items-center justify-between pointer-events-none">
-            <div class="glass-pill px-4 py-2 rounded-full flex items-center gap-2.5 pointer-events-auto shadow-lg">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-xs sm:text-sm font-bold text-slate-200">
-                    Dành tặng: <span id="card-top-recipient-name" class="text-pink-400 font-black">Đạt</span>
+    <section id="view-card" class="relative z-10 min-h-screen w-full hidden">
+        <!-- Top Bar (Locked Recipient Badge + Home & Sound Buttons) -->
+        <header class="fixed top-0 left-0 right-0 z-50 p-3 sm:p-5 flex items-center justify-between pointer-events-none">
+            <div class="glass-pill px-4 py-2 rounded-full flex items-center gap-2 pointer-events-auto shadow-lg">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span class="text-xs font-bold text-slate-300">
+                    Dành tặng: <strong id="card-top-recipient-name" class="text-pink-400 font-extrabold">Dat</strong>
                 </span>
             </div>
 
             <div class="flex items-center gap-2 pointer-events-auto">
-                <button id="card-back-home-btn" class="glass-pill px-3.5 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-house text-[11px]"></i>
+                <button id="card-back-home-btn" class="glass-pill px-3.5 py-2 rounded-full text-xs font-bold text-slate-200 hover:bg-white/15 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house text-pink-400"></i>
                     <span>Trang chủ</span>
                 </button>
-                <button id="sound-toggle-card" class="glass-pill w-10 h-10 rounded-full flex items-center justify-center text-cyan-300 hover:bg-white/10 transition" title="Bật/Tắt Âm Thanh">
+                <button id="sound-toggle-card" class="glass-pill w-9 h-9 rounded-full flex items-center justify-center text-cyan-300 hover:bg-white/15 transition" title="Bật/Tắt Âm Thanh">
                     <i class="fa-solid fa-volume-high text-sm"></i>
                 </button>
             </div>
         </header>
 
-        <!-- STAGE 1: RUNAWAY NO BUTTON -->
-        <div id="stage-1" class="card-stage min-h-screen w-full flex items-center justify-center p-4">
-            <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-9 text-center relative">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/15 border border-pink-400/30 text-pink-300 text-[11px] font-extrabold mb-4">
-                    <i class="fa-solid fa-sparkles"></i>
-                    <span id="s1-theme-badge">THÔNG ĐIỆP ĐẶC BIỆT GỬI RIÊNG CHO BẠN</span>
+        <!-- STAGE 1: RUNAWAY NO BUTTON GATEKEEPER -->
+        <div id="stage-1" class="card-stage min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
+            <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-9 text-center relative z-10 space-y-5">
+                <div id="s1-theme-badge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-pink-500/15 border border-pink-400/35 text-pink-300 text-[11px] font-extrabold tracking-wide">
+                    🌸 NGÀY PHỤ NỮ VN 20/10 • DÀNH RIÊNG CHO BẠN
                 </div>
 
-                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-500/30 to-purple-600/30 border-2 border-pink-400/50 flex items-center justify-center text-4xl shadow-2xl">
-                    <span id="s1-emoji-avatar">🌸</span>
+                <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-pink-500/25 via-purple-500/25 to-cyan-500/25 border-2 border-pink-400/50 flex items-center justify-center text-4xl shadow-inner">
+                    <span id="s1-emoji-avatar">🌹</span>
                 </div>
 
-                <h2 id="s1-title-display" class="text-xl sm:text-3xl font-black text-white leading-snug mb-3"></h2>
-                <p id="s1-sub-display" class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-7"></p>
+                <h2 id="s1-title-display" class="text-xl sm:text-2xl font-black text-white leading-snug"></h2>
+                <p id="s1-sub-display" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
 
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 relative min-h-[64px]">
+                <div class="pt-3 flex flex-wrap items-center justify-center gap-4 relative min-h-[68px]">
                     <button
                         id="s1-yes-btn"
-                        class="neon-btn-glow px-7 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600 text-white font-extrabold text-sm sm:text-base shadow-xl hover:scale-105 active:scale-95 transition flex items-center gap-2"
+                        type="button"
+                        class="neon-btn-glow px-6 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600 text-white font-extrabold text-sm sm:text-base shadow-xl hover:scale-105 active:scale-95 transition flex items-center gap-2"
                     >
                         <i class="fa-solid fa-gift"></i>
-                        <span id="s1-yes-text">Mở quà ngay</span>
+                        <span id="s1-yes-text">Mở quà 20/10 ngay 🌸</span>
                     </button>
 
                     <button
                         id="s1-no-btn"
-                        class="px-5 py-3 rounded-2xl bg-slate-800/90 border border-white/15 text-slate-300 font-bold text-xs sm:text-sm hover:bg-slate-700 transition"
+                        type="button"
+                        class="px-5 py-3 rounded-2xl bg-slate-800/90 border border-white/15 text-slate-300 font-bold text-xs sm:text-sm transition duration-150 flex items-center gap-1.5"
                     >
-                        <i class="fa-solid fa-ban mr-1"></i>
-                        <span id="s1-no-text">Không xem đâu</span>
+                        <i class="fa-solid fa-ban text-rose-400"></i>
+                        <span id="s1-no-text">Ngại lắm để sau</span>
                     </button>
                 </div>
 
-                <p id="s1-dodge-status" class="text-[11px] text-amber-300 font-mono mt-4 opacity-0 transition-opacity"></p>
+                <p id="s1-dodge-status" class="text-[11px] text-amber-300 font-mono opacity-0 transition">
+                    Nút này biết chạy trốn!
+                </p>
             </div>
         </div>
 
-        <!-- STAGE 2: 3D GIFT BOX & TYPEWRITER LETTER -->
-        <div id="stage-2" class="card-stage min-h-screen w-full hidden items-center justify-center p-4">
-            <!-- Step 2A: Closed Gift Box -->
-            <div id="s2-gift-Wrapper" class="text-center max-w-md mx-auto">
-                <div class="inline-block px-4 py-1.5 rounded-full bg-pink-500/20 border border-pink-400/40 text-pink-200 text-xs font-extrabold mb-6">
-                    ✨ Chạm vào hộp quà để mở điều bất ngờ ✨
+        <!-- STAGE 2: 3D GIFT BOX & TYPEWRITER LETTER WITH EFFECT SUMMONERS & STRICT UN-TYPED CHECK -->
+        <div id="stage-2" class="card-stage min-h-screen w-full hidden items-center justify-center p-4 relative overflow-hidden">
+            <!-- Continuous Ambient Floating Effect Layer for Stage 2 -->
+            <div id="stage2-ambient-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+            <!-- Gift Box Unopened View -->
+            <div id="s2-gift-Wrapper" class="relative z-10 text-center max-w-md mx-auto space-y-6">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/20 border border-pink-400/40 text-pink-200 text-xs font-extrabold shadow-lg">
+                    <span>✨ Chạm vào hộp quà hoặc bấm nút bên dưới để mở điều bất ngờ ✨</span>
                 </div>
 
-                <div id="s2-gift-box-trigger" class="gift-float cursor-pointer w-44 h-44 sm:w-52 sm:h-52 mx-auto rounded-3xl bg-gradient-to-br from-pink-500/25 via-purple-600/25 to-cyan-500/25 border-2 border-pink-400/50 flex flex-col items-center justify-center shadow-2xl hover:scale-105 transition relative">
-                    <div class="text-7xl sm:text-8xl select-none">🎁</div>
-                    <span class="mt-3 px-3.5 py-1 rounded-full bg-slate-950/90 border border-white/20 text-xs font-extrabold text-pink-300">
-                        Gửi: <span id="s2-gift-tag-name">Đạt</span>
-                    </span>
+                <!-- Gift Box with Orbiting Theme Effects -->
+                <div class="relative w-56 h-56 sm:w-64 sm:h-64 mx-auto flex items-center justify-center">
+                    <span id="s2-orbit-1" class="orbit-badge absolute -top-2 -left-2 text-3xl sm:text-4xl select-none pointer-events-none" style="animation-delay: 0s;">🌹</span>
+                    <span id="s2-orbit-2" class="orbit-badge absolute -top-3 -right-2 text-3xl sm:text-4xl select-none pointer-events-none" style="animation-delay: 0.7s;">💖</span>
+                    <span id="s2-orbit-3" class="orbit-badge absolute -bottom-2 -left-3 text-3xl sm:text-4xl select-none pointer-events-none" style="animation-delay: 1.4s;">🌸</span>
+                    <span id="s2-orbit-4" class="orbit-badge absolute -bottom-2 -right-3 text-3xl sm:text-4xl select-none pointer-events-none" style="animation-delay: 2.1s;">✨</span>
+
+                    <div id="s2-gift-box-trigger" class="gift-float cursor-pointer w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-br from-pink-500/30 via-purple-600/30 to-cyan-500/30 border-2 border-pink-400/60 flex flex-col items-center justify-center shadow-2xl hover:scale-105 transition relative">
+                        <div class="text-7xl sm:text-8xl select-none drop-shadow-lg">🎁</div>
+                        <span class="mt-3 px-3.5 py-1 rounded-full bg-slate-950/90 border border-pink-400/40 text-xs font-extrabold text-pink-300">
+                            Gửi: <span id="s2-gift-tag-name">Dat</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Explicit Open Gift Button & Quick Effect Trigger -->
+                <div class="flex flex-col items-center gap-3 pt-1">
+                    <button
+                        id="s2-open-gift-btn"
+                        type="button"
+                        class="neon-btn-glow px-8 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white font-extrabold text-sm sm:text-base shadow-xl hover:scale-105 active:scale-95 transition inline-flex items-center gap-2.5"
+                    >
+                        <i class="fa-solid fa-box-open"></i>
+                        <span>Mở Hộp Quà Ngay</span>
+                    </button>
+
+                    <button
+                        id="s2-pre-summon-fx-btn"
+                        type="button"
+                        class="px-4 py-1.5 rounded-full bg-white/10 hover:bg-pink-500/25 border border-pink-400/30 text-pink-200 text-xs font-bold transition inline-flex items-center gap-1.5"
+                    >
+                        <i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i>
+                        <span>Tung hoa & trái tim quanh hộp quà</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Step 2B: Opened Letter Modal -->
-            <div id="s2-letter-card" class="glass-panel w-full max-w-xl rounded-3xl p-6 sm:p-9 hidden relative">
+            <!-- Opened Letter View with Surrounding Effects & Effect Summoner Bar -->
+            <div id="s2-letter-card" class="relative z-10 glass-panel w-full max-w-xl rounded-3xl p-6 sm:p-8 hidden">
+                <!-- Corner Floating Accents -->
+                <span id="s2-letter-corner-1" class="orbit-badge absolute -top-4 -left-4 text-3xl pointer-events-none select-none">🌹</span>
+                <span id="s2-letter-corner-2" class="orbit-badge absolute -top-4 -right-4 text-3xl pointer-events-none select-none" style="animation-delay: 0.8s;">💖</span>
+                <span id="s2-letter-corner-3" class="orbit-badge absolute -bottom-4 -left-4 text-3xl pointer-events-none select-none" style="animation-delay: 1.5s;">🌸</span>
+
                 <div class="flex items-center justify-between border-b border-white/15 pb-3.5 mb-4">
                     <div class="flex items-center gap-2.5">
                         <span class="text-2xl" id="s2-letter-icon">💌</span>
                         <h3 id="s2-letter-title" class="text-base sm:text-xl font-black text-pink-300"></h3>
                     </div>
-                    <span class="text-[11px] font-mono text-slate-400">VIP CARD</span>
+                    <span id="s2-typing-badge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300">
+                        Đang viết thư...
+                    </span>
                 </div>
 
-                <div id="s2-letter-body" class="text-sm sm:text-base text-slate-100 leading-relaxed whitespace-pre-line min-h-[150px] max-h-[50vh] overflow-y-auto pr-1 font-medium"></div>
+                <div id="s2-letter-body" class="text-sm sm:text-base text-slate-100 leading-relaxed whitespace-pre-line min-h-[140px] max-h-[42vh] overflow-y-auto pr-1 font-medium"></div>
 
-                <div class="mt-6 pt-4 border-t border-white/10 flex justify-end">
+                <!-- Interactive Effect Summoner Buttons inside the Letter Card -->
+                <div class="mt-5 pt-3.5 border-t border-white/10">
+                    <div class="text-[11px] font-bold text-pink-300 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-sparkles"></i>
+                        <span>Triệu hồi hiệu ứng xung quanh thiệp:</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" data-summon-fx="roses" class="summon-fx-btn px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 text-xs font-bold transition flex items-center gap-1.5">
+                            <span>🌹</span> <span>Hoa Hồng</span>
+                        </button>
+                        <button type="button" data-summon-fx="hearts" class="summon-fx-btn px-3 py-1.5 rounded-xl bg-pink-500/20 hover:bg-pink-500/35 border border-pink-400/40 text-pink-200 text-xs font-bold transition flex items-center gap-1.5">
+                            <span>💖</span> <span>Mưa Trái Tim</span>
+                        </button>
+                        <button type="button" data-summon-fx="fireworks" class="summon-fx-btn px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/35 border border-amber-400/40 text-amber-200 text-xs font-bold transition flex items-center gap-1.5">
+                            <span>🎆</span> <span>Pháo Hoa</span>
+                        </button>
+                        <button type="button" data-summon-fx="balloons" class="summon-fx-btn px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/35 border border-purple-400/40 text-purple-200 text-xs font-bold transition flex items-center gap-1.5">
+                            <span>🎈</span> <span>Bóng Bay</span>
+                        </button>
+                        <button type="button" data-summon-fx="meteors" class="summon-fx-btn px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/35 border border-cyan-400/40 text-cyan-200 text-xs font-bold transition flex items-center gap-1.5">
+                            <span>🌠</span> <span>Sao Băng</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between gap-3">
+                    <span class="text-[11px] text-slate-400 italic">
+                        * Đợi lời nhắn hiện hết mới bấm Tiếp tục nhé!
+                    </span>
                     <button
                         id="to-stage-3-btn"
                         class="neon-btn-glow px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-extrabold text-sm flex items-center gap-2 hover:scale-105 transition"
@@ -598,21 +796,19 @@
             </div>
         </div>
 
-        <!-- STAGE 3: 3D PARTICLE UNIVERSE (No top buttons, "Tiếp tục" only after completion) -->
+        <!-- STAGE 3: 3D CONTINUOUS-MOTION PARTICLE UNIVERSE WITH METEORS -->
         <div id="stage-3" class="card-stage h-screen w-full hidden relative overflow-hidden">
             <div id="three-canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
-            <!-- Subtle drag hint -->
             <div class="fixed top-16 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
                 <div class="glass-pill px-3.5 py-1 rounded-full text-[11px] text-slate-300 font-semibold">
-                    <i class="fa-solid fa-hand-pointer mr-1 text-pink-400"></i> Chạm / Kéo để xoay 360° • Cuộn để Zoom
+                    <i class="fa-solid fa-hand-pointer mr-1 text-pink-400"></i> Xoay 360° • Tinh vân hạt sáng & Sao băng vũ trụ
                 </div>
             </div>
 
-            <!-- Bottom Status & Delayed Next Button -->
             <div class="fixed bottom-7 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3">
                 <div id="morph-status-badge" class="glass-pill px-4 py-1.5 rounded-full text-xs font-mono font-bold text-pink-300 border border-pink-400/40">
-                    ĐANG KHỞI TẠO HẠT SÁNG 3D...
+                    ĐANG KHỞI TẠO VŨ TRỤ HẠT SÁNG...
                 </div>
 
                 <button
@@ -625,39 +821,96 @@
             </div>
         </div>
 
-        <!-- STAGE 4: FLOATING WISHES & POLAROID PHOTO GALLERY -->
-        <div id="stage-4" class="card-stage min-h-screen w-full hidden relative py-20 px-4 sm:px-8 overflow-y-auto">
-            <canvas id="stage4-sky-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+        <!-- STREAMING_CHUNK:Updating Stage 4 with Filmstrip Photo Reel in center and < > Wish Slider (10s) below... -->
+        <!-- STAGE 4: FILMSTRIP PHOTO REEL IN CENTER + WISH SLIDER (< > 10s) BELOW + FLOATING WISHES -->
+        <div id="stage-4" class="card-stage min-h-screen w-full hidden relative py-16 px-4 sm:px-8 overflow-y-auto">
+            <div id="stage4-floating-wishes-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
 
-            <div class="relative z-10 max-w-5xl mx-auto space-y-8">
+            <div class="relative z-10 max-w-4xl mx-auto space-y-6">
                 <!-- Header Banner -->
-                <div class="glass-panel rounded-3xl p-6 sm:p-8 text-center">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300 text-xs font-bold mb-3">
-                        <i class="fa-solid fa-crown"></i> TRẠM CUỐI: NGÀN LỜI CHÚC & KỶ NIỆM ĐẸP
+                <div class="glass-panel rounded-3xl p-5 sm:p-7 text-center relative overflow-hidden">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300 text-xs font-bold mb-2">
+                        <i class="fa-solid fa-crown"></i> TRẠM CUỐI: CUỘN PHIM KỶ NIỆM & LỜI NHẮN YÊU THƯƠNG
                     </div>
-                    <h2 id="s4-headline-display" class="text-2xl sm:text-4xl font-black text-white leading-tight mb-4"></h2>
+                    <h2 id="s4-headline-display" class="text-xl sm:text-3xl font-black text-white leading-tight"></h2>
+                </div>
 
-                    <!-- Highlighted Wish Ticker -->
-                    <div class="max-w-2xl mx-auto p-4 rounded-2xl bg-slate-950/80 border border-pink-400/30 min-h-[68px] flex items-center justify-center">
-                        <p id="s4-active-wish" class="text-sm sm:text-lg font-bold text-pink-200 transition-opacity duration-500"></p>
+                <!-- CENTER: CINEMA FILMSTRIP PHOTO REEL (Balanced ratio, click to enlarge) -->
+                <div id="s4-filmstrip-section" class="space-y-2.5">
+                    <div class="flex items-center justify-between px-2">
+                        <h3 class="text-xs sm:text-sm font-extrabold text-pink-300 flex items-center gap-2">
+                            <i class="fa-solid fa-film"></i>
+                            <span>Cuộn Phim Kỷ Niệm (Chạm vào ảnh để phóng to)</span>
+                        </h3>
+                        <span class="text-[11px] text-slate-400 font-mono">REEL 35MM • AUTO ROLL</span>
+                    </div>
+
+                    <div class="filmstrip-container rounded-2xl">
+                        <div class="filmstrip-holes-top"></div>
+                        <div id="s4-filmstrip-track" class="filmstrip-track"></div>
+                        <div class="filmstrip-holes-bottom"></div>
                     </div>
                 </div>
 
-                <!-- Wishes Cards Grid -->
-                <div id="s4-wishes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                <!-- BELOW: WISH / MESSAGE SLIDER WITH < > BUTTONS & 10-SECOND AUTO ADVANCE -->
+                <div class="max-w-2xl mx-auto">
+                    <div class="glass-panel rounded-3xl p-6 sm:p-8 relative shadow-2xl border border-pink-400/35">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-pink-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-envelope-open-text"></i>
+                                <span>Lời Nhắn Dành Tặng Bạn</span>
+                            </span>
+                            <span id="s4-wish-counter" class="text-xs font-mono font-bold text-cyan-300 bg-slate-900/80 px-2.5 py-0.5 rounded-full border border-white/15">
+                                1 / 5
+                            </span>
+                        </div>
 
-                <!-- Polaroid Memories Gallery -->
-                <div id="s4-photos-section" class="space-y-4">
-                    <h3 class="text-center text-base sm:text-xl font-black text-white flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-camera-retro text-pink-400"></i>
-                        <span>Khoảnh Khắc & Hình Ảnh Đáng Nhớ</span>
-                    </h3>
-                    <div id="s4-polaroid-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-2"></div>
+                        <!-- Wish Content Box with < and > Controls -->
+                        <div class="relative flex items-center justify-between gap-3 min-h-[100px] py-2">
+                            <button
+                                id="wish-prev-btn"
+                                type="button"
+                                class="w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-slate-900/90 hover:bg-pink-500/30 text-white border border-white/25 hover:border-pink-400 flex items-center justify-center shadow-lg transition active:scale-95"
+                                title="Lời nhắn trước (<)"
+                            >
+                                <i class="fa-solid fa-chevron-left text-sm"></i>
+                            </button>
+
+                            <div class="flex-1 text-center px-2">
+                                <p id="s4-active-wish" class="text-base sm:text-xl font-extrabold text-pink-100 leading-relaxed transition-all duration-300"></p>
+                            </div>
+
+                            <button
+                                id="wish-next-btn"
+                                type="button"
+                                class="w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-slate-900/90 hover:bg-pink-500/30 text-white border border-white/25 hover:border-pink-400 flex items-center justify-center shadow-lg transition active:scale-95"
+                                title="Lời nhắn tiếp theo (>)"
+                            >
+                                <i class="fa-solid fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- 10-Second Progress Bar & Dots -->
+                        <div class="mt-4 space-y-2.5">
+                            <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                                <div id="s4-wish-progress-bar" class="h-full bg-gradient-to-r from-pink-500 via-purple-400 to-cyan-400 w-0 transition-all duration-100"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-slate-400">
+                                <span>Bấm <b>&lt;</b> hoặc <b>&gt;</b> để chuyển lời nhắn</span>
+                                <span>Tự động chuyển sau 10 giây</span>
+                            </div>
+                            <div id="wish-dots-container" class="flex items-center justify-center gap-2 pt-1"></div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Replay Button -->
-                <div class="text-center pt-4 pb-10">
-                    <button id="replay-card-btn" class="glass-pill px-6 py-3 rounded-full text-xs sm:text-sm font-extrabold text-pink-300 hover:text-white hover:bg-pink-500/20 transition inline-flex items-center gap-2">
+                <!-- Replay & Effect Trigger Footer -->
+                <div class="flex flex-wrap items-center justify-center gap-3 pt-2 pb-8">
+                    <button id="s4-celebrate-again-btn" type="button" class="glass-pill px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-amber-200 hover:bg-amber-500/20 border border-amber-400/30 transition inline-flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Bắn Pháo Hoa & Hoa Hồng</span>
+                    </button>
+                    <button id="replay-card-btn" type="button" class="glass-pill px-6 py-2.5 rounded-full text-xs sm:text-sm font-extrabold text-pink-300 hover:text-white hover:bg-pink-500/20 transition inline-flex items-center gap-2">
                         <i class="fa-solid fa-rotate-left"></i>
                         <span>Xem Lại Thiệp Từ Đầu</span>
                     </button>
@@ -679,9 +932,9 @@
     ======================================================================== -->
     <script>
         /**************************************************************
-         * 1. THEME PRESETS & BUILT-IN CARDS DATABASE
+         * 1. PRESETS & DATABASE ENGINE (STRICT ID VERIFICATION)
          **************************************************************/
-        const STORAGE_KEY = "cosmic_cards_v4_db";
+        const STORAGE_KEY = "cosmic_cards_v5_db";
         const ADMIN_PASSWORD = "thuan2810";
 
         const SAMPLE_20_10_PHOTOS = [
@@ -693,21 +946,20 @@
         const PARTICLE_COLOR_PRESETS = {
             "rose_pink": { primary: "#ff4d94", secondary: "#ffb3d9", label: "🌸 Hồng Phấn & Đỏ Hoa Hồng 20/10" },
             "cyber_neon": { primary: "#00f5d4", secondary: "#a855f7", label: "⚡ Xanh Cyan & Tím Vũ Trụ" },
-            "gold_luxury": { primary: "#ffd166", secondary: "#ff6b35", label: "👑 Vàng Hoàng Kim & Cam Ánh Kim" },
-            "ice_blue": { primary: "#38bdf8", secondary: "#e0f2fe", label: "❄️ Xanh Băng Tuyết & Trắng Ngân Hà" },
+            "gold_luxury": { primary: "#ffd166", secondary: "#ff6b35", label: "👑 Vàng Hoàng Kim & Ánh Kim" },
+            "ice_blue": { primary: "#38bdf8", secondary: "#e0f2fe", label: "❄️ Xanh Băng Tuyết & Ngân Hà" },
             "emerald_magic": { primary: "#10b981", secondary: "#a7f3d0", label: "🍀 Xanh Ngọc Lục Bảo & Mint" },
-            "sunset_love": { primary: "#ff3366", secondary: "#ffbe0b", label: "🌅 Đỏ Hoàng Hôn & Vàng Nắng" },
-            "rainbow": { primary: "#ff4d94", secondary: "#00f5d4", label: "🌈 Cầu Vồng Đa Sắc (7 màu rực rỡ)" }
+            "rainbow": { primary: "#ff4d94", secondary: "#00f5d4", label: "🌈 Cầu Vồng Đa Sắc" }
         };
 
         const THEME_INFO = {
-            "20/10": { label: "🌸 Ngày Phụ Nữ VN 20/10", emoji: "🌹", s2Effect: "roses", s4Effect: "petals", defaultColorPreset: "rose_pink" },
-            "sinh-nhat": { label: "🎂 Sinh Nhật", emoji: "🎂", s2Effect: "balloons", s4Effect: "starlight", defaultColorPreset: "gold_luxury" },
-            "giang-sinh": { label: "🎄 Giáng Sinh / Noel", emoji: "🎄", s2Effect: "snow", s4Effect: "snow", defaultColorPreset: "ice_blue" },
-            "tet": { label: "🧧 Tết Nguyên Đán", emoji: "🧧", s2Effect: "lixi", s4Effect: "petals", defaultColorPreset: "sunset_love" },
-            "trung-thu": { label: "🌕 Tết Trung Thu", emoji: "🏮", s2Effect: "lanterns", s4Effect: "lanterns", defaultColorPreset: "gold_luxury" },
-            "tinh-yeu": { label: "💖 Tình Yêu Ngọt Ngào", emoji: "💖", s2Effect: "hearts", s4Effect: "hearts", defaultColorPreset: "rose_pink" },
-            "ban-than": { label: "😎 Bạn Thân VIP", emoji: "😎", s2Effect: "fireworks", s4Effect: "starlight", defaultColorPreset: "cyber_neon" }
+            "20/10": { label: "🌸 Ngày Phụ Nữ VN 20/10", emoji: "🌹", s2Effect: "roses", defaultColorPreset: "rose_pink" },
+            "sinh-nhat": { label: "🎂 Sinh Nhật", emoji: "🎂", s2Effect: "balloons", defaultColorPreset: "gold_luxury" },
+            "giang-sinh": { label: "🎄 Giáng Sinh / Noel", emoji: "🎄", s2Effect: "snow", defaultColorPreset: "ice_blue" },
+            "tet": { label: "🧧 Tết Nguyên Đán", emoji: "🧧", s2Effect: "lixi", defaultColorPreset: "emerald_magic" },
+            "trung-thu": { label: "🌕 Tết Trung Thu", emoji: "🏮", s2Effect: "lanterns", defaultColorPreset: "gold_luxury" },
+            "tinh-yeu": { label: "💖 Tình Yêu Ngọt Ngào", emoji: "💖", s2Effect: "hearts", defaultColorPreset: "rose_pink" },
+            "ban-than": { label: "😎 Bạn Thân VIP", emoji: "😎", s2Effect: "fireworks", defaultColorPreset: "cyber_neon" }
         };
 
         function normalizeKey(str) {
@@ -724,180 +976,63 @@
         function resolveThemeParticleColors(themeKey) {
             const themeMeta = THEME_INFO[themeKey] || THEME_INFO["20/10"];
             const preset = PARTICLE_COLOR_PRESETS[themeMeta.defaultColorPreset] || PARTICLE_COLOR_PRESETS["rose_pink"];
-            return {
-                primary: preset.primary,
-                secondary: preset.secondary,
-                label: `${preset.label} (Theo chủ đề)`
-            };
+            return { primary: preset.primary, secondary: preset.secondary };
         }
 
         function generatePresetByTheme(themeKey, rawName) {
-            const name = (rawName || "Đạt").trim();
+            const name = (rawName || "Dat").trim();
             const upper = name.toUpperCase();
             const themeColors = resolveThemeParticleColors(themeKey);
 
-            const presets = {
+            return {
                 "20/10": {
                     s1Title: `Nhân dịp 20/10, có một món quà đặc biệt cùng ngàn lời chúc yêu thương gửi riêng cho ${name} nè!`,
-                    s1Sub: `Hôm nay là Ngày Phụ Nữ Việt Nam 20/10 — ngày tôn vinh sự dịu dàng, xinh đẹp và tuyệt vời của ${name}. Cùng mở hộp quà bí mật này ngay nhé!`,
+                    s1Sub: `Hôm nay là Ngày Phụ Nữ Việt Nam 20/10 — ngày tôn vinh sự dịu dàng và tuyệt vời của ${name}. Cùng mở hộp quà bí mật ngay nhé!`,
                     s1Yes: `Mở quà 20/10 ngay 🌸`,
-                    s1No: `Ngại lắm để sau nha`,
+                    s1No: `Ngại lắm để sau`,
                     s2Effect: "roses",
                     s2Title: `🌸 CHÚC MỪNG NGÀY PHỤ NỮ VIỆT NAM 20/10`,
-                    s2Letter: `Gửi ${name} thân yêu nhân Ngày Phụ Nữ Việt Nam 20/10! 🌹💖\n\nChúc ${name} có một ngày 20/10 thật trọn vẹn, ngập tràn hoa tươi, quà xinh và những lời chúc ngọt ngào nhất.\n\nCảm ơn ${name} vì đã luôn rạng rỡ, đáng yêu và mang đến nguồn năng lượng ấm áp cho mọi người xung quanh. Chúc ${name} 365 ngày trong năm đều xinh đẹp như hoa, hạnh phúc đong đầy và luôn được yêu thương trọn vẹn! ✨🌸🎉`,
+                    s2Letter: `Gửi ${name} thân yêu nhân Ngày Phụ Nữ Việt Nam 20/10! 🌹💖\n\nChúc ${name} có một ngày 20/10 thật trọn vẹn, ngập tràn hoa tươi, quà xinh và những lời chúc ngọt ngào nhất.\n\nCảm ơn ${name} vì luôn rạng rỡ, đáng yêu và mang đến năng lượng ấm áp cho mọi người. Chúc ${name} 365 ngày đều hạnh phúc! ✨🌸🎉`,
                     s3Words: `3, 2, 1, HAPPY 20/10, ${upper} XINH ĐẸP, LUÔN RẠNG RỠ`,
                     s3ColorMode: "rose_pink",
                     s3ColorPrimary: themeColors.primary,
                     s3ColorSecondary: themeColors.secondary,
-                    s4Effect: "petals",
                     s4Headline: `Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10 - ${name}! 🌸`,
+                    s4MainWish: `“ Chúc ${name} luôn xinh đẹp, tự tin và tỏa sáng rực rỡ! ✨ ”`,
                     s4Wishes: [
-                        `Chúc ${name} ngày 20/10 ngập tràn niềm vui, hoa tươi và nụ cười rạng rỡ! 🌹`,
-                        `Chúc ${name} luôn xinh đẹp, tự tin và tỏa sáng theo cách riêng của mình! ✨`,
-                        `Mọi ước mơ, dự định của ${name} đều nở hoa rực rỡ và thành công mỹ mãn! 🌸`,
-                        `Chúc ${name} 365 ngày đều hạnh phúc, bình yên và luôn được yêu thương! 💖`
-                    ]
-                },
-                "sinh-nhat": {
-                    s1Title: `Happy Birthday ${name}! Có một món quà sinh nhật siêu to đang đợi ${name} mở nè!`,
-                    s1Sub: `Hôm nay là ngày một ngôi sao mang tên ${name} ra đời. Bấm nút nhận quà sinh nhật ngay thôi!`,
-                    s1Yes: `Nhận quà Sinh Nhật 🎂`,
-                    s1No: `Không nhận quà đâu`,
-                    s2Effect: "balloons",
-                    s2Title: `THƯ CHÚC MỪNG SINH NHẬT ${upper}`,
-                    s2Letter: `Chúc mừng sinh nhật ${name} rực rỡ nhất quả đất! 🎂🎉\n\nBước sang tuổi mới, chúc ${name} luôn dồi dào sức khỏe, may mắn ngập tràn, công việc và học tập đều thăng tiến vù vù.\n\nMong rằng mỗi ngày trôi qua với ${name} đều là một ngày lễ hội đầy ắp niềm vui! Happy Birthday! 🥂🎁`,
-                    s3Words: `3, 2, 1, HAPPY BIRTHDAY, ${upper}, TUỔI MỚI RỰC RỠ`,
-                    s3ColorMode: "gold_luxury",
-                    s3ColorPrimary: themeColors.primary,
-                    s3ColorSecondary: themeColors.secondary,
-                    s4Effect: "starlight",
-                    s4Headline: `Happy Birthday ${name} - Tuổi Mới Bùng Nổ!`,
-                    s4Wishes: [
-                        `Chúc mừng sinh nhật ${name}! Tuổi mới thật nhiều thành công mới! 🎂`,
-                        `Tiền vào như nước, vạn sự hanh thông, deadline tự chạy trốn! 💸`,
-                        `Luôn hạnh phúc, yêu đời và được mọi người yêu thương! 💖`,
-                        `Mọi điều ước khi thổi nến hôm nay đều sớm thành hiện thực! 🌟`
-                    ]
-                },
-                "giang-sinh": {
-                    s1Title: `Ho Ho Ho! Ông già Noel vừa gửi một món quà Giáng Sinh tới cho ${name} nè!`,
-                    s1Sub: `Mùa Giáng Sinh năm nay sẽ ấm áp hơn gấp bội khi ${name} mở chiếc hộp quà phép thuật này đấy!`,
-                    s1Yes: `Mở quà Noel ngay 🎄`,
-                    s1No: `Lạnh lắm ngại mở`,
-                    s2Effect: "snow",
-                    s2Title: `THƯ GIÁNG SINH AN LÀNH GỬI ${upper}`,
-                    s2Letter: `Merry Christmas ${name}! 🎄❄️\n\nGiữa tiết trời se lạnh của mùa lễ hội, chúc ${name} có một mùa Giáng Sinh thật ấm áp, an lành bên những người thân yêu.\n\nMong rằng những bông tuyết may mắn sẽ mang tới cho ${name} thật nhiều niềm vui và phép màu kỳ diệu! 🎅🦌✨`,
-                    s3Words: `3, 2, 1, MERRY CHRISTMAS, ${upper}, AN LÀNH & ẤM ÁP`,
-                    s3ColorMode: "ice_blue",
-                    s3ColorPrimary: themeColors.primary,
-                    s3ColorSecondary: themeColors.secondary,
-                    s4Effect: "snow",
-                    s4Headline: `Giáng Sinh An Lành & Ấm Áp Nhé ${name}!`,
-                    s4Wishes: [
-                        `Merry Christmas ${name}! Chúc bạn một mùa Noel ngập tràn phép màu! 🎄`,
-                        `Chúc trái tim ${name} luôn ấm áp dù ngoài trời có lạnh giá thế nào! ❄️`,
-                        `Mọi nỗi buồn ở lại phía sau, chỉ còn niềm vui và bình yên phía trước! 🎅`,
-                        `Giáng Sinh an lành, năm mới sắp tới thật nhiều may mắn nhé! ✨`
-                    ]
-                },
-                "tet": {
-                    s1Title: `Tết Tết Tết đến rồi! Có một phong bao lì xì đại cát gửi riêng cho ${name} nè!`,
-                    s1Sub: `Đầu năm mở quà lấy vía may mắn cả năm rực rỡ nha ${name} ơi!`,
-                    s1Yes: `Nhận Lì Xì & Mở Quà 🧧`,
-                    s1No: `Chê lì xì nha`,
-                    s2Effect: "lixi",
-                    s2Title: `THƯ CHÚC TẾT ĐẦU XUÂN GỬI ${upper}`,
-                    s2Letter: `Chúc Mừng Năm Mới ${name}! 🧧🌸\n\nNhân dịp xuân về, chúc ${name} và gia đình một năm mới An Khang Thịnh Vượng, Vạn Sự Như Ý, Tỷ Sự Như Mơ.\n\nChúc ${name} năm nay bứt phá ngoạn mục, tài lộc dồi dào và lúc nào cũng tươi vui như hoa mùa xuân! 🎆🥂`,
-                    s3Words: `3, 2, 1, HAPPY NEW YEAR, ${upper}, VẠN SỰ NHƯ Ý`,
-                    s3ColorMode: "sunset_love",
-                    s3ColorPrimary: themeColors.primary,
-                    s3ColorSecondary: themeColors.secondary,
-                    s4Effect: "petals",
-                    s4Headline: `Cung Chúc Tân Xuân - Vạn Sự Như Ý Nhé ${name}!`,
-                    s4Wishes: [
-                        `Chúc ${name} năm mới Tiền Vào Như Nước Sông Đà! 🧧`,
-                        `Sức khỏe dồi dào, tâm hồn phơi phới, vạn sự hanh thông! 🌸`,
-                        `Học tập và sự nghiệp thăng hạng vượt bậc trong năm mới! 🚀`,
-                        `Cả năm may mắn, bình an và ngập tràn tiếng cười! 🎆`
-                    ]
-                },
-                "trung-thu": {
-                    s1Title: `Tết Trung Thu rước đèn đi chơi! Có một món quà trăng rằm gửi tặng ${name} nè!`,
-                    s1Sub: `Đêm trăng tròn đẹp nhất là khi ${name} mở chiếc hộp quà lung linh này đó!`,
-                    s1Yes: `Mở quà Trung Thu 🏮`,
-                    s1No: `Đi ăn bánh nướng đã`,
-                    s2Effect: "lanterns",
-                    s2Title: `THƯ TRUNG THU ĐOÀN VIÊN GỬI ${upper}`,
-                    s2Letter: `Chúc ${name} một mùa Tết Trung Thu thật ấm áp và trọn vẹn! 🌕🏮\n\nDưới ánh trăng rằm sáng tỏ, chúc ${name} luôn giữ được tâm hồn trong trẻo, niềm vui vẹn tròn như ánh trăng đêm thu.\n\nMong mọi điều tốt lành và ngọt ngào nhất sẽ luôn đồng hành cùng ${name}! 🥮🐇✨`,
-                    s3Words: `3, 2, 1, TRUNG THU VUI VẺ, ${upper}, TRĂNG RẰM ĐOÀN VIÊN`,
-                    s3ColorMode: "gold_luxury",
-                    s3ColorPrimary: themeColors.primary,
-                    s3ColorSecondary: themeColors.secondary,
-                    s4Effect: "lanterns",
-                    s4Headline: `Trung Thu Vui Vẻ & Trọn Vẹn Nhé ${name}!`,
-                    s4Wishes: [
-                        `Chúc ${name} mùa Trung Thu ấm áp, ngọt ngào như bánh nướng bánh dẻo! 🥮`,
-                        `Niềm vui và hạnh phúc luôn tròn đầy như ánh trăng rằm! 🌕`,
-                        `Gửi ngàn chiếc đèn trời mang ước nguyện của ${name} bay cao! 🏮`,
-                        `Luôn bình yên, rạng rỡ và gặp thật nhiều may mắn nhé! ✨`
-                    ]
-                },
-                "tinh-yeu": {
-                    s1Title: `Này ${name} ơi! Có một thông điệp ngọt ngào từ trái tim gửi riêng cho ${name} nè!`,
-                    s1Sub: `Cấm từ chối nha, vì món quà này được chuẩn bị bằng tất cả sự chân thành dành cho ${name} đó!`,
-                    s1Yes: `Mở món quà ngọt ngào 💖`,
-                    s1No: `Ngại lắm không xem đâu`,
-                    s2Effect: "hearts",
-                    s2Title: `LÁ THƯ NGỌT NGÀO GỬI TỚI ${upper}`,
-                    s2Letter: `Gửi ${name} thật đặc biệt của mình! 💌💖\n\nCảm ơn ${name} vì đã xuất hiện và làm cho thế giới này trở nên dịu dàng, rực rỡ hơn rất nhiều.\n\nChúc ${name} mỗi ngày đều được bao bọc bởi niềm vui, sự yêu thương và những điều ngọt ngào nhất. Luôn mỉm cười thật tươi nhé! 🌸💫`,
-                    s3Words: `3, 2, 1, HELLO ${upper}, YOU ARE SPECIAL, LOVE ${upper}`,
-                    s3ColorMode: "rose_pink",
-                    s3ColorPrimary: themeColors.primary,
-                    s3ColorSecondary: themeColors.secondary,
-                    s4Effect: "hearts",
-                    s4Headline: `Dành Trọn Những Điều Ngọt Ngào Nhất Cho ${name} 💖`,
-                    s4Wishes: [
-                        `Cảm ơn ${name} vì đã luôn dịu dàng và tuyệt vời như thế! 💖`,
-                        `Chúc mỗi ngày của ${name} đều ngập tràn nắng ấm và yêu thương! 🌸`,
-                        `Dù thế giới ngoài kia có bận rộn thế nào, hãy luôn mỉm cười nhé! ✨`,
-                        `Bạn xứng đáng nhận được tất cả những điều hạnh phúc nhất! 💫`
-                    ]
-                },
-                "ban-than": {
-                    s1Title: `Ê ${name}! Có một bí mật siêu cấp vũ trụ gửi riêng cho ${name} nè!`,
-                    s1Sub: `Hệ thống AI vừa quét toàn bộ dải ngân hà và xác nhận ${name} chính là người uy tín, đỉnh nóc kịch trần nhất hôm nay!`,
-                    s1Yes: `Mở quà ngay (${name} uy tín)`,
-                    s1No: `Không thèm xem / Chê nha`,
-                    s2Effect: "fireworks",
-                    s2Title: `THƯ VINH DANH ${upper} VIP PRO`,
-                    s2Letter: `Chào ${name} VIP PRO! 🚀👑\n\nKhông phải tự nhiên mà vũ trụ gửi tín hiệu này tới cho ${name} đâu nha. Chỉ muốn nhắc nhẹ là độ đẹp, tốt bụng và "uy tín" của ${name} đã vượt ngưỡng cho phép của hệ mặt trời rồi đấy!\n\nChúc ${name} lúc nào cũng giữ vững phong độ đỉnh nóc kịch trần, tiền vào như nước và mọi dự định đều thành công rực rỡ nhé! 🔥✨`,
-                    s3Words: `3, 2, 1, HELLO ${upper}, ${upper} VIP PRO, ĐỈNH NÓC KỊCH TRẦN`,
-                    s3ColorMode: "cyber_neon",
-                    s3ColorPrimary: themeColors.primary,
-                    s3ColorSecondary: themeColors.secondary,
-                    s4Effect: "starlight",
-                    s4Headline: `${name} VIP PRO - Mãi Đỉnh Nóc Kịch Trần! 👑`,
-                    s4Wishes: [
-                        `Xác nhận ${name} 10 điểm không có nhưng, uy tín số 1 vũ trụ! 👑`,
-                        `Chúc ${name} tiền nhiều như lá mùa thu, deadline tự động né xa! 🚀`,
-                        `Lúc nào cũng giữ vững phong độ đỉnh cao và tràn đầy năng lượng! 🔥`,
-                        `Tình bạn mãi bền lâu, cùng nhau chinh phục mọi đỉnh cao mới! ✨`
+                        `20/10 vui vẻ và hạnh phúc nhé! 🌹`,
+                        `Chúc mừng ngày phụ nữ Việt Nam! 🌸`,
+                        `Vui vẻ nhé ${name}! ✨`,
+                        `Luôn rạng rỡ và ngập tràn hoa tươi! 💖`,
+                        `Mọi ước mơ đều thành hiện thực! 🌷`
                     ]
                 }
+            }[themeKey] || {
+                s1Title: `Có một món quà đặc biệt gửi riêng cho ${name} nè!`,
+                s1Sub: `Mở món quà bí mật ngay nhé!`,
+                s1Yes: `Mở quà ngay`,
+                    s1No: `Không xem`,
+                    s2Effect: "roses",
+                    s2Title: `BỨC THƯ ĐẶC BIỆT GỬI ${upper}`,
+                    s2Letter: `Chúc ${name} luôn vui vẻ và hạnh phúc mỗi ngày! 💖`,
+                    s3Words: `3, 2, 1, HAPPY DAY, ${upper}`,
+                    s3ColorMode: "theme",
+                    s3ColorPrimary: themeColors.primary,
+                    s3ColorSecondary: themeColors.secondary,
+                    s4Headline: `Chúc Mừng ${name}!`,
+                    s4MainWish: `“ Chúc ${name} mọi điều tốt đẹp nhất! ✨ ”`,
+                    s4Wishes: [`Luôn vui vẻ nhé! 💖`, `Thành công rực rỡ! 🌟`, `Hạnh phúc đong đầy! 🌸`]
             };
-
-            return presets[themeKey] || presets["20/10"];
         }
 
         function createDefaultCardsDB() {
-            const datPreset = generatePresetByTheme("20/10", "Đạt");
+            const datPreset = generatePresetByTheme("20/10", "Dat");
             const thuanPreset = generatePresetByTheme("20/10", "Thuận");
-            const hoaPreset = generatePresetByTheme("20/10", "Hoa");
 
             return {
                 "dat": {
                     recipientId: "dat",
-                    recipientName: "Đạt",
+                    recipientName: "Dat",
                     theme: "20/10",
                     ...datPreset,
                     photos: [...SAMPLE_20_10_PHOTOS]
@@ -907,13 +1042,6 @@
                     recipientName: "Thuận",
                     theme: "20/10",
                     ...thuanPreset,
-                    photos: [...SAMPLE_20_10_PHOTOS]
-                },
-                "hoa": {
-                    recipientId: "hoa",
-                    recipientName: "Hoa",
-                    theme: "20/10",
-                    ...hoaPreset,
                     photos: [...SAMPLE_20_10_PHOTOS]
                 }
             };
@@ -926,7 +1054,12 @@
             currentStage: 1,
             dodgeCount: 0,
             typewriterTimer: null,
-            wishInterval: null
+            isLetterFullyTyped: false,
+            wishSliderIndex: 0,
+            wishSliderTimer: null,
+            wishProgressTimer: null,
+            wishProgressElapsed: 0,
+            pendingDeleteCardId: null
         };
 
         function loadCardsDB() {
@@ -947,12 +1080,12 @@
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cardsDB));
             } catch (e) {
-                showToast("Dung lượng ảnh quá lớn, đã lưu phiên tạm thời!", "fa-triangle-exclamation");
+                showToast("Dung lượng vượt quá giới hạn lưu trữ!", "fa-triangle-exclamation");
             }
         }
 
         /**************************************************************
-         * 2. WEB AUDIO SYNTHESIZER (NO EXTERNAL MP3 REQUIRED)
+         * 2. AUDIO & TOAST UTILITIES
          **************************************************************/
         const SoundEngine = {
             ctx: null,
@@ -963,37 +1096,28 @@
                     const AudioCtx = window.AudioContext || window.webkitAudioContext;
                     if (AudioCtx) this.ctx = new AudioCtx();
                 }
-                if (this.ctx && this.ctx.state === "suspended") {
-                    this.ctx.resume();
-                }
+                if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
             },
             playTone(freq, duration = 0.15, type = "sine", vol = 0.08) {
                 if (this.muted) return;
                 this.init();
                 if (!this.ctx) return;
-
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-
                 gain.gain.setValueAtTime(vol, this.ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
-
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
                 osc.stop(this.ctx.currentTime + duration);
             },
-            playClick() {
-                this.playTone(620, 0.1, "triangle", 0.08);
-            },
-            playDodge() {
-                this.playTone(340 + Math.random() * 280, 0.12, "sine", 0.07);
-            },
+            playClick() { this.playTone(620, 0.1, "triangle", 0.08); },
+            playDodge() { this.playTone(340 + Math.random() * 280, 0.12, "sine", 0.07); },
+            playAngry() { this.playTone(180, 0.25, "sawtooth", 0.12); },
             playCelebration() {
-                const notes = [523.25, 659.25, 783.99, 1046.5];
-                notes.forEach((n, idx) => {
+                [523.25, 659.25, 783.99, 1046.5].forEach((n, idx) => {
                     setTimeout(() => this.playTone(n, 0.32, "triangle", 0.1), idx * 90);
                 });
             },
@@ -1011,20 +1135,18 @@
             toggleMute() {
                 this.muted = !this.muted;
                 const iconClass = this.muted ? "fa-solid fa-volume-xmark text-sm text-rose-400" : "fa-solid fa-volume-high text-sm text-cyan-300";
-                const btn1 = document.getElementById("sound-toggle-home");
-                const btn2 = document.getElementById("sound-toggle-card");
-                if (btn1) btn1.innerHTML = `<i class="${iconClass}"></i>`;
-                if (btn2) btn2.innerHTML = `<i class="${iconClass}"></i>`;
+                ['sound-toggle-home', 'sound-toggle-card'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = `<i class="${iconClass}"></i>`;
+                });
                 showToast(this.muted ? "Đã tắt âm thanh" : "Đã bật âm thanh", this.muted ? "fa-volume-xmark" : "fa-volume-high");
             }
         };
 
         function showToast(message, icon = "fa-sparkles") {
             const box = document.getElementById("toast-box");
-            const textEl = document.getElementById("toast-text");
-            const iconEl = document.getElementById("toast-icon");
-            textEl.textContent = message;
-            iconEl.className = `fa-solid ${icon} text-pink-400`;
+            document.getElementById("toast-text").textContent = message;
+            document.getElementById("toast-icon").className = `fa-solid ${icon} text-pink-400`;
             box.classList.remove("opacity-0", "-translate-y-3");
             box.classList.add("opacity-100", "translate-y-0");
             clearTimeout(box._hideTimer);
@@ -1035,7 +1157,7 @@
         }
 
         /**************************************************************
-         * 3. AMBIENT STARFIELD & STAGE 2 BURST FX OVERLAY
+         * 3. AMBIENT STARFIELD & GIFT BOX BURST FX (FLOWERS & HEARTS)
          **************************************************************/
         function initAmbientStars() {
             const canvas = document.getElementById("ambient-star-canvas");
@@ -1081,24 +1203,25 @@
                 canvas.height = window.innerHeight;
 
                 const emojiMap = {
-                    "roses": ["🌹", "🌸", "💖", "✨", "🌷"],
+                    "roses": ["🌹", "🌸", "💖", "🌷", "✨", "❤️"],
                     "fireworks": ["✨", "🎆", "🌟", "💥", "🎉"],
                     "balloons": ["🎈", "🎂", "🎉", "🎁", "✨"],
-                    "hearts": ["💖", "💘", "💝", "💕", "🌸"],
+                    "hearts": ["💖", "💘", "💝", "💕", "❤️"],
                     "snow": ["❄️", "🎄", "⛄", "✨", "🎅"],
                     "lanterns": ["🏮", "🌕", "✨", "🥮", "🐇"],
-                    "lixi": ["🧧", "🌸", "🪙", "🎆", "✨"]
+                    "lixi": ["🧧", "🌸", "🪙", "🎆", "✨"],
+                    "meteors": ["🌠", "⭐", "✨", "💫", "🌟"]
                 };
                 const emojis = emojiMap[effectType] || emojiMap["roses"];
 
                 for (let i = 0; i < 55; i++) {
                     const angle = Math.random() * Math.PI * 2;
-                    const speed = Math.random() * 9 + 3;
+                    const speed = Math.random() * 10 + 3;
                     this.particles.push({
-                        x: window.innerWidth / 2,
-                        y: window.innerHeight / 2,
+                        x: window.innerWidth * (0.25 + Math.random() * 0.5),
+                        y: window.innerHeight * (0.3 + Math.random() * 0.4),
                         vx: Math.cos(angle) * speed,
-                        vy: Math.sin(angle) * speed - 3,
+                        vy: Math.sin(angle) * speed - 3.5,
                         gravity: 0.14,
                         emoji: emojis[i % emojis.length],
                         size: Math.random() * 16 + 18,
@@ -1146,8 +1269,57 @@
             }
         };
 
+        const Stage2AmbientFX = {
+            timer: null,
+            effectMap: {
+                "roses": ["🌹", "🌸", "💖", "🌷", "✨"],
+                "fireworks": ["✨", "🎆", "🌟", "🎉"],
+                "balloons": ["🎈", "🎉", "🎁", "✨"],
+                "hearts": ["💖", "💘", "💕", "❤️", "✨"],
+                "snow": ["❄️", "🎄", "⛄", "✨"],
+                "lanterns": ["🏮", "🌕", "✨", "🐇"],
+                "lixi": ["🧧", "🌸", "🪙", "✨"]
+            },
+            start(effectType = "roses") {
+                this.stop();
+                const icons = this.effectMap[effectType] || this.effectMap["roses"];
+                // Update orbiting icons around gift box and letter corners
+                ["s2-orbit-1", "s2-orbit-2", "s2-orbit-3", "s2-orbit-4", "s2-letter-corner-1", "s2-letter-corner-2", "s2-letter-corner-3"].forEach((id, i) => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = icons[i % icons.length];
+                });
+
+                const container = document.getElementById("stage2-ambient-container");
+                if (!container) return;
+
+                const spawnItem = () => {
+                    const el = document.createElement("div");
+                    el.className = "stage2-ambient-item select-none";
+                    el.textContent = icons[Math.floor(Math.random() * icons.length)];
+                    el.style.left = `${Math.random() * 92 + 4}vw`;
+                    el.style.fontSize = `${Math.floor(Math.random() * 12 + 18)}px`;
+                    el.style.animationDuration = `${(Math.random() * 3 + 5.5).toFixed(1)}s`;
+                    container.appendChild(el);
+                    setTimeout(() => el.remove(), 8600);
+                };
+
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(spawnItem, i * 350);
+                }
+                this.timer = setInterval(spawnItem, 900);
+            },
+            stop() {
+                if (this.timer) {
+                    clearInterval(this.timer);
+                    this.timer = null;
+                }
+                const container = document.getElementById("stage2-ambient-container");
+                if (container) container.innerHTML = "";
+            }
+        };
+
         /**************************************************************
-         * 4. STAGE 3: THREE.JS 3D PARTICLE UNIVERSE + CUSTOM COLORS
+         * 4. STAGE 3: THREE.JS 3D PARTICLE UNIVERSE + 3D SHOOTING STARS
          **************************************************************/
         const ThreeUniverse = {
             initialized: false,
@@ -1156,14 +1328,20 @@
             renderer: null,
             particles: null,
             geometry: null,
-            particleCount: 4200,
+            particleCount: 4600,
+            shapeParticleLimit: 2800, // 2800 form the text/heart, 1800 orbit around as cosmic dust
             currentPositions: null,
             targetPositions: null,
+            baseColors: null,
             colors: null,
+            twinklePhases: null,
+            meteors: [],
+            meteorGroup: null,
             isDragging: false,
             prevMouse: { x: 0, y: 0 },
             targetRot: { x: 0, y: 0 },
             sequenceTimer: null,
+            clock: null,
 
             init() {
                 if (this.initialized) {
@@ -1174,9 +1352,10 @@
 
                 const container = document.getElementById("three-canvas-container");
                 this.scene = new THREE.Scene();
+                this.clock = new THREE.Clock();
 
                 this.camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 1, 2000);
-                this.camera.position.set(0, 0, 340);
+                this.camera.position.set(0, 0, 350);
                 this.camera.lookAt(0, 0, 0);
 
                 this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -1187,45 +1366,54 @@
                 this.geometry = new THREE.BufferGeometry();
                 this.currentPositions = new Float32Array(this.particleCount * 3);
                 this.targetPositions = new Float32Array(this.particleCount * 3);
+                this.baseColors = new Float32Array(this.particleCount * 3);
                 this.colors = new Float32Array(this.particleCount * 3);
+                this.twinklePhases = new Float32Array(this.particleCount);
 
                 const defaultColor = new THREE.Color("#ff4d94");
                 for (let i = 0; i < this.particleCount; i++) {
                     const i3 = i * 3;
-                    this.currentPositions[i3] = (Math.random() - 0.5) * 600;
-                    this.currentPositions[i3 + 1] = (Math.random() - 0.5) * 600;
-                    this.currentPositions[i3 + 2] = (Math.random() - 0.5) * 600;
+                    this.currentPositions[i3] = (Math.random() - 0.5) * 680;
+                    this.currentPositions[i3 + 1] = (Math.random() - 0.5) * 520;
+                    this.currentPositions[i3 + 2] = (Math.random() - 0.5) * 520;
 
                     this.targetPositions[i3] = this.currentPositions[i3];
                     this.targetPositions[i3 + 1] = this.currentPositions[i3 + 1];
                     this.targetPositions[i3 + 2] = this.currentPositions[i3 + 2];
 
+                    this.baseColors[i3] = defaultColor.r;
+                    this.baseColors[i3 + 1] = defaultColor.g;
+                    this.baseColors[i3 + 2] = defaultColor.b;
+
                     this.colors[i3] = defaultColor.r;
                     this.colors[i3 + 1] = defaultColor.g;
                     this.colors[i3 + 2] = defaultColor.b;
+
+                    this.twinklePhases[i] = Math.random() * Math.PI * 2;
                 }
 
                 this.geometry.setAttribute("position", new THREE.BufferAttribute(this.currentPositions, 3));
                 this.geometry.setAttribute("color", new THREE.BufferAttribute(this.colors, 3));
 
-                // Pure white radial glow sprite so custom vertexColors show vividly
+                // Softer radial sprite to prevent over-bright white clumping glare
                 const spriteCanvas = document.createElement("canvas");
                 spriteCanvas.width = 64;
                 spriteCanvas.height = 64;
                 const sCtx = spriteCanvas.getContext("2d");
-                const grad = sCtx.createRadialGradient(32, 32, 2, 32, 32, 30);
-                grad.addColorStop(0, "rgba(255,255,255,1)");
-                grad.addColorStop(0.4, "rgba(255,255,255,0.85)");
+                const grad = sCtx.createRadialGradient(32, 32, 1, 32, 32, 30);
+                grad.addColorStop(0, "rgba(255,255,255,0.82)");
+                grad.addColorStop(0.35, "rgba(255,255,255,0.45)");
                 grad.addColorStop(1, "rgba(0,0,0,0)");
                 sCtx.fillStyle = grad;
                 sCtx.fillRect(0, 0, 64, 64);
                 const particleTexture = new THREE.CanvasTexture(spriteCanvas);
 
                 const material = new THREE.PointsMaterial({
-                    size: 5.4,
+                    size: 3.9,
                     map: particleTexture,
                     vertexColors: true,
                     transparent: true,
+                    opacity: 0.88,
                     blending: THREE.AdditiveBlending,
                     depthWrite: false
                 });
@@ -1233,9 +1421,57 @@
                 this.particles = new THREE.Points(this.geometry, material);
                 this.scene.add(this.particles);
 
+                // Initialize 3D Shooting Stars (Meteors)
+                this.meteorGroup = new THREE.Group();
+                this.scene.add(this.meteorGroup);
+                this.initMeteors();
+
                 this.setupControls(container);
                 window.addEventListener("resize", () => this.resize());
                 this.animate();
+            },
+
+            initMeteors() {
+                this.meteors = [];
+                for (let m = 0; m < 6; m++) {
+                    const trailPoints = [];
+                    const segs = 18;
+                    for (let j = 0; j < segs; j++) {
+                        trailPoints.push(new THREE.Vector3(j * 4.5, j * 2.4, 0));
+                    }
+                    const mGeo = new THREE.BufferGeometry().setFromPoints(trailPoints);
+                    const mColors = new Float32Array(segs * 3);
+                    for (let j = 0; j < segs; j++) {
+                        const fade = 1 - j / segs;
+                        mColors[j * 3] = 1.0 * fade;
+                        mColors[j * 3 + 1] = 0.88 * fade;
+                        mColors[j * 3 + 2] = 0.98 * fade;
+                    }
+                    mGeo.setAttribute("color", new THREE.BufferAttribute(mColors, 3));
+                    const mMat = new THREE.LineBasicMaterial({
+                        vertexColors: true,
+                        transparent: true,
+                        opacity: 0.85,
+                        blending: THREE.AdditiveBlending
+                    });
+                    const line = new THREE.Line(mGeo, mMat);
+                    this.resetMeteor(line, true);
+                    this.meteorGroup.add(line);
+                    this.meteors.push(line);
+                }
+            },
+
+            resetMeteor(line, randomDelay = false) {
+                line.position.set(
+                    180 + Math.random() * 340 + (randomDelay ? Math.random() * 250 : 0),
+                    100 + Math.random() * 220,
+                    (Math.random() - 0.5) * 260
+                );
+                line.userData = {
+                    vx: -(6.5 + Math.random() * 4.5),
+                    vy: -(3.4 + Math.random() * 2.5),
+                    vz: (Math.random() - 0.5) * 1.2
+                };
             },
 
             applyCardParticleColors(card) {
@@ -1263,17 +1499,22 @@
                     const i3 = i * 3;
                     if (mode === "rainbow") {
                         const hue = (i / this.particleCount) % 1;
-                        tempColor.setHSL(hue, 0.95, 0.62);
-                    } else if (i % 14 === 0) {
-                        tempColor.copy(colorA).lerp(whiteSparkle, 0.65);
+                        tempColor.setHSL(hue, 0.9, 0.56);
+                    } else if (i % 19 === 0) {
+                        tempColor.copy(colorA).lerp(whiteSparkle, 0.45);
                     } else {
                         const ratio = (Math.sin(i * 0.17) + 1) * 0.5;
                         tempColor.copy(colorA).lerp(colorB, ratio);
                     }
 
-                    this.colors[i3] = tempColor.r;
-                    this.colors[i3 + 1] = tempColor.g;
-                    this.colors[i3 + 2] = tempColor.b;
+                    // Tone down base intensity slightly to avoid additive white-out when points cluster
+                    this.baseColors[i3] = tempColor.r * 0.82;
+                    this.baseColors[i3 + 1] = tempColor.g * 0.82;
+                    this.baseColors[i3 + 2] = tempColor.b * 0.82;
+
+                    this.colors[i3] = this.baseColors[i3];
+                    this.colors[i3 + 1] = this.baseColors[i3 + 1];
+                    this.colors[i3 + 2] = this.baseColors[i3 + 2];
                 }
 
                 this.geometry.attributes.color.needsUpdate = true;
@@ -1302,9 +1543,7 @@
                     this.targetRot.x = Math.max(-0.8, Math.min(0.8, this.targetRot.x + dy * 0.007));
                     this.prevMouse = { x, y };
                 };
-                const endDrag = () => {
-                    this.isDragging = false;
-                };
+                const endDrag = () => { this.isDragging = false; };
 
                 container.addEventListener("mousedown", e => startDrag(e.clientX, e.clientY));
                 window.addEventListener("mousemove", e => moveDrag(e.clientX, e.clientY));
@@ -1330,9 +1569,20 @@
                 this.renderer.setSize(window.innerWidth, window.innerHeight);
             },
 
+            assignSurroundingParticles(startIndex) {
+                for (let i = startIndex; i < this.particleCount; i++) {
+                    const i3 = i * 3;
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 145 + Math.random() * 290;
+                    this.targetPositions[i3] = Math.cos(angle) * radius;
+                    this.targetPositions[i3 + 1] = (Math.random() - 0.5) * 360;
+                    this.targetPositions[i3 + 2] = Math.sin(angle) * radius;
+                }
+            },
+
             morphToText(text) {
                 const canvas = document.createElement("canvas");
-                const width = 1000;
+                const width = 1024;
                 const height = 360;
                 canvas.width = width;
                 canvas.height = height;
@@ -1341,7 +1591,7 @@
                 ctx.fillStyle = "#000000";
                 ctx.fillRect(0, 0, width, height);
 
-                const fontSize = text.length > 12 ? 68 : text.length > 7 ? 90 : 130;
+                const fontSize = text.length > 14 ? 62 : text.length > 8 ? 86 : 124;
                 ctx.font = `900 ${fontSize}px "Be Vietnam Pro", sans-serif`;
                 ctx.fillStyle = "#ffffff";
                 ctx.textAlign = "center";
@@ -1350,57 +1600,57 @@
 
                 const imgData = ctx.getImageData(0, 0, width, height).data;
                 const validPoints = [];
-                const step = 3;
+                const step = 4; // Wider step avoids excessive point stacking
 
                 for (let y = 0; y < height; y += step) {
                     for (let x = 0; x < width; x += step) {
                         const alpha = imgData[(y * width + x) * 4];
-                        if (alpha > 128) {
-                            // Standard left-to-right X mapping (fixes mirrored text)
-                            const px = (x - width / 2) * 0.42;
-                            const py = (height / 2 - y) * 0.42;
+                        if (alpha > 135) {
+                            const px = (x - width / 2) * 0.44;
+                            const py = (height / 2 - y) * 0.44;
                             validPoints.push({ x: px, y: py });
                         }
                     }
                 }
 
-                for (let i = 0; i < this.particleCount; i++) {
+                // Shuffle validPoints so particles distribute evenly without clumping
+                for (let i = validPoints.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    const temp = validPoints[i];
+                    validPoints[i] = validPoints[j];
+                    validPoints[j] = temp;
+                }
+
+                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 1600));
+                for (let i = 0; i < activeShapeCount; i++) {
                     const i3 = i * 3;
-                    if (validPoints.length > 0 && i < this.particleCount * 0.84) {
+                    if (validPoints.length > 0) {
                         const pt = validPoints[i % validPoints.length];
-                        this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 2.2;
-                        this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 2.2;
-                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 14;
-                    } else {
-                        const angle = Math.random() * Math.PI * 2;
-                        const radius = 220 + Math.random() * 220;
-                        this.targetPositions[i3] = Math.cos(angle) * radius;
-                        this.targetPositions[i3 + 1] = (Math.random() - 0.5) * 320;
-                        this.targetPositions[i3 + 2] = Math.sin(angle) * radius;
+                        // Spread jitter in X, Y, Z so multiple particles never overlap on one bright spot
+                        this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 3.8;
+                        this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 3.8;
+                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 22;
                     }
                 }
+
+                // Remaining ~1800+ particles form a lively surrounding galaxy
+                this.assignSurroundingParticles(activeShapeCount);
             },
 
             morphToHeart3D() {
-                for (let i = 0; i < this.particleCount; i++) {
+                for (let i = 0; i < this.shapeParticleLimit; i++) {
                     const i3 = i * 3;
-                    if (i < this.particleCount * 0.85) {
-                        const t = Math.random() * Math.PI * 2;
-                        const r = Math.sqrt(Math.random());
-                        const hx = 16 * Math.pow(Math.sin(t), 3);
-                        const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-                        const scale = 6.2 * (0.35 + 0.65 * r);
-                        this.targetPositions[i3] = hx * scale;
-                        this.targetPositions[i3 + 1] = hy * scale;
-                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 45 * r;
-                    } else {
-                        const angle = Math.random() * Math.PI * 2;
-                        const radius = 220 + Math.random() * 180;
-                        this.targetPositions[i3] = Math.cos(angle) * radius;
-                        this.targetPositions[i3 + 1] = (Math.random() - 0.5) * 280;
-                        this.targetPositions[i3 + 2] = Math.sin(angle) * radius;
-                    }
+                    // Uniform distribution across heart surface & volume to avoid pole clumping
+                    const t = (i / this.shapeParticleLimit) * Math.PI * 2 + (Math.random() - 0.5) * 0.15;
+                    const r = 0.35 + 0.65 * Math.cbrt(Math.random());
+                    const hx = 16 * Math.pow(Math.sin(t), 3);
+                    const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+                    const scale = 6.0 * r;
+                    this.targetPositions[i3] = hx * scale + (Math.random() - 0.5) * 4.5;
+                    this.targetPositions[i3 + 1] = hy * scale + (Math.random() - 0.5) * 4.5;
+                    this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 48 * (1 - r * 0.45);
                 }
+                this.assignSurroundingParticles(this.shapeParticleLimit);
             },
 
             stopSequence() {
@@ -1420,10 +1670,7 @@
                 nextBtn.classList.remove("inline-flex");
 
                 this.applyCardParticleColors(card);
-
-                if (this.particles) {
-                    this.particles.rotation.set(0, 0, 0);
-                }
+                if (this.particles) this.particles.rotation.set(0, 0, 0);
                 this.targetRot = { x: 0, y: 0 };
 
                 const words = (card.s3Words || "3, 2, 1, HAPPY 20/10")
@@ -1439,7 +1686,7 @@
                         SoundEngine.playClick();
                         this.morphToText(word);
                         index++;
-                        const delay = word.length <= 2 ? 1500 : 2400;
+                        const delay = word.length <= 2 ? 1600 : 2500;
                         this.sequenceTimer = setTimeout(runStep, delay);
                     } else {
                         statusBadge.textContent = `💖 TRÁI TIM VŨ TRỤ DÀNH TẶNG ${(card.recipientName || "BẠN").toUpperCase()} 💖`;
@@ -1448,26 +1695,65 @@
                         this.sequenceTimer = setTimeout(() => {
                             nextBtn.classList.remove("hidden");
                             nextBtn.classList.add("inline-flex");
-                        }, 1300);
+                        }, 1200);
                     }
                 };
-
                 runStep();
             },
 
             animate() {
                 requestAnimationFrame(() => this.animate());
-                if (!this.geometry || !this.renderer) return;
+                if (!this.geometry || !this.renderer || !this.clock) return;
 
+                const elapsedTime = this.clock.getElapsedTime();
                 const pos = this.geometry.attributes.position.array;
-                for (let i = 0; i < pos.length; i++) {
-                    pos[i] += (this.targetPositions[i] - pos[i]) * 0.085;
+                const col = this.geometry.attributes.color.array;
+
+                for (let i = 0; i < this.particleCount; i++) {
+                    const i3 = i * 3;
+                    const phase = this.twinklePhases[i];
+
+                    if (i < this.shapeParticleLimit) {
+                        // Gentle continuous breathing & floating for shape particles
+                        const waveX = Math.sin(elapsedTime * 2.1 + phase) * 0.95;
+                        const waveY = Math.cos(elapsedTime * 2.4 + phase) * 0.95;
+                        const waveZ = Math.sin(elapsedTime * 1.8 + phase) * 1.1;
+
+                        pos[i3] += (this.targetPositions[i3] + waveX - pos[i3]) * 0.08;
+                        pos[i3 + 1] += (this.targetPositions[i3 + 1] + waveY - pos[i3 + 1]) * 0.08;
+                        pos[i3 + 2] += (this.targetPositions[i3 + 2] + waveZ - pos[i3 + 2]) * 0.08;
+                    } else {
+                        // Surrounding space particles swirl and drift more actively
+                        const orbitShiftX = Math.sin(elapsedTime * 1.4 + phase) * 4.2;
+                        const orbitShiftY = Math.cos(elapsedTime * 1.6 + phase) * 4.2;
+                        pos[i3] += (this.targetPositions[i3] + orbitShiftX - pos[i3]) * 0.04;
+                        pos[i3 + 1] += (this.targetPositions[i3 + 1] + orbitShiftY - pos[i3 + 1]) * 0.04;
+                        pos[i3 + 2] += (this.targetPositions[i3 + 2] - pos[i3 + 2]) * 0.04;
+                    }
+
+                    // Faster twinkling effect (nháy nhanh hơn 1 tí) while capping max brightness
+                    const twinkle = 0.55 + 0.45 * Math.sin(elapsedTime * 7.2 + phase * 3.0);
+                    col[i3] = this.baseColors[i3] * twinkle;
+                    col[i3 + 1] = this.baseColors[i3 + 1] * twinkle;
+                    col[i3 + 2] = this.baseColors[i3 + 2] * twinkle;
                 }
                 this.geometry.attributes.position.needsUpdate = true;
+                this.geometry.attributes.color.needsUpdate = true;
+
+                // Animate 3D Shooting Stars (Meteors)
+                for (const line of this.meteors) {
+                    line.position.x += line.userData.vx;
+                    line.position.y += line.userData.vy;
+                    line.position.z += line.userData.vz;
+                    if (line.position.x < -380 || line.position.y < -260) {
+                        this.resetMeteor(line, false);
+                    }
+                }
 
                 if (this.particles) {
                     this.particles.rotation.y += (this.targetRot.y - this.particles.rotation.y) * 0.08;
                     this.particles.rotation.x += (this.targetRot.x - this.particles.rotation.x) * 0.08;
+                    this.particles.rotation.y += 0.002;
                 }
 
                 this.renderer.render(this.scene, this.camera);
@@ -1475,78 +1761,41 @@
         };
 
         /**************************************************************
-         * 5. STAGE 4 SKY EFFECTS & WISHES / PHOTO GALLERY
+         * 5. STAGE 4 FLOATING BACKGROUND WISHES & PHOTO SLIDER
          **************************************************************/
-        const Stage4Sky = {
-            items: [],
-            running: false,
-            effectType: "petals",
-            start(effectType = "petals") {
-                this.effectType = effectType;
-                const canvas = document.getElementById("stage4-sky-canvas");
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+        const Stage4WishBackground = {
+            timer: null,
+            wishesList: [],
+            start(wishes) {
+                this.stop();
+                this.wishesList = wishes && wishes.length > 0 ? wishes : ["20/10 vui vẻ!", "Chúc mừng ngày phụ nữ Việt Nam!"];
+                const container = document.getElementById("stage4-floating-wishes-container");
+                if (!container) return;
 
-                const symbolMap = {
-                    "petals": ["🌸", "🌹", "🌷", "✨"],
-                    "starlight": ["✨", "🌟", "💫", "⭐"],
-                    "hearts": ["💖", "💕", "💘", "✨"],
-                    "snow": ["❄️", "❅", "✨", "⛄"],
-                    "lanterns": ["🏮", "✨", "🌕", "🌟"]
-                };
-                const symbols = symbolMap[effectType] || symbolMap["petals"];
+                this.timer = setInterval(() => {
+                    const wishText = this.wishesList[Math.floor(Math.random() * this.wishesList.length)];
+                    const el = document.createElement("div");
+                    el.className = "floating-wish-item";
+                    el.textContent = wishText;
+                    el.style.left = `${Math.random() * 75 + 10}vw`;
+                    el.style.animationDuration = `${Math.random() * 4 + 7}s`;
+                    container.appendChild(el);
 
-                this.items = Array.from({ length: 34 }, () => ({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.8,
-                    vy: effectType === "lanterns" || effectType === "hearts"
-                        ? -(Math.random() * 1.1 + 0.4)
-                        : (Math.random() * 1.2 + 0.5),
-                    size: Math.random() * 14 + 14,
-                    symbol: symbols[Math.floor(Math.random() * symbols.length)],
-                    alpha: Math.random() * 0.65 + 0.25
-                }));
-
-                if (!this.running) {
-                    this.running = true;
-                    this.loop();
-                }
+                    setTimeout(() => el.remove(), 9500);
+                }, 1400);
             },
             stop() {
-                this.running = false;
-            },
-            loop() {
-                if (!this.running) return;
-                const canvas = document.getElementById("stage4-sky-canvas");
-                const ctx = canvas.getContext("2d");
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                for (const it of this.items) {
-                    it.x += it.vx;
-                    it.y += it.vy;
-
-                    if (it.vy > 0 && it.y > canvas.height + 30) {
-                        it.y = -20;
-                        it.x = Math.random() * canvas.width;
-                    } else if (it.vy < 0 && it.y < -30) {
-                        it.y = canvas.height + 20;
-                        it.x = Math.random() * canvas.width;
-                    }
-
-                    ctx.save();
-                    ctx.globalAlpha = it.alpha;
-                    ctx.font = `${it.size}px sans-serif`;
-                    ctx.fillText(it.symbol, it.x, it.y);
-                    ctx.restore();
+                if (this.timer) {
+                    clearInterval(this.timer);
+                    this.timer = null;
                 }
-
-                requestAnimationFrame(() => this.loop());
+                const container = document.getElementById("stage4-floating-wishes-container");
+                if (container) container.innerHTML = "";
             }
         };
 
         /**************************************************************
-         * 6. VIEW NAVIGATION, CREATOR STUDIO & RECIPIENT FLOW
+         * 6. NAVIGATION, STUDIO & RECIPIENT FLOW
          **************************************************************/
         function switchView(viewName) {
             document.getElementById("view-home").classList.add("hidden");
@@ -1555,17 +1804,14 @@
 
             if (viewName !== "card") {
                 ThreeUniverse.stopSequence();
-                Stage4Sky.stop();
+                Stage2AmbientFX.stop();
+                Stage4WishBackground.stop();
+                clearInterval(AppState.wishSliderTimer);
+                clearInterval(AppState.wishProgressTimer);
             }
 
             document.getElementById(`view-${viewName}`).classList.remove("hidden");
             window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-
-        function renderHomeSavedChips() {
-            const container = document.getElementById("saved-cards-chips");
-            if (!container) return;
-            container.innerHTML = "";
         }
 
         function renderStudioCardList() {
@@ -1584,66 +1830,23 @@
                 `;
                 
                 const btn = item.querySelector(".edit-select-btn");
-                // Normal click: load card into studio
-                btn.addEventListener("click", (e) => {
-                    if (e.shiftKey) return; // handled by mousedown/click combo or dedicated listener
-                    loadCardIntoStudioForm(card);
-                    showToast(`Đang chỉnh sửa thiệp của ${card.recipientName}`, "fa-pen-to-square");
-                });
-
-                // Shift + Click support for deletion
                 btn.addEventListener("click", (e) => {
                     if (e.shiftKey) {
                         e.preventDefault();
                         e.stopPropagation();
-                        if (confirm(`Bạn có chắc chắn muốn xóa thiệp của "${card.recipientName}" (Mã: #${card.recipientId}) không?`)) {
-                            delete AppState.cardsDB[card.recipientId];
-                            saveCardsDB();
-                            renderStudioCardList();
-                            showToast(`Đã xóa thiệp ${card.recipientName}!`, "fa-trash-can");
-                        }
+                        AppState.pendingDeleteCardId = card.recipientId;
+                        document.getElementById("delete-card-prompt").textContent =
+                            `Bạn có chắc chắn muốn xóa vĩnh viễn thiệp của "${card.recipientName}" (ID: #${card.recipientId}) không?`;
+                        const delModal = document.getElementById("delete-card-modal");
+                        delModal.classList.remove("hidden");
+                        delModal.classList.add("flex");
+                    } else {
+                        loadCardIntoStudioForm(card);
+                        showToast(`Đang chỉnh sửa thiệp của ${card.recipientName}`, "fa-pen-to-square");
                     }
                 });
-
                 container.appendChild(item);
             });
-        }
-
-        function syncStudioS3ColorUI(mode, customPrimary = null, customSecondary = null) {
-            const themeKey = document.getElementById("edit-theme").value || "20/10";
-            const primaryInput = document.getElementById("edit-s3-color-primary");
-            const secondaryInput = document.getElementById("edit-s3-color-secondary");
-            const primaryHexEl = document.getElementById("s3-primary-hex");
-            const secondaryHexEl = document.getElementById("s3-secondary-hex");
-            const previewBar = document.getElementById("s3-color-preview-bar");
-            const previewLabel = document.getElementById("s3-preview-label");
-
-            let primary = customPrimary || primaryInput.value || "#ff4d94";
-            let secondary = customSecondary || secondaryInput.value || "#ffb3d9";
-            let label = "🖌️ Tự chọn màu tùy chỉnh (Custom)";
-
-            if (mode === "theme") {
-                const themeColors = resolveThemeParticleColors(themeKey);
-                primary = themeColors.primary;
-                secondary = themeColors.secondary;
-                label = themeColors.label;
-            } else if (PARTICLE_COLOR_PRESETS[mode]) {
-                primary = PARTICLE_COLOR_PRESETS[mode].primary;
-                secondary = PARTICLE_COLOR_PRESETS[mode].secondary;
-                label = PARTICLE_COLOR_PRESETS[mode].label;
-            }
-
-            primaryInput.value = primary;
-            secondaryInput.value = secondary;
-            primaryHexEl.textContent = primary.toUpperCase();
-            secondaryHexEl.textContent = secondary.toUpperCase();
-            previewLabel.textContent = label;
-
-            if (mode === "rainbow") {
-                previewBar.style.background = "linear-gradient(90deg, #ff2a85, #ffbe0b, #10b981, #00f5d4, #3b82f6, #a855f7, #ff2a85)";
-            } else {
-                previewBar.style.background = `linear-gradient(90deg, ${primary}, ${secondary})`;
-            }
         }
 
         function renderStudioPhotosPreview() {
@@ -1680,20 +1883,12 @@
             document.getElementById("edit-s2-title").value = card.s2Title || "";
             document.getElementById("edit-s2-letter").value = card.s2Letter || "";
             document.getElementById("edit-s3-words").value = card.s3Words || "";
-
-            const colorMode = card.s3ColorMode || "theme";
-            const fallbackColors = resolveThemeParticleColors(themeKey);
-            const primaryHex = card.s3ColorPrimary || fallbackColors.primary;
-            const secondaryHex = card.s3ColorSecondary || fallbackColors.secondary;
-
-            document.getElementById("edit-s3-color-mode").value = colorMode;
-            document.getElementById("edit-s3-color-primary").value = primaryHex;
-            document.getElementById("edit-s3-color-secondary").value = secondaryHex;
-            syncStudioS3ColorUI(colorMode, primaryHex, secondaryHex);
-
-            document.getElementById("edit-s4-effect").value = card.s4Effect || "petals";
+            document.getElementById("edit-s3-color-mode").value = card.s3ColorMode || "theme";
+            document.getElementById("edit-s3-color-primary").value = card.s3ColorPrimary || "#ff4d94";
+            document.getElementById("edit-s3-color-secondary").value = card.s3ColorSecondary || "#ffb3d9";
             document.getElementById("edit-s4-headline").value = card.s4Headline || "";
-            document.getElementById("edit-s4-wishes").value = Array.isArray(card.s4Wishes) ? card.s4Wishes.join("\n") : (card.s4Wishes || "");
+            document.getElementById("edit-s4-main-wish").value = card.s4MainWish || "";
+            document.getElementById("edit-s4-wishes").value = Array.isArray(card.s4Wishes) ? card.s4Wishes.join("\n") : "";
 
             AppState.editingPhotos = Array.isArray(card.photos) ? [...card.photos] : [];
             renderStudioPhotosPreview();
@@ -1702,35 +1897,31 @@
         function collectStudioFormCard() {
             const rawId = document.getElementById("edit-recipient-id").value.trim() || "dat";
             const cleanId = normalizeKey(rawId) || "dat";
-            const recipientName = document.getElementById("edit-recipient-name").value.trim() || "Đạt";
+            const recipientName = document.getElementById("edit-recipient-name").value.trim() || "Dat";
             const theme = document.getElementById("edit-theme").value || "20/10";
             const wishesRaw = document.getElementById("edit-s4-wishes").value
                 .split("\n")
                 .map(s => s.trim())
                 .filter(Boolean);
 
-            const s3ColorMode = document.getElementById("edit-s3-color-mode").value || "theme";
-            const s3ColorPrimary = document.getElementById("edit-s3-color-primary").value || "#ff4d94";
-            const s3ColorSecondary = document.getElementById("edit-s3-color-secondary").value || "#ffb3d9";
-
             return {
                 recipientId: cleanId,
                 recipientName,
                 theme,
                 s1Title: document.getElementById("edit-s1-title").value.trim() || `Chào ${recipientName}!`,
-                s1Sub: document.getElementById("edit-s1-sub").value.trim() || `Mở món quà bí mật dành riêng cho bạn nhé!`,
-                s1Yes: document.getElementById("edit-s1-yes").value.trim() || `Mở quà ngay!`,
-                s1No: document.getElementById("edit-s1-no").value.trim() || `Không xem đâu`,
+                s1Sub: document.getElementById("edit-s1-sub").value.trim() || `Mở món quà bí mật nhé!`,
+                s1Yes: document.getElementById("edit-s1-yes").value.trim() || `Mở quà ngay`,
+                s1No: document.getElementById("edit-s1-no").value.trim() || `Không xem`,
                 s2Effect: document.getElementById("edit-s2-effect").value || "roses",
                 s2Title: document.getElementById("edit-s2-title").value.trim() || `BỨC THƯ ĐẶC BIỆT`,
-                s2Letter: document.getElementById("edit-s2-letter").value.trim() || `Chúc ${recipientName} luôn vui vẻ và tỏa sáng!`,
+                s2Letter: document.getElementById("edit-s2-letter").value.trim() || `Chúc ${recipientName} luôn vui vẻ!`,
                 s3Words: document.getElementById("edit-s3-words").value.trim() || `3, 2, 1, HAPPY 20/10, ${recipientName.toUpperCase()}`,
-                s3ColorMode,
-                s3ColorPrimary,
-                s3ColorSecondary,
-                s4Effect: document.getElementById("edit-s4-effect").value || "petals",
-                s4Headline: document.getElementById("edit-s4-headline").value.trim() || `Gửi Ngàn Lời Chúc Tốt Đẹp Nhất Tới ${recipientName}!`,
-                s4Wishes: wishesRaw.length > 0 ? wishesRaw : [`Chúc ${recipientName} luôn hạnh phúc và rạng rỡ!`],
+                s3ColorMode: document.getElementById("edit-s3-color-mode").value || "theme",
+                s3ColorPrimary: document.getElementById("edit-s3-color-primary").value || "#ff4d94",
+                s3ColorSecondary: document.getElementById("edit-s3-color-secondary").value || "#ffb3d9",
+                s4Headline: document.getElementById("edit-s4-headline").value.trim() || `Chúc Mừng ${recipientName}!`,
+                s4MainWish: document.getElementById("edit-s4-main-wish").value.trim() || `“ Chúc ${recipientName} luôn rạng rỡ và hạnh phúc! ✨ ”`,
+                s4Wishes: wishesRaw.length > 0 ? wishesRaw : [`20/10 vui vẻ nhé! 🌸`, `Chúc mừng ngày phụ nữ Việt Nam! 🌹`],
                 photos: [...AppState.editingPhotos]
             };
         }
@@ -1740,20 +1931,12 @@
             SoundEngine.startBGM();
 
             const key = normalizeKey(queryNameOrId);
-            let card = AppState.cardsDB[key];
+            const card = AppState.cardsDB[key];
 
             if (!card) {
-                const found = Object.values(AppState.cardsDB).find(
-                    c => normalizeKey(c.recipientName) === key || normalizeKey(c.recipientId) === key
-                );
-                if (found) {
-                    card = found;
-                } else {
-                    // Yêu cầu nhập đúng ID/Tên đã được tạo trong hệ thống
-                    showToast(`Không tìm thấy thiệp với tên/mã "${queryNameOrId}"! Vui lòng nhập đúng mã thiệp.`, "fa-circle-exclamation");
-                    SoundEngine.playDodge();
-                    return;
-                }
+                showToast(`Không tìm thấy thiệp với mã/tên "${queryNameOrId}"! Vui lòng nhập đúng ID thiệp đã tạo.`, "fa-circle-exclamation");
+                SoundEngine.playDodge();
+                return;
             }
 
             AppState.activeCard = card;
@@ -1804,6 +1987,11 @@
                 document.getElementById("s2-letter-icon").textContent = themeMeta.emoji;
                 document.getElementById("s2-letter-title").textContent = card.s2Title;
                 document.getElementById("s2-letter-body").textContent = "";
+                document.getElementById("s2-typing-badge").textContent = "Đang viết thư...";
+                AppState.isLetterFullyTyped = false;
+                Stage2AmbientFX.start(card.s2Effect || "roses");
+            } else {
+                Stage2AmbientFX.stop();
             }
 
             if (stageNum === 3) {
@@ -1814,111 +2002,151 @@
 
             if (stageNum === 4) {
                 renderStage4Content(card);
-                Stage4Sky.start(card.s4Effect || "petals");
+                Stage4WishBackground.start(card.s4Wishes);
                 BurstFX.trigger(card.s2Effect || "roses");
             } else {
-                Stage4Sky.stop();
-            }
-        }
-
-        function renderStage4Content(card) {
-            document.getElementById("s4-headline-display").textContent = card.s4Headline;
-            const wishes = Array.isArray(card.s4Wishes) && card.s4Wishes.length > 0
-                ? card.s4Wishes
-                : [`Chúc ${card.recipientName} luôn rạng rỡ và hạnh phúc!`];
-
-            const activeWishEl = document.getElementById("s4-active-wish");
-            let wishIdx = 0;
-            activeWishEl.textContent = `“ ${wishes[0]} ”`;
-
-            clearInterval(AppState.wishInterval);
-            AppState.wishInterval = setInterval(() => {
-                wishIdx = (wishIdx + 1) % wishes.length;
-                activeWishEl.style.opacity = "0";
-                setTimeout(() => {
-                    activeWishEl.textContent = `“ ${wishes[wishIdx]} ”`;
-                    activeWishEl.style.opacity = "1";
-                }, 260);
-            }, 3400);
-
-            const wishesGrid = document.getElementById("s4-wishes-grid");
-            wishesGrid.innerHTML = "";
-            wishes.forEach((w, i) => {
-                const div = document.createElement("div");
-                div.className = "glass-panel rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 border border-pink-400/25";
-                div.innerHTML = `
-                    <div class="w-9 h-9 rounded-xl bg-pink-500/20 border border-pink-400/40 flex items-center justify-center text-pink-300 font-mono text-xs font-black shrink-0">
-                        0${i + 1}
-                    </div>
-                    <p class="text-xs sm:text-sm text-slate-100 font-semibold leading-relaxed">${w}</p>
-                `;
-                wishesGrid.appendChild(div);
-            });
-
-            const photosSection = document.getElementById("s4-photos-section");
-            const polaroidGrid = document.getElementById("s4-polaroid-grid");
-            polaroidGrid.innerHTML = "";
-
-            const photos = Array.isArray(card.photos) ? card.photos : [];
-            if (photos.length === 0) {
-                photosSection.classList.add("hidden");
-            } else {
-                photosSection.classList.remove("hidden");
-                const rotations = ["-2deg", "1.8deg", "-1.5deg", "2.2deg", "-1.2deg", "1.5deg"];
-                photos.forEach((src, idx) => {
-                    const item = document.createElement("div");
-                    item.className = "polaroid-card cursor-pointer";
-                    item.style.transform = `rotate(${rotations[idx % rotations.length]})`;
-                    item.innerHTML = `
-                        <div class="w-full aspect-[4/3] rounded-lg overflow-hidden bg-slate-200 mb-2.5">
-                            <img src="${src}" alt="Kỷ niệm" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x450/fbcfe8/9d174d?text=20/10+Yeu+Thuong'">
-                        </div>
-                        <p class="text-center text-xs font-extrabold text-slate-700">
-                            💖 Kỷ niệm đẹp #${idx + 1} - ${card.recipientName}
-                        </p>
-                    `;
-                    item.addEventListener("click", () => {
-                        document.getElementById("lightbox-img").src = src;
-                        document.getElementById("photo-lightbox").classList.remove("hidden");
-                        document.getElementById("photo-lightbox").classList.add("flex");
-                    });
-                    polaroidGrid.appendChild(item);
-                });
+                Stage4WishBackground.stop();
+                clearInterval(AppState.wishSliderTimer);
+                clearInterval(AppState.wishProgressTimer);
             }
         }
 
         /**************************************************************
-         * 7. EVENT LISTENERS & INITIALIZATION
+         * STAGE 4 FILMSTRIP PHOTO REEL & < > WISH SLIDER (10S INTERVAL)
+         **************************************************************/
+        function renderStage4Content(card) {
+            document.getElementById("s4-headline-display").textContent = card.s4Headline;
+
+            // 1. Render Cinema Filmstrip Reel in the center with balanced proportions
+            const rawPhotos = Array.isArray(card.photos) && card.photos.length > 0 ? card.photos : SAMPLE_20_10_PHOTOS;
+            // Repeat photos so the marquee filmstrip loops seamlessly
+            const reelPhotos = [];
+            while (reelPhotos.length < Math.max(8, rawPhotos.length * 2)) {
+                reelPhotos.push(...rawPhotos);
+            }
+            const fullTrackPhotos = [...reelPhotos, ...reelPhotos];
+
+            const trackEl = document.getElementById("s4-filmstrip-track");
+            trackEl.innerHTML = "";
+            fullTrackPhotos.forEach((src, idx) => {
+                const frameNum = (idx % rawPhotos.length) + 1;
+                const frame = document.createElement("div");
+                frame.className = "film-frame group";
+                frame.innerHTML = `
+                    <img src="${src}" alt="Kỷ niệm #${frameNum}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/f472b6?text=Ky+Niem'">
+                    <div class="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-pink-300 font-bold">FRAME #0${frameNum}</span>
+                        <span class="text-[10px] text-white/80 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
+                    </div>
+                `;
+                frame.addEventListener("click", () => {
+                    const lb = document.getElementById("photo-lightbox");
+                    document.getElementById("lightbox-img").src = src;
+                    lb.classList.remove("hidden");
+                    lb.classList.add("flex");
+                });
+                trackEl.appendChild(frame);
+            });
+
+            // 2. Build Wish List for the < > Slider (10 seconds per wish)
+            const allWishes = [];
+            if (card.s4MainWish) allWishes.push(card.s4MainWish);
+            if (Array.isArray(card.s4Wishes)) {
+                card.s4Wishes.forEach(w => {
+                    if (w && !allWishes.includes(w)) allWishes.push(w);
+                });
+            }
+            if (allWishes.length === 0) {
+                allWishes.push(`“ Chúc ${card.recipientName} luôn rạng rỡ và hạnh phúc! ✨ ”`);
+            }
+
+            AppState.wishSliderIndex = 0;
+            const WISH_INTERVAL_MS = 10000; // 10 seconds per message
+
+            const updateWishDisplay = () => {
+                const wishEl = document.getElementById("s4-active-wish");
+                const counterEl = document.getElementById("s4-wish-counter");
+                const dotsContainer = document.getElementById("wish-dots-container");
+
+                wishEl.textContent = allWishes[AppState.wishSliderIndex];
+                counterEl.textContent = `${AppState.wishSliderIndex + 1} / ${allWishes.length}`;
+
+                dotsContainer.innerHTML = "";
+                allWishes.forEach((_, idx) => {
+                    const dot = document.createElement("button");
+                    dot.type = "button";
+                    dot.className = `h-2 rounded-full transition-all ${idx === AppState.wishSliderIndex ? 'bg-pink-400 w-6' : 'bg-white/25 w-2 hover:bg-white/50'}`;
+                    dot.addEventListener("click", () => {
+                        AppState.wishSliderIndex = idx;
+                        SoundEngine.playClick();
+                        updateWishDisplay();
+                        resetWishTimer();
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+            };
+
+            const nextWish = () => {
+                AppState.wishSliderIndex = (AppState.wishSliderIndex + 1) % allWishes.length;
+                updateWishDisplay();
+            };
+
+            const prevWish = () => {
+                AppState.wishSliderIndex = (AppState.wishSliderIndex - 1 + allWishes.length) % allWishes.length;
+                updateWishDisplay();
+            };
+
+            const resetWishTimer = () => {
+                clearInterval(AppState.wishSliderTimer);
+                clearInterval(AppState.wishProgressTimer);
+                AppState.wishProgressElapsed = 0;
+                const progressBar = document.getElementById("s4-wish-progress-bar");
+                if (progressBar) progressBar.style.width = "0%";
+
+                AppState.wishProgressTimer = setInterval(() => {
+                    AppState.wishProgressElapsed += 100;
+                    const pct = Math.min(100, (AppState.wishProgressElapsed / WISH_INTERVAL_MS) * 100);
+                    if (progressBar) progressBar.style.width = `${pct}%`;
+                }, 100);
+
+                AppState.wishSliderTimer = setInterval(() => {
+                    AppState.wishProgressElapsed = 0;
+                    nextWish();
+                }, WISH_INTERVAL_MS);
+            };
+
+            document.getElementById("wish-next-btn").onclick = () => {
+                SoundEngine.playClick();
+                nextWish();
+                resetWishTimer();
+            };
+            document.getElementById("wish-prev-btn").onclick = () => {
+                SoundEngine.playClick();
+                prevWish();
+                resetWishTimer();
+            };
+
+            updateWishDisplay();
+            resetWishTimer();
+        }
+
+        /**************************************************************
+         * EVENT LISTENERS & INITIALIZATION
          **************************************************************/
         window.addEventListener("DOMContentLoaded", () => {
             loadCardsDB();
             initAmbientStars();
-            renderHomeSavedChips();
 
-            // Check URL shared card parameter (?card=... or ?to=...)
+            // URL Search parameter support (?to=dat)
             const params = new URLSearchParams(window.location.search);
-            const encodedCard = params.get("card");
             const toParam = params.get("to");
-
-            if (encodedCard) {
-                try {
-                    const decoded = JSON.parse(decodeURIComponent(escape(atob(encodedCard))));
-                    if (decoded && decoded.recipientId) {
-                        AppState.cardsDB[decoded.recipientId] = decoded;
-                        saveCardsDB();
-                        renderHomeSavedChips();
-                        document.getElementById("recipient-lookup-input").value = decoded.recipientName || decoded.recipientId;
-                    }
-                } catch (e) {}
-            } else if (toParam) {
+            if (toParam) {
                 document.getElementById("recipient-lookup-input").value = toParam;
             }
 
-            // Sound toggle buttons
             document.getElementById("sound-toggle-home").addEventListener("click", () => SoundEngine.toggleMute());
             document.getElementById("sound-toggle-card").addEventListener("click", () => SoundEngine.toggleMute());
 
-            // Home recipient lookup form
             document.getElementById("recipient-lookup-form").addEventListener("submit", e => {
                 e.preventDefault();
                 const val = document.getElementById("recipient-lookup-input").value.trim();
@@ -1926,7 +2154,7 @@
                 openCardForRecipient(val);
             });
 
-            // Password Modal for Creator Studio
+            // Password modal for creator studio
             const pwdModal = document.getElementById("password-modal");
             const pwdInput = document.getElementById("creator-password-input");
             const pwdError = document.getElementById("password-error-msg");
@@ -1955,24 +2183,20 @@
                     const firstCard = AppState.cardsDB["dat"] || Object.values(AppState.cardsDB)[0];
                     loadCardIntoStudioForm(firstCard);
                     switchView("studio");
-                    showToast("Chào mừng bạn vào Xưởng Thiết Kế Thiệp!", "fa-unlock-keyhole");
+                    showToast("Đã mở Xưởng Thiết Kế Thiệp!", "fa-unlock-keyhole");
                 } else {
                     SoundEngine.playDodge();
                     pwdError.classList.remove("hidden");
                 }
             });
 
-            // Studio Navigation & Preset Controls
-            document.getElementById("studio-back-home-btn").addEventListener("click", () => {
-                renderHomeSavedChips();
-                switchView("home");
-            });
+            document.getElementById("studio-back-home-btn").addEventListener("click", () => switchView("home"));
 
             document.getElementById("studio-new-card-btn").addEventListener("click", () => {
-                const preset = generatePresetByTheme("20/10", "Người Nhận");
+                const preset = generatePresetByTheme("20/10", "Ban");
                 loadCardIntoStudioForm({
-                    recipientId: "nguoinhan",
-                    recipientName: "Người Nhận",
+                    recipientId: "newcard",
+                    recipientName: "Bạn",
                     theme: "20/10",
                     ...preset,
                     photos: [...SAMPLE_20_10_PHOTOS]
@@ -1982,7 +2206,7 @@
 
             document.getElementById("apply-theme-preset-btn").addEventListener("click", () => {
                 const theme = document.getElementById("edit-theme").value;
-                const name = document.getElementById("edit-recipient-name").value.trim() || "Đạt";
+                const name = document.getElementById("edit-recipient-name").value.trim() || "Dat";
                 const preset = generatePresetByTheme(theme, name);
 
                 document.getElementById("edit-s1-title").value = preset.s1Title;
@@ -1993,43 +2217,18 @@
                 document.getElementById("edit-s2-title").value = preset.s2Title;
                 document.getElementById("edit-s2-letter").value = preset.s2Letter;
                 document.getElementById("edit-s3-words").value = preset.s3Words;
-                document.getElementById("edit-s3-color-mode").value = preset.s3ColorMode || "theme";
-                syncStudioS3ColorUI(preset.s3ColorMode || "theme", preset.s3ColorPrimary, preset.s3ColorSecondary);
-                document.getElementById("edit-s4-effect").value = preset.s4Effect;
                 document.getElementById("edit-s4-headline").value = preset.s4Headline;
+                document.getElementById("edit-s4-main-wish").value = preset.s4MainWish;
                 document.getElementById("edit-s4-wishes").value = preset.s4Wishes.join("\n");
 
                 SoundEngine.playClick();
-                showToast(`Đã áp dụng mẫu nội dung & màu hạt 3D chủ đề "${THEME_INFO[theme].label}"!`, "fa-wand-magic-sparkles");
+                showToast(`Đã áp dụng mẫu chủ đề "${THEME_INFO[theme].label}"!`, "fa-wand-magic-sparkles");
             });
 
-            // Stage 3 Particle Color Pickers
-            document.getElementById("edit-s3-color-mode").addEventListener("change", e => {
-                SoundEngine.playClick();
-                syncStudioS3ColorUI(e.target.value);
-            });
-
-            document.getElementById("edit-s3-color-primary").addEventListener("input", e => {
-                document.getElementById("edit-s3-color-mode").value = "custom";
-                syncStudioS3ColorUI("custom", e.target.value, document.getElementById("edit-s3-color-secondary").value);
-            });
-
-            document.getElementById("edit-s3-color-secondary").addEventListener("input", e => {
-                document.getElementById("edit-s3-color-mode").value = "custom";
-                syncStudioS3ColorUI("custom", document.getElementById("edit-s3-color-primary").value, e.target.value);
-            });
-
-            document.getElementById("edit-theme").addEventListener("change", () => {
-                if (document.getElementById("edit-s3-color-mode").value === "theme") {
-                    syncStudioS3ColorUI("theme");
-                }
-            });
-
-            // Studio Photo Controls
             document.getElementById("add-sample-photos-btn").addEventListener("click", () => {
                 AppState.editingPhotos.push(...SAMPLE_20_10_PHOTOS);
                 renderStudioPhotosPreview();
-                showToast("Đã thêm bộ ảnh mẫu 20/10!", "fa-images");
+                showToast("Đã thêm bộ ảnh mẫu!", "fa-images");
             });
 
             document.getElementById("add-photo-url-btn").addEventListener("click", () => {
@@ -2056,15 +2255,13 @@
                 e.target.value = "";
             });
 
-            // Save, Preview & Share Link
             document.getElementById("save-card-btn").addEventListener("click", () => {
                 const card = collectStudioFormCard();
                 AppState.cardsDB[card.recipientId] = card;
                 saveCardsDB();
                 renderStudioCardList();
-                renderHomeSavedChips();
                 SoundEngine.playCelebration();
-                showToast(`Đã lưu thiệp cho "${card.recipientName}" (Mã: ${card.recipientId})!`, "fa-check");
+                showToast(`Đã lưu thiệp "${card.recipientName}" (ID: ${card.recipientId})!`, "fa-check");
             });
 
             document.getElementById("preview-card-btn").addEventListener("click", () => {
@@ -2072,7 +2269,6 @@
                 AppState.cardsDB[card.recipientId] = card;
                 saveCardsDB();
                 renderStudioCardList();
-                renderHomeSavedChips();
                 openCardForRecipient(card.recipientId);
             });
 
@@ -2081,14 +2277,7 @@
                 AppState.cardsDB[card.recipientId] = card;
                 saveCardsDB();
 
-                // Exclude heavy dataURLs if needed to keep share link compact
-                const sharePayload = {
-                    ...card,
-                    photos: (card.photos || []).filter(p => !p.startsWith("data:"))
-                };
-                const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(sharePayload))));
-                const shareUrl = `${window.location.origin}${window.location.pathname}?to=${encodeURIComponent(card.recipientId)}&card=${encodeURIComponent(encoded)}`;
-
+                const shareUrl = `${window.location.origin}${window.location.pathname}?to=${encodeURIComponent(card.recipientId)}`;
                 const tempInput = document.createElement("textarea");
                 tempInput.value = shareUrl;
                 document.body.appendChild(tempInput);
@@ -2100,42 +2289,23 @@
                 showToast("Đã copy Link chia sẻ thiệp vào bộ nhớ tạm!", "fa-link");
             });
 
-            // Card View Events (4 Sequential Stages)
-            document.getElementById("card-back-home-btn").addEventListener("click", () => {
-                switchView("home");
-            });
+            document.getElementById("card-back-home-btn").addEventListener("click", () => switchView("home"));
 
-            // Stage 1: Runaway No Button & Yes Button
+            // Stage 1 Runaway No Button
             const noBtn = document.getElementById("s1-no-btn");
             const dodgeNoButton = () => {
                 AppState.dodgeCount++;
                 SoundEngine.playDodge();
-                const maxX = Math.min(180, window.innerWidth * 0.32);
-                const maxY = 120;
-                const rx = (Math.random() - 0.5) * maxX * 2;
-                const ry = (Math.random() - 0.5) * maxY * 2;
+                const rx = (Math.random() - 0.5) * 180;
+                const ry = (Math.random() - 0.5) * 120;
                 noBtn.style.transform = `translate(${rx}px, ${ry}px)`;
-
-                const teasers = [
-                    "Ơ kìa, sao lại từ chối món quà tâm huyết thế! 😝",
-                    "Nút này biết chạy trốn đấy, bấm nút Mở Quà bên cạnh đi! 🚀",
-                    "Không thoát được đâu nha, mở quà đi mà! 💖",
-                    `Hệ thống khóa mục tiêu: Bắt buộc nhận quà nhé! ✨`
-                ];
                 const statusEl = document.getElementById("s1-dodge-status");
-                statusEl.textContent = `${teasers[AppState.dodgeCount % teasers.length]} (Né: ${AppState.dodgeCount} lần)`;
+                statusEl.textContent = `Nút này biết chạy trốn! (Né: ${AppState.dodgeCount} lần)`;
                 statusEl.classList.remove("opacity-0");
             };
-
             noBtn.addEventListener("mouseenter", dodgeNoButton);
-            noBtn.addEventListener("touchstart", e => {
-                e.preventDefault();
-                dodgeNoButton();
-            }, { passive: false });
-            noBtn.addEventListener("click", e => {
-                e.preventDefault();
-                dodgeNoButton();
-            });
+            noBtn.addEventListener("touchstart", e => { e.preventDefault(); dodgeNoButton(); }, { passive: false });
+            noBtn.addEventListener("click", e => { e.preventDefault(); dodgeNoButton(); });
 
             document.getElementById("s1-yes-btn").addEventListener("click", () => {
                 SoundEngine.playCelebration();
@@ -2143,8 +2313,8 @@
                 goToCardStage(2);
             });
 
-            // Stage 2: Open Gift Box & Typewriter Letter
-            document.getElementById("s2-gift-box-trigger").addEventListener("click", () => {
+            // Stage 2 Gift Box & Typewriter Letter with Strict Un-Typed Check
+            const triggerOpenStage2Gift = () => {
                 const card = AppState.activeCard;
                 if (!card) return;
                 SoundEngine.playCelebration();
@@ -2155,10 +2325,14 @@
                 letterCard.classList.remove("hidden");
 
                 const bodyEl = document.getElementById("s2-letter-body");
+                const badgeEl = document.getElementById("s2-typing-badge");
                 bodyEl.textContent = "";
+                badgeEl.textContent = "Đang viết thư...";
                 const fullText = card.s2Letter || "";
                 let idx = 0;
+                AppState.isLetterFullyTyped = false;
                 clearInterval(AppState.typewriterTimer);
+
                 AppState.typewriterTimer = setInterval(() => {
                     if (idx < fullText.length) {
                         bodyEl.textContent += fullText[idx];
@@ -2166,23 +2340,80 @@
                         idx++;
                     } else {
                         clearInterval(AppState.typewriterTimer);
+                        AppState.isLetterFullyTyped = true;
+                        badgeEl.textContent = "Đã hoàn tất ✨";
                     }
-                }, 22);
+                }, 25);
+            };
+
+            document.getElementById("s2-gift-box-trigger").addEventListener("click", triggerOpenStage2Gift);
+            document.getElementById("s2-open-gift-btn").addEventListener("click", triggerOpenStage2Gift);
+
+            document.getElementById("s2-pre-summon-fx-btn").addEventListener("click", () => {
+                const card = AppState.activeCard;
+                SoundEngine.playCelebration();
+                BurstFX.trigger((card && card.s2Effect) || "roses");
+            });
+
+            // Effect Summoner Buttons inside Stage 2 Letter Card
+            document.querySelectorAll(".summon-fx-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const fxType = btn.getAttribute("data-summon-fx") || "roses";
+                    SoundEngine.playCelebration();
+                    BurstFX.trigger(fxType);
+                });
+            });
+
+            // Shift+Click Delete Confirmation Modal Buttons
+            document.getElementById("cancel-delete-card-btn").addEventListener("click", () => {
+                AppState.pendingDeleteCardId = null;
+                document.getElementById("delete-card-modal").classList.add("hidden");
+                document.getElementById("delete-card-modal").classList.remove("flex");
+            });
+            document.getElementById("confirm-delete-card-btn").addEventListener("click", () => {
+                const delId = AppState.pendingDeleteCardId;
+                if (delId && AppState.cardsDB[delId]) {
+                    const deletedName = AppState.cardsDB[delId].recipientName;
+                    delete AppState.cardsDB[delId];
+                    saveCardsDB();
+                    renderStudioCardList();
+                    showToast(`Đã xóa thiệp của ${deletedName}!`, "fa-trash-can");
+                }
+                AppState.pendingDeleteCardId = null;
+                document.getElementById("delete-card-modal").classList.add("hidden");
+                document.getElementById("delete-card-modal").classList.remove("flex");
             });
 
             document.getElementById("to-stage-3-btn").addEventListener("click", () => {
+                if (!AppState.isLetterFullyTyped) {
+                    SoundEngine.playAngry();
+                    const angryModal = document.getElementById("chibi-angry-modal");
+                    angryModal.classList.remove("hidden");
+                    angryModal.classList.add("flex");
+                    clearTimeout(angryModal._hideTimer);
+                    angryModal._hideTimer = setTimeout(() => {
+                        angryModal.classList.add("hidden");
+                        angryModal.classList.remove("flex");
+                    }, 2000);
+                    return;
+                }
+
                 clearInterval(AppState.typewriterTimer);
                 SoundEngine.playClick();
                 goToCardStage(3);
             });
 
-            // Stage 3 -> Stage 4
             document.getElementById("to-stage-4-btn").addEventListener("click", () => {
                 SoundEngine.playCelebration();
                 goToCardStage(4);
             });
 
-            // Stage 4 Replay & Lightbox
+            document.getElementById("s4-celebrate-again-btn").addEventListener("click", () => {
+                const card = AppState.activeCard;
+                SoundEngine.playCelebration();
+                BurstFX.trigger((card && card.s2Effect) || "roses");
+            });
+
             document.getElementById("replay-card-btn").addEventListener("click", () => {
                 SoundEngine.playClick();
                 goToCardStage(1);
@@ -2191,12 +2422,6 @@
             document.getElementById("close-lightbox-btn").addEventListener("click", () => {
                 document.getElementById("photo-lightbox").classList.add("hidden");
                 document.getElementById("photo-lightbox").classList.remove("flex");
-            });
-            document.getElementById("photo-lightbox").addEventListener("click", e => {
-                if (e.target.id === "photo-lightbox") {
-                    document.getElementById("photo-lightbox").classList.add("hidden");
-                    document.getElementById("photo-lightbox").classList.remove("flex");
-                }
             });
         });
     </script>
