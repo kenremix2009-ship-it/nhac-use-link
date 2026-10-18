@@ -1090,75 +1090,226 @@
         /**************************************************************
          * 2. AUDIO & TOAST UTILITIES
          **************************************************************/
-        const SoundEngine = {
-            ctx: null,
-            muted: false,
-            bgmTimer: null,
-            init() {
-                if (!this.ctx) {
-                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                    if (AudioCtx) this.ctx = new AudioCtx();
-                }
-                if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
-            },
-            playTone(freq, duration = 0.15, type = "sine", vol = 0.08) {
-                if (this.muted) return;
-                this.init();
-                if (!this.ctx) return;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-                gain.gain.setValueAtTime(vol, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + duration);
-            },
-            playClick() { this.playTone(620, 0.1, "triangle", 0.08); },
-            playDodge() { this.playTone(340 + Math.random() * 280, 0.12, "sine", 0.07); },
-            playAngry() { this.playTone(180, 0.25, "sawtooth", 0.12); },
-            playCelebration() {
-                [523.25, 659.25, 783.99, 1046.5].forEach((n, idx) => {
-                    setTimeout(() => this.playTone(n, 0.32, "triangle", 0.1), idx * 90);
-                });
-            },
-            startBGM() {
-                if (this.bgmTimer || this.muted) return;
-                const melody = [523.25, 659.25, 783.99, 659.25, 880, 783.99, 659.25, 587.33];
-                let step = 0;
-                this.bgmTimer = setInterval(() => {
-                    if (!this.muted) {
-                        this.playTone(melody[step % melody.length], 0.45, "sine", 0.025);
-                        step++;
-                    }
-                }, 550);
-            },
-            toggleMute() {
-                this.muted = !this.muted;
-                const iconClass = this.muted ? "fa-solid fa-volume-xmark text-sm text-rose-400" : "fa-solid fa-volume-high text-sm text-cyan-300";
-                ['sound-toggle-home', 'sound-toggle-card'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.innerHTML = `<i class="${iconClass}"></i>`;
-                });
-                showToast(this.muted ? "Đã tắt âm thanh" : "Đã bật âm thanh", this.muted ? "fa-volume-xmark" : "fa-volume-high");
-            }
-        };
+        const PIANO_NOTE_FREQ = {
+    'C2': 65.41, 'D2': 73.42, 'E2': 82.41, 'F2': 87.31, 'G2': 98.00, 'A2': 110.00, 'B2': 123.47,
+    'C3': 130.81, 'D3': 146.83, 'E3': 164.81, 'F3': 174.61, 'G3': 196.00, 'A3': 220.00, 'B3': 246.94,
+    'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+    'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 'G5': 783.99, 'A5': 880.00, 'B5': 987.77,
+    'C6': 1046.50, 'D6': 1174.66, 'E6': 1318.51,
+};
 
-        function showToast(message, icon = "fa-sparkles") {
-            const box = document.getElementById("toast-box");
-            document.getElementById("toast-text").textContent = message;
-            document.getElementById("toast-icon").className = `fa-solid ${icon} text-pink-400`;
-            box.classList.remove("opacity-0", "-translate-y-3");
-            box.classList.add("opacity-100", "translate-y-0");
-            clearTimeout(box._hideTimer);
-            box._hideTimer = setTimeout(() => {
-                box.classList.add("opacity-0", "-translate-y-3");
-                box.classList.remove("opacity-100", "translate-y-0");
-            }, 2600);
+const PIANO_BPM = 68;
+const PIANO_BEAT_SEC = 60 / PIANO_BPM;
+const PIANO_TOTAL_BEATS = 32 * 4;
+
+// Vòng hợp âm 32 ô nhịp (mỗi ô 4 phách)
+const PIANO_CHORDS = [
+    // Đoạn A (1-8) — chủ đề chính, da diết
+    'Am','F','C','G','Am','F','C','G',
+    // Đoạn B (9-16) — phát triển, cao trào nhẹ
+    'F','G','Em','Am','F','G','C','G',
+    // Đoạn C (17-24) — cao trào rực rỡ
+    'Am','F','C','G','Dm','Em','F','G',
+    // Đoạn D (25-32) — lắng đọng và kết
+    'F','G','C','Am','F','G','C','C',
+];
+
+const PIANO_CHORD_DEF = {
+    'Am': { root:'A', third:'C', fifth:'E' },
+    'F':  { root:'F', third:'A', fifth:'C' },
+    'C':  { root:'C', third:'E', fifth:'G' },
+    'G':  { root:'G', third:'B', fifth:'D' },
+    'Em': { root:'E', third:'G', fifth:'B' },
+    'Dm': { root:'D', third:'F', fifth:'A' },
+};
+
+// Giai điệu tay phải — [nốt, phách bắt đầu, độ dài (phách), cường độ]
+const PIANO_MELODY = [
+    // Đoạn A
+    ['E5',0,1,0.15], ['C5',1,1,0.13], ['A4',2,2,0.13],
+    ['F5',4,1,0.15], ['E5',5,1,0.13], ['C5',6,2,0.13],
+    ['E5',8,1,0.15], ['G5',9,1,0.14], ['E5',10,1,0.13], ['D5',11,1,0.13],
+    ['D5',12,2,0.14], ['B4',14,2,0.13],
+    ['E5',16,1,0.15], ['C5',17,1,0.13], ['A4',18,2,0.13],
+    ['F5',20,1,0.15], ['A5',21,1,0.14], ['G5',22,2,0.14],
+    ['G5',24,1,0.14], ['E5',25,1,0.13], ['D5',26,2,0.13],
+    ['B4',28,2,0.13], ['D5',30,2,0.13],
+    // Đoạn B
+    ['A5',32,1,0.15], ['G5',33,1,0.14], ['F5',34,2,0.14],
+    ['G5',36,1,0.14], ['F5',37,1,0.13], ['D5',38,2,0.13],
+    ['E5',40,1,0.15], ['G5',41,1,0.14], ['B5',42,2,0.15],
+    ['A5',44,4,0.15],
+    ['F5',48,1,0.14], ['E5',49,1,0.13], ['C5',50,2,0.13],
+    ['D5',52,1,0.14], ['E5',53,1,0.13], ['G5',54,2,0.14],
+    ['E5',56,1,0.13], ['D5',57,1,0.13], ['C5',58,2,0.13],
+    ['B4',60,2,0.13], ['D5',62,2,0.13],
+    // Đoạn C — cao trào
+    ['E5',64,1,0.15], ['A5',65,1,0.14], ['G5',66,2,0.14],
+    ['F5',68,1,0.15], ['A5',69,1,0.14], ['C6',70,2,0.15],
+    ['E5',72,1,0.14], ['G5',73,1,0.14], ['E5',74,2,0.13],
+    ['D5',76,1,0.13], ['B4',77,1,0.12], ['G4',78,2,0.12],
+    ['D5',80,1,0.14], ['F5',81,1,0.14], ['A5',82,2,0.15],
+    ['E5',84,1,0.14], ['G5',85,1,0.14], ['B5',86,2,0.15],
+    ['A5',88,1,0.15], ['G5',89,1,0.14], ['F5',90,2,0.14],
+    ['G5',92,2,0.14], ['D5',94,2,0.13],
+    // Đoạn D — lắng đọng
+    ['F5',96,1,0.14], ['E5',97,1,0.13], ['C5',98,2,0.13],
+    ['D5',100,1,0.13], ['E5',101,1,0.13], ['G5',102,2,0.14],
+    ['E5',104,1,0.13], ['G5',105,1,0.14], ['C6',106,2,0.15],
+    ['A5',108,4,0.15],
+    ['C5',112,1,0.12], ['A4',113,1,0.12], ['F4',114,2,0.11],
+    ['B4',116,1,0.12], ['D5',117,1,0.12], ['G5',118,2,0.13],
+    ['E5',120,1,0.12], ['D5',121,1,0.12], ['C5',122,2,0.12],
+    ['C5',124,4,0.13],
+];
+
+// Đệm tay trái kiểu Alberti — tự sinh từ vòng hợp âm
+const PIANO_ACCOMPANIMENT = (() => {
+    const notes = [];
+    PIANO_CHORDS.forEach((chordName, barIdx) => {
+        const barStart = barIdx * 4;
+        const c = PIANO_CHORD_DEF[chordName];
+        if (!c) return;
+        notes.push([c.root + '2',   barStart,     3.8, 0.10]); // bass nốt gốc
+        notes.push([c.fifth + '3',  barStart + 1, 0.9, 0.05]); // hợp âm rải
+        notes.push([c.root + '3',   barStart + 2, 0.9, 0.05]);
+        notes.push([c.third + '4',  barStart + 3, 0.9, 0.05]);
+    });
+    return notes;
+})();
+
+const SoundEngine = {
+    ctx: null,
+    muted: false,
+    bgmTimer: null,
+    bgmPlaying: false,
+    bgmGain: null,
+    init() {
+        if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.ctx = new AudioCtx();
         }
+        if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+    },
+    playTone(freq, duration = 0.15, type = "sine", vol = 0.08) {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+    },
+    playClick() { this.playTone(620, 0.1, "triangle", 0.08); },
+    playDodge() { this.playTone(340 + Math.random() * 280, 0.12, "sine", 0.07); },
+    playAngry() { this.playTone(180, 0.25, "sawtooth", 0.12); },
+    playCelebration() {
+        [523.25, 659.25, 783.99, 1046.5].forEach((n, idx) => {
+            setTimeout(() => this.playTone(n, 0.32, "triangle", 0.1), idx * 90);
+        });
+    },
 
+    // ---- Tổng hợp tiếng piano từ nhiều partials + envelope mềm mại ----
+    playPianoNote(noteName, startTime, duration, velocity) {
+        if (!this.ctx || !this.bgmGain) return;
+        const freq = PIANO_NOTE_FREQ[noteName];
+        if (!freq) return;
+        const ctx = this.ctx;
+
+        const noteGain = ctx.createGain();
+        noteGain.gain.value = velocity;
+        noteGain.connect(this.bgmGain);
+
+        const partials = [
+            { ratio: 1,    gain: 1.00, decay: 1.00 },
+            { ratio: 2,    gain: 0.32, decay: 0.65 },
+            { ratio: 3,    gain: 0.14, decay: 0.45 },
+            { ratio: 4.01, gain: 0.06, decay: 0.30 },
+        ];
+
+        partials.forEach(p => {
+            const osc = ctx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.value = freq * p.ratio;
+            const g = ctx.createGain();
+            const pDur = Math.max(0.15, duration * p.decay);
+            g.gain.setValueAtTime(0, startTime);
+            g.gain.linearRampToValueAtTime(p.gain, startTime + 0.005);
+            g.gain.exponentialRampToValueAtTime(p.gain * 0.30, startTime + 0.12);
+            g.gain.exponentialRampToValueAtTime(0.0001, startTime + pDur);
+            osc.connect(g);
+            g.connect(noteGain);
+            osc.start(startTime);
+            osc.stop(startTime + pDur + 0.05);
+        });
+    },
+
+    // ---- Lên lịch toàn bộ bản nhạc (có humanize nhẹ) ----
+    scheduleSong(startTime) {
+        const bd = PIANO_BEAT_SEC;
+        const schedule = (list, isMelody) => {
+            list.forEach(([note, beat, dur, vel]) => {
+                const humanVel = vel * (isMelody ? (0.92 + Math.random() * 0.16) : (0.9 + Math.random() * 0.2));
+                const humanTime = startTime + beat * bd + (Math.random() - 0.5) * (isMelody ? 0.008 : 0.012);
+                this.playPianoNote(note, humanTime, dur * bd, humanVel);
+            });
+        };
+        schedule(PIANO_MELODY, true);
+        schedule(PIANO_ACCOMPANIMENT, false);
+    },
+
+    startBGM() {
+        if (this.bgmPlaying) return;
+        this.init();
+        if (!this.ctx) return;
+
+        if (!this.bgmGain) {
+            this.bgmGain = this.ctx.createGain();
+            this.bgmGain.gain.value = this.muted ? 0 : 0.5;
+            this.bgmGain.connect(this.ctx.destination);
+        }
+        this.bgmPlaying = true;
+
+        const loop = () => {
+            if (!this.bgmPlaying) return;
+            const startTime = this.ctx.currentTime + 0.15;
+            this.scheduleSong(startTime);
+            const totalDur = PIANO_TOTAL_BEATS * PIANO_BEAT_SEC;
+            // lên lịch vòng kế tiếp trước khi vòng hiện tại kết thúc ~1.5 giây
+            this.bgmTimer = setTimeout(loop, (totalDur - 1.5) * 1000);
+        };
+        loop();
+    },
+
+    stopBGM() {
+        this.bgmPlaying = false;
+        if (this.bgmTimer) {
+            clearTimeout(this.bgmTimer);
+            this.bgmTimer = null;
+        }
+    },
+
+    toggleMute() {
+        this.muted = !this.muted;
+        const iconClass = this.muted ? "fa-solid fa-volume-xmark text-sm text-rose-400" : "fa-solid fa-volume-high text-sm text-cyan-300";
+        ['sound-toggle-home', 'sound-toggle-card'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = `<i class="${iconClass}"></i>`;
+        });
+        showToast(this.muted ? "Đã tắt âm thanh" : "Đã bật âm thanh", this.muted ? "fa-volume-xmark" : "fa-volume-high");
+
+        // Tắt/mở BGM piano mượt mà
+        if (this.bgmGain && this.ctx) {
+            this.bgmGain.gain.setTargetAtTime(this.muted ? 0 : 0.5, this.ctx.currentTime, 0.12);
+        }
+    }
+};
         /**************************************************************
          * 3. AMBIENT STARFIELD & GIFT BOX BURST FX
          **************************************************************/
