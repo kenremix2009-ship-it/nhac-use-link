@@ -355,7 +355,7 @@
                             Xưởng Thiết Kế Thiệp 4 Giai Đoạn
                         </h2>
                         <p class="text-[11px] text-cyan-300">
-                            Tạo mã người nhận, chọn chủ đề (28/10, Sinh Nhật, Noel, Tết, Trung Thu...) & tùy biến từng màn
+                            Tạo mã người nhận, chọn chủ đề (20/10, Sinh Nhật, Noel, Tết, Trung Thu...) & tùy biến từng màn
                         </p>
                     </div>
                 </div>
@@ -436,7 +436,7 @@
                                     Chủ đề thiệp (Theme)
                                 </label>
                                 <select id="edit-theme" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white text-sm font-bold focus:border-cyan-400 focus:outline-none">
-                                    <option value="28/10">🌟 Kỷ Niệm Đặc Biệt 28/10</option>
+                                    <option value="20/10">🌸 Ngày Phụ Nữ Việt Nam 20/10</option>
                                     <option value="sinh-nhat">🎂 Sinh Nhật Rực Rỡ</option>
                                     <option value="giang-sinh">🎄 Giáng Sinh / Noel Ấm Áp</option>
                                     <option value="tet">🧧 Tết Nguyên Đán Sum Vầy</option>
@@ -484,6 +484,7 @@
                             <div>
                                 <label class="block text-[11px] font-bold text-amber-300 mb-1">Hiệu ứng bung ra khi mở hộp quà</label>
                                 <select id="edit-s2-effect" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-white/20 text-white text-sm font-bold focus:border-cyan-400 focus:outline-none">
+                                    <option value="roses">🌹 Hoa Hồng & Trái Tim 20/10</option>
                                     <option value="fireworks">🎆 Pháo Hoa Rực Rỡ</option>
                                     <option value="balloons">🎈 Bóng Bay & Kim Tuyến</option>
                                     <option value="hearts">💖 Mưa Trái Tim Ngọt Ngào</option>
@@ -513,7 +514,7 @@
                             <label class="block text-[11px] font-bold text-slate-300 mb-1">
                                 Các chữ hiển thị lần lượt (Ngăn cách bằng dấu phẩy `,` - Cuối chuỗi sẽ tự ghép Trái Tim 3D)
                             </label>
-                            <input id="edit-s3-words" type="text" placeholder="VD: 3, 2, 1, HELLO ĐẠT, 28/10 VUI VẺ, LUÔN TỎA SÁNG NHÉ" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm font-mono focus:border-cyan-400 focus:outline-none">
+                            <input id="edit-s3-words" type="text" placeholder="VD: 3, 2, 1, HAPPY 20/10, ĐẠT XINH ĐẸP, LUÔN RẠNG RỠ" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white text-sm font-mono focus:border-cyan-400 focus:outline-none">
                         </div>
                     </div>
 
@@ -606,7 +607,7 @@
                     Dành tặng: <span class="card-recipient-name text-cyan-300 font-extrabold underline decoration-pink-500 decoration-2 underline-offset-4">Đạt</span>
                 </span>
                 <span id="card-theme-badge" class="ml-1 px-2.5 py-0.5 text-[11px] font-bold bg-gradient-to-r from-cyan-500/25 to-pink-500/25 border border-cyan-400/30 text-amber-300 rounded-full">
-                    🌟 28/10
+                    🌸 20/10
                 </span>
             </div>
 
@@ -891,10 +892,10 @@
         /**************************************************************
          * 1. THEME PRESETS & BUILT-IN CARDS DATABASE
          **************************************************************/
-        const STORAGE_KEY = "cosmic_cards_v2_db";
+        const STORAGE_KEY = "cosmic_cards_v3_db";
 
         const THEME_INFO = {
-            "28/10": { label: "🌟 Kỷ Niệm 28/10", emoji: "🌟", s2Effect: "fireworks", s4Effect: "starlight" },
+            "20/10": { label: "🌸 Ngày Phụ Nữ VN 20/10", emoji: "🌹", s2Effect: "roses", s4Effect: "petals" },
             "sinh-nhat": { label: "🎂 Sinh Nhật", emoji: "🎂", s2Effect: "balloons", s4Effect: "starlight" },
             "giang-sinh": { label: "🎄 Giáng Sinh / Noel", emoji: "🎄", s2Effect: "snow", s4Effect: "snow" },
             "tet": { label: "🧧 Tết Nguyên Đán", emoji: "🧧", s2Effect: "lixi", s4Effect: "petals" },
@@ -908,22 +909,22 @@
             const upper = name.toUpperCase();
 
             const presets = {
-                "28/10": {
-                    s1Title: `Chào ${name}! Hôm nay 28/10 có một bí mật vũ trụ gửi riêng cho ${name} nè!`,
-                    s1Sub: `Hệ thống vừa xác nhận ${name} là nhân vật đặc biệt nhất ngày 28/10. Cùng mở hộp quà bí mật này ngay nhé?`,
-                    s1Yes: `Mở quà 28/10 ngay!`,
-                    s1No: `Để mai xem nha`,
-                    s2Effect: "fireworks",
-                    s2Title: `THƯ CHÚC MỪNG NGÀY ĐẶC BIỆT 28/10`,
-                    s2Letter: `Gửi ${name} thân mến nhân ngày đặc biệt 28/10! 🌟\n\nChúc ${name} có một ngày kỷ niệm 28/10 thật trọn vẹn, ngập tràn niềm vui và những khoảnh khắc đáng nhớ.\n\nCảm ơn ${name} vì đã luôn tuyệt vời, nhiệt huyết và mang đến năng lượng tích cực cho mọi người. Chúc mọi dự định sắp tới của ${name} đều bùng nổ rực rỡ! ✨🎉`,
-                    s3Words: `3, 2, 1, HELLO ${upper}, HAPPY 28/10, ★ ${upper} ★`,
-                    s4Effect: "starlight",
-                    s4Headline: `Chúc Mừng Ngày Đặc Biệt 28/10 - ${name}!`,
+                "20/10": {
+                    s1Title: `Nhân dịp 20/10, có một món quà đặc biệt cùng ngàn lời chúc yêu thương gửi riêng cho ${name} nè!`,
+                    s1Sub: `Hôm nay là Ngày Phụ Nữ Việt Nam 20/10 — ngày tôn vinh sự dịu dàng, xinh đẹp và tuyệt vời của ${name}. Cùng mở hộp quà bí mật này ngay nhé!`,
+                    s1Yes: `Mở quà 20/10 ngay 🌸`,
+                    s1No: `Ngại lắm để sau nha`,
+                    s2Effect: "roses",
+                    s2Title: `🌸 CHÚC MỪNG NGÀY PHỤ NỮ VIỆT NAM 20/10`,
+                    s2Letter: `Gửi ${name} thân yêu nhân Ngày Phụ Nữ Việt Nam 20/10! 🌹💖\n\nChúc ${name} có một ngày 20/10 thật trọn vẹn, ngập tràn hoa tươi, quà xinh và những lời chúc ngọt ngào nhất.\n\nCảm ơn ${name} vì đã luôn rạng rỡ, đáng yêu và mang đến nguồn năng lượng ấm áp cho mọi người xung quanh. Chúc ${name} 365 ngày trong năm đều xinh đẹp như hoa, hạnh phúc đong đầy, gặp nhiều may mắn và luôn được yêu thương trọn vẹn! ✨🌸🎉`,
+                    s3Words: `3, 2, 1, HAPPY 20/10, ${upper} XINH ĐẸP, LUÔN RẠNG RỠ`,
+                    s4Effect: "petals",
+                    s4Headline: `Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10 - ${name}! 🌸`,
                     s4Wishes: [
-                        `Chúc ${name} ngày 28/10 ngập tràn niềm vui và tiếng cười! 🌟`,
-                        `Mọi ước mơ và mục tiêu của ${name} đều sẽ thành hiện thực! 🚀`,
-                        `Luôn giữ vững nụ cười rạng rỡ và nguồn năng lượng đỉnh cao nhé! ✨`,
-                        `Mãi tỏa sáng như vì sao rực rỡ nhất giữa bầu trời đêm! 💫`
+                        `Chúc ${name} ngày 20/10 ngập tràn niềm vui, hoa tươi và nụ cười rạng rỡ! 🌹`,
+                        `Chúc ${name} luôn xinh đẹp, tự tin và tỏa sáng theo cách riêng của mình! ✨`,
+                        `Mọi ước mơ, dự định của ${name} đều nở hoa rực rỡ và thành công mỹ mãn! 🌸`,
+                        `Chúc ${name} 365 ngày đều hạnh phúc, bình yên và luôn được yêu thương! 💖`
                     ]
                 },
                 "sinh-nhat": {
@@ -1036,26 +1037,34 @@
                 }
             };
 
-            return presets[themeKey] || presets["28/10"];
+            return presets[themeKey] || presets["20/10"];
         }
 
         function createDefaultCardsDB() {
-            const datPreset = generatePresetByTheme("28/10", "Đạt");
-            const thuanPreset = generatePresetByTheme("28/10", "Thuận");
+            const datPreset = generatePresetByTheme("20/10", "Đạt");
+            const thuanPreset = generatePresetByTheme("20/10", "Thuận");
+            const hoaPreset = generatePresetByTheme("20/10", "Hoa");
 
             return {
                 "dat": {
                     recipientId: "dat",
                     recipientName: "Đạt",
-                    theme: "28/10",
+                    theme: "20/10",
                     ...datPreset,
                     photos: []
                 },
                 "thuan": {
                     recipientId: "thuan",
                     recipientName: "Thuận",
-                    theme: "28/10",
+                    theme: "20/10",
                     ...thuanPreset,
+                    photos: []
+                },
+                "hoa": {
+                    recipientId: "hoa",
+                    recipientName: "Hoa",
+                    theme: "20/10",
+                    ...hoaPreset,
                     photos: []
                 }
             };
@@ -1299,7 +1308,13 @@
         // Trigger Stage 2 Gift Box custom effect
         function triggerGiftEffect(effectType, recipientName) {
             SoundEngine.playCelebration();
-            if (effectType === "balloons") {
+            if (effectType === "roses") {
+                spawnEmojiStream("🌹", 16, false);
+                spawnEmojiStream("🌸", 14, true);
+                spawnEmojiStream("💖", 10, false);
+                spawnFireworkBurst(fxWidth * 0.35, fxHeight * 0.32, 42);
+                spawnFireworkBurst(fxWidth * 0.65, fxHeight * 0.32, 42);
+            } else if (effectType === "balloons") {
                 spawnBalloons(16, recipientName);
                 spawnFireworkBurst(fxWidth * 0.5, fxHeight * 0.3, 40);
             } else if (effectType === "hearts") {
@@ -1526,7 +1541,7 @@
             listEl.innerHTML = "";
 
             cards.forEach(card => {
-                const themeMeta = THEME_INFO[card.theme] || THEME_INFO["28/10"];
+                const themeMeta = THEME_INFO[card.theme] || THEME_INFO["20/10"];
                 const row = document.createElement("div");
                 row.className = "p-2.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-cyan-400/40 flex items-center justify-between gap-2 transition";
                 row.innerHTML = `
@@ -1562,16 +1577,16 @@
             if (!card) return;
             document.getElementById("edit-recipient-id").value = card.recipientId || "";
             document.getElementById("edit-recipient-name").value = card.recipientName || "";
-            document.getElementById("edit-theme").value = card.theme || "28/10";
+            document.getElementById("edit-theme").value = THEME_INFO[card.theme] ? card.theme : "20/10";
             document.getElementById("edit-s1-title").value = card.s1Title || "";
             document.getElementById("edit-s1-sub").value = card.s1Sub || "";
             document.getElementById("edit-s1-yes").value = card.s1Yes || "";
             document.getElementById("edit-s1-no").value = card.s1No || "";
-            document.getElementById("edit-s2-effect").value = card.s2Effect || "fireworks";
+            document.getElementById("edit-s2-effect").value = card.s2Effect || "roses";
             document.getElementById("edit-s2-title").value = card.s2Title || "";
             document.getElementById("edit-s2-letter").value = card.s2Letter || "";
             document.getElementById("edit-s3-words").value = card.s3Words || "";
-            document.getElementById("edit-s4-effect").value = card.s4Effect || "starlight";
+            document.getElementById("edit-s4-effect").value = card.s4Effect || "petals";
             document.getElementById("edit-s4-headline").value = card.s4Headline || "";
             document.getElementById("edit-s4-wishes").value = Array.isArray(card.s4Wishes) ? card.s4Wishes.join("\n") : (card.s4Wishes || "");
 
@@ -1673,11 +1688,11 @@
 
         // Create New Blank/Preset Card in Studio
         document.getElementById("studio-new-card-btn").addEventListener("click", () => {
-            const preset = generatePresetByTheme("28/10", "Bạn Mới");
+            const preset = generatePresetByTheme("20/10", "Bạn Mới");
             loadCardIntoStudioForm({
                 recipientId: "banmoi",
                 recipientName: "Bạn Mới",
-                theme: "28/10",
+                theme: "20/10",
                 ...preset,
                 photos: []
             });
@@ -1689,7 +1704,7 @@
             const rawId = document.getElementById("edit-recipient-id").value.trim() || "dat";
             const cleanId = normalizeKey(rawId) || "dat";
             const recipientName = document.getElementById("edit-recipient-name").value.trim() || "Đạt";
-            const theme = document.getElementById("edit-theme").value || "28/10";
+            const theme = document.getElementById("edit-theme").value || "20/10";
             const wishesRaw = document.getElementById("edit-s4-wishes").value
                 .split("\n")
                 .map(s => s.trim())
@@ -1703,11 +1718,11 @@
                 s1Sub: document.getElementById("edit-s1-sub").value.trim() || `Mở món quà bí mật dành riêng cho bạn nhé!`,
                 s1Yes: document.getElementById("edit-s1-yes").value.trim() || `Mở quà ngay!`,
                 s1No: document.getElementById("edit-s1-no").value.trim() || `Không xem đâu`,
-                s2Effect: document.getElementById("edit-s2-effect").value || "fireworks",
+                s2Effect: document.getElementById("edit-s2-effect").value || "roses",
                 s2Title: document.getElementById("edit-s2-title").value.trim() || `BỨC THƯ ĐẶC BIỆT`,
                 s2Letter: document.getElementById("edit-s2-letter").value.trim() || `Chúc ${recipientName} luôn vui vẻ và tỏa sáng!`,
-                s3Words: document.getElementById("edit-s3-words").value.trim() || `3, 2, 1, HELLO ${recipientName.toUpperCase()}`,
-                s4Effect: document.getElementById("edit-s4-effect").value || "starlight",
+                s3Words: document.getElementById("edit-s3-words").value.trim() || `3, 2, 1, HAPPY 20/10, ${recipientName.toUpperCase()}`,
+                s4Effect: document.getElementById("edit-s4-effect").value || "petals",
                 s4Headline: document.getElementById("edit-s4-headline").value.trim() || `Gửi Ngàn Lời Chúc Tốt Đẹp Nhất Tới ${recipientName}!`,
                 s4Wishes: wishesRaw.length > 0 ? wishesRaw : [`Chúc ${recipientName} luôn hạnh phúc và rạng rỡ!`],
                 photos: [...AppState.editingPhotos]
@@ -1772,7 +1787,7 @@
         function openCardExperience(card) {
             AppState.activeCard = card;
             AppState.dodgeCount = 0;
-            const themeMeta = THEME_INFO[card.theme] || THEME_INFO["28/10"];
+            const themeMeta = THEME_INFO[card.theme] || THEME_INFO["20/10"];
 
             // Populate read-only header & Stage 1
             document.querySelectorAll(".card-recipient-name").forEach(el => {
@@ -2281,7 +2296,7 @@
             },
 
             setupUI(card) {
-                const themeMeta = THEME_INFO[card.theme] || THEME_INFO["28/10"];
+                const themeMeta = THEME_INFO[card.theme] || THEME_INFO["20/10"];
                 document.getElementById("s4-theme-pill").textContent = `${themeMeta.label} • DÀNH TẶNG ${card.recipientName.toUpperCase()}`;
                 document.getElementById("s4-headline-display").textContent =
                     card.s4Headline || `Gửi Ngàn Lời Chúc Tốt Đẹp Nhất Tới ${card.recipientName}!`;
