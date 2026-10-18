@@ -806,22 +806,31 @@
                 </div>
             </div>
 
-            <div class="fixed bottom-7 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3">
-                <div id="morph-status-badge" class="glass-pill px-4 py-1.5 rounded-full text-xs font-mono font-bold text-pink-300 border border-pink-400/40">
+            <div class="fixed bottom-7 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3 w-full px-4">
+                <div id="morph-status-badge" class="glass-pill px-4 py-1.5 rounded-full text-xs font-mono font-bold text-pink-300 border border-pink-400/40 text-center max-w-[90vw] truncate">
                     ĐANG KHỞI TẠO VŨ TRỤ HẠT SÁNG...
                 </div>
 
-                <button
-                    id="to-stage-4-btn"
-                    class="hidden px-7 py-3 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-extrabold text-sm shadow-2xl hover:scale-105 transition items-center gap-2"
-                >
-                    <span>Tiếp tục</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
+                <div id="stage-3-actions" class="hidden flex items-center gap-3">
+                    <button
+                        id="replay-stage-3-btn"
+                        type="button"
+                        class="px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white font-extrabold text-sm hover:bg-white/20 transition flex items-center gap-2"
+                    >
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Xem lại</span>
+                    </button>
+                    <button
+                        id="to-stage-4-btn"
+                        class="px-7 py-3 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-extrabold text-sm shadow-2xl hover:scale-105 transition flex items-center gap-2"
+                    >
+                        <span>Tiếp tục</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- STREAMING_CHUNK:Updating Stage 4 with Filmstrip Photo Reel in center and < > Wish Slider (10s) below... -->
         <!-- STAGE 4: FILMSTRIP PHOTO REEL IN CENTER + WISH SLIDER (< > 10s) BELOW + FLOATING WISHES -->
         <div id="stage-4" class="card-stage min-h-screen w-full hidden relative py-16 px-4 sm:px-8 overflow-y-auto">
             <div id="stage4-floating-wishes-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
@@ -1011,17 +1020,17 @@
                 s1Title: `Có một món quà đặc biệt gửi riêng cho ${name} nè!`,
                 s1Sub: `Mở món quà bí mật ngay nhé!`,
                 s1Yes: `Mở quà ngay`,
-                    s1No: `Không xem`,
-                    s2Effect: "roses",
-                    s2Title: `BỨC THƯ ĐẶC BIỆT GỬI ${upper}`,
-                    s2Letter: `Chúc ${name} luôn vui vẻ và hạnh phúc mỗi ngày! 💖`,
-                    s3Words: `3, 2, 1, HAPPY DAY, ${upper}`,
-                    s3ColorMode: "theme",
-                    s3ColorPrimary: themeColors.primary,
-                    s3ColorSecondary: themeColors.secondary,
-                    s4Headline: `Chúc Mừng ${name}!`,
-                    s4MainWish: `“ Chúc ${name} mọi điều tốt đẹp nhất! ✨ ”`,
-                    s4Wishes: [`Luôn vui vẻ nhé! 💖`, `Thành công rực rỡ! 🌟`, `Hạnh phúc đong đầy! 🌸`]
+                s1No: `Không xem`,
+                s2Effect: "roses",
+                s2Title: `BỨC THƯ ĐẶC BIỆT GỬI ${upper}`,
+                s2Letter: `Chúc ${name} luôn vui vẻ và hạnh phúc mỗi ngày! 💖`,
+                s3Words: `3, 2, 1, HAPPY DAY, ${upper}`,
+                s3ColorMode: "theme",
+                s3ColorPrimary: themeColors.primary,
+                s3ColorSecondary: themeColors.secondary,
+                s4Headline: `Chúc Mừng ${name}!`,
+                s4MainWish: `“ Chúc ${name} mọi điều tốt đẹp nhất! ✨ ”`,
+                s4Wishes: [`Luôn vui vẻ nhé! 💖`, `Thành công rực rỡ! 🌟`, `Hạnh phúc đong đầy! 🌸`]
             };
         }
 
@@ -1283,7 +1292,6 @@
             start(effectType = "roses") {
                 this.stop();
                 const icons = this.effectMap[effectType] || this.effectMap["roses"];
-                // Update orbiting icons around gift box and letter corners
                 ["s2-orbit-1", "s2-orbit-2", "s2-orbit-3", "s2-orbit-4", "s2-letter-corner-1", "s2-letter-corner-2", "s2-letter-corner-3"].forEach((id, i) => {
                     const el = document.getElementById(id);
                     if (el) el.textContent = icons[i % icons.length];
@@ -1328,8 +1336,8 @@
             renderer: null,
             particles: null,
             geometry: null,
-            particleCount: 4600,
-            shapeParticleLimit: 2800, // 2800 form the text/heart, 1800 orbit around as cosmic dust
+            particleCount: 7000, // Tăng tổng số hạt
+            shapeParticleLimit: 4200, // Tăng số hạt tạo thành chữ/trái tim để dày hơn
             currentPositions: null,
             targetPositions: null,
             baseColors: null,
@@ -1401,19 +1409,19 @@
                 spriteCanvas.height = 64;
                 const sCtx = spriteCanvas.getContext("2d");
                 const grad = sCtx.createRadialGradient(32, 32, 1, 32, 32, 30);
-                grad.addColorStop(0, "rgba(255,255,255,0.82)");
-                grad.addColorStop(0.35, "rgba(255,255,255,0.45)");
+                grad.addColorStop(0, "rgba(255,255,255,0.95)");
+                grad.addColorStop(0.4, "rgba(255,255,255,0.55)");
                 grad.addColorStop(1, "rgba(0,0,0,0)");
                 sCtx.fillStyle = grad;
                 sCtx.fillRect(0, 0, 64, 64);
                 const particleTexture = new THREE.CanvasTexture(spriteCanvas);
 
                 const material = new THREE.PointsMaterial({
-                    size: 3.9,
+                    size: 4.6, // Tăng kích thước hạt để dày và sáng hơn
                     map: particleTexture,
                     vertexColors: true,
                     transparent: true,
-                    opacity: 0.88,
+                    opacity: 0.95,
                     blending: THREE.AdditiveBlending,
                     depthWrite: false
                 });
@@ -1433,7 +1441,8 @@
 
             initMeteors() {
                 this.meteors = [];
-                for (let m = 0; m < 6; m++) {
+                // Giảm số lượng sao băng từ 6 xuống 3 để thưa hơn
+                for (let m = 0; m < 3; m++) {
                     const trailPoints = [];
                     const segs = 18;
                     for (let j = 0; j < segs; j++) {
@@ -1463,8 +1472,8 @@
 
             resetMeteor(line, randomDelay = false) {
                 line.position.set(
-                    180 + Math.random() * 340 + (randomDelay ? Math.random() * 250 : 0),
-                    100 + Math.random() * 220,
+                    250 + Math.random() * 400 + (randomDelay ? Math.random() * 300 : 0),
+                    150 + Math.random() * 250,
                     (Math.random() - 0.5) * 260
                 );
                 line.userData = {
@@ -1501,16 +1510,23 @@
                         const hue = (i / this.particleCount) % 1;
                         tempColor.setHSL(hue, 0.9, 0.56);
                     } else if (i % 19 === 0) {
-                        tempColor.copy(colorA).lerp(whiteSparkle, 0.45);
+                        tempColor.copy(colorA).lerp(whiteSparkle, 0.55); // Tăng độ lấp lánh
                     } else {
                         const ratio = (Math.sin(i * 0.17) + 1) * 0.5;
                         tempColor.copy(colorA).lerp(colorB, ratio);
                     }
 
-                    // Tone down base intensity slightly to avoid additive white-out when points cluster
-                    this.baseColors[i3] = tempColor.r * 0.82;
-                    this.baseColors[i3 + 1] = tempColor.g * 0.82;
-                    this.baseColors[i3 + 2] = tempColor.b * 0.82;
+                    if (i < this.shapeParticleLimit) {
+                        // Hạt tạo hình (chữ/trái tim): Sáng rực rỡ, sắc nét
+                        this.baseColors[i3] = tempColor.r * 1.0;
+                        this.baseColors[i3 + 1] = tempColor.g * 1.0;
+                        this.baseColors[i3 + 2] = tempColor.b * 1.0;
+                    } else {
+                        // Hạt xung quanh: Sáng vừa phải để làm nền, không lấn át chữ
+                        this.baseColors[i3] = tempColor.r * 0.75;
+                        this.baseColors[i3 + 1] = tempColor.g * 0.75;
+                        this.baseColors[i3 + 2] = tempColor.b * 0.75;
+                    }
 
                     this.colors[i3] = this.baseColors[i3];
                     this.colors[i3 + 1] = this.baseColors[i3 + 1];
@@ -1520,13 +1536,9 @@
                 this.geometry.attributes.color.needsUpdate = true;
 
                 const statusBadge = document.getElementById("morph-status-badge");
-                const nextBtn = document.getElementById("to-stage-4-btn");
                 if (statusBadge) {
                     statusBadge.style.color = mode === "rainbow" ? "#fde047" : primaryHex;
                     statusBadge.style.borderColor = mode === "rainbow" ? "rgba(253,224,71,0.45)" : `${primaryHex}66`;
-                }
-                if (nextBtn) {
-                    nextBtn.style.boxShadow = `0 0 28px ${primaryHex}99`;
                 }
             },
 
@@ -1573,9 +1585,9 @@
                 for (let i = startIndex; i < this.particleCount; i++) {
                     const i3 = i * 3;
                     const angle = Math.random() * Math.PI * 2;
-                    const radius = 145 + Math.random() * 290;
+                    const radius = 135 + Math.random() * 320;
                     this.targetPositions[i3] = Math.cos(angle) * radius;
-                    this.targetPositions[i3 + 1] = (Math.random() - 0.5) * 360;
+                    this.targetPositions[i3 + 1] = (Math.random() - 0.5) * 380;
                     this.targetPositions[i3 + 2] = Math.sin(angle) * radius;
                 }
             },
@@ -1600,7 +1612,7 @@
 
                 const imgData = ctx.getImageData(0, 0, width, height).data;
                 const validPoints = [];
-                const step = 4; // Wider step avoids excessive point stacking
+                const step = 3; // Giảm step từ 4 xuống 3 để quét dày hơn, tạo ra nhiều điểm ảnh hơn
 
                 for (let y = 0; y < height; y += step) {
                     for (let x = 0; x < width; x += step) {
@@ -1621,19 +1633,19 @@
                     validPoints[j] = temp;
                 }
 
-                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 1600));
+                const activeShapeCount = Math.min(this.shapeParticleLimit, Math.max(validPoints.length, 2000));
                 for (let i = 0; i < activeShapeCount; i++) {
                     const i3 = i * 3;
                     if (validPoints.length > 0) {
                         const pt = validPoints[i % validPoints.length];
-                        // Spread jitter in X, Y, Z so multiple particles never overlap on one bright spot
-                        this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 3.8;
-                        this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 3.8;
-                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 22;
+                        // Độ nhiễu (jitter) giảm nhẹ để nét chữ sắc sảo hơn
+                        this.targetPositions[i3] = pt.x + (Math.random() - 0.5) * 2.5;
+                        this.targetPositions[i3 + 1] = pt.y + (Math.random() - 0.5) * 2.5;
+                        this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 18;
                     }
                 }
 
-                // Remaining ~1800+ particles form a lively surrounding galaxy
+                // Phần còn lại làm hạt vũ trụ xung quanh
                 this.assignSurroundingParticles(activeShapeCount);
             },
 
@@ -1645,10 +1657,10 @@
                     const r = 0.35 + 0.65 * Math.cbrt(Math.random());
                     const hx = 16 * Math.pow(Math.sin(t), 3);
                     const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-                    const scale = 6.0 * r;
-                    this.targetPositions[i3] = hx * scale + (Math.random() - 0.5) * 4.5;
-                    this.targetPositions[i3 + 1] = hy * scale + (Math.random() - 0.5) * 4.5;
-                    this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 48 * (1 - r * 0.45);
+                    const scale = 6.2 * r; // To hơn một chút
+                    this.targetPositions[i3] = hx * scale + (Math.random() - 0.5) * 3.5;
+                    this.targetPositions[i3 + 1] = hy * scale + (Math.random() - 0.5) * 3.5;
+                    this.targetPositions[i3 + 2] = (Math.random() - 0.5) * 42 * (1 - r * 0.45);
                 }
                 this.assignSurroundingParticles(this.shapeParticleLimit);
             },
@@ -1664,10 +1676,10 @@
                 this.init();
                 this.stopSequence();
 
-                const nextBtn = document.getElementById("to-stage-4-btn");
+                const actionsGroup = document.getElementById("stage-3-actions");
                 const statusBadge = document.getElementById("morph-status-badge");
-                nextBtn.classList.add("hidden");
-                nextBtn.classList.remove("inline-flex");
+                actionsGroup.classList.add("hidden");
+                actionsGroup.classList.remove("flex");
 
                 this.applyCardParticleColors(card);
                 if (this.particles) this.particles.rotation.set(0, 0, 0);
@@ -1693,8 +1705,8 @@
                         SoundEngine.playCelebration();
                         this.morphToHeart3D();
                         this.sequenceTimer = setTimeout(() => {
-                            nextBtn.classList.remove("hidden");
-                            nextBtn.classList.add("inline-flex");
+                            actionsGroup.classList.remove("hidden");
+                            actionsGroup.classList.add("flex");
                         }, 1200);
                     }
                 };
@@ -1731,8 +1743,8 @@
                         pos[i3 + 2] += (this.targetPositions[i3 + 2] - pos[i3 + 2]) * 0.04;
                     }
 
-                    // Faster twinkling effect (nháy nhanh hơn 1 tí) while capping max brightness
-                    const twinkle = 0.55 + 0.45 * Math.sin(elapsedTime * 7.2 + phase * 3.0);
+                    // Tăng độ sáng nền (0.65) để hạt không bị mờ tối
+                    const twinkle = 0.65 + 0.35 * Math.sin(elapsedTime * 7.2 + phase * 3.0);
                     col[i3] = this.baseColors[i3] * twinkle;
                     col[i3 + 1] = this.baseColors[i3 + 1] * twinkle;
                     col[i3 + 2] = this.baseColors[i3 + 2] * twinkle;
@@ -2401,6 +2413,12 @@
                 clearInterval(AppState.typewriterTimer);
                 SoundEngine.playClick();
                 goToCardStage(3);
+            });
+
+            // Nút Xem Lại ở Giai đoạn 3
+            document.getElementById("replay-stage-3-btn").addEventListener("click", () => {
+                SoundEngine.playClick();
+                ThreeUniverse.startCardSequence(AppState.activeCard);
             });
 
             document.getElementById("to-stage-4-btn").addEventListener("click", () => {
