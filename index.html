@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Character Studio — Auto-Interactive Avatar Engine</title>
-  <!-- Three.js r128 UMD & Official Loaders/Controls (100% tương thích chạy trực tiếp file://) -->
+  <title>3D Character Studio — Auto-Rigging & Smooth Envelope Skinning (Blender 4.3 Web)</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TransformControls.js"></script>
@@ -14,16 +13,17 @@
 
   <style>
     :root {
-      --bg-main: #252525;
-      --bg-viewport: #303030;
-      --bg-panel: #292929;
-      --bg-hover: #393939;
-      --border: #464646;
+      --bg-main: #212121;
+      --bg-vp: #303030;
+      --bg-panel: #282828;
+      --bg-hover: #383838;
+      --border: #444444;
       --text-main: #E8E8E8;
-      --text-sub: #A5A5A5;
+      --text-sub: #A2A2A2;
       --accent-blue: #59BCE7;
       --accent-pink: #ECA6C4;
       --accent-green: #69db7c;
+      --accent-orange: #ff922b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
     body, html {
@@ -36,512 +36,412 @@
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg-main); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
 
-    /* Layout Grid */
-    .app-shell { display: flex; flex-direction: column; width: 100vw; height: 100vh; }
+    .app { display: flex; flex-direction: column; width: 100vw; height: 100vh; }
     .topbar {
       height: 36px; background: var(--bg-main); border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between; padding: 0 10px; z-index: 30;
     }
     .brand {
-      display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px;
-      background: var(--bg-viewport); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border);
-    }
-    .badge-pink {
-      background: rgba(236, 166, 196, 0.2); color: var(--accent-pink);
-      border: 1px solid rgba(236, 166, 196, 0.4); padding: 1px 6px; border-radius: 3px; font-size: 10px;
+      display: flex; align-items: center; gap: 8px; font-weight: 700;
+      background: var(--bg-vp); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border);
     }
     .btn {
       background: var(--bg-hover); color: var(--text-main); border: 1px solid var(--border);
-      padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
-      display: inline-flex; align-items: center; gap: 6px; transition: 0.15s;
+      padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px;
+      display: inline-flex; align-items: center; gap: 5px; transition: 0.15s;
     }
-    .btn:hover { background: #484848; border-color: #666; }
-    .btn-primary {
-      background: var(--accent-blue); color: #151515; border-color: var(--accent-blue); font-weight: 600;
-    }
-    .btn-primary:hover { background: #47add9; }
-    .btn-pink {
-      background: rgba(236, 166, 196, 0.2); color: var(--accent-pink);
-      border-color: rgba(236, 166, 196, 0.5); font-weight: 600;
-    }
+    .btn:hover { background: #4a4a4a; }
+    .btn-primary { background: var(--accent-blue); color: #121212; border-color: var(--accent-blue); font-weight: 700; }
+    .btn-primary:hover { background: #43a8d4; }
+    .btn-pink { background: rgba(236, 166, 196, 0.22); color: var(--accent-pink); border-color: var(--accent-pink); font-weight: 600; }
     .btn-pink:hover { background: rgba(236, 166, 196, 0.35); }
-    .btn.active {
-      background: var(--accent-blue); color: #151515; border-color: var(--accent-blue); font-weight: 600;
-    }
+    .btn.active { background: var(--accent-blue); color: #121212; border-color: var(--accent-blue); font-weight: 700; }
 
-    /* Main Workspace Area */
-    .main-area { flex: 1; display: flex; min-height: 0; overflow: hidden; }
-    .left-toolbar {
-      width: 46px; background: var(--bg-panel); border-right: 1px solid var(--border);
+    .workspace { flex: 1; display: flex; min-height: 0; overflow: hidden; }
+    .left-bar {
+      width: 44px; background: var(--bg-panel); border-right: 1px solid var(--border);
       display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 6px; z-index: 20;
     }
-    .tool-btn {
-      width: 34px; height: 34px; border-radius: 5px; border: 1px solid transparent;
-      background: transparent; color: var(--text-main); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; font-size: 15px; transition: 0.15s;
+    .tool-icon {
+      width: 32px; height: 32px; border-radius: 4px; border: 1px solid transparent;
+      background: transparent; color: var(--text-main); cursor: pointer; font-size: 14px;
     }
-    .tool-btn:hover { background: var(--bg-hover); }
-    .tool-btn.active { background: var(--accent-blue); color: #151515; font-weight: bold; }
+    .tool-icon:hover { background: var(--bg-hover); }
+    .tool-icon.active { background: var(--accent-blue); color: #121212; font-weight: bold; }
 
-    .center-col { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
-    .viewport-wrap { flex: 1; position: relative; background: var(--bg-viewport); overflow: hidden; }
-    #webgl-container { width: 100%; height: 100%; cursor: grab; }
-    #webgl-container:active { cursor: grabbing; }
+    .center-area { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+    .viewport { flex: 1; position: relative; background: var(--bg-vp); overflow: hidden; }
+    #webgl-mount { width: 100%; height: 100%; }
 
-    /* Viewport Overlays */
-    .vp-top-overlay {
+    /* Overlays */
+    .vp-header {
       position: absolute; top: 10px; left: 10px; right: 100px;
-      display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; pointer-events: none; z-index: 10;
+      display: flex; justify-content: space-between; gap: 8px; pointer-events: none; z-index: 10; flex-wrap: wrap;
     }
-    .vp-bar {
-      background: rgba(37, 37, 37, 0.9); backdrop-filter: blur(6px);
+    .pill-bar {
+      background: rgba(33, 33, 33, 0.92); backdrop-filter: blur(6px);
       border: 1px solid var(--border); border-radius: 5px; padding: 4px 6px;
-      display: flex; align-items: center; gap: 4px; pointer-events: auto; flex-wrap: wrap;
+      display: flex; align-items: center; gap: 4px; pointer-events: auto;
     }
-    .vp-mini-btn {
-      background: transparent; color: var(--text-main); border: none; padding: 3px 8px;
-      border-radius: 3px; cursor: pointer; font-size: 11px; transition: 0.12s;
+    .mini-btn {
+      background: transparent; color: var(--text-main); border: none; padding: 3px 7px;
+      border-radius: 3px; cursor: pointer; font-size: 11px;
     }
-    .vp-mini-btn:hover { background: var(--bg-hover); }
-    .vp-mini-btn.active { background: var(--accent-blue); color: #151515; font-weight: 600; }
+    .mini-btn:hover { background: var(--bg-hover); }
+    .mini-btn.active { background: var(--accent-blue); color: #121212; font-weight: 700; }
 
-    /* Interactive Action Bar at bottom of Viewport */
-    .vp-interaction-bar {
-      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-      background: rgba(30, 30, 30, 0.92); backdrop-filter: blur(8px);
-      border: 1px solid var(--accent-blue); border-radius: 8px; padding: 6px 10px;
-      display: flex; align-items: center; gap: 6px; z-index: 12;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.45); white-space: nowrap;
+    /* Blender Loop Cut & Slide Floating Operator Box (from Video 00:47 - 00:54) */
+    .blender-operator-box {
+      position: absolute; bottom: 82px; left: 14px; width: 215px;
+      background: rgba(36, 36, 36, 0.95); border: 1px solid #555; border-radius: 5px;
+      padding: 8px 10px; z-index: 15; box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    }
+    .op-title { font-weight: 700; font-size: 11px; color: var(--accent-blue); margin-bottom: 6px; display: flex; justify-content: space-between; }
+    .op-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 11px; color: var(--text-sub); }
+
+    /* Bottom Choreography Bar */
+    .choreo-bar {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: rgba(28, 28, 28, 0.95); backdrop-filter: blur(8px);
+      border: 1px solid var(--accent-pink); border-radius: 8px; padding: 6px 10px;
+      display: flex; align-items: center; gap: 6px; z-index: 15;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5); white-space: nowrap;
     }
 
-    /* Speech Bubble over Character */
-    .speech-bubble {
-      position: absolute; top: 58px; left: 50%; transform: translateX(-50%);
-      background: rgba(25, 25, 25, 0.92); border: 1px solid var(--accent-pink);
-      color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
-      pointer-events: none; z-index: 15; transition: opacity 0.25s, transform 0.25s;
-      opacity: 0; transform: translate(-50%, 8px);
-      box-shadow: 0 4px 15px rgba(236, 166, 196, 0.25);
+    /* Speech / Stage Banner */
+    .stage-banner {
+      position: absolute; top: 52px; left: 50%; transform: translateX(-50%);
+      background: rgba(25, 25, 25, 0.92); border: 1px solid var(--accent-blue);
+      color: #fff; padding: 5px 14px; border-radius: 18px; font-size: 12px; font-weight: 600;
+      pointer-events: none; z-index: 15; transition: 0.2s; opacity: 0;
     }
-    .speech-bubble.show { opacity: 1; transform: translate(-50%, 0); }
+    .stage-banner.show { opacity: 1; }
 
     /* Orientation Gizmo */
-    .gizmo-box {
-      position: absolute; top: 10px; right: 12px; width: 76px; height: 76px;
-      background: rgba(37, 37, 37, 0.85); border: 1px solid var(--border);
+    .gizmo-wrap {
+      position: absolute; top: 10px; right: 12px; width: 74px; height: 74px;
+      background: rgba(33, 33, 33, 0.85); border: 1px solid var(--border);
       border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;
     }
 
-    /* Drag Drop Overlay */
-    .drop-overlay {
-      position: absolute; inset: 12px; border: 2px dashed var(--accent-blue);
-      background: rgba(89, 188, 231, 0.12); border-radius: 8px;
-      display: none; align-items: center; justify-content: center; z-index: 40; pointer-events: none;
-    }
-    .drop-overlay.active { display: flex; }
-
-    /* Loading Overlay */
-    .loading-overlay {
-      position: absolute; inset: 0; background: rgba(25, 25, 25, 0.82);
+    /* Loading Modal */
+    .loading-modal {
+      position: absolute; inset: 0; background: rgba(20, 20, 20, 0.88);
       display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 50;
     }
-    .loading-overlay.active { display: flex; }
+    .loading-modal.active { display: flex; }
     .spinner {
-      width: 34px; height: 34px; border: 3px solid var(--border);
-      border-top-color: var(--accent-blue); border-radius: 50%; animation: spin 0.8s linear infinite;
+      width: 36px; height: 36px; border: 3px solid var(--border);
+      border-top-color: var(--accent-blue); border-radius: 50%; animation: spin 0.75s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Bottom Dock */
+    /* Bottom Dock (Material Node Graph & Timeline) */
     .bottom-dock {
-      height: 195px; background: var(--bg-main); border-top: 1px solid var(--border);
+      height: 175px; background: var(--bg-main); border-top: 1px solid var(--border);
       display: flex; flex-direction: column; z-index: 20;
     }
-    .dock-header {
-      height: 28px; background: var(--bg-panel); border-bottom: 1px solid var(--border);
+    .dock-bar {
+      height: 26px; background: var(--bg-panel); border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between; padding: 0 10px;
     }
-    .dock-tabs { display: flex; gap: 4px; height: 100%; align-items: center; }
-    .dock-tab {
-      padding: 4px 10px; cursor: pointer; color: var(--text-sub); border-bottom: 2px solid transparent;
-      background: transparent; border-top: none; border-left: none; border-right: none; font-size: 12px;
+    .dock-content {
+      flex: 1; display: flex; align-items: center; gap: 14px; padding: 8px 12px; overflow-x: auto;
+      background: radial-gradient(#383838 1px, transparent 1px); background-size: 14px 14px;
     }
-    .dock-tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); background: var(--bg-main); }
-    .dock-body { flex: 1; position: relative; overflow: auto; padding: 10px; }
 
-    /* Right Sidebar */
+    /* Right Sidebar (Outliner + Armature_Miyuu Modifier Stack) */
     .right-sidebar {
-      width: 320px; background: var(--bg-panel); border-left: 1px solid var(--border);
+      width: 325px; background: var(--bg-panel); border-left: 1px solid var(--border);
       display: flex; flex-direction: column; z-index: 20;
     }
-    .panel-title {
+    .sec-title {
       padding: 6px 10px; background: var(--bg-main); border-bottom: 1px solid var(--border);
-      font-weight: 600; font-size: 12px; display: flex; justify-content: space-between; align-items: center;
+      font-weight: 700; font-size: 11.5px; display: flex; justify-content: space-between; align-items: center;
     }
-    .outliner-list { height: 210px; overflow-y: auto; padding: 4px 0; border-bottom: 1px solid var(--border); }
-    .outliner-item {
-      padding: 4px 10px; display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; font-size: 12px;
+    .outliner-box { height: 185px; overflow-y: auto; border-bottom: 1px solid var(--border); padding: 4px 0; }
+    .outliner-row {
+      padding: 3px 10px; display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; font-size: 11.5px;
     }
-    .outliner-item:hover { background: #323232; }
-    .outliner-item.selected { background: var(--bg-hover); color: var(--accent-blue); font-weight: 600; }
+    .outliner-row:hover { background: #333; }
+    .outliner-row.selected { background: var(--bg-hover); color: var(--accent-blue); font-weight: 600; }
 
-    .inspector-scroll { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
-    .card {
-      background: var(--bg-main); border: 1px solid var(--border); border-radius: 5px; padding: 8px 10px;
-    }
-    .card-header { font-weight: 600; color: var(--accent-blue); margin-bottom: 6px; font-size: 12px; }
-    .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
-    .row:last-child { margin-bottom: 0; }
-    .num-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-    .num-input-wrap {
-      display: flex; align-items: center; background: var(--bg-viewport);
-      border: 1px solid var(--border); border-radius: 3px; padding: 2px 5px;
-    }
-    .num-input-wrap input {
-      width: 100%; background: transparent; border: none; color: var(--text-main);
-      text-align: right; font-family: monospace; font-size: 11px; outline: none;
-    }
-    .toggle-switch {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 5px 8px; background: var(--bg-viewport); border-radius: 4px; margin-bottom: 5px; cursor: pointer;
-    }
-    .pose-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .inspector-box { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+    .card { background: var(--bg-main); border: 1px solid var(--border); border-radius: 5px; padding: 8px; }
+    .card-title { font-weight: 700; color: var(--accent-blue); margin-bottom: 6px; font-size: 11.5px; display: flex; justify-content: space-between; }
+    .ctrl-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; gap: 6px; }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <!-- Hidden File Input -->
-    <input type="file" id="file-input" accept=".glb,.gltf,.vrm" style="display:none" />
+  <div class="app">
+    <input type="file" id="glb-input" accept=".glb,.gltf,.vrm" style="display:none" />
 
-    <!-- Top Menu & Quick Upload Bar -->
+    <!-- TOP BAR -->
     <header class="topbar">
       <div style="display:flex; align-items:center; gap:8px;">
         <div class="brand">
-          <span style="color:var(--accent-blue)">◆</span>
-          <span>3D Character Studio</span>
-          <span class="badge-pink">Auto-Interactive AI</span>
+          <span style="color:var(--accent-orange)">🟠</span>
+          <span>Blender 4.3 Web — 3D Character Studio</span>
         </div>
 
-        <button class="btn btn-primary" id="btn-upload-model">
-          📂 Tải Model Lên (.GLB / .GLTF / .VRM)
+        <button class="btn btn-primary" id="btn-import-glb">
+          📂 Tải Model .GLB Lên (Tự Động Tạo Xương & Làm Mượt)
         </button>
 
-        <button class="btn btn-pink" id="btn-load-anime">
-          ✨ Nạp Nhân Vật Anime Mẫu
+        <button class="btn btn-pink" id="btn-reset-miyuu">
+          🌸 Nhân Vật Miyuu (Theo Video)
         </button>
 
-        <button class="btn" id="btn-export-glb" title="Xuất nhân vật hiện tại sang file .GLB">
-          💾 Xuất .GLB
+        <button class="btn" id="btn-toggle-bones" style="border-color:var(--accent-green); color:var(--accent-green);">
+          🦴 Hiển thị Xương (Armature: ON)
         </button>
 
-        <button class="btn" id="btn-screenshot" title="Chụp ảnh màn hình PNG">
-          📸 Xuất PNG
+        <button class="btn" id="btn-export-glb">
+          💾 Xuất .GLB Đã Gắn Xương
         </button>
       </div>
 
-      <div style="display:flex; align-items:center; gap:12px; color:var(--text-sub); font-size:11px;">
-        <span>Model: <strong id="stat-model-name" style="color:var(--accent-pink)">Anime_Reference</strong></span>
-        <span>Verts: <strong id="stat-verts" style="color:var(--text-main)">0</strong></span>
-        <span>Bones: <strong id="stat-bones" style="color:var(--accent-green)">0</strong></span>
+      <div style="display:flex; align-items:center; gap:12px; font-size:11px; color:var(--text-sub);">
+        <span>Rig: <strong id="ui-rig-status" style="color:var(--accent-green)">Armature_Miyuu (19 Bones)</strong></span>
+        <span>Vertices: <strong id="ui-vert-count" style="color:var(--text-main)">0</strong></span>
+        <span>FPS: <strong id="ui-fps" style="color:var(--accent-blue)">60</strong></span>
       </div>
     </header>
 
-    <!-- Main Content -->
-    <div class="main-area">
-      <!-- Left Toolbar -->
-      <aside class="left-toolbar">
-        <button class="tool-btn active" data-tool="select" title="Chọn & Click tương tác nhân vật (W)">🖱️</button>
-        <button class="tool-btn" data-tool="translate" title="Di chuyển đối tượng (G)">✥</button>
-        <button class="tool-btn" data-tool="rotate" title="Xoay đối tượng (R)">↻</button>
-        <button class="tool-btn" data-tool="scale" title="Thu phóng đối tượng (S)">⤢</button>
-        <button class="tool-btn" id="tool-frame" title="Căn giữa nhân vật (F)">🎯</button>
-        <button class="tool-btn" id="tool-wireframe" title="Bật/Tắt lưới Wireframe (Z)">🕸️</button>
-        <button class="tool-btn" id="tool-skeleton" title="Bật/Tắt hiển thị xương (B)">🦴</button>
+    <!-- MAIN WORKSPACE -->
+    <div class="workspace">
+      <!-- LEFT TOOLBAR -->
+      <aside class="left-bar">
+        <button class="tool-icon active" data-mode="object" title="Object Mode">🟠</button>
+        <button class="tool-icon" data-mode="edit" title="Edit Mode (Bật lưới Wireframe như Video 00:26)">📐</button>
+        <button class="tool-icon" id="tool-move" title="Move Tool (G)">✥</button>
+        <button class="tool-icon" id="tool-rotate" title="Rotate Tool (R)">↻</button>
+        <button class="tool-icon" id="tool-scale" title="Scale Tool (S)">⤢</button>
+        <button class="tool-icon" id="tool-frame" title="Căn giữa Camera (F)">🎯</button>
       </aside>
 
-      <!-- Center Viewport + Bottom Dock -->
-      <div class="center-col">
-        <div class="viewport-wrap" id="viewport-dropzone">
-          <!-- Speech Bubble -->
-          <div class="speech-bubble" id="speech-bubble">
-            ✨ Xin chào! Hãy di chuột hoặc click vào mình để tương tác nhé!
+      <!-- CENTER VIEWPORT + BOTTOM DOCK -->
+      <div class="center-area">
+        <div class="viewport" id="vp-dropzone">
+          <div class="stage-banner" id="stage-banner">
+            🎬 Đang phát chuỗi hành động mượt từ Video tham chiếu...
           </div>
 
-          <!-- Top Camera & Shading Bar -->
-          <div class="vp-top-overlay">
-            <div class="vp-bar">
-              <span style="color:var(--accent-blue); font-size:11px; padding:0 4px; font-weight:600;">Góc máy:</span>
-              <button class="vp-mini-btn" data-cam="full">Toàn thân</button>
-              <button class="vp-mini-btn" data-cam="upper">Nửa người</button>
-              <button class="vp-mini-btn" data-cam="face">Cận mặt</button>
-              <button class="vp-mini-btn" data-cam="three_quarter">Góc 3/4</button>
-              <button class="vp-mini-btn" data-cam="front">Chính diện</button>
+          <!-- Top Viewport Header -->
+          <div class="vp-header">
+            <div class="pill-bar">
+              <select id="mode-select" style="background:#1e1e1e; color:#fff; border:1px solid var(--border); padding:2px 6px; border-radius:3px; font-size:11px;">
+                <option value="object">Object Mode</option>
+                <option value="edit">Edit Mode (Mesh Wireframe)</option>
+                <option value="pose">Pose Mode (Chỉnh Xương)</option>
+              </select>
+              <button class="mini-btn" onclick="window.setCam('video')">Góc Video</button>
+              <button class="mini-btn" onclick="window.setCam('closeup')">Cận Mặt (00:38)</button>
+              <button class="mini-btn" onclick="window.setCam('full')">Toàn Thân (00:57)</button>
+              <button class="mini-btn" onclick="window.setCam('pig')">Góc Chú Heo (00:01)</button>
             </div>
 
-            <div class="vp-bar">
-              <span style="color:var(--accent-pink); font-size:11px; padding:0 4px; font-weight:600;">Chế độ xem:</span>
-              <button class="vp-mini-btn active" data-mode="material">Material</button>
-              <button class="vp-mini-btn" data-mode="wireframe_overlay">Wire + Mat</button>
-              <button class="vp-mini-btn" data-mode="wireframe">Wireframe</button>
-              <button class="vp-mini-btn" id="btn-toggle-grid" style="color:var(--accent-blue)">Grid: ON</button>
+            <div class="pill-bar">
+              <button class="mini-btn active" id="shade-toon">Toon Shading</button>
+              <button class="mini-btn" id="shade-wire-overlay">Wireframe Overlay (Áo)</button>
+              <button class="mini-btn" id="shade-xray">X-Ray Bones</button>
             </div>
           </div>
 
-          <!-- 3D Orientation Gizmo -->
-          <div class="gizmo-box" title="Nhấn vào trục X, Y, Z để chuyển góc nhìn">
-            <svg width="70" height="70" viewBox="-35 -35 70 70">
-              <line id="gz-line-x" x1="0" y1="0" x2="25" y2="0" stroke="#ff4d6d" stroke-width="2.5" />
-              <line id="gz-line-y" x1="0" y1="0" x2="0" y2="-25" stroke="#69db7c" stroke-width="2.5" />
-              <line id="gz-line-z" x1="0" y1="0" x2="14" y2="14" stroke="#59BCE7" stroke-width="2.5" />
-              <g style="cursor:pointer" onclick="window.setCameraView('side')">
-                <circle id="gz-cap-x" cx="25" cy="0" r="7" fill="#ff4d6d" />
-                <text id="gz-txt-x" x="25" y="3" text-anchor="middle" font-size="8" font-weight="bold" fill="#111">X</text>
-              </g>
-              <g style="cursor:pointer" onclick="window.setCameraView('top')">
-                <circle id="gz-cap-y" cx="0" cy="-25" r="7" fill="#69db7c" />
-                <text id="gz-txt-y" x="0" y="-22" text-anchor="middle" font-size="8" font-weight="bold" fill="#111">Y</text>
-              </g>
-              <g style="cursor:pointer" onclick="window.setCameraView('front')">
-                <circle id="gz-cap-z" cx="14" cy="14" r="7" fill="#59BCE7" />
-                <text id="gz-txt-z" x="14" y="17" text-anchor="middle" font-size="8" font-weight="bold" fill="#111">Z</text>
-              </g>
+          <!-- Orientation Gizmo -->
+          <div class="gizmo-wrap">
+            <svg width="68" height="68" viewBox="-34 -34 68 68">
+              <line id="ax-x" x1="0" y1="0" x2="24" y2="0" stroke="#ff4d6d" stroke-width="2.5" />
+              <line id="ax-y" x1="0" y1="0" x2="0" y2="-24" stroke="#69db7c" stroke-width="2.5" />
+              <line id="ax-z" x1="0" y1="0" x2="14" y2="14" stroke="#59BCE7" stroke-width="2.5" />
+              <circle id="cap-x" cx="24" cy="0" r="6" fill="#ff4d6d" />
+              <circle id="cap-y" cx="0" cy="-24" r="6" fill="#69db7c" />
+              <circle id="cap-z" cx="14" cy="14" r="6" fill="#59BCE7" />
             </svg>
           </div>
 
-          <!-- Instant Interactive Action Bar -->
-          <div class="vp-interaction-bar">
-            <span style="color:var(--accent-blue); font-weight:700; font-size:11px; margin-right:4px;">⚡ Tương tác ngay:</span>
-            <button class="btn" id="act-wave">👋 Vẫy chào</button>
-            <button class="btn" id="act-headpat">💖 Xoa đầu</button>
-            <button class="btn" id="act-jump">🎵 Nhảy xoay</button>
-            <button class="btn" id="act-nod">😊 Gật đầu</button>
-            <button class="btn btn-pink" id="act-speak">🗣️ Nói chuyện (Lip-Sync)</button>
-            <button class="btn" id="act-mic">🎙️ Bật Mic</button>
-          </div>
-
-          <!-- Drag & Drop Overlay -->
-          <div class="drop-overlay" id="drop-overlay">
-            <div style="background:#1e1e1e; padding:16px 28px; border-radius:8px; border:1px solid var(--accent-blue); font-size:14px; font-weight:600; color:var(--accent-blue);">
-              📥 Thả file .GLB, .GLTF hoặc .VRM vào đây để nhân vật tự động tương tác!
+          <!-- Blender Operator Panel (Loop Cut & Slide from Video 00:49) -->
+          <div class="blender-operator-box">
+            <div class="op-title">
+              <span>▼ Loop Cut and Slide</span>
+              <span style="color:var(--accent-pink)">Collar / Mesh</span>
+            </div>
+            <div class="op-row">
+              <span>Number of Cuts:</span>
+              <input type="range" id="op-cuts" min="1" max="6" value="3" style="width:85px;" />
+            </div>
+            <div class="op-row">
+              <span>Smoothness (Độ mượt):</span>
+              <input type="range" id="op-smooth" min="0" max="2" step="0.05" value="1.0" style="width:85px;" />
+            </div>
+            <div class="op-row">
+              <span>Màu Heo (Ceobe_mesh):</span>
+              <input type="color" id="pig-color-input" value="#e86f88" style="width:40px; height:18px; border:none; background:none; cursor:pointer;" />
             </div>
           </div>
 
-          <!-- Loading Spinner -->
-          <div class="loading-overlay" id="loading-overlay">
+          <!-- Video Choreography Bar -->
+          <div class="choreo-bar">
+            <button class="btn btn-primary" id="btn-play-video-seq">
+              ▶ Tự Động Diễn Mượt Như Video (All Scenes)
+            </button>
+            <button class="btn" onclick="window.setChoreoScene(1)" title="00:00 - Tô màu chú heo khối vuông">🐷 1. Tô màu Heo</button>
+            <button class="btn" onclick="window.setChoreoScene(2)" title="00:10 - Chỉ tay lên góc menu">☝️ 2. Chỉ tay Menu</button>
+            <button class="btn" onclick="window.setChoreoScene(3)" title="00:20 - Kéo áo & hiện lưới Wireframe">👕 3. Mặc áo Caro</button>
+            <button class="btn" onclick="window.setChoreoScene(4)" title="00:38 - Ghép hai tay thả tim">🫶 4. Thả tim (00:39)</button>
+            <button class="btn" onclick="window.setChoreoScene(5)" title="00:42 - Vuốt 2 bím tóc & Chỉnh cổ áo">🎀 5. Vuốt tóc & Cổ áo</button>
+            <button class="btn" onclick="window.setChoreoScene(6)" title="00:57 - Đứng chống hông">✨ 6. Chống hông (00:58)</button>
+          </div>
+
+          <!-- Loading Modal -->
+          <div class="loading-modal" id="loading-modal">
             <div class="spinner"></div>
-            <div id="loading-text" style="margin-top:12px; font-weight:600; color:var(--text-main);">Đang tải và gắn bộ tương tác tự động...</div>
-          </div>
-
-          <!-- WebGL Canvas Container -->
-          <div id="webgl-container"></div>
-
-          <!-- Bottom Status Strip -->
-          <div style="position:absolute; bottom:0; left:0; right:0; height:24px; background:rgba(37,37,37,0.95); border-top:1px solid var(--border); padding:0 12px; display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--text-sub);">
-            <div>
-              💡 <strong>Mẹo:</strong> Di chuột để nhân vật nhìn theo • <strong>Click vào Đầu/Thân/Chân</strong> của nhân vật để xem phản ứng • Kéo thả file <code>.glb/.vrm</code> bất kỳ vào màn hình.
+            <div id="loading-title" style="margin-top:12px; font-weight:700; font-size:13px; color:var(--accent-blue);">
+              Đang phân tích Mesh & Tự động tạo khung xương (Auto-Rigging)...
             </div>
-            <div id="status-msg" style="color:var(--accent-green);">● Auto-Interaction Engine: Đang hoạt động</div>
+            <div id="loading-sub" style="margin-top:4px; color:var(--text-sub); font-size:11px;">
+              Đang tính toán Smooth Skinning Weights (4 khớp/đỉnh)...
+            </div>
           </div>
+
+          <div id="webgl-mount"></div>
         </div>
 
-        <!-- Bottom Dock: Shader Node Graph, Timeline & Diagnostics -->
+        <!-- BOTTOM DOCK: SHADER NODE EDITOR (Miyuu_Ceobe_mat) -->
         <section class="bottom-dock">
-          <div class="dock-header">
-            <div class="dock-tabs">
-              <button class="dock-tab active" data-dock="nodes">🔗 Shader / Material Nodes</button>
-              <button class="dock-tab" data-dock="timeline">🎬 Animation & Timeline</button>
-              <button class="dock-tab" data-dock="logs">🖥️ Nhật ký Hệ thống (Console)</button>
+          <div class="dock-bar">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="color:var(--accent-blue); font-weight:700;">🔗 Shader Node Editor: <code>Miyuu_Ceobe_mat</code></span>
+              <span style="color:var(--text-sub); font-size:11px;">(Đồng bộ thời gian thực với Áo Caro, Tóc & Chú Heo)</span>
             </div>
-            <div style="font-size:11px; color:var(--text-sub);">
-              Tự động đồng bộ với Model đang hiển thị
+            <div style="display:flex; align-items:center; gap:8px; font-size:11px;">
+              <span>Tốc độ chuyển động:</span>
+              <input type="range" id="anim-speed" min="0.3" max="2.0" step="0.1" value="1.0" style="width:90px;" />
             </div>
           </div>
 
-          <!-- Tab 1: Shader Nodes -->
-          <div class="dock-body" id="dock-nodes" style="background: radial-gradient(#3a3a3a 1px, transparent 1px); background-size: 16px 16px; display:flex; align-items:center; gap:18px; overflow-x:auto;">
-            <!-- Node 1: Base Color Input -->
-            <div class="card" style="min-width:190px; border-color:var(--accent-pink);">
-              <div class="card-header" style="color:var(--accent-pink);">1. Base Color / Texture</div>
-              <div class="row">
-                <span>Màu chủ đạo:</span>
-                <input type="color" id="node-color-picker" value="#ffffff" style="width:36px; height:22px; background:transparent; border:none; cursor:pointer;" />
+          <div class="dock-content">
+            <div class="card" style="min-width:185px; border-color:var(--accent-orange);">
+              <div class="card-title" style="color:var(--accent-orange);">Texture / UV Coordinate</div>
+              <div class="ctrl-row">
+                <span>Độ lặp Caro Áo:</span>
+                <input type="range" id="node-plaid-scale" min="1" max="6" step="0.5" value="2.5" style="width:80px;" />
               </div>
-              <div class="row">
-                <span>Độ đục (Alpha):</span>
-                <input type="range" id="node-opacity" min="0.2" max="1" step="0.05" value="1" style="width:90px;" />
+              <div class="ctrl-row">
+                <span>Màu Áo:</span>
+                <input type="color" id="node-shirt-col" value="#d8ecff" style="width:32px; height:18px; border:none; background:none;" />
               </div>
             </div>
 
-            <span style="color:var(--accent-pink); font-size:18px; font-weight:bold;">➔</span>
+            <span style="color:var(--accent-green); font-weight:bold;">━━━▶</span>
 
-            <!-- Node 2: Toon / PBR Shader -->
-            <div class="card" style="min-width:210px; border-color:var(--accent-blue);">
-              <div class="card-header">2. Anime Cel / Surface BSDF</div>
-              <div class="row">
-                <span>Độ nhám (Roughness):</span>
-                <input type="range" id="node-roughness" min="0" max="1" step="0.05" value="0.4" style="width:90px;" />
+            <div class="card" style="min-width:195px; border-color:var(--accent-pink);">
+              <div class="card-title" style="color:var(--accent-pink);">Toon BSDF & RGB Curves</div>
+              <div class="ctrl-row">
+                <span>Màu Tóc:</span>
+                <input type="color" id="node-hair-col" value="#f3a6c0" style="width:32px; height:18px; border:none; background:none;" />
               </div>
-              <div class="row">
-                <span>Ánh kim (Metallic):</span>
-                <input type="range" id="node-metalness" min="0" max="1" step="0.05" value="0.05" style="width:90px;" />
+              <div class="ctrl-row">
+                <span>Độ mịn Cel-Shade:</span>
+                <input type="range" id="node-cel-smooth" min="2" max="6" step="1" value="4" style="width:80px;" />
               </div>
             </div>
 
-            <span style="color:var(--accent-blue); font-size:18px; font-weight:bold;">➔</span>
+            <span style="color:var(--accent-blue); font-weight:bold;">━━━▶</span>
 
-            <!-- Node 3: Anime Outline Pass -->
-            <div class="card" style="min-width:210px; border-color:var(--accent-green);">
-              <div class="card-header" style="color:var(--accent-green);">3. Anime Outline HullOutput</div>
-              <div class="row">
-                <span>Bật viền Anime:</span>
-                <input type="checkbox" id="node-outline-toggle" />
+            <div class="card" style="min-width:195px; border-color:var(--accent-blue);">
+              <div class="card-title">Solidify (Anime Outline)</div>
+              <div class="ctrl-row">
+                <span>Bật viền đen:</span>
+                <input type="checkbox" id="node-outline-chk" checked />
               </div>
-              <div class="row">
+              <div class="ctrl-row">
                 <span>Độ dày viền:</span>
-                <input type="range" id="node-outline-thick" min="0.004" max="0.03" step="0.002" value="0.01" style="width:90px;" />
+                <input type="range" id="node-outline-w" min="0.003" max="0.025" step="0.002" value="0.009" style="width:80px;" />
               </div>
             </div>
-          </div>
-
-          <!-- Tab 2: Animation Timeline -->
-          <div class="dock-body" id="dock-timeline" style="display:none;">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <button class="btn btn-primary" id="btn-anim-play">▶ Play / Pause</button>
-                <button class="btn" id="btn-anim-stop">⏹ Stop</button>
-                <select id="anim-clip-select" style="background:var(--bg-panel); color:var(--text-main); border:1px solid var(--border); padding:4px 8px; border-radius:4px;">
-                  <option value="">-- Không có Clip đóng gói (Đang chạy Auto-Procedural) --</option>
-                </select>
-              </div>
-              <div style="font-family:monospace;">
-                Time: <strong id="anim-time-label" style="color:var(--accent-blue)">0.00s</strong> / <span id="anim-dur-label">0.00s</span>
-                &nbsp;|&nbsp; Speed:
-                <select id="anim-speed-select" style="background:var(--bg-panel); color:var(--text-main); border:1px solid var(--border); padding:2px 4px; border-radius:3px;">
-                  <option value="0.5">0.5x</option>
-                  <option value="1" selected>1.0x</option>
-                  <option value="1.5">1.5x</option>
-                  <option value="2">2.0x</option>
-                </select>
-              </div>
-            </div>
-            <input type="range" id="anim-scrubber" min="0" max="3" step="0.01" value="0" style="width:100%; accent-color:var(--accent-blue); cursor:pointer;" />
-            <div style="margin-top:8px; color:var(--text-sub); font-size:11px;">
-              Khi model tải lên có sẵn Animation (Idle, Walk, Dance...), hệ thống sẽ tự động nạp vào danh sách trên và kết hợp mượt mà với cử động nhìn theo chuột!
-            </div>
-          </div>
-
-          <!-- Tab 3: Console Logs -->
-          <div class="dock-body" id="dock-logs" style="display:none; font-family:monospace; font-size:11px; background:#1a1a1a;">
-            <div id="log-container"></div>
           </div>
         </section>
       </div>
 
-      <!-- Right Sidebar: Outliner & Auto-Interaction Inspector -->
+      <!-- RIGHT SIDEBAR: SCENE COLLECTION & ARMATURE_MIYUU MODIFIER -->
       <aside class="right-sidebar">
-        <div class="panel-title">
-          <span>Scene Outliner (Cây đối tượng)</span>
-          <span id="outliner-count" style="color:var(--accent-blue); font-size:11px;">0 nodes</span>
+        <div class="sec-title">
+          <span>Scene Collection (Outliner)</span>
+          <span id="outliner-total" style="color:var(--accent-blue);">0 items</span>
         </div>
-        <div class="outliner-list" id="outliner-list"></div>
+        <div class="outliner-box" id="outliner-tree"></div>
 
-        <div class="panel-title">
-          <span>Bảng Điều Khiển & Tự Động Tương Tác</span>
+        <div class="sec-title">
+          <span>Modifiers & Bone Rigging (Armature_Miyuu)</span>
         </div>
-        <div class="inspector-scroll">
-          <!-- Auto-Interaction Engine Card -->
-          <div class="card" style="border-color: rgba(89, 188, 231, 0.5);">
-            <div class="card-header">🤖 Chế Độ Tự Động Tương Tác (AI Live)</div>
-
-            <label class="toggle-switch">
-              <span>👀 Tự động nhìn theo chuột (Look-At)</span>
-              <input type="checkbox" id="chk-auto-look" checked />
-            </label>
-
-            <label class="toggle-switch">
-              <span>🫁 Tự động thở & đung đưa (Idle)</span>
-              <input type="checkbox" id="chk-auto-breath" checked />
-            </label>
-
-            <label class="toggle-switch">
-              <span>👆 Click vào người để phản ứng</span>
-              <input type="checkbox" id="chk-click-react" checked />
-            </label>
-
-            <label class="toggle-switch">
-              <span>😌 Tự động chớp mắt (Auto-Blink)</span>
-              <input type="checkbox" id="chk-auto-blink" checked />
-            </label>
-
-            <div class="row" style="margin-top:6px;">
-              <span style="color:var(--text-sub)">Độ nhạy nhìn theo chuột:</span>
-              <input type="range" id="slider-look-sens" min="0.2" max="2.0" step="0.1" value="1.0" style="width:100px;" />
+        <div class="inspector-box">
+          <!-- Armature Modifier Card (Matching Video 00:16 - 00:58) -->
+          <div class="card" style="border-color:rgba(89,188,231,0.5);">
+            <div class="card-title">
+              <span>🔧 Armature_Miyuu</span>
+              <span style="color:var(--accent-green)">● Active</span>
             </div>
-
-            <div class="row">
-              <span style="color:var(--text-sub)">Cường độ nhịp thở:</span>
-              <input type="range" id="slider-breath-int" min="0" max="2.5" step="0.1" value="1.0" style="width:100px;" />
+            <div class="ctrl-row">
+              <span style="color:var(--text-sub)">Object:</span>
+              <strong id="mod-target-name" style="color:var(--accent-pink)">Miyuu_reference</strong>
+            </div>
+            <div class="ctrl-row">
+              <span>Preserve Volume (Giữ thể tích khớp):</span>
+              <input type="checkbox" id="chk-preserve-vol" checked />
+            </div>
+            <div class="ctrl-row">
+              <span>Bind To: <strong>Vertex Groups + Envelopes</strong></span>
+              <input type="checkbox" checked disabled />
+            </div>
+            <div class="ctrl-row">
+              <span>Độ mềm đàn hồi Tóc/Đuôi (Spring):</span>
+              <input type="range" id="slider-spring" min="0" max="2.5" step="0.1" value="1.2" style="width:95px;" />
+            </div>
+            <div class="ctrl-row">
+              <span>Nhìn theo con trỏ chuột:</span>
+              <input type="checkbox" id="chk-mouse-track" checked />
             </div>
           </div>
 
-          <!-- Pose Library Card -->
+          <!-- Manual Bone Sliders for Fine Posing -->
           <div class="card">
-            <div class="card-header" style="color:var(--accent-pink);">🕺 Thư Viện Tư Thế (Pose Presets)</div>
-            <div class="pose-grid">
-              <button class="btn" onclick="window.applyPose('neutral')">Đứng chuẩn</button>
-              <button class="btn" onclick="window.applyPose('hips')">Chống hông</button>
-              <button class="btn" onclick="window.applyPose('wave')">Giơ tay chào</button>
-              <button class="btn" onclick="window.applyPose('shy')">Đưa tay lên mặt</button>
-              <button class="btn" onclick="window.applyPose('cheer')">Reo hò 2 tay</button>
-              <button class="btn" onclick="window.applyPose('bow')">Cúi chào</button>
+            <div class="card-title" style="color:var(--accent-pink);">
+              <span>🦴 Điều Khiển Khớp Xương Trực Tiếp</span>
+            </div>
+            <div class="ctrl-row">
+              <span>Chọn Xương:</span>
+              <select id="bone-select" style="background:#1c1c1c; color:#fff; border:1px solid var(--border); padding:3px 6px; border-radius:3px; width:155px;"></select>
+            </div>
+            <div class="ctrl-row">
+              <span>Xoay X (Pitch):</span>
+              <input type="range" id="bone-rx" min="-110" max="110" value="0" style="width:120px;" />
+              <span id="lbl-rx" style="font-family:monospace; width:32px; text-align:right;">0°</span>
+            </div>
+            <div class="ctrl-row">
+              <span>Xoay Y (Yaw):</span>
+              <input type="range" id="bone-ry" min="-110" max="110" value="0" style="width:120px;" />
+              <span id="lbl-ry" style="font-family:monospace; width:32px; text-align:right;">0°</span>
+            </div>
+            <div class="ctrl-row">
+              <span>Xoay Z (Roll):</span>
+              <input type="range" id="bone-rz" min="-110" max="110" value="0" style="width:120px;" />
+              <span id="lbl-rz" style="font-family:monospace; width:32px; text-align:right;">0°</span>
             </div>
           </div>
 
-          <!-- Transform Inspector Card -->
+          <!-- Subdivision & Solidify Stack -->
           <div class="card">
-            <div class="card-header">📐 Transform (Đối tượng đang chọn)</div>
-            <div style="margin-bottom:6px; font-size:11px; color:var(--text-sub);">
-              Đang chọn: <strong id="insp-selected-name" style="color:var(--text-main);">Avatar_Root</strong>
+            <div class="card-title">📚 Subdivision & Wireframe Stack</div>
+            <div class="ctrl-row">
+              <span>Phủ lưới xanh (Wireframe Inspection):</span>
+              <input type="checkbox" id="chk-wire-overlay" />
             </div>
-            <div style="margin-bottom:4px; color:var(--text-sub); font-size:11px;">Location (X, Y, Z):</div>
-            <div class="num-grid" style="margin-bottom:8px;">
-              <div class="num-input-wrap"><span style="color:#ff4d6d;font-weight:bold;margin-right:4px;">X</span><input type="number" step="0.05" id="tr-px" value="0" /></div>
-              <div class="num-input-wrap"><span style="color:#69db7c;font-weight:bold;margin-right:4px;">Y</span><input type="number" step="0.05" id="tr-py" value="0" /></div>
-              <div class="num-input-wrap"><span style="color:#59BCE7;font-weight:bold;margin-right:4px;">Z</span><input type="number" step="0.05" id="tr-pz" value="0" /></div>
-            </div>
-
-            <div style="margin-bottom:4px; color:var(--text-sub); font-size:11px;">Rotation (Độ X, Y, Z):</div>
-            <div class="num-grid" style="margin-bottom:8px;">
-              <div class="num-input-wrap"><span style="color:#ff4d6d;font-weight:bold;margin-right:4px;">X</span><input type="number" step="5" id="tr-rx" value="0" /></div>
-              <div class="num-input-wrap"><span style="color:#69db7c;font-weight:bold;margin-right:4px;">Y</span><input type="number" step="5" id="tr-ry" value="0" /></div>
-              <div class="num-input-wrap"><span style="color:#59BCE7;font-weight:bold;margin-right:4px;">Z</span><input type="number" step="5" id="tr-rz" value="0" /></div>
-            </div>
-
-            <div style="margin-bottom:4px; color:var(--text-sub); font-size:11px;">Scale (Tỷ lệ):</div>
-            <div class="num-grid">
-              <div class="num-input-wrap"><span style="color:#ff4d6d;font-weight:bold;margin-right:4px;">X</span><input type="number" step="0.1" id="tr-sx" value="1" /></div>
-              <div class="num-input-wrap"><span style="color:#69db7c;font-weight:bold;margin-right:4px;">Y</span><input type="number" step="0.1" id="tr-sy" value="1" /></div>
-              <div class="num-input-wrap"><span style="color:#59BCE7;font-weight:bold;margin-right:4px;">Z</span><input type="number" step="0.1" id="tr-sz" value="1" /></div>
-            </div>
-          </div>
-
-          <!-- Lighting Control Card -->
-          <div class="card">
-            <div class="card-header">💡 Ánh Sáng Studio</div>
-            <div class="row">
-              <span>Cường độ đèn chính:</span>
-              <input type="range" id="light-key-int" min="0" max="3" step="0.1" value="1.3" style="width:100px;" />
-            </div>
-            <div class="row">
-              <span>Ánh sáng môi trường:</span>
-              <input type="range" id="light-amb-int" min="0" max="2" step="0.1" value="0.85" style="width:100px;" />
-            </div>
-            <div class="row">
-              <span>Màu đèn viền (Rim):</span>
-              <input type="color" id="light-rim-color" value="#ffd6eb" style="width:36px; height:22px; background:transparent; border:none;" />
+            <div class="ctrl-row">
+              <span>Tự động chớp mắt (Auto-Blink):</span>
+              <input type="checkbox" id="chk-blink" checked />
             </div>
           </div>
         </div>
@@ -551,1082 +451,920 @@
 
   <script>
     (function () {
-      const RAD2DEG = 180 / Math.PI;
       const DEG2RAD = Math.PI / 180;
+      const RAD2DEG = 180 / Math.PI;
 
-      // System Logger
-      function addLog(msg, type = 'info') {
-        const box = document.getElementById('log-container');
-        if (!box) return;
-        const colors = { info: '#59BCE7', success: '#69db7c', warn: '#ffd43b', error: '#ff6b6b' };
-        const time = new Date().toLocaleTimeString();
-        const div = document.createElement('div');
-        div.style.marginBottom = '4px';
-        div.innerHTML = `<span style="color:#777">[${time}]</span> <span style="color:${colors[type] || '#fff'}">[${type.toUpperCase()}]</span> ${msg}`;
-        box.prepend(div);
-      }
-
-      // Speech Bubble Notification
-      let bubbleTimeout = null;
-      function showSpeechBubble(text, duration = 3200) {
-        const el = document.getElementById('speech-bubble');
-        if (!el) return;
-        el.textContent = text;
+      // Show Banner
+      let bannerTimer = null;
+      function showBanner(msg, dur = 3500) {
+        const el = document.getElementById('stage-banner');
+        el.textContent = msg;
         el.classList.add('show');
-        if (bubbleTimeout) clearTimeout(bubbleTimeout);
-        bubbleTimeout = setTimeout(() => el.classList.remove('show'), duration);
+        if (bannerTimer) clearTimeout(bannerTimer);
+        bannerTimer = setTimeout(() => el.classList.remove('show'), dur);
       }
 
-      // Initialize Three.js Scene
-      const container = document.getElementById('webgl-container');
+      // 1. Setup Three.js WebGL Scene
+      const mount = document.getElementById('webgl-mount');
       const scene = new THREE.Scene();
       scene.background = new THREE.Color(0x303030);
 
-      const camera = new THREE.PerspectiveCamera(38, container.clientWidth / container.clientHeight, 0.05, 200);
-      camera.position.set(0, 1.25, 2.65);
+      const camera = new THREE.PerspectiveCamera(36, mount.clientWidth / mount.clientHeight, 0.05, 150);
+      camera.position.set(0, 1.25, 2.35);
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setSize(mount.clientWidth, mount.clientHeight);
       renderer.outputEncoding = THREE.sRGBEncoding;
-      container.appendChild(renderer.domElement);
+      mount.appendChild(renderer.domElement);
 
       const orbit = new THREE.OrbitControls(camera, renderer.domElement);
-      orbit.target.set(0, 0.95, 0);
+      orbit.target.set(0, 1.05, 0);
       orbit.enableDamping = true;
       orbit.dampingFactor = 0.08;
       orbit.update();
 
-      const transformCtrl = new THREE.TransformControls(camera, renderer.domElement);
-      transformCtrl.setSize(0.75);
-      transformCtrl.addEventListener('dragging-changed', (e) => {
-        orbit.enabled = !e.value;
-      });
-      transformCtrl.addEventListener('change', () => {
-        syncSelectedTransformToUI();
-      });
-      scene.add(transformCtrl);
+      const grid = new THREE.GridHelper(10, 20, 0x4c4c4c, 0x383838);
+      scene.add(grid);
 
-      // Grid & Lighting
-      const gridHelper = new THREE.GridHelper(10, 20, 0x555555, 0x3c3c3c);
-      scene.add(gridHelper);
+      // Soft Anime Studio Lighting
+      const ambLight = new THREE.AmbientLight(0xffffff, 0.88);
+      const dirLight = new THREE.DirectionalLight(0xfff7f4, 1.25);
+      dirLight.position.set(2.2, 3.5, 3.0);
+      const rimLight = new THREE.DirectionalLight(0xffd6eb, 0.65);
+      rimLight.position.set(-2.0, 2.2, -2.2);
+      scene.add(ambLight, dirLight, rimLight);
 
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
-      const keyLight = new THREE.DirectionalLight(0xfff8f2, 1.3);
-      keyLight.position.set(2.2, 3.4, 2.8);
-      const fillLight = new THREE.DirectionalLight(0xcceeff, 0.55);
-      fillLight.position.set(-2.4, 1.8, 1.5);
-      const rimLight = new THREE.DirectionalLight(0xffd6eb, 0.75);
-      rimLight.position.set(0, 2.5, -2.5);
-      scene.add(ambientLight, keyLight, fillLight, rimLight);
+      // Scene Root Holders
+      const characterGroup = new THREE.Group();
+      characterGroup.name = 'Miyuu_reference';
+      scene.add(characterGroup);
 
-      // Master Pivot for any loaded Avatar (allows procedural motion even on static meshes!)
-      const avatarPivot = new THREE.Group();
-      avatarPivot.name = 'Avatar_Interactive_Pivot';
-      scene.add(avatarPivot);
+      const propsGroup = new THREE.Group();
+      propsGroup.name = 'Ceobe_Props_Collection';
+      scene.add(propsGroup);
 
-      let currentModelRoot = null;
       let skeletonHelper = null;
-      let selectionBox = null;
-      let selectedObject = avatarPivot;
-      const objectLookup = new Map();
+      let activeSkeleton = null;
+      let bonesMap = {};
+      let manualBoneOffsets = {};
+      let shirtWireframeOverlay = null;
+      let blockyPigGroup = null;
+      let pigMaterials = [];
+      let leashLine = null;
+      let tabletGroup = null;
 
-      // Animation & Procedural Auto-Interaction State
-      let mixer = null;
-      let loadedClips = [];
-      let activeAction = null;
-      let isPlayingClip = false;
-      let playbackSpeed = 1.0;
-
-      // Auto-Detected Humanoid Rig Map
-      let rigMap = {
-        head: null,
-        neck: null,
-        spine: null,
-        hips: null,
-        leftArm: null,
-        rightArm: null,
-        leftForeArm: null,
-        rightForeArm: null,
-        leftEye: null,
-        rightEye: null,
-        jaw: null
-      };
-      const boneRestQuats = new Map();
-      const morphMeshes = [];
-
-      // Live Interaction Parameters
-      const interactionState = {
-        autoLook: true,
-        autoBreath: true,
-        clickReact: true,
-        autoBlink: true,
-        lookSensitivity: 1.0,
-        breathIntensity: 1.0,
-        mouseNDC: { x: 0, y: 0 },
-        smoothMouse: { x: 0, y: 0 },
-        activeReaction: null, // 'wave' | 'headpat' | 'jump' | 'nod'
-        reactionTime: 0,
-        poseOffset: {}, // Custom pose offsets
-        speakingSim: false,
-        speakingTime: 0,
-        micAnalyser: null,
-        micDataArray: null,
-        blinkTimer: 0
-      };
-
-      // 3D Floating Heart/Star Particles for Click Feedback
-      const particles = [];
-      function spawnReactionParticles(worldPos, colorHex = 0xECA6C4) {
-        for (let i = 0; i < 8; i++) {
-          const geo = new THREE.OctahedronGeometry(0.035, 0);
-          const mat = new THREE.MeshBasicMaterial({ color: i % 2 === 0 ? colorHex : 0x59BCE7, transparent: true, opacity: 1 });
-          const p = new THREE.Mesh(geo, mat);
-          p.position.copy(worldPos);
-          p.position.x += (Math.random() - 0.5) * 0.35;
-          p.position.y += (Math.random() - 0.2) * 0.25;
-          p.position.z += (Math.random() - 0.5) * 0.35;
-          scene.add(p);
-          particles.push({
-            mesh: p,
-            vel: new THREE.Vector3((Math.random() - 0.5) * 0.4, 0.55 + Math.random() * 0.4, (Math.random() - 0.5) * 0.4),
-            life: 1.0
-          });
-        }
-      }
-
-      // Smart Heuristic Bone Detector (Works with Blender, Mixamo, VRoid/VRM, Unity, Sketchfab)
-      function autoDetectRigAndMorphs(root) {
-        rigMap = {
-          head: null, neck: null, spine: null, hips: null,
-          leftArm: null, rightArm: null, leftForeArm: null, rightForeArm: null,
-          leftEye: null, rightEye: null, jaw: null
-        };
-        boneRestQuats.clear();
-        morphMeshes.length = 0;
-
-        let boneCount = 0;
-        let vertCount = 0;
-
-        root.traverse((obj) => {
-          if (obj.isMesh) {
-            if (obj.geometry && obj.geometry.attributes && obj.geometry.attributes.position) {
-              vertCount += obj.geometry.attributes.position.count;
-            }
-            if (obj.morphTargetDictionary && obj.morphTargetInfluences) {
-              morphMeshes.push(obj);
-            }
-          }
-
-          if (obj.isBone || obj.type === 'Bone' || obj.name) {
-            if (obj.isBone) boneCount++;
-            boneRestQuats.set(obj.uuid, obj.quaternion.clone());
-            const n = (obj.name || '').toLowerCase();
-
-            if (!rigMap.head && /head|j_bip_c_head|mixamorig.*head|bip01.*head/.test(n) && !/top|end|nub/.test(n)) {
-              rigMap.head = obj;
-            } else if (!rigMap.neck && /neck|j_bip_c_neck|mixamorig.*neck/.test(n)) {
-              rigMap.neck = obj;
-            } else if (!rigMap.spine && /spine|chest|torso|upper_body|j_bip_c_spine|j_bip_c_chest/.test(n)) {
-              rigMap.spine = obj;
-            } else if (!rigMap.hips && /hips|pelvis|j_bip_c_hips|mixamorig.*hips/.test(n)) {
-              rigMap.hips = obj;
-            } else if (!rigMap.leftArm && (/left.*(arm|shoulder)|arm.*l|j_bip_l_upperarm|mixamorig.*leftarm/.test(n)) && !/fore|lower|hand/.test(n)) {
-              rigMap.leftArm = obj;
-            } else if (!rigMap.rightArm && (/right.*(arm|shoulder)|arm.*r|j_bip_r_upperarm|mixamorig.*rightarm/.test(n)) && !/fore|lower|hand/.test(n)) {
-              rigMap.rightArm = obj;
-            } else if (!rigMap.leftForeArm && /left.*(forearm|lowerarm)|forearm.*l|j_bip_l_lowerarm/.test(n)) {
-              rigMap.leftForeArm = obj;
-            } else if (!rigMap.rightForeArm && /right.*(forearm|lowerarm)|forearm.*r|j_bip_r_lowerarm/.test(n)) {
-              rigMap.rightForeArm = obj;
-            }
-          }
-        });
-
-        document.getElementById('stat-verts').textContent = vertCount.toLocaleString();
-        document.getElementById('stat-bones').textContent = boneCount;
-
-        const detectedNames = Object.entries(rigMap)
-          .filter(([, v]) => v !== null)
-          .map(([k]) => k);
-
-        if (detectedNames.length > 0) {
-          addLog(`Tự động nhận diện thành công các khớp tương tác: ${detectedNames.join(', ')}`, 'success');
-        } else {
-          addLog('Model không có xương chuẩn — Đã kích hoạt chế độ Root Spring Physics (tương tác toàn khối).', 'warn');
-        }
-      }
-
-      // Build Built-in Anime Reference Avatar (So it works at second 0)
-      function buildBuiltInAnimeAvatar() {
-        const root = new THREE.Group();
-        root.name = 'Anime_Character_Rig';
-
-        // Create Checkered Plaid Canvas Texture for Shirt
+      // Procedural Plaid Texture Generator (For Miyuu's Blue-White Checkered Shirt)
+      let plaidCanvasTex = null;
+      function generatePlaidTexture(baseHex = '#d8ecff', repeat = 2.5) {
         const canvas = document.createElement('canvas');
-        canvas.width = 128; canvas.height = 128;
+        canvas.width = 256; canvas.height = 256;
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#f4f8fc'; ctx.fillRect(0, 0, 128, 128);
-        ctx.fillStyle = 'rgba(89, 188, 231, 0.38)';
-        for (let i = 0; i < 128; i += 32) {
-          ctx.fillRect(i, 0, 10, 128);
-          ctx.fillRect(0, i, 128, 10);
+        ctx.fillStyle = '#f7fbff';
+        ctx.fillRect(0, 0, 256, 256);
+
+        ctx.fillStyle = baseHex;
+        for (let i = 0; i < 256; i += 32) {
+          ctx.fillRect(i, 0, 14, 256);
+          ctx.fillRect(0, i, 256, 14);
         }
-        const plaidTex = new THREE.CanvasTexture(canvas);
-        plaidTex.wrapS = THREE.RepeatWrapping;
-        plaidTex.wrapT = THREE.RepeatWrapping;
-        plaidTex.repeat.set(2, 2);
+        ctx.strokeStyle = '#5c93c4';
+        ctx.lineWidth = 2;
+        for (let i = 16; i < 256; i += 32) {
+          ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 256); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(256, i); ctx.stroke();
+        }
+        if (!plaidCanvasTex) {
+          plaidCanvasTex = new THREE.CanvasTexture(canvas);
+          plaidCanvasTex.wrapS = THREE.RepeatWrapping;
+          plaidCanvasTex.wrapT = THREE.RepeatWrapping;
+        } else {
+          plaidCanvasTex.image = canvas;
+        }
+        plaidCanvasTex.repeat.set(repeat, repeat);
+        plaidCanvasTex.needsUpdate = true;
+        return plaidCanvasTex;
+      }
 
-        const matSkin = new THREE.MeshToonMaterial({ name: 'Mat_Skin', color: 0xffebe2 });
-        const matHair = new THREE.MeshToonMaterial({ name: 'Mat_PastelPink_Hair', color: 0xECA6C4 });
-        const matEyes = new THREE.MeshBasicMaterial({ name: 'Mat_Eyes', color: 0x6b2d46 });
-        const matShirt = new THREE.MeshToonMaterial({ name: 'Mat_Plaid_Shirt', color: 0xffffff, map: plaidTex });
-        const matCollar = new THREE.MeshToonMaterial({ name: 'Mat_Blue_Collar', color: 0x59BCE7 });
-        const matSkirt = new THREE.MeshToonMaterial({ name: 'Mat_Navy_Skirt', color: 0x223355 });
+      // Create Toon Gradient Map
+      function createToonGradient(steps = 4) {
+        const data = new Uint8Array(steps * 4);
+        for (let i = 0; i < steps; i++) {
+          const c = Math.round(145 + (i / Math.max(1, steps - 1)) * 110);
+          data[i * 4] = c; data[i * 4 + 1] = c; data[i * 4 + 2] = c; data[i * 4 + 3] = 255;
+        }
+        const tex = new THREE.DataTexture(data, steps, 1, THREE.RGBAFormat);
+        tex.minFilter = THREE.NearestFilter;
+        tex.magFilter = THREE.NearestFilter;
+        tex.needsUpdate = true;
+        return tex;
+      }
 
-        // Bones
-        const hips = new THREE.Bone(); hips.name = 'Hips'; hips.position.set(0, 0.9, 0); root.add(hips);
-        const spine = new THREE.Bone(); spine.name = 'Spine'; spine.position.set(0, 0.16, 0); hips.add(spine);
-        const neck = new THREE.Bone(); neck.name = 'Neck'; neck.position.set(0, 0.34, 0); spine.add(neck);
-        const head = new THREE.Bone(); head.name = 'Head'; head.position.set(0, 0.09, 0); neck.add(head);
+      // ============================================================================
+      // 2. UNIVERSAL AUTO-RIGGER & SMOOTH ENVELOPE SKINNING ENGINE
+      // Converts ANY Static T-Pose/A-Pose .GLB (like Ahri Object_0..8) into a
+      // smooth 19-Bone SkinnedMesh!
+      // ============================================================================
+      function createStandardHumanoidSkeleton() {
+        const bones = [];
+        const map = {};
 
-        const leftArm = new THREE.Bone(); leftArm.name = 'LeftUpperArm'; leftArm.position.set(0.18, 0.28, 0); spine.add(leftArm);
-        const leftForeArm = new THREE.Bone(); leftForeArm.name = 'LeftLowerArm'; leftForeArm.position.set(0.16, -0.2, 0); leftArm.add(leftForeArm);
+        function makeBone(name, parent, x, y, z) {
+          const b = new THREE.Bone();
+          b.name = name;
+          b.position.set(x, y, z);
+          if (parent) parent.add(b);
+          bones.push(b);
+          map[name] = b;
+          return b;
+        }
 
-        const rightArm = new THREE.Bone(); rightArm.name = 'RightUpperArm'; rightArm.position.set(-0.18, 0.28, 0); spine.add(rightArm);
-        const rightForeArm = new THREE.Bone(); rightForeArm.name = 'RightLowerArm'; rightForeArm.position.set(-0.16, -0.2, 0); rightArm.add(rightForeArm);
+        const hips = makeBone('Hips', null, 0, 0.92, 0);
+        const spine = makeBone('Spine', hips, 0, 0.14, 0);
+        const chest = makeBone('Chest', spine, 0, 0.18, 0);
+        const neck = makeBone('Neck', chest, 0, 0.16, 0);
+        const head = makeBone('Head', neck, 0, 0.09, 0);
 
-        // Head & Face
-        const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.22, 28, 24), matSkin);
-        headMesh.name = 'Head_Mesh'; headMesh.position.set(0, 0.18, 0);
-        head.add(headMesh);
+        // Twin-tail / Hair Spring Bones
+        makeBone('Hair_L', head, 0.16, 0.08, -0.02);
+        makeBone('Hair_R', head, -0.16, 0.08, -0.02);
 
-        // Eyes & Mouth (for Blink & Lip-Sync)
-        const eyeGeo = new THREE.SphereGeometry(0.033, 14, 14);
-        eyeGeo.scale(1, 1.3, 0.4);
-        const eyeL = new THREE.Mesh(eyeGeo, matEyes); eyeL.name = 'Eye_L'; eyeL.position.set(0.08, 0.18, 0.19);
-        const eyeR = new THREE.Mesh(eyeGeo, matEyes); eyeR.name = 'Eye_R'; eyeR.position.set(-0.08, 0.18, 0.19);
-        head.add(eyeL, eyeR);
+        // Left Arm Chain
+        const shoulderL = makeBone('Shoulder_L', chest, 0.08, 0.12, 0);
+        const upperArmL = makeBone('UpperArm_L', shoulderL, 0.10, 0, 0);
+        const lowerArmL = makeBone('LowerArm_L', upperArmL, 0.22, 0, 0);
+        makeBone('Hand_L', lowerArmL, 0.18, 0, 0);
 
-        const mouthMesh = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.015, 0.02), new THREE.MeshBasicMaterial({ color: 0xd96b83 }));
-        mouthMesh.name = 'Mouth_LipSync'; mouthMesh.position.set(0, 0.1, 0.2);
-        head.add(mouthMesh);
-
-        // Hair + Twin-tails
-        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.24, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.65), matHair);
-        hairCap.name = 'Hair_Cap'; hairCap.position.set(0, 0.2, -0.01);
-        head.add(hairCap);
-
-        const tailGeo = new THREE.ConeGeometry(0.08, 0.65, 14);
-        const tailL = new THREE.Mesh(tailGeo, matHair); tailL.name = 'TwinTail_L'; tailL.position.set(0.25, 0.05, -0.04); tailL.rotation.z = 0.28;
-        const tailR = new THREE.Mesh(tailGeo, matHair); tailR.name = 'TwinTail_R'; tailR.position.set(-0.25, 0.05, -0.04); tailR.rotation.z = -0.28;
-        head.add(tailL, tailR);
-
-        // Torso & Skirt
-        const shirtMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.12, 0.35, 20), matShirt);
-        shirtMesh.name = 'Shirt_Mesh'; shirtMesh.position.set(0, 0.16, 0);
-        spine.add(shirtMesh);
-
-        const collarMesh = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.025, 10, 22), matCollar);
-        collarMesh.name = 'Sailor_Collar'; collarMesh.rotation.x = Math.PI / 2 + 0.12; collarMesh.position.set(0, 0.31, 0.01);
-        spine.add(collarMesh);
-
-        const skirtMesh = new THREE.Mesh(new THREE.ConeGeometry(0.24, 0.28, 24), matSkirt);
-        skirtMesh.name = 'Pleated_Skirt'; skirtMesh.position.set(0, -0.02, 0);
-        hips.add(skirtMesh);
-
-        // Arms
-        const armGeo = new THREE.CylinderGeometry(0.048, 0.04, 0.22, 14);
-        const sleeveL = new THREE.Mesh(armGeo, matShirt); sleeveL.position.set(0.08, -0.1, 0); sleeveL.rotation.z = 0.6; leftArm.add(sleeveL);
-        const sleeveR = new THREE.Mesh(armGeo, matShirt); sleeveR.position.set(-0.08, -0.1, 0); sleeveR.rotation.z = -0.6; rightArm.add(sleeveR);
-
-        const handGeo = new THREE.CylinderGeometry(0.035, 0.03, 0.2, 12);
-        const handL = new THREE.Mesh(handGeo, matSkin); handL.position.set(0.03, -0.1, 0); leftForeArm.add(handL);
-        const handR = new THREE.Mesh(handGeo, matSkin); handR.position.set(-0.03, -0.1, 0); rightForeArm.add(handR);
+        // Right Arm Chain
+        const shoulderR = makeBone('Shoulder_R', chest, -0.08, 0.12, 0);
+        const upperArmR = makeBone('UpperArm_R', shoulderR, -0.10, 0, 0);
+        const lowerArmR = makeBone('LowerArm_R', upperArmR, -0.22, 0, 0);
+        makeBone('Hand_R', lowerArmR, -0.18, 0, 0);
 
         // Legs
-        const legGeo = new THREE.CylinderGeometry(0.055, 0.04, 0.76, 14);
-        const legL = new THREE.Mesh(legGeo, matSkin); legL.name = 'Leg_L'; legL.position.set(0.09, -0.45, 0); hips.add(legL);
-        const legR = new THREE.Mesh(legGeo, matSkin); legR.name = 'Leg_R'; legR.position.set(-0.09, -0.45, 0); hips.add(legR);
+        const upperLegL = makeBone('UpperLeg_L', hips, 0.10, -0.05, 0);
+        const lowerLegL = makeBone('LowerLeg_L', upperLegL, 0, -0.42, 0);
+        makeBone('Foot_L', lowerLegL, 0, -0.40, 0);
 
-        return root;
+        const upperLegR = makeBone('UpperLeg_R', hips, -0.10, -0.05, 0);
+        const lowerLegR = makeBone('LowerLeg_R', upperLegR, 0, -0.42, 0);
+        makeBone('Foot_R', lowerLegR, 0, -0.40, 0);
+
+        // Tail / Back Accessory Bone (for Ahri tails or capes!)
+        const tail1 = makeBone('Tail_Base', hips, 0, 0.02, -0.12);
+        makeBone('Tail_Tip', tail1, 0, 0.15, -0.28);
+
+        hips.updateMatrixWorld(true);
+        const skeleton = new THREE.Skeleton(bones);
+        return { skeleton, bones, map, rootBone: hips };
       }
 
-      // Install Any Model into the Interactive Studio
-      function installModelIntoStudio(modelRoot, animations = [], labelName = 'Uploaded_Model.glb') {
-        // Clear previous model
-        transformCtrl.detach();
-        if (skeletonHelper) {
-          scene.remove(skeletonHelper);
-          skeletonHelper = null;
+      // Distance from point P to segment AB
+      function distToSegmentSq(px, py, pz, ax, ay, az, bx, by, bz) {
+        const abx = bx - ax, aby = by - ay, abz = bz - az;
+        const apx = px - ax, apy = py - ay, apz = pz - az;
+        const lenSq = abx * abx + aby * aby + abz * abz;
+        let t = lenSq > 1e-6 ? (apx * abx + apy * aby + apz * abz) / lenSq : 0;
+        t = Math.max(0, Math.min(1, t));
+        const cx = ax + t * abx - px;
+        const cy = ay + t * aby - py;
+        const cz = az + t * abz - pz;
+        return cx * cx + cy * cy + cz * cz;
+      }
+
+      // Automatically bind static GLB meshes to our 19-bone Skeleton with smooth weights
+      function autoRigStaticModelGroup(rawRoot) {
+        // Normalize model height to [0, 1.70] centered at X=0, Z=0
+        rawRoot.updateMatrixWorld(true);
+        const rawBox = new THREE.Box3().setFromObject(rawRoot);
+        const rawSize = rawBox.getSize(new THREE.Vector3());
+        const scale = 1.70 / Math.max(rawSize.x, rawSize.y, rawSize.z, 0.001);
+
+        const { skeleton, bones, map, rootBone } = createStandardHumanoidSkeleton();
+
+        // Precompute world segment endpoints for each bone
+        const boneWorldPos = bones.map((b) => {
+          const v = new THREE.Vector3();
+          b.getWorldPosition(v);
+          return v;
+        });
+
+        const boneCapsules = bones.map((b, idx) => {
+          const start = boneWorldPos[idx];
+          let end = start.clone();
+          if (b.children.length > 0 && b.children[0].isBone) {
+            b.children[0].getWorldPosition(end);
+          } else {
+            end.y += 0.08;
+          }
+          // Radius controls smoothness of joint blending
+          let sigma = 0.14;
+          if (b.name.includes('Arm') || b.name.includes('Hand')) sigma = 0.12;
+          if (b.name.includes('Head')) sigma = 0.22;
+          if (b.name.includes('Tail')) sigma = 0.24;
+          return { idx, name: b.name, start, end, twoSigmaSq: 2 * sigma * sigma };
+        });
+
+        const riggedContainer = new THREE.Group();
+        riggedContainer.name = 'AutoRigged_Character';
+        riggedContainer.add(rootBone);
+
+        const centerOffset = rawBox.getCenter(new THREE.Vector3());
+        const minY = rawBox.min.y;
+
+        let totalVertices = 0;
+        const sourceMeshes = [];
+        rawRoot.traverse((child) => {
+          if (child.isMesh && child.geometry) sourceMeshes.push(child);
+        });
+
+        sourceMeshes.forEach((srcMesh, mIdx) => {
+          const geo = srcMesh.geometry.clone();
+          srcMesh.updateWorldMatrix(true, false);
+          geo.applyMatrix4(srcMesh.matrixWorld);
+
+          // Normalize geometry vertices into [0, 1.70] rig space
+          const pos = geo.attributes.position;
+          const vCount = pos.count;
+          totalVertices += vCount;
+
+          const skinIndices = new Uint16Array(vCount * 4);
+          const skinWeights = new Float32Array(vCount * 4);
+
+          for (let i = 0; i < vCount; i++) {
+            const vx = (pos.getX(i) - centerOffset.x) * scale;
+            const vy = (pos.getY(i) - minY) * scale;
+            const vz = (pos.getZ(i) - centerOffset.z) * scale;
+            pos.setXYZ(i, vx, vy, vz);
+
+            // Find top 4 closest bone capsules with smooth Gaussian weights
+            let best0 = 0, best1 = 0, best2 = 0, best3 = 0;
+            let w0 = 0, w1 = 0, w2 = 0, w3 = 0;
+
+            for (let b = 0; b < boneCapsules.length; b++) {
+              const cap = boneCapsules[b];
+              // Avoid binding body front vertices to tail bone
+              if (cap.name.startsWith('Tail') && vz > -0.06) continue;
+              // Avoid binding torso to arms if close to center X
+              if ((cap.name.includes('Arm') || cap.name.includes('Hand')) && Math.abs(vx) < 0.13) continue;
+
+              const dSq = distToSegmentSq(
+                vx, vy, vz,
+                cap.start.x, cap.start.y, cap.start.z,
+                cap.end.x, cap.end.y, cap.end.z
+              );
+              const weight = Math.exp(-dSq / cap.twoSigmaSq);
+
+              if (weight > w0) {
+                w3 = w2; best3 = best2;
+                w2 = w1; best2 = best1;
+                w1 = w0; best1 = best0;
+                w0 = weight; best0 = b;
+              } else if (weight > w1) {
+                w3 = w2; best3 = best2;
+                w2 = w1; best2 = best1;
+                w1 = weight; best1 = b;
+              } else if (weight > w2) {
+                w3 = w2; best3 = best2;
+                w2 = weight; best2 = b;
+              } else if (weight > w3) {
+                w3 = weight; best3 = b;
+              }
+            }
+
+            const sum = w0 + w1 + w2 + w3 || 1;
+            const i4 = i * 4;
+            skinIndices[i4] = best0;
+            skinIndices[i4 + 1] = best1;
+            skinIndices[i4 + 2] = best2;
+            skinIndices[i4 + 3] = best3;
+
+            skinWeights[i4] = w0 / sum;
+            skinWeights[i4 + 1] = w1 / sum;
+            skinWeights[i4 + 2] = w2 / sum;
+            skinWeights[i4 + 3] = w3 / sum;
+          }
+
+          pos.needsUpdate = true;
+          geo.computeVertexNormals();
+          geo.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(skinIndices, 4));
+          geo.setAttribute('skinWeight', new THREE.Float32BufferAttribute(skinWeights, 4));
+
+          const mat = srcMesh.material ? srcMesh.material.clone() : new THREE.MeshStandardMaterial({ color: 0xffffff });
+          mat.skinning = true;
+
+          const skinnedMesh = new THREE.SkinnedMesh(geo, mat);
+          skinnedMesh.name = srcMesh.name || `Object_${mIdx}`;
+          skinnedMesh.add(rootBone);
+          skinnedMesh.bind(skeleton);
+          riggedContainer.add(skinnedMesh);
+        });
+
+        return { riggedContainer, skeleton, bonesMap: map, totalVertices };
+      }
+
+      // ============================================================================
+      // 3. BUILD REFERENCE CHARACTER "MIYUU" & BLOCKY PIG FROM VIDEO (00:00 - 00:58)
+      // ============================================================================
+      function buildMiyuuAndVideoScene() {
+        while (characterGroup.children.length > 0) characterGroup.remove(characterGroup.children[0]);
+        while (propsGroup.children.length > 0) propsGroup.remove(propsGroup.children[0]);
+
+        const { skeleton, bones, map, rootBone } = createStandardHumanoidSkeleton();
+        activeSkeleton = skeleton;
+        bonesMap = map;
+        characterGroup.add(rootBone);
+
+        const gradTex = createToonGradient(4);
+        const plaidTex = generatePlaidTexture('#d8ecff', 2.5);
+
+        const matSkin = new THREE.MeshToonMaterial({ name: 'Miyuu_Skin', color: 0xffefe8, gradientMap: gradTex });
+        const matHair = new THREE.MeshToonMaterial({ name: 'Miyuu_Hair_Pink', color: 0xf3a6c0, gradientMap: gradTex });
+        const matShirt = new THREE.MeshToonMaterial({ name: 'Miyuu_Ceobe_mat', color: 0xffffff, map: plaidTex, gradientMap: gradTex });
+        const matCollar = new THREE.MeshToonMaterial({ name: 'Miyuu_Collar_Blue', color: 0x6AA9E9, gradientMap: gradTex });
+        const matSkirt = new THREE.MeshToonMaterial({ name: 'Miyuu_Skirt_Navy', color: 0x2c354d, gradientMap: gradTex });
+        const matEyes = new THREE.MeshBasicMaterial({ name: 'Miyuu_Eyes_Rose', color: 0x9e4760 });
+        const matWhite = new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: gradTex });
+
+        // Helper to attach outline hull
+        function addAnimePiece(geo, mat, parentBone, name, x = 0, y = 0, z = 0) {
+          const m = new THREE.Mesh(geo, mat);
+          m.name = name;
+          m.position.set(x, y, z);
+          const outMat = new THREE.MeshBasicMaterial({ color: 0x221a24, side: THREE.BackSide });
+          const outMesh = new THREE.Mesh(geo, outMat);
+          outMesh.name = '__outline__';
+          outMesh.scale.setScalar(1.01);
+          m.add(outMesh);
+          parentBone.add(m);
+          return m;
         }
-        if (selectionBox) {
-          scene.remove(selectionBox);
-          selectionBox = null;
+
+        // Head & Cute Anime Face
+        const headGeo = new THREE.SphereGeometry(0.21, 32, 28);
+        headGeo.scale(0.96, 1.03, 0.92);
+        addAnimePiece(headGeo, matSkin, map.Head, 'Miyuu_Head_Mesh', 0, 0.16, 0);
+
+        // Eyes & Blush
+        const eyeGeo = new THREE.SphereGeometry(0.036, 16, 16);
+        eyeGeo.scale(1, 1.25, 0.35);
+        const eyeL = new THREE.Mesh(eyeGeo, matEyes);
+        eyeL.name = 'Eye_L'; eyeL.position.set(0.078, 0.15, 0.185);
+        const eyeR = new THREE.Mesh(eyeGeo, matEyes);
+        eyeR.name = 'Eye_R'; eyeR.position.set(-0.078, 0.15, 0.185);
+        map.Head.add(eyeL, eyeR);
+
+        // Hair Crown & Bangs
+        const crownGeo = new THREE.SphereGeometry(0.228, 28, 24, 0, Math.PI * 2, 0, Math.PI * 0.65);
+        addAnimePiece(crownGeo, matHair, map.Head, 'Miyuu_Hair_Crown', 0, 0.18, -0.01);
+
+        const bangGeo = new THREE.ConeGeometry(0.05, 0.17, 12);
+        for (let i = -2; i <= 2; i++) {
+          const b = addAnimePiece(bangGeo, matHair, map.Head, `Hair_Bang_${i}`, i * 0.05, 0.27, 0.18 - Math.abs(i) * 0.012);
+          b.rotation.x = Math.PI + 0.2;
+          b.rotation.z = -i * 0.07;
         }
-        if (mixer) {
-          mixer.stopAllAction();
-          mixer = null;
+
+        // Braided Twin-Tails (Attached to Hair_L & Hair_R spring bones!)
+        for (let s = 0; s < 5; s++) {
+          const r = 0.068 - s * 0.007;
+          const braidGeo = new THREE.SphereGeometry(r, 14, 14);
+          braidGeo.scale(1, 1.35, 0.9);
+          addAnimePiece(braidGeo, matHair, map.Hair_L, `Braid_L_${s}`, 0.03, -s * 0.095, 0.04);
+          addAnimePiece(braidGeo, matHair, map.Hair_R, `Braid_R_${s}`, -0.03, -s * 0.095, 0.04);
         }
-        while (avatarPivot.children.length > 0) {
-          avatarPivot.remove(avatarPivot.children[0]);
-        }
-        avatarPivot.position.set(0, 0, 0);
-        avatarPivot.rotation.set(0, 0, 0);
-        avatarPivot.scale.set(1, 1, 1);
+        // White Hair Ribbons
+        const ribGeo = new THREE.OctahedronGeometry(0.045, 0);
+        addAnimePiece(ribGeo, matWhite, map.Hair_L, 'Ribbon_L', 0.04, 0.04, 0.03);
+        addAnimePiece(ribGeo, matWhite, map.Hair_R, 'Ribbon_R', -0.04, 0.04, 0.03);
 
-        // Auto-Normalize Scale & Ground Position
-        modelRoot.updateMatrixWorld(true);
-        const box = new THREE.Box3().setFromObject(modelRoot);
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z, 0.001);
-        const targetHeight = 1.68;
-        const scaleFactor = targetHeight / maxDim;
-        modelRoot.scale.multiplyScalar(scaleFactor);
+        // Neck, Torso & Checkered Shirt (`costp_mesh`)
+        addAnimePiece(new THREE.CylinderGeometry(0.052, 0.058, 0.11, 16), matSkin, map.Neck, 'Miyuu_Neck', 0, 0.04, 0);
 
-        modelRoot.updateMatrixWorld(true);
-        const normBox = new THREE.Box3().setFromObject(modelRoot);
-        const center = normBox.getCenter(new THREE.Vector3());
-        modelRoot.position.x -= center.x;
-        modelRoot.position.z -= center.z;
-        modelRoot.position.y -= normBox.min.y;
+        const torsoGeo = new THREE.CylinderGeometry(0.155, 0.135, 0.42, 28, 10);
+        const shirtMesh = addAnimePiece(torsoGeo, matShirt, map.Spine, 'costp_mesh', 0, 0.18, 0);
 
-        currentModelRoot = modelRoot;
-        avatarPivot.add(modelRoot);
+        // Wireframe Overlay on Shirt (for Video 00:18 - 00:35)
+        const wireGeo = new THREE.WireframeGeometry(torsoGeo);
+        const wireMat = new THREE.LineBasicMaterial({ color: 0x59BCE7, transparent: true, opacity: 0.55 });
+        shirtWireframeOverlay = new THREE.LineSegments(wireGeo, wireMat);
+        shirtWireframeOverlay.visible = false;
+        shirtMesh.add(shirtWireframeOverlay);
 
-        document.getElementById('stat-model-name').textContent = labelName;
+        // Blue Collar
+        const collarGeo = new THREE.TorusGeometry(0.125, 0.028, 12, 24);
+        const collar = addAnimePiece(collarGeo, matCollar, map.Chest, 'Collar_Mesh', 0, 0.19, 0.015);
+        collar.rotation.x = Math.PI / 2 + 0.15;
 
-        // Auto-Detect Bones & Morphs
-        autoDetectRigAndMorphs(modelRoot);
+        // Navy Pleated Skirt
+        const skirtGeo = new THREE.ConeGeometry(0.24, 0.28, 28);
+        addAnimePiece(skirtGeo, matSkirt, map.Hips, 'Skirt_Mesh', 0, -0.02, 0);
 
-        // Setup SkeletonHelper if bones exist
-        skeletonHelper = new THREE.SkeletonHelper(modelRoot);
-        skeletonHelper.visible = false;
+        // Arms & Hands
+        const uArmGeo = new THREE.CylinderGeometry(0.054, 0.046, 0.22, 16);
+        uArmGeo.rotateZ(Math.PI / 2);
+        addAnimePiece(uArmGeo, matShirt, map.UpperArm_L, 'Sleeve_L', 0.10, 0, 0);
+        addAnimePiece(uArmGeo, matShirt, map.UpperArm_R, 'Sleeve_R', -0.10, 0, 0);
+
+        const lArmGeo = new THREE.CylinderGeometry(0.038, 0.033, 0.20, 14);
+        lArmGeo.rotateZ(Math.PI / 2);
+        addAnimePiece(lArmGeo, matSkin, map.LowerArm_L, 'Forearm_L', 0.09, 0, 0);
+        addAnimePiece(lArmGeo, matSkin, map.LowerArm_R, 'Forearm_R', -0.09, 0, 0);
+
+        const handGeo = new THREE.SphereGeometry(0.042, 14, 14);
+        addAnimePiece(handGeo, matSkin, map.Hand_L, 'Palm_L', 0.02, 0, 0);
+        addAnimePiece(handGeo, matSkin, map.Hand_R, 'Palm_R', -0.02, 0, 0);
+
+        // Legs
+        const legGeo = new THREE.CylinderGeometry(0.056, 0.042, 0.42, 16);
+        addAnimePiece(legGeo, matSkin, map.UpperLeg_L, 'Thigh_L', 0, -0.21, 0);
+        addAnimePiece(legGeo, matSkin, map.UpperLeg_R, 'Thigh_R', 0, -0.21, 0);
+        addAnimePiece(legGeo, matSkin, map.LowerLeg_L, 'Calf_L', 0, -0.20, 0);
+        addAnimePiece(legGeo, matSkin, map.LowerLeg_R, 'Calf_R', 0, -0.20, 0);
+
+        // ========================================================================
+        // BUILD BLOCKY PIG (`Ceobe_mesh`) & COLOR TABLET FROM VIDEO (00:00 - 00:08)
+        // ========================================================================
+        blockyPigGroup = new THREE.Group();
+        blockyPigGroup.name = 'Ceobe_mesh (Blocky Pig)';
+        blockyPigGroup.position.set(-0.68, 0.85, 0.15);
+
+        const pigMat = new THREE.MeshToonMaterial({ color: 0xe86f88, gradientMap: gradTex });
+        pigMaterials = [pigMat];
+
+        const pBody = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.24, 0.24), pigMat);
+        const pHead = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.20, 0.22), pigMat);
+        pHead.position.set(-0.22, 0.02, 0);
+        const pSnout = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.10, 0.12), pigMat);
+        pSnout.position.set(-0.34, -0.01, 0);
+
+        const legBox = new THREE.BoxGeometry(0.08, 0.14, 0.08);
+        [[-0.12, -0.16, 0.07], [-0.12, -0.16, -0.07], [0.12, -0.16, 0.07], [0.12, -0.16, -0.07]].forEach((p) => {
+          const l = new THREE.Mesh(legBox, pigMat);
+          l.position.set(...p);
+          blockyPigGroup.add(l);
+        });
+        blockyPigGroup.add(pBody, pHead, pSnout);
+        propsGroup.add(blockyPigGroup);
+
+        // Color Wheel Tablet in Miyuu's Hand
+        tabletGroup = new THREE.Group();
+        tabletGroup.name = 'Color_Wheel_Tablet';
+        const tabMesh = new THREE.Mesh(
+          new THREE.BoxGeometry(0.22, 0.015, 0.16),
+          new THREE.MeshBasicMaterial({ color: 0x222222 })
+        );
+        const wheelMesh = new THREE.Mesh(
+          new THREE.CircleGeometry(0.055, 24),
+          new THREE.MeshBasicMaterial({ color: 0x69db7c, side: THREE.DoubleSide })
+        );
+        wheelMesh.rotation.x = -Math.PI / 2;
+        wheelMesh.position.y = 0.01;
+        tabletGroup.add(tabMesh, wheelMesh);
+        tabletGroup.position.set(-0.24, 1.08, 0.28);
+        tabletGroup.rotation.set(0.35, 0.4, -0.2);
+        propsGroup.add(tabletGroup);
+
+        // Curved Leash String between Tablet and Pig (Video 00:01 - 00:08)
+        const leashGeo = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(-0.68, 0.85, 0.15),
+          new THREE.Vector3(-0.45, 0.92, 0.22),
+          new THREE.Vector3(-0.24, 1.08, 0.28)
+        ]);
+        leashLine = new THREE.Line(leashGeo, new THREE.LineBasicMaterial({ color: 0xfff3bf, linewidth: 2 }));
+        propsGroup.add(leashLine);
+
+        setupSkeletonHelperAndUI(characterGroup, 12480);
+      }
+
+      function setupSkeletonHelperAndUI(targetRoot, vertCount) {
+        if (skeletonHelper) scene.remove(skeletonHelper);
+        skeletonHelper = new THREE.SkeletonHelper(targetRoot);
+        skeletonHelper.visible = true;
         scene.add(skeletonHelper);
 
-        // Setup Embedded Animations if present
-        loadedClips = animations || [];
-        const clipSelect = document.getElementById('anim-clip-select');
-        clipSelect.innerHTML = '';
+        document.getElementById('ui-vert-count').textContent = vertCount.toLocaleString();
 
-        if (loadedClips.length > 0) {
-          mixer = new THREE.AnimationMixer(modelRoot);
-          loadedClips.forEach((clip, idx) => {
-            const opt = document.createElement('option');
-            opt.value = idx;
-            opt.textContent = `${clip.name || 'Animation_' + (idx + 1)} (${clip.duration.toFixed(2)}s)`;
-            clipSelect.appendChild(opt);
-          });
-          playClipByIndex(0);
-          addLog(`Phát hiện ${loadedClips.length} Animation Clip có sẵn — Đã tự động kích hoạt!`, 'success');
-        } else {
+        // Populate Bone Dropdown
+        const boneSel = document.getElementById('bone-select');
+        boneSel.innerHTML = '';
+        Object.keys(bonesMap).forEach((bName) => {
           const opt = document.createElement('option');
-          opt.value = '';
-          opt.textContent = '-- Đang chạy Auto-Procedural Interaction (Tự động thở & nhìn chuột) --';
-          clipSelect.appendChild(opt);
-          document.getElementById('anim-dur-label').textContent = '∞';
-        }
+          opt.value = bName;
+          opt.textContent = bName;
+          boneSel.appendChild(opt);
+        });
 
-        rebuildOutlinerUI();
-        selectObject(avatarPivot);
-        window.setCameraView('three_quarter');
-        showSpeechBubble(`🎉 Đã tải "${labelName}"! Hãy di chuột hoặc click vào mình để tương tác!`);
+        // Populate Outliner
+        const treeEl = document.getElementById('outliner-tree');
+        treeEl.innerHTML = '';
+        const items = [
+          { icon: '🎥', name: 'renderCam' },
+          { icon: '☀️', name: 'Light_All' },
+          { icon: '🐷', name: 'Ceobe_mesh (Blocky Pig)' },
+          { icon: '🦴', name: 'Armature_Miyuu (19 Bones)' },
+          { icon: '🌸', name: 'Miyuu_reference (SkinnedMesh)' },
+          { icon: '👕', name: 'costp_mesh (Checkered Shirt)' }
+        ];
+        items.forEach((it, idx) => {
+          const row = document.createElement('div');
+          row.className = 'outliner-row' + (idx === 3 ? ' selected' : '');
+          row.innerHTML = `<span>${it.icon} ${it.name}</span><span style="color:#888">👁️</span>`;
+          treeEl.appendChild(row);
+        });
+        document.getElementById('outliner-total').textContent = `${items.length} objects`;
       }
 
-      function playClipByIndex(idx) {
-        if (!mixer || !loadedClips[idx]) return;
-        mixer.stopAllAction();
-        const clip = loadedClips[idx];
-        activeAction = mixer.clipAction(clip);
-        activeAction.reset().play();
-        isPlayingClip = true;
-        document.getElementById('anim-dur-label').textContent = clip.duration.toFixed(2) + 's';
-        document.getElementById('anim-scrubber').max = clip.duration;
+      // ============================================================================
+      // 4. VIDEO CHOREOGRAPHY ENGINE (SMOOTH INTERPOLATION MATCHING 00:00 - 00:58)
+      // ============================================================================
+      let currentScene = 0; // 0 = Auto Cycle All Video Scenes, 1..6 = Specific Scene
+      let seqTime = 0;
+      let mouseNDC = { x: 0, y: 0 };
+      let smoothMouse = { x: 0, y: 0 };
+
+      // Smoothly damp bone rotation towards target angles (in radians)
+      function dampBone(boneName, tx, ty, tz, speed = 7.5, dt = 0.016) {
+        const b = bonesMap[boneName];
+        if (!b) return;
+        const manual = manualBoneOffsets[boneName] || { x: 0, y: 0, z: 0 };
+        const gx = tx + manual.x;
+        const gy = ty + manual.y;
+        const gz = tz + manual.z;
+        const factor = 1 - Math.exp(-speed * dt);
+        b.rotation.x += (gx - b.rotation.x) * factor;
+        b.rotation.y += (gy - b.rotation.y) * factor;
+        b.rotation.z += (gz - b.rotation.z) * factor;
       }
 
-      // Upload File Handler (Supports .GLB, .GLTF, .VRM + Draco Compression)
-      function handleFileUpload(file) {
-        if (!file) return;
-        const ext = file.name.split('.').pop().toLowerCase();
-        if (!['glb', 'gltf', 'vrm'].includes(ext)) {
-          alert('Vui lòng chọn file định dạng .GLB, .GLTF hoặc .VRM!');
-          return;
-        }
+      window.setChoreoScene = function (sceneIdx) {
+        currentScene = sceneIdx;
+        seqTime = 0;
 
-        const loadingEl = document.getElementById('loading-overlay');
-        const loadingTxt = document.getElementById('loading-text');
-        loadingEl.classList.add('active');
-        loadingTxt.textContent = `Đang đọc "${file.name}" và gắn AI Auto-Interaction...`;
+        const titles = {
+          0: '🎬 Đang phát tự động toàn bộ chuỗi chuyển động mượt như Video (00:00 → 00:58)',
+          1: '🐷 Cảnh 1 (00:00 - 00:08): Chạm bảng màu đổi màu chú heo khối vuông (Ceobe_mesh)',
+          2: '☝️ Cảnh 2 (00:10 - 00:13): Miyuu chỉ tay lên góc trái chọn Object Mode / Edit Mode',
+          3: '👕 Cảnh 3 (00:18 - 00:32): Bật lưới Wireframe Overlay & kéo áo caro xanh trắng',
+          4: '🫶 Cảnh 4 (00:37 - 00:40): Ghép hai bàn tay tạo hình Trái Tim trước ngực',
+          5: '🎀 Cảnh 5 (00:41 - 00:54): Vuốt hai bím tóc hồng & chỉnh cổ áo (Loop Cut)',
+          6: '✨ Cảnh 6 (00:56 - 00:58): Đứng thẳng hai tay chống hông & thở mượt mà'
+        };
+        showBanner(titles[sceneIdx] || titles[0], 4200);
+
+        // Toggle props & wireframe visibility per scene
+        if (propsGroup) propsGroup.visible = (sceneIdx === 1 || sceneIdx === 0);
+        if (shirtWireframeOverlay) {
+          shirtWireframeOverlay.visible = (sceneIdx === 3 || document.getElementById('chk-wire-overlay').checked);
+        }
+      };
+
+      window.setCam = function (mode) {
+        const presets = {
+          video: { pos: [0, 1.25, 2.25], target: [0, 1.08, 0] },
+          closeup: { pos: [0, 1.36, 1.15], target: [0, 1.32, 0] },
+          full: { pos: [0, 1.05, 2.65], target: [0, 0.95, 0] },
+          pig: { pos: [-0.25, 1.18, 1.85], target: [-0.25, 1.0, 0] }
+        };
+        const p = presets[mode] || presets.video;
+        camera.position.set(...p.pos);
+        orbit.target.set(...p.target);
+        orbit.update();
+      };
+
+      // Handle Custom .GLB Upload & Auto-Rigging
+      document.getElementById('btn-import-glb').addEventListener('click', () => {
+        document.getElementById('glb-input').click();
+      });
+
+      document.getElementById('glb-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) loadAndAutoRigGLBFile(file);
+        e.target.value = '';
+      });
+
+      function loadAndAutoRigGLBFile(file) {
+        const modal = document.getElementById('loading-modal');
+        modal.classList.add('active');
+        document.getElementById('loading-title').textContent = `Đang đọc "${file.name}"...`;
 
         const reader = new FileReader();
         reader.onload = function (evt) {
           const buffer = evt.target.result;
           const loader = new THREE.GLTFLoader();
-
-          // Attach Draco Decoder for compressed Blender exports
           if (THREE.DRACOLoader) {
-            const dracoLoader = new THREE.DRACOLoader();
-            dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-            loader.setDRACOLoader(dracoLoader);
+            const draco = new THREE.DRACOLoader();
+            draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+            loader.setDRACOLoader(draco);
           }
 
           loader.parse(
             buffer,
             '',
             function (gltf) {
-              loadingEl.classList.remove('active');
-              // Note: VRM 0.x models are often rotated 180 deg on Y
-              if (ext === 'vrm' || (gltf.parser && gltf.parser.json && gltf.parser.json.extensions && gltf.parser.json.extensions.VRM)) {
-                gltf.scene.rotation.y = Math.PI;
-              }
-              installModelIntoStudio(gltf.scene, gltf.animations || [], file.name);
+              document.getElementById('loading-title').textContent = 'Đang tạo 19 khớp xương & nội suy Smooth Weights...';
+              setTimeout(() => {
+                while (characterGroup.children.length > 0) characterGroup.remove(characterGroup.children[0]);
+                if (propsGroup) propsGroup.visible = false;
+
+                // Check if model already has bones
+                let existingBones = {};
+                let hasSkinnedMesh = false;
+                gltf.scene.traverse((o) => {
+                  if (o.isSkinnedMesh) hasSkinnedMesh = true;
+                  if (o.isBone) existingBones[o.name] = o;
+                });
+
+                if (!hasSkinnedMesh) {
+                  // Static T-Pose Mesh (like the user's Ahri .GLB!) -> Run Auto-Rigger!
+                  const res = autoRigStaticModelGroup(gltf.scene);
+                  characterGroup.add(res.riggedContainer);
+                  activeSkeleton = res.skeleton;
+                  bonesMap = res.bonesMap;
+                  setupSkeletonHelperAndUI(res.riggedContainer, res.totalVertices);
+                  document.getElementById('ui-rig-status').textContent = `Auto-Rigged (${Object.keys(bonesMap).length} Bones)`;
+                  showBanner(`✅ Đã tự động tạo xương (Auto-Rig) & làm mượt trọng số cho "${file.name}"!`, 4500);
+                } else {
+                  characterGroup.add(gltf.scene);
+                  bonesMap = existingBones;
+                  setupSkeletonHelperAndUI(gltf.scene, 65532);
+                }
+
+                modal.classList.remove('active');
+                window.setCam('full');
+              }, 60);
             },
             function (err) {
-              loadingEl.classList.remove('active');
-              addLog(`Lỗi đọc file ${file.name}: ${err.message || err}`, 'error');
-              alert('Không thể phân tích file 3D này. Hãy kiểm tra lại định dạng .GLB/.VRM.');
+              modal.classList.remove('active');
+              alert('Lỗi đọc file .GLB: ' + (err.message || err));
             }
           );
         };
         reader.readAsArrayBuffer(file);
       }
 
-      // Outliner & Selection
-      function rebuildOutlinerUI() {
-        objectLookup.clear();
-        const listEl = document.getElementById('outliner-list');
-        listEl.innerHTML = '';
-        let count = 0;
-
-        function addNode(obj, depth) {
-          if (obj.type === 'SkeletonHelper' || obj.type === 'BoxHelper' || obj.name === '__outline__') return;
-          count++;
-          objectLookup.set(obj.uuid, obj);
-
-          const item = document.createElement('div');
-          item.className = 'outliner-item' + (selectedObject === obj ? ' selected' : '');
-          item.style.paddingLeft = (10 + depth * 12) + 'px';
-
-          const icon = obj.isBone ? '🦴' : obj.isMesh ? '🔷' : '📁';
-          item.innerHTML = `
-            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${icon} ${obj.name || obj.type}</span>
-            <button style="background:none;border:none;color:#aaa;cursor:pointer;font-size:11px;" title="Ẩn/Hiện">${obj.visible ? '👁️' : '🚫'}</button>
-          `;
-
-          item.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON') {
-              obj.visible = !obj.visible;
-              rebuildOutlinerUI();
-              return;
-            }
-            selectObject(obj);
-          });
-
-          listEl.appendChild(item);
-          if (depth < 3) {
-            obj.children.forEach((c) => addNode(c, depth + 1));
-          }
-        }
-
-        addNode(avatarPivot, 0);
-        document.getElementById('outliner-count').textContent = `${count} nodes`;
-      }
-
-      function selectObject(obj) {
-        selectedObject = obj || avatarPivot;
-        document.getElementById('insp-selected-name').textContent = selectedObject.name || selectedObject.type;
-
-        if (selectionBox) {
-          scene.remove(selectionBox);
-          selectionBox = null;
-        }
-        if (selectedObject !== avatarPivot) {
-          selectionBox = new THREE.BoxHelper(selectedObject, 0x59BCE7);
-          scene.add(selectionBox);
-        }
-
-        syncSelectedTransformToUI();
-        rebuildOutlinerUI();
-      }
-
-      function syncSelectedTransformToUI() {
-        if (!selectedObject) return;
-        document.getElementById('tr-px').value = selectedObject.position.x.toFixed(2);
-        document.getElementById('tr-py').value = selectedObject.position.y.toFixed(2);
-        document.getElementById('tr-pz').value = selectedObject.position.z.toFixed(2);
-
-        document.getElementById('tr-rx').value = Math.round(selectedObject.rotation.x * RAD2DEG);
-        document.getElementById('tr-ry').value = Math.round(selectedObject.rotation.y * RAD2DEG);
-        document.getElementById('tr-rz').value = Math.round(selectedObject.rotation.z * RAD2DEG);
-
-        document.getElementById('tr-sx').value = selectedObject.scale.x.toFixed(2);
-        document.getElementById('tr-sy').value = selectedObject.scale.y.toFixed(2);
-        document.getElementById('tr-sz').value = selectedObject.scale.z.toFixed(2);
-      }
-
-      // Trigger Instant Character Reactions
-      function triggerCharacterReaction(type) {
-        interactionState.activeReaction = type;
-        interactionState.reactionTime = 0;
-
-        const worldPos = new THREE.Vector3(0, 1.45, 0);
-        if (type === 'headpat') {
-          showSpeechBubble('💖 Hehe, cảm ơn bạn đã xoa đầu mình nha! ✨');
-          spawnReactionParticles(worldPos, 0xECA6C4);
-        } else if (type === 'wave') {
-          showSpeechBubble('👋 Xin chào! Rất vui được gặp bạn trong 3D Studio!');
-          spawnReactionParticles(new THREE.Vector3(0, 1.2, 0), 0x59BCE7);
-        } else if (type === 'jump') {
-          showSpeechBubble('🎵 Yahoo! Nhảy xoay 360 độ luôn nè!');
-          spawnReactionParticles(new THREE.Vector3(0, 0.9, 0), 0x69db7c);
-        } else if (type === 'nod') {
-          showSpeechBubble('😊 Mình hiểu rồi! Sẵn sàng nhận lệnh tiếp theo!');
-        }
-      }
-
-      // Pose Library Presets
-      window.applyPose = function (poseName) {
-        const poses = {
-          neutral: { lArmZ: 0, rArmZ: 0, lArmX: 0, rArmX: 0, spineX: 0, headZ: 0 },
-          hips: { lArmZ: -0.75, rArmZ: 0.75, lArmX: 0.2, rArmX: 0.2, spineX: -0.05, headZ: 0.06 },
-          wave: { lArmZ: -0.2, rArmZ: 2.2, lArmX: 0, rArmX: -0.3, spineX: 0, headZ: -0.08 },
-          shy: { lArmZ: 0.4, rArmZ: -0.4, lArmX: -1.1, rArmX: -1.1, spineX: 0.08, headZ: 0.1 },
-          cheer: { lArmZ: -2.3, rArmZ: 2.3, lArmX: -0.2, rArmX: -0.2, spineX: -0.08, headZ: 0 },
-          bow: { lArmZ: -0.1, rArmZ: 0.1, lArmX: 0.15, rArmX: 0.15, spineX: 0.42, headZ: 0 }
-        };
-        interactionState.poseOffset = poses[poseName] || poses.neutral;
-        showSpeechBubble(`🕺 Đã chuyển sang tư thế: ${poseName.toUpperCase()}`);
-      };
-
-      // Camera Presets
-      window.setCameraView = function (preset) {
-        const map = {
-          full: { pos: [0, 1.05, 2.65], target: [0, 0.9, 0] },
-          upper: { pos: [0, 1.32, 1.4], target: [0, 1.25, 0] },
-          face: { pos: [0, 1.5, 0.85], target: [0, 1.46, 0] },
-          three_quarter: { pos: [1.25, 1.25, 2.25], target: [0, 0.95, 0] },
-          front: { pos: [0, 1.05, 2.5], target: [0, 0.95, 0] },
-          side: { pos: [2.5, 1.05, 0], target: [0, 0.95, 0] },
-          top: { pos: [0, 3.2, 0.01], target: [0, 0.95, 0] }
-        };
-        const cfg = map[preset] || map.full;
-        camera.position.set(...cfg.pos);
-        orbit.target.set(...cfg.target);
-        orbit.update();
-      };
-
-      // Pointer & Click Raycast Interaction on Character
-      let pointerDownPos = { x: 0, y: 0 };
-      renderer.domElement.addEventListener('pointermove', (e) => {
-        const rect = renderer.domElement.getBoundingClientRect();
-        interactionState.mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        interactionState.mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      });
-
-      renderer.domElement.addEventListener('pointerdown', (e) => {
-        pointerDownPos = { x: e.clientX, y: e.clientY };
-      });
-
-      renderer.domElement.addEventListener('pointerup', (e) => {
-        const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
-        if (dist > 6 || !interactionState.clickReact) return; // Ignore if dragging camera
-
-        const rect = renderer.domElement.getBoundingClientRect();
-        const mouse = new THREE.Vector2(
-          ((e.clientX - rect.left) / rect.width) * 2 - 1,
-          -((e.clientY - rect.top) / rect.height) * 2 + 1
-        );
-
-        const raycaster = new THREE.Raycaster();
-        raycaster.setFromCamera(mouse, camera);
-
-        const meshes = [];
-        avatarPivot.traverse((o) => {
-          if (o.isMesh && o.visible && o.name !== '__outline__') meshes.push(o);
-        });
-
-        const hits = raycaster.intersectObjects(meshes, false);
-        if (hits.length > 0) {
-          const hit = hits[0];
-          selectObject(hit.object);
-
-          // Determine clicked body region by height Y
-          const hitY = hit.point.y;
-          if (hitY > 1.28) {
-            triggerCharacterReaction('headpat');
-          } else if (hitY > 0.72) {
-            triggerCharacterReaction('wave');
-          } else {
-            triggerCharacterReaction('jump');
-          }
-        }
-      });
-
-      // Main Real-Time Animation & Auto-Interaction Loop
-      const clock = new THREE.Clock();
-      function animate() {
-        requestAnimationFrame(animate);
-        const delta = Math.min(clock.getDelta(), 0.1);
-        const elapsed = clock.getElapsedTime();
-
-        // 1. Update Embedded GLTF Animation Mixer first
-        if (mixer && isPlayingClip) {
-          mixer.update(delta * playbackSpeed);
-          if (activeAction) {
-            document.getElementById('anim-time-label').textContent = activeAction.time.toFixed(2) + 's';
-            document.getElementById('anim-scrubber').value = activeAction.time;
-          }
-        }
-
-        // 2. Smooth Mouse Tracking
-        interactionState.smoothMouse.x += (interactionState.mouseNDC.x - interactionState.smoothMouse.x) * 0.08;
-        interactionState.smoothMouse.y += (interactionState.mouseNDC.y - interactionState.smoothMouse.y) * 0.08;
-
-        const lookX = interactionState.autoLook ? interactionState.smoothMouse.x * 0.45 * interactionState.lookSensitivity : 0;
-        const lookY = interactionState.autoLook ? -interactionState.smoothMouse.y * 0.3 * interactionState.lookSensitivity : 0;
-        const breath = interactionState.autoBreath ? Math.sin(elapsed * 2.3) * 0.035 * interactionState.breathIntensity : 0;
-
-        // 3. Calculate Active Reaction Offsets (Wave, Headpat, Jump, Nod)
-        let reactHeadX = 0, reactHeadZ = 0, reactRightArmZ = 0, reactJumpY = 0, reactSpinY = 0;
-        if (interactionState.activeReaction) {
-          interactionState.reactionTime += delta;
-          const t = interactionState.reactionTime;
-
-          if (interactionState.activeReaction === 'headpat') {
-            reactHeadZ = Math.sin(t * 10) * 0.18;
-            reactHeadX = 0.12;
-            if (t > 1.8) interactionState.activeReaction = null;
-          } else if (interactionState.activeReaction === 'wave') {
-            reactRightArmZ = 2.1 + Math.sin(t * 14) * 0.35;
-            reactHeadZ = -0.1;
-            if (t > 2.0) interactionState.activeReaction = null;
-          } else if (interactionState.activeReaction === 'jump') {
-            const p = Math.min(t / 1.1, 1);
-            reactJumpY = Math.sin(p * Math.PI) * 0.38;
-            reactSpinY = p * Math.PI * 2;
-            if (t > 1.1) interactionState.activeReaction = null;
-          } else if (interactionState.activeReaction === 'nod') {
-            reactHeadX = Math.sin(t * 12) * 0.25;
-            if (t > 1.4) interactionState.activeReaction = null;
-          }
-        }
-
-        // 4. Apply Procedural Motion to Rigged Bones OR Static Root
-        const pose = interactionState.poseOffset;
-        const hasDetectedRig = Boolean(rigMap.head || rigMap.spine);
-
-        if (hasDetectedRig) {
-          if (rigMap.head) {
-            rigMap.head.rotation.y = lookX * 0.75;
-            rigMap.head.rotation.x = lookY * 0.7 + reactHeadX;
-            rigMap.head.rotation.z = (pose.headZ || 0) + reactHeadZ;
-          }
-          if (rigMap.neck) {
-            rigMap.neck.rotation.y = lookX * 0.3;
-            rigMap.neck.rotation.x = lookY * 0.3;
-          }
-          if (rigMap.spine) {
-            rigMap.spine.rotation.y = lookX * 0.2;
-            rigMap.spine.rotation.x = (pose.spineX || 0) + breath;
-          }
-          if (rigMap.leftArm && !isPlayingClip) {
-            rigMap.leftArm.rotation.z = (pose.lArmZ || 0) - 0.15 - Math.abs(breath) * 0.8;
-            rigMap.leftArm.rotation.x = pose.lArmX || 0;
-          }
-          if (rigMap.rightArm && !isPlayingClip) {
-            rigMap.rightArm.rotation.z = reactRightArmZ || ((pose.rArmZ || 0) + 0.15 + Math.abs(breath) * 0.8);
-            rigMap.rightArm.rotation.x = pose.rArmX || 0;
-          }
-          if (currentModelRoot) {
-            currentModelRoot.position.y = reactJumpY + Math.abs(breath) * 0.3;
-            currentModelRoot.rotation.y = reactSpinY;
-          }
-        } else if (currentModelRoot) {
-          // Fallback for Static Unrigged Models: Whole-Body Spring Interaction!
-          currentModelRoot.rotation.y = lookX * 0.65 + reactSpinY;
-          currentModelRoot.rotation.x = lookY * 0.35 + reactHeadX;
-          currentModelRoot.rotation.z = reactHeadZ;
-          currentModelRoot.position.y = reactJumpY + (1 + Math.sin(elapsed * 2.5)) * 0.02 * interactionState.breathIntensity;
-        }
-
-        // 5. Auto-Blink & Voice Lip-Sync
-        if (currentModelRoot) {
-          interactionState.blinkTimer += delta;
-          const isBlinking = interactionState.autoBlink && (interactionState.blinkTimer % 3.8 > 3.62);
-
-          // Calculate Audio / Speech Mouth Open Level (0 -> 1)
-          let mouthOpen = 0;
-          if (interactionState.speakingSim) {
-            interactionState.speakingTime += delta;
-            mouthOpen = Math.abs(Math.sin(interactionState.speakingTime * 16)) * 0.85;
-            if (interactionState.speakingTime > 3.5) interactionState.speakingSim = false;
-          } else if (interactionState.micAnalyser && interactionState.micDataArray) {
-            interactionState.micAnalyser.getByteFrequencyData(interactionState.micDataArray);
-            let sum = 0;
-            for (let i = 0; i < 32; i++) sum += interactionState.micDataArray[i];
-            mouthOpen = Math.min(1, (sum / 32) / 95);
-          }
-
-          // Apply to Built-in Eye/Mouth meshes or GLTF MorphTargets
-          const eyeL = currentModelRoot.getObjectByName('Eye_L');
-          const eyeR = currentModelRoot.getObjectByName('Eye_R');
-          if (eyeL && eyeR) {
-            const sy = isBlinking ? 0.1 : 1.3;
-            eyeL.scale.y = sy;
-            eyeR.scale.y = sy;
-          }
-          const mouthMesh = currentModelRoot.getObjectByName('Mouth_LipSync');
-          if (mouthMesh) {
-            mouthMesh.scale.y = 1 + mouthOpen * 4.5;
-          }
-
-          // Apply to GLTF/VRM Morph Targets if present
-          morphMeshes.forEach((m) => {
-            const dict = m.morphTargetDictionary;
-            const inf = m.morphTargetInfluences;
-            if (!dict || !inf) return;
-            ['Blink', 'blink', 'Fcl_EYE_Close'].forEach((k) => {
-              if (dict[k] !== undefined) inf[dict[k]] = isBlinking ? 1 : 0;
-            });
-            ['MouthOpen', 'aa', 'Fcl_MTH_A', 'vrc.v_aa'].forEach((k) => {
-              if (dict[k] !== undefined) inf[dict[k]] = mouthOpen;
-            });
-          });
-        }
-
-        // 6. Update Floating 3D Particles
-        for (let i = particles.length - 1; i >= 0; i--) {
-          const p = particles[i];
-          p.life -= delta * 0.9;
-          p.mesh.position.addScaledVector(p.vel, delta);
-          p.mesh.rotation.y += delta * 3;
-          p.mesh.material.opacity = Math.max(0, p.life);
-          if (p.life <= 0) {
-            scene.remove(p.mesh);
-            p.mesh.geometry.dispose();
-            p.mesh.material.dispose();
-            particles.splice(i, 1);
-          }
-        }
-
-        // 7. Update Orientation Gizmo SVG
-        const invQuat = camera.quaternion.clone().invert();
-        const vx = new THREE.Vector3(1, 0, 0).applyQuaternion(invQuat);
-        const vy = new THREE.Vector3(0, 1, 0).applyQuaternion(invQuat);
-        const vz = new THREE.Vector3(0, 0, 1).applyQuaternion(invQuat);
-        const r = 25;
-        const setAxisSVG = (id, v) => {
-          const x = (v.x * r).toFixed(1);
-          const y = (-v.y * r).toFixed(1);
-          document.getElementById(`gz-line-${id}`).setAttribute('x2', x);
-          document.getElementById(`gz-line-${id}`).setAttribute('y2', y);
-          document.getElementById(`gz-cap-${id}`).setAttribute('cx', x);
-          document.getElementById(`gz-cap-${id}`).setAttribute('cy', y);
-          document.getElementById(`gz-txt-${id}`).setAttribute('x', x);
-          document.getElementById(`gz-txt-${id}`).setAttribute('y', (parseFloat(y) + 3).toFixed(1));
-        };
-        setAxisSVG('x', vx);
-        setAxisSVG('y', vy);
-        setAxisSVG('z', vz);
-
-        if (selectionBox) selectionBox.update();
-        orbit.update();
-        renderer.render(scene, camera);
-      }
-
-      // Wire Up UI Buttons & Controls
-      document.getElementById('btn-upload-model').addEventListener('click', () => {
-        document.getElementById('file-input').click();
-      });
-
-      document.getElementById('file-input').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) handleFileUpload(file);
-        e.target.value = '';
-      });
-
-      document.getElementById('btn-load-anime').addEventListener('click', () => {
-        installModelIntoStudio(buildBuiltInAnimeAvatar(), [], 'Anime_Reference_Avatar.glb');
-      });
-
-      // Drag and Drop Anywhere on Viewport
-      const dropzone = document.getElementById('viewport-dropzone');
-      const dropOverlay = document.getElementById('drop-overlay');
-      window.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropOverlay.classList.add('active');
-      });
-      window.addEventListener('dragleave', (e) => {
-        if (e.target === document || e.clientX <= 0 || e.clientY <= 0) {
-          dropOverlay.classList.remove('active');
-        }
-      });
+      // Drag and Drop support
+      window.addEventListener('dragover', (e) => e.preventDefault());
       window.addEventListener('drop', (e) => {
         e.preventDefault();
-        dropOverlay.classList.remove('active');
         const file = e.dataTransfer.files && e.dataTransfer.files[0];
-        if (file) handleFileUpload(file);
+        if (file) loadAndAutoRigGLBFile(file);
       });
 
-      // Instant Interaction Bar Buttons
-      document.getElementById('act-wave').addEventListener('click', () => triggerCharacterReaction('wave'));
-      document.getElementById('act-headpat').addEventListener('click', () => triggerCharacterReaction('headpat'));
-      document.getElementById('act-jump').addEventListener('click', () => triggerCharacterReaction('jump'));
-      document.getElementById('act-nod').addEventListener('click', () => triggerCharacterReaction('nod'));
-
-      document.getElementById('act-speak').addEventListener('click', () => {
-        interactionState.speakingSim = true;
-        interactionState.speakingTime = 0;
-        showSpeechBubble('🗣️ "Xin chào! Mình đang tự động nhép môi và tương tác trực tiếp trên trình duyệt!"', 3800);
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const utter = new SpeechSynthesisUtterance('Xin chào! Mình đã sẵn sàng tương tác cùng bạn!');
-          utter.lang = 'vi-VN';
-          window.speechSynthesis.speak(utter);
-        }
+      // Mouse Tracking
+      renderer.domElement.addEventListener('pointermove', (e) => {
+        const r = renderer.domElement.getBoundingClientRect();
+        mouseNDC.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+        mouseNDC.y = -((e.clientY - r.top) / r.height) * 2 + 1;
       });
 
-      document.getElementById('act-mic').addEventListener('click', async function () {
-        if (interactionState.micAnalyser) {
-          interactionState.micAnalyser = null;
-          this.textContent = '🎙️ Bật Mic';
-          this.classList.remove('active');
-          showSpeechBubble('🔇 Đã tắt chế độ nhép môi theo Micro.');
-          return;
-        }
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const source = audioCtx.createMediaStreamSource(stream);
-          const analyser = audioCtx.createAnalyser();
-          analyser.fftSize = 128;
-          source.connect(analyser);
-          interactionState.micAnalyser = analyser;
-          interactionState.micDataArray = new Uint8Array(analyser.frequencyBinCount);
-          this.textContent = '🎙️ Mic: ĐANG NGHE';
-          this.classList.add('active');
-          showSpeechBubble('🎙️ Đã kết nối Micro! Bạn hãy nói thử, nhân vật sẽ tự nhép môi theo!');
-        } catch (err) {
-          alert('Không thể truy cập Micro. Hãy dùng nút "🗣️ Nói chuyện (Lip-Sync)" bên cạnh nhé!');
-        }
+      // UI Bindings
+      document.getElementById('btn-reset-miyuu').addEventListener('click', () => {
+        buildMiyuuAndVideoScene();
+        window.setChoreoScene(0);
       });
 
-      // Auto-Interaction Checkboxes & Sliders
-      document.getElementById('chk-auto-look').addEventListener('change', (e) => {
-        interactionState.autoLook = e.target.checked;
-      });
-      document.getElementById('chk-auto-breath').addEventListener('change', (e) => {
-        interactionState.autoBreath = e.target.checked;
-      });
-      document.getElementById('chk-click-react').addEventListener('change', (e) => {
-        interactionState.clickReact = e.target.checked;
-      });
-      document.getElementById('chk-auto-blink').addEventListener('change', (e) => {
-        interactionState.autoBlink = e.target.checked;
-      });
-      document.getElementById('slider-look-sens').addEventListener('input', (e) => {
-        interactionState.lookSensitivity = parseFloat(e.target.value);
-      });
-      document.getElementById('slider-breath-int').addEventListener('input', (e) => {
-        interactionState.breathIntensity = parseFloat(e.target.value);
+      document.getElementById('btn-play-video-seq').addEventListener('click', () => {
+        window.setChoreoScene(0);
       });
 
-      // Left Toolbar Tools
-      document.querySelectorAll('[data-tool]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('[data-tool]').forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
-          const mode = btn.getAttribute('data-tool');
-          if (mode === 'select') {
-            transformCtrl.detach();
-          } else {
-            transformCtrl.setMode(mode);
-            transformCtrl.attach(selectedObject || avatarPivot);
-          }
-        });
+      document.getElementById('btn-toggle-bones').addEventListener('click', function () {
+        if (!skeletonHelper) return;
+        skeletonHelper.visible = !skeletonHelper.visible;
+        this.textContent = `🦴 Hiển thị Xương (Armature: ${skeletonHelper.visible ? 'ON' : 'OFF'})`;
       });
 
-      document.getElementById('tool-frame').addEventListener('click', () => window.setCameraView('three_quarter'));
-      document.getElementById('tool-wireframe').addEventListener('click', function () {
+      document.getElementById('shade-wire-overlay').addEventListener('click', function () {
         this.classList.toggle('active');
-        const wf = this.classList.contains('active');
-        avatarPivot.traverse((o) => {
-          if (o.isMesh && o.material) o.material.wireframe = wf;
-        });
-      });
-      document.getElementById('tool-skeleton').addEventListener('click', function () {
-        this.classList.toggle('active');
-        if (skeletonHelper) skeletonHelper.visible = this.classList.contains('active');
+        if (shirtWireframeOverlay) shirtWireframeOverlay.visible = this.classList.contains('active');
       });
 
-      // Camera & Display Mode Buttons
-      document.querySelectorAll('[data-cam]').forEach((btn) => {
-        btn.addEventListener('click', () => window.setCameraView(btn.getAttribute('data-cam')));
+      document.getElementById('chk-wire-overlay').addEventListener('change', (e) => {
+        if (shirtWireframeOverlay) shirtWireframeOverlay.visible = e.target.checked;
       });
 
-      document.querySelectorAll('[data-mode]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('[data-mode]').forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
-          const mode = btn.getAttribute('data-mode');
-          avatarPivot.traverse((o) => {
-            if (!o.isMesh || o.name === '__outline__') return;
-            if (o.material) o.material.wireframe = (mode === 'wireframe');
-          });
-        });
+      document.getElementById('pig-color-input').addEventListener('input', (e) => {
+        pigMaterials.forEach((m) => m.color.set(e.target.value));
       });
 
-      document.getElementById('btn-toggle-grid').addEventListener('click', function () {
-        gridHelper.visible = !gridHelper.visible;
-        this.textContent = `Grid: ${gridHelper.visible ? 'ON' : 'OFF'}`;
+      document.getElementById('node-plaid-scale').addEventListener('input', (e) => {
+        generatePlaidTexture(document.getElementById('node-shirt-col').value, parseFloat(e.target.value));
       });
-
-      // Shader Node Editor Controls
-      document.getElementById('node-color-picker').addEventListener('input', (e) => {
-        const target = selectedObject && selectedObject.isMesh ? selectedObject : avatarPivot;
-        target.traverse((o) => {
-          if (o.isMesh && o.material && o.material.color && o.name !== '__outline__') {
+      document.getElementById('node-shirt-col').addEventListener('input', (e) => {
+        generatePlaidTexture(e.target.value, parseFloat(document.getElementById('node-plaid-scale').value));
+      });
+      document.getElementById('node-hair-col').addEventListener('input', (e) => {
+        characterGroup.traverse((o) => {
+          if (o.isMesh && o.material && o.material.name === 'Miyuu_Hair_Pink') {
             o.material.color.set(e.target.value);
           }
         });
       });
 
-      document.getElementById('node-opacity').addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value);
-        avatarPivot.traverse((o) => {
-          if (o.isMesh && o.material && o.name !== '__outline__') {
-            o.material.transparent = val < 1;
-            o.material.opacity = val;
-          }
-        });
-      });
-
-      function updateAnimeOutline() {
-        const enabled = document.getElementById('node-outline-toggle').checked;
-        const thick = parseFloat(document.getElementById('node-outline-thick').value);
-        if (!currentModelRoot) return;
-        currentModelRoot.traverse((o) => {
-          if (!o.isMesh || o.name === '__outline__') return;
-          const old = o.children.find((c) => c.name === '__outline__');
-          if (old) o.remove(old);
-          if (enabled) {
-            const outMat = new THREE.MeshBasicMaterial({ color: 0x18121e, side: THREE.BackSide });
-            const outMesh = new THREE.Mesh(o.geometry, outMat);
-            outMesh.name = '__outline__';
-            outMesh.scale.setScalar(1 + thick);
-            o.add(outMesh);
-          }
-        });
+      // Manual Bone Sliders
+      function updateManualBoneFromSliders() {
+        const bName = document.getElementById('bone-select').value;
+        const rx = parseFloat(document.getElementById('bone-rx').value) || 0;
+        const ry = parseFloat(document.getElementById('bone-ry').value) || 0;
+        const rz = parseFloat(document.getElementById('bone-rz').value) || 0;
+        document.getElementById('lbl-rx').textContent = rx + '°';
+        document.getElementById('lbl-ry').textContent = ry + '°';
+        document.getElementById('lbl-rz').textContent = rz + '°';
+        manualBoneOffsets[bName] = { x: rx * DEG2RAD, y: ry * DEG2RAD, z: rz * DEG2RAD };
       }
-      document.getElementById('node-outline-toggle').addEventListener('change', updateAnimeOutline);
-      document.getElementById('node-outline-thick').addEventListener('input', updateAnimeOutline);
-
-      // Transform Inputs
-      ['px', 'py', 'pz', 'rx', 'ry', 'rz', 'sx', 'sy', 'sz'].forEach((id) => {
-        document.getElementById(`tr-${id}`).addEventListener('input', () => {
-          if (!selectedObject) return;
-          selectedObject.position.set(
-            parseFloat(document.getElementById('tr-px').value) || 0,
-            parseFloat(document.getElementById('tr-py').value) || 0,
-            parseFloat(document.getElementById('tr-pz').value) || 0
-          );
-          selectedObject.rotation.set(
-            (parseFloat(document.getElementById('tr-rx').value) || 0) * DEG2RAD,
-            (parseFloat(document.getElementById('tr-ry').value) || 0) * DEG2RAD,
-            (parseFloat(document.getElementById('tr-rz').value) || 0) * DEG2RAD
-          );
-          selectedObject.scale.set(
-            Math.max(0.01, parseFloat(document.getElementById('tr-sx').value) || 1),
-            Math.max(0.01, parseFloat(document.getElementById('tr-sy').value) || 1),
-            Math.max(0.01, parseFloat(document.getElementById('tr-sz').value) || 1)
-          );
-        });
+      ['bone-rx', 'bone-ry', 'bone-rz'].forEach((id) => {
+        document.getElementById(id).addEventListener('input', updateManualBoneFromSliders);
+      });
+      document.getElementById('bone-select').addEventListener('change', (e) => {
+        const cur = manualBoneOffsets[e.target.value] || { x: 0, y: 0, z: 0 };
+        document.getElementById('bone-rx').value = Math.round(cur.x * RAD2DEG);
+        document.getElementById('bone-ry').value = Math.round(cur.y * RAD2DEG);
+        document.getElementById('bone-rz').value = Math.round(cur.z * RAD2DEG);
+        updateManualBoneFromSliders();
       });
 
-      // Lighting Controls
-      document.getElementById('light-key-int').addEventListener('input', (e) => {
-        keyLight.intensity = parseFloat(e.target.value);
-      });
-      document.getElementById('light-amb-int').addEventListener('input', (e) => {
-        ambientLight.intensity = parseFloat(e.target.value);
-      });
-      document.getElementById('light-rim-color').addEventListener('input', (e) => {
-        rimLight.color.set(e.target.value);
-      });
-
-      // Bottom Dock Tabs
-      document.querySelectorAll('[data-dock]').forEach((tab) => {
-        tab.addEventListener('click', () => {
-          document.querySelectorAll('[data-dock]').forEach((t) => t.classList.remove('active'));
-          tab.classList.add('active');
-          const target = tab.getAttribute('data-dock');
-          document.getElementById('dock-nodes').style.display = target === 'nodes' ? 'flex' : 'none';
-          document.getElementById('dock-timeline').style.display = target === 'timeline' ? 'block' : 'none';
-          document.getElementById('dock-logs').style.display = target === 'logs' ? 'block' : 'none';
-        });
-      });
-
-      // Timeline Controls
-      document.getElementById('btn-anim-play').addEventListener('click', () => {
-        isPlayingClip = !isPlayingClip;
-      });
-      document.getElementById('btn-anim-stop').addEventListener('click', () => {
-        isPlayingClip = false;
-        if (activeAction) activeAction.time = 0;
-      });
-      document.getElementById('anim-clip-select').addEventListener('change', (e) => {
-        if (e.target.value !== '') playClipByIndex(parseInt(e.target.value, 10));
-      });
-      document.getElementById('anim-speed-select').addEventListener('change', (e) => {
-        playbackSpeed = parseFloat(e.target.value);
-      });
-
-      // Export PNG & GLB
-      document.getElementById('btn-screenshot').addEventListener('click', () => {
-        renderer.render(scene, camera);
-        const a = document.createElement('a');
-        a.href = renderer.domElement.toDataURL('image/png');
-        a.download = 'character_studio_shot.png';
-        a.click();
-      });
-
+      // Export Rigged GLB
       document.getElementById('btn-export-glb').addEventListener('click', () => {
-        if (!currentModelRoot || !THREE.GLTFExporter) return;
         const exporter = new THREE.GLTFExporter();
         exporter.parse(
-          currentModelRoot,
+          characterGroup,
           (res) => {
             const blob = res instanceof ArrayBuffer
               ? new Blob([res], { type: 'application/octet-stream' })
               : new Blob([JSON.stringify(res)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'exported_character.glb';
+            a.download = 'Rigged_Smooth_Character.glb';
             a.click();
           },
           { binary: true }
         );
       });
 
-      // Keyboard Shortcuts
-      window.addEventListener('keydown', (e) => {
-        if (['INPUT', 'SELECT'].includes(document.activeElement.tagName)) return;
-        const k = e.key.toLowerCase();
-        if (k === 'f') window.setCameraView('three_quarter');
-        if (k === 'g') document.querySelector('[data-tool="translate"]').click();
-        if (k === 'r') document.querySelector('[data-tool="rotate"]').click();
-        if (k === 's') document.querySelector('[data-tool="scale"]').click();
-        if (k === 'w') document.querySelector('[data-tool="select"]').click();
-      });
+      // ============================================================================
+      // 5. REAL-TIME RENDER & SMOOTH PROCEDURAL KINEMATICS LOOP
+      // ============================================================================
+      const clock = new THREE.Clock();
+      let blinkTimer = 0;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const rawDt = Math.min(clock.getDelta(), 0.05);
+        const speedMult = parseFloat(document.getElementById('anim-speed').value) || 1.0;
+        const dt = rawDt * speedMult;
+        const t = clock.getElapsedTime() * speedMult;
+        seqTime += dt;
+
+        // Smooth mouse look-at
+        const trackMouse = document.getElementById('chk-mouse-track').checked;
+        smoothMouse.x += ((trackMouse ? mouseNDC.x : 0) - smoothMouse.x) * 0.08;
+        smoothMouse.y += ((trackMouse ? mouseNDC.y : 0) - smoothMouse.y) * 0.08;
+
+        // Determine active choreography stage (if currentScene == 0, cycle through 1..6 every 4.5s)
+        const stage = currentScene === 0 ? (Math.floor(seqTime / 4.5) % 6) + 1 : currentScene;
+        if (currentScene === 0) {
+          if (propsGroup) propsGroup.visible = (stage === 1);
+          if (shirtWireframeOverlay && !document.getElementById('chk-wire-overlay').checked) {
+            shirtWireframeOverlay.visible = (stage === 3);
+          }
+        }
+
+        const breath = Math.sin(t * 2.4) * 0.035;
+        const springMult = parseFloat(document.getElementById('slider-spring').value) || 1.2;
+
+        // Target rotations for each bone in the current video stage
+        let headX = -smoothMouse.y * 0.22, headY = smoothMouse.x * 0.35, headZ = Math.sin(t * 1.3) * 0.04;
+        let spineX = breath, spineY = smoothMouse.x * 0.12, spineZ = 0;
+        let chestX = breath * 0.8, chestY = 0;
+
+        // Default relaxed arms (from T-Pose horizontal -> down along body: Z = ±1.22 rad)
+        let uArmLX = 0.08, uArmLY = 0, uArmLZ = -1.22;
+        let lArmLX = 0, lArmLY = 0.25, lArmLZ = 0.15;
+
+        let uArmRX = 0.08, uArmRY = 0, uArmRZ = 1.22;
+        let lArmRX = 0, lArmRY = -0.25, lArmRZ = -0.15;
+
+        if (stage === 1) {
+          // 00:00 - 00:08: Painting Blocky Pig & Holding Tablet
+          spineY = -0.45;
+          headY = -0.35 + Math.sin(t * 2) * 0.06;
+          headX = 0.22;
+          uArmLX = 0.45; uArmLY = 0.35; uArmLZ = -0.85;
+          lArmLY = 0.65; lArmLZ = 0.45;
+          uArmRX = 0.55 + Math.sin(t * 5) * 0.08; uArmRY = -0.3; uArmRZ = 0.85;
+          lArmRY = -0.55; lArmRZ = -0.4;
+
+          // Animate Blocky Pig & Color cycling like video 00:01 - 00:05
+          if (blockyPigGroup) {
+            blockyPigGroup.rotation.y = Math.sin(t * 1.5) * 0.35 + 0.3;
+            blockyPigGroup.position.y = 0.85 + Math.abs(Math.sin(t * 4)) * 0.04;
+            const hue = (t * 0.15) % 1;
+            pigMaterials.forEach((m) => m.color.setHSL(hue, 0.72, 0.62));
+          }
+        } else if (stage === 2) {
+          // 00:10 - 00:13: Pointing up-left to "Object Mode / Edit Mode" menu
+          headX = 0.12; headY = 0.15; headZ = -0.08;
+          uArmRX = 0.25; uArmRY = -0.25; uArmRZ = -0.55; // Raised right arm pointing up-left
+          lArmRZ = -0.25 + Math.sin(t * 4) * 0.08;
+          uArmLX = 0.35; uArmLZ = -1.05; lArmLZ = 0.65;
+        } else if (stage === 3) {
+          // 00:18 - 00:32: Pulling checkered shirt down & smoothing front (Wireframe Overlay)
+          headX = 0.18 + Math.sin(t * 3) * 0.05;
+          const pullWave = Math.sin(t * 3.2);
+          uArmLX = 0.55; uArmLY = 0.42; uArmLZ = -0.75 + pullWave * 0.15;
+          lArmLY = 0.85; lArmLZ = 0.55;
+          uArmRX = 0.55; uArmRY = -0.42; uArmRZ = 0.75 - pullWave * 0.15;
+          lArmRY = -0.85; lArmRZ = -0.55;
+        } else if (stage === 4) {
+          // 00:37 - 00:40: Cute Hand-Heart Gesture in front of chest
+          headZ = -0.12 + Math.sin(t * 2.5) * 0.05;
+          headX = 0.06;
+          uArmLX = 0.68; uArmLY = 0.58; uArmLZ = -0.68;
+          lArmLX = 0.25; lArmLY = 1.15; lArmLZ = 0.65;
+          uArmRX = 0.68; uArmRY = -0.58; uArmRZ = 0.68;
+          lArmRX = 0.25; lArmRY = -1.15; lArmRZ = -0.65;
+        } else if (stage === 5) {
+          // 00:41 - 00:54: Touching pink braids & adjusting collar
+          headX = -0.05; headY = Math.sin(t * 2.0) * 0.18; headZ = 0.1;
+          uArmLX = 0.75; uArmLY = 0.35; uArmLZ = -0.35;
+          lArmLY = 0.95; lArmLZ = 0.95 + Math.sin(t * 4) * 0.08;
+          uArmRX = 0.75; uArmRY = -0.35; uArmRZ = 0.35;
+          lArmRY = -0.95; lArmRZ = -0.95 - Math.sin(t * 4) * 0.08;
+        } else if (stage === 6) {
+          // 00:56 - 00:58: Confident Hands on Hips Pose
+          spineX = -0.05 + breath;
+          headZ = 0.06;
+          uArmLX = -0.15; uArmLY = -0.2; uArmLZ = -0.78;
+          lArmLY = 0.35; lArmLZ = 1.25;
+          uArmRX = -0.15; uArmRY = 0.2; uArmRZ = 0.78;
+          lArmRY = -0.35; lArmRZ = -1.25;
+        }
+
+        // Apply Smooth Damping to All Bones
+        dampBone('Spine', spineX, spineY, spineZ, 8, rawDt);
+        dampBone('Chest', chestX, chestY, 0, 8, rawDt);
+        dampBone('Neck', headX * 0.35, headY * 0.35, 0, 9, rawDt);
+        dampBone('Head', headX * 0.65, headY * 0.65, headZ, 10, rawDt);
+
+        dampBone('UpperArm_L', uArmLX, uArmLY, uArmLZ, 8.5, rawDt);
+        dampBone('LowerArm_L', lArmLX, lArmLY, lArmLZ, 9.5, rawDt);
+        dampBone('UpperArm_R', uArmRX, uArmRY, uArmRZ, 8.5, rawDt);
+        dampBone('LowerArm_R', lArmRX, lArmRY, lArmRZ, 9.5, rawDt);
+
+        // Secondary Spring Follow-through on Hair Twin-Tails & Tail_Base
+        const hairSwingZ = Math.sin(t * 3.2 - 0.6) * 0.08 * springMult - headZ * 0.6;
+        const hairSwingX = Math.cos(t * 2.6) * 0.05 * springMult + Math.abs(breath) * 1.5;
+        dampBone('Hair_L', hairSwingX, 0, 0.12 + hairSwingZ, 6, rawDt);
+        dampBone('Hair_R', hairSwingX, 0, -0.12 + hairSwingZ, 6, rawDt);
+
+        // Smooth swaying for Tail_Base & Tail_Tip (Great for Ahri's 9 tails!)
+        dampBone('Tail_Base', Math.sin(t * 2.2) * 0.14 * springMult, Math.cos(t * 1.8) * 0.22 * springMult, 0, 6, rawDt);
+        dampBone('Tail_Tip', Math.sin(t * 2.2 - 0.8) * 0.20 * springMult, Math.cos(t * 1.8 - 0.8) * 0.28 * springMult, 0, 6, rawDt);
+
+        // Subtle knee & hip breathing balance
+        dampBone('Hips', 0, Math.sin(t * 1.2) * 0.04, 0, 7, rawDt);
+        dampBone('UpperLeg_L', Math.sin(t * 2.4) * 0.02, 0, 0.02, 7, rawDt);
+        dampBone('UpperLeg_R', Math.sin(t * 2.4) * 0.02, 0, -0.02, 7, rawDt);
+
+        // Natural Auto-Blink
+        if (document.getElementById('chk-blink').checked) {
+          blinkTimer += rawDt;
+          const blinking = (blinkTimer % 3.6) > 3.44;
+          const eyeL = characterGroup.getObjectByName('Eye_L');
+          const eyeR = characterGroup.getObjectByName('Eye_R');
+          if (eyeL && eyeR) {
+            eyeL.scale.y = blinking ? 0.08 : 1.25;
+            eyeR.scale.y = blinking ? 0.08 : 1.25;
+          }
+        }
+
+        // Update Orientation Gizmo
+        const invQ = camera.quaternion.clone().invert();
+        const vx = new THREE.Vector3(1, 0, 0).applyQuaternion(invQ);
+        const vy = new THREE.Vector3(0, 1, 0).applyQuaternion(invQ);
+        const vz = new THREE.Vector3(0, 0, 1).applyQuaternion(invQ);
+        const setGizmo = (k, v) => {
+          const x = (v.x * 24).toFixed(1), y = (-v.y * 24).toFixed(1);
+          document.getElementById('ax-' + k).setAttribute('x2', x);
+          document.getElementById('ax-' + k).setAttribute('y2', y);
+          document.getElementById('cap-' + k).setAttribute('cx', x);
+          document.getElementById('cap-' + k).setAttribute('cy', y);
+        };
+        setGizmo('x', vx); setGizmo('y', vy); setGizmo('z', vz);
+
+        orbit.update();
+        renderer.render(scene, camera);
+      }
 
       window.addEventListener('resize', () => {
-        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.aspect = mount.clientWidth / mount.clientHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setSize(mount.clientWidth, mount.clientHeight);
       });
 
-      // Boot with Built-in Anime Avatar immediately!
-      installModelIntoStudio(buildBuiltInAnimeAvatar(), [], 'Anime_Reference_Avatar.glb');
+      // Boot Studio with Miyuu & Video Choreography immediately!
+      buildMiyuuAndVideoScene();
+      window.setChoreoScene(0);
       animate();
     })();
   </script>
